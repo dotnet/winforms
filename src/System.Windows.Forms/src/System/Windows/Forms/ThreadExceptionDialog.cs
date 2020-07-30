@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace System.Windows.Forms
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
             {
                 messageFormat = SR.ExDlgWarningText;
                 messageText = w.Message;
-                if (w.HelpUrl == null)
+                if (w.HelpUrl is null)
                 {
                     buttons = new Button[] { continueButton };
                 }
@@ -253,7 +252,7 @@ namespace System.Windows.Forms
             int buttonTop = Math.Max(textSize.Height, scaledMaxTextHeight) + scaledPaddingHeight;
 
             Form activeForm = Form.ActiveForm;
-            if (activeForm == null || activeForm.Text.Length == 0)
+            if (activeForm is null || activeForm.Text.Length == 0)
             {
                 Text = SR.ExDlgCaption;
             }
@@ -415,7 +414,7 @@ namespace System.Windows.Forms
 
         private static string Trim(string s)
         {
-            if (s == null)
+            if (s is null)
             {
                 return s;
             }

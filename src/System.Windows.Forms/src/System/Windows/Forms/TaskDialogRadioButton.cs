@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated(); // Shouldn't throw here as the control must have been created.
                 DenyIfWaitingForInitialization();
 
-                if (BoundPage == null)
+                if (BoundPage is null)
                 {
                     _checked = value;
 

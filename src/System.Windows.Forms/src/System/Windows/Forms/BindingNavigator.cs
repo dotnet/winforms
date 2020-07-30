@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -61,7 +60,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container) : this(false)
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -495,7 +494,7 @@ namespace System.Windows.Forms
             bool allowNew, allowRemove;
 
             // Get state info from the binding source (if any)
-            if (_bindingSource == null)
+            if (_bindingSource is null)
             {
                 count = 0;
                 position = 0;
@@ -602,7 +601,7 @@ namespace System.Windows.Forms
         private void AcceptNewPosition()
         {
             // If no position item or binding source, do nothing
-            if (_positionItem == null || _bindingSource == null)
+            if (_positionItem is null || _bindingSource is null)
             {
                 return;
             }

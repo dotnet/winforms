@@ -4,14 +4,9 @@
 
 #nullable disable
 
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -587,7 +582,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         var selectedGridEntryAccessibleRuntimeId =
                             propertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
 
-                        if (selectedGridEntryAccessibleRuntimeId == null)
+                        if (selectedGridEntryAccessibleRuntimeId is null)
                         {
                             return null;
                         }

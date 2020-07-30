@@ -54,7 +54,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public unsafe override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
         {
-            IntPtr handle = (parent == null ? IntPtr.Zero : parent.Handle);
+            IntPtr handle = (parent is null ? IntPtr.Zero : parent.Handle);
 
             // try to get the page guid
             if (obj is Oleaut32.IPerPropertyBrowsing)
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     IUIService uiSvc = (context != null) ? ((IUIService)context.GetService(typeof(IUIService))) : null;
 
-                    if (uiSvc == null)
+                    if (uiSvc is null)
                     {
                         RTLAwareMessageBox.Show(null, errString, SR.PropertyGridTitle,
                                 MessageBoxButtons.OK, MessageBoxIcon.Error,

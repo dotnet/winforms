@@ -161,7 +161,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (columnName == null)
+                if (columnName is null)
                 {
                     throw new ArgumentNullException(nameof(columnName));
                 }
@@ -237,14 +237,14 @@ namespace System.Windows.Forms
             DataGridView.OnAddedColumn(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), false /*changeIsInsertion*/, new Point(-1, -1));
 #if DEBUG
-            Debug.Assert(_itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(_itemsSorted is null || VerifyColumnOrderCache());
 #endif
             return index;
         }
 
         public virtual void AddRange(params DataGridViewColumn[] dataGridViewColumns)
         {
-            if (dataGridViewColumns == null)
+            if (dataGridViewColumns is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumns));
             }
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
 
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), false /*changeIsInsertion*/, new Point(-1, -1));
 #if DEBUG
-            Debug.Assert(_itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(_itemsSorted is null || VerifyColumnOrderCache());
 #endif
         }
 
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
                 }
                 OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), false /*changeIsInsertion*/, new Point(-1, -1));
 #if DEBUG
-                Debug.Assert(_itemsSorted == null || VerifyColumnOrderCache());
+                Debug.Assert(_itemsSorted is null || VerifyColumnOrderCache());
 #endif
             }
         }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
 
         public virtual bool Contains(string columnName)
         {
-            if (columnName == null)
+            if (columnName is null)
             {
                 throw new ArgumentNullException(nameof(columnName));
             }
@@ -639,7 +639,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
             }
 
-            if (_itemsSorted == null)
+            if (_itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -678,7 +678,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (_itemsSorted == null)
+            if (_itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -714,7 +714,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (_itemsSorted == null)
+            if (_itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -740,7 +740,7 @@ namespace System.Windows.Forms
                                                 DataGridViewElementStates includeFilter,
                                                 DataGridViewElementStates excludeFilter)
         {
-            if (dataGridViewColumnStart == null)
+            if (dataGridViewColumnStart is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumnStart));
             }
@@ -755,7 +755,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (_itemsSorted == null)
+            if (_itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -811,7 +811,7 @@ namespace System.Windows.Forms
                                                              DataGridViewElementStates includeFilter,
                                                              DataGridViewElementStates excludeFilter)
         {
-            if (dataGridViewColumnStart == null)
+            if (dataGridViewColumnStart is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumnStart));
             }
@@ -826,7 +826,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
             }
 
-            if (_itemsSorted == null)
+            if (_itemsSorted is null)
             {
                 UpdateColumnOrderCache();
             }
@@ -897,7 +897,7 @@ namespace System.Windows.Forms
                 // We are within columns display indexes adjustments. We do not allow changing the column collection while adjusting display indexes.
                 throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
-            if (dataGridViewColumn == null)
+            if (dataGridViewColumn is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
@@ -923,7 +923,7 @@ namespace System.Windows.Forms
             DataGridView.OnInsertedColumn_PreNotification(dataGridViewColumn);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewColumn), true /*changeIsInsertion*/, newCurrentCell);
 #if DEBUG
-            Debug.Assert(_itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(_itemsSorted is null || VerifyColumnOrderCache());
 #endif
         }
 
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(DataGridViewColumn dataGridViewColumn)
         {
-            if (dataGridViewColumn == null)
+            if (dataGridViewColumn is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
@@ -1036,7 +1036,7 @@ namespace System.Windows.Forms
                 {
                     RemoveAt(i);
 #if DEBUG
-                    Debug.Assert(_itemsSorted == null || VerifyColumnOrderCache());
+                    Debug.Assert(_itemsSorted is null || VerifyColumnOrderCache());
 #endif
                     return;
                 }
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(string columnName)
         {
-            if (columnName == null)
+            if (columnName is null)
             {
                 throw new ArgumentNullException(nameof(columnName));
             }
@@ -1087,7 +1087,7 @@ namespace System.Windows.Forms
 
             RemoveAtInternal(index, false /*force*/);
 #if DEBUG
-            Debug.Assert(_itemsSorted == null || VerifyColumnOrderCache());
+            Debug.Assert(_itemsSorted is null || VerifyColumnOrderCache());
 #endif
         }
 
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms
         {
             for (int columnDisplayIndex = 0; columnDisplayIndex < _items.Count; columnDisplayIndex++)
             {
-                if (GetColumnAtDisplayIndex(columnDisplayIndex) == null)
+                if (GetColumnAtDisplayIndex(columnDisplayIndex) is null)
                 {
                     return false;
                 }
@@ -1179,7 +1179,7 @@ namespace System.Windows.Forms
 
         private bool VerifyColumnOrderCache()
         {
-            if (_itemsSorted == null)
+            if (_itemsSorted is null)
             {
                 return false;
             }

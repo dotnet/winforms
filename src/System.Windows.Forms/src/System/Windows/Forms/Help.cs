@@ -10,7 +10,6 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using static Interop;
 using static Interop.Hhctl;
 
@@ -138,7 +137,7 @@ namespace System.Windows.Forms
             { // Can't assume we have a good url
                 pathAndFileName = file.AbsoluteUri;
             }
-            if (file == null || file.IsFile)
+            if (file is null || file.IsFile)
             {
                 string localPath = (file != null && file.IsFile) ? file.LocalPath : url;
 
@@ -207,7 +206,7 @@ namespace System.Windows.Forms
                     HtmlHelpW(handle, pathAndFileName, htmlCommand, (string)param);
                 }
             }
-            else if (param == null)
+            else if (param is null)
             {
                 HtmlHelpW(handle, pathAndFileName, MapCommandToHTMLCommand(command, null, out htmlParam), IntPtr.Zero);
             }
@@ -230,7 +229,7 @@ namespace System.Windows.Forms
 
             Uri file = Resolve(url);
 
-            if (file == null)
+            if (file is null)
             {
                 throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), nameof(url));
             }
@@ -297,7 +296,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (file == null)
+            if (file is null)
             {
                 Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "try appbase relative");
                 try
@@ -333,7 +332,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "Help:: GetHelpFileType " + url);
 
-            if (url == null)
+            if (url is null)
             {
                 Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tnull, must be Html File");
                 return HTMLFILE;
@@ -341,11 +340,11 @@ namespace System.Windows.Forms
 
             Uri file = Resolve(url);
 
-            if (file == null || file.Scheme == "file")
+            if (file is null || file.Scheme == "file")
             {
                 Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tfile");
 
-                string ext = Path.GetExtension(file == null ? url : file.LocalPath + file.Fragment).ToLower(CultureInfo.InvariantCulture);
+                string ext = Path.GetExtension(file is null ? url : file.LocalPath + file.Fragment).ToLower(CultureInfo.InvariantCulture);
                 if (ext == ".chm" || ext == ".col")
                 {
                     Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "\tchm or col, HtmlHelp 1.0 file");

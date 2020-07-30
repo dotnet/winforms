@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_bindings == null)
+                if (_bindings is null)
                 {
                     _bindings = new ListManagerBindingsCollection(this);
 
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (itemProps == null)
+                if (itemProps is null)
                 {
                     // Use the properties on the type of the first element in the list
                     // if offset == 0, then this means that the first dataSource did not have a strongly typed Item property.

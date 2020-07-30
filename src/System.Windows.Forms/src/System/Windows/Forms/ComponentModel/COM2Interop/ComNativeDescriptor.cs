@@ -45,7 +45,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (handler == null)
+                if (handler is null)
                 {
                     handler = new ComNativeDescriptor();
                 }
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             Oleaut32.ITypeInfo pTypeInfo = Com2TypeInfoProcessor.FindTypeInfo(component, true);
 
-            if (pTypeInfo == null)
+            if (pTypeInfo is null)
             {
                 return string.Empty;
             }
@@ -229,7 +229,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         internal bool IsNameDispId(object obj, DispatchID dispid)
         {
-            if (obj == null || !obj.GetType().IsCOMObject)
+            if (obj is null || !obj.GetType().IsCOMObject)
             {
                 return false;
             }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                         if (entry != null && entry.TooOld)
                         {
-                            if (disposeList == null)
+                            if (disposeList is null)
                             {
                                 disposeList = new List<object>(3);
                             }
@@ -307,7 +307,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // if we dont' have one, create one and set it up
             //
-            if (propsInfo == null || !propsInfo.CheckValid())
+            if (propsInfo is null || !propsInfo.CheckValid())
             {
                 propsInfo = Com2TypeInfoProcessor.GetProperties(component);
                 if (propsInfo != null)
@@ -342,7 +342,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 attrs.Add(a);
             }
 
-            if (attrs == null || attrs.Count == 0)
+            if (attrs is null || attrs.Count == 0)
             {
                 return staticAttrs;
             }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             Com2Properties propsInfo = GetPropsInfo(component);
 
-            if (propsInfo == null)
+            if (propsInfo is null)
             {
                 return PropertyDescriptorCollection.Empty;
             }
@@ -421,7 +421,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // find the key
                     object key = propsInfo.TargetObject;
 
-                    if (key == null && nativeProps.ContainsValue(propsInfo))
+                    if (key is null && nativeProps.ContainsValue(propsInfo))
                     {
                         // need to find it - the target object has probably been cleaned out
                         // of the Com2Properties object already, so we run through the
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                         }
 
-                        if (key == null)
+                        if (key is null)
                         {
                             Debug.Fail("Failed to find Com2 properties key on dispose.");
                             return;

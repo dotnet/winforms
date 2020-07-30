@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderHelpKeywordDescr))]
         public virtual string GetHelpKeyword(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -83,13 +83,13 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderNavigatorDescr))]
         public virtual HelpNavigator GetHelpNavigator(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
 
             object nav = _navigators[ctl];
-            return nav == null ? HelpNavigator.AssociateIndex : (HelpNavigator)nav;
+            return nav is null ? HelpNavigator.AssociateIndex : (HelpNavigator)nav;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderHelpStringDescr))]
         public virtual string GetHelpString(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -115,13 +115,13 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderShowHelpDescr))]
         public virtual bool GetShowHelp(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
 
             object b = _showHelp[ctl];
-            return b == null ? false : (bool)b;
+            return b is null ? false : (bool)b;
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             string keyword = GetHelpKeyword(ctl);
             HelpNavigator navigator = GetHelpNavigator(ctl);
 
-            if (!GetShowHelp(ctl) || hevent == null)
+            if (!GetShowHelp(ctl) || hevent is null)
             {
                 return;
             }
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpString(Control ctl, string helpString)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpKeyword(Control ctl, string keyword)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpNavigator(Control ctl, HelpNavigator navigator)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetShowHelp(Control ctl, bool value)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool ShouldSerializeShowHelp(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void ResetShowHelp(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 throw new ArgumentNullException(nameof(ctl));
             }

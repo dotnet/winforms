@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         protected override object[] GetItems(object editValue)
         {
             Array valueArray = editValue as Array;
-            if (valueArray == null)
+            if (valueArray is null)
             {
                 return Array.Empty<object>();
             }
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override object SetItems(object editValue, object[] value)
         {
-            if (editValue is Array || editValue == null)
+            if (editValue is Array || editValue is null)
             {
                 Array newArray = Array.CreateInstance(CollectionItemType, value.Length);
                 Array.Copy(value, newArray, value.Length);

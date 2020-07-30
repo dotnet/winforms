@@ -179,8 +179,8 @@ namespace System.Windows.Forms.Tests
         public void ListBindingHelper_GetListItemType_InvokeObject_ReturnsExpected(object list, Type expected)
         {
             Assert.Equal(expected, ListBindingHelper.GetListItemType(list));
-            Assert.Equal(list == null ? typeof(object) : expected, ListBindingHelper.GetListItemType(list, null));
-            Assert.Equal(list == null ? typeof(object) : expected, ListBindingHelper.GetListItemType(list, string.Empty));
+            Assert.Equal(list is null ? typeof(object) : expected, ListBindingHelper.GetListItemType(list, null));
+            Assert.Equal(list is null ? typeof(object) : expected, ListBindingHelper.GetListItemType(list, string.Empty));
         }
 
         public static IEnumerable<object[]> GetListItemType_Object_String_TestData()

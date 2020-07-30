@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (dropDown == null)
+                if (dropDown is null)
                 {
                     DropDown = CreateDefaultDropDown();
                     if (!(this is ToolStripOverflowButton))
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ParentInternal == null || !HasDropDownItems)
+                if (ParentInternal is null || !HasDropDownItems)
                 {
                     return Point.Empty;
                 }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms
 
         private void ShowDropDownInternal()
         {
-            if (dropDown == null || (!dropDown.Visible))
+            if (dropDown is null || (!dropDown.Visible))
             {
                 // We want to show if there's no dropdown
                 // or if the dropdown is not visible.
@@ -738,7 +738,7 @@ namespace System.Windows.Forms
 
                     foreach (ToolStripItem childItem in item.DropDown.Items)
                     {
-                        if (childItem == null)
+                        if (childItem is null)
                             continue;
 
                         // Checking if font was inherited from parent.
@@ -856,7 +856,7 @@ namespace System.Windows.Forms
 
         public override AccessibleObject GetChild(int index)
         {
-            if ((owner == null) || !owner.HasDropDownItems)
+            if ((owner is null) || !owner.HasDropDownItems)
             {
                 return null;
             }
@@ -865,7 +865,7 @@ namespace System.Windows.Forms
 
         public override int GetChildCount()
         {
-            if ((owner == null) || !owner.HasDropDownItems)
+            if ((owner is null) || !owner.HasDropDownItems)
             {
                 return -1;
             }
@@ -887,7 +887,7 @@ namespace System.Windows.Forms
 
         internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
         {
-            if ((owner == null) || (owner.DropDownItems == null))
+            if ((owner is null) || (owner.DropDownItems is null))
             {
                 return -1;
             }
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
         /// <returns>The number of children.</returns>
         internal int GetChildFragmentCount()
         {
-            if ((owner == null) || (owner.DropDownItems == null))
+            if ((owner is null) || (owner.DropDownItems is null))
             {
                 return -1;
             }
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
 
         internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (owner == null || owner.DropDown == null)
+            if (owner is null || owner.DropDown is null)
             {
                 return null;
             }

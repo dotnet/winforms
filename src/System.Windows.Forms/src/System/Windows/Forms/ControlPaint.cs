@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         {
             Rectangle result = bounds;
 
-            if (backgroundImage == null)
+            if (backgroundImage is null)
             {
                 return result;
             }
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, ButtonState state)
         {
-            if (graphics == null)
+            if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
 
             // Background color of checkbox
@@ -1348,7 +1348,7 @@ namespace System.Windows.Forms
             Brush background,
             ButtonState state)
         {
-            if (graphics == null)
+            if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
             if (rectangle.Width < 0 || rectangle.Height < 0)
                 throw new ArgumentOutOfRangeException(nameof(rectangle));
@@ -1365,7 +1365,7 @@ namespace System.Windows.Forms
 
             if ((state & ButtonState.Checked) == ButtonState.Checked)
             {
-                if (t_checkImage == null || t_checkImage.Width != rectangle.Width || t_checkImage.Height != rectangle.Height)
+                if (t_checkImage is null || t_checkImage.Width != rectangle.Width || t_checkImage.Height != rectangle.Height)
                 {
                     if (t_checkImage != null)
                     {
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms
             float intensity = backColor.GetBrightness();
             bool invert = (intensity < .5);
 
-            if (t_gridBrush == null || s_gridSize.Width != pixelsBetweenDots.Width
+            if (t_gridBrush is null || s_gridSize.Width != pixelsBetweenDots.Width
                 || s_gridSize.Height != pixelsBetweenDots.Height || invert != s_gridInvert)
             {
                 if (t_gridBrush != null)
@@ -1631,7 +1631,7 @@ namespace System.Windows.Forms
 
             Size imageSize = image.Size;
 
-            if (t_disabledImageAttr == null)
+            if (t_disabledImageAttr is null)
             {
                 // This ColorMatrix is set up to resemble Office 10 commandbars, but still be able to deal with
                 // hi-color (256+) icons and images.
@@ -2162,7 +2162,7 @@ namespace System.Windows.Forms
         {
             Color brushColor = backColor.GetBrightness() <= .5 ? SystemColors.ControlLight : SystemColors.ControlDark;
 
-            if (t_frameBrushActive == null || !s_frameColorActive.Equals(brushColor))
+            if (t_frameBrushActive is null || !s_frameColorActive.Equals(brushColor))
             {
                 if (t_frameBrushActive != null)
                 {
@@ -2210,7 +2210,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast)
         {
-            if (t_focusPen == null
+            if (t_focusPen is null
                 || t_hcFocusPen != highContrast
                 || (!highContrast && t_focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5)
                 || t_focusPenColor.ToArgb() != baseColor.ToArgb())
@@ -2288,7 +2288,7 @@ namespace System.Windows.Forms
         {
             Color brushColor = backColor.GetBrightness() <= .5 ? SystemColors.ControlLight : SystemColors.ControlDark;
 
-            if (t_frameBrushSelected == null || !s_frameColorSelected.Equals(brushColor))
+            if (t_frameBrushSelected is null || !s_frameColorSelected.Equals(brushColor))
             {
                 if (t_frameBrushSelected != null)
                 {

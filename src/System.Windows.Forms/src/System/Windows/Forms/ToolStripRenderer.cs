@@ -76,7 +76,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (disabledImageColorMatrix == null)
+                if (disabledImageColorMatrix is null)
                 {
                     // this is the result of a GreyScale matrix multiplied by a transparency matrix of .5
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (events == null)
+                if (events is null)
                 {
                     events = new EventHandlerList();
                 }
@@ -597,7 +597,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -768,7 +768,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -844,7 +844,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -952,7 +952,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -1017,17 +1017,17 @@ namespace System.Windows.Forms
         // Only paint background effects if no backcolor has been set or no background image has been set.
         internal bool ShouldPaintBackground(Control control)
         {
-            return (control.RawBackColor == Color.Empty && control.BackgroundImage == null);
+            return (control.RawBackColor == Color.Empty && control.BackgroundImage is null);
         }
 
         private static Image CreateDisabledImage(Image normalImage, ImageAttributes imgAttrib)
         {
-            if (normalImage == null)
+            if (normalImage is null)
             {
                 throw new ArgumentNullException(nameof(normalImage));
             }
 
-            if (imgAttrib == null)
+            if (imgAttrib is null)
             {
                 imgAttrib = new ImageAttributes();
             }

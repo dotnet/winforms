@@ -15,7 +15,7 @@ internal static partial class Interop
 
             public VARIANTVector(object[]? values)
             {
-                if (values == null)
+                if (values is null)
                 {
                     Variants = Array.Empty<VARIANT>();
                     return;

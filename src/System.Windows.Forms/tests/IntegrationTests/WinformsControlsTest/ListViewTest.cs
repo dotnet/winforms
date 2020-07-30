@@ -214,7 +214,7 @@ namespace WinformsControlsTest
             // MessageBox.Show(this, "listView2_SelectedIndexChanged", "event");
 
             var listView2 = sender as ListView;
-            if (listView2 == null)
+            if (listView2 is null)
             {
                 return;
             }

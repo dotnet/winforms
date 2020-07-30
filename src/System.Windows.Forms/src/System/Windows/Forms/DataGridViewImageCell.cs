@@ -9,8 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Globalization;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -94,7 +92,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorBitmap == null)
+                if (s_errorBitmap is null)
                 {
                     s_errorBitmap = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
                 }
@@ -106,7 +104,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_errorIcon == null)
+                if (s_errorIcon is null)
                 {
                     s_errorIcon = new Icon(typeof(DataGridView), "IconInError");
                 }
@@ -281,12 +279,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -337,14 +335,14 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                OwningColumn == null ||
+                OwningColumn is null ||
                 !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
@@ -403,7 +401,7 @@ namespace System.Windows.Forms
             }
 
             object formattedValue = base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
-            if (formattedValue == null && cellStyle.NullValue == null)
+            if (formattedValue is null && cellStyle.NullValue is null)
             {
                 return null;
             }
@@ -427,12 +425,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -445,7 +443,7 @@ namespace System.Windows.Forms
             object formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
             Image img = formattedValue as Image;
             Icon ico = null;
-            if (img == null)
+            if (img is null)
             {
                 ico = formattedValue as Icon;
             }
@@ -568,7 +566,7 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             object valueBase = base.GetValue(rowIndex);
-            if (valueBase == null)
+            if (valueBase is null)
             {
                 if (OwningColumn is DataGridViewImageColumn owningImageColumn)
                 {
@@ -713,7 +711,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -868,8 +866,8 @@ namespace System.Windows.Forms
                 {
                     Rectangle imageBounds2 = ImageBounds(
                         imageBounds,
-                        (image == null) ? icon.Width : image.Width,
-                        (image == null) ? icon.Height : image.Height,
+                        (image is null) ? icon.Width : image.Width,
+                        (image is null) ? icon.Height : image.Height,
                         imageLayout,
                         cellStyle);
 

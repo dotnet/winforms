@@ -29,7 +29,7 @@ namespace System.Drawing.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -38,7 +38,7 @@ namespace System.Drawing.Design
                 return value;
             }
 
-            if (_colorUI == null)
+            if (_colorUI is null)
             {
                 _colorUI = new ColorUI(this);
             }
@@ -575,7 +575,7 @@ namespace System.Drawing.Design
                         return null;
                     }
 
-                    if (cells[id] == null)
+                    if (cells[id] is null)
                     {
                         cells[id] = new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
                     }
@@ -689,7 +689,7 @@ namespace System.Drawing.Design
             {
                 get
                 {
-                    if (customColors == null)
+                    if (customColors is null)
                     {
                         customColors = new Color[ColorPalette.CELLS_CUSTOM];
                         for (int i = 0; i < ColorPalette.CELLS_CUSTOM; i++)

@@ -829,7 +829,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (text == null && ((msg & (int)WM.REFLECT) == (int)WM.REFLECT))
+            if (text is null && ((msg & (int)WM.REFLECT) == (int)WM.REFLECT))
             {
                 string subtext = MsgToString(msg - (int)WM.REFLECT) ?? "???";
 
@@ -841,7 +841,7 @@ namespace System.Windows.Forms
 
         private static string Parenthesize(string? input)
         {
-            if (input == null)
+            if (input is null)
             {
                 return string.Empty;
             }

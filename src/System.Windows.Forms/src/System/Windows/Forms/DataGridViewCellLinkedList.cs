@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Collections;
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             if (tmp2.DataGridViewCell == dataGridViewCell)
             {
                 DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
-                if (tmp1 == null)
+                if (tmp1 is null)
                 {
                     headElement = tmp3;
                 }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                     (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
                 {
                     DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
-                    if (tmp1 == null)
+                    if (tmp1 is null)
                     {
                         headElement = tmp3;
                     }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
         {
             if (reset)
             {
-                Debug.Assert(current == null);
+                Debug.Assert(current is null);
                 current = headElement;
                 reset = false;
             }

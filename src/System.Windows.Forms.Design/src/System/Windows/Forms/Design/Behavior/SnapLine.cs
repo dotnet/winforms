@@ -126,14 +126,14 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             // if the filters are both null - then return true
-            if (line1.Filter == null && line2.Filter == null)
+            if (line1.Filter is null && line2.Filter is null)
             {
                 return true;
             }
 
             // at least one filter is non-null so if the other is null
             // then we don't have a match
-            if (line1.Filter == null || line2.Filter == null)
+            if (line1.Filter is null || line2.Filter is null)
             {
                 return false;
             }
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public override string ToString()
         {
-            return "SnapLine: {type = " + SnapLineType + ", offset = " + Offset + ", priority = " + Priority + ", filter = " + (Filter == null ? "<null>" : Filter) + "}";
+            return "SnapLine: {type = " + SnapLineType + ", offset = " + Offset + ", priority = " + Priority + ", filter = " + (Filter is null ? "<null>" : Filter) + "}";
         }
     }
 }

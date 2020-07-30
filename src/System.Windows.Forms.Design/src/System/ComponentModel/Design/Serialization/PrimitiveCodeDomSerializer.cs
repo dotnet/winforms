@@ -2,14 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -27,7 +20,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer == null)
+                if (s_defaultSerializer is null)
                 {
                     s_defaultSerializer = new PrimitiveCodeDomSerializer();
                 }
@@ -42,12 +35,12 @@ namespace System.ComponentModel.Design.Serialization
         {
             using (TraceScope("PrimitiveCodeDomSerializer::" + nameof(Serialize)))
             {
-                Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
+                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
             }
 
             CodeExpression expression = new CodePrimitiveExpression(value);
 
-            if (value == null)
+            if (value is null)
             {
                 return expression;
             }

@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             this.parentManager = parentManager;
             this.dataField = dataField;
             fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
-            if (fieldInfo == null)
+            if (fieldInfo is null)
             {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }

@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms.Tests
 
         private static void AssertEqualListViewSubItem(ListViewItem.ListViewSubItem[] expected, ListViewItem.ListViewSubItem[] actual)
         {
-            if (expected == null || expected.Length == 0)
+            if (expected is null || expected.Length == 0)
             {
                 ListViewItem.ListViewSubItem subItem = Assert.Single(actual.Cast<ListViewItem.ListViewSubItem>());
                 Assert.Empty(subItem.Text);

@@ -144,7 +144,7 @@ namespace System.Windows.Forms
 
             public override object GetEditor(Type editorBaseType)
             {
-                if (editorBaseType == null)
+                if (editorBaseType is null)
                 {
                     throw new ArgumentNullException(nameof(editorBaseType));
                 }
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
                 try
                 {
                     Oleaut32.IPerPropertyBrowsing ippb = owner.GetPerPropertyBrowsing();
-                    if (ippb == null)
+                    if (ippb is null)
                     {
                         return Guid.Empty;
                     }
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (owner.GetOcx() == null)
+                if (owner.GetOcx() is null)
                 {
                     return;
                 }
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
 
                             if (stringMarshaler.Count > 0 && intMarshaler.Count > 0)
                             {
-                                if (converter == null)
+                                if (converter is null)
                                 {
                                     converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(this, owner, stringMarshaler, intMarshaler, true));
                                 }
@@ -415,7 +415,7 @@ namespace System.Windows.Forms
                             // have a .Net Editor for this type.
                             //
                             ComAliasNameAttribute comAlias = (ComAliasNameAttribute)baseProp.Attributes[typeof(ComAliasNameAttribute)];
-                            if (comAlias == null)
+                            if (comAlias is null)
                             {
                                 Guid g = GetPropertyPage(dispid);
 

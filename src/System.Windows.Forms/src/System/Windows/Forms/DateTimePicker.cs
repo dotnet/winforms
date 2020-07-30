@@ -227,7 +227,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (calendarFont == null)
+                if (calendarFont is null)
                 {
                     return Font;
                 }
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if ((value == null && calendarFont != null) || (value != null && !value.Equals(calendarFont)))
+                if ((value is null && calendarFont != null) || (value != null && !value.Equals(calendarFont)))
                 {
                     calendarFont = value;
                     calendarFontHandleWrapper = null;
@@ -249,13 +249,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (calendarFont == null)
+                if (calendarFont is null)
                 {
-                    Debug.Assert(calendarFontHandleWrapper == null, "font handle out of sync with Font");
+                    Debug.Assert(calendarFontHandleWrapper is null, "font handle out of sync with Font");
                     return FontHandle;
                 }
 
-                if (calendarFontHandleWrapper == null)
+                if (calendarFontHandleWrapper is null)
                 {
                     calendarFontHandleWrapper = new FontHandleWrapper(CalendarFont);
                 }
@@ -486,7 +486,7 @@ namespace System.Windows.Forms
             set
             {
                 if ((value != null && !value.Equals(customFormat)) ||
-                    (value == null && customFormat != null))
+                    (value is null && customFormat != null))
                 {
                     customFormat = value;
 
@@ -913,7 +913,7 @@ namespace System.Windows.Forms
             {
                 // Clause to check length
                 //
-                if (value == null || value.Length == 0)
+                if (value is null || value.Length == 0)
                 {
                     ResetValue();
                 }
@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms
 
             Height = PreferredHeight;
 
-            if (calendarFont == null)
+            if (calendarFont is null)
             {
                 calendarFontHandleWrapper = null;
                 SetControlCalendarFont();
@@ -1711,7 +1711,7 @@ namespace System.Windows.Forms
 
                     string baseShortcut = base.KeyboardShortcut;
 
-                    if ((baseShortcut == null || baseShortcut.Length == 0))
+                    if ((baseShortcut is null || baseShortcut.Length == 0))
                     {
                         char ownerTextMnemonic = WindowsFormsUtils.GetMnemonic(Owner.Text, false /*convertToUpperCase*/);
                         if (ownerTextMnemonic != (char)0)
@@ -1729,7 +1729,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string baseValue = base.Value;
-                    if (baseValue == null || baseValue.Length == 0)
+                    if (baseValue is null || baseValue.Length == 0)
                     {
                         return Owner.Text;
                     }

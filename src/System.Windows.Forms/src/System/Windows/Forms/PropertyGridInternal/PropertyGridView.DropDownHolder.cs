@@ -4,18 +4,11 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Windows.Forms.Design;
-using System.Windows.Forms.VisualStyles;
-using Microsoft.Win32;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -88,7 +81,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (createNewLink == null)
+                    if (createNewLink is null)
                     {
                         createNewLink = new LinkLabel();
                         createNewLink.LinkClicked += new LinkLabelLinkClickedEventHandler(OnNewLinkClicked);
@@ -185,7 +178,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             private InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
             {
-                if (entry == null)
+                if (entry is null)
                 {
                     return null;
                 }
@@ -202,7 +195,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // now check if there is a dropdown UI type editor.  If so, use that.
                 //
-                if (editor == null)
+                if (editor is null)
                 {
                     UITypeEditor ute = entry.UITypeEditor;
                     if (ute != null && ute.GetEditStyle() == UITypeEditorEditStyle.DropDown)
@@ -577,7 +570,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // check to see if we're going to be adding an InstanceCreationEditor
                 //
-                InstanceCreationEditor editor = (ctl == null ? null : GetInstanceCreationEditor(gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
+                InstanceCreationEditor editor = (ctl is null ? null : GetInstanceCreationEditor(gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
 
                 // clear any existing control we have
                 //

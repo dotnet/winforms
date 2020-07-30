@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    Control toLayout = DesignMode || ParentInternal == null ? this : ParentInternal;
+                    Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
 
                     if (toLayout != null)
                     {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
         {
             if (!HostedInWin32DialogManager)
             {
-                if (ActiveControl == null)
+                if (ActiveControl is null)
                 {
                     SelectNextControl(null, true, true, true, false);
                 }

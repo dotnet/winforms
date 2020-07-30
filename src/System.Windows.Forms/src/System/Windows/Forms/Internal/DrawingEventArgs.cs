@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal Graphics GetOrCreateGraphicsInternal(Action<Graphics>? creationAction = null)
         {
-            if (_graphics == null)
+            if (_graphics is null)
             {
                 Debug.Assert(!_hdc.IsNull);
 

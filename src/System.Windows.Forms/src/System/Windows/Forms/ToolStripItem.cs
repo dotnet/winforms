@@ -13,8 +13,8 @@ using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Windows.Forms.Layout;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
             get
             {
                 AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
-                if (accessibleObject == null)
+                if (accessibleObject is null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
                     Properties.SetObject(s_accessibilityProperty, accessibleObject);
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
             get
             {
                 Image image = (Image)Properties.GetObject(s_imageProperty);
-                if (image == null && Owner?.ImageList != null && ImageIndexer.ActualIndex >= 0)
+                if (image is null && Owner?.ImageList != null && ImageIndexer.ActualIndex >= 0)
                 {
                     bool disposing = _state[s_stateDisposing];
                     if (!disposing && ImageIndexer.ActualIndex < Owner.ImageList.Images.Count)
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    imageSize = (image == null) ? Size.Empty : image.Size;
+                    imageSize = (image is null) ? Size.Empty : image.Size;
                 }
 
                 return imageSize;
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms
                 if (_state[s_stateInvalidMirroredImage])
                 {
                     Image image = Image;
-                    if (image == null)
+                    if (image is null)
                     {
                         return null;
                     }
@@ -1939,7 +1939,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        textDirection = (Owner == null) ? ToolStripTextDirection.Horizontal : Owner.TextDirection;
+                        textDirection = (Owner is null) ? ToolStripTextDirection.Horizontal : Owner.TextDirection;
                     }
                 }
 
@@ -2067,7 +2067,7 @@ namespace System.Windows.Forms
             }
 
             Image image = Image;
-            if (image == null)
+            if (image is null)
             {
                 return;
             }
@@ -2167,7 +2167,7 @@ namespace System.Windows.Forms
             IComDataObject dataObject = null;
 
             dataObject = data as IComDataObject;
-            if (dataObject == null)
+            if (dataObject is null)
             {
                 DataObject iwdata = null;
                 if (data is IDataObject idataObject)
@@ -2849,7 +2849,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void OnOwnerFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_fontProperty) == null)
+            if (Properties.GetObject(s_fontProperty) is null)
             {
                 OnFontChanged(e);
             }
@@ -3111,7 +3111,7 @@ namespace System.Windows.Forms
                 }
 
                 // clear the parent if the owner is null.
-                if (newOwner == null)
+                if (newOwner is null)
                 {
                     this.ParentInternal = null;
                 }
@@ -3351,11 +3351,11 @@ namespace System.Windows.Forms
         {
             ToolStrip parent = ParentInternal;
 
-            if (parent == null)
+            if (parent is null)
             {
                 parent = (IsOnOverflow && Owner != null) ? Owner.OverflowButton.DropDown : Owner;
             }
-            if (parent == null)
+            if (parent is null)
             {
                 // should not throw here as it's an internal function call.
                 return fromPoint;

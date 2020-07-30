@@ -265,7 +265,7 @@ namespace System.Windows.Forms
             get
             {
                 ImageList? imageList = ImageIndexer.ImageList;
-                return imageList == null || ImageIndexer.Index < imageList.Images.Count
+                return imageList is null || ImageIndexer.Index < imageList.Images.Count
                     ? ImageIndexer.Index
                     : imageList.Images.Count - 1;
             }
@@ -401,7 +401,7 @@ namespace System.Windows.Forms
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
+            if (info is null)
             {
                 throw new ArgumentNullException(nameof(info));
             }

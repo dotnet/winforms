@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }
@@ -304,9 +304,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         for (int i = nameItems.Length - 1; i >= 0; i--)
                         {
                             cookie = (int)cookieItems[i];
-                            if (nameItems[i] == null || !(nameItems[i] is string))
+                            if (nameItems[i] is null || !(nameItems[i] is string))
                             {
-                                Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems == null ? "(unknown)" : nameItems[i].ToString()));
+                                Debug.Fail("Bad IPerPropertyBrowsing item [" + i.ToString(CultureInfo.InvariantCulture) + "], name=" + (nameItems is null ? "(unknown)" : nameItems[i].ToString()));
                                 continue;
                             }
                             using var var = new Oleaut32.VARIANT();

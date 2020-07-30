@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (options == null || options.Parent != null)
+            if (options is null || options.Parent != null)
             {
                 return;
             }

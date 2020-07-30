@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ImageList(IContainer container) : this()
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_nativeImageList == null)
+                if (_nativeImageList is null)
                 {
                     CreateHandle();
                 }
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
 
         internal IntPtr CreateUniqueHandle()
         {
-            if (_nativeImageList == null)
+            if (_nativeImageList is null)
             {
                 CreateHandle();
             }
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     DestroyHandle();
                     Images.Clear();
@@ -437,7 +437,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void CreateHandle()
         {
-            Debug.Assert(_nativeImageList == null, "Handle already created, this may be a source of temporary GDI leaks");
+            Debug.Assert(_nativeImageList is null, "Handle already created, this may be a source of temporary GDI leaks");
 
             ComCtl32.ILC flags = ComCtl32.ILC.MASK;
             switch (_colorDepth)
@@ -711,7 +711,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (result == null)
+            if (result is null)
             {
                 // Paint with the mask but no alpha.
                 result = new Bitmap(_imageSize.Width, _imageSize.Height);
@@ -789,7 +789,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (_originals == null || Images.Empty)
+            if (_originals is null || Images.Empty)
             {
                 // spoof it into thinking this is the first CreateHandle
                 _originals = new ArrayList();

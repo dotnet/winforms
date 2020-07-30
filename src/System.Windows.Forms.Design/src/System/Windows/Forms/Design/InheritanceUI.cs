@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (s_inheritanceGlyph == null)
+                if (s_inheritanceGlyph is null)
                 {
                     s_inheritanceGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph").ToBitmap();
 
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void AddInheritedControl(Control c, InheritanceLevel level)
         {
-            if (_tooltip == null)
+            if (_tooltip is null)
             {
                 _tooltip = new ToolTip
                 {
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Design
             // Also, set all of its non-sited children
             foreach (Control child in c.Controls)
             {
-                if (child.Site == null)
+                if (child.Site is null)
                 {
                     _tooltip.SetToolTip(child, text);
                 }
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Design
                 // Also, set all of its non-sited children
                 foreach (Control child in c.Controls)
                 {
-                    if (child.Site == null)
+                    if (child.Site is null)
                     {
                         _tooltip.SetToolTip(child, null);
                     }

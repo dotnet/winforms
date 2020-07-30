@@ -4,10 +4,10 @@
 
 #nullable disable
 
+using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using System.Collections;
 
 namespace System.Windows.Forms
 {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                     }
 
                     // Parse 2 integer values.
-                    if (culture == null)
+                    if (culture is null)
                     {
                         culture = CultureInfo.CurrentCulture;
                     }
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
                 {
                     if (destinationType == typeof(string))
                     {
-                        if (culture == null)
+                        if (culture is null)
                         {
                             culture = CultureInfo.CurrentCulture;
                         }
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
             {
-                if (propertyValues == null)
+                if (propertyValues is null)
                 {
                     throw new ArgumentNullException(nameof(propertyValues));
                 }

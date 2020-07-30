@@ -79,7 +79,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public static bool IsElementDefined(VisualStyleElement element)
         {
-            if (element == null)
+            if (element is null)
                 throw new ArgumentNullException(nameof(element));
 
             return IsCombinationDefined(element.ClassName, element.Part);
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public VisualStyleRenderer(string className, int part, int state)
         {
-            if (className == null)
+            if (className is null)
                 throw new ArgumentNullException(nameof(className));
 
             if (!IsCombinationDefined(className, part))
@@ -334,10 +334,10 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, Image image)
         {
-            if (g == null)
+            if (g is null)
                 throw new ArgumentNullException(nameof(g));
 
-            if (image == null)
+            if (image is null)
                 throw new ArgumentNullException(nameof(image));
 
             if (bounds.Width < 0 || bounds.Height < 0)
@@ -352,10 +352,10 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex)
         {
-            if (g == null)
+            if (g is null)
                 throw new ArgumentNullException(nameof(g));
 
-            if (imageList == null)
+            if (imageList is null)
                 throw new ArgumentNullException(nameof(imageList));
 
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count)
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            if (childControl == null)
+            if (childControl is null)
                 throw new ArgumentNullException(nameof(childControl));
 
             if (bounds.Width < 0 || bounds.Height < 0)
@@ -778,10 +778,10 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options)
         {
-            if (g == null)
+            if (g is null)
                 throw new ArgumentNullException(nameof(g));
 
-            if (region == null)
+            if (region is null)
                 throw new ArgumentNullException(nameof(region));
 
             IntPtr hRgn = region.GetHrgn(g);
@@ -887,7 +887,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         private static IntPtr GetHandle(string className, bool throwExceptionOnFail)
         {
-            if (t_themeHandles == null)
+            if (t_themeHandles is null)
             {
                 CreateThemeHandleHashtable();
             }
@@ -902,7 +902,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 // See if it is already in cache
                 ThemeHandle? tHandle = ThemeHandle.Create(className, throwExceptionOnFail);
-                if (tHandle == null)
+                if (tHandle is null)
                 {
                     return IntPtr.Zero;
                 }

@@ -4,8 +4,8 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.ComponentModel.Design.Serialization;
+using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
 {
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design
             {
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(tlp)[typeof(InheritanceAttribute)];
 
-                if (ia == null || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+                if (ia is null || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
                 {
                     IDesignerHost host = (IDesignerHost)manager.GetService(typeof(IDesignerHost));
 

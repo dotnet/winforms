@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -96,7 +95,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (accelerations == null)
+                if (accelerations is null)
                 {
                     accelerations = new NumericUpDownAccelerationCollection();
                 }
@@ -969,7 +968,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         return base.RuntimeId;
                     }

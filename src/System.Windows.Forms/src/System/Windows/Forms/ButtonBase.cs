@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -98,7 +97,7 @@ namespace System.Windows.Forms
                 SetFlag(FlagAutoEllipsis, value);
                 if (value)
                 {
-                    if (_textToolTip == null)
+                    if (_textToolTip is null)
                     {
                         _textToolTip = new ToolTip();
                     }
@@ -301,7 +300,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_flatAppearance == null)
+                if (_flatAppearance is null)
                 {
                     _flatAppearance = new FlatButtonAppearance(this);
                 }
@@ -321,7 +320,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_image == null && _imageList != null)
+                if (_image is null && _imageList != null)
                 {
                     int actualIndex = _imageIndex.ActualIndex;
 
@@ -339,7 +338,7 @@ namespace System.Windows.Forms
                     {
                         return _imageList.Images[actualIndex];
                     }
-                    Debug.Assert(_image == null, "We expect to be returning null.");
+                    Debug.Assert(_image is null, "We expect to be returning null.");
                 }
                 return _image;
             }
@@ -975,7 +974,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_adapter == null || FlatStyle != _cachedAdapterType)
+                if (_adapter is null || FlatStyle != _cachedAdapterType)
                 {
                     switch (FlatStyle)
                     {
@@ -1019,7 +1018,7 @@ namespace System.Windows.Forms
 
         internal virtual StringFormat CreateStringFormat()
         {
-            if (Adapter == null)
+            if (Adapter is null)
             {
                 Debug.Fail("Adapter not expected to be null at this point");
                 return new StringFormat();
@@ -1029,7 +1028,7 @@ namespace System.Windows.Forms
 
         internal virtual TextFormatFlags CreateTextFormatFlags()
         {
-            if (Adapter == null)
+            if (Adapter is null)
             {
                 Debug.Fail("Adapter not expected to be null at this point");
                 return TextFormatFlags.Default;

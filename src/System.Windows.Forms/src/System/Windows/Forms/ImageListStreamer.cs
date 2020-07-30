@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         private ImageListStreamer(SerializationInfo info, StreamingContext context)
         {
             SerializationInfoEnumerator sie = info.GetEnumerator();
-            if (sie == null)
+            if (sie is null)
             {
                 return;
             }

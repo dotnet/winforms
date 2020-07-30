@@ -536,11 +536,11 @@ namespace System.Windows.Forms
 
         unsafe HRESULT Ole32.IServiceProvider.QueryService(Guid* service, Guid* riid, IntPtr* ppvObject)
         {
-            if (service == null || riid == null)
+            if (service is null || riid is null)
             {
                 return HRESULT.E_NOINTERFACE;
             }
-            if (ppvObject == null)
+            if (ppvObject is null)
             {
                 return HRESULT.E_POINTER;
             }
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
         // This method is never called
         unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object? ppAcc, int* pidChild)
         {
-            if (pidChild == null)
+            if (pidChild is null)
             {
                 ppAcc = null;
                 return HRESULT.E_INVALIDARG;
@@ -917,7 +917,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible == null || systemIAccessible.accChildCount == 0)
+            if (systemIAccessible is null || systemIAccessible.accChildCount == 0)
             {
                 return null;
             }
@@ -1217,7 +1217,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible == null || systemIAccessible.accChildCount == 0)
+            if (systemIAccessible is null || systemIAccessible.accChildCount == 0)
             {
                 return null;
             }
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms
             }
 
             // Or fail if there is no parent
-            if (phwnd == null)
+            if (phwnd is null)
             {
                 return HRESULT.E_POINTER;
             }
@@ -1609,7 +1609,7 @@ namespace System.Windows.Forms
             }
 
             // If object found, wrap in a VARIANT. Otherwise return null for 'end of list' (OLEACC expects this)
-            retObject = (newObject == null) ? null : AsVariant(newObject);
+            retObject = (newObject is null) ? null : AsVariant(newObject);
 
             // Tell caller not to fall back on system behavior now
             return true;
@@ -1623,7 +1623,7 @@ namespace System.Windows.Forms
             // An empty childID is considered to be the same as CHILDID_SELF.
             // Some accessibility programs pass null into our functions, so we
             // need to convert them here.
-            if (childID == null)
+            if (childID is null)
             {
                 childID = NativeMethods.CHILDID_SELF;
             }
@@ -1886,7 +1886,7 @@ namespace System.Windows.Forms
         {
             if (UiaCore.UiaClientsAreListening().IsTrue())
             {
-                HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
+                HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
                 return result == HRESULT.S_OK;
             }
 

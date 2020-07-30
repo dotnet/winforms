@@ -396,7 +396,7 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (DebugLayoutTraceSwitch.TraceVerbose)
                 {
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString()));
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal is null) ? "null" : item.ParentInternal.ToString()));
                 }
 #endif
             }
@@ -548,7 +548,7 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (DebugLayoutTraceSwitch.TraceVerbose)
                 {
-                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal == null) ? "null" : item.ParentInternal.ToString()));
+                    Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Item {0} Placement {1} Bounds {2} Parent {3}", item.ToString(), item.Placement.ToString(), item.Bounds.ToString(), (item.ParentInternal is null) ? "null" : item.ParentInternal.ToString()));
                 }
 #endif
             }

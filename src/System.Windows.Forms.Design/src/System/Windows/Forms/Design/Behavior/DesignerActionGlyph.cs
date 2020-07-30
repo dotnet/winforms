@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         public bool IsInComponentTray
         {
-            get => (_adorner == null); // adorner and alternative bounds are exclusive
+            get => (_adorner is null); // adorner and alternative bounds are exclusive
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_glyphImageClosed == null)
+                if (_glyphImageClosed is null)
                 {
                     _glyphImageClosed = new Icon(typeof(DesignerActionGlyph), "Close_left").ToBitmap();
 
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_glyphImageOpened == null)
+                if (_glyphImageOpened is null)
                 {
                     _glyphImageOpened = new Icon(typeof(DesignerActionGlyph), "Open_left").ToBitmap();
 

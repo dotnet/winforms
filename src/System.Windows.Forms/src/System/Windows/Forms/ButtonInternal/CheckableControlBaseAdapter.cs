@@ -23,7 +23,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             get
             {
-                if (buttonAdapter == null)
+                if (buttonAdapter is null)
                 {
                     buttonAdapter = CreateButtonAdapter();
                 }

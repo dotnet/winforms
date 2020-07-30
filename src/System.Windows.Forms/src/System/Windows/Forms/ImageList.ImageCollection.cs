@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             private void AssertInvariant()
             {
                 Debug.Assert(_owner != null, "ImageCollection has no owner (ImageList)");
-                Debug.Assert((_owner._originals == null) == (_owner.HandleCreated), " Either we should have the original images, or the handle should be created");
+                Debug.Assert((_owner._originals is null) == (_owner.HandleCreated), " Either we should have the original images, or the handle should be created");
             }
 
             [Browsable(false)]
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    if (value == null)
+                    if (value is null)
                     {
                         throw new ArgumentNullException(nameof(value));
                     }
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
 
             public void Add(Icon value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(Image value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int Add(Image value, Color transparentColor)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -314,7 +314,7 @@ namespace System.Windows.Forms
 
             private int Add(Original original, ImageInfo imageInfo)
             {
-                if (original == null || original._image == null)
+                if (original is null || original._image is null)
                 {
                     throw new ArgumentNullException(nameof(original));
                 }
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
             public void AddRange(Image[] images)
             {
-                if (images == null)
+                if (images is null)
                 {
                     throw new ArgumentNullException(nameof(images));
                 }
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int AddStrip(Image value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -602,7 +602,7 @@ namespace System.Windows.Forms
                     throw new IndexOutOfRangeException();
                 }
 
-                if (_imageInfoCollection[index] == null)
+                if (_imageInfoCollection[index] is null)
                 {
                     _imageInfoCollection[index] = new ImageInfo();
                 }

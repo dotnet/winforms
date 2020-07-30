@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         /// </summary>
         public MaskedTextBox(string mask)
         {
-            if (mask == null)
+            if (mask is null)
             {
                 throw new ArgumentNullException();
             }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
         /// </summary>
         public MaskedTextBox(MaskedTextProvider maskedTextProvider)
         {
-            if (maskedTextProvider == null)
+            if (maskedTextProvider is null)
             {
                 throw new ArgumentNullException();
             }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException();
                 }
@@ -730,7 +730,7 @@ namespace System.Windows.Forms
                     maskedTextProvider.PasswordChar,
                     maskedTextProvider.AsciiOnly);
 
-                //text == null when setting to a different mask value or when resetting the mask to null.
+                //text is null when setting to a different mask value or when resetting the mask to null.
                 //text != null only when setting the mask from null to some value.
                 SetMaskedTextProvider(newProvider, text);
             }
@@ -2352,7 +2352,7 @@ namespace System.Windows.Forms
                 }
 
                 bool isValidInput = false;
-                if (message == null)
+                if (message is null)
                 {
                     isValidInput = true;
                     message = SR.MaskedTextBoxTypeValidationSucceeded;
@@ -2508,7 +2508,7 @@ namespace System.Windows.Forms
 
             // If mask not initialized and not initializing it, the new provider is just a property backend.
             // Change won't have any effect in text.
-            if (flagState[IS_NULL_MASK] && textOnInitializingMask == null)
+            if (flagState[IS_NULL_MASK] && textOnInitializingMask is null)
             {
                 maskedTextProvider = newProvider;
                 return;

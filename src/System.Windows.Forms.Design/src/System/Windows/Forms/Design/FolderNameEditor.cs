@@ -4,9 +4,7 @@
 
 using System.Buffers;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using Microsoft.Win32.SafeHandles;
 using static Interop;
 
@@ -22,7 +20,7 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (_folderBrowser == null)
+            if (_folderBrowser is null)
             {
                 _folderBrowser = new FolderBrowser();
                 InitializeDialog(_folderBrowser);

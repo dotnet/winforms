@@ -4,10 +4,10 @@
 
 #nullable disable
 
-using System.Text;
 using System.ComponentModel;
-using System.Globalization;
 using System.Diagnostics;
+using System.Globalization;
+using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
                                                           previousInheritedMode != DataGridViewAutoSizeColumnMode.None &&
                                                           previousInheritedMode != DataGridViewAutoSizeColumnMode.NotSet;
                     _autoSizeMode = value;
-                    if (DataGridView == null)
+                    if (DataGridView is null)
                     {
                         if (InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.Fill &&
                             InheritedAutoSizeMode != DataGridViewAutoSizeColumnMode.None &&
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -470,7 +470,7 @@ namespace System.Windows.Forms
                     Debug.Assert(columnStyle != null);
                 }
 
-                if (DataGridView == null)
+                if (DataGridView is null)
                 {
                     return columnStyle;
                 }
@@ -993,9 +993,9 @@ namespace System.Windows.Forms
 
             DataGridView dataGridView = DataGridView;
 
-            Debug.Assert(dataGridView == null || Index > -1);
+            Debug.Assert(dataGridView is null || Index > -1);
 
-            if (dataGridView == null)
+            if (dataGridView is null)
             {
                 return -1;
             }

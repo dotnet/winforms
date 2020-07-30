@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
@@ -29,7 +28,7 @@ namespace System.Windows.Forms.Design
         {
             _designer = designer;
             _targetProperty = prop;
-            if (prop == null)
+            if (prop is null)
             {
                 prop = TypeDescriptor.GetDefaultProperty(designer.Component);
                 if (prop != null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
@@ -79,7 +78,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_componentChangeSvc == null)
+                if (_componentChangeSvc is null)
                 {
                     _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
                 }
@@ -185,7 +184,7 @@ namespace System.Windows.Forms.Design
         private void OnEditItems(object sender, EventArgs e)
         {
             object propertyValue = _targetProperty.GetValue(_designer.Component);
-            if (propertyValue == null)
+            if (propertyValue is null)
             {
                 return;
             }

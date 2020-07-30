@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                 lock (s_wcInternalSyncObject)
                 {
                     WindowClass wc = s_cache;
-                    if (className == null)
+                    if (className is null)
                     {
                         // If we weren't given a class name, look for a window
                         // that has the exact class style.
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (wc == null)
+                    if (wc is null)
                     {
                         // Didn't find an existing class, create one and attatch it to
                         // the end of the linked list.
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
 
                 string localClassName = _className;
 
-                if (localClassName == null)
+                if (localClassName is null)
                 {
                     // If we don't use a hollow brush here, Windows will "pre paint" us with COLOR_WINDOW which
                     // creates a little bit if flicker.  This happens even though we are overriding wm_erasebackgnd.

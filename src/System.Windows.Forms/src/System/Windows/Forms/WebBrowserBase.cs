@@ -725,7 +725,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (containingControl == null ||
+                if (containingControl is null ||
                     GetAXHostState(WebBrowserHelper.recomputeContainingControl))
                 {
                     containingControl = FindContainerControlInternal();
@@ -737,7 +737,7 @@ namespace System.Windows.Forms
 
         internal WebBrowserContainer CreateWebBrowserContainer()
         {
-            if (wbContainer == null)
+            if (wbContainer is null)
             {
                 wbContainer = new WebBrowserContainer(this);
             }
@@ -746,11 +746,11 @@ namespace System.Windows.Forms
 
         internal WebBrowserContainer GetParentContainer()
         {
-            if (container == null)
+            if (container is null)
             {
                 container = WebBrowserContainer.FindContainerForControl(this);
             }
-            if (container == null)
+            if (container is null)
             {
                 container = CreateWebBrowserContainer();
                 container.AddControl(this);
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return Site == null || !DesignMode;
+                return Site is null || !DesignMode;
             }
         }
 
@@ -898,7 +898,7 @@ namespace System.Windows.Forms
             if (ActiveXState == WebBrowserHelper.AXState.Passive)
             {
                 // First, create the ActiveX control
-                Debug.Assert(activeXInstance == null, "activeXInstance must be null");
+                Debug.Assert(activeXInstance is null, "activeXInstance must be null");
                 HRESULT hr = Ole32.CoCreateInstance(
                     ref clsid,
                     IntPtr.Zero,
@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (axSite == null)
+                if (axSite is null)
                 {
                     axSite = CreateWebBrowserSiteBase();
                 }
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectionChangeHandler == null)
+                if (selectionChangeHandler is null)
                 {
                     selectionChangeHandler = new EventHandler(OnNewSelection);
                 }
@@ -1258,7 +1258,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cc == null && IsHandleCreated)
+            if (cc is null && IsHandleCreated)
             {
                 cc = Control.FromHandle(User32.GetParent(this)) as ContainerControl;
             }
@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms
                 cc = null;
             }
 
-            SetAXHostState(WebBrowserHelper.recomputeContainingControl, cc == null);
+            SetAXHostState(WebBrowserHelper.recomputeContainingControl, cc is null);
 
             return cc;
         }

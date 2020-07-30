@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
@@ -92,7 +91,7 @@ namespace System.Windows.Forms.Design
                     toolStripContextMenu.GroupOrdering.Clear();
                     toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
                     toolStripContextMenu.Text = "CustomContextMenu";
-                    if (toolStripItemCustomMenuItemCollection == null)
+                    if (toolStripItemCustomMenuItemCollection is null)
                     {
                         toolStripItemCustomMenuItemCollection = new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
                     }
@@ -591,7 +590,7 @@ namespace System.Windows.Forms.Design
                     if (ToolStripItem.IsOnDropDown)
                     {
                         ToolStrip parent = ToolStripItem.GetCurrentParent();
-                        if (parent == null)
+                        if (parent is null)
                         {
                             parent = ToolStripItem.Owner;
                         }
@@ -686,7 +685,7 @@ namespace System.Windows.Forms.Design
                 ISite site = Component.Site;
                 if (site != null && Component is ToolStripDropDownItem)
                 {
-                    if (defaultValues == null)
+                    if (defaultValues is null)
                     {
                         defaultValues = new Hashtable();
                     }
@@ -698,7 +697,7 @@ namespace System.Windows.Forms.Design
                     if (pd != null && pd.PropertyType.Equals(typeof(string)))
                     {
                         string current = (string)pd.GetValue(component);
-                        if (current == null || current.Length == 0)
+                        if (current is null || current.Length == 0)
                         {
                             pd.SetValue(component, site.Name);
                         }
@@ -724,7 +723,7 @@ namespace System.Windows.Forms.Design
         {
             ToolStripItem newItem = null;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host == null)
+            if (host is null)
             {
                 Debug.Fail("Couldn't get designer host!");
                 return newItem;
@@ -816,7 +815,7 @@ namespace System.Windows.Forms.Design
                     // Add the new Item...
                     newItem = (ToolStripItem)host.Container.Components[name];
                     //Set the Image property and DisplayStyle...
-                    if (newItem.Image == null && newItem is ToolStripButton)
+                    if (newItem.Image is null && newItem is ToolStripButton)
                     {
                         Image image = null;
                         try
@@ -1087,7 +1086,7 @@ namespace System.Windows.Forms.Design
         {
             dummyItemAdded = false;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host == null)
+            if (host is null)
             {
                 Debug.Fail("Couldn't get designer host!");
                 return;
@@ -1238,7 +1237,7 @@ namespace System.Windows.Forms.Design
             // ACTIVATION ONLY FOR TOOLSTRIPMENUITEMS
             if (ToolStripItem is ToolStripMenuItem)
             {
-                if (_editorNode == null)
+                if (_editorNode is null)
                 {
                     CreateDummyNode();
                 }

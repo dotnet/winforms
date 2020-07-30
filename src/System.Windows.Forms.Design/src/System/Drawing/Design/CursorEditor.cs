@@ -24,7 +24,7 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -33,7 +33,7 @@ namespace System.Drawing.Design
                 return value;
             }
 
-            if (_cursorUI == null)
+            if (_cursorUI is null)
             {
                 _cursorUI = new CursorUI(this);
             }

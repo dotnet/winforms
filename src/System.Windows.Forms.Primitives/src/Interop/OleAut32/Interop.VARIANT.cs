@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
 using static Interop.Ole32;
-using static Interop.Oleaut32;
 
 internal static partial class Interop
 {
@@ -49,7 +48,7 @@ internal static partial class Interop
                         data = *((void**)data);
                         // CLR allows VT_EMPTY/NULL | VT_BYREF to have no data.
                         // In other cases, the variant is invalid.
-                        if (data == null && !(Type == VARENUM.EMPTY || Type == VARENUM.NULL))
+                        if (data is null && !(Type == VARENUM.EMPTY || Type == VARENUM.NULL))
                         {
                             throw new ArgumentException("Invalid Variant");
                         }
@@ -187,7 +186,7 @@ internal static partial class Interop
                         {
                             throw new ArgumentException("Specified OLE variant is invalid.");
                         }
-                        if (record->pvRecord == null)
+                        if (record->pvRecord is null)
                         {
                             return null;
                         }
@@ -212,7 +211,7 @@ internal static partial class Interop
                 }
 
                 Type? t = System.Type.GetTypeFromCLSID(guid);
-                if (t == null || !t.IsValueType)
+                if (t is null || !t.IsValueType)
                 {
                     throw new ArgumentException("The specified record cannot be mapped to a managed value class.");
                 }
@@ -222,7 +221,7 @@ internal static partial class Interop
 
             private static object? ToArray(SAFEARRAY* psa, VARENUM vt)
             {
-                if (psa == null)
+                if (psa is null)
                 {
                     return null;
                 }

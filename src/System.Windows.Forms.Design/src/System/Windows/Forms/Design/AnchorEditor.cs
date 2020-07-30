@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            if (_anchorUI == null)
+            if (_anchorUI is null)
             {
                 _anchorUI = new AnchorUI(this);
             }

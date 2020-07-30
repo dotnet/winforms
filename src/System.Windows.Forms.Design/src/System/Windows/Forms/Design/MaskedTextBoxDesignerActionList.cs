@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             _uiSvc = GetService(typeof(IUIService)) as IUIService;
             _helpService = GetService(typeof(IHelpService)) as IHelpService;
 
-            if (_discoverySvc == null || _uiSvc == null)
+            if (_discoverySvc is null || _uiSvc is null)
             {
                 Debug.Fail("could not get either ITypeDiscoveryService or IUIService");
             }
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         {
             string mask = MaskPropertyEditor.EditMask(_discoverySvc, _uiSvc, _maskedTextBox, _helpService);
 
-            if (mask == null)
+            if (mask is null)
             {
                 return;
             }

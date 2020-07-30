@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             {
                 // OleInitialize needs to be called before we can call ActivateKeyboardLayout.
                 Application.OleRequired();
-                if (value == null)
+                if (value is null)
                 {
                     value = DefaultInputLanguage;
                 }
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                             (encodingValue & 0xFFFF) == language)
                         {
                             string? encodingSubstitution = (string?)substitutions.GetValue(encoding);
-                            if (encodingSubstitution == null)
+                            if (encodingSubstitution is null)
                             {
                                 continue;
                             }
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
                         if (currentHandle == (IntPtr)Convert.ToInt32(encoding, 16))
                         {
                             using RegistryKey? key = layouts.OpenSubKey(encoding);
-                            if (key == null)
+                            if (key is null)
                             {
                                 continue;
                             }
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
 
                             // Default back to our legacy codepath and obtain the name
                             // directly through the registry value
-                            if (layoutName == null)
+                            if (layoutName is null)
                             {
                                 layoutName = (string?)key.GetValue("Layout Text");
                             }
@@ -238,13 +238,13 @@ namespace System.Windows.Forms
                         if (language == (0xffff & Convert.ToInt32(encoding.Substring(4, 4), 16)))
                         {
                             using RegistryKey? key = layouts.OpenSubKey(encoding);
-                            if (key == null)
+                            if (key is null)
                             {
                                 continue;
                             }
 
                             string? codeValue = (string?)key.GetValue("Layout Id");
-                            if (codeValue == null)
+                            if (codeValue is null)
                             {
                                 continue;
                             }
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
 
                                 // Default back to our legacy codepath and obtain the name
                                 // directly through the registry value
-                                if (layoutName == null)
+                                if (layoutName is null)
                                 {
                                     layoutName = (string?)key.GetValue("Layout Text");
                                 }
@@ -326,7 +326,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static InputLanguage? FromCulture(CultureInfo culture)
         {
-            if (culture == null)
+            if (culture is null)
             {
                 throw new ArgumentNullException(nameof(culture));
             }

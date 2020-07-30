@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                 {
                     return ((IBindingList)list).AllowNew;
                 }
-                if (list == null)
+                if (list is null)
                 {
                     return false;
                 }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
                 {
                     return ((IBindingList)list).AllowEdit;
                 }
-                if (list == null)
+                if (list is null)
                 {
                     return false;
                 }
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
                 {
                     return ((IBindingList)list).AllowRemove;
                 }
-                if (list == null)
+                if (list is null)
                 {
                     return false;
                 }
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (list == null)
+                if (list is null)
                 {
                     return 0;
                 }
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
 
                 if (tempList is IList)
                 {
-                    if (finalType == null)
+                    if (finalType is null)
                     {
                         finalType = tempList.GetType();
                     }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (tempList == null)
+                    if (tempList is null)
                     {
                         throw new ArgumentNullException(nameof(dataSource));
                     }
@@ -425,7 +425,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void CheckEmpty()
         {
-            if (dataSource == null || list == null || list.Count == 0)
+            if (dataSource is null || list is null || list.Count == 0)
             {
                 throw new InvalidOperationException(SR.ListManagerEmptyList);
             }
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex)
         {
-            if (key == null)
+            if (key is null)
             {
                 throw new ArgumentNullException(nameof(key));
             }

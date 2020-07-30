@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
                 // We only do this if the ThreadContext tells us that we are currently
                 // handling a window message.
-                if (context == null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
+                if (context is null || !ReferenceEquals(context, ThreadContext.FromCurrent()))
                 {
                     User32.PostMessageW(HandleInternal, (User32.WM)WM_CHECKDESTROY);
                 }

@@ -2,16 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.CodeDom;
 using System.Configuration;
-using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Reflection;
-using System.Text;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -24,7 +18,7 @@ namespace System.ComponentModel.Design.Serialization
 
         private Type[] GetContainerConstructor(IDesignerSerializationManager manager)
         {
-            if (_containerConstructor == null)
+            if (_containerConstructor is null)
             {
                 _containerConstructor = new Type[]
                 {
@@ -72,7 +66,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (props == null)
+                if (props is null)
                 {
                     props = TypeDescriptor.GetProperties(comp);
                 }
@@ -121,9 +115,9 @@ namespace System.ComponentModel.Design.Serialization
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value);
             using (TraceScope("ComponentCodeDomSerializer::Serialize"))
             {
-                if (manager == null || value == null)
+                if (manager is null || value is null)
                 {
-                    throw new ArgumentNullException(manager == null ? "manager" : "value");
+                    throw new ArgumentNullException(manager is null ? "manager" : "value");
                 }
 
                 if (IsSerialized(manager, value))
@@ -183,7 +177,7 @@ namespace System.ComponentModel.Design.Serialization
                         // if we have an existing expression and this is not
                         // a sited component, do not serialize it.  We need this for Everett / 1.0
                         // backwards compat (even though it's wrong).
-                        if (value is IComponent comp && comp.Site == null)
+                        if (value is IComponent comp && comp.Site is null)
                         {
                             // We were in a serialize content
                             // property and would still serialize it.  This code reverses what the
@@ -216,7 +210,7 @@ namespace System.ComponentModel.Design.Serialization
                             generateObject = false;
                         }
 
-                        if (rootCxt == null)
+                        if (rootCxt is null)
                         {
                             generateLocal = true;
                             generateField = false;
@@ -247,7 +241,7 @@ namespace System.ComponentModel.Design.Serialization
                                     PropertyDescriptor modifersProp = props["Modifiers"];
                                     MemberAttributes fieldAttrs;
 
-                                    if (modifersProp == null)
+                                    if (modifersProp is null)
                                     {
                                         modifersProp = props["DefaultModifiers"];
                                     }
@@ -315,10 +309,10 @@ namespace System.ComponentModel.Design.Serialization
                                 Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
                             }
 
-                            TraceErrorIf(assignRhs == null, "No RHS code assign for object {0}", value);
+                            TraceErrorIf(assignRhs is null, "No RHS code assign for object {0}", value);
                             if (assignRhs != null)
                             {
-                                if (assignLhs == null)
+                                if (assignLhs is null)
                                 {
                                     // We cannot do much more for this object.  If isComplete is true,
                                     // then the RHS now becomes our LHS.  Otherwise, I'm afraid we have
@@ -399,7 +393,7 @@ namespace System.ComponentModel.Design.Serialization
                             // code and then see if we can cache the results for later.
                             ComponentCache cache = manager.GetService(typeof(ComponentCache)) as ComponentCache;
                             ComponentCache.Entry entry = null;
-                            if (cache == null)
+                            if (cache is null)
                             {
                                 if (manager.GetService(typeof(IServiceContainer)) is ServiceContainer sc)
                                 {
@@ -415,11 +409,11 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
 
-                            if (entry == null || entry.Tracking)
+                            if (entry is null || entry.Tracking)
                             {
                                 // Pushing the entry here allows it to be found by the resource code dom serializer,
                                 // which will add data to the ResourceBlob property on the entry.
-                                if (entry == null)
+                                if (entry is null)
                                 {
                                     entry = new ComponentCache.Entry(cache);
 

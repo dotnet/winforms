@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.Windows.Forms.VisualStyles;
 using System.Drawing;
+using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripHighContrastRenderer == null)
+                if (toolStripHighContrastRenderer is null)
                 {
                     toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/true);
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (renderer == null && VisualStyleRenderer.IsElementDefined(VisualStyleElement.ToolBar.Button.Normal))
+                    if (renderer is null && VisualStyleRenderer.IsElementDefined(VisualStyleElement.ToolBar.Button.Normal))
                     {
                         renderer = new VisualStyleRenderer(VisualStyleElement.ToolBar.Button.Normal);
                     }
@@ -569,7 +569,7 @@ namespace System.Windows.Forms
                 Rectangle dropDownRect = splitButton.DropDownButtonBounds;
 
                 // fill the color in the dropdown button
-                if (splitButton.BackgroundImage == null)
+                if (splitButton.BackgroundImage is null)
                 {
                     FillBackground(g, dropDownRect, splitButton.BackColor);
                 }
@@ -748,7 +748,7 @@ namespace System.Windows.Forms
             {
                 VisualStyleRenderer vsRenderer = VisualStyleRenderer;
 
-                if (vsRenderer == null || (item.BackColor != SystemColors.Control))
+                if (vsRenderer is null || (item.BackColor != SystemColors.Control))
                 {
                     FillBackground(g, fillRect, item.BackColor);
                 }

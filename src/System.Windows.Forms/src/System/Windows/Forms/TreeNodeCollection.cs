@@ -240,7 +240,7 @@ namespace System.Windows.Forms
 
         public virtual void AddRange(TreeNode[] nodes)
         {
-            if (nodes == null)
+            if (nodes is null)
             {
                 throw new ArgumentNullException(nameof(nodes));
             }
@@ -285,7 +285,7 @@ namespace System.Windows.Forms
 
         private ArrayList FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, ArrayList foundTreeNodes)
         {
-            if ((treeNodeCollectionToLookIn == null) || (foundTreeNodes == null))
+            if ((treeNodeCollectionToLookIn is null) || (foundTreeNodes is null))
             {
                 return null;
             }
@@ -295,7 +295,7 @@ namespace System.Windows.Forms
 
             for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
             {
-                if (treeNodeCollectionToLookIn[i] == null)
+                if (treeNodeCollectionToLookIn[i] is null)
                 {
                     continue;
                 }
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < treeNodeCollectionToLookIn.Count; i++)
                 {
-                    if (treeNodeCollectionToLookIn[i] == null)
+                    if (treeNodeCollectionToLookIn[i] is null)
                     {
                         continue;
                     }
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
 
         private int AddInternal(TreeNode node, int delta)
         {
-            if (node == null)
+            if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }
@@ -386,7 +386,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object node)
         {
-            if (node == null)
+            if (node is null)
             {
                 throw new ArgumentNullException(nameof(node));
             }

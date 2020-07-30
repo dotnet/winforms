@@ -124,7 +124,7 @@ namespace System.Windows.Forms
             if (site != null)
             {
                 object o = site.GetService(typeof(ISelectionService));
-                Debug.Assert(o == null || o is ISelectionService, "service must implement ISelectionService");
+                Debug.Assert(o is null || o is ISelectionService, "service must implement ISelectionService");
                 if (o is ISelectionService)
                 {
                     return (ISelectionService)o;

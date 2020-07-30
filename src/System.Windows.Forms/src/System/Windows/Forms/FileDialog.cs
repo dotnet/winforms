@@ -158,7 +158,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fileNames == null || string.IsNullOrEmpty(_fileNames[0]))
+                if (_fileNames is null || string.IsNullOrEmpty(_fileNames[0]))
                 {
                     return string.Empty;
                 }
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                     if (!string.IsNullOrEmpty(value))
                     {
                         string[] formats = value.Split('|');
-                        if (formats == null || formats.Length % 2 != 0)
+                        if (formats is null || formats.Length % 2 != 0)
                         {
                             throw new ArgumentException(SR.FileDialogInvalidFilter, nameof(value));
                         }
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
                 {
                     s = " |*.*";
                 }
-                else if (s == null)
+                else if (s is null)
                 {
                     return null;
                 }

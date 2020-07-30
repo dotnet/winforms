@@ -11,13 +11,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using Microsoft.Win32;
 using static Interop;
 using static Interop.Ole32;
 using IAdviseSink = System.Runtime.InteropServices.ComTypes.IAdviseSink;
@@ -121,7 +119,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (prop.Value == null)
+                    if (prop.Value is null)
                     {
                         return Color.Empty;
                     }
@@ -205,7 +203,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (prop.Value == null)
+                    if (prop.Value is null)
                     {
                         return Color.Empty;
                     }
@@ -482,7 +480,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal static HRESULT EnumVerbs(out IEnumOLEVERB ppEnumOleVerb)
             {
-                if (s_axVerbs == null)
+                if (s_axVerbs is null)
                 {
                     var verbShow = new OLEVERB();
                     var verbInplaceActivate = new OLEVERB();
@@ -768,7 +766,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT GetWindow(IntPtr* phwnd)
             {
-                if (phwnd == null)
+                if (phwnd is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -1377,7 +1375,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT QuickActivate(QACONTAINER pQaContainer, QACONTROL* pQaControl)
             {
-                if (pQaControl == null)
+                if (pQaControl is null)
                 {
                     return HRESULT.E_FAIL;
                 }
@@ -1740,7 +1738,7 @@ namespace System.Windows.Forms
                     ComSourceInterfacesAttribute coms = (ComSourceInterfacesAttribute)custom[0];
                     string eventName = coms.Value.Split(new char[] { '\0' })[0];
                     eventInterface = controlType.Module.Assembly.GetType(eventName, false);
-                    if (eventInterface == null)
+                    if (eventInterface is null)
                     {
                         eventInterface = Type.GetType(eventName, false);
                     }
@@ -1926,7 +1924,7 @@ namespace System.Windows.Forms
                     buttonControl.NotifyDefault((bool)obj);
                 }
 
-                if (_clientSite == null && _accelTable != IntPtr.Zero)
+                if (_clientSite is null && _accelTable != IntPtr.Zero)
                 {
                     User32.DestroyAcceleratorTable(new HandleRef(this, _accelTable));
                     _accelTable = IntPtr.Zero;
@@ -2025,7 +2023,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
             {
-                if (lprcPosRect == null || lprcClipRect == null)
+                if (lprcPosRect is null || lprcClipRect is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -2160,7 +2158,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal unsafe HRESULT TranslateAccelerator(User32.MSG* lpmsg)
             {
-                if (lpmsg == null)
+                if (lpmsg is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -2288,7 +2286,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal HRESULT Unadvise(uint dwConnection)
             {
-                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] == null)
+                if (dwConnection > _adviseList.Count || _adviseList[(int)dwConnection - 1] is null)
                 {
                     return HRESULT.OLE_E_NOCONNECTION;
                 }

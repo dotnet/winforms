@@ -36,7 +36,7 @@ namespace System.Resources
         {
             Assembly result = null;
 
-            if (_cachedAssemblies == null)
+            if (_cachedAssemblies is null)
             {
                 _cachedAssemblies = Hashtable.Synchronized(new Hashtable());
             }
@@ -46,7 +46,7 @@ namespace System.Resources
                 result = _cachedAssemblies[name] as Assembly;
             }
 
-            if (result == null)
+            if (result is null)
             {
                 result = Assembly.Load(name.FullName);
                 if (result != null)
@@ -99,7 +99,7 @@ namespace System.Resources
             Type result = null;
 
             // Check type cache first
-            if (_cachedTypes == null)
+            if (_cachedTypes is null)
             {
                 _cachedTypes = Hashtable.Synchronized(new Hashtable(StringComparer.Ordinal));
             }
@@ -116,7 +116,7 @@ namespace System.Resources
                 result = Type.GetType(name, false, ignoreCase);
             }
 
-            if (result == null && _names != null)
+            if (result is null && _names != null)
             {
                 // If the type is assembly qualified name, we sort the assembly names
                 // to put assemblies with same name in the front so that they can
@@ -159,7 +159,7 @@ namespace System.Resources
                     if (asm != null)
                     {
                         result = asm.GetType(name, false, ignoreCase);
-                        if (result == null)
+                        if (result is null)
                         {
                             int indexOfComma = name.IndexOf(',');
                             if (indexOfComma != -1)
@@ -177,7 +177,7 @@ namespace System.Resources
                 }
             }
 
-            if (result == null && throwOnError)
+            if (result is null && throwOnError)
             {
                 throw new ArgumentException(string.Format(SR.InvalidResXNoType, name));
             }

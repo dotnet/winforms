@@ -409,7 +409,7 @@ namespace System.Windows.Forms
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
         {
-            if (page == null)
+            if (page is null)
             {
                 throw new ArgumentNullException(nameof(page));
             }
@@ -1445,7 +1445,7 @@ namespace System.Windows.Forms
 
                         char* MarshalString(string? str)
                         {
-                            if (str == null)
+                            if (str is null)
                             {
                                 return null;
                             }
@@ -1499,7 +1499,7 @@ namespace System.Windows.Forms
 
             static long SizeOfString(string? str)
             {
-                return str == null ? 0 : ((long)str.Length + 1) * sizeof(char);
+                return str is null ? 0 : ((long)str.Length + 1) * sizeof(char);
             }
         }
 

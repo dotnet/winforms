@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             {
                 return (string)value;
             }
-            if (value == null)
+            if (value is null)
             {
                 return "";
             }
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             {
                 return SR.toStringNone;
             }
-            else if (destinationType == typeof(string) && (value == null))
+            else if (destinationType == typeof(string) && (value is null))
             {
                 return SR.toStringNone;
             }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
                 object instance = context.Instance;
                 PropertyDescriptor imageListProp = ImageListUtils.GetImageListProperty(context.PropertyDescriptor, ref instance);
 
-                while (instance != null && imageListProp == null)
+                while (instance != null && imageListProp is null)
                 {
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (imageListProp == null)
+                    if (imageListProp is null)
                     {
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...

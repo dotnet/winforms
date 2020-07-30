@@ -47,7 +47,7 @@ namespace System.Windows.Forms
 
         public void SetFlowBreak(object child, bool value)
         {
-            if (child == null)
+            if (child is null)
             {
                 throw new ArgumentNullException(nameof(child));
             }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
 
         public bool GetFlowBreak(object child)
         {
-            if (child == null)
+            if (child is null)
             {
                 throw new ArgumentNullException(nameof(child));
             }

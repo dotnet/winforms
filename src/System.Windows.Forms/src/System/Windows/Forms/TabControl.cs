@@ -746,7 +746,7 @@ namespace System.Windows.Forms
             get
             {
                 int index = SelectedIndex;
-                if (index == -1 || _tabPages == null)
+                if (index == -1 || _tabPages is null)
                 {
                     return null;
                 }
@@ -1028,7 +1028,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectTab(TabPage tabPage)
         {
-            if (tabPage == null)
+            if (tabPage is null)
             {
                 throw new ArgumentNullException(nameof(tabPage));
             }
@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectTab(string tabPageName)
         {
-            if (tabPageName == null)
+            if (tabPageName is null)
             {
                 throw new ArgumentNullException(nameof(tabPageName));
             }
@@ -1163,7 +1163,7 @@ namespace System.Windows.Forms
 
         protected string GetToolTipText(object item)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -1185,7 +1185,7 @@ namespace System.Windows.Forms
 
         internal void Insert(int index, TabPage tabPage)
         {
-            if (_tabPages == null)
+            if (_tabPages is null)
             {
                 _tabPages = new TabPage[4];
             }
@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (tabPage == null)
+            if (tabPage is null)
             {
                 throw new ArgumentNullException(nameof(tabPage));
             }
@@ -1673,7 +1673,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -1708,7 +1708,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectTab(TabPage tabPage)
         {
-            if (tabPage == null)
+            if (tabPage is null)
             {
                 throw new ArgumentNullException(nameof(tabPage));
             }
@@ -1721,7 +1721,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectTab(string tabPageName)
         {
-            if (tabPageName == null)
+            if (tabPageName is null)
             {
                 throw new ArgumentNullException(nameof(tabPageName));
             }

@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (richTextDbg == null)
+                if (richTextDbg is null)
                 {
                     richTextDbg = new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
                 }
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
                 {
                     if (User32.GetWindowTextLengthW(new HandleRef(this, Handle)) > 0)
                     {
-                        if (value == null)
+                        if (value is null)
                         {
                             base.Font = null;
                             SetCharFormatFont(false, Font);
@@ -465,7 +465,7 @@ namespace System.Windows.Forms
                             try
                             {
                                 Font f = GetCharFormatFont(false);
-                                if (f == null || !f.Equals(value))
+                                if (f is null || !f.Equals(value))
                                 {
                                     SetCharFormatFont(false, value);
                                     // update controlfont from "resolved" font from the attempt
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             get { return richTextBoxFlags[richTextShortcutsEnabledSection] != 0; }
             set
             {
-                if (shortcutsToDisable == null)
+                if (shortcutsToDisable is null)
                 {
                     shortcutsToDisable = new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
                 }
@@ -685,7 +685,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms
             set
             {
                 ForceHandleCreate();
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -1318,7 +1318,7 @@ namespace System.Windows.Forms
                 // we need to get the number of tabstops to copy
                 User32.SendMessageW(this, (User32.WM)EM.GETPARAFORMAT, IntPtr.Zero, ref pf);
 
-                pf.cTabCount = (short)((value == null) ? 0 : value.Length);
+                pf.cTabCount = (short)((value is null) ? 0 : value.Length);
                 pf.dwMask = PFM.TABSTOPS;
                 for (int x = 0; x < pf.cTabCount; x++)
                 {
@@ -1423,7 +1423,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                if (!IsHandleCreated && textRtf == null)
+                if (!IsHandleCreated && textRtf is null)
                 {
                     if (textPlain != null)
                     {
@@ -1458,7 +1458,7 @@ namespace System.Windows.Forms
                     else
                     {
                         textPlain = null;
-                        if (value == null)
+                        if (value is null)
                         {
                             value = string.Empty;
                         }
@@ -1736,7 +1736,7 @@ namespace System.Windows.Forms
                 {
                     case RichTextBox.OUTPUT:
                         {
-                            if (editStream == null)
+                            if (editStream is null)
                             {
                                 editStream = new MemoryStream();
                             }
@@ -1891,7 +1891,7 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe int Find(string str, int start, int end, RichTextBoxFinds options)
         {
-            if (str == null)
+            if (str is null)
             {
                 throw new ArgumentNullException(nameof(str));
             }
@@ -2046,7 +2046,7 @@ namespace System.Windows.Forms
 
             int textLength = TextLength;
 
-            if (characterSet == null)
+            if (characterSet is null)
             {
                 throw new ArgumentNullException(nameof(characterSet));
             }
@@ -2422,7 +2422,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void LoadFile(Stream data, RichTextBoxStreamType fileType)
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -3142,7 +3142,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(RichTextDbg.TraceVerbose, "update ole callback (" + AllowDrop + ")");
             if (IsHandleCreated)
             {
-                if (oleCallback == null)
+                if (oleCallback is null)
                 {
                     Debug.WriteLineIf(RichTextDbg.TraceVerbose, "binding ole callback");
 
@@ -3836,7 +3836,7 @@ namespace System.Windows.Forms
 
             public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
-                if (pdwEffect == null)
+                if (pdwEffect is null)
                 {
                     return HRESULT.E_POINTER;
                 }

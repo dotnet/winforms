@@ -75,27 +75,27 @@ namespace System.Windows.Forms.Design.Behavior
         internal DropSourceBehavior(ICollection dragComponents, Control source, Point initialMouseLocation)
         {
             serviceProviderSource = source.Site as IServiceProvider;
-            if (serviceProviderSource == null)
+            if (serviceProviderSource is null)
             {
                 Debug.Fail("DragBehavior could not be created because the source ServiceProvider was not found");
                 return;
             }
 
             behaviorServiceSource = (BehaviorService)serviceProviderSource.GetService(typeof(BehaviorService));
-            if (behaviorServiceSource == null)
+            if (behaviorServiceSource is null)
             {
                 Debug.Fail("DragBehavior could not be created because the BehaviorService was not found");
                 return;
             }
 
-            if (dragComponents == null || dragComponents.Count <= 0)
+            if (dragComponents is null || dragComponents.Count <= 0)
             {
                 Debug.Fail("There are no component to drag!");
                 return;
             }
 
             srcHost = (IDesignerHost)serviceProviderSource.GetService(typeof(IDesignerHost));
-            if (srcHost == null)
+            if (srcHost is null)
             {
                 Debug.Fail("DragBehavior could not be created because the srcHost could not be found");
                 return;
@@ -296,33 +296,33 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             // If for some reason we couldn't get these guys, let's try and get them here
-            if (serviceProviderTarget == null)
+            if (serviceProviderTarget is null)
             {
                 Debug.Fail("EndDragDrop - how can serviceProviderTarget be null?");
                 serviceProviderTarget = dragTarget.Site as IServiceProvider;
-                if (serviceProviderTarget == null)
+                if (serviceProviderTarget is null)
                 {
                     Debug.Fail("EndDragDrop - how can serviceProviderTarget be null?");
                     return;
                 }
             }
 
-            if (destHost == null)
+            if (destHost is null)
             {
                 Debug.Fail("EndDragDrop - how can destHost be null?");
                 destHost = (IDesignerHost)serviceProviderTarget.GetService(typeof(IDesignerHost));
-                if (destHost == null)
+                if (destHost is null)
                 {
                     Debug.Fail("EndDragDrop - how can destHost be null?");
                     return;
                 }
             }
 
-            if (behaviorServiceTarget == null)
+            if (behaviorServiceTarget is null)
             {
                 Debug.Fail("EndDragDrop - how can behaviorServiceTarget be null?");
                 behaviorServiceTarget = (BehaviorService)serviceProviderTarget.GetService(typeof(BehaviorService));
-                if (behaviorServiceTarget == null)
+                if (behaviorServiceTarget is null)
                 {
                     Debug.Fail("EndDragDrop - how can behaviorServiceTarget be null?");
                     return;
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.Design.Behavior
                     if (dragComponents.Length == 1)
                     {
                         string name = TypeDescriptor.GetComponentName(dragComponents[0].dragComponent);
-                        if (name == null || name.Length == 0)
+                        if (name is null || name.Length == 0)
                         {
                             name = dragComponents[0].dragComponent.GetType().Name;
                         }
@@ -404,7 +404,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                             // Create a copy of them
                             temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget) as ArrayList;
-                            if (temp == null)
+                            if (temp is null)
                             {
                                 Debug.Fail("Couldn't create copies of the controls we are dragging.");
                                 return;
@@ -511,7 +511,7 @@ namespace System.Windows.Forms.Design.Behavior
                         // Rearrange the Component Tray - if we have to
                         if (performCopy)
                         {
-                            if (tray == null)
+                            if (tray is null)
                             {
                                 // the target did not have a tray already, so let's go get it - if there is one
                                 tray = serviceProviderTarget.GetService(typeof(ComponentTray)) as ComponentTray;
@@ -577,7 +577,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (statusCommandUITarget != null)
                 {
                     // if selSvs is not null, then we either did a copy, or moved between forms, so use it to set the right info
-                    statusCommandUITarget.SetStatusInformation(selSvc == null ? dragComponents[primaryComponentIndex].dragComponent as Component :
+                    statusCommandUITarget.SetStatusInformation(selSvc is null ? dragComponents[primaryComponentIndex].dragComponent as Component :
                                                                                 selSvc.PrimarySelection as Component);
                 }
             }
@@ -594,7 +594,7 @@ namespace System.Windows.Forms.Design.Behavior
             // cache off this last effect so in QueryContinueDrag we can identify (if dropped) a valid drop operation
             lastEffect = e.Effect;
             //if our target is null, we can't drop anywhere, so don't even draw images
-            if (data.Target == null || e.Effect == DragDropEffects.None)
+            if (data.Target is null || e.Effect == DragDropEffects.None)
             {
                 if (clearDragImageRect != dragImageRect)
                 {
@@ -636,13 +636,13 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!data.Target.Equals(lastDropTarget))
                 {
                     serviceProviderTarget = target.Site as IServiceProvider;
-                    if (serviceProviderTarget == null)
+                    if (serviceProviderTarget is null)
                     {
                         return;
                     }
 
                     IDesignerHost newDestHost = (IDesignerHost)serviceProviderTarget.GetService(typeof(IDesignerHost));
-                    if (newDestHost == null)
+                    if (newDestHost is null)
                     {
                         return;
                     }
@@ -656,7 +656,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                     statusCommandUITarget = new StatusCommandUI(serviceProviderTarget);
                     // Spin up new stuff if the host changes, or if this is the first time through (lastDropTarget will be null in this case)
-                    if ((lastDropTarget == null) || (newDestHost != destHost))
+                    if ((lastDropTarget is null) || (newDestHost != destHost))
                     {
                         if (destHost != null && destHost != srcHost)
                         {
@@ -665,7 +665,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
 
                         behaviorServiceTarget = (BehaviorService)serviceProviderTarget.GetService(typeof(BehaviorService));
-                        if (behaviorServiceTarget == null)
+                        if (behaviorServiceTarget is null)
                         {
                             return;
                         }

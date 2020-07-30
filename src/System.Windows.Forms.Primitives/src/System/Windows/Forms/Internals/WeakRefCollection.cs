@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             {
                 object? item = this[currentIndex];
 
-                if (item == null)
+                if (item is null)
                 {
                     InnerList.RemoveAt(currentIndex);
                 }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            if (other == null || Count != other.Count)
+            if (other is null || Count != other.Count)
             {
                 return false;
             }
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
 
         private WeakRefObject? CreateWeakRefObject(object? value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }
@@ -195,14 +195,14 @@ namespace System.Windows.Forms
                     return true;
                 }
 
-                if (other == null)
+                if (other is null)
                 {
                     return false;
                 }
 
                 if (other.Target != Target)
                 {
-                    if (Target == null || !Target.Equals(other.Target))
+                    if (Target is null || !Target.Equals(other.Target))
                     {
                         return false;
                     }

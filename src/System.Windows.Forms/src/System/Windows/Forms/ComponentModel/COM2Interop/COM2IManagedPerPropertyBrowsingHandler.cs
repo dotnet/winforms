@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Oleaut32.VARIANT* pvars = null;
 
             HRESULT hr = target.GetPropertyAttributes(dispid, &cItems, &pbstrs, &pvars);
-            if (hr != HRESULT.S_OK || cItems == 0 || pvars == null)
+            if (hr != HRESULT.S_OK || cItems == 0 || pvars is null)
             {
                 return Array.Empty<Attribute>();
             }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     a = t.Assembly;
                 }
 
-                if (t == null)
+                if (t is null)
                 {
                     // check for an assembly name.
                     //
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
 
                     // try to get the field value
-                    if (a == null)
+                    if (a is null)
                     {
                         t = Type.GetType(attrName.Substring(0, lastDot) + assemblyName);
                     }
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         t = a.GetType(attrName.Substring(0, lastDot) + assemblyName);
                     }
 
-                    if (t == null)
+                    if (t is null)
                     {
                         Debug.Fail("Failed load attribute '" + attrName + assemblyName + "'.  It's Type could not be found.");
                         continue;

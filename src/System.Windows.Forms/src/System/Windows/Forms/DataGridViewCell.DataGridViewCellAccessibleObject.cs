@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -41,7 +40,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner == null)
+                    if (Owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
@@ -60,7 +59,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
@@ -123,7 +122,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
@@ -144,7 +143,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
@@ -199,14 +198,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
 
                     object formattedValue = _owner.FormattedValue;
                     string formattedValueAsString = formattedValue as string;
-                    if (formattedValue == null || (formattedValueAsString != null && string.IsNullOrEmpty(formattedValueAsString)))
+                    if (formattedValue is null || (formattedValueAsString != null && string.IsNullOrEmpty(formattedValueAsString)))
                     {
                         return SR.DataGridView_AccNullValue;
                     }
@@ -244,7 +243,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    if (_owner.OwningRow == null)
+                    if (_owner.OwningRow is null)
                     {
                         return;
                     }
@@ -275,7 +274,7 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -325,12 +324,12 @@ namespace System.Windows.Forms
 
             internal Rectangle GetAccessibleObjectBounds(AccessibleObject parentAccObject)
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                if (_owner.OwningColumn == null)
+                if (_owner.OwningColumn is null)
                 {
                     return Rectangle.Empty;
                 }
@@ -400,7 +399,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetChild(int index)
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -421,7 +420,7 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -451,12 +450,12 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                if (_owner.OwningColumn == null || _owner.OwningRow == null)
+                if (_owner.OwningColumn is null || _owner.OwningRow is null)
                 {
                     return null;
                 }
@@ -599,7 +598,7 @@ namespace System.Windows.Forms
 
             public override void Select(AccessibleSelection flags)
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -647,7 +646,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_runtimeId == null)
+                    if (_runtimeId is null)
                     {
                         _runtimeId = new int[2];
                         _runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
@@ -694,12 +693,12 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (_owner == null)
+                if (_owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                if (_owner.OwningColumn == null || _owner.OwningRow == null)
+                if (_owner.OwningColumn is null || _owner.OwningRow is null)
                 {
                     return null;
                 }

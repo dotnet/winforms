@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
                 es.AddExtenderProvider(this);
             }
 
-            if (GetService(typeof(IEventHandlerService)) == null)
+            if (GetService(typeof(IEventHandlerService)) is null)
             {
                 if (host != null)
                 {
@@ -105,9 +105,9 @@ namespace System.Windows.Forms.Design
             IMenuCommandService mcs = MenuService;
             if (mcs != null)
             {
-                Debug.Assert(menucmdArrangeIcons == null, "Non-Null Menu Command for ArrangeIcons");
-                Debug.Assert(menucmdLineupIcons == null, "Non-Null Menu Command for LineupIcons");
-                Debug.Assert(menucmdLargeIcons == null, "Non-Null Menu Command for LargeIcons");
+                Debug.Assert(menucmdArrangeIcons is null, "Non-Null Menu Command for ArrangeIcons");
+                Debug.Assert(menucmdLineupIcons is null, "Non-Null Menu Command for LineupIcons");
+                Debug.Assert(menucmdLargeIcons is null, "Non-Null Menu Command for LargeIcons");
                 menucmdArrangeIcons = new MenuCommand(new EventHandler(OnMenuArrangeIcons), StandardCommands.ArrangeIcons);
                 menucmdLineupIcons = new MenuCommand(new EventHandler(OnMenuLineupIcons), StandardCommands.LineupIcons);
                 menucmdLargeIcons = new MenuCommand(new EventHandler(OnMenuShowLargeIcons), StandardCommands.ShowLargeIcons);
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Design
         private void ResetTrayControls()
         {
             ControlCollection children = (ControlCollection)Controls;
-            if (children == null)
+            if (children is null)
             {
                 return;
             }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms.Design
 
         private void DoAutoArrange(bool dirtyDesigner)
         {
-            if (controls == null || controls.Count <= 0)
+            if (controls is null || controls.Count <= 0)
             {
                 return;
             }
@@ -572,7 +572,7 @@ namespace System.Windows.Forms.Design
 
         internal virtual OleDragDropHandler GetOleDragHandler()
         {
-            if (oleDragDropHandler == null)
+            if (oleDragDropHandler is null)
             {
                 oleDragDropHandler = new TrayOleDragDropHandler(DragHandler, serviceProvider, this);
             }
@@ -583,7 +583,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (dragHandler == null)
+                if (dragHandler is null)
                 {
                     dragHandler = new TraySelectionUIHandler(this);
                 }
@@ -688,12 +688,12 @@ namespace System.Windows.Forms.Design
                 return;
             }
             // And designate us as the selection UI handler for the control.
-            if (selectionUISvc == null)
+            if (selectionUISvc is null)
             {
                 selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
 
                 // If there is no selection service, then we will provide our own.
-                if (selectionUISvc == null)
+                if (selectionUISvc is null)
                 {
                     selectionUISvc = new SelectionUIService(host);
                     host.AddService(typeof(ISelectionUIService), selectionUISvc);
@@ -753,7 +753,7 @@ namespace System.Windows.Forms.Design
             Debug.Assert(host != null, "Service object could not provide us with a designer host.");
             // Disallow controls to be added to the component tray.
             Type compType = host.GetType(tool.TypeName);
-            if (compType == null)
+            if (compType is null)
             {
                 return true;
             }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 string message = e.Message;
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     message = e.ToString();
                 }
@@ -977,7 +977,7 @@ namespace System.Windows.Forms.Design
         public Point GetTrayLocation(IComponent receiver)
         {
             Control c = TrayControl.FromComponent(receiver);
-            if (c == null)
+            if (c is null)
             {
                 Debug.Fail("Anything we're extending should have a component view.");
                 return new Point();
@@ -1006,7 +1006,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public bool IsTrayComponent(IComponent comp)
         {
-            if (TrayControl.FromComponent(comp) == null)
+            if (TrayControl.FromComponent(comp) is null)
             {
                 return false;
             }
@@ -1104,14 +1104,14 @@ namespace System.Windows.Forms.Design
             if (!TabOrderActive)
             {
                 SuspendLayout();
-                if (toolboxService == null)
+                if (toolboxService is null)
                 {
                     toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
                 }
                 OleDragDropHandler dragDropHandler = GetOleDragHandler();
                 object[] dragComps = dragDropHandler.GetDraggingObjects(de);
-                // Only assume the items came from the ToolBox if dragComps == null
-                if (toolboxService != null && dragComps == null)
+                // Only assume the items came from the ToolBox if dragComps is null
+                if (toolboxService != null && dragComps is null)
                 {
                     mouseDragTool = toolboxService.DeserializeToolboxItem(de.Data, (IDesignerHost)GetService(typeof(IDesignerHost)));
                 }
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms.Design
             base.OnMouseDown(e);
             if (!TabOrderActive)
             {
-                if (toolboxService == null)
+                if (toolboxService is null)
                 {
                     toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
                 }
@@ -1486,11 +1486,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void OnSetCursor()
         {
-            if (toolboxService == null)
+            if (toolboxService is null)
             {
                 toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
             }
-            if (toolboxService == null || !toolboxService.SetCursor())
+            if (toolboxService is null || !toolboxService.SetCursor())
             {
                 Cursor.Current = Cursors.Default;
             }
@@ -1564,7 +1564,7 @@ namespace System.Windows.Forms.Design
         public void SetTrayLocation(IComponent receiver, Point location)
         {
             TrayControl c = TrayControl.FromComponent(receiver);
-            if (c == null)
+            if (c is null)
             {
                 Debug.Fail("Anything we're extending should have a component view.");
                 return;
@@ -1673,7 +1673,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (inheritanceUI == null)
+                if (inheritanceUI is null)
                 {
                     inheritanceUI = new InheritanceUI();
                 }
@@ -1685,7 +1685,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (menuCommandService == null)
+                if (menuCommandService is null)
                 {
                     menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
                 }
@@ -1825,7 +1825,7 @@ namespace System.Windows.Forms.Design
                 whiteSpace.Y = whiteSpace.Y * 2 + 3;
             }
 
-            if (prevCtl == null)
+            if (prevCtl is null)
             {
                 Rectangle display = DisplayRectangle;
                 Point newLoc = new Point(display.X + whiteSpace.X, display.Y + whiteSpace.Y);
@@ -1941,7 +1941,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (name == null)
+                if (name is null)
                 {
                     // We always want name to have something in it, so we default to the class name.  This way the design instance contains something semi-intuitive if we don't have a site.
                     name = component.GetType().Name;
@@ -2054,7 +2054,7 @@ namespace System.Windows.Forms.Design
             public static TrayControl FromComponent(IComponent component)
             {
                 TrayControl c = null;
-                if (component == null)
+                if (component is null)
                 {
                     return null;
                 }
@@ -2109,7 +2109,7 @@ namespace System.Windows.Forms.Design
                         Capture = false;
                         // We try to get a designer for the component and let it view the event.  If this fails, then we'll try to do it ourselves.
                         IDesigner designer = host.GetDesigner(_component);
-                        if (designer == null)
+                        if (designer is null)
                         {
                             ViewDefaultEvent(_component);
                         }
@@ -2487,7 +2487,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // If we couldn't find a property for this event, or if the property is read only, then abort and just show the code.
-                if (defaultPropEvent == null || defaultPropEvent.IsReadOnly)
+                if (defaultPropEvent is null || defaultPropEvent.IsReadOnly)
                 {
                     if (eps != null)
                     {
@@ -2499,7 +2499,7 @@ namespace System.Windows.Forms.Design
                 string handler = (string)defaultPropEvent.GetValue(component);
 
                 // If there is no handler set, set one now.
-                if (handler == null)
+                if (handler is null)
                 {
                     eventChanged = true;
                     handler = eps.CreateUniqueMethodName(component, defaultEvent);
@@ -2906,13 +2906,13 @@ namespace System.Windows.Forms.Design
                         try
                         {
                             object serializationData = dataObj.GetData(OleDragDropHandler.DataFormat, true);
-                            if (serializationData == null)
+                            if (serializationData is null)
                             {
                                 return false;
                             }
 
                             IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                            if (ds == null)
+                            if (ds is null)
                             {
                                 return false;
                             }

@@ -153,7 +153,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
-                if (Owner.OwningColumn == null)
+                if (Owner.OwningColumn is null)
                 {
                     return null;
                 }
@@ -255,7 +255,7 @@ namespace System.Windows.Forms
 
             public override void Select(AccessibleSelection flags)
             {
-                if (Owner == null)
+                if (Owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView == null)
+                if (dataGridView is null)
                 {
                     return;
                 }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (Owner.OwningColumn == null)
+                if (Owner.OwningColumn is null)
                 {
                     return null;
                 }

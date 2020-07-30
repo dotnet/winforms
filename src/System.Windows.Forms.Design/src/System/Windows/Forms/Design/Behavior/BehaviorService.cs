@@ -236,7 +236,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_dropSource == null)
+                if (_dropSource is null)
                 {
                     _dropSource = new Control();
                 }
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point ControlToAdornerWindow(Control c)
         {
-            if (c.Parent == null)
+            if (c.Parent is null)
             {
                 return Point.Empty;
             }
@@ -369,7 +369,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Rectangle ControlRectInAdornerWindow(Control c)
         {
-            if (c.Parent == null)
+            if (c.Parent is null)
             {
                 return Rectangle.Empty;
             }
@@ -495,7 +495,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (_captureBehavior != null)
                 {
                     OnLoseCapture();
-                    Debug.Assert(_captureBehavior == null, "OnLostCapture should have cleared captureBehavior");
+                    Debug.Assert(_captureBehavior is null, "OnLostCapture should have cleared captureBehavior");
                 }
             }
             return behavior;
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void PushBehavior(Behavior behavior)
         {
-            if (behavior == null)
+            if (behavior is null)
             {
                 throw new ArgumentNullException(nameof(behavior));
             }
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 base.OnHandleCreated(e);
                 s_adornerWindowList.Add(this);
-                if (s_mouseHook == null)
+                if (s_mouseHook is null)
                 {
                     s_mouseHook = new MouseHook();
                 }
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 get
                 {
-                    if (_designerFrame == null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
+                    if (_designerFrame is null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
                     {
                         return false;
                     }
@@ -1223,7 +1223,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                         //with a valid hit test, fire enter/leave events
                         InvokeMouseEnterLeave(_hitTestedGlyph, newGlyph);
-                        if (_validDragArgs == null)
+                        if (_validDragArgs is null)
                         {
                             //if we're not dragging, set the appropriate cursor
                             SetAppropriateCursor(hitTestCursor);
@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             InvokeMouseEnterLeave(_hitTestedGlyph, null);
-            if (_validDragArgs == null)
+            if (_validDragArgs is null)
             {
                 Cursor cursor = Cursors.Default;
                 if ((_behaviorStack != null) && (_behaviorStack.Count > 0))
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms.Design.Behavior
             //default cursors will let the toolbox svc set a cursor if needed
             if (cursor == Cursors.Default)
             {
-                if (_toolboxSvc == null)
+                if (_toolboxSvc is null)
                 {
                     _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
                 }
@@ -1433,13 +1433,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragEnter");
-            if (g == null)
+            if (g is null)
             {
                 g = _hitTestedGlyph;
             }
 
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, returning");
                 return;
@@ -1462,13 +1462,13 @@ namespace System.Windows.Forms.Design.Behavior
             _dragEnterReplies.Clear();
 
             // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one
-            if (g == null)
+            if (g is null)
             {
                 g = _hitTestedGlyph;
             }
 
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\t No behavior returning ");
                 return;
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseDoubleClick(MouseButtons button, Point mouseLoc)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1490,7 +1490,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseDown(MouseButtons button, Point mouseLoc)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1500,7 +1500,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseEnter(Glyph g)
         {
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1510,7 +1510,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseHover(Point mouseLoc)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms.Design.Behavior
             UnHookMouseEvent();
 
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1536,7 +1536,7 @@ namespace System.Windows.Forms.Design.Behavior
             HookMouseEvent();
 
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1548,7 +1548,7 @@ namespace System.Windows.Forms.Design.Behavior
             _dragEnterReplies.Clear();
             _validDragArgs = null;
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1583,7 +1583,7 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragDrop");
             _validDragArgs = null;//be sure to null out our cached drag args
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior. returning");
                 return;
@@ -1686,13 +1686,13 @@ namespace System.Windows.Forms.Design.Behavior
             _validDragArgs = e;
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragOver");
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, exiting with DragDropEffects.None");
                 e.Effect = DragDropEffects.None;
                 return;
             }
-            if (_hitTestedGlyph == null ||
+            if (_hitTestedGlyph is null ||
                (_hitTestedGlyph != null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
@@ -1708,7 +1708,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return;
             }
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnQueryContinueDrag(QueryContinueDragEventArgs e)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return;
             }

@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
@@ -71,7 +70,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (DataGridView == null || !DataGridView.Visible)
+                if (DataGridView is null || !DataGridView.Visible)
                 {
                     // No detached or invisible element is displayed.
                     return false;
@@ -230,14 +229,14 @@ namespace System.Windows.Forms
                 {
                     // row header cell
                     return OwningRow.Visible &&
-                            (DataGridView == null || DataGridView.RowHeadersVisible);
+                            (DataGridView is null || DataGridView.RowHeadersVisible);
                 }
 
                 if (OwningColumn != null)
                 {
                     // column header cell
                     return OwningColumn.Visible &&
-                            (DataGridView == null || DataGridView.ColumnHeadersVisible);
+                            (DataGridView is null || DataGridView.ColumnHeadersVisible);
                 }
 
                 if (DataGridView != null)
@@ -294,7 +293,7 @@ namespace System.Windows.Forms
             if (OwningRow != null)
             {
                 // row header cell
-                if ((DataGridView == null && rowIndex != -1) ||
+                if ((DataGridView is null && rowIndex != -1) ||
                     (DataGridView != null && (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)))
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
@@ -308,7 +307,7 @@ namespace System.Windows.Forms
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
-                if (OwningRow.GetVisible(rowIndex) && (DataGridView == null || DataGridView.RowHeadersVisible))
+                if (OwningRow.GetVisible(rowIndex) && (DataGridView is null || DataGridView.RowHeadersVisible))
                 {
                     state |= DataGridViewElementStates.Visible;
                     if (OwningRow.GetDisplayed(rowIndex))
@@ -330,7 +329,7 @@ namespace System.Windows.Forms
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
-                if (OwningColumn.Visible && (DataGridView == null || DataGridView.ColumnHeadersVisible))
+                if (OwningColumn.Visible && (DataGridView is null || DataGridView.ColumnHeadersVisible))
                 {
                     state |= DataGridViewElementStates.Visible;
                     if (OwningColumn.Displayed)
@@ -362,7 +361,7 @@ namespace System.Windows.Forms
             }
 
 #if DEBUG
-            if (OwningRow == null || OwningRow.Index != -1)
+            if (OwningRow is null || OwningRow.Index != -1)
             {
                 DataGridViewElementStates stateDebug = DataGridViewElementStates.ResizableSet;
                 if (Displayed)
@@ -398,7 +397,7 @@ namespace System.Windows.Forms
 
         protected override Size GetSize(int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 // detached cell
                 if (rowIndex != -1)
@@ -511,7 +510,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -525,7 +524,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseEnter(int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -545,7 +544,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -564,7 +563,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -641,7 +640,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
                     }

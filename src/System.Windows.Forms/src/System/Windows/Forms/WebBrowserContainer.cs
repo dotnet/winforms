@@ -8,7 +8,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -70,7 +69,7 @@ namespace System.Windows.Forms
         // IOleInPlaceFrame methods:
         unsafe HRESULT Ole32.IOleInPlaceFrame.GetWindow(IntPtr* phwnd)
         {
-            if (phwnd == null)
+            if (phwnd is null)
             {
                 return HRESULT.E_POINTER;
             }
@@ -101,7 +100,7 @@ namespace System.Windows.Forms
 
         HRESULT Ole32.IOleInPlaceFrame.SetActiveObject(Ole32.IOleInPlaceActiveObject pActiveObject, string pszObjName)
         {
-            if (pActiveObject == null)
+            if (pActiveObject is null)
             {
                 if (ctlInEditMode != null)
                 {
@@ -126,7 +125,7 @@ namespace System.Windows.Forms
                     ctlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
                 }
 
-                if (ctl == null)
+                if (ctl is null)
                 {
                     ctlInEditMode = null;
                 }
@@ -181,7 +180,7 @@ namespace System.Windows.Forms
         private void ListAXControls(ArrayList list, bool fuseOcx)
         {
             Hashtable components = GetComponents();
-            if (components == null)
+            if (components is null)
             {
                 return;
             }
@@ -220,7 +219,7 @@ namespace System.Windows.Forms
         {
             //
             IContainer rval = GetParentIContainer();
-            Debug.Assert(rval == null || assocContainer == null || rval == assocContainer,
+            Debug.Assert(rval is null || assocContainer is null || rval == assocContainer,
                          "mismatch between getIPD & aContainer");
             return rval ?? assocContainer;
         }
@@ -261,14 +260,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            Debug.Assert(parent.Site == null, "Parent is sited but we could not find IContainer!!!");
+            Debug.Assert(parent.Site is null, "Parent is sited but we could not find IContainer!!!");
 
             bool checkHashTable = true;
             Control[] ctls = new Control[containerCache.Values.Count];
             containerCache.Values.CopyTo(ctls, 0);
             if (ctls != null)
             {
-                if (ctls.Length > 0 && components == null)
+                if (ctls.Length > 0 && components is null)
                 {
                     components = new Hashtable();
                     checkHashTable = false;
@@ -287,12 +286,12 @@ namespace System.Windows.Forms
 
         private void GetAllChildren(Control ctl)
         {
-            if (ctl == null)
+            if (ctl is null)
             {
                 return;
             }
 
-            if (components == null)
+            if (components is null)
             {
                 components = new Hashtable();
             }
@@ -355,7 +354,7 @@ namespace System.Windows.Forms
 
             containerCache.Add(ctl, ctl);
 
-            if (assocContainer == null)
+            if (assocContainer is null)
             {
                 ISite site = ctl.Site;
                 if (site != null)
@@ -420,7 +419,7 @@ namespace System.Windows.Forms
                 tempSite.AXInPlaceObject.UIDeactivate();
             }
             site.AddSelectionHandler();
-            Debug.Assert(siteUIActive == null, "Object did not call OnUIDeactivate");
+            Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
             siteUIActive = site;
             ContainerControl f = site.ContainingControl;
             if (f != null && f.Contains(site))
@@ -459,7 +458,7 @@ namespace System.Windows.Forms
 
         internal void OnExitEditMode(WebBrowserBase ctl)
         {
-            Debug.Assert(ctlInEditMode == null || ctlInEditMode == ctl, "who is exiting edit mode?");
+            Debug.Assert(ctlInEditMode is null || ctlInEditMode == ctl, "who is exiting edit mode?");
             if (ctlInEditMode == ctl)
             {
                 ctlInEditMode = null;

@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_begin == null)
+                if (_begin is null)
                 {
                     _begin = new CodeStatementCollection();
                 }
@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_end == null)
+                if (_end is null)
                 {
                     _end = new CodeStatementCollection();
                 }
@@ -68,7 +68,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_container == null)
+                if (_container is null)
                 {
                     _container = new CodeStatementCollection();
                 }
@@ -86,7 +86,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_statements == null)
+                if (_statements is null)
                 {
                     _statements = new CodeStatementCollection();
                 }
@@ -99,7 +99,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_locals == null)
+                if (_locals is null)
                 {
                     _locals = new CodeStatementCollection();
                 }
@@ -112,7 +112,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_fields == null)
+                if (_fields is null)
                 {
                     _fields = new CodeStatementCollection();
                 }
@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_variables == null)
+                if (_variables is null)
                 {
                     _variables = new CodeStatementCollection();
                 }

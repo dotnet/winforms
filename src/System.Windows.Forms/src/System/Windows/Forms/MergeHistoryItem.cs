@@ -1,10 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 #nullable disable
-
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
@@ -28,6 +26,6 @@ namespace System.Windows.Forms
         public ToolStripItemCollection IndexCollection { get; set; }
 
         public override string ToString()
-            => $"MergeAction: {MergeAction} | TargetItem: {(TargetItem == null ? "null" : TargetItem.Text)} Index: {Index}";
+            => $"MergeAction: {MergeAction} | TargetItem: {(TargetItem is null ? "null" : TargetItem.Text)} Index: {Index}";
     }
 }

@@ -10,9 +10,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using Hashtable = System.Collections.Hashtable;
 using static Interop;
 using static Interop.User32;
+using Hashtable = System.Collections.Hashtable;
 
 namespace System.Windows.Forms
 {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedIndexCollection == null)
+                if (_checkedIndexCollection is null)
                 {
                     _checkedIndexCollection = new CheckedIndexCollection(this);
                 }
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_checkedItemCollection == null)
+                if (_checkedItemCollection is null)
                 {
                     _checkedItemCollection = new CheckedItemCollection(this);
                 }

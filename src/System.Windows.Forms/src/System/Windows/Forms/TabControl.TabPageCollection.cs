@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
             public void Add(TabPage value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
 
             public void AddRange(TabPage[] pages)
             {
-                if (pages == null)
+                if (pages is null)
                 {
                     throw new ArgumentNullException(nameof(pages));
                 }
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
 
             public bool Contains(TabPage page)
             {
-                if (page == null)
+                if (page is null)
                 {
                     throw new ArgumentNullException(nameof(page));
                 }
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(TabPage page)
             {
-                if (page == null)
+                if (page is null)
                 {
                     throw new ArgumentNullException(nameof(page));
                 }
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
             public IEnumerator GetEnumerator()
             {
                 TabPage[] tabPages = _owner.GetTabPages();
-                if (tabPages == null)
+                if (tabPages is null)
                 {
                     return Array.Empty<TabPage>().GetEnumerator();
                 }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
 
             public void Remove(TabPage value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }

@@ -58,7 +58,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // we default to black.
             //
-            if (managedValue == null)
+            if (managedValue is null)
             {
                 managedValue = Color.Black;
             }

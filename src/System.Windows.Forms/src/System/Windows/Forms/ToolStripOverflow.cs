@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -23,7 +22,7 @@ namespace System.Windows.Forms
 
         public ToolStripOverflow(ToolStripItem parentItem) : base(parentItem)
         {
-            if (parentItem == null)
+            if (parentItem is null)
             {
                 throw new ArgumentNullException(nameof(parentItem));
             }

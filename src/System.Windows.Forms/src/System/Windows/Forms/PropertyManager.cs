@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Collections;
+using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             if (_dataSource != null && !string.IsNullOrEmpty(_propName))
             {
                 _propInfo = TypeDescriptor.GetProperties(dataSource).Find(_propName, true);
-                if (_propInfo == null)
+                if (_propInfo is null)
                 {
                     throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource.ToString()));
                 }

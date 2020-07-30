@@ -7,8 +7,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Design;
+using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Windows.Forms.Design;
 using static Interop;
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
                 private static bool UseBaseAdapter(ComboBox comboBox)
                 {
                     ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
-                    if (toolStripComboBox == null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
+                    if (toolStripComboBox is null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
                     {
                         Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
                         return true;

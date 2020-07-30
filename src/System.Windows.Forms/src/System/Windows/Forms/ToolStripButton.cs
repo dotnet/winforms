@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.Drawing;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner == null)
+            if (Owner is null)
             {
                 return;
             }

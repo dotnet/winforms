@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public Point ControlToAdornerWindow(Control c)
         {
-            if (c.Parent == null)
+            if (c.Parent is null)
             {
                 return Point.Empty;
             }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Design
             get => _dropDownCollection;
             set
             {
-                if (_dropDownCollection == null)
+                if (_dropDownCollection is null)
                 {
                     _dropDownCollection = new ArrayList();
                 }
@@ -238,7 +238,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_designerFrame == null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
+                    if (_designerFrame is null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
                     {
                         return false;
                     }

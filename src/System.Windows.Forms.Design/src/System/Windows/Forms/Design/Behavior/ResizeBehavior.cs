@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (_behaviorService == null)
+                if (_behaviorService is null)
                 {
                     _behaviorService = (BehaviorService)_serviceProvider.GetService(typeof(BehaviorService));
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if (_resizeComponents.Length == 1)
                 {
                     string name = TypeDescriptor.GetComponentName(_resizeComponents[0].resizeControl);
-                    if (name == null || name.Length == 0)
+                    if (name is null || name.Length == 0)
                     {
                         name = _resizeComponents[0].resizeControl.GetType().Name;
                     }
@@ -307,7 +307,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-            if (selSvc == null)
+            if (selSvc is null)
             {
                 return false;
             }
@@ -487,7 +487,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            if (_resizeComponents == null || _resizeComponents.Length == 0)
+            if (_resizeComponents is null || _resizeComponents.Length == 0)
             {
                 return false;
             }
@@ -807,7 +807,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     }
                                     DesignerUtils.DrawResizeBorder(graphics, newRegion, backColor);
                                 }
-                                if (_lastResizeRegion == null)
+                                if (_lastResizeRegion is null)
                                 {
                                     _lastResizeRegion = newRegion.Clone(); //we will need to dispose it later.
                                 }

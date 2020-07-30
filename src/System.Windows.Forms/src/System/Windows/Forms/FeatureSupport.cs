@@ -37,7 +37,7 @@ namespace System.Windows.Forms
             }
 
             object featureId = c?.GetField(featureConstName)?.GetValue(null);
-            if (featureId == null || !typeof(IFeatureSupport).IsAssignableFrom(c))
+            if (featureId is null || !typeof(IFeatureSupport).IsAssignableFrom(c))
             {
                 return false;
             }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
             }
 
             object featureId = c?.GetField(featureConstName)?.GetValue(null);
-            if (featureId == null || !typeof(IFeatureSupport).IsAssignableFrom(c))
+            if (featureId is null || !typeof(IFeatureSupport).IsAssignableFrom(c))
             {
                 return null;
             }
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         public virtual bool IsPresent(object feature, Version minimumVersion)
         {
             Version ver = GetVersionPresent(feature);
-            if (ver == null)
+            if (ver is null)
             {
                 return false;
             }

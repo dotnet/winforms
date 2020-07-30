@@ -7,8 +7,8 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         {
             IDataObject data = null;
 
-            if (pDataObj == null)
+            if (pDataObj is null)
             {
                 data = lastDataObject;
             }

@@ -31,7 +31,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_companyName == null)
+                    if (_companyName is null)
                     {
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
                         if (attrs != null && attrs.Length > 0)
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                             _companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
                         }
 
-                        if (_companyName == null || _companyName.Length == 0)
+                        if (_companyName is null || _companyName.Length == 0)
                         {
                             _companyName = GetFileVersionInfo().CompanyName;
                             if (_companyName != null)
@@ -48,11 +48,11 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        if (_companyName == null || _companyName.Length == 0)
+                        if (_companyName is null || _companyName.Length == 0)
                         {
                             string ns = _owner.GetType().Namespace;
 
-                            if (ns == null)
+                            if (ns is null)
                             {
                                 ns = string.Empty;
                             }
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_productName == null)
+                    if (_productName is null)
                     {
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
                         if (attrs != null && attrs.Length > 0)
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                             _productName = ((AssemblyProductAttribute)attrs[0]).Product;
                         }
 
-                        if (_productName == null || _productName.Length == 0)
+                        if (_productName is null || _productName.Length == 0)
                         {
                             _productName = GetFileVersionInfo().ProductName;
                             if (_productName != null)
@@ -96,11 +96,11 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        if (_productName == null || _productName.Length == 0)
+                        if (_productName is null || _productName.Length == 0)
                         {
                             string ns = _owner.GetType().Namespace;
 
-                            if (ns == null)
+                            if (ns is null)
                             {
                                 ns = string.Empty;
                             }
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_productVersion == null)
+                    if (_productVersion is null)
                     {
                         // custom attribute
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
                         }
 
                         // win32 version info
-                        if (_productVersion == null || _productVersion.Length == 0)
+                        if (_productVersion is null || _productVersion.Length == 0)
                         {
                             _productVersion = GetFileVersionInfo().ProductVersion;
                             if (_productVersion != null)
@@ -147,7 +147,7 @@ namespace System.Windows.Forms
                         }
 
                         // fake it
-                        if (_productVersion == null || _productVersion.Length == 0)
+                        if (_productVersion is null || _productVersion.Length == 0)
                         {
                             _productVersion = "1.0.0.0";
                         }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
             /// </summary>
             private FileVersionInfo GetFileVersionInfo()
             {
-                if (_versionInfo == null)
+                if (_versionInfo is null)
                 {
                     string path = _owner.GetType().Module.FullyQualifiedName;
 

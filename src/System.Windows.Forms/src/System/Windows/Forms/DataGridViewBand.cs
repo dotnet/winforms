@@ -85,7 +85,7 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewCellStyle? style = (DataGridViewCellStyle?)Properties.GetObject(s_propDefaultCellStyle);
-                if (style == null)
+                if (style is null)
                 {
                     style = new DataGridViewCellStyle();
                     style.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewHeaderCell? headerCell = (DataGridViewHeaderCell?)Properties.GetObject(s_propHeaderCell);
-                if (headerCell == null)
+                if (headerCell is null)
                 {
                     Type cellType = DefaultHeaderCellType;
 
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                             {
                                 value.OwningRow.HeaderCell = null;
                             }
-                            Debug.Assert(value.OwningRow == null);
+                            Debug.Assert(value.OwningRow is null);
                             value.OwningRow = (DataGridViewRow)this;   // may be a shared row
                         }
                         else
@@ -345,16 +345,16 @@ namespace System.Windows.Forms
                                 value.OwningColumn.HeaderCell = null;
                             }
                             Debug.Assert(dataGridViewColumnHeaderCell.SortGlyphDirection == SortOrder.None);
-                            Debug.Assert(value.OwningColumn == null);
+                            Debug.Assert(value.OwningColumn is null);
                             value.OwningColumn = (DataGridViewColumn)this;
                         }
-                        Debug.Assert(value.DataGridView == null);
+                        Debug.Assert(value.DataGridView is null);
                         value.DataGridView = DataGridView;
                     }
 
                     Properties.SetObject(s_propHeaderCell, value);
                 }
-                if (((value == null && headerCell != null) || (value != null && headerCell == null) || (value != null && headerCell != null && !headerCell.Equals(value))) && DataGridView != null)
+                if (((value is null && headerCell != null) || (value != null && headerCell is null) || (value != null && headerCell != null && !headerCell.Equals(value))) && DataGridView != null)
                 {
                     DataGridView.OnBandHeaderCellChanged(this);
                 }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
                 {
                     return ((State & DataGridViewElementStates.Resizable) != 0) ? DataGridViewTriState.True : DataGridViewTriState.False;
                 }
-                if (DataGridView == null)
+                if (DataGridView is null)
                 {
                     return DataGridViewTriState.NotSet;
                 }
@@ -764,7 +764,7 @@ namespace System.Windows.Forms
         {
             dataGridViewBand.Properties = new PropertyStore();
             dataGridViewBand.Index = -1;
-            if (!IsRow || Index >= 0 || DataGridView == null)
+            if (!IsRow || Index >= 0 || DataGridView is null)
             {
                 dataGridViewBand.State = State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
             }
@@ -875,7 +875,7 @@ namespace System.Windows.Forms
         {
             if (HasDefaultCellStyle)
             {
-                if (DataGridView == null)
+                if (DataGridView is null)
                 {
                     DefaultCellStyle.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                 }

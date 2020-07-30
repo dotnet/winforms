@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -693,7 +692,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnParentChanged(ToolStrip oldParent, ToolStrip newParent)
         {
-            if (oldParent != null && Owner == null && newParent == null && Control != null)
+            if (oldParent != null && Owner is null && newParent is null && Control != null)
             {
                 // if we've really been removed from the item collection,
                 // politely remove ourselves from the control collection

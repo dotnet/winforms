@@ -30,7 +30,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Assert(childGridEntries[n] != null, "Null item in category subproperty list");
             }
 #endif
-            if (categoryStates == null)
+            if (categoryStates is null)
             {
                 categoryStates = new Hashtable();
             }
@@ -329,19 +329,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                    if (parent == null)
+                    if (parent is null)
                     {
                         return -1;
                     }
 
                     var gridView = parent.Owner as PropertyGridView;
-                    if (gridView == null || gridView.OwnerGrid == null || !gridView.OwnerGrid.SortedByCategories)
+                    if (gridView is null || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
                     {
                         return -1;
                     }
 
                     var topLevelGridEntries = gridView.TopLevelGridEntries;
-                    if (topLevelGridEntries == null)
+                    if (topLevelGridEntries is null)
                     {
                         return -1;
                     }

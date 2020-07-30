@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_converter == null)
+                    if (_converter is null)
                     {
                         _converter = new EventConverter(Event);
                     }
@@ -84,7 +84,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public override object GetValue(object component)
             {
-                if (component == null)
+                if (component is null)
                 {
                     throw new ArgumentNullException(nameof(component));
                 }
@@ -98,7 +98,7 @@ namespace System.ComponentModel.Design
                     site = ((IComponent)component).Site;
                 }
 
-                if (site == null)
+                if (site is null)
                 {
                     if (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs)
                     {
@@ -111,7 +111,7 @@ namespace System.ComponentModel.Design
                     }
                 }
 
-                if (site == null)
+                if (site is null)
                 {
                     // Object not sited, so we weren't able to set a value on it.  Setting a value will fail.
                     return null;
@@ -119,7 +119,7 @@ namespace System.ComponentModel.Design
 
                 IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (ds == null)
+                if (ds is null)
                 {
                     // No dictionary service, so we weren't able to set a value on it. Setting a value will fail.
                     return null;
@@ -181,7 +181,7 @@ namespace System.ComponentModel.Design
                     site = ((IComponent)component).Site;
                 }
 
-                if (site == null && (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs))
+                if (site is null && (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs))
                 {
                     IComponent baseComponent = rs.GetComponent(component);
 
@@ -191,7 +191,7 @@ namespace System.ComponentModel.Design
                     }
                 }
 
-                if (site == null)
+                if (site is null)
                 {
                     Exception ex = new InvalidOperationException(SR.EventBindingServiceNoSite);
                     ex.HelpLink = SR.EventBindingServiceNoSite;
@@ -358,7 +358,7 @@ namespace System.ComponentModel.Design
                 /// </summary>
                 public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
                 {
-                    if (value == null)
+                    if (value is null)
                     {
                         return value;
                     }

@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -52,7 +51,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
         {
-            if (propDesc == null)
+            if (propDesc is null)
             {
                 return;
             }
@@ -123,7 +122,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnCanResetPropertyValue(Com2PropertyDescriptor sender, GetBoolValueEvent boolEvent)
@@ -138,7 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         /// <summary>
@@ -157,7 +156,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e)
@@ -218,7 +217,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
         private unsafe void OnShouldSerializeValue(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
@@ -235,7 +234,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            Debug.Assert(sender.TargetObject == null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
+            Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
     }
 }

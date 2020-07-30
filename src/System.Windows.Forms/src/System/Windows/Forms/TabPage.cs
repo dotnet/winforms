@@ -5,10 +5,8 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -358,7 +356,7 @@ namespace System.Windows.Forms
             get => _toolTipText;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }

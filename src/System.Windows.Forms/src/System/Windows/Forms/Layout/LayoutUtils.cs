@@ -643,7 +643,7 @@ namespace System.Windows.Forms.Layout
                     // than 200 px.
 
                     // Create our ring buffer if we dont have one
-                    if (sizeCacheList == null)
+                    if (sizeCacheList is null)
                     {
                         sizeCacheList = new PreferredSizeCache[MaxCacheSize];
                     }

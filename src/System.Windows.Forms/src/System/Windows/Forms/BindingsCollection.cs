@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Collections;
+using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         {
         }
 
-        public override int Count => _list == null ? 0 : base.Count;
+        public override int Count => _list is null ? 0 : base.Count;
 
         /// <summary>
         ///  Gets the bindings in the collection as an object.
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void AddCore(Binding dataBinding)
         {
-            if (dataBinding == null)
+            if (dataBinding is null)
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }

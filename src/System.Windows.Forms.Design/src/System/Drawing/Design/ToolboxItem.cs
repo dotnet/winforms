@@ -238,7 +238,7 @@ namespace System.Drawing.Design
         {
             get
             {
-                if (_properties == null)
+                if (_properties is null)
                 {
                     _properties = new LockableDictionary(this, 8 /* # of properties we have */);
                 }
@@ -424,7 +424,7 @@ namespace System.Drawing.Design
                 }
             }
 
-            if (propertyNames == null)
+            if (propertyNames is null)
             {
                 // For backwards compat, here are the default property
                 // names we use
@@ -467,7 +467,7 @@ namespace System.Drawing.Design
                 return true;
             }
 
-            if (obj == null)
+            if (obj is null)
             {
                 return false;
             }
@@ -510,7 +510,7 @@ namespace System.Drawing.Design
 
                 case "DisplayName":
                 case "TypeName":
-                    if (value == null)
+                    if (value is null)
                     {
                         value = string.Empty;
                     }
@@ -518,7 +518,7 @@ namespace System.Drawing.Design
                     break;
 
                 case "Filter":
-                    if (value == null)
+                    if (value is null)
                     {
                         value = Array.Empty<ToolboxItemFilterAttribute>();
                     }
@@ -526,7 +526,7 @@ namespace System.Drawing.Design
                     break;
 
                 case "IsTransient":
-                    if (value == null)
+                    if (value is null)
                     {
                         value = false;
                     }
@@ -557,7 +557,7 @@ namespace System.Drawing.Design
             ITypeResolutionService ts = null;
             Type type = null;
 
-            if (typeName == null)
+            if (typeName is null)
             {
                 throw new ArgumentNullException(nameof(typeName));
             }
@@ -581,7 +581,7 @@ namespace System.Drawing.Design
                         // Just try loading the type.  If we succeed, then use this as the
                         // reference.
                         type = ts.GetType(typeName);
-                        if (type == null)
+                        if (type is null)
                         {
                             type = Type.GetType(typeName);
                         }
@@ -602,7 +602,7 @@ namespace System.Drawing.Design
                         }
                     }
 
-                    if (type == null)
+                    if (type is null)
                     {
                         type = ts.GetType(typeName);
                     }
@@ -629,7 +629,7 @@ namespace System.Drawing.Design
                         {
                         }
 
-                        if (a == null && !string.IsNullOrEmpty(assemblyName.CodeBase))
+                        if (a is null && !string.IsNullOrEmpty(assemblyName.CodeBase))
                         {
                             try
                             {
@@ -652,7 +652,7 @@ namespace System.Drawing.Design
                         }
                     }
 
-                    if (type == null)
+                    if (type is null)
                     {
                         type = Type.GetType(typeName, false);
                     }
@@ -765,7 +765,7 @@ namespace System.Drawing.Design
         private AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
         {
             Debug.Assert(type != null);
-            if (policiedAssemblyName == null)
+            if (policiedAssemblyName is null)
             {
                 return null;
             }
@@ -872,7 +872,7 @@ namespace System.Drawing.Design
         /// </summary>
         protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
         {
-            if (value == null)
+            if (value is null)
             {
                 if (!allowNull)
                 {
@@ -914,7 +914,7 @@ namespace System.Drawing.Design
                 case "DisplayName":
                 case "TypeName":
                     ValidatePropertyType(propertyName, value, typeof(string), true);
-                    if (value == null)
+                    if (value is null)
                     {
                         value = string.Empty;
                     }
@@ -1029,7 +1029,7 @@ namespace System.Drawing.Design
 
             private string GetPropertyName(object key)
             {
-                if (key == null)
+                if (key is null)
                 {
                     throw new ArgumentNullException(nameof(key));
                 }

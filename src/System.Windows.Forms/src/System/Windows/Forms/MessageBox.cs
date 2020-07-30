@@ -78,7 +78,7 @@ namespace System.Windows.Forms
             // usually there's only going to be one message box shown at a time.  But if
             // someone shows two message boxes (say by launching them via a WM_TIMER message)
             // we've got to gracefully handle the current help info.
-            if (helpInfoTable == null)
+            if (helpInfoTable is null)
             {
                 Debug.Fail("Why are we being called when there's nothing to pop?");
             }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
             int lastCount = 0;
             HelpInfo[] newTable;
 
-            if (helpInfoTable == null)
+            if (helpInfoTable is null)
             {
                 newTable = new HelpInfo[lastCount + 1];
             }
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
             IntPtr handle = IntPtr.Zero;
             if (showHelp || ((options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0))
             {
-                if (owner == null)
+                if (owner is null)
                 {
                     handle = GetActiveWindow();
                 }

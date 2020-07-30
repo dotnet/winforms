@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Layout
 
         public virtual void InitLayout(object child, BoundsSpecified specified)
         {
-            if (child == null)
+            if (child is null)
             {
                 throw new ArgumentNullException(nameof(child));
             }
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Layout
 
         public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }

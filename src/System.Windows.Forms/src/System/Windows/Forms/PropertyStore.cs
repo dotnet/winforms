@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                     return wrapper.Color;
                 }
 
-                Debug.Assert(storedObject == null, $"Have non-null object that isnt a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isnt a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
             }
 
             found = false;
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                     return wrapper.Padding;
                 }
 
-                Debug.Assert(storedObject == null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
 
             found = false;
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                     return wrapper.Size;
                 }
 
-                Debug.Assert(storedObject == null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
 
             found = false;
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                     return wrapper.Rectangle;
                 }
 
-                Debug.Assert(storedObject == null, $"Have non-null object that isnt a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isnt a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
             }
 
             found = false;
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
         [MemberNotNullWhen(true, nameof(_intEntries))]
         private bool LocateIntegerEntry(short entryKey, out int index)
         {
-            if (_intEntries == null)
+            if (_intEntries is null)
             {
                 index = 0;
                 return false;
@@ -614,7 +614,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(storedObject == null, "object should either be null or ColorWrapper"); // could someone have SetObject to this key behind our backs?
+                    Debug.Assert(storedObject is null, "object should either be null or ColorWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new ColorWrapper(value));
                 }
             }
@@ -636,7 +636,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(storedObject == null, "object should either be null or PaddingWrapper"); // could someone have SetObject to this key behind our backs?
+                    Debug.Assert(storedObject is null, "object should either be null or PaddingWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new PaddingWrapper(value));
                 }
             }
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(storedObject == null, "object should either be null or RectangleWrapper"); // could someone have SetObject to this key behind our backs?
+                    Debug.Assert(storedObject is null, "object should either be null or RectangleWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new RectangleWrapper(value));
                 }
             }
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(storedObject == null, "object should either be null or SizeWrapper"); // could someone have SetObject to this key behind our backs?
+                    Debug.Assert(storedObject is null, "object should either be null or SizeWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new SizeWrapper(value));
                 }
             }

@@ -28,7 +28,7 @@ namespace System.Drawing.Design
         {
             const string StarDot = "*.";
 
-            if (extensions == null || extensions.Length == 0)
+            if (extensions is null || extensions.Length == 0)
             {
                 return null;
             }
@@ -62,18 +62,18 @@ namespace System.Drawing.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             var edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
 
-            if (_fileDialog == null)
+            if (_fileDialog is null)
             {
                 _fileDialog = new OpenFileDialog();
                 var filter = CreateFilterEntry(this);

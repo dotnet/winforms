@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
@@ -286,7 +285,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         // if all else fails, throw up a default image.
-                        if (_image == null)
+                        if (_image is null)
                         {
                             _image = ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
                         }

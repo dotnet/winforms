@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.VisualStyles
@@ -222,7 +221,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
                     }
@@ -247,7 +246,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
                     }
@@ -275,7 +274,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
                     }
@@ -300,7 +299,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer == null)
+                    if (visualStyleRenderer is null)
                     {
                         visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
                     }

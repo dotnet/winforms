@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -234,7 +233,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rendererSwitcher == null)
+                if (_rendererSwitcher is null)
                 {
                     _rendererSwitcher = new ToolStripRendererSwitcher(this);
                     HandleRendererChanged(this, EventArgs.Empty);
@@ -292,7 +291,7 @@ namespace System.Windows.Forms
             {
                 ToolStripPanelRowCollection rowCollection = (ToolStripPanelRowCollection)Properties.GetObject(s_propToolStripPanelRowCollection);
 
-                if (rowCollection == null)
+                if (rowCollection is null)
                 {
                     rowCollection = CreateToolStripPanelRowCollection();
                     Properties.SetObject(s_propToolStripPanelRowCollection, rowCollection);
@@ -603,7 +602,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDock()
         {
-            return (owner == null && (Dock != DockStyle.None));
+            return (owner is null && (Dock != DockStyle.None));
         }
 
         private void JoinControls()
@@ -671,7 +670,7 @@ namespace System.Windows.Forms
                 // paint the feedback in the correct location when RTL.Yes
                 screenLocation.Offset(-toolStripToDrag.Width, 0);
             }
-            if (CurrentFeedbackRect == null)
+            if (CurrentFeedbackRect is null)
             {
                 Debug.WriteLineIf(s_toolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: creating NEW feedback at " + screenLocation.ToString());
 
@@ -935,7 +934,7 @@ namespace System.Windows.Forms
 
         public void Join(ToolStrip toolStripToDrag, Point location)
         {
-            if (toolStripToDrag == null)
+            if (toolStripToDrag is null)
             {
                 throw new ArgumentNullException(nameof(toolStripToDrag));
             }
@@ -1048,7 +1047,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, "RC.MoveControl - Point " + clientLocation + " is outside the current rafting row.");
 
                 ToolStripPanelRow row = PointToRow(clientLocation);
-                if (row == null)
+                if (row is null)
                 {
                     Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
 
@@ -1372,7 +1371,7 @@ namespace System.Windows.Forms
 
             public int Add(ToolStripPanelRow value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -1383,7 +1382,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ToolStripPanelRow[] value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -1410,7 +1409,7 @@ namespace System.Windows.Forms
             }
             public void AddRange(ToolStripPanelRowCollection value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -1487,7 +1486,7 @@ namespace System.Windows.Forms
 
             public void Insert(int index, ToolStripPanelRow value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }

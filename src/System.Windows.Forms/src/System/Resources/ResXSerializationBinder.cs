@@ -30,7 +30,7 @@ namespace System.Resources
 
         public override Type BindToType(string assemblyName, string typeName)
         {
-            if (_typeResolver == null)
+            if (_typeResolver is null)
             {
                 return null;
             }
@@ -38,7 +38,7 @@ namespace System.Resources
             typeName = typeName + ", " + assemblyName;
 
             Type type = _typeResolver.GetType(typeName);
-            if (type == null)
+            if (type is null)
             {
                 string[] typeParts = typeName.Split(',');
 
@@ -58,7 +58,7 @@ namespace System.Resources
                     }
 
                     type = _typeResolver.GetType(partialName);
-                    if (type == null)
+                    if (type is null)
                     {
                         type = _typeResolver.GetType(typeParts[0].Trim());
                     }

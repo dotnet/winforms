@@ -62,7 +62,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
-                if (service == null)
+                if (service is null)
                 {
                     throw new ArgumentNullException(nameof(service));
                 }
@@ -118,12 +118,12 @@ namespace System.Windows.Forms
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
-                if (_dictionary == null)
+                if (_dictionary is null)
                 {
                     _dictionary = new Hashtable();
                 }
 
-                if (value == null)
+                if (value is null)
                 {
                     _dictionary.Remove(key);
                 }

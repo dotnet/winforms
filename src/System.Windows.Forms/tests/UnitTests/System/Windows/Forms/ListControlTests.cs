@@ -642,14 +642,14 @@ namespace System.Windows.Forms.Tests
 
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
-            Assert.Equal(value == null ? string.Empty : "Capacity", control.DisplayMember);
+            Assert.Equal(value is null ? string.Empty : "Capacity", control.DisplayMember);
             Assert.Null(control.DataManager);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
-            Assert.Equal(value == null ? string.Empty : "Capacity", control.DisplayMember);
+            Assert.Equal(value is null ? string.Empty : "Capacity", control.DisplayMember);
             Assert.Null(control.DataManager);
             Assert.False(control.IsHandleCreated);
         }
@@ -868,7 +868,7 @@ namespace System.Windows.Forms.Tests
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -881,7 +881,7 @@ namespace System.Windows.Forms.Tests
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -905,7 +905,7 @@ namespace System.Windows.Forms.Tests
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -918,7 +918,7 @@ namespace System.Windows.Forms.Tests
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
             Assert.Empty(control.DisplayMember);
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -964,8 +964,8 @@ namespace System.Windows.Forms.Tests
 
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
-            Assert.Equal(value == null ? "NoSuchDisplayMember" : string.Empty, control.DisplayMember);
-            if (value == null)
+            Assert.Equal(value is null ? "NoSuchDisplayMember" : string.Empty, control.DisplayMember);
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -977,8 +977,8 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.DataSource = value;
             Assert.Same(value, control.DataSource);
-            Assert.Equal(value == null ? "NoSuchDisplayMember" : string.Empty, control.DisplayMember);
-            if (value == null)
+            Assert.Equal(value is null ? "NoSuchDisplayMember" : string.Empty, control.DisplayMember);
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms.Tests
             control.DisplayMember = value;
             Assert.Same(dataSource, control.DataSource);
             Assert.Empty(control.DisplayMember);
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }
@@ -1247,7 +1247,7 @@ namespace System.Windows.Forms.Tests
             control.DisplayMember = value;
             Assert.Same(dataSource, control.DataSource);
             Assert.Empty(control.DisplayMember);
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(control.DataManager);
             }

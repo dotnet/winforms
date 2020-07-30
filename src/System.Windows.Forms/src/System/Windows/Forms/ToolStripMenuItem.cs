@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
                 if (checkedState == CheckState.Indeterminate)
                 {
-                    if (indeterminateCheckedImage == null)
+                    if (indeterminateCheckedImage is null)
                     {
                         if (DpiHelper.IsScalingRequirementMet)
                         {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
                 }
                 else if (checkedState == CheckState.Checked)
                 {
-                    if (checkedImage == null)
+                    if (checkedImage is null)
                     {
                         if (DpiHelper.IsScalingRequirementMet)
                         {
@@ -585,7 +585,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (ParentInternal as ToolStripDropDown == null);
+                return (ParentInternal as ToolStripDropDown is null);
             }
         }
 
@@ -869,7 +869,7 @@ namespace System.Windows.Forms
 
         internal string GetShortcutText()
         {
-            if (cachedShortcutText == null)
+            if (cachedShortcutText is null)
             {
                 cachedShortcutText = ShortcutToText(ShortcutKeys, ShortcutKeyDisplayString);
             }
@@ -1007,7 +1007,7 @@ namespace System.Windows.Forms
                 {
                     // opening should happen on mouse down.
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                    openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                    openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
                 }
                 else if (!isMouseDown && !showDropDown)
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms
                     // closing should happen on mouse up.  ensure it's not the mouse
                     // up for the mouse down we opened with.
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                    byte closeMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                    byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     int openedMouseID = openMouseId;
                     if (closeMouseId != openedMouseID)
                     {
@@ -1344,7 +1344,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value == null) ? "null" : value.ToString()));
+                Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value is null) ? "null" : value.ToString()));
                 currentItem = value;
             }
         }
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.Transition] transitioning items " + fromItem.ToString() + " " + toItem.ToString());
 
-            if (toItem == null && InTransition)
+            if (toItem is null && InTransition)
             {
                 Cancel();
                 // in this case we're likely to have hit an item that's not a menu item
@@ -1478,7 +1478,7 @@ namespace System.Windows.Forms
         {
             autoMenuExpandTimer.Enabled = false;
 
-            if (CurrentItem == null)
+            if (CurrentItem is null)
             {
                 return;
             }

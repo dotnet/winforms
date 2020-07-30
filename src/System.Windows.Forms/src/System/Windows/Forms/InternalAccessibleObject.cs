@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
         unsafe HRESULT IAccessibleEx.GetIAccessiblePair(out object? ppAcc, int* pidChild)
         {
-            if (pidChild == null)
+            if (pidChild is null)
             {
                 ppAcc = null;
                 return HRESULT.E_INVALIDARG;

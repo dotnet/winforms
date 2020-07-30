@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         public InputLanguageChangingEventArgs(CultureInfo culture, bool sysCharSet)
         {
             InputLanguage? language = InputLanguage.FromCulture(culture);
-            if (language == null)
+            if (language is null)
             {
                 throw new ArgumentException(string.Format(SR.InputLanguageCultureNotFound, culture), nameof(culture));
             }

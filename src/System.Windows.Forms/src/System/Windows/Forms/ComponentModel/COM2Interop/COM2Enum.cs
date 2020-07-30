@@ -51,8 +51,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             this.allowUnknownValues = allowUnknownValues;
 
             // these have to be null and the same length
-            if (names == null ||
-                values == null ||
+            if (names is null ||
+                values is null ||
                 names.Length != values.Length)
             {
                 throw new ArgumentException(SR.COM2NamesAndValuesNotEqual);

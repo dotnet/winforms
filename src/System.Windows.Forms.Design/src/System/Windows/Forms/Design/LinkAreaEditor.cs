@@ -18,18 +18,18 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
 
-            if (_linkAreaUI == null)
+            if (_linkAreaUI is null)
             {
                 IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
 

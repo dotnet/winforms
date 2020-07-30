@@ -123,7 +123,7 @@ namespace System.Windows.Forms
             set
             {
                 DataGridViewCell dataGridViewCell = value;
-                if (dataGridViewCell == null)
+                if (dataGridViewCell is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn = _owner.DataGridView.Columns[columnName];
                 }
-                if (dataGridViewColumn == null)
+                if (dataGridViewColumn is null)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), nameof(columnName));
                 }
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn = _owner.DataGridView.Columns[columnName];
                 }
-                if (dataGridViewColumn == null)
+                if (dataGridViewColumn is null)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), nameof(columnName));
                 }
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
-            if (dataGridViewCells == null)
+            if (dataGridViewCells is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewCells));
             }
@@ -248,7 +248,7 @@ namespace System.Windows.Forms
             }
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
-                if (dataGridViewCell == null)
+                if (dataGridViewCell is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_AtLeastOneCellIsNull);
                 }

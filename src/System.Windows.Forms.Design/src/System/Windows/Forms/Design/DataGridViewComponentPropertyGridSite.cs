@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
 
         public object GetService(Type t)
         {
-            if (_inGetService || _sp == null)
+            if (_inGetService || _sp is null)
             {
                 return null;
             }

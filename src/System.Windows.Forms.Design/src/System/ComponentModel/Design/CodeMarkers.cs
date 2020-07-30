@@ -96,7 +96,7 @@ namespace System.ComponentModel.Design
                         // this code can either be used in an InitPerf (loads CodeMarker DLL) or AttachPerf context (CodeMarker DLL already loaded)
                         // in the InitPerf context we have a regroot and should check for the test DLL registration
                         // in the AttachPerf context we should see which module is already loaded
-                        if (_regroot == null)
+                        if (_regroot is null)
                         {
                             _shouldUseTestDll = Kernel32.GetModuleHandleW(ProductDllName) == IntPtr.Zero;
                         }
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
-            if (aBuff == null)
+            if (aBuff is null)
             {
                 throw new ArgumentNullException(nameof(aBuff));
             }
@@ -233,7 +233,7 @@ namespace System.ComponentModel.Design
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
-            if (stringData == null)
+            if (stringData is null)
             {
                 throw new ArgumentNullException(nameof(stringData));
             }
@@ -322,7 +322,7 @@ namespace System.ComponentModel.Design
         /// <returns>Whether CodeMarkers are enabled in the registry</returns>
         private static bool UsePrivateCodeMarkers(string regRoot, RegistryView registryView)
         {
-            if (regRoot == null)
+            if (regRoot is null)
             {
                 throw new ArgumentNullException(nameof(regRoot));
             }
@@ -375,7 +375,7 @@ namespace System.ComponentModel.Design
 
         private void CodeMarker(int id)
         {
-            if (_buffer == null)
+            if (_buffer is null)
             {
                 CodeMarkers.Instance.CodeMarker(id);
             }

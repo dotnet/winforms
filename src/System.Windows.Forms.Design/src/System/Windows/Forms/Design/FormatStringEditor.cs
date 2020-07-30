@@ -15,13 +15,13 @@ namespace System.Windows.Forms.Design
         /// Edits the specified value using the specified provider within the specified context.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
 
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             Debug.Assert(listControl != null || dgvCellStyle != null, "this editor is used for the DataGridViewCellStyle::Format and the ListControl::FormatString properties");
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
 
-            if (_formatStringDialog == null)
+            if (_formatStringDialog is null)
             {
                 _formatStringDialog = new FormatStringDialog(context);
             }

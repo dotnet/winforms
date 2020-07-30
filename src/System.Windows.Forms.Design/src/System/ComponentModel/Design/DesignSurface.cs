@@ -61,7 +61,7 @@ namespace System.ComponentModel.Design
         /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
         public DesignSurface(IServiceProvider parentProvider, Type rootComponentType) : this(parentProvider)
         {
-            if (rootComponentType == null)
+            if (rootComponentType is null)
             {
                 throw new ArgumentNullException(nameof(rootComponentType));
             }
@@ -75,7 +75,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_host == null)
+                if (_host is null)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
@@ -125,7 +125,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_serviceContainer == null)
+                if (_serviceContainer is null)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
@@ -143,13 +143,13 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_host == null)
+                if (_host is null)
                 {
                     throw new ObjectDisposedException(ToString());
                 }
 
                 IComponent rootComponent = ((IDesignerHost)_host).RootComponent;
-                if (rootComponent == null)
+                if (rootComponent is null)
                 {
                     // Check to see if we have any load errors.  If so, use them.
                     if (_loadErrors != null)
@@ -182,7 +182,7 @@ namespace System.ComponentModel.Design
                 }
 
                 ViewTechnology[] designerViews = rootDesigner.SupportedTechnologies;
-                if (designerViews == null || designerViews.Length == 0)
+                if (designerViews is null || designerViews.Length == 0)
                 {
                     throw new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
                     {
@@ -236,12 +236,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(DesignerLoader loader)
         {
-            if (loader == null)
+            if (loader is null)
             {
                 throw new ArgumentNullException(nameof(loader));
             }
 
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -256,12 +256,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(Type rootComponentType)
         {
-            if (rootComponentType == null)
+            if (rootComponentType is null)
             {
                 throw new ArgumentNullException(nameof(rootComponentType));
             }
 
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -282,12 +282,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -310,7 +310,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual object CreateInstance(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -334,7 +334,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (instance == null)
+            if (instance is null)
             {
                 instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
             }
@@ -354,12 +354,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            if (owningComponent == null)
+            if (owningComponent is null)
             {
                 throw new ArgumentNullException(nameof(owningComponent));
             }
@@ -490,7 +490,7 @@ namespace System.ComponentModel.Design
             if (successful)
             {
                 IComponent rootComponent = ((IDesignerHost)_host).RootComponent;
-                if (rootComponent == null)
+                if (rootComponent is null)
                 {
                     ArrayList newErrors = new ArrayList();
                     Exception ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)

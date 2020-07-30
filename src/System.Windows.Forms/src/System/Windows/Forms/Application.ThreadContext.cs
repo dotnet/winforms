@@ -8,7 +8,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -277,7 +276,7 @@ namespace System.Windows.Forms
                 lock (this)
                 {
                     ParkingWindow parkingWindow = GetParkingWindowForContext(context);
-                    if (parkingWindow == null)
+                    if (parkingWindow is null)
                     {
 #if DEBUG
                         if (CoreSwitches.PerfTrack.Enabled)
@@ -365,7 +364,7 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
-                        if (_marshalingControl == null)
+                        if (_marshalingControl is null)
                         {
 #if DEBUG
                             if (CoreSwitches.PerfTrack.Enabled)
@@ -388,11 +387,11 @@ namespace System.Windows.Forms
             /// </summary>
             internal void AddMessageFilter(IMessageFilter f)
             {
-                if (_messageFilters == null)
+                if (_messageFilters is null)
                 {
                     _messageFilters = new List<IMessageFilter>();
                 }
-                if (_messageFilterSnapshot == null)
+                if (_messageFilterSnapshot is null)
                 {
                     _messageFilterSnapshot = new List<IMessageFilter>();
                 }
@@ -755,7 +754,7 @@ namespace System.Windows.Forms
             internal static ThreadContext FromId(uint id)
             {
                 ThreadContext context = (ThreadContext)s_contextHash[id];
-                if (context == null && id == Kernel32.GetCurrentThreadId())
+                if (context is null && id == Kernel32.GetCurrentThreadId())
                 {
                     context = new ThreadContext();
                 }
@@ -1221,7 +1220,7 @@ namespace System.Windows.Forms
                                 continueLoop = !form.CheckCloseDialog(false);
                             }
                         }
-                        else if (form == null)
+                        else if (form is null)
                         {
                             break;
                         }
@@ -1512,7 +1511,7 @@ namespace System.Windows.Forms
 
                 // If we get a null message, and we have previously posted the WM_QUIT message,
                 // then someone ate the message...
-                if (pMsgPeeked == null && GetState(STATE_POSTEDQUIT))
+                if (pMsgPeeked is null && GetState(STATE_POSTEDQUIT))
                 {
                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Abnormal loop termination, no WM_QUIT received");
                     continueLoop = false;
@@ -1538,7 +1537,7 @@ namespace System.Windows.Forms
                             // dismissed.  If there is no active form, then it is an error that
                             // we got into here, so we terminate the loop.
 
-                            if (_currentForm == null || _currentForm.CheckCloseDialog(false))
+                            if (_currentForm is null || _currentForm.CheckCloseDialog(false))
                             {
                                 continueLoop = false;
                             }

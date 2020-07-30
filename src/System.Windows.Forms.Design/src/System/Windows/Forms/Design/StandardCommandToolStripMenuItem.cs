@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -59,7 +58,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_menuCommandService == null)
+                if (_menuCommandService is null)
                 {
                     _menuCommandService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
                 }

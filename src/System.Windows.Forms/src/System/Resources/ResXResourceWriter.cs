@@ -151,7 +151,7 @@ namespace System.Resources
 
         private void InitializeWriter()
         {
-            if (_xmlTextWriter == null)
+            if (_xmlTextWriter is null)
             {
                 bool writeHeaderRequired = false;
 
@@ -257,12 +257,12 @@ namespace System.Resources
         /// </summary>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
         {
-            if (assemblyName == null)
+            if (assemblyName is null)
             {
                 throw new ArgumentNullException(nameof(assemblyName));
             }
 
-            if (_cachedAliases == null)
+            if (_cachedAliases is null)
             {
                 _cachedAliases = new Hashtable();
             }
@@ -390,7 +390,7 @@ namespace System.Resources
         {
             // if it's a null string, set it here as a resxnullref
             string typeName =
-                value == null
+                value is null
                     ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), _typeNameConverter)
                     : null;
             AddDataRow(elementName, name, value, typeName, null, null);
@@ -461,7 +461,7 @@ namespace System.Resources
                     Writer.WriteAttributeString(MimeTypeStr, mimeType);
                 }
 
-                if ((type == null && mimeType == null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal)))
+                if ((type is null && mimeType is null) || (type != null && type.StartsWith("System.Char", StringComparison.Ordinal)))
                 {
                     Writer.WriteAttributeString("xml", "space", null, "preserve");
                 }
@@ -506,7 +506,7 @@ namespace System.Resources
 
         private string GetAliasFromName(AssemblyName assemblyName)
         {
-            if (_cachedAliases == null)
+            if (_cachedAliases is null)
             {
                 _cachedAliases = new Hashtable();
             }

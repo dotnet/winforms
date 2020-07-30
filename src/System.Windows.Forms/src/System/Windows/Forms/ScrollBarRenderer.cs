@@ -146,7 +146,7 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(VisualStyleElement element, int state)
         {
-            if (visualStyleRenderer == null)
+            if (visualStyleRenderer is null)
             {
                 visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
             }

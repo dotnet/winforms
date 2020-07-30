@@ -29,7 +29,7 @@ namespace System.Windows.Forms
                 }
 
                 // Create the tool tip handle on demand.
-                if (activate && ToolTip == null)
+                if (activate && ToolTip is null)
                 {
                     ToolTip = new ToolTip
                     {

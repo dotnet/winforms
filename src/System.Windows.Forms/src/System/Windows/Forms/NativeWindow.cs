@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                 {
                     uint id = User32.GetWindowThreadProcessId(handle, out uint lpdwProcessId);
                     Application.ThreadContext ctx = Application.ThreadContext.FromId(id);
-                    IntPtr threadHandle = (ctx == null ? IntPtr.Zero : ctx.GetHandle());
+                    IntPtr threadHandle = (ctx is null ? IntPtr.Zero : ctx.GetHandle());
 
                     if (threadHandle != IntPtr.Zero)
                     {
@@ -271,7 +271,7 @@ namespace System.Windows.Forms
                         if (oldRoot.Target is NativeWindow target)
                         {
                             window.PreviousWindow = target;
-                            Debug.Assert(window.PreviousWindow._nextWindow == null, "Last window in chain should have null next ptr");
+                            Debug.Assert(window.PreviousWindow._nextWindow is null, "Last window in chain should have null next ptr");
                             window.PreviousWindow._nextWindow = window;
                         }
                         oldRoot.Free();
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DefWndProc(ref Message m)
         {
-            if (PreviousWindow == null)
+            if (PreviousWindow is null)
             {
                 if (_priorWindowProcHandle == IntPtr.Zero)
                 {
@@ -727,7 +727,7 @@ namespace System.Windows.Forms
                     window._nextWindow.PreviousWindow = window.PreviousWindow;
                 }
 
-                if (window._nextWindow == null)
+                if (window._nextWindow is null)
                 {
                     // We're the last NativeWindow for this HWND, remove the key or reassign
                     // the value to the prior NativeWindow if it exists.
@@ -838,7 +838,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UnSubclass()
         {
-            bool finalizing = (!_weakThisPtr.IsAlive || _weakThisPtr.Target == null);
+            bool finalizing = (!_weakThisPtr.IsAlive || _weakThisPtr.Target is null);
 
             // Don't touch if the current window proc is not ours.
 
@@ -847,7 +847,7 @@ namespace System.Windows.Forms
             {
                 // The current window proc is ours
 
-                if (PreviousWindow == null)
+                if (PreviousWindow is null)
                 {
                     // This is the first NativeWindow registered for this HWND, just put back the prior handle we stashed away.
                     User32.SetWindowLong(this, User32.GWL.WNDPROC, _priorWindowProcHandle);
@@ -884,7 +884,7 @@ namespace System.Windows.Forms
                 // If we find previouswindow pointing to us, then we can let RemoveWindowFromTable reassign the
                 // defwndproc pointers properly when this guy gets removed (thereby unsubclassing ourselves)
 
-                if (_nextWindow == null || _nextWindow._priorWindowProcHandle != _windowProcHandle)
+                if (_nextWindow is null || _nextWindow._priorWindowProcHandle != _windowProcHandle)
                 {
                     // we didn't find it... let's unhook anyway and cut the chain... this prevents crashes
                     User32.SetWindowLong(this, User32.GWL.WNDPROC, DefaultWindowProc);

@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void AddSelection(object sel)
         {
-            if (_selection == null)
+            if (_selection is null)
             {
                 _selection = new ArrayList();
                 // Now is the opportune time to hook up all of our events
@@ -340,7 +340,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ISelectionService.GetComponentSelected(object component)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -383,7 +383,7 @@ namespace System.ComponentModel.Design
             bool fAuto = !(fToggle | fAdd | fRemove | fReplace);
 
             // We always want to allow NULL arrays coming in.
-            if (components == null)
+            if (components is null)
             {
                 components = Array.Empty<object>();
             }
@@ -410,7 +410,7 @@ namespace System.ComponentModel.Design
                 foreach (object o in components)
                 {
                     requestedPrimary = o;
-                    if (o == null)
+                    if (o is null)
                     {
                         throw new ArgumentNullException(nameof(components));
                     }
@@ -443,7 +443,7 @@ namespace System.ComponentModel.Design
                             bool remove = true;
                             foreach (object comp in components)
                             {
-                                if (comp == null)
+                                if (comp is null)
                                 {
                                     throw new ArgumentNullException(nameof(components));
                                 }
@@ -467,7 +467,7 @@ namespace System.ComponentModel.Design
                 // Now select / toggle the components.
                 foreach (object comp in components)
                 {
-                    if (comp == null)
+                    if (comp is null)
                     {
                         throw new ArgumentNullException(nameof(components));
                     }

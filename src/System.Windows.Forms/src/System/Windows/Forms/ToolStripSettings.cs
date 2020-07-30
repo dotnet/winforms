@@ -215,7 +215,7 @@ namespace System.Windows.Forms
             {
                 object destinationPanel = !string.IsNullOrEmpty(toolStripSettings.ToolStripPanelName) ? toolStripSettings.ToolStripPanelName : null;
 
-                if (destinationPanel == null)
+                if (destinationPanel is null)
                 {
                     // Not in a panel.
                     if (!string.IsNullOrEmpty(toolStripSettings.Name))
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
 
         private ArrayList FindControls(Type baseType, bool searchAllChildren, Control.ControlCollection controlsToLookIn, ArrayList foundControls)
         {
-            if ((controlsToLookIn == null) || (foundControls == null))
+            if ((controlsToLookIn is null) || (foundControls is null))
             {
                 return null;
             }
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < controlsToLookIn.Count; i++)
                 {
-                    if (controlsToLookIn[i] == null)
+                    if (controlsToLookIn[i] is null)
                     {
                         continue;
                     }
@@ -366,7 +366,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < controlsToLookIn.Count; i++)
                     {
-                        if (controlsToLookIn[i] == null || controlsToLookIn[i] is Form)
+                        if (controlsToLookIn[i] is null || controlsToLookIn[i] is Form)
                         {
                             continue;
                         }

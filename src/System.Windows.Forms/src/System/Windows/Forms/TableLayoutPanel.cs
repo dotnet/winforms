@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -314,7 +313,7 @@ namespace System.Windows.Forms
         public int[] GetColumnWidths()
         {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
-            if (containerInfo.Columns == null)
+            if (containerInfo.Columns is null)
             {
                 return Array.Empty<int>();
             }
@@ -335,7 +334,7 @@ namespace System.Windows.Forms
         public int[] GetRowHeights()
         {
             TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(this);
-            if (containerInfo.Rows == null)
+            if (containerInfo.Rows is null)
             {
                 return Array.Empty<int>();
             }
@@ -388,7 +387,7 @@ namespace System.Windows.Forms
             TableLayout.Strip[] rowStrips = containerInfo.Rows;
             TableLayoutPanelCellBorderStyle cellBorderStyle = CellBorderStyle;
 
-            if (colStrips == null || rowStrips == null)
+            if (colStrips is null || rowStrips is null)
             {
                 return;
             }

@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fontWrapper == null)
+                if (_fontWrapper is null)
                 {
                     _fontWrapper = new Control.FontHandleWrapper(Font);
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns whether or not this property bag contains all default values (is empty)
         /// </summary>
-        public virtual bool IsEmpty() => Font == null && ForeColor.IsEmpty && BackColor.IsEmpty;
+        public virtual bool IsEmpty() => Font is null && ForeColor.IsEmpty && BackColor.IsEmpty;
 
         /// <summary>
         ///  Copies the bag. Always returns a valid ODPB object
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             lock (s_internalSyncObject)
             {
                 var result = new OwnerDrawPropertyBag();
-                if (value == null)
+                if (value is null)
                 {
                     return result;
                 }

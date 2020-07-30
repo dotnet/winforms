@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Layout
                         case DockStyle.Fill:
                             if (element is MdiClient)
                             {
-                                Debug.Assert(mdiClient == null, "How did we end up with multiple MdiClients?");
+                                Debug.Assert(mdiClient is null, "How did we end up with multiple MdiClients?");
                                 mdiClient = element;
                             }
                             else
@@ -614,7 +614,7 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(!HasCachedBounds(element.Container), "Do not call this method with an active cached bounds list.");
 
             AnchorInfo anchorInfo = GetAnchorInfo(element);
-            if (anchorInfo == null)
+            if (anchorInfo is null)
             {
                 anchorInfo = new AnchorInfo();
                 SetAnchorInfo(element, anchorInfo);
@@ -622,7 +622,7 @@ namespace System.Windows.Forms.Layout
 
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "Update anchor info");
             Debug.Indent();
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container == null ? "No parent" : "Parent");
+            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, element.Container is null ? "No parent" : "Parent");
 
             if (CommonProperties.GetNeedsAnchorLayout(element) && element.Container != null)
             {
@@ -885,7 +885,7 @@ namespace System.Windows.Forms.Layout
             if (bounds != GetCachedBounds(element))
             {
                 IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
-                if (dictionary == null)
+                if (dictionary is null)
                 {
                     dictionary = new HybridDictionary();
                     element.Container.Properties.SetObject(s_cachedBoundsProperty, dictionary);

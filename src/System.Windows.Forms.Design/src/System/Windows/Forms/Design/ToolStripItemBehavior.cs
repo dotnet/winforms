@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design.Behavior;
@@ -38,7 +37,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_dropSource == null)
+                if (_dropSource is null)
                 {
                     _dropSource = new Control();
                 }
@@ -167,7 +166,7 @@ namespace System.Windows.Forms.Design
         private bool MouseHandlerPresent(ToolStripItem item)
         {
             IMouseHandler mouseHandler = null;
-            if (_eventSvc == null)
+            if (_eventSvc is null)
             {
                 _eventSvc = (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
             }
@@ -220,7 +219,7 @@ namespace System.Windows.Forms.Design
                 if (glyph != null && button == MouseButtons.Left)
                 {
                     ISelectionService selSvc = GetSelectionService(glyphItem);
-                    if (selSvc == null)
+                    if (selSvc is null)
                     {
                         return false;
                     }
@@ -311,7 +310,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (selSvc == null || MouseHandlerPresent(glyphItem))
+            if (selSvc is null || MouseHandlerPresent(glyphItem))
             {
                 return false;
             }
@@ -503,7 +502,7 @@ namespace System.Windows.Forms.Design
             ToolStripItemGlyph glyph = g as ToolStripItemGlyph;
             ToolStripItem glyphItem = glyph.Item;
             ISelectionService selSvc = GetSelectionService(glyphItem);
-            if (selSvc == null || glyphItem.Site == null || MouseHandlerPresent(glyphItem))
+            if (selSvc is null || glyphItem.Site is null || MouseHandlerPresent(glyphItem))
             {
                 return false;
             }
@@ -627,7 +626,7 @@ namespace System.Windows.Forms.Design
                     if (components.Count == 1)
                     {
                         string name = TypeDescriptor.GetComponentName(components[0]);
-                        if (name == null || name.Length == 0)
+                        if (name is null || name.Length == 0)
                         {
                             name = components[0].GetType().Name;
                         }
@@ -922,7 +921,7 @@ namespace System.Windows.Forms.Design
         // Set values before initiating the Drag-Drop
         private void SetParentDesignerValuesForDragDrop(ToolStripItem glyphItem, bool setValues, Point mouseLoc)
         {
-            if (glyphItem.Site == null)
+            if (glyphItem.Site is null)
             {
                 return;
             }

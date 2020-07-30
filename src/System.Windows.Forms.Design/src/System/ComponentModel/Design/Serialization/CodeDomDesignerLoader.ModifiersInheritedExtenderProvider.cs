@@ -54,12 +54,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 IComponent baseComponent = null;
 
-                if (c == null)
+                if (c is null)
                 {
                     return null;
                 }
 
-                if (_host == null)
+                if (_host is null)
                 {
                     ISite site = c.Site;
 
@@ -96,14 +96,14 @@ namespace System.ComponentModel.Design.Serialization
                 Type baseType = baseComponent.GetType();
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return MemberAttributes.Private;
                 }
 
                 string name = site.Name;
 
-                if (name == null)
+                if (name is null)
                 {
                     return MemberAttributes.Private;
                 }
@@ -135,7 +135,7 @@ namespace System.ComponentModel.Design.Serialization
                 // visibility of this accessor to fix the modifiers up.
                 PropertyInfo prop = TypeDescriptor.GetReflectionType(baseType).GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
                 MethodInfo[] accessors = prop?.GetAccessors(true);
-                if (accessors == null || accessors.Length == 0 || accessors[0] == null)
+                if (accessors is null || accessors.Length == 0 || accessors[0] is null)
                 {
                     return MemberAttributes.Private;
                 }

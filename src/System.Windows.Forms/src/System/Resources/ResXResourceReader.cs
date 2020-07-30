@@ -234,7 +234,7 @@ namespace System.Resources
         /// </summary>
         private void EnsureResData()
         {
-            if (_resData == null)
+            if (_resData is null)
             {
                 _resData = new ListDictionary();
                 _resMetadata = new ListDictionary();
@@ -254,7 +254,7 @@ namespace System.Resources
                     }
                     else if (_fileName != null || _stream != null)
                     {
-                        if (_stream == null)
+                        if (_stream is null)
                         {
                             _stream = new FileStream(_fileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                         }
@@ -660,7 +660,7 @@ namespace System.Resources
                 }
             }
 
-            if (nodeInfo.Name == null)
+            if (nodeInfo.Name is null)
             {
                 throw new ArgumentException(string.Format(SR.InvalidResXResourceNoName, nodeInfo.ValueData));
             }
@@ -674,7 +674,7 @@ namespace System.Resources
             else
             {
                 IDictionary data = (isMetaData ? _resMetadata : _resData);
-                if (_assemblyNames == null)
+                if (_assemblyNames is null)
                 {
                     data[nodeInfo.Name] = dataNode.GetValue(_typeResolver);
                 }

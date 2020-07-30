@@ -6,14 +6,12 @@
 
 using System.Buffers;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -665,7 +663,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (itemsCollection == null)
+                if (itemsCollection is null)
                 {
                     itemsCollection = CreateItemCollection();
                 }
@@ -778,7 +776,7 @@ namespace System.Windows.Forms
                 else
                 {
                     //When the list is empty, we don't want to multiply by 0 here.
-                    int cnt = (itemsCollection == null || itemsCollection.Count == 0) ? 1 : itemsCollection.Count;
+                    int cnt = (itemsCollection is null || itemsCollection.Count == 0) ? 1 : itemsCollection.Count;
                     height = GetItemHeight(0) * cnt;
                 }
 
@@ -884,7 +882,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
+                int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
 
                 if (value < -1 || value >= itemCount)
                 {
@@ -954,7 +952,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedIndices == null)
+                if (selectedIndices is null)
                 {
                     selectedIndices = new SelectedIndexCollection(this);
                 }
@@ -1015,7 +1013,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedItems == null)
+                if (selectedItems is null)
                 {
                     selectedItems = new SelectedObjectCollection(this);
                 }
@@ -1126,7 +1124,7 @@ namespace System.Windows.Forms
                 // Scan through the list items looking for the supplied text string.  If we find it,
                 // select it.
                 //
-                if (SelectionMode != SelectionMode.None && value != null && (SelectedItem == null || !value.Equals(GetItemText(SelectedItem))))
+                if (SelectionMode != SelectionMode.None && value != null && (SelectedItem is null || !value.Equals(GetItemText(SelectedItem))))
                 {
                     int cnt = Items.Count;
                     for (int index = 0; index < cnt; ++index)
@@ -1217,7 +1215,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (customTabOffsets == null)
+                if (customTabOffsets is null)
                 {
                     customTabOffsets = new IntegerCollection(this);
                 }
@@ -1231,7 +1229,7 @@ namespace System.Windows.Forms
         [Obsolete("This method has been deprecated.  There is no replacement.  http://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value)
         {
-            int count = value == null ? 0 : value.Length;
+            int count = value is null ? 0 : value.Length;
             if (count == 0)
             {
                 return;
@@ -1374,7 +1372,7 @@ namespace System.Windows.Forms
         {
             bool hadSelection = false;
 
-            int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
+            int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
             for (int x = 0; x < itemCount; x++)
             {
                 if (SelectedItems.GetSelected(x))
@@ -1459,7 +1457,7 @@ namespace System.Windows.Forms
         /// </summary>
         public int GetItemHeight(int index)
         {
-            int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
+            int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
 
             // Note: index == 0 is OK even if the ListBox currently has
             // no items.
@@ -1986,7 +1984,7 @@ namespace System.Windows.Forms
 
         protected override void OnDataSourceChanged(EventArgs e)
         {
-            if (DataSource == null)
+            if (DataSource is null)
             {
                 BeginUpdate();
                 SelectedIndex = -1;
@@ -2161,7 +2159,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetItemsCore(IList value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -2209,7 +2207,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetSelected(int index, bool value)
         {
-            int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
+            int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
             if (index < 0 || index >= itemCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));

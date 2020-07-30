@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             if (tmp2.Int == integer)
             {
                 DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-                if (tmp1 == null)
+                if (tmp1 is null)
                 {
                     _headElement = tmp3;
                 }
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
                 index--;
             }
             DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-            if (tmp1 == null)
+            if (tmp1 is null)
             {
                 _headElement = tmp3;
             }
@@ -224,7 +224,7 @@ namespace System.Windows.Forms
         {
             if (_reset)
             {
-                Debug.Assert(_current == null);
+                Debug.Assert(_current is null);
                 _current = _headElement;
                 _reset = false;
             }

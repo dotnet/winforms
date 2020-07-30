@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
 
             internal List<ControlInformation> GetControlsInformation()
             {
-                if (_controlsInfo == null)
+                if (_controlsInfo is null)
                 {
                     return new List<ControlInformation>();
                 }
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
 
             private ControlInformation GetControlInformation(object controlName)
             {
-                if (_controlsInfo == null)
+                if (_controlsInfo is null)
                 {
                     return s_defaultControlInfo;
                 }

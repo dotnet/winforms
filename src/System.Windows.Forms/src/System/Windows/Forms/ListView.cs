@@ -616,7 +616,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (checkedIndexCollection == null)
+                if (checkedIndexCollection is null)
                 {
                     checkedIndexCollection = new CheckedIndexCollection(this);
                 }
@@ -633,7 +633,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (checkedListViewItemCollection == null)
+                if (checkedListViewItemCollection is null)
                 {
                     checkedListViewItemCollection = new CheckedListViewItemCollection(this);
                 }
@@ -733,7 +733,7 @@ namespace System.Windows.Forms
                     cp.Style |= (int)LVS.SINGLESEL;
                 }
 
-                if (listItemSorter == null)
+                if (listItemSorter is null)
                 {
                     switch (sorting)
                     {
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (defaultGroup == null)
+                if (defaultGroup is null)
                 {
                     defaultGroup = new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"));
                 }
@@ -1001,7 +1001,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (groups == null)
+                if (groups is null)
                 {
                     groups = new ListViewGroupCollection(this);
                 }
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (insertionMark == null)
+                if (insertionMark is null)
                 {
                     insertionMark = new ListViewInsertionMark(this);
                 }
@@ -1423,7 +1423,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedIndexCollection == null)
+                if (selectedIndexCollection is null)
                 {
                     selectedIndexCollection = new SelectedIndexCollection(this);
                 }
@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (selectedListViewItemCollection == null)
+                if (selectedListViewItemCollection is null)
                 {
                     selectedListViewItemCollection = new SelectedListViewItemCollection(this);
                 }
@@ -1561,7 +1561,7 @@ namespace System.Windows.Forms
                     sorting = value;
                     if (View == View.LargeIcon || View == View.SmallIcon)
                     {
-                        if (listItemSorter == null)
+                        if (listItemSorter is null)
                         {
                             listItemSorter = new IconComparer(sorting);
                         }
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewSetTopItem);
                 }
 
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -1816,7 +1816,7 @@ namespace System.Windows.Forms
                 EnsureVisible(value.Index);
                 ListViewItem topItem = TopItem;
 
-                if ((topItem == null) && (topIndex == Items.Count)) //
+                if ((topItem is null) && (topIndex == Items.Count)) //
                 {                                                   // There's a
                     topItem = value;                                // a single item.  Result of the
                     if (Scrollable)                                 // message is the number of items in the list rather than an index of an item in the list.
@@ -2385,7 +2385,7 @@ namespace System.Windows.Forms
         {
             if (selected)
             {
-                if (savedSelectedItems == null)
+                if (savedSelectedItems is null)
                 {
                     savedSelectedItems = new List<ListViewItem>();
                 }
@@ -2422,7 +2422,7 @@ namespace System.Windows.Forms
 
         private void CleanPreviousBackgroundImageFiles()
         {
-            if (bkImgFileNames == null)
+            if (bkImgFileNames is null)
             {
                 return;
             }
@@ -2514,7 +2514,7 @@ namespace System.Windows.Forms
                     ColumnHeader col = (columnHeaders != null && columnHeaders.Length > 0) ? columnHeaders[0] : null;
                     if (col != null)
                     {
-                        if (SmallImageList == null)
+                        if (SmallImageList is null)
                         {
                             return 2;
                         }
@@ -2909,7 +2909,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        if (!haveRenderInfo || subItemFont == null)
+                        if (!haveRenderInfo || subItemFont is null)
                         {
                             // safety net code just in case
                             if (odCacheFont != null)
@@ -3476,7 +3476,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal int GetColumnIndex(ColumnHeader ch)
         {
-            if (columnHeaders == null)
+            if (columnHeaders is null)
             {
                 return -1;
             }
@@ -3754,7 +3754,7 @@ namespace System.Windows.Forms
             ListViewItem item = (iItem == -1) ? null : Items[iItem];
             ListViewHitTestLocations location = ListViewHitTestLocations.None;
 
-            if (item == null && (LVHT.ABOVE & lvhi.flags) == LVHT.ABOVE)
+            if (item is null && (LVHT.ABOVE & lvhi.flags) == LVHT.ABOVE)
             {
                 location = (ListViewHitTestLocations)((MASK_HITTESTFLAG & (int)lvhi.flags) | (int)ListViewHitTestLocations.AboveClientArea);
             }
@@ -3801,7 +3801,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems = true)
         {
-            if (ch == null)
+            if (ch is null)
             {
                 throw new ArgumentNullException(nameof(ch));
             }
@@ -3831,7 +3831,7 @@ namespace System.Windows.Forms
             }
 
             // Add the column to our internal array
-            int columnCount = columnHeaders == null ? 0 : columnHeaders.Length;
+            int columnCount = columnHeaders is null ? 0 : columnHeaders.Length;
             if (columnCount > 0)
             {
                 ColumnHeader[] newHeaders = new ColumnHeader[columnCount + 1];
@@ -3943,7 +3943,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < Items.Count; i++)
                 {
                     ListViewItem item = Items[i];
-                    if (item.Group == null)
+                    if (item.Group is null)
                     {
                         item.UpdateStateToListView(item.Index);
                     }
@@ -3986,7 +3986,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InsertItems(int displayIndex, ListViewItem[] items, bool checkHosting)
         {
-            if (items == null || items.Length == 0)
+            if (items is null || items.Length == 0)
             {
                 return;
             }
@@ -4090,7 +4090,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe int InsertItemsNative(int index, ListViewItem[] items)
         {
-            if (items == null || items.Length == 0)
+            if (items is null || items.Length == 0)
             {
                 return 0;
             }
@@ -4579,7 +4579,7 @@ namespace System.Windows.Forms
                 listItemsArray = null;
             }
 
-            int columnCount = columnHeaders == null ? 0 : columnHeaders.Length;
+            int columnCount = columnHeaders is null ? 0 : columnHeaders.Length;
             if (columnCount > 0)
             {
                 int[] indices = new int[columnHeaders.Length];
@@ -4691,7 +4691,7 @@ namespace System.Windows.Forms
                         savedSelectedItems.Add(lviArr[i]);
                     }
                 }
-                Debug.Assert(listItemsArray == null, "listItemsArray not null, even though handle created");
+                Debug.Assert(listItemsArray is null, "listItemsArray not null, even though handle created");
                 ListViewItem[] items = null;
                 ListViewItemCollection tempItems = Items;
 
@@ -5111,7 +5111,7 @@ namespace System.Windows.Forms
             //
 
             // 8 strings should be good enough for us
-            if (bkImgFileNames == null)
+            if (bkImgFileNames is null)
             {
                 bkImgFileNames = new string[BKIMGARRAYSIZE];
                 bkImgFileNamesCount = -1;
@@ -5200,7 +5200,7 @@ namespace System.Windows.Forms
         internal void SetColumnWidth(int columnIndex, ColumnHeaderAutoResizeStyle headerAutoResize)
         {
             if ((columnIndex < 0) ||
-                (columnIndex >= 0 && columnHeaders == null) ||
+                (columnIndex >= 0 && columnHeaders is null) ||
                 (columnIndex >= columnHeaders.Length))
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, string.Format(SR.InvalidArgument, nameof(columnIndex), columnIndex));
@@ -5293,7 +5293,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateSavedCheckedItems(ListViewItem item, bool addItem)
         {
-            if (addItem && savedCheckedItems == null)
+            if (addItem && savedCheckedItems is null)
             {
                 savedCheckedItems = new List<ListViewItem>();
             }
@@ -5533,7 +5533,7 @@ namespace System.Windows.Forms
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 if (Items.Count > 0 && !VirtualMode)
                 {
-                    string z = (Items[0] == null) ? "null" : Items[0].ToString();
+                    string z = (Items[0] is null) ? "null" : Items[0].ToString();
                     string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
                     s += ", Items[0]: " + txt;
                 }
@@ -5987,7 +5987,7 @@ namespace System.Windows.Forms
                 {
                     int w = columnHeaders[nmheader->iItem].Width;
 
-                    if (columnHeaderClicked == null ||
+                    if (columnHeaderClicked is null ||
                         (columnHeaderClicked == columnHeaders[nmheader->iItem] &&
                          columnHeaderClickedWidth != -1 &&
                          columnHeaderClickedWidth != w))
@@ -6552,7 +6552,7 @@ namespace System.Windows.Forms
                             RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
                             OnRetrieveVirtualItem(rVI);
                             ListViewItem lvItem = rVI.Item;
-                            if (lvItem == null)
+                            if (lvItem is null)
                             {
                                 throw new InvalidOperationException(SR.ListViewVirtualItemRequired);
                             }
@@ -6814,7 +6814,7 @@ namespace System.Windows.Forms
 
                         // We should set focus to the first item,
                         // if none of the items are focused already.
-                        if (FocusedItem == null && Items.Count > 0)
+                        if (FocusedItem is null && Items.Count > 0)
                         {
                             Items[0].Focused = true;
                         }
@@ -8189,7 +8189,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
+                    if (owner.columnHeaders is null || index < 0 || index >= owner.columnHeaders.Length)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
@@ -8244,7 +8244,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.columnHeaders == null ? 0 : owner.columnHeaders.Length;
+                    return owner.columnHeaders is null ? 0 : owner.columnHeaders.Length;
                 }
             }
 
@@ -8432,7 +8432,7 @@ namespace System.Windows.Forms
 
             public virtual void AddRange(ColumnHeader[] values)
             {
-                if (values == null)
+                if (values is null)
                 {
                     throw new ArgumentNullException(nameof(values));
                 }
@@ -8442,7 +8442,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < values.Length; i++)
                 {
-                    if (values[i] == null)
+                    if (values[i] is null)
                     {
                         throw new ArgumentNullException(nameof(values));
                     }
@@ -8669,7 +8669,7 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void RemoveAt(int index)
             {
-                if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
+                if (owner.columnHeaders is null || index < 0 || index >= owner.columnHeaders.Length)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
@@ -9029,7 +9029,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewItem[] items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -9039,7 +9039,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewItemCollection items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -9112,7 +9112,7 @@ namespace System.Windows.Forms
             /// </summary>
             private ArrayList FindInternal(string key, bool searchAllSubItems, ListViewItemCollection listViewItems, ArrayList foundItems)
             {
-                if ((listViewItems == null) || (foundItems == null))
+                if ((listViewItems is null) || (foundItems is null))
                 {
                     return null;  //
                 }
@@ -9313,7 +9313,7 @@ namespace System.Windows.Forms
 
             void IList.Remove(object item)
             {
-                if (item == null || !(item is ListViewItem))
+                if (item is null || !(item is ListViewItem))
                 {
                     return;
                 }
@@ -9454,7 +9454,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewItem[] values)
             {
-                if (values == null)
+                if (values is null)
                 {
                     throw new ArgumentNullException(nameof(values));
                 }
@@ -9575,7 +9575,7 @@ namespace System.Windows.Forms
                                 item.UnHost(i, false);
                             }
                         }
-                        Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
+                        Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
 
                         User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
 
@@ -9741,7 +9741,7 @@ namespace System.Windows.Forms
 
                 if (owner.IsHandleCreated)
                 {
-                    Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
+                    Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
                     int retval = unchecked((int)(long)User32.SendMessageW(owner, (User32.WM)LVM.DELETEITEM, (IntPtr)index));
 
                     if (0 == retval)

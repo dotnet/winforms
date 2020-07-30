@@ -63,7 +63,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, PropertySort, CurrentTab);
 
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps == null, "PropertyGridView: MergedProps returned null!");
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
                 if (mergedProps != null)
                 {
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (entries[i].ParensAroundName)
                     {
-                        if (newEntries == null)
+                        if (newEntries is null)
                         {
                             newEntries = new MultiPropertyDescriptorGridEntry[entries.Length];
                         }
@@ -353,15 +353,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 PropertyDescriptor a1 = obj1 as PropertyDescriptor;
                 PropertyDescriptor a2 = obj2 as PropertyDescriptor;
 
-                if (a1 == null && a2 == null)
+                if (a1 is null && a2 is null)
                 {
                     return 0;
                 }
-                else if (a1 == null)
+                else if (a1 is null)
                 {
                     return -1;
                 }
-                else if (a2 == null)
+                else if (a2 is null)
                 {
                     return 1;
                 }

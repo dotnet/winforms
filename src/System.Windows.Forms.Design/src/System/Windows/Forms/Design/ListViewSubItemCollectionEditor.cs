@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
 
             text = TypeDescriptor.GetConverter(value).ConvertToString(value);
 
-            if (text == null || text.Length == 0)
+            if (text is null || text.Length == 0)
             {
                 text = value.GetType().Name;
             }

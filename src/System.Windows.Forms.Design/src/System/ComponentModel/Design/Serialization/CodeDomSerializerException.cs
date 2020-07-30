@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design.Serialization
 
         public CodeDomSerializerException(string message, IDesignerSerializationManager manager) : base(message)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design.Serialization
 
         public CodeDomSerializerException(Exception ex, IDesignerSerializationManager manager) : base(ex?.Message, ex)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }

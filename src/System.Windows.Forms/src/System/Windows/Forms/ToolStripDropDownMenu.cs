@@ -8,7 +8,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -133,7 +132,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (downScrollButton == null)
+                if (downScrollButton is null)
                 {
                     downScrollButton = new ToolStripScrollButton(false)
                     {
@@ -240,7 +239,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (upScrollButton == null)
+                if (upScrollButton is null)
                 {
                     upScrollButton = new ToolStripScrollButton(true)
                     {

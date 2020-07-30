@@ -236,7 +236,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_autoCompleteCustomSource == null)
+                if (_autoCompleteCustomSource is null)
                 {
                     _autoCompleteCustomSource = new AutoCompleteStringCollection();
                     _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childEditAccessibleObject == null)
+                if (_childEditAccessibleObject is null)
                 {
                     _childEditAccessibleObject = new ComboBoxChildEditUiaProvider(this, _childEdit.Handle);
                 }
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childListAccessibleObject == null)
+                if (_childListAccessibleObject is null)
                 {
                     _childListAccessibleObject =
                         new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox.Handle : _dropDownHandle);
@@ -346,7 +346,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_childTextAccessibleObject == null)
+                if (_childTextAccessibleObject is null)
                 {
                     _childTextAccessibleObject = new ComboBoxChildTextUiaProvider(this);
                 }
@@ -736,7 +736,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_itemsCollection == null)
+                if (_itemsCollection is null)
                 {
                     _itemsCollection = new ObjectCollection(this);
                 }
@@ -1290,12 +1290,12 @@ namespace System.Windows.Forms
                 {
                     //
 
-                    if (value == null)
+                    if (value is null)
                     {
                         SelectedIndex = -1;
                     }
                     else if (value != null &&
-                        (selectedItem == null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0)))
+                        (selectedItem is null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0)))
                     {
                         int index = FindStringIgnoreCase(value);
 
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms
         [Obsolete("This method has been deprecated.  There is no replacement.  http://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value)
         {
-            int count = value == null ? 0 : value.Length;
+            int count = value is null ? 0 : value.Length;
             if (count == 0)
             {
                 return;
@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal Point EditToComboboxMapping(Message m)
         {
-            if (_childEdit == null)
+            if (_childEdit is null)
             {
                 return new Point(0, 0);
             }
@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms
                 return ItemHeight;
             }
 
-            if (index < 0 || _itemsCollection == null || index >= _itemsCollection.Count)
+            if (index < 0 || _itemsCollection is null || index >= _itemsCollection.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -2434,10 +2434,10 @@ namespace System.Windows.Forms
 
             // Get the handles and wndprocs of the ComboBox's child windows
             //
-            Debug.Assert(_childEdit == null, "Child edit window already attached");
-            Debug.Assert(_childListBox == null, "Child listbox window already attached");
+            Debug.Assert(_childEdit is null, "Child edit window already attached");
+            Debug.Assert(_childListBox is null, "Child listbox window already attached");
 
-            bool ok = _childEdit == null && _childListBox == null;
+            bool ok = _childEdit is null && _childListBox is null;
 
             if (ok && DropDownStyle != ComboBoxStyle.DropDownList)
             {
@@ -2950,7 +2950,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ComboBoxDataSourceWithSort);
                 }
             }
-            if (DataSource == null)
+            if (DataSource is null)
             {
                 BeginUpdate();
                 SelectedIndex = -1;
@@ -3194,7 +3194,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetAutoComplete(bool reset, bool recreate)
         {
-            if (!IsHandleCreated || _childEdit == null)
+            if (!IsHandleCreated || _childEdit is null)
             {
                 return;
             }
@@ -3221,7 +3221,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (_stringSource == null)
+                            if (_stringSource is null)
                             {
                                 _stringSource = new StringSource(GetStringsForAutoComplete(AutoCompleteCustomSource));
                                 if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
@@ -3248,7 +3248,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                if (_stringSource == null)
+                                if (_stringSource is null)
                                 {
                                     _stringSource = new StringSource(GetStringsForAutoComplete(Items));
                                     if (!_stringSource.Bind(new HandleRef(this, _childEdit.Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
@@ -3416,7 +3416,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            return s + ", Items.Count: " + ((_itemsCollection == null) ? "0" : _itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
+            return s + ", Items.Count: " + ((_itemsCollection is null) ? "0" : _itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
         }
 
         private void UpdateDropDownHeight()
@@ -3427,7 +3427,7 @@ namespace System.Windows.Forms
                 int height = DropDownHeight;
                 if (height == DefaultDropDownHeight)
                 {
-                    int itemCount = (_itemsCollection == null) ? 0 : _itemsCollection.Count;
+                    int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
                     int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
                     height = (ItemHeight * count + 2);
                 }
@@ -3494,7 +3494,7 @@ namespace System.Windows.Forms
             //
             // v1.1 - ComboBox::set_Text compares FilterItemOnProperty(item) w/ "value" and set the SelectedIndex accordingly
             // v1.1 - null values correspond to String.Empty
-            // v1.1 - SelectedIndex == -1 corresponds to Text == null
+            // v1.1 - SelectedIndex == -1 corresponds to Text is null
             string s = null;
 
             if (SelectedIndex != -1)
@@ -4018,7 +4018,7 @@ namespace System.Windows.Forms
                         AccessibleObject wfAccessibleObject = null;
                         UiaCore.IAccessibleInternal iacc = null;
 
-                        if (_accessibilityObject == null)
+                        if (_accessibilityObject is null)
                         {
                             wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
@@ -4061,16 +4061,16 @@ namespace System.Windows.Forms
 
             public int Compare(object item1, object item2)
             {
-                if (item1 == null)
+                if (item1 is null)
                 {
-                    if (item2 == null)
+                    if (item2 is null)
                     {
                         return 0; //both null, then they are equal
                     }
 
                     return -1; //item1 is null, but item2 is valid (greater)
                 }
-                if (item2 == null)
+                if (item2 is null)
                 {
                     return 1; //item2 is null, so item 1 is greater
                 }
@@ -4099,7 +4099,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_comparer == null)
+                    if (_comparer is null)
                     {
                         _comparer = new ItemComparer(_owner);
                     }
@@ -4111,7 +4111,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_innerList == null)
+                    if (_innerList is null)
                     {
                         _innerList = new ArrayList();
                     }
@@ -4184,7 +4184,7 @@ namespace System.Windows.Forms
 
             private int AddInternal(object item)
             {
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -4257,7 +4257,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(IList items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -4349,7 +4349,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(object value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -4370,7 +4370,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -4971,7 +4971,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_dropDownButtonUiaProvider == null)
+                    if (_dropDownButtonUiaProvider is null)
                     {
                         _dropDownButtonUiaProvider = new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox, _owningComboBox.Handle);
                     }
@@ -5114,7 +5114,7 @@ namespace System.Windows.Forms
             internal void SetComboBoxItemFocus()
             {
                 var selectedItem = _owningComboBox.SelectedItem;
-                if (selectedItem == null)
+                if (selectedItem is null)
                 {
                     return;
                 }
@@ -5128,7 +5128,7 @@ namespace System.Windows.Forms
             internal void SetComboBoxItemSelection()
             {
                 var selectedItem = _owningComboBox.SelectedItem;
-                if (selectedItem == null)
+                if (selectedItem is null)
                 {
                     return;
                 }
@@ -6019,7 +6019,7 @@ namespace System.Windows.Forms
             {
                 if (subclass && s_ACWindows.ContainsKey(acHandle))
                 {
-                    if (s_ACWindows[acHandle] == null)
+                    if (s_ACWindows[acHandle] is null)
                     {
                         s_ACWindows.Remove(acHandle); //if an external handle got destroyed, dont let it stop us.
                     }
@@ -6047,7 +6047,7 @@ namespace System.Windows.Forms
                 ArrayList nulllist = new ArrayList();
                 foreach (DictionaryEntry e in s_ACWindows)
                 {
-                    if (e.Value == null)
+                    if (e.Value is null)
                     {
                         nulllist.Add(e.Key);
                     }

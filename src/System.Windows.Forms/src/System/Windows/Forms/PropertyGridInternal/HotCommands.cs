@@ -69,7 +69,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (label == null)
+                if (label is null)
                 {
                     label = new LinkLabel
                     {
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 this.verbs = null;
             }
 
-            if (component == null || verbs == null || verbs.Length == 0)
+            if (component is null || verbs is null || verbs.Length == 0)
             {
                 Visible = false;
                 Label.Links.Clear();

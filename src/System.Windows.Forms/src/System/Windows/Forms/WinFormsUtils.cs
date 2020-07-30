@@ -126,7 +126,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static string EscapeTextWithAmpersands(string text)
         {
-            if (text == null)
+            if (text is null)
             {
                 return null;
             }
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
         /// </remarks>
         public static string TextWithoutMnemonics(string text)
         {
-            if (text == null)
+            if (text is null)
             {
                 return null;
             }
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool SafeCompareStrings(string string1, string string2, bool ignoreCase)
         {
-            if ((string1 == null) || (string2 == null))
+            if ((string1 is null) || (string2 is null))
             {
                 // if either key is null, we should return false
                 return false;

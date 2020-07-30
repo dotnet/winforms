@@ -93,7 +93,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_licenseCtx == null)
+                if (_licenseCtx is null)
                 {
                     _licenseCtx = new HostDesigntimeLicenseContext(this);
                 }
@@ -167,7 +167,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal bool AddToContainerPreProcess(IComponent component, string name, IContainer containerToAddTo)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -229,10 +229,10 @@ namespace System.ComponentModel.Design
 
             IDesigner designer;
             // Is this the first component the loader has created?  If so, then it must be the root component (by definition) so we will expect there to be a root designer associated with the component.  Otherwise, we search for a normal designer, which can be optionally provided.
-            if (_rootComponent == null)
+            if (_rootComponent is null)
             {
                 designer = _surface.CreateDesigner(component, true) as IRootDesigner;
-                if (designer == null)
+                if (designer is null)
                 {
                     Exception ex = new Exception(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
                     {
@@ -243,7 +243,7 @@ namespace System.ComponentModel.Design
 
                 _rootComponent = component;
                 // Check and see if anyone has set the class name of the root component. we default to the component name.
-                if (_rootComponentClassName == null)
+                if (_rootComponentClassName is null)
                 {
                     _rootComponentClassName = component.Site.Name;
                 }
@@ -260,7 +260,7 @@ namespace System.ComponentModel.Design
                 try
                 {
                     designer.Initialize(component);
-                    if (designer.Component == null)
+                    if (designer.Component is null)
                     {
                         throw new InvalidOperationException(SR.DesignerHostDesignerNeedsComponent);
                     }
@@ -336,7 +336,7 @@ namespace System.ComponentModel.Design
 
                 string message = e.Message;
                 // We must handle the case of an exception with no message.
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     e = new Exception(string.Format(SR.DesignSurfaceFatalError, e.ToString()), e);
                 }
@@ -345,7 +345,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerLoaderHost)this).EndLoad(null, false, new object[] { e });
             }
 
-            if (_designerEventService == null)
+            if (_designerEventService is null)
             {
                 // If there is no designer event service, make this designer the currently active designer.  It will remain active.
                 OnActiveDesignerChanged(null, new ActiveDesignerEventArgs(null, this));
@@ -370,7 +370,7 @@ namespace System.ComponentModel.Design
 
             INameCreationService nameCreate = GetService(typeof(INameCreationService)) as INameCreationService;
             // Fabricate a name if one wasn't provided.  We try to use the name creation service, but if it is not available we will just use an empty string.
-            if (name == null)
+            if (name is null)
             {
                 if (nameCreate != null)
                 {
@@ -478,7 +478,7 @@ namespace System.ComponentModel.Design
         protected override object GetService(Type service)
         {
             object serviceInstance = null;
-            if (service == null)
+            if (service is null)
             {
                 throw new ArgumentNullException(nameof(service));
             }
@@ -493,7 +493,7 @@ namespace System.ComponentModel.Design
             else
             {
                 serviceInstance = base.GetService(service);
-                if (serviceInstance == null && _surface != null)
+                if (serviceInstance is null && _surface != null)
                 {
                     serviceInstance = _surface.GetService(service);
                 }
@@ -507,7 +507,7 @@ namespace System.ComponentModel.Design
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
         {
             // NOTE: sender can be null (we call this directly in BeginLoad)
-            if (e == null)
+            if (e is null)
             {
                 return;
             }
@@ -524,7 +524,7 @@ namespace System.ComponentModel.Design
             }
 
             // Not our document, so we don't fire.
-            if (eventobj == null)
+            if (eventobj is null)
             {
                 return;
             }
@@ -622,13 +622,13 @@ namespace System.ComponentModel.Design
 
         internal bool RemoveFromContainerPreProcess(IComponent component, IContainer container)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
             ISite site = component.Site;
-            if (site == null || site.Container != container)
+            if (site is null || site.Container != container)
             {
                 return false;
             }
@@ -1021,7 +1021,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         IComponent IDesignerHost.CreateComponent(Type componentType, string name)
         {
-            if (componentType == null)
+            if (componentType is null)
             {
                 throw new ArgumentNullException(nameof(componentType));
             }
@@ -1048,7 +1048,7 @@ namespace System.ComponentModel.Design
                     _newComponentName = null;
                 }
 
-                if (component == null)
+                if (component is null)
                 {
                     InvalidOperationException ex = new InvalidOperationException(string.Format(SR.DesignerHostFailedComponentCreate, componentType.Name))
                     {
@@ -1059,7 +1059,7 @@ namespace System.ComponentModel.Design
 
                 // Add this component to our container
                 //
-                if (component.Site == null || component.Site.Container != this)
+                if (component.Site is null || component.Site.Container != this)
                 {
                     PerformAdd(component, name);
                 }
@@ -1089,7 +1089,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         DesignerTransaction IDesignerHost.CreateTransaction(string description)
         {
-            if (description == null)
+            if (description is null)
             {
                 description = SR.DesignerHostGenericTransactionName;
             }
@@ -1102,7 +1102,7 @@ namespace System.ComponentModel.Design
         void IDesignerHost.DestroyComponent(IComponent component)
         {
             string name;
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -1151,7 +1151,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         IDesigner IDesignerHost.GetDesigner(IComponent component)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -1163,7 +1163,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         Type IDesignerHost.GetType(string typeName)
         {
-            if (typeName == null)
+            if (typeName is null)
             {
                 throw new ArgumentNullException(nameof(typeName));
             }
@@ -1193,7 +1193,7 @@ namespace System.ComponentModel.Design
             }
 
             // If the loader indicated success, but it never created a component, that is an error.
-            if (successful && _rootComponent == null)
+            if (successful && _rootComponent is null)
             {
                 ArrayList errorList = new ArrayList();
                 InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass)
@@ -1520,7 +1520,7 @@ namespace System.ComponentModel.Design
             public DesignerHostTransaction(DesignerHost host, string description) : base(description)
             {
                 _host = host;
-                if (_host._transactions == null)
+                if (_host._transactions is null)
                 {
                     _host._transactions = new Stack();
                 }
@@ -1659,11 +1659,11 @@ namespace System.ComponentModel.Design
             /// </summary>
             void IDictionaryService.SetValue(object key, object value)
             {
-                if (_dictionary == null)
+                if (_dictionary is null)
                 {
                     _dictionary = new Hashtable();
                 }
-                if (value == null)
+                if (value is null)
                 {
                     _dictionary.Remove(key);
                 }
@@ -1726,7 +1726,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
-                if (service == null)
+                if (service is null)
                 {
                     throw new ArgumentNullException(nameof(service));
                 }
@@ -1740,7 +1740,7 @@ namespace System.ComponentModel.Design
                 // NestedContainer is demand created
                 if (service == typeof(INestedContainer))
                 {
-                    if (_nestedContainer == null)
+                    if (_nestedContainer is null)
                     {
                         _nestedContainer = new SiteNestedContainer(_component, null, _host);
 
@@ -1809,7 +1809,7 @@ namespace System.ComponentModel.Design
                 get => _name;
                 set
                 {
-                    if (value == null)
+                    if (value is null)
                     {
                         value = string.Empty;
                     }

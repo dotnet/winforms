@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer == null)
+                if (s_defaultSerializer is null)
                 {
                     s_defaultSerializer = new ResourceCodeDomSerializer();
                 }
@@ -81,9 +81,9 @@ namespace System.ComponentModel.Design.Serialization
         {
             object instance = null;
 
-            if (manager == null || codeObject == null)
+            if (manager is null || codeObject is null)
             {
-                throw new ArgumentNullException(manager == null ? "manager" : "codeObject");
+                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
             }
 
             using (TraceScope("ResourceCodeDomSerializer::Deserialize"))
@@ -111,7 +111,7 @@ namespace System.ComponentModel.Design.Serialization
                             else
                             {
                                 // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
-                                if (instance == null)
+                                if (instance is null)
                                 {
                                     instance = DeserializeStatementToInstance(manager, element);
                                 }
@@ -154,11 +154,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
@@ -287,7 +287,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         sm.DeclarationAdded = true;
                         // If we have a root context, then we can write out a reasonable resource manager constructor. If not, then we're a bit hobbled because we have to guess at the resource name.
-                        TraceWarningIf(statements == null, "No CodeStatementCollection on serialization stack, we cannot serialize resource manager creation statements.");
+                        TraceWarningIf(statements is null, "No CodeStatementCollection on serialization stack, we cannot serialize resource manager creation statements.");
                         if (statements != null)
                         {
                             CodeExpression[] parameters;
@@ -313,7 +313,7 @@ namespace System.ComponentModel.Design.Serialization
                         // Check to see if we have an expression for SM yet.  If we have cached the declaration  in the component cache, the expression may not be setup so we should re-apply it.
                         if (!sm.ExpressionAdded)
                         {
-                            if (GetExpression(manager, sm) == null)
+                            if (GetExpression(manager, sm) is null)
                             {
                                 SetExpression(manager, sm, new CodeVariableReferenceExpression(ResourceManagerName));
                             }
@@ -323,7 +323,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 // Retrieve the ExpressionContext on the context stack, and save the value as a resource.
                 ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
-                TraceWarningIf(tree == null, "No ExpressionContext on stack.  We can serialize, but we cannot create a well-formed name.");
+                TraceWarningIf(tree is null, "No ExpressionContext on stack.  We can serialize, but we cannot create a well-formed name.");
                 string resourceName = sm.SetValue(manager, tree, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, false);
                 // Now the next step is to discover the type of the given value.  If it is a string, we will invoke "GetString"  Otherwise, we will invoke "GetObject" and supply a cast to the proper value.
                 bool needCast;
@@ -385,7 +385,7 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("ResourceCodeDomSerializer::" + nameof(SerializeMetadata)))
             {
                 Trace("Name: {0}", name);
-                Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
+                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
                 SerializationResourceManager sm = GetResourceManager(manager);
                 sm.SetMetadata(manager, name, value, shouldSerializeValue, false);
             }
@@ -413,7 +413,7 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("ResourceCodeDomSerializer::" + calleeName))
             {
                 Trace("Name: {0}", name);
-                Trace("Value: {0}", (value == null ? "(null)" : value.ToString()));
+                Trace("Value: {0}", (value is null ? "(null)" : value.ToString()));
                 SerializationResourceManager sm = GetResourceManager(manager);
                 sm.SetValue(manager, name, value, forceInvariant, shouldSerializeInvariant, ensureInvariant, applyingCachedResources);
             }
@@ -524,7 +524,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_readCulture == null)
+                    if (_readCulture is null)
                     {
                         CultureInfo locCulture = LocalizationLanguage;
                         if (locCulture != null)
@@ -547,7 +547,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_resourceSets == null)
+                    if (_resourceSets is null)
                     {
                         _resourceSets = new Hashtable();
                     }
@@ -562,7 +562,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_rootComponent == null)
+                    if (_rootComponent is null)
                     {
                         if (_manager.Context[typeof(RootContext)] is RootContext rootCxt)
                         {
@@ -580,7 +580,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 get
                 {
-                    if (_writer == null)
+                    if (_writer is null)
                     {
                         IResourceService rs = (IResourceService)_manager.GetService(typeof(IResourceService));
 
@@ -635,7 +635,7 @@ namespace System.ComponentModel.Design.Serialization
             public bool AddPropertyFill(object value)
             {
                 bool added = false;
-                if (_propertyFillAdded == null)
+                if (_propertyFillAdded is null)
                 {
                     _propertyFillAdded = new Hashtable();
                 }
@@ -655,7 +655,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override void ApplyResources(object value, string objectName, CultureInfo culture)
             {
-                if (culture == null)
+                if (culture is null)
                 {
                     culture = ReadCulture;
                 }
@@ -693,7 +693,7 @@ namespace System.ComponentModel.Design.Serialization
                     Debug.Assert(culture.Parent != culture, "should have exited loop when culture = InvariantCulture");
                     culture = culture.Parent;
                     Hashtable rs = GetResourceSet(culture);
-                    bool contains = (rs == null) ? false : rs.ContainsKey(name);
+                    bool contains = (rs is null) ? false : rs.ContainsKey(name);
                     if (contains)
                     {
                         object parentValue = rs?[name];
@@ -745,7 +745,7 @@ namespace System.ComponentModel.Design.Serialization
                 catch (Exception e)
                 {
                     string message = e.Message;
-                    if (message == null || message.Length == 0)
+                    if (message is null || message.Length == 0)
                     {
                         message = e.GetType().Name;
                     }
@@ -774,7 +774,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public IDictionaryEnumerator GetMetadataEnumerator()
             {
-                if (_mergedMetadata == null)
+                if (_mergedMetadata is null)
                 {
                     Hashtable t = GetMetadata();
                     if (t != null)
@@ -820,7 +820,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private Hashtable GetMetadata()
             {
-                if (_metadata == null)
+                if (_metadata is null)
                 {
                     IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
                     if (resSvc != null)
@@ -877,7 +877,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 object value = null;
-                while (value == null)
+                while (value is null)
                 {
                     Hashtable rs = GetResourceSet(culture);
                     if (rs != null)
@@ -903,10 +903,10 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Assert(culture != null, "null parameter");
                 Hashtable rs = null;
                 object objRs = ResourceTable[culture];
-                if (objRs == null)
+                if (objRs is null)
                 {
                     IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
-                    TraceErrorIf(resSvc == null, "IResourceService is not available.  We will not be able to load resources.");
+                    TraceErrorIf(resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
                     if (resSvc != null)
                     {
                         IResourceReader reader = resSvc.GetResourceReader(culture);
@@ -940,7 +940,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     rs = objRs as Hashtable;
-                    if (rs == null)
+                    if (rs is null)
                     {
                         // the resourceSets hash table may contain our "this" pointer as a sentinel value
                         Debug.Assert(objRs == s_resourceSetSentinel, "unknown object in resourceSets: " + objRs);
@@ -954,7 +954,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override ResourceSet GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
             {
-                if (culture == null)
+                if (culture is null)
                 {
                     throw new ArgumentNullException(nameof(culture));
                 }
@@ -1056,7 +1056,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (value != null && (!value.GetType().IsSerializable))
                 {
-                    Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value == null ? "(null)" : value.GetType().Name));
+                    Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value is null ? "(null)" : value.GetType().Name));
                     return;
                 }
 
@@ -1087,10 +1087,10 @@ namespace System.ComponentModel.Design.Serialization
 
                     Hashtable invariant = GetResourceSet(CultureInfo.InvariantCulture);
                     Hashtable t;
-                    if (invariantWriter == null || invariantWriter is ResXResourceWriter)
+                    if (invariantWriter is null || invariantWriter is ResXResourceWriter)
                     {
                         t = GetMetadata();
-                        if (t == null)
+                        if (t is null)
                         {
                             _metadata = new Hashtable();
                             t = _metadata;
@@ -1139,7 +1139,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Values we are going to serialize must be serializable or else the resource writer will fail when we close it.
                 if (value != null && (!value.GetType().IsSerializable))
                 {
-                    Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value == null ? "(null)" : value.GetType().Name));
+                    Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value is null ? "(null)" : value.GetType().Name));
                     return;
                 }
 
@@ -1250,7 +1250,7 @@ namespace System.ComponentModel.Design.Serialization
                     else
                     {
                         nameBase = manager.GetName(tree.Owner);
-                        if (nameBase == null)
+                        if (nameBase is null)
                         {
                             IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
                             if (referenceService != null)
@@ -1282,7 +1282,7 @@ namespace System.ComponentModel.Design.Serialization
                         expressionName = null;
                     }
 
-                    if (nameBase == null)
+                    if (nameBase is null)
                     {
                         nameBase = "resource";
                     }

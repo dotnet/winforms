@@ -11,7 +11,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
 using static Interop.ComCtl32;
@@ -117,7 +116,7 @@ namespace System.Windows.Forms
             // Update the owner of these subitems
             for (int i = 0; i < subItems.Length; i++)
             {
-                if (subItems[i] == null)
+                if (subItems[i] is null)
                 {
                     throw new ArgumentNullException(nameof(subItems));
                 }
@@ -198,7 +197,7 @@ namespace System.Windows.Forms
             // Update the owner of these subitems
             for (int i = 0; i < subItems.Length; i++)
             {
-                if (subItems[i] == null)
+                if (subItems[i] is null)
                 {
                     throw new ArgumentNullException(nameof(subItems));
                 }
@@ -425,7 +424,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ImageList == null || ImageIndexer.Index < ImageList.Images.Count
+                return ImageList is null || ImageIndexer.Index < ImageList.Images.Count
                     ? ImageIndexer.Index
                     : ImageList.Images.Count - 1;
             }
@@ -783,7 +782,7 @@ namespace System.Windows.Forms
             get => toolTipText;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -953,8 +952,8 @@ namespace System.Windows.Forms
         internal void Host(ListView parent, int id, int index)
         {
             // Don't let the name "host" fool you -- Handle is not necessarily created
-            Debug.Assert(listView == null || !listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
-            Debug.Assert(parent == null || !parent.VirtualMode, "ListViewItem::Host can't be used w/ a virtual list");
+            Debug.Assert(listView is null || !listView.VirtualMode, "ListViewItem::Host can't be used w/ a virtual item");
+            Debug.Assert(parent is null || !parent.VirtualMode, "ListViewItem::Host can't be used w/ a virtual list");
 
             ID = id;
             listView = parent;
@@ -1098,7 +1097,7 @@ namespace System.Windows.Forms
         {
             UpdateStateFromListView(displayIndex, checkSelection);
 
-            if (listView != null && (listView.Site == null || !listView.Site.DesignMode) && group != null)
+            if (listView != null && (listView.Site is null || !listView.Site.DesignMode) && group != null)
             {
                 group.Items.Remove(this);
             }
@@ -1338,7 +1337,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (style == null)
+                    if (style is null)
                     {
                         style = new SubItemStyle();
                     }
@@ -1414,7 +1413,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (style == null)
+                    if (style is null)
                     {
                         style = new SubItemStyle();
                     }
@@ -1445,7 +1444,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (style == null)
+                    if (style is null)
                     {
                         style = new SubItemStyle();
                     }
@@ -1629,7 +1628,7 @@ namespace System.Windows.Forms
 
             public ListViewSubItem Add(ListViewSubItem item)
             {
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
@@ -1657,7 +1656,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewSubItem[] items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -1676,7 +1675,7 @@ namespace System.Windows.Forms
 
             public void AddRange(string[] items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -1695,7 +1694,7 @@ namespace System.Windows.Forms
 
             public void AddRange(string[] items, Color foreColor, Color backColor, Font font)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -1764,11 +1763,11 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ErrorCollectionFull);
                 }
 
-                if (_owner.subItems == null || _owner.SubItemCount + size > _owner.subItems.Length)
+                if (_owner.subItems is null || _owner.SubItemCount + size > _owner.subItems.Length)
                 {
                     // Must grow array. Don't do it just by size, though;
                     // chunk it for efficiency.
-                    if (_owner.subItems == null)
+                    if (_owner.subItems is null)
                     {
                         int newSize = (size > 4) ? size : 4;
                         _owner.subItems = new ListViewSubItem[newSize];
@@ -1875,7 +1874,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                if (item == null)
+                if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));
                 }

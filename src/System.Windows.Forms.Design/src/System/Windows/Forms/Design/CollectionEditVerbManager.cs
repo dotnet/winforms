@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
             Debug.Assert(designer != null, "Can't have a CollectionEditVerbManager without an associated designer");
             _designer = designer;
             _targetProperty = prop;
-            if (prop == null)
+            if (prop is null)
             {
                 prop = TypeDescriptor.GetDefaultProperty(designer.Component);
                 if (prop != null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design
                 }
             }
             Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collectoin edtior with.");
-            if (text == null)
+            if (text is null)
             {
                 text = SR.ToolStripItemCollectionEditorVerb;
             }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_componentChangeSvc == null)
+                if (_componentChangeSvc is null)
                 {
                     _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
                 }
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Design
                 actionUIService.HideUI(_designer.Component);
             }
             object propertyValue = _targetProperty.GetValue(_designer.Component);
-            if (propertyValue == null)
+            if (propertyValue is null)
             {
                 return;
             }

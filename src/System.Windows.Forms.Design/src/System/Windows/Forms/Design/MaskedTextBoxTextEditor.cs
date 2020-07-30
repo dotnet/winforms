@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
     {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (context?.Instance == null || provider == null)
+            if (context?.Instance is null || provider is null)
             {
                 return value;
             }
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
             }
 
             MaskedTextBox maskedTextBox = context.Instance as MaskedTextBox;
-            if (maskedTextBox == null)
+            if (maskedTextBox is null)
             {
                 maskedTextBox = new MaskedTextBox();
                 maskedTextBox.Text = value as string;

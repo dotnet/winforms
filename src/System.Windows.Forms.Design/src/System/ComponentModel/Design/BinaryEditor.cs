@@ -23,13 +23,13 @@ namespace System.ComponentModel.Design
 
         internal object GetService(Type serviceType)
         {
-            if (_context == null)
+            if (_context is null)
             {
                 return null;
             }
 
             IDesignerHost host = _context.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (host == null)
+            if (host is null)
             {
                 return _context.GetService(serviceType);
             }
@@ -66,7 +66,7 @@ namespace System.ComponentModel.Design
                 return buffer;
             }
 
-            Debug.Fail("No conversion from " + value == null ? "null" : value.GetType().FullName + " to byte[]");
+            Debug.Fail("No conversion from " + value is null ? "null" : value.GetType().FullName + " to byte[]");
             return null;
         }
 
@@ -92,13 +92,13 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                Debug.Fail("No conversion from byte[] to " + value == null ? "null" : value.GetType().FullName);
+                Debug.Fail("No conversion from byte[] to " + value is null ? "null" : value.GetType().FullName);
             }
         }
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -106,12 +106,12 @@ namespace System.ComponentModel.Design
             _context = context;
 
             IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-            if (edSvc == null)
+            if (edSvc is null)
             {
                 return value;
             }
 
-            if (_binaryUI == null)
+            if (_binaryUI is null)
             {
                 // child modal dialog -launching in System Aware mode
                 _binaryUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new BinaryUI(this));

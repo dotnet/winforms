@@ -289,7 +289,7 @@ namespace System.ComponentModel.Design
             int unicodeCount = 0;
             int size;
 
-            if ((_dataBuf == null) || (_dataBuf.Length >= 0 && (_dataBuf.Length < 8)))
+            if ((_dataBuf is null) || (_dataBuf.Length >= 0 && (_dataBuf.Length < 8)))
             {
                 return DisplayMode.Hexdump;
             }
@@ -616,7 +616,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SaveToFile(string path)
         {
-            if (_dataBuf == null)
+            if (_dataBuf is null)
             {
                 return;
             }
@@ -649,7 +649,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetBytes(byte[] bytes)
         {
-            if (bytes == null)
+            if (bytes is null)
             {
                 throw new ArgumentNullException(nameof(bytes));
             }

@@ -37,7 +37,7 @@ namespace System.Windows.Forms
                 if (UseSystemColors)
                 {
                     // someone has turned off theme support for the color table.
-                    if (!_usingSystemColors || _professionalRGB == null)
+                    if (!_usingSystemColors || _professionalRGB is null)
                     {
                         _professionalRGB ??= new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
                         InitSystemColors(ref _professionalRGB);
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                 else if (ToolStripManager.VisualStylesEnabled)
                 {
                     // themes are on and enabled in the manager
-                    if (_usingSystemColors || _professionalRGB == null)
+                    if (_usingSystemColors || _professionalRGB is null)
                     {
                         _professionalRGB ??= new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
                         InitThemedColors(ref _professionalRGB);
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // themes are off.
-                    if (!_usingSystemColors || _professionalRGB == null)
+                    if (!_usingSystemColors || _professionalRGB is null)
                     {
                         _professionalRGB ??= new Dictionary<KnownColors, Color>((int)KnownColors.lastKnownColor);
                         InitSystemColors(ref _professionalRGB);
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
             int green = (src.G * alpha + (255 - alpha) * dest.G) / 255;
             int blue = (src.B * alpha + (255 - alpha) * dest.B) / 255;
             int newAlpha = (src.A * alpha + (255 - alpha) * dest.A) / 255;
-            if (g == null)
+            if (g is null)
             {
                 return Color.FromArgb(newAlpha, red, green, blue);
             }
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             int g = (nPart1 * src.G + nPart2 * dest.G + sum / 2) / sum;
             int b = (nPart1 * src.B + nPart2 * dest.B + sum / 2) / sum;
 
-            if (graphics == null)
+            if (graphics is null)
             {
                 return Color.FromArgb(r, g, b);
             }
