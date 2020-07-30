@@ -50,6 +50,17 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
+            if (dc.IsNull)
+                throw new ArgumentNullException(nameof(dc));
+
+#if DEBUG
+            Gdi32.OBJ type = Gdi32.GetObjectType(dc);
+            Debug.Assert(type == Gdi32.OBJ.DC
+                || type == Gdi32.OBJ.ENHMETADC
+                || type == Gdi32.OBJ.MEMDC
+                || type == Gdi32.OBJ.METADC);
+#endif
+
             _hdc = dc;
             _graphics = null;
             _oldPalette = default;
