@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public MaskDesignerDialog(MaskedTextBox instance, IHelpService helpService)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 Debug.Fail("Null masked text box, creating default.");
                 _maskedTextBox = new MaskedTextBox();
@@ -346,7 +346,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void DiscoverMaskDescriptors(ITypeDiscoveryService discoveryService)
         {
-            if (discoveryService == null)
+            if (discoveryService is null)
             {
                 return;
             }
@@ -697,7 +697,7 @@ namespace System.Windows.Forms.Design
                 selectedMaskDex = _maskDescriptors[selectedIndex];
             }
 
-            if (selectedMaskDex == null || (selectedMaskDex != _customMaskDescriptor && selectedMaskDex.Mask != _txtBoxMask.Text))
+            if (selectedMaskDex is null || (selectedMaskDex != _customMaskDescriptor && selectedMaskDex.Mask != _txtBoxMask.Text))
             {
                 SetSelectedMaskDescriptor(_customMaskDescriptor);
             }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics;
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
@@ -58,11 +57,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Add(IComponent comp, DesignerActionListCollection designerActionListCollection)
         {
-            if (comp == null)
+            if (comp is null)
             {
                 throw new ArgumentNullException(nameof(comp));
             }
-            if (designerActionListCollection == null)
+            if (designerActionListCollection is null)
             {
                 throw new ArgumentNullException(nameof(designerActionListCollection));
             }
@@ -120,7 +119,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public bool Contains(IComponent comp)
         {
-            if (comp == null)
+            if (comp is null)
             {
                 throw new ArgumentNullException(nameof(comp));
             }
@@ -158,7 +157,7 @@ namespace System.ComponentModel.Design
 
         public virtual DesignerActionListCollection GetComponentActions(IComponent component, ComponentActionsType type)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -181,12 +180,12 @@ namespace System.ComponentModel.Design
 
         protected virtual void GetComponentDesignerActions(IComponent component, DesignerActionListCollection actionLists)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (actionLists == null)
+            if (actionLists is null)
             {
                 throw new ArgumentNullException(nameof(actionLists));
             }
@@ -208,14 +207,14 @@ namespace System.ComponentModel.Design
                         if (verbs != null && verbs.Count != 0)
                         {
                             ArrayList verbsArray = new ArrayList();
-                            bool hookupEvents = _componentToVerbsEventHookedUp[component] == null;
+                            bool hookupEvents = _componentToVerbsEventHookedUp[component] is null;
                             if (hookupEvents)
                             {
                                 _componentToVerbsEventHookedUp[component] = true;
                             }
                             foreach (DesignerVerb verb in verbs)
                             {
-                                if (verb == null)
+                                if (verb is null)
                                 {
                                     continue;
                                 }
@@ -244,7 +243,7 @@ namespace System.ComponentModel.Design
                         foreach (DesignerActionList actionList in pullCollection)
                         {
                             DesignerActionItemCollection collection = actionList?.GetSortedActionItems();
-                            if (collection == null || collection.Count == 0)
+                            if (collection is null || collection.Count == 0)
                             {
                                 actionLists.Remove(actionList);
                             }
@@ -289,12 +288,12 @@ namespace System.ComponentModel.Design
 
         protected virtual void GetComponentServiceActions(IComponent component, DesignerActionListCollection actionLists)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (actionLists == null)
+            if (actionLists is null)
             {
                 throw new ArgumentNullException(nameof(actionLists));
             }
@@ -307,7 +306,7 @@ namespace System.ComponentModel.Design
                 foreach (DesignerActionList actionList in pushCollection)
                 {
                     DesignerActionItemCollection collection = actionList?.GetSortedActionItems();
-                    if (collection == null || collection.Count == 0)
+                    if (collection is null || collection.Count == 0)
                     {
                         actionLists.Remove(actionList);
                     }
@@ -336,7 +335,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Remove(IComponent comp)
         {
-            if (comp == null)
+            if (comp is null)
             {
                 throw new ArgumentNullException(nameof(comp));
             }
@@ -355,7 +354,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {
-            if (actionList == null)
+            if (actionList is null)
             {
                 throw new ArgumentNullException(nameof(actionList));
             }
@@ -376,11 +375,11 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Remove(IComponent comp, DesignerActionList actionList)
         {
-            if (comp == null)
+            if (comp is null)
             {
                 throw new ArgumentNullException(nameof(comp));
             }
-            if (actionList == null)
+            if (actionList is null)
             {
                 throw new ArgumentNullException(nameof(actionList));
             }

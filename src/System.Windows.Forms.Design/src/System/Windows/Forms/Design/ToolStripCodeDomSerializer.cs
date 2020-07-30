@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
         {
             ToolStrip toolStrip = parent as ToolStrip;
 
-            if (toolStrip == null)
+            if (toolStrip is null)
             {
                 Debug.Fail("why were we passed a non winbar?");
                 return false;

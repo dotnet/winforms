@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Reflection;
@@ -107,7 +106,7 @@ namespace System.Windows.Forms.Design
         private static ToolboxItem GetCachedToolboxItem(Type itemType)
         {
             ToolboxItem tbxItem = null;
-            if (s_cachedToolboxItems == null)
+            if (s_cachedToolboxItems is null)
             {
                 s_cachedToolboxItems = new Dictionary<Type, ToolboxItem>();
             }
@@ -118,7 +117,7 @@ namespace System.Windows.Forms.Design
             }
 
             // no cache hit - load the item.
-            if (tbxItem == null)
+            if (tbxItem is null)
             {
                 // create a toolbox item to match
                 tbxItem = new ToolboxItem(itemType);
@@ -136,7 +135,7 @@ namespace System.Windows.Forms.Design
         // only call this for well known items.
         private static Bitmap GetKnownToolboxBitmap(Type itemType)
         {
-            if (s_cachedWinformsImages == null)
+            if (s_cachedWinformsImages is null)
             {
                 s_cachedWinformsImages = new Dictionary<Type, Bitmap>();
             }
@@ -178,7 +177,7 @@ namespace System.Windows.Forms.Design
             {
                 currentName = tbxItem.DisplayName;
             }
-            if (currentName == null)
+            if (currentName is null)
             {
                 currentName = itemType.Name;
             }
@@ -274,7 +273,7 @@ namespace System.Windows.Forms.Design
                         }
                         // Check if we have public constructor...
                         ConstructorInfo ctor = t.GetConstructor(Array.Empty<Type>());
-                        if (ctor == null)
+                        if (ctor is null)
                         {
                             continue;
                         }
@@ -413,7 +412,7 @@ namespace System.Windows.Forms.Design
         public static void InvalidateSelection(ArrayList originalSelComps, ToolStripItem nextSelection, IServiceProvider provider, bool shiftPressed)
         {
             // if we are not selecting a ToolStripItem then return (dont invalidate).
-            if (nextSelection == null || provider == null)
+            if (nextSelection is null || provider is null)
             {
                 return;
             }
@@ -448,7 +447,7 @@ namespace System.Windows.Forms.Design
                                     GetAdjustedBounds(selItem, ref invalidateBounds);
                                     invalidateBounds.Inflate(GLYPHBORDER, GLYPHBORDER);
 
-                                    if (invalidateRegion == null)
+                                    if (invalidateRegion is null)
                                     {
                                         invalidateRegion = new Region(invalidateBounds);
                                         invalidateBounds.Inflate(-GLYPHINSET, -GLYPHINSET);

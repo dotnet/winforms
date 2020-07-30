@@ -333,7 +333,7 @@ namespace System.Windows.Forms.Design
             DialogDataGridViewCellAccessibleObject _accObj;
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                if (_accObj == null)
+                if (_accObj is null)
                 {
                     _accObj = new DialogDataGridViewCellAccessibleObject(this);
                 }

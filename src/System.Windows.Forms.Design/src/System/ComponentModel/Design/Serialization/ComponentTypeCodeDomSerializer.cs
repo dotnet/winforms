@@ -2,11 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.CodeDom;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -23,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default == null)
+                if (s_default is null)
                 {
                     s_default = new ComponentTypeCodeDomSerializer();
                 }
@@ -38,17 +34,17 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl, object value)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (typeDecl == null)
+            if (typeDecl is null)
             {
                 throw new ArgumentNullException(nameof(typeDecl));
             }
 
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -78,12 +74,12 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (typeDecl == null)
+            if (typeDecl is null)
             {
                 throw new ArgumentNullException(nameof(typeDecl));
             }

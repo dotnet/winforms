@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             ApplyMethodTable table = (ApplyMethodTable)manager.Context[typeof(ApplyMethodTable)];
 
-            if (table == null)
+            if (table is null)
             {
                 table = new ApplyMethodTable();
                 manager.Context.Append(table);

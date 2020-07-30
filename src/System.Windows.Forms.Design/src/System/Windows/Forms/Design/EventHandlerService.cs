@@ -45,12 +45,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public object GetHandler(Type handlerType)
         {
-            if (handlerType == null)
+            if (handlerType is null)
             {
                 throw new ArgumentNullException(nameof(handlerType));
             }
 
-            if (_lastHandlerType == null)
+            if (_lastHandlerType is null)
             {
                 return null;
             }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PopHandler(object handler)
         {
-            if (handler == null)
+            if (handler is null)
             {
                 throw new ArgumentNullException(nameof(handler));
             }
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PushHandler(object handler)
         {
-            if (handler == null)
+            if (handler is null)
             {
                 throw new ArgumentNullException(nameof(handler));
             }

@@ -88,7 +88,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void AddCommand(MenuCommand command)
         {
-            if (command == null)
+            if (command is null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
@@ -131,12 +131,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void AddVerb(DesignerVerb verb)
         {
-            if (verb == null)
+            if (verb is null)
             {
                 throw new ArgumentNullException(nameof(verb));
             }
 
-            if (_globalVerbs == null)
+            if (_globalVerbs is null)
             {
                 _globalVerbs = new ArrayList();
             }
@@ -201,12 +201,12 @@ namespace System.ComponentModel.Design
             //
             bool useGlobalVerbs = false;
 
-            if (_currentVerbs == null && _serviceProvider != null)
+            if (_currentVerbs is null && _serviceProvider != null)
             {
                 Hashtable buildVerbs = null;
                 ArrayList verbsOrder;
 
-                if (_selectionService == null)
+                if (_selectionService is null)
                 {
                     _selectionService = GetService(typeof(ISelectionService)) as ISelectionService;
 
@@ -276,7 +276,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // GLOBAL VERBS
-                if (useGlobalVerbs && _globalVerbs == null)
+                if (useGlobalVerbs && _globalVerbs is null)
                 {
                     useGlobalVerbs = false;
                 }
@@ -430,7 +430,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected object GetService(Type serviceType)
         {
-            if (serviceType == null)
+            if (serviceType is null)
             {
                 throw new ArgumentNullException(nameof(serviceType));
             }
@@ -527,7 +527,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void RemoveCommand(MenuCommand command)
         {
-            if (command == null)
+            if (command is null)
             {
                 throw new ArgumentNullException(nameof(command));
             }
@@ -564,7 +564,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void RemoveVerb(DesignerVerb verb)
         {
-            if (verb == null)
+            if (verb is null)
             {
                 throw new ArgumentNullException(nameof(verb));
             }

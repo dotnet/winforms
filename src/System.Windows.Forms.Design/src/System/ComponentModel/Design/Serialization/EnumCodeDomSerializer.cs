@@ -2,13 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.CodeDom;
-using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -26,7 +21,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_defaultSerializer == null)
+                if (s_defaultSerializer is null)
                 {
                     s_defaultSerializer = new EnumCodeDomSerializer();
                 }
@@ -43,7 +38,7 @@ namespace System.ComponentModel.Design.Serialization
 
             using (TraceScope("EnumCodeDomSerializer::" + nameof(Serialize)))
             {
-                Trace("Type: {0}", (value == null ? "(null)" : value.GetType().Name));
+                Trace("Type: {0}", (value is null ? "(null)" : value.GetType().Name));
                 if (value is Enum)
                 {
                     bool needCast = false;
@@ -84,7 +79,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (newExpression != null)
                         {
-                            if (expression == null)
+                            if (expression is null)
                             {
                                 expression = newExpression;
                             }
@@ -105,7 +100,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     Debug.Fail("Enum serializer called for non-enum object.");
-                    TraceError("Enum serializer called for non-enum object {0}", (value == null ? "(null)" : value.GetType().Name));
+                    TraceError("Enum serializer called for non-enum object {0}", (value is null ? "(null)" : value.GetType().Name));
                 }
             }
 

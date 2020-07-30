@@ -45,7 +45,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public bool ShouldSerialize(MemberDescriptor member)
         {
-            return Member == null || Member == member;
+            return Member is null || Member == member;
         }
     }
 }

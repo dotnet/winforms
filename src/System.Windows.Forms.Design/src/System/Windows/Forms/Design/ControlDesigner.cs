@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService == null)
+                if (_behaviorService is null)
                 {
                     _behaviorService = (BehaviorService)GetService(typeof(BehaviorService));
                 }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (c.Site != null)
                     {
-                        if (sitedChildren == null)
+                        if (sitedChildren is null)
                         {
                             sitedChildren = new ArrayList();
                         }
@@ -125,7 +125,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (accessibilityObj == null)
+                if (accessibilityObj is null)
                 {
                     accessibilityObj = new ControlDesignerAccessibleObject(this, Control);
                 }
@@ -188,7 +188,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_subclassedChildren == null)
+                if (_subclassedChildren is null)
                 {
                     _subclassedChildren = new Dictionary<IntPtr, bool>();
                 }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 string message = e.Message;
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     message = e.ToString();
                 }
@@ -545,12 +545,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected bool EnableDesignMode(Control child, string name)
         {
-            if (child == null)
+            if (child is null)
             {
                 throw new ArgumentNullException(nameof(child));
             }
 
-            if (name == null)
+            if (name is null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
@@ -578,7 +578,7 @@ namespace System.Windows.Forms.Design
         protected void EnableDragDrop(bool value)
         {
             Control rc = Control;
-            if (rc == null)
+            if (rc is null)
             {
                 return;
             }
@@ -651,7 +651,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_moveBehavior == null)
+                if (_moveBehavior is null)
                 {
                     _moveBehavior = new ContainerSelectorBehavior(Control, Component.Site);
                 }
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (g == null)
+            if (g is null)
             {
                 //we are not totally clipped by the parent
                 g = new ControlBodyGlyph(translatedBounds, cursor, Control, this);
@@ -805,7 +805,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_resizeBehavior == null)
+                if (_resizeBehavior is null)
                 {
                     _resizeBehavior = new ResizeBehavior(Component.Site);
                 }
@@ -882,7 +882,7 @@ namespace System.Windows.Forms.Design
             // Visibility works as follows:  If the control's property is not actually set, then set our shadow to true.  Otherwise, grab the shadow value from the control directly and then set the control to be visible if it is not the root component.  Root components will be set to visible = true in their own time by the view.
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component.GetType());
             PropertyDescriptor visibleProp = props["Visible"];
-            if (visibleProp == null || visibleProp.PropertyType != typeof(bool) || !visibleProp.ShouldSerializeValue(component))
+            if (visibleProp is null || visibleProp.PropertyType != typeof(bool) || !visibleProp.ShouldSerializeValue(component))
             {
                 Visible = true;
             }
@@ -892,7 +892,7 @@ namespace System.Windows.Forms.Design
             }
 
             PropertyDescriptor enabledProp = props["Enabled"];
-            if (enabledProp == null || enabledProp.PropertyType != typeof(bool) || !enabledProp.ShouldSerializeValue(component))
+            if (enabledProp is null || enabledProp.PropertyType != typeof(bool) || !enabledProp.ShouldSerializeValue(component))
             {
                 Enabled = true;
             }
@@ -948,7 +948,7 @@ namespace System.Windows.Forms.Design
             }
 
             // When we drag one control from one form to another, we will end up here. In this case we do not want to set the control to visible, so check ForceVisible.
-            if ((_host == null || _host.RootComponent != component) && ForceVisible)
+            if ((_host is null || _host.RootComponent != component) && ForceVisible)
             {
                 Control.Visible = true;
             }
@@ -1259,7 +1259,7 @@ namespace System.Windows.Forms.Design
         protected virtual void OnMouseDragBegin(int x, int y)
         {
             // Ignore another mouse down if we are already in a drag.
-            if (BehaviorService == null && _mouseDragLast != InvalidPoint)
+            if (BehaviorService is null && _mouseDragLast != InvalidPoint)
             {
                 return;
             }
@@ -1307,12 +1307,12 @@ namespace System.Windows.Forms.Design
                 BehaviorService.CancelDrag = true;
             }
             // Leave this here in case we are doing a ComponentTray drag
-            if (_selectionUISvc == null)
+            if (_selectionUISvc is null)
             {
                 _selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
             }
 
-            if (_selectionUISvc == null)
+            if (_selectionUISvc is null)
             {
                 return;
             }
@@ -1369,7 +1369,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (comp is Control control)
                     {
-                        if (requiredParent == null)
+                        if (requiredParent is null)
                         {
                             requiredParent = control.Parent;
                         }
@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
-            while (parentDesigner == null && parent != null)
+            while (parentDesigner is null && parent != null)
             {
                 parent = parent.Parent;
                 if (parent != null)
@@ -1437,7 +1437,7 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
-            while (parentDesigner == null && parent != null)
+            while (parentDesigner is null && parent != null)
             {
                 parent = parent.Parent;
                 if (parent != null)
@@ -1464,7 +1464,7 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
-            while (parentDesigner == null && parent != null)
+            while (parentDesigner is null && parent != null)
             {
                 parent = parent.Parent;
                 if (parent != null)
@@ -1510,7 +1510,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                if (_toolboxSvc == null)
+                if (_toolboxSvc is null)
                 {
                     _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
                 }
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void UnhookChildControls(Control firstChild)
         {
-            if (_host == null)
+            if (_host is null)
             {
                 _host = (IDesignerHost)GetService(typeof(IDesignerHost));
             }
@@ -1693,7 +1693,7 @@ namespace System.Windows.Forms.Design
                 || (m.Msg >= (int)User32.WM.NCMOUSEMOVE && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                 || m.Msg == (int)User32.WM.SETCURSOR)
             {
-                if (_eventSvc == null)
+                if (_eventSvc is null)
                 {
                     _eventSvc = (IEventHandlerService)GetService(typeof(IEventHandlerService));
                 }
@@ -1741,7 +1741,7 @@ namespace System.Windows.Forms.Design
                         // Get an Lresult for the accessibility Object for this control
                         IntPtr punkAcc;
                         IAccessible iacc = (IAccessible)AccessibilityObject;
-                        if (iacc == null)
+                        if (iacc is null)
                         {
                             // Accessibility is not supported on this control
                             m.Result = (IntPtr)0;
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms.Design
                         _toolPassThrough = false;
                         if (!EnableDragRect && button == MouseButtons.Left)
                         {
-                            if (_toolboxSvc == null)
+                            if (_toolboxSvc is null)
                             {
                                 _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
                             }
@@ -1986,7 +1986,7 @@ namespace System.Windows.Forms.Design
                             break;
                         }
 
-                        if (Control == null)
+                        if (Control is null)
                         {
                             break;
                         }
@@ -1998,7 +1998,7 @@ namespace System.Windows.Forms.Design
                         using Region region = hrgn.CreateGdiPlusRegion();
 
                         // Call the base class to do its own painting.
-                        if (_thrownException == null)
+                        if (_thrownException is null)
                         {
                             DefWndProc(ref m);
                         }
@@ -2019,7 +2019,7 @@ namespace System.Windows.Forms.Design
                         using PaintEventArgs pevent = new PaintEventArgs(graphics, paintRect);
 
                         graphics.Clip = region;
-                        if (_thrownException == null)
+                        if (_thrownException is null)
                         {
                             OnPaintAdornments(pevent);
                         }
@@ -2046,7 +2046,7 @@ namespace System.Windows.Forms.Design
                     {
                         DefWndProc(ref m);
                     }
-                    else if (_thrownException == null)
+                    else if (_thrownException is null)
                     {
                         DefWndProc(ref m);
                     }
@@ -2242,7 +2242,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_overlayService == null)
+                if (_overlayService is null)
                 {
                     _overlayService = (IOverlayService)GetService(typeof(IOverlayService));
                 }
@@ -2366,7 +2366,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_host == null)
+                    if (_host is null)
                     {
                         _host = (IDesignerHost)_designer.GetService(typeof(IDesignerHost));
                     }
@@ -2398,7 +2398,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_selSvc == null)
+                    if (_selSvc is null)
                     {
                         _selSvc = (ISelectionService)_designer.GetService(typeof(ISelectionService));
                     }
@@ -2450,7 +2450,7 @@ namespace System.Windows.Forms.Design
 
             private AccessibleObject GetDesignerAccessibleObject(Control.ControlAccessibleObject cao)
             {
-                if (cao == null)
+                if (cao is null)
                 {
                     return null;
                 }
@@ -2568,7 +2568,7 @@ namespace System.Windows.Forms.Design
 
                 // Is it a control?
                 Control child = Control.FromHandle(hwndChild);
-                if (child == null)
+                if (child is null)
                 {
                     // No control.  We must subclass this control.
                     if (!SubclassedChildWindows.ContainsKey(hwndChild))
@@ -2587,7 +2587,7 @@ namespace System.Windows.Forms.Design
                 // UserControl is a special ContainerControl which should "hook to all the WindowHandles"
                 // Since it doesnt allow the Mouse to pass through any of its contained controls.
                 // Please refer to VsWhidbey : 293117
-                if (child == null || Control is UserControl)
+                if (child is null || Control is UserControl)
                 {
                     // Now do the children of this window.
                     HookChildHandles(User32.GetWindow(hwndChild, User32.GW.CHILD));
@@ -2648,7 +2648,7 @@ namespace System.Windows.Forms.Design
 
             protected override void WndProc(ref Message m)
             {
-                if (_designer == null)
+                if (_designer is null)
                 {
                     DefWndProc(ref m);
                     return;
@@ -2793,7 +2793,7 @@ namespace System.Windows.Forms.Design
             public void OnMessage(ref Message m)
             {
                 // If the designer has jumped ship, the continue partying on messages, but send them back to the original control.
-                if (_designer.Component == null)
+                if (_designer.Component is null)
                 {
                     _oldWindowTarget.OnMessage(ref m);
                     return;
@@ -2814,7 +2814,7 @@ namespace System.Windows.Forms.Design
                 finally
                 {
                     // If the designer disposed us, then we should follow suit.
-                    if (_designer.DesignerTarget == null)
+                    if (_designer.DesignerTarget is null)
                     {
                         designerTarget.Dispose();
                     }
@@ -2835,10 +2835,10 @@ namespace System.Windows.Forms.Design
 
         internal void SetUnhandledException(Control owner, Exception exception)
         {
-            if (_thrownException == null)
+            if (_thrownException is null)
             {
                 _thrownException = exception;
-                if (owner == null)
+                if (owner is null)
                 {
                     owner = Control;
                 }

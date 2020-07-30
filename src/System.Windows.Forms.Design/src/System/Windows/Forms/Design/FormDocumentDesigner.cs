@@ -172,7 +172,7 @@ namespace System.Windows.Forms.Design
             {
                 ArrayList snapLines = null;
                 base.AddPaddingSnapLines(ref snapLines);
-                if (snapLines == null)
+                if (snapLines is null)
                 {
                     Debug.Fail("why did base.AddPaddingSnapLines return null?");
                     snapLines = new ArrayList(4);
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Design
 
         private void EnsureToolStripWindowAdornerService()
         {
-            if (_toolStripAdornerWindowService == null)
+            if (_toolStripAdornerWindowService is null)
             {
                 _toolStripAdornerWindowService = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
             }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is ToolStrip && _toolStripAdornerWindowService == null)
+            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is null)
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 if (host != null)

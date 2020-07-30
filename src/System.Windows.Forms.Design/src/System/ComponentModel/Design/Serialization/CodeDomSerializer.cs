@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default == null)
+                if (s_default is null)
                 {
                     s_default = new CodeDomSerializer();
                 }
@@ -61,9 +61,9 @@ namespace System.ComponentModel.Design.Serialization
         public virtual object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
             object instance = null;
-            if (manager == null || codeObject == null)
+            if (manager is null || codeObject is null)
             {
-                throw new ArgumentNullException(manager == null ? "manager" : "codeObject");
+                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
             }
 
             using (TraceScope("CodeDomSerializer::Deserialize"))
@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
                         foreach (CodeStatement element in statements)
                         {
                             // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
-                            if (instance == null)
+                            if (instance is null)
                             {
                                 instance = DeserializeStatementToInstance(manager, element);
                                 if (instance != null)
@@ -165,11 +165,11 @@ namespace System.ComponentModel.Design.Serialization
         public virtual object Serialize(IDesignerSerializationManager manager, object value)
         {
             object result = null;
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design.Serialization
                         isPreset = false;
                     }
 
-                    TraceIf(expression == null, "Unable to create object; aborting.");
+                    TraceIf(expression is null, "Unable to create object; aborting.");
                     // Short circuit common cases
                     if (expression != null)
                     {
@@ -271,17 +271,17 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMember(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (owningObject == null)
+            if (owningObject is null)
             {
                 throw new ArgumentNullException(nameof(owningObject));
             }
 
-            if (member == null)
+            if (member is null)
             {
                 throw new ArgumentNullException(nameof(member));
             }
@@ -289,7 +289,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeStatementCollection statements = new CodeStatementCollection();
             // See if we have an existing expression for this member.  If not, fabricate one
             CodeExpression expression = GetExpression(manager, owningObject);
-            if (expression == null)
+            if (expression is null)
             {
                 string name = GetUniqueName(manager, owningObject);
                 expression = new CodeVariableReferenceExpression(name);
@@ -319,17 +319,17 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMemberAbsolute(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (owningObject == null)
+            if (owningObject is null)
             {
                 throw new ArgumentNullException(nameof(owningObject));
             }
 
-            if (member == null)
+            if (member is null)
             {
                 throw new ArgumentNullException(nameof(member));
             }
@@ -366,11 +366,11 @@ namespace System.ComponentModel.Design.Serialization
                 // First - try GetExpression
                 expression = GetExpression(manager, value);
                 // Next, we check for a named IComponent, and return a reference to it.
-                if (expression == null && value is IComponent)
+                if (expression is null && value is IComponent)
                 {
                     string name = manager.GetName(value);
                     bool referenceName = false;
-                    if (name == null)
+                    if (name is null)
                     {
                         IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
                         if (referenceService != null)
@@ -406,7 +406,7 @@ namespace System.ComponentModel.Design.Serialization
         }
         private void ResetBrowsableProperties(object instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return;
             }

@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService == null)
+                if (_behaviorService is null)
                 {
                     _behaviorService = _designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
                 }
@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         void ISplitWindowService.AddSplitWindow(Control window)
         {
-            if (_splitter == null)
+            if (_splitter is null)
             {
                 _splitter = new Splitter();
                 if (_uiService != null && _uiService.Styles["HorizontalResizeGrip"] is Color)
@@ -397,7 +397,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_behaviorService == null)
+                    if (_behaviorService is null)
                     {
                         _behaviorService = _provider.GetService(typeof(BehaviorService)) as BehaviorService;
                     }

@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design
             }
 
             // If the designer host is not in our collection, add it.
-            if (host != null && (_designerList == null || !_designerList.Contains(host)))
+            if (host != null && (_designerList is null || !_designerList.Contains(host)))
             {
                 OnCreateDesigner(surface);
             }
@@ -118,7 +118,7 @@ namespace System.ComponentModel.Design
             }
 
             ISite site = comp.Site;
-            if (site == null)
+            if (site is null)
             {
                 return;
             }
@@ -139,7 +139,7 @@ namespace System.ComponentModel.Design
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
             Debug.Assert(host != null, "Design surface did not provide us with a designer host");
 
-            if (_designerList == null)
+            if (_designerList is null)
             {
                 _designerList = new ArrayList();
             }
@@ -149,7 +149,7 @@ namespace System.ComponentModel.Design
             // Hookup an object disposed handler on the design surface so we know when it's gone.
             surface.Disposed += new EventHandler(OnDesignerDisposed);
 
-            if (_events == null)
+            if (_events is null)
             {
                 return;
             }
@@ -173,7 +173,7 @@ namespace System.ComponentModel.Design
 
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;
             Debug.Assert(host != null, "Design surface removed host too early in dispose");
-            if (host == null)
+            if (host is null)
             {
                 return;
             }
@@ -205,7 +205,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            if (_events == null)
+            if (_events is null)
             {
                 return;
             }
@@ -344,12 +344,12 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_designerList == null)
+                if (_designerList is null)
                 {
                     _designerList = new ArrayList();
                 }
 
-                if (_designerCollection == null)
+                if (_designerCollection is null)
                 {
                     _designerCollection = new DesignerCollection(_designerList);
                 }
@@ -366,7 +366,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     _events = new EventHandlerList();
                 }
@@ -375,7 +375,7 @@ namespace System.ComponentModel.Design
             }
             remove
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     return;
                 }
@@ -391,7 +391,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     _events = new EventHandlerList();
                 }
@@ -400,7 +400,7 @@ namespace System.ComponentModel.Design
             }
             remove
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     return;
                 }
@@ -416,7 +416,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     _events = new EventHandlerList();
                 }
@@ -425,7 +425,7 @@ namespace System.ComponentModel.Design
             }
             remove
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     return;
                 }
@@ -441,7 +441,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     _events = new EventHandlerList();
                 }
@@ -450,7 +450,7 @@ namespace System.ComponentModel.Design
             }
             remove
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     return;
                 }

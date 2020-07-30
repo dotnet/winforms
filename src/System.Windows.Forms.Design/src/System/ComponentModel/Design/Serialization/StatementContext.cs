@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void AddOwner(object statementOwner, CodeStatementCollection statements)
         {
-            if (_table == null)
+            if (_table is null)
             {
                 _table = new List<TableEntry>();
             }
@@ -90,7 +90,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (statementOwner == null)
+                if (statementOwner is null)
                 {
                     throw new ArgumentNullException(nameof(statementOwner));
                 }
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         if (object.ReferenceEquals(_table[idx].Owner, statementOwner))
                         {
-                            if (_table[idx].Statements == null)
+                            if (_table[idx].Statements is null)
                             {
                                 _table[idx] = new TableEntry(statementOwner, new CodeStatementCollection());
                             }
@@ -125,7 +125,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public bool ContainsKey(object statementOwner)
         {
-            if (statementOwner == null)
+            if (statementOwner is null)
             {
                 throw new ArgumentNullException(nameof(statementOwner));
             }
@@ -150,7 +150,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(ICollection statementOwners)
         {
-            if (statementOwners == null)
+            if (statementOwners is null)
             {
                 throw new ArgumentNullException(nameof(statementOwners));
             }
@@ -165,7 +165,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(object owner)
         {
-            if (owner == null)
+            if (owner is null)
             {
                 throw new ArgumentNullException(nameof(owner));
             }
@@ -217,12 +217,12 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         throw new InvalidOperationException();
                     }
-                    if (_position < 0 || _table._table == null || _position >= _table._table.Count)
+                    if (_position < 0 || _table._table is null || _position >= _table._table.Count)
                     {
                         throw new InvalidOperationException();
                     }
 
-                    if (_table._table[_position].Statements == null)
+                    if (_table._table[_position].Statements is null)
                     {
                         _table._table[_position] = new TableEntry(_table._table[_position].Owner, new CodeStatementCollection());
                     }

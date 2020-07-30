@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (_editorUI == null)
+                    if (_editorUI is null)
                     {
                         _editorUI = new MultilineStringEditorUI();
                     }
@@ -296,7 +296,7 @@ namespace System.ComponentModel.Design
             public void ProcessSurrogateFonts(int start, int length)
             {
                 string value = Text;
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -320,7 +320,7 @@ namespace System.ComponentModel.Design
                                     int planeNumber = (value[surrogates[i]] / 0x40) - (0xD800 / 0x40) + 1; //plane 0 is the default plane
                                     Font replaceFont = _fallbackFonts[planeNumber] as Font;
 
-                                    if (replaceFont == null)
+                                    if (replaceFont is null)
                                     {
                                         using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
                                         if (regkey != null)
@@ -410,7 +410,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_watermarkBrush == null)
+                    if (_watermarkBrush is null)
                     {
                         Color cw = SystemColors.Window;
                         Color ct = SystemColors.WindowText;
@@ -555,7 +555,7 @@ namespace System.ComponentModel.Design
 
             public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
             {
-                if (pdwEffect == null)
+                if (pdwEffect is null)
                 {
                     return HRESULT.E_POINTER;
                 }

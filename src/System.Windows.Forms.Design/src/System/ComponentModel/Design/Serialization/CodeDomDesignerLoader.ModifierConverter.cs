@@ -66,7 +66,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (modifierConverter == null)
+                if (modifierConverter is null)
                 {
                     modifierConverter = TypeDescriptor.GetConverter(typeof(MemberAttributes));
                 }

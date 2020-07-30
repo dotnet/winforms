@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -45,7 +44,7 @@ namespace System.Windows.Forms.Design.Behavior
             selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
             designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
 
-            if (designerHost == null || selSvc == null)
+            if (designerHost is null || selSvc is null)
             {
                 Debug.Fail("SelectionManager - Host or SelSvc is null, can't continue");
             }

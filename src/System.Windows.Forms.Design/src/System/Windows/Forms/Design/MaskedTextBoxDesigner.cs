@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actions == null)
+                if (_actions is null)
                 {
                     _actions = new DesignerActionListCollection();
                     _actions.Add(new MaskedTextBoxDesignerActionList(this));
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
         internal static MaskedTextBox GetDesignMaskedTextBox(MaskedTextBox maskedTextBox)
         {
             MaskedTextBox designMaskedTextBox;
-            if (maskedTextBox == null)
+            if (maskedTextBox is null)
             {
                 // return a default control.
                 designMaskedTextBox = new MaskedTextBox();
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
             {
                 MaskedTextProvider maskedTextProvider = maskedTextBox.MaskedTextProvider;
 
-                if (maskedTextProvider == null)
+                if (maskedTextProvider is null)
                 {
                     designMaskedTextBox = new MaskedTextBox();
                     designMaskedTextBox.Text = maskedTextBox.Text;
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_verbs == null)
+                if (_verbs is null)
                 {
                     _verbs = new DesignerVerbCollection();
                     _verbs.Add(new DesignerVerb(SR.MaskedTextBoxDesignerVerbsSetMaskDesc, new EventHandler(OnVerbSetMask)));

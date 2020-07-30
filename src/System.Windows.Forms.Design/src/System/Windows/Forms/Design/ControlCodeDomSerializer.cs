@@ -8,8 +8,8 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Reflection;
 using System.Globalization;
+using System.Reflection;
 
 namespace System.Windows.Forms.Design
 {
@@ -26,9 +26,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
-            if (manager == null || codeObject == null)
+            if (manager is null || codeObject is null)
             {
-                throw new ArgumentNullException(manager == null ? "manager" : "codeObject");
+                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
             }
 
             //Attempt to suspend all components within the icontainer
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design
                 // Find our base class's serializer.
                 CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
 
-                if (serializer == null)
+                if (serializer is null)
                 {
                     Debug.Fail("Unable to find a CodeDom serializer for 'Component'. Has someone tampered with the serialization providers?");
 
@@ -157,15 +157,15 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            if (manager == null || value == null)
+            if (manager is null || value is null)
             {
-                throw new ArgumentNullException(manager == null ? "manager" : "value");
+                throw new ArgumentNullException(manager is null ? "manager" : "value");
             }
 
             // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
 
-            if (serializer == null)
+            if (serializer is null)
             {
                 Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
 
@@ -270,7 +270,7 @@ namespace System.Windows.Forms.Design
 
                         // Now emit the data
                         string componentName = manager.GetName(component);
-                        string componentTypeName = mthelperSvc == null ? component.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(component.GetType());
+                        string componentTypeName = mthelperSvc is null ? component.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(component.GetType());
 
                         if (componentName != null)
                         {
@@ -284,9 +284,9 @@ namespace System.Windows.Forms.Design
                     name = manager.GetName(value);
 
                     // if we get null back, this must be an unsited control
-                    if (name == null)
+                    if (name is null)
                     {
-                        Debug.Assert(!(value is IComponent) || ((IComponent)value).Site == null, "Unnamed, sited control in hierarchy");
+                        Debug.Assert(!(value is IComponent) || ((IComponent)value).Site is null, "Unnamed, sited control in hierarchy");
                         return;
                     }
                 }
@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Design
                 SerializeResourceInvariant(manager, ">>" + name + ".Name", manager.GetName(value));
 
                 // Object type
-                SerializeResourceInvariant(manager, ">>" + name + ".Type", mthelperSvc == null ? control.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(control.GetType()));
+                SerializeResourceInvariant(manager, ">>" + name + ".Type", mthelperSvc is null ? control.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(control.GetType()));
 
                 // Parent
                 Control parent = control.Parent;
@@ -433,7 +433,7 @@ namespace System.Windows.Forms.Design
                     // (b) not being privately inherited
                     Control child = control.Controls[i];
 
-                    if (child.Site == null || child.Site.Container != control.Site.Container)
+                    if (child.Site is null || child.Site.Container != control.Site.Container)
                     {
                         continue;
                     }

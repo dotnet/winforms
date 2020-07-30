@@ -139,7 +139,7 @@ namespace System.ComponentModel.Design
         {
             string text;
 
-            if (value == null)
+            if (value is null)
             {
                 return string.Empty;
             }
@@ -314,7 +314,7 @@ namespace System.ComponentModel.Design
 
             foreach (object o in items)
             {
-                if (o is IComponent comp && comp.Site == null)
+                if (o is IComponent comp && comp.Site is null)
                 {
                     if (!isInheritanceServiceInitialized)
                     {
@@ -599,7 +599,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (ContextMenuStrip == null || !ContextMenuStrip.Visible)
+                if (ContextMenuStrip is null || !ContextMenuStrip.Visible)
                 {
                     SetButtonDrawState();
                     if (Bounds.Contains(Parent.PointToClient(Cursor.Position)) && !_dropDownRectangle.Contains(mevent.Location))
@@ -833,7 +833,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void AddItems(IList instances)
             {
-                if (_createdItems == null)
+                if (_createdItems is null)
                 {
                     _createdItems = new ArrayList();
                 }
@@ -1082,7 +1082,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private string GetDisplayText(ListItem item)
             {
-                return (item == null) ? string.Empty : item.ToString();
+                return (item is null) ? string.Empty : item.ToString();
             }
 
             private void HookEvents()
@@ -1453,7 +1453,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // Remember these contents for cancellation
-                if (_originalItems == null)
+                if (_originalItems is null)
                 {
                     _originalItems = new ArrayList();
                 }
@@ -1601,7 +1601,7 @@ namespace System.ComponentModel.Design
                         {
                             if (CanRemoveInstance(item.Value))
                             {
-                                if (_removedItems == null)
+                                if (_removedItems is null)
                                 {
                                     _removedItems = new ArrayList();
                                 }
@@ -1820,7 +1820,7 @@ namespace System.ComponentModel.Design
             /// <param name="button">button with an image, image size is defined in logical units</param>
             private static void ScaleButtonImageLogicalToDevice(Button button)
             {
-                if (button == null || !(button.Image is Bitmap buttonBitmap))
+                if (button is null || !(button.Image is Bitmap buttonBitmap))
                 {
                     return;
                 }
@@ -1866,7 +1866,7 @@ namespace System.ComponentModel.Design
                             object nextValue = li.Value;
                             if (_value != null)
                             {
-                                if (nextValue == null)
+                                if (nextValue is null)
                                 {
                                     _value = null;
                                     break;
@@ -2062,10 +2062,10 @@ namespace System.ComponentModel.Design
                 {
                     get
                     {
-                        if (_uiTypeEditor == null)
+                        if (_uiTypeEditor is null)
                         {
                             _uiTypeEditor = TypeDescriptor.GetEditor(_value, typeof(UITypeEditor));
-                            if (_uiTypeEditor == null)
+                            if (_uiTypeEditor is null)
                             {
                                 _uiTypeEditor = this;
                             }
@@ -2118,7 +2118,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_grid == null)
+                    if (_grid is null)
                     {
                         foreach (Control c in Parent.Controls)
                         {
@@ -2364,7 +2364,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
-                if (edSvc == null)
+                if (edSvc is null)
                 {
                     throw new ArgumentNullException(nameof(edSvc));
                 }

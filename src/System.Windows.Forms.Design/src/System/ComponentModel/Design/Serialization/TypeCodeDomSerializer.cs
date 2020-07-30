@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (s_default == null)
+                if (s_default is null)
                 {
                     s_default = new TypeCodeDomSerializer();
                 }
@@ -45,12 +45,12 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual object Deserialize(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (declaration == null)
+            if (declaration is null)
             {
                 throw new ArgumentNullException(nameof(declaration));
             }
@@ -61,7 +61,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Determine case-sensitivity
                 bool caseInsensitive = false;
                 CodeDomProvider provider = manager.GetService(typeof(CodeDomProvider)) as CodeDomProvider;
-                TraceWarningIf(provider == null, "Unable to determine case sensitivity. Make sure CodeDomProvider is a service of the manager.");
+                TraceWarningIf(provider is null, "Unable to determine case sensitivity. Make sure CodeDomProvider is a service of the manager.");
                 if (provider != null)
                 {
                     caseInsensitive = ((provider.LanguageOptions & LanguageOptions.CaseInsensitive) != 0);
@@ -82,7 +82,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (baseType == null)
+                if (baseType is null)
                 {
                     TraceError("Base type for type declaration {0} could not be loaded.  Closest base type name: {1}", declaration.Name, baseTypeName);
                     Error(manager, string.Format(SR.SerializerTypeNotFound, baseTypeName), SR.SerializerTypeNotFound);
@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     CodeMemberMethod[] methods = GetInitializeMethods(manager, declaration);
-                    if (methods == null)
+                    if (methods is null)
                     {
                         throw new InvalidOperationException();
                     }
@@ -169,7 +169,7 @@ namespace System.ComponentModel.Design.Serialization
                                 foreach (CodeStatement statement in statements)
                                 {
                                     object genFlag = statement.UserData["GeneratedStatement"];
-                                    if (genFlag == null || !(genFlag is bool) || !((bool)genFlag))
+                                    if (genFlag is null || !(genFlag is bool) || !((bool)genFlag))
                                     {
                                         acceptStatement = true;
                                         break;
@@ -237,7 +237,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeObject codeObject = value as CodeObject;
                 string typeName = null;
                 CodeMemberField field = null;
-                TraceIf(codeObject == null, "Name already deserialized.  Type: {0}", (value == null ? "(null)" : value.GetType().Name));
+                TraceIf(codeObject is null, "Name already deserialized.  Type: {0}", (value is null ? "(null)" : value.GetType().Name));
                 if (codeObject != null)
                 {
                     // If we fail, don't return a CodeDom element to the caller! Also clear out our nametable entry here -- A badly written serializer may cause a recursion here, and we want to stop it.
@@ -270,7 +270,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
-                else if (value == null)
+                else if (value is null)
                 {
                     // See if the container has this object.  This may be necessary for visual inheritance.
                     IContainer container = (IContainer)manager.GetService(typeof(IContainer));
@@ -291,14 +291,14 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     // Default case -- something that needs to be deserialized
                     Type type = manager.GetType(typeName);
-                    if (type == null)
+                    if (type is null)
                     {
                         TraceError("Type does not exist: {0}", typeName);
                         manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
                     }
                     else
                     {
-                        if (statements == null && _statementTable.ContainsKey(name))
+                        if (statements is null && _statementTable.ContainsKey(name))
                         {
                             statements = _statementTable[name];
                         }
@@ -306,7 +306,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (statements != null && statements.Count > 0)
                         {
                             CodeDomSerializer serializer = GetSerializer(manager, type);
-                            if (serializer == null)
+                            if (serializer is null)
                             {
                                 // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
                                 TraceError("Type referenced in init method has no serializer: {0}", type.Name);
@@ -351,15 +351,15 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration declaration, object value)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (declaration == null)
+            if (declaration is null)
             {
                 throw new ArgumentNullException(nameof(declaration));
             }
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -376,11 +376,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (declaration == null)
+            if (declaration is null)
             {
                 throw new ArgumentNullException(nameof(declaration));
             }
@@ -426,11 +426,11 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection members)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
-            if (root == null)
+            if (root is null)
             {
                 throw new ArgumentNullException(nameof(root));
             }
@@ -463,7 +463,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
 #if DEBUG
                             string memberName = manager.GetName(member);
-                            if (memberName == null)
+                            if (memberName is null)
                             {
                                 memberName = member.ToString();
                             }
@@ -480,7 +480,7 @@ namespace System.ComponentModel.Design.Serialization
                 // Now do the root object last.
 #if DEBUG
                 string rootName = manager.GetName(root);
-                if (rootName == null)
+                if (rootName is null)
                 {
                     rootName = root.ToString();
                 }
@@ -526,7 +526,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (statements != null)
                         {
                             CodeMemberMethod method = GetInitializeMethod(manager, typeDecl, member);
-                            if (method == null)
+                            if (method is null)
                             {
                                 throw new InvalidOperationException();
                             }
@@ -556,7 +556,7 @@ namespace System.ComponentModel.Design.Serialization
             if (rootStatements != null)
             {
                 CodeMemberMethod rootMethod = GetInitializeMethod(manager, typeDecl, root);
-                if (rootMethod == null)
+                if (rootMethod is null)
                 {
                     throw new InvalidOperationException();
                 }
@@ -600,11 +600,11 @@ namespace System.ComponentModel.Design.Serialization
             {
                 OrderedCodeStatementCollection cscLeft = left as OrderedCodeStatementCollection;
                 OrderedCodeStatementCollection cscRight = right as OrderedCodeStatementCollection;
-                if (left == null)
+                if (left is null)
                 {
                     return 1;
                 }
-                else if (right == null)
+                else if (right is null)
                 {
                     return -1;
                 }

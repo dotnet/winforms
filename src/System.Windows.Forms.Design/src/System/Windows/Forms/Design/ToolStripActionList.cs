@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.Design
 {
@@ -39,7 +38,7 @@ namespace System.Windows.Forms.Design
             {
                 // Make sure the component is not being inherited -- we can't delete these!
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(_toolStrip)[typeof(InheritanceAttribute)];
-                if (ia == null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
+                if (ia is null || ia.InheritanceLevel == InheritanceLevel.NotInherited)
                 {
                     return true;
                 }
@@ -53,7 +52,7 @@ namespace System.Windows.Forms.Design
             {
                 // Make sure the component is not being inherited -- we can't delete these!
                 InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(_toolStrip)[typeof(InheritanceAttribute)];
-                if (ia == null || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                if (ia is null || ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                 {
                     return true;
                 }

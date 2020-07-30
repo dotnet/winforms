@@ -246,7 +246,7 @@ namespace System.Windows.Forms.Design
 
         private void UpdateControlVisibility(FormatTypeClass formatType)
         {
-            if (formatType == null)
+            if (formatType is null)
             {
                 explanationLabel.Visible = false;
                 sampleLabel.Visible = false;
@@ -866,7 +866,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (_owner.dateTimeFormatsListBox.SelectedItem == null)
+                    if (_owner.dateTimeFormatsListBox.SelectedItem is null)
                     {
                         return "";
                     }

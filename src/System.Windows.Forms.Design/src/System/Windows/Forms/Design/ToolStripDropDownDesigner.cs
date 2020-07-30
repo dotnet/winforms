@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (Component is IPersistComponentSettings persistableComponent && host != null)
                     {
-                        if (persistableComponent.SettingsKey == null)
+                        if (persistableComponent.SettingsKey is null)
                         {
                             IComponent rootComponent = host.RootComponent;
                             if (rootComponent != null && rootComponent != persistableComponent)
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Design
         // private helper function to Hide the ContextMenu structure.
         private void HideMenu()
         {
-            if (menuItem == null)
+            if (menuItem is null)
             {
                 return;
             }
@@ -349,14 +349,14 @@ namespace System.Windows.Forms.Design
             host = (IDesignerHost)GetService(typeof(IDesignerHost));
             //Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
             ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
-            if (keyboardHandlingService == null)
+            if (keyboardHandlingService is null)
             {
                 keyboardHandlingService = new ToolStripKeyboardHandlingService(component.Site);
             }
 
             //Add the InsituEditService so that the ToolStrip can do its own Insitu Editing
             ISupportInSituService inSituService = (ISupportInSituService)GetService(typeof(ISupportInSituService));
-            if (inSituService == null)
+            if (inSituService is null)
             {
                 inSituService = new ToolStripInSituService(Component.Site);
             }
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design
             // init the verb.
             new EditorServiceContext(this, TypeDescriptor.GetProperties(Component)["Items"], SR.ToolStripItemCollectionEditorVerb);
             // use the UndoEngine.Undone to Show the DropDown Again..
-            if (undoEngine == null)
+            if (undoEngine is null)
             {
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine != null)
@@ -425,14 +425,14 @@ namespace System.Windows.Forms.Design
         private bool IsContextMenuStripItemSelected(ISelectionService selectionService)
         {
             bool showDesignMenu = false;
-            if (menuItem == null)
+            if (menuItem is null)
             {
                 return showDesignMenu;
             }
 
             ToolStripDropDown topmost = null;
             IComponent comp = (IComponent)selectionService.PrimarySelection;
-            if (comp == null && dropDown.Visible)
+            if (comp is null && dropDown.Visible)
             {
                 ToolStripKeyboardHandlingService keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
                 if (keyboardHandlingService != null)
@@ -510,7 +510,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
-            if (Component == null || menuItem == null)
+            if (Component is null || menuItem is null)
             {
                 return;
             }
@@ -638,7 +638,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void ShowMenu(ToolStripItem selectedItem)
         {
-            if (menuItem == null)
+            if (menuItem is null)
             {
                 return;
             }
@@ -694,7 +694,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (dummyToolStripGlyph == null)
+                if (dummyToolStripGlyph is null)
                 {
                     Point loc = behaviorService.ControlToAdornerWindow(designMenu);
                     Rectangle r = designMenu.Bounds;

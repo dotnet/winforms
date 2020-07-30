@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design.Serialization
             // that the value we need to serialize is null, in which case we handle it
             // through the PrimitiveCodeDomSerializer.
             //
-            if (objectType == null)
+            if (objectType is null)
             {
                 return PrimitiveCodeDomSerializer.Default;
             }

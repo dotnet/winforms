@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void Init(Control containerControl, IServiceProvider serviceProvider)
         {
             _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
-            if (_behaviorService == null)
+            if (_behaviorService is null)
             {
                 Debug.Fail("Could not get the BehaviorService from ContainerSelectroBehavior!");
                 return;
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Design.Behavior
             //need to grab a hold of some services
             ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
             IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            if (selSvc == null || host == null)
+            if (selSvc is null || host is null)
             {
                 Debug.Fail("Can't drag this Container! Either SelectionService is null or DesignerHost is null");
                 return;

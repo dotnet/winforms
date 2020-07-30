@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
 
         public int Compare(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
         {
-            if (maskDescriptorA == null || maskDescriptorB == null)
+            if (maskDescriptorA is null || maskDescriptorB is null)
             {
                 // Since this is an internal class we cannot throw here, the user cannot do anything about this.
                 Debug.Fail("One or more parameters invalid");
@@ -57,8 +57,8 @@ namespace System.Windows.Forms.Design
                     break;
 
                 case SortType.ByValidatingTypeName:
-                    textA = maskDescriptorA.ValidatingType == null ? SR.MaskDescriptorValidatingTypeNone : maskDescriptorA.ValidatingType.Name;
-                    textB = maskDescriptorB.ValidatingType == null ? SR.MaskDescriptorValidatingTypeNone : maskDescriptorB.ValidatingType.Name;
+                    textA = maskDescriptorA.ValidatingType is null ? SR.MaskDescriptorValidatingTypeNone : maskDescriptorA.ValidatingType.Name;
+                    textB = maskDescriptorB.ValidatingType is null ? SR.MaskDescriptorValidatingTypeNone : maskDescriptorB.ValidatingType.Name;
                     break;
             }
 

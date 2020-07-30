@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
                 {
                     currentImageListProp = currentImageListPropRef.Target as PropertyDescriptor;
                 }
-                if (currentImageList == null ||
+                if (currentImageList is null ||
                     instance != currentInstance ||
                     (currentImageListProp != null && (ImageList)currentImageListProp.GetValue(currentInstance) != currentImageList))
                 {
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Design
                     PropertyDescriptor imageListProp = GetImageListProperty(context.PropertyDescriptor, ref instance);
 
                     // not found as an attribute, do the old behavior
-                    while (instance != null && imageListProp == null)
+                    while (instance != null && imageListProp is null)
                     {
                         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(instance);
 
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (imageListProp == null)
+                        if (imageListProp is null)
                         {
                             // We didn't find the image list in this component.  See if the
                             // component has a "parent" property.  If so, walk the tree...
@@ -184,13 +184,13 @@ namespace System.Windows.Forms.Design
                 var pathInfo = relILAttr.RelatedImageList.Split('.');
                 for (int i = 0; i < pathInfo.Length; i++)
                 {
-                    if (parentInstance == null)
+                    if (parentInstance is null)
                     {
                         Debug.Fail("A property specified in the path is null or not yet instanciated at this time");
                         break; // path is wrong
                     }
                     var prop = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
-                    if (prop == null)
+                    if (prop is null)
                     {
                         Debug.Fail("The path specified to the property is wrong");
                         break; // path is wrong

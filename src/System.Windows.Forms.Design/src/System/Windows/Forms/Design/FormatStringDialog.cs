@@ -259,7 +259,7 @@ namespace System.Windows.Forms.Design
         {
             FormatControl.FormatTypeClass formatTypeItem = _formatControl1.FormatTypeItem;
 
-            if (formatTypeItem == null)
+            if (formatTypeItem is null)
             {
                 return;
             }

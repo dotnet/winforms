@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using static Interop;
@@ -25,7 +23,7 @@ namespace System.Drawing.Design
             {
                 if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
-                    if (_fontDialog == null)
+                    if (_fontDialog is null)
                     {
                         _fontDialog = new FontDialog
                         {

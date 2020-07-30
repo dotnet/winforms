@@ -2,9 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
-using System.Globalization;
-
 namespace System.ComponentModel.Design
 {
     /// <summary>
@@ -74,7 +71,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected override ISite CreateSite(IComponent component, string name)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -114,7 +111,7 @@ namespace System.ComponentModel.Design
                 return _services.GetService(serviceType);
             }
 
-            if (Owner.Site == null || !_safeToCallOwner)
+            if (Owner.Site is null || !_safeToCallOwner)
             {
                 return null;
             }
@@ -147,14 +144,14 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_name == null)
+                    if (_name is null)
                     {
                         return null;
                     }
 
                     string ownerName = _container.OwnerName;
                     string childName = ((ISite)this).Name;
-                    if (ownerName == null)
+                    if (ownerName is null)
                     {
                         return childName;
                     }

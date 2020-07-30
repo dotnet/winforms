@@ -87,13 +87,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             _serviceProvider = serviceProvider;
             _behaviorService = serviceProvider.GetService(typeof(BehaviorService)) as BehaviorService;
-            if (!(serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host) || _behaviorService == null)
+            if (!(serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host) || _behaviorService is null)
             {
                 Debug.Fail("Cannot get DesignerHost or BehaviorService");
                 return;
             }
 
-            if (graphics == null)
+            if (graphics is null)
             {
                 _graphics = _behaviorService.AdornerWindowGraphics;
             }
@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Design.Behavior
                (dragComponents != null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
                IsChildOfParent(control, targetControl) ||//cannot be a child of the control we will drag
                !clipBounds.IntersectsWith(control.Bounds) || //has to be partially visible on the rootcomp's surface
-               control.Parent == null || // control must have a parent.
+               control.Parent is null || // control must have a parent.
                !control.Visible)
             { //control itself has to be visible -- we do mean visible, not ShadowedVisible
                 return false;
@@ -497,7 +497,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private static bool IsChildOfParent(Control child, Control parent)
         {
-            if (child == null || parent == null)
+            if (child is null || parent is null)
             {
                 return false;
             }
@@ -889,7 +889,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal Point OnMouseMove(Rectangle dragBounds, SnapLine[] snapLines, ref bool didSnap, bool shouldSnapHorizontally)
         {
-            if (snapLines == null || snapLines.Length == 0)
+            if (snapLines is null || snapLines.Length == 0)
             {
                 return Point.Empty;
             }

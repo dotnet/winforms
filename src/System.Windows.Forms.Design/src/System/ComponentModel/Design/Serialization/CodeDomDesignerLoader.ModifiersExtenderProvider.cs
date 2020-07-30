@@ -51,12 +51,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 IComponent baseComponent = null;
 
-                if (c == null)
+                if (c is null)
                 {
                     return null;
                 }
 
-                if (_host == null)
+                if (_host is null)
                 {
                     ISite site = c.Site;
 
@@ -89,7 +89,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return true;
                 }
@@ -164,7 +164,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return;
                 }
@@ -187,7 +187,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 string compName = site.Name;
 
-                if (!(site.GetService(typeof(CodeTypeDeclaration)) is CodeTypeDeclaration typeDecl) || compName == null)
+                if (!(site.GetService(typeof(CodeTypeDeclaration)) is CodeTypeDeclaration typeDecl) || compName is null)
                 {
                     return;
                 }
@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site == null)
+                if (site is null)
                 {
                     return;
                 }

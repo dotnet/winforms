@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (context == null || provider == null)
+            if (context is null || provider is null)
             {
                 return value;
             }

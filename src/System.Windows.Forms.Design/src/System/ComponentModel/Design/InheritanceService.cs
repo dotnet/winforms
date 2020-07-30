@@ -62,7 +62,7 @@ namespace System.ComponentModel.Design
         protected virtual void AddInheritedComponents(Type type, IComponent component, IContainer container)
         {
             // We get out now if this component type is not assignable from IComponent.  We only walk down to the component level.
-            if (type == null || !typeof(IComponent).IsAssignableFrom(type))
+            if (type is null || !typeof(IComponent).IsAssignableFrom(type))
             {
                 return;
             }
@@ -108,7 +108,7 @@ namespace System.ComponentModel.Design
 
                         // If the value of the field is null, then don't mess with it.  If it wasn't assigned when our base class was created then we can't really use it.
                         object value = field.GetValue(component);
-                        if (value == null)
+                        if (value is null)
                         {
                             Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...skipping " + name + ": Contains NULL");
                             continue;
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design
                             attr = InheritanceAttribute.Inherited;
                         }
 
-                        bool notPresent = (_inheritedComponents[value] == null);
+                        bool notPresent = (_inheritedComponents[value] is null);
                         _inheritedComponents[value] = attr;
 
                         if (!ignoreMember && notPresent)
@@ -197,7 +197,7 @@ namespace System.ComponentModel.Design
                                 _addingAttribute = attr;
 
                                 // Lets make sure this is a valid name
-                                if (ncs == null || ncs.IsValidName(name))
+                                if (ncs is null || ncs.IsValidName(name))
                                 {
                                     try
                                     {
@@ -254,7 +254,7 @@ namespace System.ComponentModel.Design
         public InheritanceAttribute GetInheritanceAttribute(IComponent component)
         {
             InheritanceAttribute attr = (InheritanceAttribute)_inheritedComponents[component];
-            if (attr == null)
+            if (attr is null)
             {
                 attr = InheritanceAttribute.Default;
             }

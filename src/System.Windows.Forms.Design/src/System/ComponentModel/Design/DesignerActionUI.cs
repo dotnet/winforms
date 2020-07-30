@@ -59,7 +59,7 @@ namespace System.ComponentModel.Design
             _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
             _menuCommandService = (IMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
             _selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-            if (_behaviorService == null || _selSvc == null)
+            if (_behaviorService is null || _selSvc is null)
             {
                 Debug.Fail("Either BehaviorService or ISelectionService is null, cannot continue.");
                 return;
@@ -67,14 +67,14 @@ namespace System.ComponentModel.Design
 
             //query for our DesignerActionService
             _designerActionService = (DesignerActionService)serviceProvider.GetService(typeof(DesignerActionService));
-            if (_designerActionService == null)
+            if (_designerActionService is null)
             {
                 //start the service
                 _designerActionService = new DesignerActionService(serviceProvider);
                 _disposeActionService = true;
             }
             _designerActionUIService = (DesignerActionUIService)serviceProvider.GetService(typeof(DesignerActionUIService));
-            if (_designerActionUIService == null)
+            if (_designerActionUIService is null)
             {
                 _designerActionUIService = new DesignerActionUIService(serviceProvider);
                 _disposeActionUIService = true;
@@ -175,7 +175,7 @@ namespace System.ComponentModel.Design
             }
 
             // we didnt get on, fetch it
-            if (dalColl == null)
+            if (dalColl is null)
             {
                 dalColl = _designerActionService.GetComponentActions(comp);
             }
@@ -183,7 +183,7 @@ namespace System.ComponentModel.Design
             if (dalColl != null && dalColl.Count > 0)
             {
                 DesignerActionGlyph dag = null;
-                if (_componentToGlyph[comp] == null)
+                if (_componentToGlyph[comp] is null)
                 {
                     DesignerActionBehavior dab = new DesignerActionBehavior(_serviceProvider, comp, dalColl, this);
 
@@ -203,7 +203,7 @@ namespace System.ComponentModel.Design
                     }
 
                     //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
-                    if (dag == null)
+                    if (dag is null)
                     {
                         //if the related comp is a control, then this shortcut will be off its bounds
                         dag = new DesignerActionGlyph(dab, _designerActionAdorner);
@@ -243,7 +243,7 @@ namespace System.ComponentModel.Design
         private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
         {
             //validate event args
-            if (ce.Component == null || ce.Member == null || !IsDesignerActionPanelVisible)
+            if (ce.Component is null || ce.Member is null || !IsDesignerActionPanelVisible)
             {
                 return;
             }
@@ -467,14 +467,14 @@ namespace System.ComponentModel.Design
         internal bool ShowDesignerActionPanelForPrimarySelection()
         {
             //can't do anythign w/o selection service
-            if (_selSvc == null)
+            if (_selSvc is null)
             {
                 return false;
             }
 
             object primarySelection = _selSvc.PrimarySelection;
             //verfiy that we have obtained a valid component with designer actions
-            if (primarySelection == null || !_componentToGlyph.Contains(primarySelection))
+            if (primarySelection is null || !_componentToGlyph.Contains(primarySelection))
             {
                 return false;
             }
@@ -505,7 +505,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void RemoveActionGlyph(object relatedObject)
         {
-            if (relatedObject == null)
+            if (relatedObject is null)
             {
                 return;
             }
@@ -600,7 +600,7 @@ namespace System.ComponentModel.Design
                 Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Closing...");
                 Debug.Assert(_lastPanelComponent != null, "last panel component should not be null here... " +
                     "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
-                if (_lastPanelComponent == null)
+                if (_lastPanelComponent is null)
                 {
                     return;
                 }
@@ -626,17 +626,17 @@ namespace System.ComponentModel.Design
 
         internal Point UpdateDAPLocation(IComponent component, DesignerActionGlyph glyph)
         {
-            if (component == null)
+            if (component is null)
             { // in case of a resize...
                 component = _lastPanelComponent;
             }
 
-            if (designerActionHost == null)
+            if (designerActionHost is null)
             {
                 return Point.Empty;
             }
 
-            if (component == null || glyph == null)
+            if (component is null || glyph is null)
             {
                 return designerActionHost.Location;
             }
@@ -688,7 +688,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
         {
-            if (designerActionHost == null)
+            if (designerActionHost is null)
             {
                 designerActionHost = new DesignerActionToolStripDropDown(this, _mainParentWindow)
                 {

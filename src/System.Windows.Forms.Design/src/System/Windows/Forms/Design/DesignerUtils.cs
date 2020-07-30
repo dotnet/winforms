@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (s_boxImage == null)
+                if (s_boxImage is null)
                 {
                     s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                     using (Graphics g = Graphics.FromImage(s_boxImage))
@@ -641,14 +641,14 @@ namespace System.Windows.Forms.Design
 
             // Get the name creation service from the designer host
             INameCreationService nameCreationService = (INameCreationService)host.GetService(typeof(INameCreationService));
-            if (nameCreationService == null)
+            if (nameCreationService is null)
             {
                 return null;
             }
 
             // See if desired name is already in use
             object existingComponent = host.Container.Components[name];
-            if (existingComponent == null)
+            if (existingComponent is null)
             {
                 // Name is not in use - but make sure that it contains valid characters before using it!
                 return nameCreationService.IsValidName(name) ? name : null;
@@ -714,7 +714,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static ICollection FilterGenericTypes(ICollection types)
         {
-            if (types == null || types.Count == 0)
+            if (types is null || types.Count == 0)
             {
                 return types;
             }
@@ -751,7 +751,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static ICollection CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
         {
-            if (objects == null || svcProvider == null)
+            if (objects is null || svcProvider is null)
             {
                 Debug.Fail("Invalid parameter passed to DesignerUtils.CopyObjects.");
                 return null;
@@ -785,13 +785,13 @@ namespace System.Windows.Forms.Design
                     foreach (IComponent comp in copyObjects)
                     {
                         Control c = comp as Control;
-                        if (c != null && c.Parent == null)
+                        if (c != null && c.Parent is null)
                         {
                             newObjects.Add(comp);
                         }
-                        else if (c == null)
+                        else if (c is null)
                         { // this happens when we are dragging a toolstripitem
-                            if (comp is ToolStripItem item && item.GetCurrentParent() == null)
+                            if (comp is ToolStripItem item && item.GetCurrentParent() is null)
                             {
                                 newObjects.Add(comp);
                             }
@@ -810,7 +810,7 @@ namespace System.Windows.Forms.Design
 
         private static ICollection GetCopySelection(ICollection objects, IDesignerHost host)
         {
-            if (objects == null || host == null)
+            if (objects is null || host is null)
             {
                 return null;
             }
@@ -826,7 +826,7 @@ namespace System.Windows.Forms.Design
 
         internal static void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
         {
-            if (host == null)
+            if (host is null)
             {
                 return;
             }
@@ -860,7 +860,7 @@ namespace System.Windows.Forms.Design
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
-            if (treeView == null)
+            if (treeView is null)
             {
                 throw new ArgumentNullException(nameof(treeView));
             }
@@ -879,7 +879,7 @@ namespace System.Windows.Forms.Design
         /// <param name="listView">The list view control to modify</param>
         public static void ApplyListViewThemeStyles(ListView listView)
         {
-            if (listView == null)
+            if (listView is null)
             {
                 throw new ArgumentNullException(nameof(listView));
             }

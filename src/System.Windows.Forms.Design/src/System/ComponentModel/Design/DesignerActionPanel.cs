@@ -150,7 +150,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_filteredCommandIDs == null)
+                if (_filteredCommandIDs is null)
                 {
                     _filteredCommandIDs = new CommandID[] {
                         StandardCommands.Copy,
@@ -280,20 +280,20 @@ namespace System.ComponentModel.Design
         private void AddToCategories(LineInfo lineInfo, ListDictionary categories)
         {
             string categoryName = lineInfo.Item.Category;
-            if (categoryName == null)
+            if (categoryName is null)
             {
                 categoryName = string.Empty;
             }
 
             ListDictionary category = (ListDictionary)categories[categoryName];
-            if (category == null)
+            if (category is null)
             {
                 category = new ListDictionary();
                 categories.Add(categoryName, category);
             }
 
             List<LineInfo> categoryList = (List<LineInfo>)category[lineInfo.List];
-            if (categoryList == null)
+            if (categoryList is null)
             {
                 categoryList = new List<LineInfo>();
                 category.Add(lineInfo.List, categoryList);
@@ -475,7 +475,7 @@ namespace System.ComponentModel.Design
             {
                 return true;
             }
-            return (pd.ComponentType.GetProperty(pd.Name).GetSetMethod() == null);
+            return (pd.ComponentType.GetProperty(pd.Name).GetSetMethod() is null);
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -614,7 +614,7 @@ namespace System.ComponentModel.Design
 
         private void ProcessLists(DesignerActionListCollection lists, ListDictionary categories)
         {
-            if (lists == null)
+            if (lists is null)
             {
                 return;
             }
@@ -627,12 +627,12 @@ namespace System.ComponentModel.Design
                     {
                         foreach (DesignerActionItem item in items)
                         {
-                            if (item == null)
+                            if (item is null)
                             {
                                 continue;
                             }
                             LineInfo lineInfo = ProcessTaskItem(list, item);
-                            if (lineInfo == null)
+                            if (lineInfo is null)
                             {
                                 continue;
                             }
@@ -681,7 +681,7 @@ namespace System.ComponentModel.Design
             {
                 // Try to use the component's service provider if it exists so that we end up getting the right IDesignerHost.
                 IServiceProvider serviceProvider = relatedComponent.Site;
-                if (serviceProvider == null)
+                if (serviceProvider is null)
                 {
                     serviceProvider = ServiceProvider;
                 }
@@ -737,7 +737,7 @@ namespace System.ComponentModel.Design
             else if (item is DesignerActionPropertyItem pti)
             {
                 PropertyDescriptor pd = TypeDescriptor.GetProperties(list)[pti.MemberName];
-                if (pd == null)
+                if (pd is null)
                 {
                     throw new InvalidOperationException(string.Format(SR.DesignerActionPanel_CouldNotFindProperty, pti.MemberName, list.GetType().FullName));
                 }
@@ -745,7 +745,7 @@ namespace System.ComponentModel.Design
                 TypeDescriptorContext context = new TypeDescriptorContext(_serviceProvider, pd, list);
                 UITypeEditor editor = (UITypeEditor)pd.GetEditor(typeof(UITypeEditor));
                 bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
-                if (editor == null)
+                if (editor is null)
                 {
                     if (pd.PropertyType == typeof(bool))
                     {
@@ -1390,7 +1390,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_propDesc == null)
+                    if (_propDesc is null)
                     {
                         _propDesc = TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
                     }
@@ -1407,7 +1407,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_typeDescriptorContext == null)
+                    if (_typeDescriptorContext is null)
                     {
                         _typeDescriptorContext = new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
                     }
@@ -2164,7 +2164,7 @@ namespace System.ComponentModel.Design
                 base.PaintLine(g, lineWidth, lineHeight);
                 if (_hasSwatch)
                 {
-                    if (_swatch == null)
+                    if (_swatch is null)
                     {
                         int width = EditRegionSize.Height - EditorLineSwatchPadding * 2;
                         int height = width - 1;

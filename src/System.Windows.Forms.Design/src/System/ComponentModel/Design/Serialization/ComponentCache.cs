@@ -56,7 +56,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (component == null)
+                if (component is null)
                 {
                     throw new ArgumentNullException(nameof(component));
                 }
@@ -72,14 +72,14 @@ namespace System.ComponentModel.Design.Serialization
             }
             set
             {
-                if (_cache == null && Enabled)
+                if (_cache is null && Enabled)
                 {
                     _cache = new Dictionary<object, Entry>();
                 }
                 // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
                 if (_cache != null && component is IComponent)
                 {
-                    if (value != null && value.Component == null)
+                    if (value != null && value.Component is null)
                     {
                         value.Component = component;
                     }
@@ -99,7 +99,7 @@ namespace System.ComponentModel.Design.Serialization
 
         internal bool ContainsLocalName(string name)
         {
-            if (_cache == null)
+            if (_cache is null)
             {
                 return false;
             }
@@ -308,7 +308,7 @@ namespace System.ComponentModel.Design.Serialization
 
             internal void AddLocalName(string name)
             {
-                if (_localNames == null)
+                if (_localNames is null)
                 {
                     _localNames = new List<string>();
                 }
@@ -318,7 +318,7 @@ namespace System.ComponentModel.Design.Serialization
 
             public void AddDependency(object dep)
             {
-                if (_dependencies == null)
+                if (_dependencies is null)
                 {
                     _dependencies = new List<object>();
                 }
@@ -331,7 +331,7 @@ namespace System.ComponentModel.Design.Serialization
 
             public void AddMetadata(ResourceEntry re)
             {
-                if (_metadata == null)
+                if (_metadata is null)
                 {
                     _metadata = new List<ResourceEntry>();
                 }
@@ -340,7 +340,7 @@ namespace System.ComponentModel.Design.Serialization
 
             public void AddResource(ResourceEntry re)
             {
-                if (_resources == null)
+                if (_resources is null)
                 {
                     _resources = new List<ResourceEntry>();
                 }

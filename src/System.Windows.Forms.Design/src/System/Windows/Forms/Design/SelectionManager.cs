@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
             _serviceProvider = serviceProvider;
             _selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
             _designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-            if (_designerHost == null || _selSvc == null)
+            if (_designerHost is null || _selSvc is null)
             {
                 Debug.Fail("SelectionManager - Host or SelSvc is null, can't continue");
             }

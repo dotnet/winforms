@@ -266,9 +266,9 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (componentName == null && generateNew)
+            if (componentName is null && generateNew)
             {
-                if (obj == null)
+                if (obj is null)
                 {
                     componentName = "(null)";
                 }
@@ -286,7 +286,7 @@ namespace System.ComponentModel.Design
         protected object GetRequiredService(Type serviceType)
         {
             object service = GetService(serviceType);
-            if (service == null)
+            if (service is null)
             {
                 Exception ex = new InvalidOperationException(string.Format(SR.UndoEngineMissingService, serviceType.Name))
                 {
@@ -302,7 +302,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected object GetService(Type serviceType)
         {
-            if (serviceType == null)
+            if (serviceType is null)
             {
                 throw new ArgumentNullException(nameof(serviceType));
             }
@@ -330,7 +330,7 @@ namespace System.ComponentModel.Design
         private void OnComponentAdding(object sender, ComponentEventArgs e)
         {
             // Open a new unit unless there is already one open or we are currently executing a unit. If we need to create a unit, we will have to fabricate a good name.
-            if (_enabled && _executingUnit == null && _unitStack.Count == 0)
+            if (_enabled && _executingUnit is null && _unitStack.Count == 0)
             {
                 string name;
                 if (e.Component != null)
@@ -367,7 +367,7 @@ namespace System.ComponentModel.Design
         private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
         {
             // Open a new unit unless there is already one open or we are currently executing a unit. If we need to create a unit, we will have to fabricate a good name.
-            if (_enabled && _executingUnit == null && _unitStack.Count == 0)
+            if (_enabled && _executingUnit is null && _unitStack.Count == 0)
             {
                 string name;
 
@@ -419,7 +419,7 @@ namespace System.ComponentModel.Design
         private void OnComponentRemoving(object sender, ComponentEventArgs e)
         {
             // Open a new unit unless there is already one open or we are currently executing a unit. If we need to create a unit, we will have to fabricate a good name.
-            if (_enabled && _executingUnit == null && _unitStack.Count == 0)
+            if (_enabled && _executingUnit is null && _unitStack.Count == 0)
             {
                 string name;
                 if (e.Component != null)
@@ -462,11 +462,11 @@ namespace System.ComponentModel.Design
 
                             if (obj != null && object.ReferenceEquals(obj, e.Component))
                             {
-                                if (propsToUpdate == null)
+                                if (propsToUpdate is null)
                                 {
                                     propsToUpdate = new List<ReferencingComponent>();
 
-                                    if (_refToRemovedComponent == null)
+                                    if (_refToRemovedComponent is null)
                                     {
                                         _refToRemovedComponent = new Dictionary<IComponent, List<ReferencingComponent>>();
                                     }
@@ -490,7 +490,7 @@ namespace System.ComponentModel.Design
         private void OnComponentRename(object sender, ComponentRenameEventArgs e)
         {
             // Open a new unit unless there is already one open or we are currently executing a unit. If we need to create a unit, we will have to fabricate a good name.
-            if (_enabled && _executingUnit == null && _unitStack.Count == 0)
+            if (_enabled && _executingUnit is null && _unitStack.Count == 0)
             {
                 string name = string.Format(SR.UndoEngineComponentRename, e.OldName, e.NewName);
                 _unitStack.Push(CreateUndoUnit(name, true));
@@ -505,7 +505,7 @@ namespace System.ComponentModel.Design
 
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
-            if (_executingUnit == null && CurrentUnit != null)
+            if (_executingUnit is null && CurrentUnit != null)
             {
                 PopUnitReason reason = e.TransactionCommitted ? PopUnitReason.TransactionCommit : PopUnitReason.TransactionCancel;
                 CheckPopUnit(reason);
@@ -515,7 +515,7 @@ namespace System.ComponentModel.Design
         private void OnTransactionOpening(object sender, EventArgs e)
         {
             // When a transaction is opened, we always push a new unit unless we're executing a unit.  We can push multiple units onto the stack to handle nested transactions.
-            if (_enabled && _executingUnit == null)
+            if (_enabled && _executingUnit is null)
             {
                 _unitStack.Push(CreateUndoUnit(_host.TransactionDescription, _unitStack.Count == 0));
             }
@@ -575,7 +575,7 @@ namespace System.ComponentModel.Design
 
             public UndoUnit(UndoEngine engine, string name)
             {
-                if (name == null)
+                if (name is null)
                 {
                     name = string.Empty;
                 }
@@ -605,7 +605,7 @@ namespace System.ComponentModel.Design
             /// <summary>
             ///  This returns true if the undo unit has nothing in it to undo.  The unit will be discarded.
             /// </summary>
-            public virtual bool IsEmpty => _events == null || _events.Count == 0;
+            public virtual bool IsEmpty => _events is null || _events.Count == 0;
 
             protected UndoEngine UndoEngine { get; }
 
@@ -614,7 +614,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void AddEvent(UndoEvent e)
             {
-                if (_events == null)
+                if (_events is null)
                 {
                     _events = new ArrayList();
                 }
@@ -670,7 +670,7 @@ namespace System.ComponentModel.Design
                     _ignoreAddingList.Remove(e.Component);
                 }
 
-                if (_ignoreAddedList == null)
+                if (_ignoreAddedList is null)
                 {
                     _ignoreAddedList = new ArrayList();
                 }
@@ -682,7 +682,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public virtual void ComponentAdding(ComponentEventArgs e)
             {
-                if (_ignoreAddingList == null)
+                if (_ignoreAddingList is null)
                 {
                     _ignoreAddingList = new ArrayList();
                 }
@@ -691,7 +691,7 @@ namespace System.ComponentModel.Design
 
             private static bool ChangeEventsSymmetric(ComponentChangingEventArgs changing, ComponentChangedEventArgs changed)
             {
-                if (changing == null || changed == null)
+                if (changing is null || changed is null)
                 {
                     return false;
                 }
@@ -759,7 +759,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (_changeEvents == null)
+                if (_changeEvents is null)
                 {
                     _changeEvents = new ArrayList();
                 }
@@ -845,7 +845,7 @@ namespace System.ComponentModel.Design
                     int changeIdx = -1;
                     for (int idx = _events.Count - 1; idx >= 0; idx--)
                     {
-                        if (changeEvt == null)
+                        if (changeEvt is null)
                         {
                             changeEvt = _events[idx] as ChangeUndoEvent;
                             changeIdx = idx;
@@ -893,7 +893,7 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                if (_removeEvents == null)
+                if (_removeEvents is null)
                 {
                     _removeEvents = new ArrayList();
                 }
@@ -941,7 +941,7 @@ namespace System.ComponentModel.Design
                 DesignerTransaction transaction = null;
                 try
                 {
-                    if (savedUnit == null)
+                    if (savedUnit is null)
                     {
                         UndoEngine.OnUndoing(EventArgs.Empty);
                     }
@@ -963,7 +963,7 @@ namespace System.ComponentModel.Design
                     }
 
                     UndoEngine._executingUnit = savedUnit;
-                    if (savedUnit == null)
+                    if (savedUnit is null)
                     {
                         UndoEngine.OnUndone(EventArgs.Empty);
                     }
@@ -1217,7 +1217,7 @@ namespace System.ComponentModel.Design
                 {
                     get
                     {
-                        return _openComponent == null;
+                        return _openComponent is null;
                     }
                 }
 
@@ -1249,12 +1249,12 @@ namespace System.ComponentModel.Design
                 /// </summary>
                 public bool ContainsChange(MemberDescriptor desc)
                 {
-                    if (_member == null)
+                    if (_member is null)
                     {
                         return true;
                     }
 
-                    if (desc == null)
+                    if (desc is null)
                     {
                         return false;
                     }
@@ -1276,7 +1276,7 @@ namespace System.ComponentModel.Design
 
                 private void SaveAfterState(UndoEngine engine)
                 {
-                    Debug.Assert(_after == null, "Change undo saving state twice.");
+                    Debug.Assert(_after is null, "Change undo saving state twice.");
                     UndoEngine.Trace("---> Saving after snapshot for change to '{0}'", _componentName);
                     object component = null;
 

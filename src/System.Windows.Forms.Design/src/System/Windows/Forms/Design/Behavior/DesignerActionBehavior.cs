@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -114,7 +113,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {
-            if (button != MouseButtons.Left || ParentUI == null)
+            if (button != MouseButtons.Left || ParentUI is null)
             {
                 return true;
             }

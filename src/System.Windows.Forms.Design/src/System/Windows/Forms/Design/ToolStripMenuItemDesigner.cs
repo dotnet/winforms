@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
 
@@ -156,7 +155,7 @@ namespace System.Windows.Forms.Design
                 //Set the Shadow Property
                 customDropDown = value;
                 // If DropDown is Set to null and we have valid serializedData, then use it to recreate Items.
-                if (value == null && !dropDownSet && serializedDataForDropDownItems != null)
+                if (value is null && !dropDownSet && serializedDataForDropDownItems != null)
                 {
                     try
                     {
@@ -244,7 +243,7 @@ namespace System.Windows.Forms.Design
                 {
                     object selectedItem = selSvc.PrimarySelection;
                     ToolStripItem toolItem;
-                    if (selectedItem == null)
+                    if (selectedItem is null)
                     {
                         if (KeyboardHandlingService != null)
                         {
@@ -295,7 +294,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (keyboardHandlingService == null)
+                if (keyboardHandlingService is null)
                 {
                     keyboardHandlingService = GetService(typeof(ToolStripKeyboardHandlingService)) as ToolStripKeyboardHandlingService;
                 }
@@ -544,7 +543,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
-                else //if commitedEditorNode == null and we are in commitEdit then just add the new Item, since this item is added through dropDown.
+                else //if commitedEditorNode is null and we are in commitEdit then just add the new Item, since this item is added through dropDown.
                 {
                     //if no editorNode then we are commiting a NEW NODE...
                     index = MenuItem.DropDownItems.IndexOf(typeHereNode);
@@ -701,11 +700,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void CreatetypeHereNode()
         {
-            if (typeHereNode == null)
+            if (typeHereNode is null)
             {
                 AddNewTemplateNode(MenuItem.DropDown);
                 //Add Text for Debugging Non Sited DropDown..
-                if (MenuItem.DropDown.Site == null)
+                if (MenuItem.DropDown.Site is null)
                 {
                     MenuItem.DropDown.Text = MenuItem.Name + ".DropDown";
                 }
@@ -741,7 +740,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private ToolStripItem CreateDummyItem(Type t, int dummyIndex)
         {
-            if (designerHost == null)
+            if (designerHost is null)
             {
                 Debug.Fail("Couldn't get designer host!");
                 return null;
@@ -764,7 +763,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     //create our transaction
-                    if (newMenuItemTransaction == null)
+                    if (newMenuItemTransaction is null)
                     {
                         newMenuItemTransaction = designerHost.CreateTransaction(SR.ToolStripCreatingNewItemTransaction);
                     }
@@ -817,7 +816,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private ToolStripItem CreateNewItem(Type t, int dummyIndex, string newText)
         {
-            if (designerHost == null)
+            if (designerHost is null)
             {
                 Debug.Fail("Couldn't get designer host!");
                 return null;
@@ -1187,7 +1186,7 @@ namespace System.Windows.Forms.Design
         internal void EditTemplateNode(bool clicked)
         {
             // If the parent has a window which is too small, there won't be any space  to draw the entry box and typeHereNode will be null
-            if (typeHereNode == null)
+            if (typeHereNode is null)
             {
                 return;
             }
@@ -1205,7 +1204,7 @@ namespace System.Windows.Forms.Design
             if (clicked)
             {
                 // We should come here for a valid parent !!!
-                if (MenuItem == null)
+                if (MenuItem is null)
                 {
                     return;
                 }
@@ -1224,7 +1223,7 @@ namespace System.Windows.Forms.Design
 
             // Hide the DropDown of any previous Selection.. First get the SelectedItem...
             ToolStripDropDownItem selectedItem = null;
-            if (selSvc.PrimarySelection == null && KeyboardHandlingService != null)
+            if (selSvc.PrimarySelection is null && KeyboardHandlingService != null)
             {
                 if (KeyboardHandlingService.SelectedDesignerControl is ToolStripItem item)
                 {
@@ -1317,7 +1316,7 @@ namespace System.Windows.Forms.Design
             //Remove the Glyphs so that Mouse Message go to the Editor
             RemoveItemBodyGlyph(toolItem);
 
-            if (toolItem == null)
+            if (toolItem is null)
             {
                 return;
             }
@@ -1496,7 +1495,7 @@ namespace System.Windows.Forms.Design
             //Set the DoubleClickEnabled
             MenuItem.DoubleClickEnabled = true;
 
-            if (undoEngine == null)
+            if (undoEngine is null)
             {
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine != null)
@@ -1605,7 +1604,7 @@ namespace System.Windows.Forms.Design
                         startDropDown = null;
                     }
                 }
-                if (startDropDown == null)
+                if (startDropDown is null)
                 {
                     return false;
                 }
@@ -1820,7 +1819,7 @@ namespace System.Windows.Forms.Design
                 if (!IsOnContextMenu)
                 {
                     ToolStrip mainStrip = GetMainToolStrip();
-                    if (designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && !mainStripDesigner.EditingCollection && mainStripDesigner.InsertTansaction == null)
+                    if (designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && !mainStripDesigner.EditingCollection && mainStripDesigner.InsertTansaction is null)
                     {
                         componentAddingFired = true;
                         Debug.Assert(designerHost != null, "Why didn't we get a designer host?");
@@ -1829,7 +1828,7 @@ namespace System.Windows.Forms.Design
                 }
                 else  //we are on ContextMenuStrip, ToolStripDropDown or ToolStripDropDownMenu....
                 {
-                    if (e.Component is ToolStripItem itemAdding && itemAdding.Owner == null)
+                    if (e.Component is ToolStripItem itemAdding && itemAdding.Owner is null)
                     {
                         componentAddingFired = true;
                         Debug.Assert(designerHost != null, "Why didn't we get a designer host?");
@@ -1945,7 +1944,7 @@ namespace System.Windows.Forms.Design
                             boundsToInvalidateOnRemove = Rectangle.Union(boundsToInvalidateOnRemove, dropDownItem.DropDown.Bounds);
                         }
                         Debug.Assert(designerHost != null, "Why didn't we get a designer host?");
-                        Debug.Assert(_pendingTransaction == null, "Adding item with pending transaction?");
+                        Debug.Assert(_pendingTransaction is null, "Adding item with pending transaction?");
                         try
                         {
                             _pendingTransaction = designerHost.CreateTransaction(SR.ToolStripDesignerTransactionRemovingItem);
@@ -2089,14 +2088,14 @@ namespace System.Windows.Forms.Design
         private void OnSelectionChanged(object sender, EventArgs e)
         {
             //determine if we are selected
-            if (MenuItem == null)
+            if (MenuItem is null)
             {
                 return;
             }
 
             ISelectionService selectionSvc = sender as ISelectionService;
             Debug.Assert(selectionSvc != null, "No Selection Service !!");
-            if (selectionSvc == null)
+            if (selectionSvc is null)
             {
                 return;
             }
@@ -2157,7 +2156,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 object selectedObj = ((ISelectionService)sender).PrimarySelection;
-                if (selectedObj == null)
+                if (selectedObj is null)
                 {
                     if (KeyboardHandlingService != null)
                     {
@@ -2169,7 +2168,7 @@ namespace System.Windows.Forms.Design
                     ToolStripDropDown parent = currentSelection.Owner as ToolStripDropDown;
                     while (parent != null)
                     {
-                        if (parent.OwnerItem == MenuItem || parent.OwnerItem == null)
+                        if (parent.OwnerItem == MenuItem || parent.OwnerItem is null)
                         {
                             return;
                         }
@@ -2433,7 +2432,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal override void ShowEditNode(bool clicked)
         {
-            if (MenuItem == null)
+            if (MenuItem is null)
             {
                 return;
             }
@@ -2640,7 +2639,7 @@ namespace System.Windows.Forms.Design
                         if (components.Count == 1)
                         {
                             string name = TypeDescriptor.GetComponentName(components[0]);
-                            if (name == null || name.Length == 0)
+                            if (name is null || name.Length == 0)
                             {
                                 name = components[0].GetType().Name;
                             }

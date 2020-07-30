@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 
@@ -23,7 +22,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -32,7 +31,7 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            if (_borderSidesEditorUI == null)
+            if (_borderSidesEditorUI is null)
             {
                 _borderSidesEditorUI = new BorderSidesEditorUI(this);
             }

@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_menuCommandService == null)
+                if (_menuCommandService is null)
                 {
                     if (_provider != null)
                     {
@@ -242,7 +242,7 @@ namespace System.Windows.Forms.Design
             if (mcs != null & !_commandsAdded)
             {
                 // Demand Create the oldCommands
-                if (_oldCommands == null)
+                if (_oldCommands is null)
                 {
                     PopulateOldCommands();
                 }
@@ -255,14 +255,14 @@ namespace System.Windows.Forms.Design
                     }
                 }
                 // DemandCreate the new Commands.
-                if (_newCommands == null)
+                if (_newCommands is null)
                 {
                     PopulateNewCommands();
                 }
                 // Add our Commands
                 foreach (MenuCommand newCommand in _newCommands)
                 {
-                    if (newCommand != null && mcs.FindCommand(newCommand.CommandID) == null)
+                    if (newCommand != null && mcs.FindCommand(newCommand.CommandID) is null)
                     {
                         mcs.AddCommand(newCommand);
                     }
@@ -318,7 +318,7 @@ namespace System.Windows.Forms.Design
                             if (parentControls[c].TabIndex >= targetIndex)
                             {
                                 // Check to see if this control replaces the "best match" we've already found.
-                                if (found == null || found.TabIndex > parentControls[c].TabIndex)
+                                if (found is null || found.TabIndex > parentControls[c].TabIndex)
                                 {
                                     // Finally, check to make sure that if this tab index is the same as ctl, that we've already encountered ctl in the z-order.  If it isn't the same, than we're more than happy with it.
                                     if ((parentControls[c].Site != null && parentControls[c].TabIndex != targetIndex) || hitCtl)
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Design
                             if (parentControls[c].TabIndex <= targetIndex)
                             {
                                 // Check to see if this control replaces the "best match" we've already found.
-                                if (found == null || found.TabIndex < parentControls[c].TabIndex)
+                                if (found is null || found.TabIndex < parentControls[c].TabIndex)
                                 {
                                     // Finally, check to make sure that if this tab index is the same as ctl, that we've already encountered ctl in the z-order.  If it isn't the same, than we're more than happy with it.
                                     if (parentControls[c].TabIndex != targetIndex || hitCtl)
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.Design
                 IMenuCommandService mcs = MenuService;
                 if (mcs != null)
                 {
-                    if (_newCommandPaste == null)
+                    if (_newCommandPaste is null)
                     {
                         _oldCommandPaste = mcs.FindCommand(StandardCommands.Paste);
                         if (_oldCommandPaste != null)
@@ -532,7 +532,7 @@ namespace System.Windows.Forms.Design
                             mcs.RemoveCommand(_oldCommandPaste);
                         }
                         _newCommandPaste = new MenuCommand(new EventHandler(OnCommandPaste), StandardCommands.Paste);
-                        if (_newCommandPaste != null && mcs.FindCommand(_newCommandPaste.CommandID) == null)
+                        if (_newCommandPaste != null && mcs.FindCommand(_newCommandPaste.CommandID) is null)
                         {
                             mcs.AddCommand(_newCommandPaste);
                         }
@@ -780,7 +780,7 @@ namespace System.Windows.Forms.Design
             ISelectionService selSvc = SelectionService;
             if (selSvc != null)
             {
-                if (selSvc.PrimarySelection == null)
+                if (selSvc.PrimarySelection is null)
                 {
                     if (SelectedDesignerControl is DesignerToolStripControlHost controlHost)
                     {
@@ -1080,7 +1080,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (tool == null && !(primarySelection is ToolStripItem))
+            if (tool is null && !(primarySelection is ToolStripItem))
             {
                 RestoreCommands();
                 // Reset the cached item...
@@ -1143,7 +1143,7 @@ namespace System.Windows.Forms.Design
                     }
                     return;
                 }
-                else if (item == null && selSvc.PrimarySelection is ToolStrip)
+                else if (item is null && selSvc.PrimarySelection is ToolStrip)
                 {
                     RotateTab(reverse);
                 }
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms.Design
             object currentSelection;
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = Host;
-            if (selSvc == null || host == null || !(host.RootComponent is Control))
+            if (selSvc is null || host is null || !(host.RootComponent is Control))
             {
                 return false;
             }
@@ -1170,20 +1170,20 @@ namespace System.Windows.Forms.Design
             {
                 currentSelection = ShiftPrimaryItem;
             }
-            if (currentSelection == null)
+            if (currentSelection is null)
             {
                 currentSelection = SelectedDesignerControl;
             }
 
             ctl = currentSelection as Control;
-            if (targetSelection == null && ctl == null)
+            if (targetSelection is null && ctl is null)
             {
                 ToolStripItem toolStripItem = selSvc.PrimarySelection as ToolStripItem;
                 if (_shiftPressed && ShiftPrimaryItem != null)
                 {
                     toolStripItem = ShiftPrimaryItem as ToolStripItem;
                 }
-                if (toolStripItem == null)
+                if (toolStripItem is null)
                 {
                     toolStripItem = SelectedDesignerControl as ToolStripItem;
                 }
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms.Design
                     {
                         item = ShiftPrimaryItem as ToolStripDropDownItem;
                     }
-                    if (item == null)
+                    if (item is null)
                     {
                         item = SelectedDesignerControl as ToolStripDropDownItem;
                     }
@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms.Design
             object currentSelection;
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = Host;
-            if (selSvc == null || host == null || !(host.RootComponent is Control))
+            if (selSvc is null || host is null || !(host.RootComponent is Control))
             {
                 return;
             }
@@ -1303,20 +1303,20 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            if (currentSelection == null)
+            if (currentSelection is null)
             {
                 currentSelection = SelectedDesignerControl;
             }
             ctl = currentSelection as Control;
 
-            if (targetSelection == null && ctl == null)
+            if (targetSelection is null && ctl is null)
             {
                 ToolStripItem item = selSvc.PrimarySelection as ToolStripItem;
                 if (_shiftPressed && ShiftPrimaryItem != null)
                 {
                     item = ShiftPrimaryItem as ToolStripItem;
                 }
-                if (item == null)
+                if (item is null)
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
@@ -1359,7 +1359,7 @@ namespace System.Windows.Forms.Design
                             parentToMoveOn = ((dropDownItem.Placement == ToolStripItemPlacement.Overflow) ? dropDownItem.Owner.OverflowButton.DropDown : dropDownItem.Owner) as ToolStripDropDown;
                             item = dropDownItem;
                         }
-                        if (dropDownItem == null)
+                        if (dropDownItem is null)
                         {
                             parentToMoveOn = item.GetCurrentParent() as ToolStripDropDown;
                         }
@@ -1447,7 +1447,7 @@ namespace System.Windows.Forms.Design
         // caches the old commands from the menuCommand service.
         private void PopulateOldCommands()
         {
-            if (_oldCommands == null)
+            if (_oldCommands is null)
             {
                 _oldCommands = new ArrayList();
             }
@@ -1487,7 +1487,7 @@ namespace System.Windows.Forms.Design
         // pupulates a list of our custom commands to be added to menu command service.
         private void PopulateNewCommands()
         {
-            if (_newCommands == null)
+            if (_newCommands is null)
             {
                 _newCommands = new ArrayList();
             }
@@ -1548,7 +1548,7 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (MenuCommand oldCommand in _oldCommands)
                     {
-                        if (oldCommand != null && mcs.FindCommand(oldCommand.CommandID) == null)
+                        if (oldCommand != null && mcs.FindCommand(oldCommand.CommandID) is null)
                         {
                             mcs.AddCommand(oldCommand);
                         }
@@ -1561,7 +1561,7 @@ namespace System.Windows.Forms.Design
                     _newCommandPaste = null;
                 }
 
-                if (_oldCommandPaste != null && mcs.FindCommand(_oldCommandPaste.CommandID) == null)
+                if (_oldCommandPaste != null && mcs.FindCommand(_oldCommandPaste.CommandID) is null)
                 {
                     mcs.AddCommand(_oldCommandPaste);
                     _oldCommandPaste = null;
@@ -1649,7 +1649,7 @@ namespace System.Windows.Forms.Design
             ToolStripItem toolStripItem = null;
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = Host;
-            if (selSvc == null || host == null || !(host.RootComponent is Control))
+            if (selSvc is null || host is null || !(host.RootComponent is Control))
             {
                 return;
             }
@@ -1666,11 +1666,11 @@ namespace System.Windows.Forms.Design
             else
             {
                 toolStripItem = selSvc.PrimarySelection as ToolStripItem;
-                if (toolStripItem == null)
+                if (toolStripItem is null)
                 {
                     toolStripItem = SelectedDesignerControl as ToolStripItem;
                 }
-                if (toolStripItem == null)
+                if (toolStripItem is null)
                 {
                     current = (Control)host.RootComponent;
                 }
@@ -1699,7 +1699,7 @@ namespace System.Windows.Forms.Design
                 if (current != null)
                 {
                     next = current.Parent;
-                    if (!(next is Control nextControl) || nextControl.Site == null || nextControl.Site.Container != container)
+                    if (!(next is Control nextControl) || nextControl.Site is null || nextControl.Site.Container != container)
                     {
                         next = current;
                     }
@@ -1750,7 +1750,7 @@ namespace System.Windows.Forms.Design
             object currentSelection;
             ISelectionService selSvc = SelectionService;
             IDesignerHost host = Host;
-            if (selSvc == null || host == null || !(host.RootComponent is Control))
+            if (selSvc is null || host is null || !(host.RootComponent is Control))
             {
                 return;
             }
@@ -1763,7 +1763,7 @@ namespace System.Windows.Forms.Design
             {
                 currentSelection = ShiftPrimaryItem;
             }
-            if (currentSelection == null)
+            if (currentSelection is null)
             {
                 currentSelection = SelectedDesignerControl;
                 // If we are on templateNode and tabbing ahead ...  the select the next Control on the parent ...
@@ -1775,7 +1775,7 @@ namespace System.Windows.Forms.Design
                         if ((ctl.RightToLeft != RightToLeft.Yes && !backwards) || (ctl.RightToLeft == RightToLeft.Yes && backwards))
                         {
                             targetSelection = GetNextControlInTab(baseCtl, ctl, !backwards);
-                            if (targetSelection == null)
+                            if (targetSelection is null)
                             {
                                 ComponentTray tray = (ComponentTray)_provider.GetService(typeof(ComponentTray));
                                 if (tray != null)
@@ -1800,7 +1800,7 @@ namespace System.Windows.Forms.Design
                                         }
                                     }
                                 }
-                                if (targetSelection == null)
+                                if (targetSelection is null)
                                 {
                                     targetSelection = baseCtl;
                                 }
@@ -1811,7 +1811,7 @@ namespace System.Windows.Forms.Design
             }
             ctl = currentSelection as Control;
             //Added New Code for ToolStrip Tabbing..
-            if (targetSelection == null && ctl is ToolStrip wb)
+            if (targetSelection is null && ctl is ToolStrip wb)
             {
                 ToolStripItemCollection collection = wb.Items;
                 if (collection != null)
@@ -1827,14 +1827,14 @@ namespace System.Windows.Forms.Design
                 }
             }
             // ctl is NOT A CONTROL ... so its Component. Try this for ToolStripItem.
-            if (targetSelection == null && ctl == null)
+            if (targetSelection is null && ctl is null)
             {
                 ToolStripItem item = selSvc.PrimarySelection as ToolStripItem;
                 if (_shiftPressed && ShiftPrimaryItem != null)
                 {
                     item = ShiftPrimaryItem as ToolStripItem;
                 }
-                if (item == null)
+                if (item is null)
                 {
                     item = SelectedDesignerControl as ToolStripItem;
                 }
@@ -1889,7 +1889,7 @@ namespace System.Windows.Forms.Design
                                     return;
                                 }
                                 targetSelection = GetNextControlInTab(baseCtl, parent, !backwards);
-                                if (targetSelection == null)
+                                if (targetSelection is null)
                                 {
                                     ComponentTray tray = (ComponentTray)_provider.GetService(typeof(ComponentTray));
                                     if (tray != null)
@@ -1914,7 +1914,7 @@ namespace System.Windows.Forms.Design
                                             }
                                         }
                                     }
-                                    if (targetSelection == null)
+                                    if (targetSelection is null)
                                     {
                                         targetSelection = baseCtl;
                                     }
@@ -1945,7 +1945,7 @@ namespace System.Windows.Forms.Design
                                 }
                                 targetSelection = GetNextControlInTab(baseCtl, parent, !backwards);
                                 // this is the First control in TabOrder... Select the Form..
-                                if (targetSelection == null)
+                                if (targetSelection is null)
                                 {
                                     targetSelection = baseCtl;
                                 }
@@ -1993,7 +1993,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (targetSelection == null && ctl != null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
+            if (targetSelection is null && ctl != null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
             {
                 // Our current selection is a control.  Select the next control in  the z-order.
                 while (null != (ctl = GetNextControlInTab(baseCtl, ctl, !backwards)))
@@ -2006,7 +2006,7 @@ namespace System.Windows.Forms.Design
                 targetSelection = ctl;
             }
 
-            if (targetSelection == null)
+            if (targetSelection is null)
             {
                 ComponentTray tray = (ComponentTray)_provider.GetService(typeof(ComponentTray));
                 if (tray != null)
@@ -2014,7 +2014,7 @@ namespace System.Windows.Forms.Design
                     targetSelection = tray.GetNextComponent((IComponent)currentSelection, !backwards);
                 }
 
-                if (targetSelection == null || targetSelection == currentSelection)
+                if (targetSelection is null || targetSelection == currentSelection)
                 {
                     targetSelection = baseCtl;
                 }

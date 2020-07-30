@@ -53,13 +53,13 @@ namespace System.ComponentModel.Design
             get
             {
                 IDesignerEventService eventService = EventService;
-                if (eventService == null)
+                if (eventService is null)
                 {
                     return null;
                 }
 
                 IDesignerHost activeHost = eventService.ActiveDesigner;
-                if (activeHost == null)
+                if (activeHost is null)
                 {
                     return null;
                 }
@@ -112,7 +112,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_serviceContainer == null)
+                if (_serviceContainer is null)
                 {
                     _serviceContainer = new ServiceContainer(_parentProvider);
                 }
@@ -129,7 +129,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_activeDesignSurfaceChanged == null)
+                if (_activeDesignSurfaceChanged is null)
                 {
                     IDesignerEventService eventService = EventService;
                     if (eventService != null)
@@ -164,7 +164,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_designSurfaceCreated == null)
+                if (_designSurfaceCreated is null)
                 {
                     IDesignerEventService eventService = EventService;
                     if (eventService != null)
@@ -199,7 +199,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_designSurfaceDisposed == null)
+                if (_designSurfaceDisposed is null)
                 {
                     IDesignerEventService eventService = EventService;
                     if (eventService != null)
@@ -235,7 +235,7 @@ namespace System.ComponentModel.Design
         {
             add
             {
-                if (_selectionChanged == null)
+                if (_selectionChanged is null)
                 {
                     IDesignerEventService eventService = EventService;
                     if (eventService != null)
@@ -292,7 +292,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public DesignSurface CreateDesignSurface(IServiceProvider parentProvider)
         {
-            if (parentProvider == null)
+            if (parentProvider is null)
             {
                 throw new ArgumentNullException(nameof(parentProvider));
             }
@@ -333,7 +333,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposing || _serviceContainer == null)
+            if (!disposing || _serviceContainer is null)
             {
                 return;
             }
@@ -405,7 +405,7 @@ namespace System.ComponentModel.Design
         private void OnDesignerCreated(object sender, DesignerEventArgs e)
         {
             Debug.Assert(_designSurfaceCreated != null, "Should have detached this event handler.");
-            if (_designSurfaceCreated == null)
+            if (_designSurfaceCreated is null)
             {
                 return;
             }
@@ -423,7 +423,7 @@ namespace System.ComponentModel.Design
         private void OnDesignerDisposed(object sender, DesignerEventArgs e)
         {
             Debug.Assert(_designSurfaceDisposed != null, "Should have detached this event handler.");
-            if (_designSurfaceDisposed == null)
+            if (_designSurfaceDisposed is null)
             {
                 return;
             }
@@ -460,14 +460,14 @@ namespace System.ComponentModel.Design
 
             object IServiceProvider.GetService(Type serviceType)
             {
-                if (serviceType == null)
+                if (serviceType is null)
                 {
                     throw new ArgumentNullException(nameof(serviceType));
                 }
 
                 object service = _primaryProvider.GetService(serviceType);
 
-                if (service == null)
+                if (service is null)
                 {
                     service = _secondaryProvider.GetService(serviceType);
                 }

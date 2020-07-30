@@ -2,11 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using static Interop;
@@ -40,7 +36,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 return value;
             }
@@ -49,7 +45,7 @@ namespace System.ComponentModel.Design
                 return value;
             }
 
-            if (_selector == null)
+            if (_selector is null)
             {
                 _selector = new Selector(this);
 
@@ -77,7 +73,7 @@ namespace System.ComponentModel.Design
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
-            if (treeView == null)
+            if (treeView is null)
             {
                 throw new ArgumentNullException(nameof(treeView));
             }
@@ -239,7 +235,7 @@ namespace System.ComponentModel.Design
             {
                 TreeNode[] treeNodes;
 
-                if (nodes == null)
+                if (nodes is null)
                 {
                     treeNodes = new TreeNode[Nodes.Count];
                     Nodes.CopyTo(treeNodes, 0);

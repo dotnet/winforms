@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_toolStripKeyBoardService == null)
+                if (_toolStripKeyBoardService is null)
                 {
                     _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
                 }
@@ -355,7 +355,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_selectionService == null)
+                if (_selectionService is null)
                 {
                     _selectionService = (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
                 }
@@ -367,7 +367,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_behaviorService == null)
+                if (_behaviorService is null)
                 {
                     _behaviorService = (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
                 }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Design
                             KeyboardService.ActiveTemplateNode.Commit(false, false);
                         }
                         // cause a selectionChange...
-                        if (SelectionService.PrimarySelection == null)
+                        if (SelectionService.PrimarySelection is null)
                         {
                             SelectionService.SetSelectedComponents(new object[] { _component }, SelectionTypes.Replace);
                         }
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms.Design
 
         private void OnContextMenuClosing(object sender, ToolStripDropDownClosingEventArgs e)
         {
-            if (_addItemButton == null)
+            if (_addItemButton is null)
             {
                 _miniToolStrip.RaiseStateChangeEvent();
             }
@@ -1278,7 +1278,7 @@ namespace System.Windows.Forms.Design
                     Rectangle translatedBounds = new Rectangle(loc, _miniToolStrip.Size);
                     _miniToolStrip.RaiseStateChangeEvent();
 
-                    if (_contextMenu == null)
+                    if (_contextMenu is null)
                     {
                         _isPopulated = true;
                         _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(_component, null, new EventHandler(AddNewItemClick), false, _component.Site, true);
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms.Design
                 switch ((User32.WM)m.Msg)
                 {
                     case User32.WM.GETOBJECT:
-                        if (owner._addItemButton == null)
+                        if (owner._addItemButton is null)
                         {
                             // only adding patterns to _miniToolStrip associated with MenuStrip or ContextMenu
                             // m.Result = AutomationInteropProvider.ReturnRawElementProvider(Handle, m.WParam, m.LParam, (IRawElementProviderSimple)(new TransparentToolStripUiaProvider(this)));
