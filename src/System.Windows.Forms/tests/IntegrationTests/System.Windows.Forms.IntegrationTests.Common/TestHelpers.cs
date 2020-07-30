@@ -340,7 +340,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <param name="form">The form</param>
         public static void BringToForeground(this Form form)
         {
-            if (form == null)
+            if (form is null)
                 throw new ArgumentNullException(nameof(form));
 
             form.WindowState = FormWindowState.Minimized;
