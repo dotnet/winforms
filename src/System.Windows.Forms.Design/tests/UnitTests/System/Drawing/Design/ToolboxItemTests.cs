@@ -58,7 +58,7 @@ namespace System.Drawing.Design.Tests
             {
                 AssemblyName = value
             };
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(item.AssemblyName);
                 Assert.Null(item.Properties["AssemblyName"]);
@@ -77,7 +77,7 @@ namespace System.Drawing.Design.Tests
 
             // Set same.
             item.AssemblyName = value;
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(item.AssemblyName);
                 Assert.Null(item.Properties["AssemblyName"]);
@@ -172,7 +172,7 @@ namespace System.Drawing.Design.Tests
             {
                 DependentAssemblies = value
             };
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(item.DependentAssemblies);
                 Assert.Null(item.Properties["DependentAssemblies"]);
@@ -187,7 +187,7 @@ namespace System.Drawing.Design.Tests
 
             // Set same.
             item.DependentAssemblies = value;
-            if (value == null)
+            if (value is null)
             {
                 Assert.Null(item.DependentAssemblies);
                 Assert.Null(item.Properties["DependentAssemblies"]);

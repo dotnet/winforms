@@ -23,7 +23,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var e = new LoadedEventArgs(succeeded, errors);
             Assert.Equal(succeeded, e.HasSucceeded);
-            if (errors == null)
+            if (errors is null)
             {
                 Assert.Empty(e.Errors);
             }

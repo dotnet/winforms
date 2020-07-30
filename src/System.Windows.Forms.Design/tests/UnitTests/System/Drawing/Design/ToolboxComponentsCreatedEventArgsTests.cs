@@ -22,7 +22,7 @@ namespace System.Drawing.Design.Tests
         public void Ctor_IComponentArray(IComponent[] components)
         {
             var e = new ToolboxComponentsCreatedEventArgs(components);
-            if (components == null)
+            if (components is null)
             {
                 Assert.Null(e.Components);
             }
