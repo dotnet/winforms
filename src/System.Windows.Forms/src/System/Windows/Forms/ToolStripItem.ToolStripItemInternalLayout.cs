@@ -136,7 +136,7 @@ namespace System.Windows.Forms
 
             private bool EnsureLayout()
             {
-                if (_layoutData == null || _parentLayoutData == null || !_parentLayoutData.IsCurrent(ParentInternal))
+                if (_layoutData is null || _parentLayoutData is null || !_parentLayoutData.IsCurrent(ParentInternal))
                 {
                     PerformLayout();
                     return true;

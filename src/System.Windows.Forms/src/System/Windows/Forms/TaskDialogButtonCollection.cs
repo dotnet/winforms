@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         /// </exception>
         protected override void SetItem(int index, TaskDialogButton item)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
         /// </exception>
         protected override void InsertItem(int index, TaskDialogButton item)
         {
-            if (item == null)
+            if (item is null)
             {
                 throw new ArgumentNullException(nameof(item));
             }

@@ -4,9 +4,9 @@
 
 #nullable disable
 
-using System.Threading;
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace System.Windows.Forms
 {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         public override void Send(SendOrPostCallback d, object state)
         {
             Thread destinationThread = DestinationThread;
-            if (destinationThread == null || !destinationThread.IsAlive)
+            if (destinationThread is null || !destinationThread.IsAlive)
             {
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (SynchronizationContext.Current == null)
+            if (SynchronizationContext.Current is null)
             {
                 previousSyncContext = null;
             }
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
             {
                 SynchronizationContext currentContext = AsyncOperationManager.SynchronizationContext;
                 //Make sure we either have no sync context or that we have one of type SynchronizationContext
-                if (currentContext == null || currentContext.GetType() == typeof(SynchronizationContext))
+                if (currentContext is null || currentContext.GetType() == typeof(SynchronizationContext))
                 {
                     previousSyncContext = currentContext;
 
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        if (previousSyncContext == null)
+                        if (previousSyncContext is null)
                         {
                             AsyncOperationManager.SynchronizationContext = new SynchronizationContext();
                         }

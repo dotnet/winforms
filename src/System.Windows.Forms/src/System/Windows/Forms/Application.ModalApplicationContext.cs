@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                 if (_parentWindowContext != null)
                 {
                     // In case we've already torn down, ask the context for this.
-                    if (parentControl == null)
+                    if (parentControl is null)
                     {
                         parentControl = _parentWindowContext.ApplicationContext.MainForm;
                     }

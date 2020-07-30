@@ -22,7 +22,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningRow == null)
+                    if (Owner.OwningRow is null)
                     {
                         return Rectangle.Empty;
                     }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.OwningRow == null)
+                    if (Owner.OwningRow is null)
                     {
                         return null;
                     }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                             return null;
                         }
                     case AccessibleNavigation.Down:
-                        if (Owner.OwningRow == null)
+                        if (Owner.OwningRow is null)
                         {
                             return null;
                         }
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Previous:
                         return null;
                     case AccessibleNavigation.Up:
-                        if (Owner.OwningRow == null)
+                        if (Owner.OwningRow is null)
                         {
                             return null;
                         }
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
 
             public override void Select(AccessibleSelection flags)
             {
-                if (Owner == null)
+                if (Owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                 DataGridViewRowHeaderCell dataGridViewCell = (DataGridViewRowHeaderCell)Owner;
                 DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (dataGridView == null)
+                if (dataGridView is null)
                 {
                     return;
                 }
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (Owner.OwningRow == null)
+                if (Owner.OwningRow is null)
                 {
                     return null;
                 }

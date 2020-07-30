@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 // doesn't have to be bogged down by checks for null.
 
                 state[stateUseDefaultRenderer] = false;
-                if (renderer == null)
+                if (renderer is null)
                 {
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
                 // will autogenerate a new ToolStripRenderer.
                 if (renderer != value)
                 {
-                    state[stateUseDefaultRenderer] = (value == null);
+                    state[stateUseDefaultRenderer] = (value is null);
                     renderer = value;
                     currentRendererType = (renderer != null) ? renderer.GetType() : typeof(Type);
 

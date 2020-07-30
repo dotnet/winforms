@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms
 
             // Problem after KeyUp- focus rect and reversible lines leave a trace behind on the splitter.
             using Graphics g = CreateGraphicsInternal();
-            if (BackgroundImage == null)
+            if (BackgroundImage is null)
             {
                 using var brush = BackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, SplitterRectangle);
@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms
                     _selectNextControl = true;
                     while (parent != null)
                     {
-                        if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal == null))
+                        if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal is null))
                         {
                             break;
                         }
@@ -1862,7 +1862,7 @@ namespace System.Windows.Forms
                     ctl = firstPanel;
                     break;
                 }
-                if (ctl == null)
+                if (ctl is null)
                 {
                     break;
                 }
@@ -1943,7 +1943,7 @@ namespace System.Windows.Forms
             do
             {
                 ctl = GetNextControl(ctl, forward);
-                if (ctl == null || (ctl is SplitterPanel && ctl.Visible))
+                if (ctl is null || (ctl is SplitterPanel && ctl.Visible))
                 {
                     break;
                 }
@@ -1964,8 +1964,8 @@ namespace System.Windows.Forms
                 }
             } while (ctl != null);
 
-            //If CTL == null .. we r out of the Current SplitContainer...
-            if (ctl == null || (ctl is SplitterPanel && !ctl.Visible))
+            //If CTL is null .. we r out of the Current SplitContainer...
+            if (ctl is null || (ctl is SplitterPanel && !ctl.Visible))
             {
                 _callBaseVersion = true;
             }
@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (ctl == null || !(ctl.ParentInternal.Visible))
+                    if (ctl is null || !(ctl.ParentInternal.Visible))
                     {
                         _callBaseVersion = true;
                     }
@@ -2093,7 +2093,7 @@ namespace System.Windows.Forms
             _initialSplitterDistance = _splitterDistance;
             _initialSplitterRectangle = SplitterRectangle;
 
-            if (_splitContainerMessageFilter == null)
+            if (_splitContainerMessageFilter is null)
             {
                 _splitContainerMessageFilter = new SplitContainerMessageFilter(this);
             }

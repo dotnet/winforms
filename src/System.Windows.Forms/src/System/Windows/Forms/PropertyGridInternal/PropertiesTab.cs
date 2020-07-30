@@ -31,7 +31,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             PropertyDescriptor def = base.GetDefaultProperty(obj);
 
-            if (def == null)
+            if (def is null)
             {
                 PropertyDescriptorCollection props = GetProperties(obj);
                 if (props != null)
@@ -56,19 +56,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes)
         {
-            if (attributes == null)
+            if (attributes is null)
             {
                 attributes = new Attribute[] { BrowsableAttribute.Yes };
             }
 
-            if (context == null)
+            if (context is null)
             {
                 return TypeDescriptor.GetProperties(component, attributes);
             }
             else
             {
-                TypeConverter tc = (context.PropertyDescriptor == null ? TypeDescriptor.GetConverter(component) : context.PropertyDescriptor.Converter);
-                if (tc == null || !tc.GetPropertiesSupported(context))
+                TypeConverter tc = (context.PropertyDescriptor is null ? TypeDescriptor.GetConverter(component) : context.PropertyDescriptor.Converter);
+                if (tc is null || !tc.GetPropertiesSupported(context))
                 {
                     return TypeDescriptor.GetProperties(component, attributes);
                 }

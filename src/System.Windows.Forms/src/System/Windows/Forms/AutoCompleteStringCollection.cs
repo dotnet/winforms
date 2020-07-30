@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddRange(string[] value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

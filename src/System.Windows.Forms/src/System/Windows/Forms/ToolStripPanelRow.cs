@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             {
                 ToolStripPanelRowControlCollection controlsCollection = (ToolStripPanelRowControlCollection)Properties.GetObject(s_propControlsCollection);
 
-                if (controlsCollection == null)
+                if (controlsCollection is null)
                 {
                     controlsCollection = CreateControlsInstance();
                     Properties.SetObject(s_propControlsCollection, controlsCollection);
@@ -139,7 +139,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_rowManager == null)
+                if (_rowManager is null)
                 {
                     _rowManager = (Orientation == Orientation.Horizontal) ? new HorizontalRowManager(this) as ToolStripPanelRowManager
                                                                          : new VerticalRowManager(this) as ToolStripPanelRowManager;
@@ -380,7 +380,7 @@ namespace System.Windows.Forms
                 {
                     ToolStripPanelCell cell = element as ToolStripPanelCell;
                     element.SetBounds(cell.CachedBounds, BoundsSpecified.None);
-                    //                    Debug.Assert( cell.Control == null || cell.CachedBounds.Location == cell.Control.Bounds.Location, "CachedBounds out of sync with bounds!");
+                    //                    Debug.Assert( cell.Control is null || cell.CachedBounds.Location == cell.Control.Bounds.Location, "CachedBounds out of sync with bounds!");
                 }
             }
         }
@@ -405,7 +405,7 @@ namespace System.Windows.Forms
                     }
 
                     ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
-                    if (cell == null)
+                    if (cell is null)
                     {
                         ApplyCachedBounds();
                     }
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
         private void OnLayoutHorizontalPostFix()
         {
             ToolStripPanelCell cell = RowManager.GetNextVisibleCell(Cells.Count - 1, /*forward*/false);
-            if (cell == null)
+            if (cell is null)
             {
                 ApplyCachedBounds();
                 return;
@@ -490,7 +490,7 @@ namespace System.Windows.Forms
                         // we're not reperforming a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
-                            if (cellOffsets == null)
+                            if (cellOffsets is null)
                             {
                                 cellOffsets = new int[Cells.Count];
                             }
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                         // we're not reperforming a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
-                            if (cellOffsets == null)
+                            if (cellOffsets is null)
                             {
                                 cellOffsets = new int[Cells.Count];
                             }
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_flowLayoutSettings == null)
+                    if (_flowLayoutSettings is null)
                     {
                         _flowLayoutSettings = new FlowLayoutSettings(Row);
                     }
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms
                 {
                     // we should shrink the last guy and then move him.
                     ToolStripPanelCell lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
-                    if (lastCellOnRow == null)
+                    if (lastCellOnRow is null)
                     {
                         return 0;
                     }
@@ -1239,7 +1239,7 @@ namespace System.Windows.Forms
                     {
                         // add the space we freed to the first guy.
                         cell = GetNextVisibleCell(index, /*forward*/true);
-                        if (cell == null)
+                        if (cell is null)
                         {
                             cell = Row.Cells[index] as ToolStripPanelCell;
                         }
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms
                             {
                                 // we're adding to the beginning.
                                 ToolStripPanelCell cell = GetNextVisibleCell(Row.Cells.Count - 1, /*forward*/false);
-                                if (cell == null && toolStripToDrag.IsInDesignMode)
+                                if (cell is null && toolStripToDrag.IsInDesignMode)
                                 {
                                     cell = (ToolStripPanelCell)Row.Cells[Row.Cells.Count - 1];
                                 }
@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms
                 {
                     // we should shrink the last guy and then move him.
                     ToolStripPanelCell lastCellOnRow = GetNextVisibleCell(Row.Cells.Count - 1,  /*forward*/false);
-                    if (lastCellOnRow == null)
+                    if (lastCellOnRow is null)
                     {
                         return 0;
                     }
@@ -2140,7 +2140,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_cellCollection == null)
+                    if (_cellCollection is null)
                     {
                         _cellCollection = new ArrangedElementCollection(InnerList);
                     }
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int Add(Control value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -2177,7 +2177,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void AddRange(Control[] value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -2300,7 +2300,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Insert(int index, Control value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
@@ -2385,7 +2385,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void CopyTo(Control[] array, int index)
             {
-                if (array == null)
+                if (array is null)
                 {
                     throw new ArgumentNullException(nameof(array));
                 }

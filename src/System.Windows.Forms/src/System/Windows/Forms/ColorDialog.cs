@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             get { return (int[])_customColors.Clone(); }
             set
             {
-                int length = value == null ? 0 : Math.Min(value.Length, 16);
+                int length = value is null ? 0 : Math.Min(value.Length, 16);
                 if (length > 0)
                 {
                     Array.Copy(value, 0, _customColors, 0, length);

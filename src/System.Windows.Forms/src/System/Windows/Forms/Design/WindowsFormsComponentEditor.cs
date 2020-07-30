@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design
         public virtual bool EditComponent(ITypeDescriptorContext context, object component, IWin32Window owner)
         {
             Type[] pageControlTypes = GetComponentEditorPages();
-            if (pageControlTypes == null || pageControlTypes.Length == 0)
+            if (pageControlTypes is null || pageControlTypes.Length == 0)
             {
                 return false;
             }

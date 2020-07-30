@@ -55,8 +55,8 @@ namespace System.Windows.Forms
                 object original = baseVar;
 
                 if (autoConvert
-                    && (dse == null || dse.autoConvert)
-                    && (baseVar == null || baseVar is MemoryStream))
+                    && (dse is null || dse.autoConvert)
+                    && (baseVar is null || baseVar is MemoryStream))
                 {
                     string[] mappedFormats = GetMappedFormats(format);
                     if (mappedFormats != null)
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
                 if (string.IsNullOrWhiteSpace(format))
                 {
-                    if (format == null)
+                    if (format is null)
                     {
                         throw new ArgumentNullException(nameof(format));
                     }
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             public virtual void SetData(Type format, object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
-                if (format == null)
+                if (format is null)
                 {
                     throw new ArgumentNullException(nameof(format));
                 }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
             public virtual void SetData(object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data?.ToString() ?? "(null)");
-                if (data == null)
+                if (data is null)
                 {
                     throw new ArgumentNullException(nameof(data));
                 }

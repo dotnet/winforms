@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Drawing;
-using static Interop;
 using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -73,7 +72,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
         {
             // we default to black.
-            if (managedValue == null)
+            if (managedValue is null)
             {
                 managedValue = Control.DefaultFont;
             }

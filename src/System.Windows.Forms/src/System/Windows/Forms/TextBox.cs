@@ -188,7 +188,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (autoCompleteCustomSource == null)
+                if (autoCompleteCustomSource is null)
                 {
                     autoCompleteCustomSource = new AutoCompleteStringCollection();
                     autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
@@ -740,7 +740,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            if (stringSource == null)
+                            if (stringSource is null)
                             {
                                 stringSource = new StringSource(GetStringsForAutoComplete());
                                 if (!stringSource.Bind(new HandleRef(this, Handle), (Shell32.AUTOCOMPLETEOPTIONS)AutoCompleteMode))
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }

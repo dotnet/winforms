@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                 }
 
                 // Parse 2 integer values.
-                if (culture == null)
+                if (culture is null)
                 {
                     culture = CultureInfo.CurrentCulture;
                 }
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            if (propertyValues == null)
+            if (propertyValues is null)
             {
                 throw new ArgumentNullException(nameof(propertyValues));
             }

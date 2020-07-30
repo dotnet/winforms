@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CheckBoxCellTemplate == null)
+                if (CheckBoxCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CheckBoxCellTemplate == null)
+                if (CheckBoxCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CheckBoxCellTemplate == null)
+                if (CheckBoxCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CheckBoxCellTemplate == null)
+                if (CheckBoxCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CheckBoxCellTemplate == null)
+                if (CheckBoxCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }

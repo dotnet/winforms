@@ -37,7 +37,7 @@ namespace System.Windows.Forms
             this.parentManager = parentManager;
             this.dataField = dataField;
             fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
-            if (fieldInfo == null || !typeof(IList).IsAssignableFrom(fieldInfo.PropertyType))
+            if (fieldInfo is null || !typeof(IList).IsAssignableFrom(fieldInfo.PropertyType))
             {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }

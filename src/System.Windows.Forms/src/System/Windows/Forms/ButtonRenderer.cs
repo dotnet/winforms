@@ -295,7 +295,7 @@ namespace System.Windows.Forms
 
         private static void InitializeRenderer(int state)
         {
-            if (t_visualStyleRenderer == null)
+            if (t_visualStyleRenderer is null)
             {
                 t_visualStyleRenderer = new VisualStyleRenderer(s_buttonElement.ClassName, s_buttonElement.Part, state);
             }

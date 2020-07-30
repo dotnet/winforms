@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.Drawing;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             {
                 system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(target)), bRevert: BOOL.FALSE), target);
             }
-            else if (MergedMenu == null)
+            else if (MergedMenu is null)
             {
                 system.DropDown.Dispose();
             }

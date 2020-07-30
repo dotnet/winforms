@@ -469,7 +469,7 @@ namespace System.Windows.Forms
         /// <returns>The accessible name.</returns>
         internal string GetAccessibleName(string baseName)
         {
-            if (baseName == null)
+            if (baseName is null)
             {
                 return SR.SpinnerAccessibleName;
             }
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
                 case User32.WM.SETFOCUS:
                     if (!HostedInWin32DialogManager)
                     {
-                        if (ActiveControl == null)
+                        if (ActiveControl is null)
                         {
                             SetActiveControl(TextBox);
                         }

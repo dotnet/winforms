@@ -7,7 +7,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -244,7 +243,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rendererSwitcher == null)
+                if (rendererSwitcher is null)
                 {
                     rendererSwitcher = new ToolStripRendererSwitcher(this, ToolStripRenderMode.System);
                     HandleRendererChanged(this, EventArgs.Empty);

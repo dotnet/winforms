@@ -106,7 +106,7 @@ namespace System.Windows.Forms
                 if (ShimManager != null)
                 {
                     HtmlElementShim shim = ShimManager.GetElementShim(this);
-                    if (shim == null)
+                    if (shim is null)
                     {
                         shimManager.AddElementShim(this);
                         shim = ShimManager.GetElementShim(this);
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
         public string GetAttribute(string attributeName)
         {
             object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);
-            return oAttributeValue == null ? "" : oAttributeValue.ToString();
+            return oAttributeValue is null ? "" : oAttributeValue.ToString();
         }
 
         public HtmlElementCollection GetElementsByTagName(string tagName)
@@ -1086,9 +1086,9 @@ namespace System.Windows.Forms
 
             public override void ConnectToEvents()
             {
-                if (cookie == null || !cookie.Connected)
+                if (cookie is null || !cookie.Connected)
                 {
-                    for (int i = 0; i < dispInterfaceTypes.Length && cookie == null; i++)
+                    for (int i = 0; i < dispInterfaceTypes.Length && cookie is null; i++)
                     {
                         cookie = new AxHost.ConnectionPointCookie(NativeHtmlElement,
                                                                                   new HTMLElementEvents2(htmlElement),

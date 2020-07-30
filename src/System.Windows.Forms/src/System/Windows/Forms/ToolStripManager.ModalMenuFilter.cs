@@ -260,7 +260,7 @@ namespace System.Windows.Forms
             /// </summary>
             private ToolStrip GetCurrentTopLevelToolStrip()
             {
-                if (_toplevelToolStrip == null)
+                if (_toplevelToolStrip is null)
                 {
                     ToolStrip activeToolStrip = GetActiveToolStripInternal();
                     if (activeToolStrip != null)
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
                 activeToolStripDropDown.Visible = false;
 
                 // There's no more dropdowns left in the chain
-                if (GetActiveToolStrip() == null)
+                if (GetActiveToolStrip() is null)
                 {
                     Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.CloseActiveDropDown] Calling exit because there are no more dropdowns left to activate.");
                     ExitMenuMode();
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
 
             private void SetActiveToolStripCore(ToolStrip toolStrip)
             {
-                if (toolStrip == null)
+                if (toolStrip is null)
                 {
                     return;
                 }
@@ -447,7 +447,7 @@ namespace System.Windows.Forms
                 }
                 toolStrip.KeyboardActive = true;
 
-                if (_inputFilterQueue == null)
+                if (_inputFilterQueue is null)
                 {
                     // Use list because we want to be able to remove at any point
                     _inputFilterQueue = new List<ToolStrip>();
@@ -557,7 +557,7 @@ namespace System.Windows.Forms
                     return false;
                 }
                 ToolStrip activeToolStrip = GetActiveToolStrip();
-                if (activeToolStrip == null)
+                if (activeToolStrip is null)
                 {
                     return false;
                 }
@@ -609,7 +609,7 @@ namespace System.Windows.Forms
                             // this prevents things like ToolTips and mouse over highlights from
                             // being processed.
                             Control control = Control.FromChildHandle(m.HWnd);
-                            if (control == null || !(control.TopLevelControlInternal is ToolStripDropDown))
+                            if (control is null || !(control.TopLevelControlInternal is ToolStripDropDown))
                             {
                                 // Double check it's not a child control of the active toolstrip.
                                 if (!IsChildOrSameWindow(hwndActiveToolStrip, new HandleRef(null, m.HWnd)))

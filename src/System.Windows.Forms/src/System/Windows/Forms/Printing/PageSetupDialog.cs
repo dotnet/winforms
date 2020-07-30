@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -182,7 +181,7 @@ namespace System.Windows.Forms
                 flags |= Comdlg32.PSD.DISABLEPAPER;
             }
 
-            if (!AllowPrinter || _printerSettings == null)
+            if (!AllowPrinter || _printerSettings is null)
             {
                 flags |= Comdlg32.PSD.DISABLEPRINTER;
             }
@@ -273,7 +272,7 @@ namespace System.Windows.Forms
         protected unsafe override bool RunDialog(IntPtr hwndOwner)
         {
             var hookProcPtr = new User32.WNDPROCINT(HookProc);
-            if (_pageSettings == null)
+            if (_pageSettings is null)
             {
                 throw new ArgumentException(SR.PSDcantShowWithoutPage);
             }

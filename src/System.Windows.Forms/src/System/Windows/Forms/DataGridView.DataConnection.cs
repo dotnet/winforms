@@ -4,12 +4,12 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Drawing;
+using System.Globalization;
 
 namespace System.Windows.Forms
 {
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
             //
             public void ApplySortingInformationFromBackEnd()
             {
-                if (CurrencyManager == null)
+                if (CurrencyManager is null)
                 {
                     return;
                 }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
                 // If we are not bound to a sorted IBindingList then set the SortGlyphDirection to SortOrder.None
                 // on each dataBound DataGridViewColumn.
                 // This will have the side effect of setting DataGridView::SortedColumn to null and setting DataGridView::SortOrder to null.
-                if (sortField == null)
+                if (sortField is null)
                 {
                     for (int i = 0; i < _owner.Columns.Count; i++)
                     {
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
             // given a data field name we get the bound index
             public int BoundColumnIndex(string dataPropertyName)
             {
-                if (_props == null)
+                if (_props is null)
                 {
                     return -1;
                 }
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
                 IBindingList ibl = CurrencyManager != null ? CurrencyManager.List as IBindingList : null;
                 IBindingListView iblv = ibl != null ? ibl as IBindingListView : null;
 
-                if (ibl == null || !ibl.SupportsSorting || !ibl.IsSorted)
+                if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
                 {
                     return SortOrder.None;
                 }
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
 
                 if (sortOrder == SortOrder.None)
                 {
-                    Debug.Assert(sortProperty == null);
+                    Debug.Assert(sortProperty is null);
                     return SortOrder.None;
                 }
 
@@ -939,7 +939,7 @@ namespace System.Windows.Forms
 
             public bool DataFieldIsReadOnly(int boundColumnIndex)
             {
-                if (_props == null)
+                if (_props is null)
                 {
                     Debug.Fail("we only care about which data fields are read only when we are data bound");
                     return false;
@@ -981,7 +981,7 @@ namespace System.Windows.Forms
 
             public DataGridViewColumn[] GetCollectionOfBoundDataGridViewColumns()
             {
-                if (_props == null)
+                if (_props is null)
                 {
                     return null;
                 }
@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms
                 IBindingList ibl = CurrencyManager != null ? CurrencyManager.List as IBindingList : null;
                 IBindingListView iblv = ibl != null ? ibl as IBindingListView : null;
 
-                if (ibl == null || !ibl.SupportsSorting || !ibl.IsSorted)
+                if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
                 {
                     sortOrder = SortOrder.None;
                     sortProperty = null;
@@ -1096,7 +1096,7 @@ namespace System.Windows.Forms
 
                 ResetDataConnectionState();
 
-                if (dataMember == null)
+                if (dataMember is null)
                 {
                     dataMember = string.Empty;
                 }
@@ -1113,7 +1113,7 @@ namespace System.Windows.Forms
                 this.DataSource = dataSource;
                 this.DataMember = dataMember;
 
-                if (_owner.BindingContext == null)
+                if (_owner.BindingContext is null)
                 {
                     return;
                 }
@@ -1581,13 +1581,13 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                if (_owner.BindingContext == null)
+                if (_owner.BindingContext is null)
                 {
                     // if we don't have the BindingContext then the data member can still be valid
                     return false;
                 }
 
-                if (newDataSource == null)
+                if (newDataSource is null)
                 {
                     // we have the binding context and the new data source is null
                     // we should change the data member to ""

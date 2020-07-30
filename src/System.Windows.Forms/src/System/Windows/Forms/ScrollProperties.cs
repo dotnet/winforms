@@ -287,7 +287,7 @@ namespace System.Windows.Forms
 
         private void UpdateDisplayPosition()
         {
-            if (_parent == null)
+            if (_parent is null)
             {
                 return;
             }

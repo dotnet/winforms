@@ -22,7 +22,7 @@ namespace System.Windows.Forms
                 //if (AxHTraceSwitch.TraceVerbose) Debug.WriteObject(arr);
                 this.arr = arr;
                 loc = 0;
-                size = (arr == null) ? 0 : arr.Length;
+                size = (arr is null) ? 0 : arr.Length;
             }
 
             private EnumUnknown(object[] arr, int loc) : this(arr)

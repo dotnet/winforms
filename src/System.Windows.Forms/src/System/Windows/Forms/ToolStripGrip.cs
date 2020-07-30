@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                     if (value)
                     {
                         // dont let grips move the toolstrip
-                        if (ParentInternal.ToolStripPanelRow == null)
+                        if (ParentInternal.ToolStripPanelRow is null)
                         {
                             return;
                         }
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (ParentInternal == null) ? null : ((ISupportToolStripPanel)ParentInternal).ToolStripPanelRow;
+                return (ParentInternal is null) ? null : ((ISupportToolStripPanel)ParentInternal).ToolStripPanelRow;
             }
         }
 

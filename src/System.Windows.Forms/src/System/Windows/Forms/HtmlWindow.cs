@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 if (ShimManager != null)
                 {
                     HtmlWindowShim shim = ShimManager.GetWindowShim(this);
-                    if (shim == null)
+                    if (shim is null)
                     {
                         shimManager.AddWindowShim(this);
                         shim = ShimManager.GetWindowShim(this);
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLLocation iHtmlLocation = NativeHtmlWindow.GetLocation();
-                string stringLocation = (iHtmlLocation == null) ? "" : iHtmlLocation.GetHref();
+                string stringLocation = (iHtmlLocation is null) ? "" : iHtmlLocation.GetHref();
                 return string.IsNullOrEmpty(stringLocation) ? null : new Uri(stringLocation);
             }
         }
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
             ///  Support HTMLWindowEvents2
             public override void ConnectToEvents()
             {
-                if (cookie == null || !cookie.Connected)
+                if (cookie is null || !cookie.Connected)
                 {
                     cookie = new AxHost.ConnectionPointCookie(NativeHtmlWindow,
                                                                               new HTMLWindowEvents2(htmlWindow),

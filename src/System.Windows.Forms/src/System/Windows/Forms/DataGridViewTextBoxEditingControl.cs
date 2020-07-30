@@ -98,7 +98,7 @@ namespace System.Windows.Forms
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            if (dataGridViewCellStyle == null)
+            if (dataGridViewCellStyle is null)
             {
                 throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }

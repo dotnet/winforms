@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (TextBoxCellTemplate == null)
+                if (TextBoxCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }

@@ -435,7 +435,7 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_elementProxy == null)
+                    if (_elementProxy is null)
                     {
                         _elementProxy = IsVertical ? new VerticalElementProxy() : new ElementProxy();
                     }

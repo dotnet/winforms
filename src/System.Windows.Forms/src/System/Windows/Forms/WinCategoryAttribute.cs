@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -34,7 +33,7 @@ namespace System.Windows.Forms
         protected override string GetLocalizedString(string value)
         {
             string localizedValue = base.GetLocalizedString(value);
-            if (localizedValue == null)
+            if (localizedValue is null)
             {
                 localizedValue = (string)GetSRObject("WinFormsCategory" + value);
             }

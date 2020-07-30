@@ -33,7 +33,7 @@ namespace System.Windows.Forms
         {
             HtmlDocument.HtmlDocumentShim shim = null;
 
-            if (htmlDocumentShims == null)
+            if (htmlDocumentShims is null)
             {
                 htmlDocumentShims = new Dictionary<HtmlDocument, HtmlDocument.HtmlDocumentShim>();
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         public void AddWindowShim(HtmlWindow window)
         {
             HtmlWindow.HtmlWindowShim shim = null;
-            if (htmlWindowShims == null)
+            if (htmlWindowShims is null)
             {
                 htmlWindowShims = new Dictionary<HtmlWindow, HtmlWindow.HtmlWindowShim>();
                 shim = new HtmlWindow.HtmlWindowShim(window);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         {
             HtmlElement.HtmlElementShim shim = null;
 
-            if (htmlElementShims == null)
+            if (htmlElementShims is null)
             {
                 htmlElementShims = new Dictionary<HtmlElement, HtmlElement.HtmlElementShim>();
                 shim = new HtmlElement.HtmlElementShim(element);
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
 
         internal HtmlDocument.HtmlDocumentShim GetDocumentShim(HtmlDocument document)
         {
-            if (htmlDocumentShims == null)
+            if (htmlDocumentShims is null)
             {
                 return null;
             }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
 
         internal HtmlElement.HtmlElementShim GetElementShim(HtmlElement element)
         {
-            if (htmlElementShims == null)
+            if (htmlElementShims is null)
             {
                 return null;
             }
@@ -126,7 +126,7 @@ namespace System.Windows.Forms
 
         internal HtmlWindow.HtmlWindowShim GetWindowShim(HtmlWindow window)
         {
-            if (htmlWindowShims == null)
+            if (htmlWindowShims is null)
             {
                 return null;
             }

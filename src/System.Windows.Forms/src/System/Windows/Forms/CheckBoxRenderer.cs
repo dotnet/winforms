@@ -399,7 +399,7 @@ namespace System.Windows.Forms
                 part = VisualStyleElement.Button.CheckBox.HighContrastDisabledPart;
             }
 
-            if (t_visualStyleRenderer == null)
+            if (t_visualStyleRenderer is null)
             {
                 t_visualStyleRenderer = new VisualStyleRenderer(s_checkBoxElement.ClassName, part, state);
             }

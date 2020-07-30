@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             set
             {
                 printDocument = value;
-                if (printDocument == null)
+                if (printDocument is null)
                 {
                     settings = new PrinterSettings();
                 }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (Document == null)
+                if (Document is null)
                 {
                     return PrinterSettings.DefaultPageSettings;
                 }
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (settings == null)
+                if (settings is null)
                 {
                     settings = new PrinterSettings();
                 }
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (PageSettings == null)
+                if (PageSettings is null)
                 {
                     data.hDevMode = PrinterSettings.GetHdevmode();
                 }
@@ -434,7 +434,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (PageSettings == null)
+                if (PageSettings is null)
                 {
                     data.hDevMode = PrinterSettings.GetHdevmode();
                 }

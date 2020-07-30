@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             if (!string.IsNullOrEmpty(_selectedPath))
             {
                 string parent = Path.GetDirectoryName(_selectedPath);
-                if (parent == null || !Directory.Exists(parent))
+                if (parent is null || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
                 }

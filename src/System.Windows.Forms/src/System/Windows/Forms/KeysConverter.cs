@@ -81,9 +81,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (keyNames == null)
+                if (keyNames is null)
                 {
-                    Debug.Assert(displayOrder == null);
+                    Debug.Assert(displayOrder is null);
                     Initialize();
                 }
                 return keyNames;
@@ -94,9 +94,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (displayOrder == null)
+                if (displayOrder is null)
                 {
-                    Debug.Assert(keyNames == null);
+                    Debug.Assert(keyNames is null);
                     Initialize();
                 }
                 return displayOrder;
@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                     {
                         object obj = KeyNames[tokens[i]];
 
-                        if (obj == null)
+                        if (obj is null)
                         {
                             // Key was not found in our table.  See if it is a valid value in
                             // the Keys enum.
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (values == null)
+            if (values is null)
             {
                 ArrayList list = new ArrayList();
 

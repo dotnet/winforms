@@ -61,19 +61,19 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (destinationType == typeof(string))
             {
-                if (value == null)
+                if (value is null)
                 {
                     return none;
                 }
 
                 string text = ComNativeDescriptor.Instance.GetName(value);
 
-                if (text == null || text.Length == 0)
+                if (text is null || text.Length == 0)
                 {
                     text = ComNativeDescriptor.Instance.GetClassName(value);
                 }
 
-                if (text == null)
+                if (text is null)
                 {
                     return "(Object)";
                 }

@@ -231,12 +231,12 @@ namespace System.Windows.Forms
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] approach used
                 // here to avoid statically loading the default bitmaps from resources at
                 // runtime when they're never used.
-                if (errorImage == null && _pictureBoxState[UseDefaultErrorImageState])
+                if (errorImage is null && _pictureBoxState[UseDefaultErrorImageState])
                 {
-                    if (_defaultErrorImage == null)
+                    if (_defaultErrorImage is null)
                     {
                         // Can't share images across threads.
-                        if (t_defaultErrorImageForThread == null)
+                        if (t_defaultErrorImageForThread is null)
                         {
                             t_defaultErrorImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
                         }
@@ -392,12 +392,12 @@ namespace System.Windows.Forms
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] approach
                 // used here to avoid statically loading the default bitmaps from resources at
                 // runtime when they're never used.
-                if (_initialImage == null && _pictureBoxState[UseDefaultInitialImageState])
+                if (_initialImage is null && _pictureBoxState[UseDefaultInitialImageState])
                 {
-                    if (_defaultInitialImage == null)
+                    if (_defaultInitialImage is null)
                     {
                         // Can't share images across threads.
-                        if (t_defaultInitialImageForThread == null)
+                        if (t_defaultInitialImageForThread is null)
                         {
                             t_defaultInitialImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
                         }
@@ -535,14 +535,14 @@ namespace System.Windows.Forms
 
             _pictureBoxState[AsyncOperationInProgressState] = true;
 
-            if ((Image == null || (_imageInstallationType == ImageInstallationType.ErrorOrInitial)) && InitialImage != null)
+            if ((Image is null || (_imageInstallationType == ImageInstallationType.ErrorOrInitial)) && InitialImage != null)
             {
                 InstallNewImage(InitialImage, ImageInstallationType.ErrorOrInitial);
             }
 
             _currentAsyncLoadOperation = AsyncOperationManager.CreateOperation(null);
 
-            if (_loadCompletedDelegate == null)
+            if (_loadCompletedDelegate is null)
             {
                 _loadCompletedDelegate = new SendOrPostCallback(LoadCompletedDelegate);
                 _loadProgressDelegate = new SendOrPostCallback(LoadProgressDelegate);
@@ -579,7 +579,7 @@ namespace System.Windows.Forms
 
             Image img = ErrorImage;
             ImageInstallationType installType = ImageInstallationType.ErrorOrInitial;
-            if (!e.Cancelled && e.Error == null)
+            if (!e.Cancelled && e.Error is null)
             {
                 // successful completion
                 try
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override Size GetPreferredSizeCore(Size proposedSize)
         {
-            if (_image == null)
+            if (_image is null)
             {
                 return CommonProperties.GetSpecifiedBounds(this).Size;
             }

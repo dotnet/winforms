@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (!_checkedBmp && _bitmap == null)
+                if (!_checkedBmp && _bitmap is null)
                 {
                     string bmpName = GetType().Name;
                     try

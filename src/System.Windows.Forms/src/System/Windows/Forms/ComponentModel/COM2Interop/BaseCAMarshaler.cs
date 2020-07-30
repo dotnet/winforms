@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             try
             {
-                if (_itemArray == null && _caArrayAddress != null)
+                if (_itemArray is null && _caArrayAddress != null)
                 {
                     object[] items = Items;
                 }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         items[i] = curItem;
                     }
 
-                    Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaled " + ItemType.Name + " item, value=" + (curItem == null ? "(null)" : curItem.ToString()));
+                    Debug.WriteLineIf(s_caMarshalSwitch.TraceVerbose, "Marshaled " + ItemType.Name + " item, value=" + (curItem is null ? "(null)" : curItem.ToString()));
                 }
                 catch (Exception ex)
                 {

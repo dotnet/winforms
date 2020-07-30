@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (t_visualStyleRenderer == null)
+                    if (t_visualStyleRenderer is null)
                     {
                         t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton);
                     }
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             // Post theming functions
             public static void DrawBorder(Graphics g, Rectangle bounds)
             {
-                if (t_visualStyleRenderer == null)
+                if (t_visualStyleRenderer is null)
                 {
                     t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxBorder);
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             {
                 if (rightToLeft)
                 {
-                    if (t_visualStyleRenderer == null)
+                    if (t_visualStyleRenderer is null)
                     {
                         t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxDropDownButtonLeft.ClassName, s_comboBoxDropDownButtonLeft.Part, (int)state);
                     }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (t_visualStyleRenderer == null)
+                    if (t_visualStyleRenderer is null)
                     {
                         t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxDropDownButtonRight.ClassName, s_comboBoxDropDownButtonRight.Part, (int)state);
                     }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
 
             public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
             {
-                if (t_visualStyleRenderer == null)
+                if (t_visualStyleRenderer is null)
                 {
                     t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton.ClassName, s_comboBoxReadOnlyButton.Part, (int)state);
                 }

@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -20,7 +19,7 @@ namespace System.Windows.Forms
         public ContextMenuStrip(IContainer container) : base()
         {
             // this constructor ensures ContextMenuStrip is disposed properly since its not parented to the form.
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }

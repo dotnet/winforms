@@ -155,7 +155,7 @@ namespace System.Windows.Forms
             get
             {
                 Font result = font;
-                if (result == null)
+                if (result is null)
                 {
                     result = Control.DefaultFont;
                 }

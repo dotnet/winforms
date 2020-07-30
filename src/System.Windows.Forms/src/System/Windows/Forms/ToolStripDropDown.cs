@@ -750,7 +750,7 @@ namespace System.Windows.Forms
                     {
                         return ownerItem.Owner.OverflowButton.DropDown;
                     }
-                    if (owner == null)
+                    if (owner is null)
                     {
                         return ownerItem.Owner;
                     }
@@ -1073,7 +1073,7 @@ namespace System.Windows.Forms
             SetCloseReason(ToolStripDropDownCloseReason.CloseCalled);
             Visible = false;
             // we were the last one in the chain, roll out of menu mode.
-            if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() == null)
+            if (ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
             {
                 ToolStripManager.ModalMenuFilter.ExitMenuMode();
             }
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms
         internal override ToolStrip GetToplevelOwnerToolStrip()
         {
             ToolStripDropDown topmost = GetFirstDropDown();
-            return (topmost.OwnerItem == null) ? null : topmost.OwnerToolStrip;
+            return (topmost.OwnerItem is null) ? null : topmost.OwnerToolStrip;
         }
 
         internal ToolStripItem GetToplevelOwnerItem()
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                if (ownerItem == null || !ownerItem.IsInDesignMode)
+                if (ownerItem is null || !ownerItem.IsInDesignMode)
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupEnd, -1);
                 }
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                if (ownerItem == null || !ownerItem.IsInDesignMode)
+                if (ownerItem is null || !ownerItem.IsInDesignMode)
                 {
                     AccessibilityNotifyClients(AccessibleEvents.SystemMenuPopupStart, -1);
                 }
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
 
             // Since we're toplevel and arent a container control, we've got to do our own mnemonic handling.
-            if ((OwnerItem == null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))
+            if ((OwnerItem is null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))
             {
                 return true;
             }
@@ -1989,7 +1989,7 @@ namespace System.Windows.Forms
             SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
             // When we have no owner item and we're set to RTL.Inherit, translate the coordinates
             // so that the menu looks like it's swooping from the other side
-            if (OwnerItem == null && control.RightToLeft == RightToLeft.Yes)
+            if (OwnerItem is null && control.RightToLeft == RightToLeft.Yes)
             {
                 AdjustSize();
                 position.Offset(control.IsMirrored ? Width : -Width, 0);
@@ -2189,7 +2189,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return ((OwnerToolStrip as ToolStripDropDown) == null);
+                return ((OwnerToolStrip as ToolStripDropDown) is null);
             }
         }
 
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms
         internal static ToolStripDropDown GetFirstDropDown(ToolStrip start)
         {
             Debug.Assert(start != null, "Who is passing null to GetFirstDropDown?");
-            if ((start == null) || (!start.IsDropDown))
+            if ((start is null) || (!start.IsDropDown))
             {
                 return null;
             }

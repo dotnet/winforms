@@ -11,16 +11,12 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.Threading;
-using System.Windows.Forms.ComponentModel.Com2Interop;
-using System.Windows.Forms.Design;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -1935,7 +1931,7 @@ namespace System.Windows.Forms
                         // Sadly, we don't have a message so we must fake one ourselves...
                         // A bit of ugliness here (a bit?  more like a bucket...)
                         // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
-                        hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
+                        hwnd = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
                         message = User32.WM.SYSKEYDOWN,
                         wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture),
                         lParam = (IntPtr)0x20180001,
@@ -1991,7 +1987,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (IsDirty() || ocxState == null)
+                if (IsDirty() || ocxState is null)
                 {
                     Debug.Assert(!axState[disposed], "we chould not be asking for the object when we are axState[disposed]...");
                     ocxState = CreateNewOcxState(ocxState);
@@ -2003,7 +1999,7 @@ namespace System.Windows.Forms
             {
                 axState[ocxStateSet] = true;
 
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -2130,7 +2126,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (containingControl == null)
+                if (containingControl is null)
                 {
                     containingControl = FindContainerControlInternal();
                 }
@@ -2250,7 +2246,7 @@ namespace System.Windows.Forms
         internal bool IsUserMode()
         {
             ISite site = Site;
-            return site == null || !site.DesignMode;
+            return site is null || !site.DesignMode;
         }
 
         private object GetAmbientProperty(Ole32.DispatchID dispid)
@@ -2301,7 +2297,7 @@ namespace System.Windows.Forms
                     return null;
                 case Ole32.DispatchID.AMBIENT_DISPLAYNAME:
                     string rval = GetParentContainer().GetNameForControl(this);
-                    if (rval == null)
+                    if (rval is null)
                     {
                         rval = string.Empty;
                     }
@@ -2471,7 +2467,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (instance == null)
+            if (instance is null)
             {
                 CreateWithoutLicense(clsid);
             }
@@ -2479,7 +2475,7 @@ namespace System.Windows.Forms
 
         private void CreateInstance()
         {
-            Debug.Assert(instance == null, "instance must be null");
+            Debug.Assert(instance is null, "instance must be null");
             try
             {
                 instance = CreateInstanceCore(clsid);
@@ -2518,7 +2514,7 @@ namespace System.Windows.Forms
         private unsafe CategoryAttribute GetCategoryForDispid(Ole32.DispatchID dispid)
         {
             VSSDK.ICategorizeProperties icp = GetCategorizeProperties();
-            if (icp == null)
+            if (icp is null)
             {
                 return null;
             }
@@ -2674,7 +2670,7 @@ namespace System.Windows.Forms
                 return editor;
             }
 
-            if (editor == null && HasPropertyPages())
+            if (editor is null && HasPropertyPages())
             {
                 editor = new AxComponentEditor();
             }
@@ -2734,7 +2730,7 @@ namespace System.Windows.Forms
             }
             else if (propsStash != null)
             {
-                if (attributes == null && attribsStash == null)
+                if (attributes is null && attribsStash is null)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Returning stashed values for : " + "<null>");
                     return propsStash;
@@ -2762,12 +2758,12 @@ namespace System.Windows.Forms
 
             ArrayList retProps = new ArrayList();
 
-            if (properties == null)
+            if (properties is null)
             {
                 properties = new Hashtable();
             }
 
-            if (propertyInfos == null)
+            if (propertyInfos is null)
             {
                 propertyInfos = new Hashtable();
 
@@ -2823,7 +2819,7 @@ namespace System.Windows.Forms
                         PropertyDescriptor propDesc = (PropertyDescriptor)properties[propName];
                         Debug.Assert(propDesc != null, "Cannot find cached entry for: " + propName);
                         AxPropertyDescriptor axPropDesc = propDesc as AxPropertyDescriptor;
-                        if ((propInfo == null && axPropDesc != null) || (propInfo != null && axPropDesc == null))
+                        if ((propInfo is null && axPropDesc != null) || (propInfo != null && axPropDesc is null))
                         {
                             Debug.Fail("Duplicate property with same name: " + propName);
                             Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Duplicate property with same name: " + propName);
@@ -2864,7 +2860,7 @@ namespace System.Windows.Forms
                                 Attribute attr = prop.Attributes[typeof(BrowsableAttribute)];
                                 if (attr != null && !attr.Equals(browse))
                                 {
-                                    if (removeList == null)
+                                    if (removeList is null)
                                     {
                                         removeList = new ArrayList();
                                     }
@@ -2984,7 +2980,7 @@ namespace System.Windows.Forms
         {
             Freeze(true);
 
-            if (ocxState == null)
+            if (ocxState is null)
             {
                 // must init new:
                 //
@@ -3117,7 +3113,7 @@ namespace System.Windows.Forms
 
         private object GetOcxCreate()
         {
-            if (instance == null)
+            if (instance is null)
             {
                 CreateInstance();
                 RealizeStyles();
@@ -3222,7 +3218,7 @@ namespace System.Windows.Forms
                     var opcparams = new Oleaut32.OCPFIPARAMS
                     {
                         cbStructSize = (uint)Marshal.SizeOf<Oleaut32.OCPFIPARAMS>(),
-                        hwndOwner = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle,
+                        hwndOwner = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle,
                         lpszCaption = pName,
                         cObjects = 1,
                         ppUnk = (IntPtr)(&pUnk),
@@ -3244,13 +3240,13 @@ namespace System.Windows.Forms
         public void MakeDirty()
         {
             ISite isite = Site;
-            if (isite == null)
+            if (isite is null)
             {
                 return;
             }
 
             IComponentChangeService ccs = (IComponentChangeService)isite.GetService(typeof(IComponentChangeService));
-            if (ccs == null)
+            if (ccs is null)
             {
                 return;
             }
@@ -3262,7 +3258,7 @@ namespace System.Windows.Forms
 
         public void ShowPropertyPages()
         {
-            if (ParentInternal == null)
+            if (ParentInternal is null)
             {
                 return;
             }
@@ -3304,7 +3300,7 @@ namespace System.Windows.Forms
                     trans = host.CreateTransaction(SR.AXEditProperties);
                 }
 
-                IntPtr handle = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
+                IntPtr handle = (ContainingControl is null) ? IntPtr.Zero : ContainingControl.Handle;
                 IntPtr pUnk = Marshal.GetIUnknownForObject(GetOcx());
                 try
                 {
@@ -3823,19 +3819,19 @@ namespace System.Windows.Forms
 
         private AxContainer GetParentContainer()
         {
-            if (container == null)
+            if (container is null)
             {
                 container = AxContainer.FindContainerForControl(this);
             }
-            if (container == null)
+            if (container is null)
             {
                 ContainerControl f = ContainingControl;
-                if (f == null)
+                if (f is null)
                 {
                     // ContainingCointrol can be null if the AxHost is still not parented to a containerControl
                     // In everett we used to return a parking window.
                     // now we just set the containingControl to a dummyValue.
-                    if (newParent == null)
+                    if (newParent is null)
                     {
                         newParent = new ContainerControl();
                         axContainer = newParent.CreateAxContainer();
@@ -3865,7 +3861,7 @@ namespace System.Windows.Forms
             }
 
             // otherwise use our instance.
-            if (iOleInPlaceActiveObject == null)
+            if (iOleInPlaceActiveObject is null)
             {
                 Debug.Assert(instance != null, "must have the ocx");
                 try
@@ -3884,7 +3880,7 @@ namespace System.Windows.Forms
 
         private Ole32.IOleInPlaceObject GetInPlaceObject()
         {
-            if (iOleInPlaceObject == null)
+            if (iOleInPlaceObject is null)
             {
                 Debug.Assert(instance != null, "must have the ocx");
                 iOleInPlaceObject = (Ole32.IOleInPlaceObject)instance;
@@ -3901,7 +3897,7 @@ namespace System.Windows.Forms
 
         private VSSDK.ICategorizeProperties GetCategorizeProperties()
         {
-            if (iCategorizeProperties == null && !axState[checkedCP] && instance != null)
+            if (iCategorizeProperties is null && !axState[checkedCP] && instance != null)
             {
                 axState[checkedCP] = true;
                 if (instance is VSSDK.ICategorizeProperties)
@@ -3914,7 +3910,7 @@ namespace System.Windows.Forms
 
         private Oleaut32.IPerPropertyBrowsing GetPerPropertyBrowsing()
         {
-            if (iPerPropertyBrowsing == null && !axState[checkedIppb] && instance != null)
+            if (iPerPropertyBrowsing is null && !axState[checkedIppb] && instance != null)
             {
                 axState[checkedIppb] = true;
                 if (instance is Oleaut32.IPerPropertyBrowsing)
@@ -3947,7 +3943,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromPicture(Image image)
         {
-            if (image == null)
+            if (image is null)
             {
                 return null;
             }
@@ -3962,7 +3958,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureFromCursor(Cursor cursor)
         {
-            if (cursor == null)
+            if (cursor is null)
             {
                 return null;
             }
@@ -3977,7 +3973,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIPictureDispFromPicture(Image image)
         {
-            if (image == null)
+            if (image is null)
             {
                 return null;
             }
@@ -3992,7 +3988,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Image GetPictureFromIPicture(object picture)
         {
-            if (picture == null)
+            if (picture is null)
             {
                 return null;
             }
@@ -4020,7 +4016,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected unsafe static Image GetPictureFromIPictureDisp(object picture)
         {
-            if (picture == null)
+            if (picture is null)
             {
                 return null;
             }
@@ -4086,7 +4082,7 @@ namespace System.Windows.Forms
 
         private static Oleaut32.FONTDESC GetFONTDESCFromFont(Font font)
         {
-            if (fontTable == null)
+            if (fontTable is null)
             {
                 fontTable = new Dictionary<Font, Oleaut32.FONTDESC>();
             }
@@ -4137,7 +4133,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIFontFromFont(Font font)
         {
-            if (font == null)
+            if (font is null)
             {
                 return null;
             }
@@ -4165,7 +4161,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Font GetFontFromIFont(object font)
         {
-            if (font == null)
+            if (font is null)
             {
                 return null;
             }
@@ -4194,7 +4190,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static object GetIFontDispFromFont(Font font)
         {
-            if (font == null)
+            if (font is null)
             {
                 return null;
             }
@@ -4214,7 +4210,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static Font GetFontFromIFontDisp(object font)
         {
-            if (font == null)
+            if (font is null)
             {
                 return null;
             }

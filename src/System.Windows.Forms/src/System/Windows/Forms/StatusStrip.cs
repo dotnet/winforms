@@ -143,7 +143,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (rtlLayoutGrip == null)
+                if (rtlLayoutGrip is null)
                 {
                     rtlLayoutGrip = new RightToLeftLayoutGrip();
                 }

@@ -409,7 +409,7 @@ namespace System.Windows.Forms
         {
             int oldStart = StartPage;
 
-            if (document == null)
+            if (document is null)
             {
                 pageInfo = Array.Empty<PreviewPageInfo>();
             }
@@ -471,7 +471,7 @@ namespace System.Windows.Forms
             pageInfoCalcPending = true;
             try
             {
-                if (pageInfo == null)
+                if (pageInfo is null)
                 {
                     try
                     {
@@ -502,7 +502,7 @@ namespace System.Windows.Forms
             Color backColor = GetBackColor(SystemInformation.HighContrast);
             using var backBrush = backColor.GetCachedSolidBrushScope();
 
-            if (pageInfo == null || pageInfo.Length == 0)
+            if (pageInfo is null || pageInfo.Length == 0)
             {
                 pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
 

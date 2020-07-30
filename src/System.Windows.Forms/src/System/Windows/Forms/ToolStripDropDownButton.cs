@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                 {
                     // opening should happen on mouse down.
                     Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                    openMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                    openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
                 }
             }
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
                 (e.Button == MouseButtons.Left))
             {
                 Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
-                byte closeMouseId = (ParentInternal == null) ? (byte)0 : ParentInternal.GetMouseId();
+                byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                 if (closeMouseId != openMouseId)
                 {
                     openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.

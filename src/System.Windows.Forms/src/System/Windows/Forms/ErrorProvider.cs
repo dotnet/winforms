@@ -11,7 +11,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -77,7 +76,7 @@ namespace System.Windows.Forms
 
         public ErrorProvider(ContainerControl parentControl) : this()
         {
-            if (parentControl == null)
+            if (parentControl is null)
             {
                 throw new ArgumentNullException(nameof(parentControl));
             }
@@ -89,7 +88,7 @@ namespace System.Windows.Forms
 
         public ErrorProvider(IContainer container) : this()
         {
-            if (container == null)
+            if (container is null)
             {
                 throw new ArgumentNullException(nameof(container));
             }
@@ -102,7 +101,7 @@ namespace System.Windows.Forms
             set
             {
                 base.Site = value;
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -349,7 +348,7 @@ namespace System.Windows.Forms
             get => _dataMember;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -367,7 +366,7 @@ namespace System.Windows.Forms
 
         private void WireEvents(BindingManagerBase listManager)
         {
-            if (listManager == null)
+            if (listManager is null)
             {
                 return;
             }
@@ -384,7 +383,7 @@ namespace System.Windows.Forms
 
         private void UnwireEvents(BindingManagerBase listManager)
         {
-            if (listManager == null)
+            if (listManager is null)
             {
                 return;
             }
@@ -478,7 +477,7 @@ namespace System.Windows.Forms
             for (int j = 0; j < bindingsCount; j++)
             {
                 // Ignore everything but bindings to Controls
-                if (errBindings[j].Control == null)
+                if (errBindings[j].Control is null)
                 {
                     continue;
                 }
@@ -486,7 +485,7 @@ namespace System.Windows.Forms
                 Binding dataBinding = errBindings[j];
                 string error = ((IDataErrorInfo)value)[dataBinding.BindingMemberInfo.BindingField];
 
-                if (error == null)
+                if (error is null)
                 {
                     error = string.Empty;
                 }
@@ -551,7 +550,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (t_defaultIcon == null)
+                if (t_defaultIcon is null)
                 {
                     lock (typeof(ErrorProvider))
                     {
@@ -714,13 +713,13 @@ namespace System.Windows.Forms
         /// </summary>
         private ControlItem EnsureControlItem(Control control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
 
             ControlItem item = (ControlItem)_items[control];
-            if (item == null)
+            if (item is null)
             {
                 item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
                 _items[control] = item;
@@ -734,7 +733,7 @@ namespace System.Windows.Forms
         internal ErrorWindow EnsureErrorWindow(Control parent)
         {
             ErrorWindow window = (ErrorWindow)_windows[parent];
-            if (window == null)
+            if (window is null)
             {
                 window = new ErrorWindow(this, parent);
                 _windows[parent] = window;
@@ -847,7 +846,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
 
-                    if (accessibleObject == null)
+                    if (accessibleObject is null)
                     {
                         accessibleObject = CreateAccessibilityInstance();
                         Properties.SetObject(s_accessibilityProperty, accessibleObject);
@@ -1089,7 +1088,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void StartBlinking()
             {
-                if (_timer == null)
+                if (_timer is null)
                 {
                     _timer = new Timer();
                     _timer.Tick += new EventHandler(OnTimer);
@@ -1308,7 +1307,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleObject accessibleObject = (AccessibleObject)Properties.GetObject(s_accessibilityProperty);
 
-                    if (accessibleObject == null)
+                    if (accessibleObject is null)
                     {
                         accessibleObject = CreateAccessibilityInstance();
                         Properties.SetObject(s_accessibilityProperty, accessibleObject);
@@ -1383,7 +1382,7 @@ namespace System.Windows.Forms
                 get => _error;
                 set
                 {
-                    if (value == null)
+                    if (value is null)
                     {
                         value = string.Empty;
                     }
@@ -1546,7 +1545,7 @@ namespace System.Windows.Forms
             private void AddToWindow()
             {
                 // if we are recreating the control, then add the control.
-                if (_window == null &&
+                if (_window is null &&
                     (_control.Created || _control.RecreatingHandle) &&
                     _control.Visible && _control.ParentInternal != null &&
                     _error.Length > 0)
@@ -1631,7 +1630,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (region == null)
+                    if (region is null)
                     {
                         region = new Region(new Rectangle(0, 0, 0, 0));
 

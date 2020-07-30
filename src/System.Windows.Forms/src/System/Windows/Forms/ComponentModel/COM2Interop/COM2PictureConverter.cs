@@ -46,7 +46,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
         {
-            if (nativeValue == null)
+            if (nativeValue is null)
             {
                 return null;
             }

@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 }
 
                 // get the user specified color
-                if (ToolStrip == null)
+                if (ToolStrip is null)
                 {
                     _backColor = SystemColors.Control;
                     return _backColor;

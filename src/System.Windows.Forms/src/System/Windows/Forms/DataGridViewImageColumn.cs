@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CellTemplate == null)
+                if (CellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (CellTemplate == null)
+                if (CellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CellTemplate == null)
+                if (CellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ImageCellTemplate == null)
+                if (ImageCellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }

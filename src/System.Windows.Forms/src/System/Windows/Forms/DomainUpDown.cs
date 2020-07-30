@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_domainItems == null)
+                if (_domainItems is null)
                 {
                     _domainItems = new DomainUpDownItemCollection(this);
                 }
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             {
                 // Treat null as selecting no item
                 //
-                if (value == null)
+                if (value is null)
                 {
                     SelectedIndex = -1;
                 }
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
         {
             // Make sure domain values exist, and there are >0 items
             //
-            if (_domainItems == null)
+            if (_domainItems is null)
             {
                 return;
             }
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
         internal int MatchIndex(string text, bool complete, int startPosition)
         {
             // Make sure domain values exist
-            if (_domainItems == null)
+            if (_domainItems is null)
             {
                 return -1;
             }
@@ -405,7 +405,7 @@ namespace System.Windows.Forms
 
             Debug.Assert(_domainItems != null, "Domain values array is null");
             Debug.Assert(index < _domainItems.Count && index >= -1, "SelectValue: index out of range");
-            if (_domainItems == null || index < -1 || index >= _domainItems.Count)
+            if (_domainItems is null || index < -1 || index >= _domainItems.Count)
             {
                 // Defensive programming
                 index = -1;
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
         public override void UpButton()
         {
             // Make sure domain values exist, and there are >0 items
-            if (_domainItems == null)
+            if (_domainItems is null)
             {
                 return;
             }
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
-                if (p == null || q == null)
+                if (p is null || q is null)
                 {
                     return 0;
                 }
@@ -715,7 +715,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (itemList == null)
+                    if (itemList is null)
                     {
                         itemList = new DomainItemListAccessibleObject(this);
                     }
@@ -767,7 +767,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner == null)
+                    if (_owner is null)
                     {
                         return base.RuntimeId;
                     }
@@ -801,7 +801,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string baseName = base.Name;
-                    if (baseName == null || baseName.Length == 0)
+                    if (baseName is null || baseName.Length == 0)
                     {
                         return "Items";
                     }

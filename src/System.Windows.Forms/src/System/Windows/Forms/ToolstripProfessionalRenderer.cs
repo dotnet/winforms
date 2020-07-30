@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (professionalColorTable == null)
+                if (professionalColorTable is null)
                 {
                     return ProfessionalColors.ColorTable;
                 }
@@ -84,7 +84,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripHighContrastRenderer == null)
+                if (toolStripHighContrastRenderer is null)
                 {
                     toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/false);
                 }
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (toolStripLowResolutionRenderer == null)
+                if (toolStripLowResolutionRenderer is null)
                 {
                     toolStripLowResolutionRenderer = new ToolStripProfessionalLowResolutionRenderer();
                 }

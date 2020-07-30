@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (events == null)
+                if (events is null)
                 {
                     events = new EventHandlerList();
                 }
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
 
         protected HtmlToClrEventProxy AddEventProxy(string eventName, EventHandler eventHandler)
         {
-            if (attachedEventList == null)
+            if (attachedEventList is null)
             {
                 attachedEventList = new Dictionary<EventHandler, HtmlToClrEventProxy>();
             }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
 
         protected HtmlToClrEventProxy RemoveEventProxy(EventHandler eventHandler)
         {
-            if (attachedEventList == null)
+            if (attachedEventList is null)
             {
                 return null;
             }

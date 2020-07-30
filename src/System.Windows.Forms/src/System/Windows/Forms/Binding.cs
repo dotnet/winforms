@@ -262,7 +262,7 @@ namespace System.Windows.Forms
             get => _formatString;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -435,7 +435,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < propInfos.Count; i++)
                 {
-                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, PropertyName, StringComparison.OrdinalIgnoreCase))
+                    if (tempPropInfo is null && string.Equals(propInfos[i].Name, PropertyName, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropInfo = propInfos[i];
                         if (tempPropIsNullInfo != null)
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
                             break;
                         }
                     }
-                    if (tempPropIsNullInfo == null && string.Equals(propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase))
+                    if (tempPropIsNullInfo is null && string.Equals(propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropIsNullInfo = propInfos[i];
                         if (tempPropInfo != null)
@@ -453,7 +453,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (tempPropInfo == null)
+                if (tempPropInfo is null)
                 {
                     throw new ArgumentException(string.Format(SR.ListBindingBindProperty, PropertyName), nameof(PropertyName));
                 }
@@ -477,7 +477,7 @@ namespace System.Windows.Forms
                 EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(BindableComponent);
                 for (int i = 0; i < eventInfos.Count; i++)
                 {
-                    if (tempValidateInfo == null && string.Equals(eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase))
+                    if (tempValidateInfo is null && string.Equals(eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase))
                     {
                         tempValidateInfo = eventInfos[i];
                         break;
@@ -625,7 +625,7 @@ namespace System.Windows.Forms
                         fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                     }
 
-                    return Formatter.ParseObject(value, type, (value == null ? _propInfo.PropertyType : value.GetType()), fieldInfoConverter, _propInfoConverter, _formatInfo, _nullValue, GetDataSourceNullValue(type));
+                    return Formatter.ParseObject(value, type, (value is null ? _propInfo.PropertyType : value.GetType()), fieldInfoConverter, _propInfoConverter, _formatInfo, _nullValue, GetDataSourceNullValue(type));
                 }
             }
             else
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
             {
                 // If parse failed, reset control property value back to original data source value.
                 // An exception always indicates a parsing failure.
-                if (lastException != null || (!FormattingEnabled && parsedValue == null))
+                if (lastException != null || (!FormattingEnabled && parsedValue is null))
                 {
                     parseFailed = true;
                     parsedValue = _bindToObject.GetValue();
@@ -964,7 +964,7 @@ namespace System.Windows.Forms
 
             try
             {
-                bool isNull = value == null || Formatter.IsNullData(value, DataSourceNullValue);
+                bool isNull = value is null || Formatter.IsNullData(value, DataSourceNullValue);
                 if (isNull)
                 {
                     if (_propIsNullInfo != null)
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms
                 if (value is IDataErrorInfo errorInfo)
                 {
                     // Get the row error if there is no DataMember
-                    if (FieldInfo == null)
+                    if (FieldInfo is null)
                     {
                         text = errorInfo.Error;
                     }
@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms
                     string dataField = _owner.BindingMemberInfo.BindingField;
 
                     FieldInfo = _bindingManager.GetItemProperties().Find(dataField, true);
-                    if (_bindingManager.DataSource != null && FieldInfo == null && dataField.Length > 0)
+                    if (_bindingManager.DataSource != null && FieldInfo is null && dataField.Length > 0)
                     {
                         throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                     }

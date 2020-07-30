@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         {
             DenyIfWaitingForInitialization();
 
-            if (BoundPage == null)
+            if (BoundPage is null)
             {
                 throw new InvalidOperationException(SR.TaskDialogControlNotBound);
             }

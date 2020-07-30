@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             get
             {
                 int imgIndex = _imageIndexer.ActualIndex;
-                if (ImageList == null || ImageList.Images == null || imgIndex >= ImageList.Images.Count)
+                if (ImageList is null || ImageList.Images is null || imgIndex >= ImageList.Images.Count)
                 {
                     // the ImageIndex equivalent of a ImageKey that does not exist in the ImageList
                     return -1;
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 // When the list is being deserialized we need
                 // to take the display index as is. ListView
                 // does correctly synchronize the indices.
-                if (ListView == null)
+                if (ListView is null)
                 {
                     DisplayIndexInternal = value;
                     return;
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     _name = string.Empty;
                 }
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     _text = string.Empty;
                 }

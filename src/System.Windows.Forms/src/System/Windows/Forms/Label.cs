@@ -144,7 +144,7 @@ namespace System.Windows.Forms
 
                     if (value)
                     {
-                        if (_textToolTip == null)
+                        if (_textToolTip is null)
                         {
                             _textToolTip = new ToolTip();
                         }
@@ -371,7 +371,7 @@ namespace System.Windows.Forms
             {
                 Image image = (Image)Properties.GetObject(s_propImage);
 
-                if (image == null && ImageList != null && ImageIndexer.ActualIndex >= 0)
+                if (image is null && ImageList != null && ImageIndexer.ActualIndex >= 0)
                 {
                     return ImageList.Images[ImageIndexer.ActualIndex];
                 }

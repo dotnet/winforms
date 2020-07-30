@@ -178,7 +178,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void AddRangeInternal(ICollection items)
             {
-                if (items == null)
+                if (items is null)
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureSpace(int elements)
             {
-                if (innerArray == null)
+                if (innerArray is null)
                 {
                     innerArray = new int[Math.Max(elements, 4)];
                 }
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array destination, int index)
             {
-                if (destination == null)
+                if (destination is null)
                 {
                     throw new ArgumentNullException(nameof(destination));
                 }

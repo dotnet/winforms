@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             get
             {
                 // We do not support null and empty string as valid keys.
-                if ((key == null) || (key.Length == 0))
+                if ((key is null) || (key.Length == 0))
                 {
                     return null;
                 }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ToolStripItem[] toolStripItems)
         {
-            if (toolStripItems == null)
+            if (toolStripItems is null)
             {
                 throw new ArgumentNullException(nameof(toolStripItems));
             }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ToolStripItemCollection toolStripItems)
         {
-            if (toolStripItems == null)
+            if (toolStripItems is null)
             {
                 throw new ArgumentNullException(nameof(toolStripItems));
             }
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
         private void CheckCanAddOrInsertItem(ToolStripItem value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
-            if ((key == null) || (key.Length == 0))
+            if ((key is null) || (key.Length == 0))
             {
                 throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
             }
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
             /// </summary>
         private ArrayList FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, ArrayList foundItems)
         {
-            if ((itemsToLookIn == null) || (foundItems == null))
+            if ((itemsToLookIn is null) || (foundItems is null))
             {
                 return null;  //
             }
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < itemsToLookIn.Count; i++)
                 {
-                    if (itemsToLookIn[i] == null)
+                    if (itemsToLookIn[i] is null)
                     {
                         continue;
                     }
@@ -356,7 +356,7 @@ namespace System.Windows.Forms
         public virtual int IndexOfKey(string key)
         {
             // Step 0 - Arg validation
-            if ((key == null) || (key.Length == 0))
+            if ((key is null) || (key.Length == 0))
             {
                 return -1; // we dont support empty or null keys.
             }

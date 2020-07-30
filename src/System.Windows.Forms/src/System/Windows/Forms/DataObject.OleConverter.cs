@@ -15,8 +15,8 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -285,11 +285,11 @@ namespace System.Windows.Forms
                 try
                 {
                     data = GetDataFromOleOther(format);
-                    if (data == null)
+                    if (data is null)
                     {
                         data = GetDataFromOleHGLOBAL(format, out done);
                     }
-                    if (data == null && !done)
+                    if (data is null && !done)
                     {
                         data = GetDataFromOleIStream(format);
                     }
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
                 object baseVar = GetDataFromBoundOleDataObject(format, out bool done);
                 object original = baseVar;
 
-                if (!done && autoConvert && (baseVar == null || baseVar is MemoryStream))
+                if (!done && autoConvert && (baseVar is null || baseVar is MemoryStream))
                 {
                     string[] mappedFormats = GetMappedFormats(format);
                     if (mappedFormats != null)

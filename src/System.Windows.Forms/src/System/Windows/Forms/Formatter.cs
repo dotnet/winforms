@@ -67,7 +67,7 @@ namespace System.Windows.Forms
 
             object result = FormatObjectInternal(value, targetType, sourceConverter, targetConverter, formatString, formatInfo, formattedNullValue);
 
-            if (oldTargetType.IsValueType && result == null && !isNullableTargetType)
+            if (oldTargetType.IsValueType && result is null && !isNullableTargetType)
             {
                 throw new FormatException(GetCantConvertMessage(value, targetType));
             }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                                                    IFormatProvider formatInfo,
                                                    object formattedNullValue)
         {
-            if (value == System.DBNull.Value || value == null)
+            if (value == System.DBNull.Value || value is null)
             {
                 //
                 // Convert DBNull to the formatted representation of 'null' (if possible)
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (sourceConverter == null)
+                    if (sourceConverter is null)
                     {
                         sourceConverter = sourceTypeTypeConverter;
                     }
@@ -175,12 +175,12 @@ namespace System.Windows.Forms
             // If explicit type converters not provided, supply default ones instead
             //
 
-            if (sourceConverter == null)
+            if (sourceConverter is null)
             {
                 sourceConverter = sourceTypeTypeConverter;
             }
 
-            if (targetConverter == null)
+            if (targetConverter is null)
             {
                 targetConverter = targetTypeTypeConverter;
             }
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                 {
                     return (state == CheckState.Checked);
                 }
-                if (targetConverter == null)
+                if (targetConverter is null)
                 {
                     targetConverter = targetTypeTypeConverter;
                 }
@@ -341,12 +341,12 @@ namespace System.Windows.Forms
             // If explicit type converters not provided, supply default ones instead
             //
 
-            if (targetConverter == null)
+            if (targetConverter is null)
             {
                 targetConverter = targetTypeTypeConverter;
             }
 
-            if (sourceConverter == null)
+            if (sourceConverter is null)
             {
                 sourceConverter = sourceTypeTypeConverter;
             }
@@ -382,7 +382,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (formatInfo == null)
+                if (formatInfo is null)
                 {
                     formatInfo = CultureInfo.CurrentCulture;
                 }
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string GetCantConvertMessage(object value, Type targetType)
         {
-            string stringResId = (value == null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
+            string stringResId = (value is null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
             return string.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
         }
 
@@ -493,7 +493,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool IsNullData(object value, object dataSourceNullValue)
         {
-            return value == null ||
+            return value is null ||
                    value == System.DBNull.Value ||
                    Object.Equals(value, NullData(value.GetType(), dataSourceNullValue));
         }
@@ -507,7 +507,7 @@ namespace System.Windows.Forms
             {
                 // For nullable types, null is represented by an instance of that type with no assigned value.
                 // The value could also be DBNull.Value (the default for dataSourceNullValue).
-                if (dataSourceNullValue == null || dataSourceNullValue == DBNull.Value)
+                if (dataSourceNullValue is null || dataSourceNullValue == DBNull.Value)
                 {
                     // We don't have a special value that represents null on the data source:
                     // use the Nullable<T>'s representation

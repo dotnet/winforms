@@ -146,7 +146,7 @@ namespace System.Windows.Forms
 
             private TReturn? GetValue<TReturn>(Func<IAccessible, TReturn> getFunction) where TReturn : class
             {
-                if (_systemIAccessible == null)
+                if (_systemIAccessible is null)
                 {
                     return null;
                 }
@@ -172,7 +172,7 @@ namespace System.Windows.Forms
                 Func<IAccessible, TReturn> func,
                 TReturn defaultReturnValue = default(TReturn)) where TReturn : struct
             {
-                if (_systemIAccessible == null)
+                if (_systemIAccessible is null)
                 {
                     return defaultReturnValue;
                 }
@@ -196,7 +196,7 @@ namespace System.Windows.Forms
 
             private void Execute(Action<IAccessible> action)
             {
-                if (_systemIAccessible == null)
+                if (_systemIAccessible is null)
                 {
                     return;
                 }

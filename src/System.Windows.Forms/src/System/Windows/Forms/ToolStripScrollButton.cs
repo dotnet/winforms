@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (downScrollImage == null)
+                if (downScrollImage is null)
                 {
                     downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
                 }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (upScrollImage == null)
+                if (upScrollImage is null)
                 {
                     upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
                 }
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (mouseDownTimer == null)
+                if (mouseDownTimer is null)
                 {
                     mouseDownTimer = new Timer();
                 }

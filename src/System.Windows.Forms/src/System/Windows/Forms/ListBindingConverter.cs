@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ctorTypes == null)
+                if (ctorTypes is null)
                 {
                     ctorTypes = new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider) };
                 }
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ctorParamProps == null)
+                if (ctorParamProps is null)
                 {
                     ctorParamProps = new string[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", };
                 }
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (destinationType is null)
             {
                 throw new ArgumentNullException(nameof(destinationType));
             }
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
             {
                 // null means no prop is available, we quit here.
                 //
-                if (ConstructorParameterProperties[lastItem] == null)
+                if (ConstructorParameterProperties[lastItem] is null)
                 {
                     break;
                 }
@@ -158,7 +158,7 @@ namespace System.Windows.Forms
             //
             ConstructorInfo ctor = typeof(Binding).GetConstructor(ctorParams);
             Debug.Assert(ctor != null, "Failed to find Binding ctor for types!");
-            if (ctor == null)
+            if (ctor is null)
             {
                 isComplete = false;
                 ctor = typeof(Binding).GetConstructor(new Type[] {

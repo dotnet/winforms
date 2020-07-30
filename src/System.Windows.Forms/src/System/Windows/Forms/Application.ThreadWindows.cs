@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -49,7 +48,7 @@ namespace System.Windows.Forms
                     if (_onlyWinForms)
                     {
                         Control c = Control.FromHandle(hWnd);
-                        if (c == null)
+                        if (c is null)
                         {
                             add = false;
                         }

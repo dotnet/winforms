@@ -224,7 +224,7 @@ namespace System.Windows.Forms
             Size proposedSize,
             TextFormatFlags flags = TextFormatFlags.Bottom)
         {
-            if (dc == null)
+            if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
             if (text.IsEmpty)

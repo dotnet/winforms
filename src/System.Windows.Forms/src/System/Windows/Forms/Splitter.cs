@@ -401,7 +401,7 @@ namespace System.Windows.Forms
                 splitSize = value;
                 DrawSplitBar(DRAW_END);
 
-                if (spd.target == null)
+                if (spd.target is null)
                 {
                     splitSize = -1;
                     return;
@@ -608,7 +608,7 @@ namespace System.Windows.Forms
         private int CalcSplitSize()
         {
             Control target = FindTarget();
-            if (target == null)
+            if (target is null)
             {
                 return -1;
             }
@@ -691,7 +691,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void DrawSplitHelper(int splitSize)
         {
-            if (splitTarget == null)
+            if (splitTarget is null)
             {
                 return;
             }
@@ -715,7 +715,7 @@ namespace System.Windows.Forms
         private Control FindTarget()
         {
             Control parent = ParentInternal;
-            if (parent == null)
+            if (parent is null)
             {
                 return null;
             }

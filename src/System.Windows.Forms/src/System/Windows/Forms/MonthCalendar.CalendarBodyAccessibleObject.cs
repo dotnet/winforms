@@ -55,7 +55,7 @@ namespace System.Windows.Forms
                     case MCHT.CALENDARDATE:
                         AccessibleObject rowAccessibleObject = _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, hitTestInfo.iRow);
 
-                        if (rowAccessibleObject == null)
+                        if (rowAccessibleObject is null)
                         {
                             return null;
                         }

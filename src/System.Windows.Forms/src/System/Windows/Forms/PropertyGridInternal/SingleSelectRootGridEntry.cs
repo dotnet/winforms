@@ -53,7 +53,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (browsableAttributes == null)
+                if (browsableAttributes is null)
                 {
                     browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
                 }
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     ResetBrowsableAttributes();
                     return;
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (changeService == null)
+                if (changeService is null)
                 {
                     changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 }
@@ -221,7 +221,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (objValue is IComponent)
                 {
                     ISite site = ((IComponent)objValue).Site;
-                    if (site == null)
+                    if (site is null)
                     {
                         return objValue.GetType().Name;
                     }
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 service = host.GetService(serviceType);
             }
-            if (service == null && baseProvider != null)
+            if (service is null && baseProvider != null)
             {
                 service = baseProvider.GetService(serviceType);
             }
@@ -349,7 +349,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             string category = pe.PropertyCategory;
                             ArrayList bin = (ArrayList)bins[category];
-                            if (bin == null)
+                            if (bin is null)
                             {
                                 bin = new ArrayList();
                                 bins[category] = bin;

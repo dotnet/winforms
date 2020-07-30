@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (mergeItem == null)
+                if (mergeItem is null)
                 {
                     mergeItem = new ToolStripMenuItem
                     {
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                     };
                 }
 
-                if (mergeItem.Owner == null)
+                if (mergeItem.Owner is null)
                 {
                     Items.Add(mergeItem);
                 }

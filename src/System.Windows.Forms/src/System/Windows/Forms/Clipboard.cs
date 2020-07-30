@@ -6,11 +6,9 @@
 
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
@@ -49,7 +47,7 @@ namespace System.Windows.Forms
                 throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
 
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -329,7 +327,7 @@ namespace System.Windows.Forms
 
         public static void SetAudio(byte[] audioBytes)
         {
-            if (audioBytes == null)
+            if (audioBytes is null)
             {
                 throw new ArgumentNullException(nameof(audioBytes));
             }
@@ -339,7 +337,7 @@ namespace System.Windows.Forms
 
         public static void SetAudio(Stream audioStream)
         {
-            if (audioStream == null)
+            if (audioStream is null)
             {
                 throw new ArgumentNullException(nameof(audioStream));
             }
@@ -353,7 +351,7 @@ namespace System.Windows.Forms
         {
             if (string.IsNullOrWhiteSpace(format))
             {
-                if (format == null)
+                if (format is null)
                 {
                     throw new ArgumentNullException(nameof(format));
                 }
@@ -369,7 +367,7 @@ namespace System.Windows.Forms
 
         public static void SetFileDropList(StringCollection filePaths)
         {
-            if (filePaths == null)
+            if (filePaths is null)
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
@@ -403,7 +401,7 @@ namespace System.Windows.Forms
 
         public static void SetImage(Image image)
         {
-            if (image == null)
+            if (image is null)
             {
                 throw new ArgumentNullException(nameof(image));
             }

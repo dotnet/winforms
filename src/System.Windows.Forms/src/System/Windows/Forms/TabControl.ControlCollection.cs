@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -57,7 +56,7 @@ namespace System.Windows.Forms
                 if (site != null)
                 {
                     ISite siteTab = tabPage.Site;
-                    if (siteTab == null)
+                    if (siteTab is null)
                     {
                         site.Container?.Add(tabPage);
                     }

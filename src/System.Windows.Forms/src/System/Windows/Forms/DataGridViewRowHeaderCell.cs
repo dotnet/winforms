@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_leftArrowBmp == null)
+                if (s_leftArrowBmp is null)
                 {
                     s_leftArrowBmp = GetBitmapFromIcon("DataGridViewRow.left");
                 }
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_leftArrowStarBmp == null)
+                if (s_leftArrowStarBmp is null)
                 {
                     s_leftArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.leftstar");
                 }
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_pencilLTRBmp == null)
+                if (s_pencilLTRBmp is null)
                 {
                     s_pencilLTRBmp = GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
                 }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_pencilRTLBmp == null)
+                if (s_pencilRTLBmp is null)
                 {
                     s_pencilRTLBmp = GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
                 }
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_rightArrowBmp == null)
+                if (s_rightArrowBmp is null)
                 {
                     s_rightArrowBmp = GetBitmapFromIcon("DataGridViewRow.right");
                 }
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_rightArrowStarBmp == null)
+                if (s_rightArrowStarBmp is null)
                 {
                     s_rightArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.rightstar");
                 }
@@ -119,7 +119,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_starBmp == null)
+                if (s_starBmp is null)
                 {
                     s_starBmp = GetBitmapFromIcon("DataGridViewRow.star");
                 }
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
                                                       bool inLastRow,
                                                       string format)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return null;
             }
@@ -275,12 +275,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || OwningRow == null)
+            if (DataGridView is null || OwningRow is null)
             {
                 return Rectangle.Empty;
             }
@@ -331,12 +331,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
                 !DataGridView.ShowRowErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
 
         protected internal override string GetErrorText(int rowIndex)
         {
-            if (OwningRow == null)
+            if (OwningRow is null)
             {
                 return base.GetErrorText(rowIndex);
             }
@@ -604,12 +604,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -677,7 +677,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }

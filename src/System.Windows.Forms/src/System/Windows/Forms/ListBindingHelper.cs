@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (browsableAttribute == null)
+                if (browsableAttribute is null)
                 {
                     browsableAttribute = new Attribute[] { new BrowsableAttribute(true) };
                 }
@@ -56,14 +56,14 @@ namespace System.Windows.Forms
             //
 
             dataSource = GetList(dataSource);
-            if (dataSource == null || dataSource is Type || string.IsNullOrEmpty(dataMember))
+            if (dataSource is null || dataSource is Type || string.IsNullOrEmpty(dataMember))
             {
                 return dataSource;
             }
 
             PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(dataSource);
             PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
-            if (dmProp == null)
+            if (dmProp is null)
             {
                 throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
             }
@@ -89,14 +89,14 @@ namespace System.Windows.Forms
             }
 
             // Query the data member property on the chosen object to get back the list
-            return (currentItem == null) ? null : dmProp.GetValue(currentItem);
+            return (currentItem is null) ? null : dmProp.GetValue(currentItem);
         }
 
         public static string GetListName(object list, PropertyDescriptor[] listAccessors)
         {
             string name;
 
-            if (list == null)
+            if (list is null)
             {
                 return string.Empty;
             }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
             {
                 Type type;
                 // We always resolve via type in this case (not an instance)
-                if (listAccessors == null || listAccessors.Length == 0 || listAccessors[0] == null)
+                if (listAccessors is null || listAccessors.Length == 0 || listAccessors[0] is null)
                 {
                     if (list is Type listAsType)
                     {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms
         {
             PropertyDescriptorCollection pdc;
 
-            if (list == null)
+            if (list is null)
             {
                 return new PropertyDescriptorCollection(null);
             }
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
 
         public static PropertyDescriptorCollection GetListItemProperties(object list, PropertyDescriptor[] listAccessors)
         {
-            if (listAccessors == null || listAccessors.Length == 0)
+            if (listAccessors is null || listAccessors.Length == 0)
             {
                 return GetListItemProperties(list);
             }
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
                 PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
 
                 // Add the data member property to the list accessors
-                int len = (listAccessors == null) ? 1 : (listAccessors.Length + 1);
+                int len = (listAccessors is null) ? 1 : (listAccessors.Length + 1);
                 PropertyDescriptor[] listAccessors2 = new PropertyDescriptor[len];
                 listAccessors2[0] = dmProp ?? throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, dataMember));
                 for (int i = 1; i < len; ++i)
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
 
         public static Type GetListItemType(object list)
         {
-            if (list == null)
+            if (list is null)
             {
                 return null;
             }
@@ -230,7 +230,7 @@ namespace System.Windows.Forms
             }
 
             list = GetList(list);
-            if (list == null)
+            if (list is null)
             {
                 return null;
             }
@@ -291,7 +291,7 @@ namespace System.Windows.Forms
         public static Type GetListItemType(object dataSource, string dataMember)
         {
             // No data source
-            if (dataSource == null)
+            if (dataSource is null)
             {
                 return typeof(object);
             }
@@ -304,14 +304,14 @@ namespace System.Windows.Forms
 
             // Get list item properties for this data source
             PropertyDescriptorCollection dsProps = GetListItemProperties(dataSource);
-            if (dsProps == null)
+            if (dsProps is null)
             {
                 return typeof(object);
             }
 
             // Find the property specified by the data member
             PropertyDescriptor dmProp = dsProps.Find(dataMember, true);
-            if (dmProp == null || dmProp.PropertyType is ICustomTypeDescriptor)
+            if (dmProp is null || dmProp.PropertyType is ICustomTypeDescriptor)
             {
                 return typeof(object);
             }
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
         private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type, PropertyDescriptor[] listAccessors, int startIndex)
         {
             PropertyDescriptorCollection pdc = null;
-            if (listAccessors[startIndex] == null)
+            if (listAccessors[startIndex] is null)
             {
                 return new PropertyDescriptorCollection(null);
             }
@@ -467,7 +467,7 @@ namespace System.Windows.Forms
             //   We have an instance
             if (listAccessors.Length > startIndex)
             {
-                if (listAccessors[startIndex] == null)
+                if (listAccessors[startIndex] is null)
                 {
                     return new PropertyDescriptorCollection(null);
                 }
@@ -475,7 +475,7 @@ namespace System.Windows.Forms
                 // Get the value (e.g. given Foo with property Bar, this gets Foo.Bar)
                 object value = listAccessors[startIndex].GetValue(target);
 
-                if (value == null)
+                if (value is null)
                 {
                     // It's null - we can't walk down by Instance so use Type
                     return GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                 {
                     pdc = TypeDescriptor.GetProperties(enumerable, BrowsableAttributeList);
                 }
-                else if (instance == null)
+                else if (instance is null)
                 {
                     pdc = new PropertyDescriptorCollection(null);
                 }
@@ -681,7 +681,7 @@ namespace System.Windows.Forms
                 try
                 {
                     IEnumerator listEnumerator = enumerable.GetEnumerator();
-                    if (listEnumerator == null)
+                    if (listEnumerator is null)
                     {
                         return null;
                     }

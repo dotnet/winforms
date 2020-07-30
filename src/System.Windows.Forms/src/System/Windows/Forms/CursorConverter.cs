@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                     return cursor.GetData();
                 }
             }
-            else if (destinationType == typeof(byte[]) && value == null)
+            else if (destinationType == typeof(byte[]) && value is null)
             {
                 return Array.Empty<byte>();
             }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (values == null)
+            if (values is null)
             {
                 ArrayList list = new ArrayList();
                 PropertyInfo[] props = GetProperties();

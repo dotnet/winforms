@@ -31,7 +31,7 @@ namespace System.Windows.Forms
 
             HRESULT Oleaut32.IEnumVariant.Clone(Oleaut32.IEnumVariant[]? ppEnum)
             {
-                if (ppEnum == null)
+                if (ppEnum is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                     {
                         NextFromChildCollection(celt, rgVar, pCeltFetched, childCount);
                     }
-                    else if (owner.systemIEnumVariant == null)
+                    else if (owner.systemIEnumVariant is null)
                     {
                         NextEmpty(celt, rgVar, pCeltFetched);
                     }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                     NextFromSystem(celt, rgVar, pCeltFetched);
                 }
 
-                if (pCeltFetched == null)
+                if (pCeltFetched is null)
                 {
                     return HRESULT.S_OK;
                 }
@@ -145,7 +145,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextFromSystemReordered(uint celt, IntPtr rgVar, uint* pCeltFetched, int[] newOrder)
             {
-                if (owner.systemIEnumVariant == null)
+                if (owner.systemIEnumVariant is null)
                 {
                     return;
                 }

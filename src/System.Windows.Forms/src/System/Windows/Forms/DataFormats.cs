@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Text;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -223,7 +222,7 @@ namespace System.Windows.Forms
                 }
 
                 string name = User32.GetClipboardFormatNameW(clampedId);
-                if (name == null)
+                if (name is null)
                 {
                     // This can happen if windows adds a standard format that we don't know about,
                     // so we should play it safe.
@@ -241,7 +240,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void EnsureFormatSpace(int size)
         {
-            if (s_formatList == null || s_formatList.Length <= s_formatCount + size)
+            if (s_formatList is null || s_formatList.Length <= s_formatCount + size)
             {
                 int newSize = s_formatCount + 20;
 

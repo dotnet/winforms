@@ -184,7 +184,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (canShow && (propType == typeof(object) || (valueConverter == null && propType == typeof(Oleaut32.IDispatch))))
+            if (canShow && (propType == typeof(object) || (valueConverter is null && propType == typeof(Oleaut32.IDispatch))))
             {
                 typeHide = true;
             }
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.BaseAttributes, false);
 
-                    int baseCount = baseAttrs == null ? 0 : baseAttrs.Length;
+                    int baseCount = baseAttrs is null ? 0 : baseAttrs.Length;
 
                     ArrayList attrList = new ArrayList();
 
@@ -252,7 +252,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // if we are forcing a hide
                 if (typeHide && canShow)
                 {
-                    if (newAttributes == null)
+                    if (newAttributes is null)
                     {
                         newAttributes = new ArrayList(AttributeArray);
                     }
@@ -270,7 +270,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (hr.Succeeded())
                         {
                             // make it browsable
-                            if (newAttributes == null)
+                            if (newAttributes is null)
                             {
                                 newAttributes = new ArrayList(AttributeArray);
                             }
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     Attribute ma;
 
-                    if (attrList.Count != 0 && newAttributes == null)
+                    if (attrList.Count != 0 && newAttributes is null)
                     {
                         newAttributes = new ArrayList(AttributeArray);
                     }
@@ -440,7 +440,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                bool currentRefresh = !(displayName == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName));
+                bool currentRefresh = !(displayName is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName));
 
                 return currentRefresh;
             }
@@ -450,7 +450,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (events == null)
+                if (events is null)
                 {
                     events = new EventHandlerList();
                 }
@@ -555,7 +555,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                bool currentRefresh = !(converter == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter));
+                bool currentRefresh = !(converter is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter));
 
                 return currentRefresh;
             }
@@ -565,7 +565,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                bool currentRefresh = !(editor == null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor));
+                bool currentRefresh = !(editor is null || GetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor));
 
                 return currentRefresh;
             }
@@ -660,7 +660,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         private Com2DataTypeToManagedDataTypeConverter CreateOleTypeConverter(Type t)
         {
-            if (t == null)
+            if (t is null)
             {
                 return null;
             }
@@ -689,7 +689,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private TypeConverter GetBaseTypeConverter()
         {
-            if (PropertyType == null)
+            if (PropertyType is null)
             {
                 return new TypeConverter();
             }
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // if we didn't get one from the attribute, ask the type descriptor
-            if (localConverter == null)
+            if (localConverter is null)
             {
                 // we don't want to create the value editor for the IDispatch props because
                 // that will create the reference editor.  We don't want that guy!
@@ -737,7 +737,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            if (localConverter == null)
+            if (localConverter is null)
             {
                 localConverter = new TypeConverter();
             }
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         private object GetBaseTypeEditor(Type editorBaseType)
         {
-            if (PropertyType == null)
+            if (PropertyType is null)
             {
                 return null;
             }
@@ -781,7 +781,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
-            if (localEditor == null)
+            if (localEditor is null)
             {
                 localEditor = base.GetEditor(editorBaseType);
             }
@@ -811,7 +811,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return editor;
             }
 
-            if (PropertyType == null)
+            if (PropertyType is null)
             {
                 return null;
             }
@@ -842,7 +842,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public unsafe object GetNativeValue(object component)
         {
-            if (component == null)
+            if (component is null)
             {
                 return null;
             }
@@ -852,7 +852,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 component = ((ICustomTypeDescriptor)component).GetPropertyOwner(this);
             }
 
-            if (component == null || !Marshal.IsComObject(component) || !(component is Oleaut32.IDispatch))
+            if (component is null || !Marshal.IsComObject(component) || !(component is Oleaut32.IDispatch))
             {
                 return null;
             }
@@ -878,7 +878,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 case HRESULT.S_OK:
                 case HRESULT.S_FALSE:
 
-                    if (pVarResult[0] == null || Convert.IsDBNull(pVarResult[0]))
+                    if (pVarResult[0] is null || Convert.IsDBNull(pVarResult[0]))
                     {
                         lastValue = null;
                     }
@@ -945,12 +945,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             TypeConverter localConverter = typeConverter;
             object localEditor = typeEditor;
 
-            if (localConverter == null)
+            if (localConverter is null)
             {
                 localConverter = GetBaseTypeConverter();
             }
 
-            if (localEditor == null)
+            if (localEditor is null)
             {
                 localEditor = GetBaseTypeEditor(editorBaseType);
             }
@@ -985,12 +985,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // just in case one of the handlers removed our editor...
             //
-            if (localConverter == null)
+            if (localConverter is null)
             {
                 localConverter = GetBaseTypeConverter();
             }
 
-            if (localEditor == null)
+            if (localEditor is null)
             {
                 localEditor = GetBaseTypeEditor(editorBaseType);
             }
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 owner = ((ICustomTypeDescriptor)owner).GetPropertyOwner(this);
             }
 
-            if (owner == null || !Marshal.IsComObject(owner) || !(owner is Oleaut32.IDispatch))
+            if (owner is null || !Marshal.IsComObject(owner) || !(owner is Oleaut32.IDispatch))
             {
                 return;
             }
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                         }
                     }
-                    else if (errorInfo == null)
+                    else if (errorInfo is null)
                     {
                         StringBuilder strMessage = new StringBuilder(256);
 
@@ -1387,7 +1387,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         if (!pd.PropertyType.IsEnum)
                         {
                             Com2EnumConverter baseConverter = (Com2EnumConverter)GetWrappedConverter(typeof(Com2EnumConverter));
-                            if (baseConverter == null)
+                            if (baseConverter is null)
                             {
                                 return pd.GetDisplayValue((string)baseConversion);
                             }

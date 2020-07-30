@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                 DenyIfBoundAndNotCreated();
                 DenyIfWaitingForInitialization();
 
-                if (BoundPage == null)
+                if (BoundPage is null)
                 {
                     _checked = value;
                 }

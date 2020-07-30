@@ -66,11 +66,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (FormattedValueType == null)
+                if (FormattedValueType is null)
                 {
                     throw new ArgumentException(SR.DataGridViewCell_FormattedValueTypeNull);
                 }
-                if (value == null || !FormattedValueType.IsAssignableFrom(value.GetType()))
+                if (value is null || !FormattedValueType.IsAssignableFrom(value.GetType()))
                 {
                     // Assigned formatted value may not be of the good type, in cases where the app
                     // is feeding wrong values to the cell in virtual / databound mode.
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
 
         public virtual object GetEditingCellFormattedValue(DataGridViewDataErrorContexts context)
         {
-            if (FormattedValueType == null)
+            if (FormattedValueType is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCell_FormattedValueTypeNull);
             }
@@ -505,12 +505,12 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null || rowIndex < 0 || OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -564,14 +564,14 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                OwningColumn == null ||
+                OwningColumn is null ||
                 !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
@@ -684,12 +684,12 @@ namespace System.Windows.Forms
 
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -836,7 +836,7 @@ namespace System.Windows.Forms
 
         private void OnCommonContentClick(DataGridViewCellEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -864,7 +864,7 @@ namespace System.Windows.Forms
 
         protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -877,7 +877,7 @@ namespace System.Windows.Forms
 
         protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -901,7 +901,7 @@ namespace System.Windows.Forms
 
         protected override void OnLeave(int rowIndex, bool throughMouseClick)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -914,7 +914,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -927,7 +927,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseLeave(int rowIndex)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -953,7 +953,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseMove(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -989,7 +989,7 @@ namespace System.Windows.Forms
 
         protected override void OnMouseUp(DataGridViewCellMouseEventArgs e)
         {
-            if (DataGridView == null)
+            if (DataGridView is null)
             {
                 return;
             }
@@ -1032,7 +1032,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
@@ -1366,7 +1366,7 @@ namespace System.Windows.Forms
                                 fullSize.Width++;
                                 fullSize.Height++;
 
-                                if (checkImage == null || checkImage.Width != fullSize.Width || checkImage.Height != fullSize.Height)
+                                if (checkImage is null || checkImage.Width != fullSize.Width || checkImage.Height != fullSize.Height)
                                 {
                                     if (checkImage != null)
                                     {
@@ -1590,7 +1590,7 @@ namespace System.Windows.Forms
             TypeConverter formattedValueTypeConverter,
             TypeConverter valueTypeConverter)
         {
-            Debug.Assert(formattedValue == null || FormattedValueType == null || FormattedValueType.IsAssignableFrom(formattedValue.GetType()));
+            Debug.Assert(formattedValue is null || FormattedValueType is null || FormattedValueType.IsAssignableFrom(formattedValue.GetType()));
 
             if (formattedValue != null)
             {
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms
 
         private bool SwitchFormattedValue()
         {
-            if (FormattedValueType == null)
+            if (FormattedValueType is null)
             {
                 return false;
             }

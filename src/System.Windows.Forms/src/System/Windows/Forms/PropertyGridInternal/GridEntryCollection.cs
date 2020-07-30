@@ -19,7 +19,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void AddRange(GridEntry[] value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

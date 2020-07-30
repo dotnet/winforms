@@ -360,7 +360,7 @@ namespace System.Windows.Forms
             protected void StartTimer()
             {
                 _parent.OnStartTimer();
-                if (_timer == null)
+                if (_timer is null)
                 {
                     // Generates UpDown events
                     _timer = new Timer();
@@ -543,7 +543,7 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        if (_owner == null)
+                        if (_owner is null)
                         {
                             return base.RuntimeId;
                         }

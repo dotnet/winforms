@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void Add(Control value)
             {
-                if (value == null)
+                if (value is null)
                 {
                     return;
                 }
@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls)
             {
-                if (controls == null)
+                if (controls is null)
                 {
                     throw new ArgumentNullException(nameof(controls));
                 }
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
             /// </summary>
             private ArrayList FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, ArrayList foundControls)
             {
-                if ((controlsToLookIn == null) || (foundControls == null))
+                if ((controlsToLookIn is null) || (foundControls is null))
                 {
                     return null;
                 }
@@ -236,7 +236,7 @@ namespace System.Windows.Forms
                     // to the same parent close to each other.
                     for (int i = 0; i < controlsToLookIn.Count; i++)
                     {
-                        if (controlsToLookIn[i] == null)
+                        if (controlsToLookIn[i] is null)
                         {
                             continue;
                         }
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
                     {
                         for (int i = 0; i < controlsToLookIn.Count; i++)
                         {
-                            if (controlsToLookIn[i] == null)
+                            if (controlsToLookIn[i] is null)
                             {
                                 continue;
                             }
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
             public virtual void Remove(Control value)
             {
                 // Sanity check parameter
-                if (value == null)
+                if (value is null)
                 {
                     return;     // Don't do anything
                 }
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
             internal virtual void SetChildIndexInternal(Control child, int newIndex)
             {
                 // Sanity check parameters
-                if (child == null)
+                if (child is null)
                 {
                     throw new ArgumentNullException(nameof(child));
                 }

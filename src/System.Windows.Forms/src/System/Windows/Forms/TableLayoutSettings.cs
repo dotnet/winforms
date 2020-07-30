@@ -6,9 +6,7 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Layout;
 
@@ -255,7 +253,7 @@ namespace System.Windows.Forms
 
         public int GetColumnSpan(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -273,7 +271,7 @@ namespace System.Windows.Forms
 
         public void SetColumnSpan(object control, int value)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -301,7 +299,7 @@ namespace System.Windows.Forms
 
         public int GetRowSpan(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -319,7 +317,7 @@ namespace System.Windows.Forms
 
         public void SetRowSpan(object control, int value)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -353,7 +351,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetRow(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -377,7 +375,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetRow(object control, int row)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -397,7 +395,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -413,7 +411,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -429,7 +427,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetColumn(object control)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
@@ -453,7 +451,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetColumn(object control, int column)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }

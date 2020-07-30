@@ -4,10 +4,10 @@
 
 #nullable disable
 
-using System.Text;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CellTemplate == null)
+                if (CellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
@@ -134,7 +134,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CellTemplate == null)
+                if (CellTemplate is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }

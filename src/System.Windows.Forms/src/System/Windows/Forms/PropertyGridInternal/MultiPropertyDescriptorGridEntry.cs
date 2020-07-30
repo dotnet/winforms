@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (comp.Site != null)
                     {
-                        if (c == null)
+                        if (c is null)
                         {
                             c = comp.Site.Container;
                             continue;
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     foreach (object o in mergedPd.GetValues(objs))
                     {
-                        if (o == null)
+                        if (o is null)
                         {
                             fExpandable = false;
                             break;
@@ -124,7 +124,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(mergedPd.GetValues(objs), this, PropertySort, CurrentTab);
 
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps == null, "PropertyGridView: MergedProps returned null!");
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
                 if (mergedProps != null)
                 {
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             bool allEqual = true;
             try
             {
-                if (value == null && mergedPd.GetValue(objs, out allEqual) == null)
+                if (value is null && mergedPd.GetValue(objs, out allEqual) is null)
                 {
                     if (!allEqual)
                     {
@@ -221,7 +221,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 while (!(ge is PropertyDescriptorGridEntry) || OwnersEqual(owner, ge.GetValueOwner()))
                 {
                     ge = ge.ParentGridEntry;
-                    if (ge == null)
+                    if (ge is null)
                     {
                         break;
                     }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         try
                         {
-                            bool needChangeNotify = !(objects[0] is IComponent) || ((IComponent)objects[0]).Site == null;
+                            bool needChangeNotify = !(objects[0] is IComponent) || ((IComponent)objects[0]).Site is null;
                             if (needChangeNotify)
                             {
                                 if (!OnComponentChanging())
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         object[] objs = (object[])obj;
 
-                        if (_eventBindings == null)
+                        if (_eventBindings is null)
                         {
                             _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                         }

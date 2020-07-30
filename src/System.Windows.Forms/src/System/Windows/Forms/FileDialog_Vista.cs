@@ -230,7 +230,7 @@ namespace System.Windows.Forms
 
             public unsafe HRESULT OnShareViolation(IFileDialog pfd, IShellItem psi, FDESVR* pResponse)
             {
-                if (pResponse == null)
+                if (pResponse is null)
                 {
                     return HRESULT.E_POINTER;
                 }
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
 
             public unsafe HRESULT OnOverwrite(IFileDialog pfd, IShellItem psi, FDEOR* pResponse)
             {
-                if (pResponse == null)
+                if (pResponse is null)
                 {
                     return HRESULT.E_POINTER;
                 }

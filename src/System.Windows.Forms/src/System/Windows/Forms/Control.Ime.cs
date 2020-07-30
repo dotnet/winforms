@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Windows.Forms.Layout;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -834,7 +832,7 @@ namespace System.Windows.Forms
             Control topMostWinformsParent = TopMostParent;
             Form appForm = topMostWinformsParent as Form;
 
-            if ((appForm == null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
+            if ((appForm is null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
             {
                 // This means the winforms component container is not a WinForms host and it is no longer focused.
                 // Or it is not the main app host.
@@ -1440,7 +1438,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (imeModeConversionBits == null)
+                if (imeModeConversionBits is null)
                 {
                     // Create ImeModeConversionBits dictionary
                     imeModeConversionBits = new Dictionary<ImeMode, ImeModeConversion>(7);

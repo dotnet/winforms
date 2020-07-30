@@ -513,7 +513,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background)
         {
-            if (background == null)
+            if (background is null)
             {
                 Control.PaintBackground(e, bounds);
             }
@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
 
                 // Compute the final image and text bounds.
-                if (imageSize == Size.Empty || text == null || text.Length == 0 || textImageRelation == TextImageRelation.Overlay)
+                if (imageSize == Size.Empty || text is null || text.Length == 0 || textImageRelation == TextImageRelation.Overlay)
                 {
                     // Do not worry about text/image overlaying
                     Size textSize = GetTextSize(maxBounds.Size);
@@ -1464,7 +1464,7 @@ namespace System.Windows.Forms.ButtonInternal
                 focusOddEvenFixup = false,
                 font = Control.Font,
                 text = Control.Text,
-                imageSize = (Control.Image == null) ? Size.Empty : Control.Image.Size,
+                imageSize = (Control.Image is null) ? Size.Empty : Control.Image.Size,
                 checkSize = 0,
                 checkPaddingSize = 0,
                 checkAlign = ContentAlignment.TopLeft,

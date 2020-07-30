@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using static Interop;
@@ -578,12 +577,12 @@ namespace System.Windows.Forms
         /// </exception>
         public void Navigate(TaskDialogPage page)
         {
-            if (page == null)
+            if (page is null)
             {
                 throw new ArgumentNullException(nameof(page));
             }
 
-            if (BoundDialog == null)
+            if (BoundDialog is null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotNavigateWithoutDialog);
             }
@@ -645,7 +644,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogButton? GetBoundButtonByID(int buttonID)
         {
-            if (BoundDialog == null)
+            if (BoundDialog is null)
             {
                 throw new InvalidOperationException();
             }
@@ -672,7 +671,7 @@ namespace System.Windows.Forms
 
         internal TaskDialogRadioButton? GetBoundRadioButtonByID(int buttonID)
         {
-            if (BoundDialog == null)
+            if (BoundDialog is null)
             {
                 throw new InvalidOperationException();
             }
@@ -897,7 +896,7 @@ namespace System.Windows.Forms
 
         internal void Unbind()
         {
-            if (BoundDialog == null)
+            if (BoundDialog is null)
             {
                 throw new InvalidOperationException();
             }

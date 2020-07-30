@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             protected State(SerializationInfo info, StreamingContext context)
             {
                 SerializationInfoEnumerator sie = info.GetEnumerator();
-                if (sie == null)
+                if (sie is null)
                 {
                     return;
                 }
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
 
             private void CreateStorage()
             {
-                Debug.Assert(storage == null, "but we already have a storage!!!");
+                Debug.Assert(storage is null, "but we already have a storage!!!");
                 IntPtr hglobal = IntPtr.Zero;
                 if (buffer != null)
                 {
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
                 try
                 {
                     iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
-                    if (buffer == null)
+                    if (buffer is null)
                     {
                         storage = Ole32.StgCreateDocfileOnILockBytes(
                             iLockBytes,
@@ -196,7 +196,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception)
                 {
-                    if (iLockBytes == null && hglobal != IntPtr.Zero)
+                    if (iLockBytes is null && hglobal != IntPtr.Zero)
                     {
                         Kernel32.GlobalFree(hglobal);
                     }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
 
             internal Ole32.IStorage GetStorage()
             {
-                if (storage == null)
+                if (storage is null)
                 {
                     CreateStorage();
                 }
@@ -226,10 +226,10 @@ namespace System.Windows.Forms
 
             internal Ole32.IStream GetStream()
             {
-                if (ms == null)
+                if (ms is null)
                 {
                     Debug.Assert(buffer != null, "gotta have the buffer already...");
-                    if (buffer == null)
+                    if (buffer is null)
                     {
                         return null;
                     }
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(storage != null, "how can we not have a storage object?");
                 Debug.Assert(iLockBytes != null, "how can we have a storage w/o ILockBytes?");
-                if (storage == null || iLockBytes == null)
+                if (storage is null || iLockBytes is null)
                 {
                     return null;
                 }

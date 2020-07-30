@@ -6,11 +6,11 @@
 
 namespace System.Windows.Forms
 {
-    using System.Drawing;
-    using System.Windows.Forms.Layout;
     using System.Collections;
     using System.Diagnostics;
+    using System.Drawing;
     using System.Globalization;
+    using System.Windows.Forms.Layout;
 
     ///  this class is a container for toolstrips on a rafting row.
     ///  you can set layout styles on this container all day long and not
@@ -48,11 +48,11 @@ namespace System.Windows.Forms
 
             ToolStripPanelRow = parent;
             _wrappedToolStrip = control as ToolStrip;
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
-            else if (_wrappedToolStrip == null)
+            else if (_wrappedToolStrip is null)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void OnToolStripLocationChanging(object sender, ToolStripLocationCancelEventArgs e)
         {
-            if (ToolStripPanelRow == null)
+            if (ToolStripPanelRow is null)
             {
                 return;
             }

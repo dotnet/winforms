@@ -45,7 +45,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_oleComponents == null)
+                    if (_oleComponents is null)
                     {
                         _oleComponents = new Dictionary<UIntPtr, ComponentHashtableEntry>();
                     }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 MSOCRINFO* pcrinfo,
                 UIntPtr* pdwComponentID)
             {
-                if (pcrinfo == null || pdwComponentID == null
+                if (pcrinfo is null || pdwComponentID is null
                     || pcrinfo->cbSize < sizeof(MSOCRINFO))
                 {
                     return BOOL.FALSE;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                 MSOCRINFO* pcrinfo)
             {
                 // Update the registration info
-                if (pcrinfo == null
+                if (pcrinfo is null
                     || !OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
                     return BOOL.FALSE;
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
                     _ => null
                 };
 
-                if (component == null)
+                if (component is null)
                     return BOOL.FALSE;
 
                 if (pcrinfo != null)

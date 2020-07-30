@@ -326,7 +326,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_linkCollection == null)
+                if (_linkCollection is null)
                 {
                     _linkCollection = new LinkCollection(this);
                 }
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (g == null)
+                    if (g is null)
                     {
                         g = created = CreateGraphicsInternal();
                     }
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool IsOneLink()
         {
-            if (_links == null || _links.Count != 1 || Text == null)
+            if (_links is null || _links.Count != 1 || Text is null)
             {
                 return false;
             }
@@ -840,7 +840,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                if (link == null || link.VisualRegion == null || IsOneLink())
+                if (link is null || link.VisualRegion is null || IsOneLink())
                 {
                     Invalidate();
                 }
@@ -923,7 +923,7 @@ namespace System.Windows.Forms
             try
             {
                 Link focusLink = FocusLink;
-                if (focusLink == null)
+                if (focusLink is null)
                 {
                     // Set focus on first link.
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
@@ -1572,7 +1572,7 @@ namespace System.Windows.Forms
         {
             // If a link is not currently focused, focus on the first link
             //
-            if (FocusLink == null && Links.Count > 0)
+            if (FocusLink is null && Links.Count > 0)
             {
                 string text = Text;
                 foreach (Link link in Links)
@@ -2362,7 +2362,7 @@ namespace System.Windows.Forms
                 _owner.InvalidateTextLayout();
                 _owner.Invalidate();
 
-                if (_owner.FocusLink == null && _owner._links.Count > 0)
+                if (_owner.FocusLink is null && _owner._links.Count > 0)
                 {
                     _owner.FocusLink = (Link)_owner._links[0];
                 }
@@ -2647,11 +2647,11 @@ namespace System.Windows.Forms
 
                     // Make sure we have a region for this link
                     //
-                    if (region == null)
+                    if (region is null)
                     {
                         _link.Owner.EnsureRun(g);
                         region = _link.VisualRegion;
-                        if (region == null)
+                        if (region is null)
                         {
                             g.Dispose();
                             return Rectangle.Empty;

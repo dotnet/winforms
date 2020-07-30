@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (s_instance == null)
+                if (s_instance is null)
                 {
                     s_instance = new KeyboardToolTipStateMachine();
                 }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
             if (IsToolTracked(sender) && sender.ShowsOwnToolTip())
             {
                 Transit(SmEvent.LeftTool, sender);
-                if (_currentTool == null)
+                if (_currentTool is null)
                 {
                     _lastFocusedTool.SetTarget(null);
                 }
@@ -238,7 +238,7 @@ namespace System.Windows.Forms
             try
             {
                 ToolTip toolTip = _toolToTip[source];
-                if ((_currentTool == null || _currentTool.CanShowToolTipsNow()) && toolTip != null)
+                if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip != null)
                 {
                     _currentState = Transition(source, toolTip, @event);
                 }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
 
         private void Reset(ToolTip toolTipToReset)
         {
-            if (toolTipToReset == null || (_currentTool != null && _toolToTip[_currentTool] == toolTipToReset))
+            if (toolTipToReset is null || (_currentTool != null && _toolToTip[_currentTool] == toolTipToReset))
             {
                 FullFsmReset();
             }

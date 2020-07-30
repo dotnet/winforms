@@ -79,7 +79,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolTip(IContainer cont) : this()
         {
-            if (cont == null)
+            if (cont is null)
             {
                 throw new ArgumentNullException(nameof(cont));
             }
@@ -464,7 +464,7 @@ namespace System.Windows.Forms
             get => _toolTipTitle;
             set
             {
-                if (value == null)
+                if (value is null)
                 {
                     value = string.Empty;
                 }
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
                     }
 
                     // In the designer, baseVar can be null since the Parent is not a TopLevel control
-                    if (baseVar == null)
+                    if (baseVar is null)
                     {
                         if (ctl != null && ctl.ParentInternal != null)
                         {
@@ -874,7 +874,7 @@ namespace System.Windows.Forms
                 SetToolInfo(ctl, caption);
                 _created[ctl] = ctl;
             }
-            if (ctl.IsHandleCreated && _topLevelControl == null)
+            if (ctl.IsHandleCreated && _topLevelControl is null)
             {
                 // Remove first to purge any duplicates.
                 ctl.MouseMove -= new MouseEventHandler(MouseMove);
@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string GetToolTip(Control control)
         {
-            if (control == null)
+            if (control is null)
             {
                 return string.Empty;
             }
@@ -1091,7 +1091,7 @@ namespace System.Windows.Forms
                 else
                 {
                     baseVar = Control.FromHandle(found);
-                    if (baseVar == null)
+                    if (baseVar is null)
                     {
                         baseVar = Control.FromChildHandle(found);
                         if (baseVar != null)
@@ -1226,13 +1226,13 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetToolTipInternal(Control control, TipInfo info)
         {
-            if (control == null)
+            if (control is null)
             {
                 throw new ArgumentNullException(nameof(control));
             }
 
             bool exists = _tools.ContainsKey(control);
-            bool empty = info == null || string.IsNullOrEmpty(info.Caption);
+            bool empty = info is null || string.IsNullOrEmpty(info.Caption);
             if (exists && empty)
             {
                 _tools.Remove(control);
@@ -1305,7 +1305,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowTooltip(string text, IWin32Window window, int duration)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms
                 else
                 {
                     TipInfo tt = (TipInfo)_tools[associatedControl];
-                    if (tt == null)
+                    if (tt is null)
                     {
                         tt = new TipInfo(text, TipInfo.Type.SemiAbsolute);
                     }
@@ -1393,7 +1393,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int duration)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -1413,7 +1413,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, Point point)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, Point point, int duration)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int x, int y)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -1484,7 +1484,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int x, int y, int duration)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -1507,7 +1507,7 @@ namespace System.Windows.Forms
 
         internal void ShowKeyboardToolTip(string text, IKeyboardToolTip tool, int duration)
         {
-            if (tool == null)
+            if (tool is null)
             {
                 throw new ArgumentNullException(nameof(tool));
             }
@@ -1739,12 +1739,12 @@ namespace System.Windows.Forms
         /// </summary>
         public void Hide(IWin32Window win)
         {
-            if (win == null)
+            if (win is null)
             {
                 throw new ArgumentNullException(nameof(win));
             }
 
-            if (_window == null)
+            if (_window is null)
             {
                 return;
             }
@@ -1822,7 +1822,7 @@ namespace System.Windows.Forms
                 }
 
                 TipInfo tt = (TipInfo)_tools[tool];
-                if (tt == null)
+                if (tt is null)
                 {
                     tt = new TipInfo(text, type);
                 }
@@ -1844,7 +1844,7 @@ namespace System.Windows.Forms
                 // Need to do this BEFORE we call GetWinTOOLINFO, since it relies on the tools array to be populated
                 // in order to find the toplevelparent.
                 TipInfo tt = (TipInfo)_tools[tool];
-                if (tt == null)
+                if (tt is null)
                 {
                     tt = new TipInfo(text, type);
                 }
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void StartTimer(IWin32Window owner, int interval)
         {
-            if (_timer == null)
+            if (_timer is null)
             {
                 _timer = new ToolTipTimer(owner);
                 // Add the timer handler
@@ -1989,11 +1989,11 @@ namespace System.Windows.Forms
         private void WmMove()
         {
             IWin32Window window = GetCurrentToolWindow();
-            if (window == null)
+            if (window is null)
                 return;
 
             TipInfo tt = (TipInfo)_tools[window];
-            if (window == null || tt == null)
+            if (window is null || tt is null)
             {
                 return;
             }
@@ -2023,7 +2023,7 @@ namespace System.Windows.Forms
         private void WmMouseActivate(ref Message msg)
         {
             IWin32Window window = GetCurrentToolWindow();
-            if (window == null)
+            if (window is null)
                 return;
 
             var r = new RECT();
@@ -2055,7 +2055,7 @@ namespace System.Windows.Forms
         private void WmShow()
         {
             IWin32Window window = GetCurrentToolWindow();
-            if (window == null)
+            if (window is null)
                 return;
 
             // Get the bounds.
@@ -2171,7 +2171,7 @@ namespace System.Windows.Forms
                 if (window != null)
                 {
                     tt = (TipInfo)_tools[window];
-                    if (tt == null)
+                    if (tt is null)
                     {
                         return;
                     }
@@ -2246,12 +2246,12 @@ namespace System.Windows.Forms
         private void WmPop()
         {
             IWin32Window window = GetCurrentToolWindow();
-            if (window == null)
+            if (window is null)
                 return;
 
             Control control = window as Control;
             TipInfo tt = (TipInfo)_tools[window];
-            if (tt == null)
+            if (tt is null)
             {
                 return;
             }

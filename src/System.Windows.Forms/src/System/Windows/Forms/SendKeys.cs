@@ -763,7 +763,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void AddCancelModifiersForPreviousEvents(SKEvent[] previousEvents)
         {
-            if (previousEvents == null)
+            if (previousEvents is null)
             {
                 return;
             }
@@ -936,7 +936,7 @@ namespace System.Windows.Forms
             ParseKeys(keys, (control != null) ? control.Handle : IntPtr.Zero);
 
             // If there weren't any events posted as a result, we're done!
-            if (s_events == null)
+            if (s_events is null)
             {
                 return;
             }
@@ -1121,7 +1121,7 @@ namespace System.Windows.Forms
                             {
                                 s_events.Dequeue();
                             }
-                            s_stopHook = s_events == null || s_events.Count == 0;
+                            s_stopHook = s_events is null || s_events.Count == 0;
                             break;
                         }
 

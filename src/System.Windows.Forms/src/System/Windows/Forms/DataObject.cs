@@ -16,8 +16,8 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using static Interop;
+using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
         public virtual object GetData(Type format)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format?.FullName ?? "(null)");
-            if (format == null)
+            if (format is null)
             {
                 return null;
             }
@@ -195,7 +195,7 @@ namespace System.Windows.Forms
         public virtual bool GetDataPresent(Type format)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format?.FullName ?? "(null)");
-            if (format == null)
+            if (format is null)
             {
                 return false;
             }
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
         public virtual void SetAudio(byte[] audioBytes)
         {
-            if (audioBytes == null)
+            if (audioBytes is null)
             {
                 throw new ArgumentNullException(nameof(audioBytes));
             }
@@ -341,7 +341,7 @@ namespace System.Windows.Forms
 
         public virtual void SetAudio(Stream audioStream)
         {
-            if (audioStream == null)
+            if (audioStream is null)
             {
                 throw new ArgumentNullException(nameof(audioStream));
             }
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
 
         public virtual void SetFileDropList(StringCollection filePaths)
         {
-            if (filePaths == null)
+            if (filePaths is null)
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
 
         public virtual void SetImage(Image image)
         {
-            if (image == null)
+            if (image is null)
             {
                 throw new ArgumentNullException(nameof(image));
             }
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string[] GetMappedFormats(string format)
         {
-            if (format == null)
+            if (format is null)
             {
                 return null;
             }
@@ -870,7 +870,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe HRESULT SaveFileListToHandle(IntPtr handle, string[] files)
         {
-            if (files == null || files.Length == 0)
+            if (files is null || files.Length == 0)
             {
                 return HRESULT.S_OK;
             }
@@ -965,7 +965,7 @@ namespace System.Windows.Forms
                 }
 
                 char* ptr = (char*)Kernel32.GlobalLock(newHandle);
-                if (ptr == null)
+                if (ptr is null)
                 {
                     return HRESULT.E_OUTOFMEMORY;
                 }
@@ -989,7 +989,7 @@ namespace System.Windows.Forms
                     }
 
                     byte* ptr = (byte*)Kernel32.GlobalLock(newHandle);
-                    if (ptr == null)
+                    if (ptr is null)
                     {
                         return HRESULT.E_OUTOFMEMORY;
                     }
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms
             }
 
             byte* ptr = (byte*)Kernel32.GlobalLock(newHandle);
-            if (ptr == null)
+            if (ptr is null)
             {
                 return HRESULT.E_OUTOFMEMORY;
             }

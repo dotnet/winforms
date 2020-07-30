@@ -363,7 +363,7 @@ namespace System.Windows.Forms
                 part = VisualStyleElement.Button.GroupBox.HighContrastDisabledPart;
             }
 
-            if (t_visualStyleRenderer == null)
+            if (t_visualStyleRenderer is null)
             {
                 t_visualStyleRenderer = new VisualStyleRenderer(s_groupBoxElement.ClassName, part, state);
             }
