@@ -50,6 +50,9 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
+            if (dc.IsNull)
+                throw new ArgumentNullException(nameof(dc));
+
             _hdc = dc;
             _graphics = null;
             _oldPalette = default;
