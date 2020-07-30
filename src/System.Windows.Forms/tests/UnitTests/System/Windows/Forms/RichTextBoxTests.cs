@@ -2568,7 +2568,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(64000, 0)]
         [InlineData(0x7FFFFFFE, 0)]
         [InlineData(int.MaxValue, 0)]
-        public void RichTextBox_RightMargin_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value,  int expectedCreatedCallCount)
+        public void RichTextBox_RightMargin_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value, int expectedCreatedCallCount)
         {
             using var control = new RichTextBox
             {
@@ -8077,13 +8077,13 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, -1 };
 
             yield return new object[] { "abc", Array.Empty<char>(), 0, -1 };
-            yield return new object[] { "abc", new char[] { 'a' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'c', 'b' },0,  1 };
-            yield return new object[] { "abc", new char[] { 'b' },0,  1 };
+            yield return new object[] { "abc", new char[] { 'a' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b' }, 0, 1 };
+            yield return new object[] { "abc", new char[] { 'b' }, 0, 1 };
             yield return new object[] { "abc", new char[] { 'd' }, 0, -1 };
             yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, -1 };
 
@@ -8121,13 +8121,13 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, end, -1 };
 
                 yield return new object[] { "abc", Array.Empty<char>(), 0, end, -1 };
-                yield return new object[] { "abc", new char[] { 'a' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'c', 'b' },0, end,  1 };
-                yield return new object[] { "abc", new char[] { 'b' },0, end,  1 };
+                yield return new object[] { "abc", new char[] { 'a' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b' }, 0, end, 1 };
+                yield return new object[] { "abc", new char[] { 'b' }, 0, end, 1 };
                 yield return new object[] { "abc", new char[] { 'd' }, 0, end, -1 };
                 yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, end, -1 };
 
@@ -10384,11 +10384,21 @@ namespace System.Windows.Forms.Tests
 
         public class SubRichTextBox : RichTextBox
         {
+            public SubRichTextBox()
+            {
+                CustomCreateParams = base.CreateParams;
+            }
+
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
 
-            public new CreateParams CreateParams => base.CreateParams;
+            public CreateParams CustomCreateParams;
+
+            public new CreateParams CreateParams
+            {
+                get => CustomCreateParams;
+            }
 
             public new Cursor DefaultCursor => base.DefaultCursor;
 
@@ -10461,6 +10471,108 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private const int MaxClassName = 256;
+        static string GetClassName(IntPtr hWnd)
+        {
+            StringBuilder sb = new StringBuilder(MaxClassName);
+            UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), sb, MaxClassName);
+            return sb.ToString();
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_CheckDefaultNativeControlVersions()
+        {
+            var rtb = new RichTextBox();
+            rtb.CreateControl();
+            Assert.Contains("RichEdit50W", GetClassName(rtb.Handle), StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_CheckRichEditWithVersionCanCreateAllVersions()
+        {
+            var rtb1 = new RichEditWithVersion("riched32.dll", "RichEdit");
+            rtb1.CreateControl();
+            Assert.Contains(".RichEdit.", GetClassName(rtb1.Handle), StringComparison.InvariantCultureIgnoreCase);
+            rtb1.Dispose();
+
+            var rtb2 = new RichEditWithVersion("riched20.dll", "RichEdit20W");
+            rtb2.CreateControl();
+            Assert.Contains(".RichEdit20W.", GetClassName(rtb2.Handle), StringComparison.InvariantCultureIgnoreCase);
+            rtb2.Dispose();
+
+            var rtb4 = new RichEditWithVersion("msftedit.dll", "RichEdit50W");
+            rtb4.CreateControl();
+            Assert.Contains(".RichEdit50W.", GetClassName(rtb4.Handle), StringComparison.InvariantCultureIgnoreCase);
+            rtb4.Dispose();
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_HiddenTextOnlyAffectsRtf()
+        {
+            string rtfString = @"{\rtf1\ansi{" +
+                @"The next line\par " +
+                @"is {\v ###NOT### }hidden\par in plain text!}}";
+
+            var rtb = new RichTextBox();
+            rtb.CreateControl();
+            rtb.Rtf = rtfString;
+
+            var rtb2 = new RichEditWithVersion("RichEd20.dll", "RichEdit20W"); // RichEdit 2/3 performed correctly
+            rtb2.CreateControl();
+            rtb2.Rtf = rtfString;
+
+            Assert.Equal(rtb2.TextLength, rtb.TextLength);
+            Assert.Equal(rtb2.Text, rtb.Text);
+            Assert.Equal(rtb.Text.Length, rtb.TextLength);
+
+            int indexOfHidden = rtb.Text.IndexOf("hidden");
+            rtb.Select(indexOfHidden, "hidden".Length);
+            Assert.Equal("hidden", rtb.SelectedText);
+        }
+
+        private class RichEditWithVersion : RichTextBox
+        {
+            public RichEditWithVersion(string nativeDll, string windowClassName)
+            {
+                this.nativeDll = nativeDll;
+                this.windowClassName = windowClassName;
+            }
+
+            private IntPtr _nativeDllHandle = IntPtr.Zero;
+            protected string nativeDll;
+            protected string windowClassName;
+
+            protected override CreateParams CreateParams
+            {
+                get
+                {
+                    CreateParams cp = base.CreateParams;
+
+                    if (_nativeDllHandle == IntPtr.Zero &&
+                        !string.IsNullOrEmpty(nativeDll)) // CreateParams is called in the base class constructor, before nativeDll is assigned.
+                    {
+                        _nativeDllHandle = NativeLibrary.Load(nativeDll);
+                    }
+
+                    if (!string.IsNullOrEmpty(windowClassName))
+                    {
+                        cp.ClassName = windowClassName;
+                    }
+
+                    return cp;
+                }
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+                if (_nativeDllHandle != IntPtr.Zero)
+                {
+                    NativeLibrary.Free(_nativeDllHandle);
+                }
+            }
         }
     }
 }
