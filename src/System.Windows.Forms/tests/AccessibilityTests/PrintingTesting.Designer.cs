@@ -89,7 +89,7 @@
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(75, 23);
             this.btnSetting.TabIndex = 2;
-            this.btnSetting.Text = "Setting";
+            this.btnSetting.Text = "&Setting";
             this.btnSetting.UseVisualStyleBackColor = true;
             this.btnSetting.Click += new System.EventHandler(this.BtnSetting_Click);
             // 
@@ -99,7 +99,7 @@
             this.btnPreView.Name = "btnPreView";
             this.btnPreView.Size = new System.Drawing.Size(75, 23);
             this.btnPreView.TabIndex = 3;
-            this.btnPreView.Text = "Preview";
+            this.btnPreView.Text = "P&review";
             this.btnPreView.UseVisualStyleBackColor = true;
             this.btnPreView.Click += new System.EventHandler(this.BtnPreView_Click);
             // 
@@ -109,7 +109,7 @@
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(75, 23);
             this.btnPrint.TabIndex = 4;
-            this.btnPrint.Text = "Print";
+            this.btnPrint.Text = "&Print";
             this.btnPrint.UseVisualStyleBackColor = true;
             this.btnPrint.Click += new System.EventHandler(this.BtnPrint_Click);
             // 
@@ -119,7 +119,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(89, 23);
             this.button1.TabIndex = 6;
-            this.button1.Text = "PreviewControl";
+            this.button1.Text = "Preview &Control";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -130,7 +130,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 7;
-            this.label2.Text = "label2:";
+            this.label2.Text = "View your page:";
             // 
             // printPreviewControl1
             // 
@@ -139,7 +139,7 @@
             this.printPreviewControl1.Location = new System.Drawing.Point(15, 93);
             this.printPreviewControl1.Name = "printPreviewControl1";
             this.printPreviewControl1.Size = new System.Drawing.Size(332, 405);
-            this.printPreviewControl1.TabIndex = 8;
+            this.printPreviewControl1.TabStop = false;
             this.printPreviewControl1.Zoom = 0.36454545454545456D;
             // 
             // PrintingTesting
