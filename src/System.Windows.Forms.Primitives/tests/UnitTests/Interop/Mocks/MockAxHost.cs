@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
 
         public static Image? GetPictureFromIPictureDisp(object picture)
         {
-            if (picture == null)
+            if (picture is null)
             {
                 return null;
             }
