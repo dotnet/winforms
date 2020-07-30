@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
                 }
                 catch (Exception ex)
                 {
-                    Assert.True(ex == null, "Expected no exception, but got: " + ex.Message); // Actually need to check whether GC.Collect() does not throw exception.
+                    Assert.True(ex is null, "Expected no exception, but got: " + ex.Message); // Actually need to check whether GC.Collect() does not throw exception.
                 }
             });
 
