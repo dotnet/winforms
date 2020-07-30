@@ -97,5 +97,11 @@ internal static partial class Interop
                 return SendMessageW(hWnd, Msg, wParam, (IntPtr)l);
             }
         }
+
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern int SendMessageW(IntPtr hWnd, EM msg, ref Richedit.GETTEXTEX gettext, IntPtr lpar);
+
+        [DllImport(Libraries.User32, ExactSpelling = true)]
+        public static extern uint SendMessageW(IntPtr hWnd, EM msg, ref Richedit.GETTEXTLENGTHEX gettext, int lpar = 0);
     }
 }

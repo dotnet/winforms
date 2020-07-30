@@ -10559,9 +10559,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(rtb2.Text, rtb.Text);
             Assert.Equal(rtb.Text.Length, rtb.TextLength);
 
-            int indexOfHidden = rtb.Text.IndexOf("hidden");
-            rtb.Select(indexOfHidden, "hidden".Length);
-            Assert.Equal("hidden", rtb.SelectedText);
+            int startOfIs = rtb2.Text.IndexOf("is");
+            int endOfHidden = rtb2.Text.IndexOf("hidden")+"hidden".Length;
+            rtb.Select(startOfIs, endOfHidden-startOfIs);
+            Assert.Equal("is ###NOT### hidden", rtb.SelectedText);
         }
     }
 }

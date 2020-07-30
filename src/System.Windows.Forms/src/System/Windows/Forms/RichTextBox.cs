@@ -1343,9 +1343,7 @@ namespace System.Windows.Forms
             get
             {
                 ForceHandleCreate();
-
-                string text = StreamOut(SF.F_SELECTION | SF.TEXT | SF.UNICODE);
-                return text;
+                return GetTextEx(GT.SELECTION);
             }
             set
             {
@@ -1443,7 +1441,7 @@ namespace System.Windows.Forms
                     //
                     ForceHandleCreate();
 
-                    return StreamOut(SF.TEXT | SF.UNICODE);
+                    return GetTextEx();
                 }
             }
             set
@@ -3135,6 +3133,40 @@ namespace System.Windows.Forms
                 // release any storage space held.
                 editStream = null;
             }
+        }
+
+        private string GetTextEx(GT flags = GT.DEFAULT)
+        {
+            GETTEXTLENGTHEX gtl = new GETTEXTLENGTHEX
+            {
+                codepage = 1200, // Unicode
+                flags = GTL.DEFAULT
+            };
+
+            uint numChars = User32.SendMessageW(Handle, User32.EM.GETTEXTLENGTHEX, ref gtl, 0);
+            if (numChars == 0x80070057) // E_INVALIDARG
+                throw new Win32Exception(unchecked((int)0x80070057));
+
+            numChars++; // buffer has to have enough space for final \0. Without this, the last character is missing!
+            // in case flags contains GT_SELECTION we'll allocate too much memory (for the whole text and not just the selection),
+            // but there's no appropriate flag for EM_GETTEXTLENGTHEX
+
+            GETTEXTEX gt = new GETTEXTEX
+            {
+                cb = (short)(numChars * 2),
+                flags = flags,
+                codepage = 1200, // Unicode
+                lpDefaultChar = IntPtr.Zero,
+                lpUsedDefChar = IntPtr.Zero
+            };
+
+            IntPtr buf = Marshal.AllocHGlobal(gt.cb);
+            User32.SendMessageW(Handle, User32.EM.GETTEXTEX, ref gt, buf);
+
+            string txt = Marshal.PtrToStringUni(buf);
+            Marshal.FreeHGlobal(buf);
+
+            return txt;
         }
 
         private void UpdateOleCallback()
