@@ -969,15 +969,11 @@ namespace System.Windows.Forms
             set => base.Visible = value;
         }
 
-        // internally we use not so we don't have to initialize it.
+        // internally we store the negated value so we don't have to initialize it.
         internal bool WorkingAreaConstrained
         {
-            get => true;
-            set
-            {
-                bool notConstrained = !value;
-                state[stateNotWorkingAreaConstrained] = !value;
-            }
+            get => !state[stateNotWorkingAreaConstrained];
+            set => state[stateNotWorkingAreaConstrained] = !value;
         }
 
         internal void AssignToDropDownItem()

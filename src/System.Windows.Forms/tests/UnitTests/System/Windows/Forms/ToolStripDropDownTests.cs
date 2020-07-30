@@ -4912,6 +4912,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
         }
 
+        [WinFormsFact]
+        public void ToolStripDropDown_WorkingAreaConstrained_DefaultValueTest()
+        {
+            using var control = new ToolStripDropDown();
+            Assert.True(control.WorkingAreaConstrained);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStripDropDown_WorkingAreaConstrained_AssignmentTest(bool value)
+        {
+            using var control = new ToolStripDropDown();
+            control.WorkingAreaConstrained = value;
+            Assert.Equal(value, control.WorkingAreaConstrained);
+        }
+
         private class SubAxHost : AxHost
         {
             public SubAxHost(string clsid) : base(clsid)
