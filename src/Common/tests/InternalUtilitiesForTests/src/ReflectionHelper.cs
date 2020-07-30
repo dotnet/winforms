@@ -7,15 +7,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace InternalUtilitiesForTests.src
+namespace System
 {
     public static class ReflectionHelper
     {
-        public static IEnumerable<object[]> GetDerivedPublicNotAbstractClasses<T>()
+        public static IEnumerable<object[]> GetPublicNotAbstractClasses<T>()
         {
             var types = typeof(T).Assembly.GetTypes().Where(type => IsPublicNonAbstract<T>(type));
             foreach (var type in types)
             {
+                if (type.GetConstructor(
+                bindingAttr: BindingFlags.Public | BindingFlags.Instance,
+                binder: null,
+                types: Array.Empty<Type>(),
+                modifiers: null) == null)
+                {
+                    continue;
+                }
+                
                 yield return new object[] { type };
             }
         }

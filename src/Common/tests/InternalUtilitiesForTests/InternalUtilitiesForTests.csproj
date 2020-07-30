@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>InternalUtilitiesForTests</AssemblyName> 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>System</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

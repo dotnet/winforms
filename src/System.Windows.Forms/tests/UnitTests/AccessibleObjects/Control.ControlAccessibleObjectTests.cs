@@ -3,20 +3,19 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using InternalUtilitiesForTests.src;
 using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class Control_ControlAccessibleObjectTests
     {
-        public static IEnumerable<object[]> ControlObject_TestData()
+        public static IEnumerable<object[]> ControlAccessibleObject_TestData()
         {
-            return ReflectionHelper.GetDerivedPublicNotAbstractClasses<Control>();
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>();
         }
 
         [StaTheory]
-        [MemberData(nameof(ControlObject_TestData))]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
@@ -35,7 +34,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [StaTheory]
-        [MemberData(nameof(ControlObject_TestData))]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
@@ -53,7 +52,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [StaTheory]
-        [MemberData(nameof(ControlObject_TestData))]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
@@ -72,8 +71,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [StaTheory]
-        [MemberData(nameof(ControlObject_TestData))]
-        public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
@@ -84,8 +83,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             control.Name = "Name1";
             control.AccessibleName = "Test Name";
-
             AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
             var accessibleName = controlAccessibleObject.GetPropertyValue(NativeMethods.UIA_NamePropertyId);
 
             Assert.Equal("Test Name", accessibleName);

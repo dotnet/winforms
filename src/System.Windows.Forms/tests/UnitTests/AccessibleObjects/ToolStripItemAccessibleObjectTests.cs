@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using InternalUtilitiesForTests.src;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -39,13 +38,13 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("ownerItem", () => new ToolStripItem.ToolStripItemAccessibleObject(null));
         }
 
-        public static IEnumerable<object[]> ToolStripItemObject_TestData()
+        public static IEnumerable<object[]> ToolStripItemAccessibleObject_TestData()
         {
-            return ReflectionHelper.GetDerivedPublicNotAbstractClasses<ToolStripItem>();
+            return ReflectionHelper.GetPublicNotAbstractClasses<ToolStripItem>();
         }
 
         [Theory]
-        [MemberData(nameof(ToolStripItemObject_TestData))]
+        [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
@@ -61,8 +60,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
         }
 
-        [Theory]
-        [MemberData(nameof(ToolStripItemObject_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
         public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
@@ -77,8 +76,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(supportsLegacyIAccessiblePatternId);
         }
 
-        [Theory]
-        [MemberData(nameof(ToolStripItemObject_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
@@ -95,8 +94,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Test Accessible Description", accessibleObjectDescription);
         }
 
-        [Theory]
-        [MemberData(nameof(ToolStripItemObject_TestData))]
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
         public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
