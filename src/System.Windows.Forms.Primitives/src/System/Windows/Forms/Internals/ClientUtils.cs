@@ -4,7 +4,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 
@@ -177,7 +176,7 @@ namespace System.Windows.Forms
         {
             Type t = value.GetType();
 
-            if (enumValueInfo == null)
+            if (enumValueInfo is null)
             {
                 enumValueInfo = new Hashtable();
             }
@@ -188,7 +187,7 @@ namespace System.Windows.Forms
             {
                 sequentialEnumInfo = enumValueInfo[t] as SequentialEnumInfo;
             }
-            if (sequentialEnumInfo == null)
+            if (sequentialEnumInfo is null)
             {
                 sequentialEnumInfo = new SequentialEnumInfo(t);
 

@@ -15,7 +15,7 @@ internal static partial class Interop
 
         public static uint DragQueryFileW(IntPtr hDrop, uint iFile, StringBuilder? lpszFile)
         {
-            if (lpszFile == null || lpszFile.Capacity == 0 || iFile == 0xFFFFFFFF)
+            if (lpszFile is null || lpszFile.Capacity == 0 || iFile == 0xFFFFFFFF)
             {
                 return DragQueryFileWInternal(hDrop, iFile, null, 0);
             }

@@ -5,7 +5,6 @@
 using System;
 using System.Buffers;
 using System.IO;
-using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
@@ -152,7 +151,7 @@ internal static partial class Interop
                         break;
                 }
 
-                if (plibNewPosition == null)
+                if (plibNewPosition is null)
                     return;
 
                 if (_virtualPosition != -1)

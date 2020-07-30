@@ -50,7 +50,7 @@ namespace System.Windows.Forms
                 }
 
                 // Parse 4 integer values.
-                if (culture == null)
+                if (culture is null)
                 {
                     culture = CultureInfo.CurrentCulture;
                 }
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             {
                 if (destinationType == typeof(string))
                 {
-                    if (culture == null)
+                    if (culture is null)
                     {
                         culture = CultureInfo.CurrentCulture;
                     }
