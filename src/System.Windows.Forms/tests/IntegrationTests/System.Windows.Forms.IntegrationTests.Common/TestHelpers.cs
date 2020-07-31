@@ -3,11 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Threading;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Newtonsoft.Json.Linq;
-using System.Globalization;
 using static Interop.User32;
 
 namespace System.Windows.Forms.IntegrationTests.Common
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
                 throw new ArgumentNullException(nameof(seek));
             }
 
-            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location);
             var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
             var currentDirectory = Path.GetDirectoryName(codeBasePath);
             var root = Directory.GetDirectoryRoot(currentDirectory);
