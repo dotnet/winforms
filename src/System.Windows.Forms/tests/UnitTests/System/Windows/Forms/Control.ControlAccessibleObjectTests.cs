@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Automation;
 using Accessibility;
@@ -1042,13 +1041,13 @@ namespace System.Windows.Forms.Tests
             return ReflectionHelper.GetPublicNotAbstractClasses<Control>();
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (!control.SupportsUiaProviders)
             {
                 return;
             }
@@ -1061,13 +1060,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (!control.SupportsUiaProviders)
             {
                 return;
             }
@@ -1079,13 +1078,13 @@ namespace System.Windows.Forms.Tests
             Assert.True(supportsLegacyIAccessiblePatternId);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (!control.SupportsUiaProviders)
             {
                 return;
             }
@@ -1098,13 +1097,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Test Accessible Description", accessibleObjectDescription);
         }
 
-        [StaTheory]
+        [WinFormsTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
         public void ControlAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (!control.SupportsUiaProviders)
             {
                 return;
             }

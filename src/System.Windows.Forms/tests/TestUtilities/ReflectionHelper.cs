@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Xunit;
 
 namespace System
 {
@@ -16,10 +17,10 @@ namespace System
             foreach (var type in types)
             {
                 if (type.GetConstructor(
-                bindingAttr: BindingFlags.Public | BindingFlags.Instance,
-                binder: null,
-                types: Array.Empty<Type>(),
-                modifiers: null) == null)
+                    bindingAttr: BindingFlags.Public | BindingFlags.Instance,
+                    binder: null,
+                    types: Array.Empty<Type>(),
+                    modifiers: null) == null)
                 {
                     continue;
                 }
@@ -41,7 +42,9 @@ namespace System
                 return default;
             }
 
-            return (T)ctor.Invoke(Array.Empty<object>());
+            T obj= (T)ctor.Invoke(Array.Empty<object>());
+            Assert.NotNull(obj);
+            return obj;
         }
 
         public static bool IsPublicNonAbstract<T>(Type type)

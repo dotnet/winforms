@@ -11155,7 +11155,6 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Name.get -> string
 ~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.DataGridViewControlCollection.Remove(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
@@ -11478,8 +11477,6 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.Name.set -> void
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Add(object item) -> int
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Insert(int index, object item) -> void
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Remove(object item) -> void

@@ -22,11 +22,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using NumericUpDown numericUpDown = new NumericUpDown();
             string accessibleName = numericUpDown.AccessibilityObject.Name;
 
-            // Mas requires us to have no same AccessibleName and LocalizedControlType,
-            // please see the requirement (Section 508 502.3.1).
-            // So we need to check if these properties are not equal.
-            // In this specific case, we can't have some positive Assert.
-            // ToLower method used to be case insensitive.
+            // Control should have null AccessibleName by default
             Assert.Null(accessibleName);
         }
     }

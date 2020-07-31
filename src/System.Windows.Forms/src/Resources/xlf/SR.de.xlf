@@ -4214,11 +4214,6 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Bearbeiten</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8739,11 +8734,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Absteigend sortiert.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Wartekreisel</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">

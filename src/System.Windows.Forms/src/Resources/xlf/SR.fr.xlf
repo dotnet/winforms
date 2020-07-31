@@ -4214,11 +4214,6 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Modifier</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8739,11 +8734,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Trié en ordre décroissant.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Compteur</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">

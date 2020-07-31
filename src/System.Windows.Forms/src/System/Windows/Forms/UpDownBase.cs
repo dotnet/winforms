@@ -463,21 +463,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets an accessible name.
-        /// </summary>
-        /// <param name="baseName">The base name.</param>
-        /// <returns>The accessible name.</returns>
-        internal string GetAccessibleName(string baseName)
-        {
-            if (baseName is null)
-            {
-                return SR.SpinnerAccessibleName;
-            }
-
-            return baseName;
-        }
-
-        /// <summary>
         ///  When overridden in a derived class, handles rescaling of any magic numbers used in control painting.
         ///  For UpDown controls, scale the width of the up/down buttons.
         ///  Must call the base class method to get the current DPI values. This method is invoked only when

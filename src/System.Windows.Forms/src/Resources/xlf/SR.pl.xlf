@@ -4214,11 +4214,6 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
         <target state="translated">Edytuj</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8739,11 +8734,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Posortowano malejąco.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Pokrętło</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">

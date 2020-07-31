@@ -4214,11 +4214,6 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
         <target state="translated">Modifica</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8739,11 +8734,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Ordinamento decrescente.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Casella di selezione</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
