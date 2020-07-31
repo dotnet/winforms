@@ -243,7 +243,7 @@
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
             // editToolStripMenuItem
-            // 
+            //
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.undoToolStripMenuItem,
             this.redoToolStripMenuItem,
@@ -388,12 +388,13 @@
             // 
             // toolStripComboBox1
             // 
+            this.toolStripComboBox1.AccessibleName = "Custom accessible name for combo box";
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 23);
             this.toolStripComboBox1.ToolTipText = "toolStripComboBox1";
             // 
             // toolStripTextBox1
-            // 
+            //
             this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
@@ -583,7 +584,7 @@
             // 
             // toolStripProgressBar1
             // 
-            this.toolStripProgressBar1.AccessibleName = "Proressbar";
+            this.toolStripProgressBar1.AccessibleName = "Custom accessible name for progress bar";
             this.toolStripProgressBar1.Name = "toolStripProgressBar1";
             this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
             // 
