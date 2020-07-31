@@ -10519,10 +10519,11 @@ namespace System.Windows.Forms.Tests
             var rtb = new RichTextBox();
             rtb.CreateControl();
             Assert.Contains("RichEdit50W", GetClassName(rtb.Handle), StringComparison.InvariantCultureIgnoreCase);
+            rtb.Dispose();
         }
 
         [WinFormsFact]
-        public void RichTextBox_CheckRichEditWithVersionCanCreateAllVersions()
+        public void RichTextBox_CheckRichEditWithVersionCanCreateOldVersions()
         {
             var rtb1 = new RichEditWithVersion("riched32.dll", "RichEdit");
             rtb1.CreateControl();
@@ -10533,11 +10534,6 @@ namespace System.Windows.Forms.Tests
             rtb2.CreateControl();
             Assert.Contains(".RichEdit20W.", GetClassName(rtb2.Handle), StringComparison.InvariantCultureIgnoreCase);
             rtb2.Dispose();
-
-            var rtb4 = new RichEditWithVersion("msftedit.dll", "RichEdit50W");
-            rtb4.CreateControl();
-            Assert.Contains(".RichEdit50W.", GetClassName(rtb4.Handle), StringComparison.InvariantCultureIgnoreCase);
-            rtb4.Dispose();
         }
 
         [WinFormsFact]
