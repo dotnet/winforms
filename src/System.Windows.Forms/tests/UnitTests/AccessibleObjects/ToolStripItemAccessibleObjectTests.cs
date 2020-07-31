@@ -20,6 +20,7 @@ namespace System.Windows.Forms.Tests
                 AccessibleName = "Name",
                 AccessibleRole = AccessibleRole.MenuBar
             };
+
             var accessibleObject = new ToolStripItem.ToolStripItemAccessibleObject(item);
             Assert.Equal(Rectangle.Empty, accessibleObject.Bounds);
             Assert.Equal("DefaultActionDescription", accessibleObject.DefaultAction);
@@ -48,10 +49,6 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
-            if (item == null)
-            {
-                return;
-            }
             item.AccessibleRole = AccessibleRole.Link;
             AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
@@ -65,10 +62,6 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
-            if (item == null)
-            {
-                return;
-            }
             AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
             bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
@@ -81,11 +74,6 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
-            if (item == null)
-            {
-                return;
-            }
-
             item.AccessibleDescription = "Test Accessible Description";
             AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
@@ -99,11 +87,6 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItemAccessibleObject_GetPropertyValue_Custom_Name_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
-            if (item == null)
-            {
-                return;
-            }
-
             item.Name = "Name1";
             item.AccessibleName = "Test Name";
 
