@@ -3143,11 +3143,11 @@ namespace System.Windows.Forms
                 flags = GTL.DEFAULT
             };
 
-            uint numChars = User32.SendMessageW(Handle, User32.EM.GETTEXTLENGTHEX, ref gtl, 0);
-            if (numChars == 0x80070057) // E_INVALIDARG
-                throw new Win32Exception(unchecked((int)0x80070057));
+            IntPtr res = User32.SendMessageW<GETTEXTLENGTHEX>(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, ref gtl, IntPtr.Zero);
+            if ((HRESULT)res == HRESULT.E_INVALIDARG) // E_INVALIDARG
+                throw new Win32Exception(unchecked((int)res));
 
-            numChars++; // buffer has to have enough space for final \0. Without this, the last character is missing!
+            uint numChars = (uint)res + 1; // buffer has to have enough space for final \0. Without this, the last character is missing!
             // in case flags contains GT_SELECTION we'll allocate too much memory (for the whole text and not just the selection),
             // but there's no appropriate flag for EM_GETTEXTLENGTHEX
 
@@ -3160,13 +3160,23 @@ namespace System.Windows.Forms
                 lpUsedDefChar = IntPtr.Zero
             };
 
-            IntPtr buf = Marshal.AllocHGlobal(gt.cb);
-            User32.SendMessageW(Handle, User32.EM.GETTEXTEX, ref gt, buf);
+            IntPtr buf = IntPtr.Zero;
+            try
+            {
+                buf = Marshal.AllocHGlobal(gt.cb);
+                if (buf == IntPtr.Zero)
+                    throw new OutOfMemoryException();
 
-            string txt = Marshal.PtrToStringUni(buf);
-            Marshal.FreeHGlobal(buf);
+                User32.SendMessageW<GETTEXTEX>(Handle, (User32.WM)User32.EM.GETTEXTEX, ref gt, buf);
 
-            return txt;
+                string txt = Marshal.PtrToStringUni(buf);
+                return txt;
+            }
+            finally
+            {
+                if (buf != IntPtr.Zero)
+                    Marshal.FreeHGlobal(buf);
+            }
         }
 
         private void UpdateOleCallback()

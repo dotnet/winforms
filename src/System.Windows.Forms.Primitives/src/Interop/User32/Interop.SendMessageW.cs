@@ -98,10 +98,28 @@ internal static partial class Interop
             }
         }
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int SendMessageW(IntPtr hWnd, EM msg, ref Richedit.GETTEXTEX gettext, IntPtr lpar);
+        public unsafe static IntPtr SendMessageW<T>(
+            IntPtr hWnd,
+            WM Msg,
+            ref T wParam,
+            IntPtr lParam) where T : unmanaged
+        {
+            fixed (void* w = &wParam)
+            {
+                return SendMessageW(hWnd, Msg, (IntPtr)w, lParam);
+            }
+        }
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern uint SendMessageW(IntPtr hWnd, EM msg, ref Richedit.GETTEXTLENGTHEX gettext, int lpar = 0);
+        public unsafe static IntPtr SendMessageW<T>(
+            IHandle hWnd,
+            WM Msg,
+            ref T wParam,
+            IntPtr lParam) where T : unmanaged
+        {
+            fixed (void* w = &wParam)
+            {
+                return SendMessageW(hWnd, Msg, (IntPtr)w, lParam);
+            }
+        }
     }
 }
