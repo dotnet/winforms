@@ -11,7 +11,7 @@ namespace System
 {
     public static class ReflectionHelper
     {
-        public static IEnumerable<object[]> GetPublicNotAbstractClasses<T>()
+        public static IEnumerable<Type> GetPublicNotAbstractClasses<T>()
         {
             var types = typeof(T).Assembly.GetTypes().Where(type => IsPublicNonAbstract<T>(type));
             foreach (var type in types)
@@ -20,12 +20,12 @@ namespace System
                     bindingAttr: BindingFlags.Public | BindingFlags.Instance,
                     binder: null,
                     types: Array.Empty<Type>(),
-                    modifiers: null) == null)
+                    modifiers: null) is null)
                 {
                     continue;
                 }
 
-                yield return new object[] { type };
+                yield return type;
             }
         }
 
@@ -37,12 +37,12 @@ namespace System
                 types: Array.Empty<Type>(),
                 modifiers: null);
 
-            if (ctor == null)
+            if (ctor is null)
             {
                 return default;
             }
 
-            T obj= (T)ctor.Invoke(Array.Empty<object>());
+            T obj = (T)ctor.Invoke(Array.Empty<object>());
             Assert.NotNull(obj);
             return obj;
         }

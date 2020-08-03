@@ -3369,7 +3369,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(ControlStyles.EnableNotifyMessage, false)]
         [InlineData(ControlStyles.DoubleBuffer, false)]
         [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
-        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, false)]
         [InlineData((ControlStyles)0, true)]
         [InlineData((ControlStyles)int.MaxValue, false)]
         [InlineData((ControlStyles)(-1), false)]

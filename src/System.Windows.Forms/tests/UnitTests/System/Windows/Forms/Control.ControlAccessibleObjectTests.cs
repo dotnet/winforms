@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Automation;
 using Accessibility;
@@ -1038,7 +1039,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ControlAccessibleObject_TestData()
         {
-            return ReflectionHelper.GetPublicNotAbstractClasses<Control>();
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
         }
 
         [WinFormsTheory]
@@ -1109,13 +1110,46 @@ namespace System.Windows.Forms.Tests
             }
 
             AccessibleObject controlAccessibleObject = control.AccessibilityObject;
-            Assert.Null(controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
             control.Name = "Name1";
             control.AccessibleName = "Test Name";
 
             var accessibleName = controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
 
             Assert.Equal("Test Name", accessibleName);
+        }
+
+        public static IEnumerable<object[]> ControlAccessibleObject_DefaultName_TestData()
+        {
+            // These controls have AccessibleName defined.
+            // MonthCalendar has "Month" view by default and returns current date as AccessibleName
+            var typeDefaultValues = new Dictionary<Type, string> {
+                { typeof(DataGridViewTextBoxEditingControl), "Editing Control"},
+                { typeof(PrintPreviewDialog), "Print preview"},
+                { typeof(MonthCalendar), string.Format(SR.MonthCalendarSingleDateSelected, DateTime.Now.ToLongDateString())}
+            };
+
+            foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
+            {
+                yield return new object[] {
+                    type,
+                    typeDefaultValues.ContainsKey(type) ? typeDefaultValues[type] : null
+                };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_DefaultName_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_Default_Name_ReturnsExpected(Type type, string expectedName)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+            Assert.Equal(expectedName, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
         }
 
         private class AutomationLiveRegionControl : Control, IAutomationLiveRegion

@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Xunit;
 using static Interop.UiaCore;
 
@@ -43,7 +44,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ToolStripItemAccessibleObject_TestData()
         {
-            return ReflectionHelper.GetPublicNotAbstractClasses<ToolStripItem>();
+            return ReflectionHelper.GetPublicNotAbstractClasses<ToolStripItem>().Select(type => new object[] { type });
         }
 
         [WinFormsTheory]
@@ -90,6 +91,9 @@ namespace System.Windows.Forms.Tests
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
             AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
+
+            // By default Name has string.Empty value, because if AccessibleName is not defined
+            // then control uses the value of "Text" property from owner Item (by default an empty string)
             Assert.Equal(string.Empty, toolStripItemAccessibleObject.GetPropertyValue(UIA.NamePropertyId));
 
             item.Name = "Name1";
