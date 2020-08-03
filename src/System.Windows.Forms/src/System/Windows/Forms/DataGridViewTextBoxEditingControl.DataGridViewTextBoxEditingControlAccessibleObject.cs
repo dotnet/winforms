@@ -15,8 +15,6 @@ namespace System.Windows.Forms
         /// </summary>
         internal class DataGridViewTextBoxEditingControlAccessibleObject : Control.ControlAccessibleObject
         {
-            private readonly DataGridViewTextBoxEditingControl ownerControl;
-
             /// <summary>
             ///  The parent is changed when the editing control is attached to another editing cell.
             /// </summary>
@@ -24,91 +22,49 @@ namespace System.Windows.Forms
 
             public DataGridViewTextBoxEditingControlAccessibleObject(DataGridViewTextBoxEditingControl ownerControl) : base(ownerControl)
             {
-                this.ownerControl = ownerControl;
             }
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parentAccessibleObject;
-                }
-            }
+            public override AccessibleObject Parent => _parentAccessibleObject;
 
             public override string Name
             {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-                    else
-                    {
-                        return SR.DataGridView_AccEditingControlAccName;
-                    }
-                }
+                get => Owner.AccessibleName ?? SR.DataGridView_AccEditingControlAccName;
                 set => base.Name = value;
             }
 
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
+                => direction switch
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                        if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
-                        {
-                            return _parentAccessibleObject;
-                        }
-
-                        return null;
-                }
-
-                return base.FragmentNavigate(direction);
-            }
+                    UiaCore.NavigateDirection.Parent => (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
+                                               ? _parentAccessibleObject
+                                               : null,
+                    _ => base.FragmentNavigate(direction),
+                };
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
-                }
-            }
+                => (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+                => propertyID switch
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.EditControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                        return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+                    UiaCore.UIA.NamePropertyId => Name,
+                    UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
+                    _ => base.GetPropertyValue(propertyID),
+                };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId)
+                => patternId switch
                 {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                    UiaCore.UIA.ValuePatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             /// <summary>
             ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
             /// </summary>
             /// <param name="parent">The parent accessible object.</param>
-            internal override void SetParent(AccessibleObject parent)
-            {
-                _parentAccessibleObject = parent;
-            }
+            internal override void SetParent(AccessibleObject parent) => _parentAccessibleObject = parent;
         }
     }
 }
