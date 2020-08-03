@@ -522,7 +522,7 @@ namespace System.Windows.Forms
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
         /// </summary>
         /// <param name="parent">The parent accessible object.</param>
-        internal virtual void SetParent(AccessibleObject parent)
+        internal virtual void SetParent(AccessibleObject? parent)
         {
         }
 
@@ -530,7 +530,7 @@ namespace System.Windows.Forms
         ///  Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
         /// </summary>
         /// <param name="child">The child accessible object.</param>
-        internal virtual void SetDetachableChild(AccessibleObject child)
+        internal virtual void SetDetachableChild(AccessibleObject? child)
         {
         }
 
