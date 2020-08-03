@@ -2099,6 +2099,8 @@ namespace System.Windows.Forms
                     }
 
                     ToolStripManager.ToolStrips.Remove(this);
+
+                    _imageList?.Dispose();
                 }
                 finally
                 {
