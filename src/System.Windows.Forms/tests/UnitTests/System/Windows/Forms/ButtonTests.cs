@@ -584,7 +584,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         public void Button_AutoSize_SetCachedPreferredSize_DoesNotInvalidate()
         {
             using var control = new Button
@@ -682,7 +683,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3647")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/3647")]
         public void Button_Font_SetCachedPreferredSize_Invalidates()
         {
             using var font = new Font("Arial", 100f);
@@ -3162,14 +3164,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(true, "", 'a',  0)]
+        [InlineData(true, "", 'a', 0)]
         [InlineData(true, "", char.MinValue, 0)]
         [InlineData(true, "&a", 'a', 1)]
         [InlineData(true, "&a", 'b', 0)]
         [InlineData(true, "&&a", 'a', 0)]
         [InlineData(true, "&", 'a', 0)]
         [InlineData(true, "text", 'a', 0)]
-        [InlineData(false, "", 'a',  0)]
+        [InlineData(false, "", 'a', 0)]
         [InlineData(false, "", char.MinValue, 0)]
         [InlineData(false, "&a", 'a', 0)]
         [InlineData(false, "&a", 'b', 0)]
