@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -18,21 +16,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The parent is changed when the editing control is attached to another editing cell.
             /// </summary>
-            private AccessibleObject _parentAccessibleObject;
+            private AccessibleObject? _parentAccessibleObject;
 
             public DataGridViewTextBoxEditingControlAccessibleObject(DataGridViewTextBoxEditingControl ownerControl) : base(ownerControl)
             {
             }
 
-            public override AccessibleObject Parent => _parentAccessibleObject;
+            public override AccessibleObject? Parent => _parentAccessibleObject;
 
-            public override string Name
+            public override string? Name
             {
                 get => Owner.AccessibleName ?? SR.DataGridView_AccEditingControlAccName;
                 set => base.Name = value;
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 => direction switch
                 {
                     UiaCore.NavigateDirection.Parent => (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
@@ -41,10 +39,10 @@ namespace System.Windows.Forms
                     _ => base.FragmentNavigate(direction),
                 };
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 => (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
@@ -64,7 +62,7 @@ namespace System.Windows.Forms
             ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
             /// </summary>
             /// <param name="parent">The parent accessible object.</param>
-            internal override void SetParent(AccessibleObject parent) => _parentAccessibleObject = parent;
+            internal override void SetParent(AccessibleObject? parent) => _parentAccessibleObject = parent;
         }
     }
 }
