@@ -1123,8 +1123,8 @@ namespace System.Windows.Forms.Tests
             // These controls have AccessibleName defined.
             // MonthCalendar has "Month" view by default and returns current date as AccessibleName
             var typeDefaultValues = new Dictionary<Type, string> {
-                { typeof(DataGridViewTextBoxEditingControl), "Editing Control"},
-                { typeof(PrintPreviewDialog), "Print preview"},
+                { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName},
+                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview},
                 { typeof(MonthCalendar), string.Format(SR.MonthCalendarSingleDateSelected, DateTime.Now.ToLongDateString())}
             };
 

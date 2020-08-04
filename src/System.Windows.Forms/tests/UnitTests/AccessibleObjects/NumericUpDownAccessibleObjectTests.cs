@@ -15,15 +15,5 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
             Assert.NotNull(accessibleObject);
         }
-
-        [WinFormsFact]
-        public void NumericUpDownAccessibleObject_NameIsNotEqualControlType()
-        {
-            using NumericUpDown numericUpDown = new NumericUpDown();
-            string accessibleName = numericUpDown.AccessibilityObject.Name;
-
-            // Control should have null AccessibleName by default
-            Assert.Null(accessibleName);
-        }
     }
 }
