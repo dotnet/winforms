@@ -9770,8 +9770,8 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DataGridViewTopLeftHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewTopLeftHeaderCell owner) -> void
 ~System.Windows.Forms.DataObject.DataObject(object data) -> void
 ~System.Windows.Forms.DataObject.DataObject(string format, object data) -> void
-~System.Windows.Forms.DateBoldEventArgs.DaysToBold.get -> int[]
-~System.Windows.Forms.DateBoldEventArgs.DaysToBold.set -> void
+System.Windows.Forms.DateBoldEventArgs.DaysToBold.get -> int[]?
+System.Windows.Forms.DateBoldEventArgs.DaysToBold.set -> void
 ~System.Windows.Forms.DateTimePicker.CalendarFont.get -> System.Drawing.Font
 ~System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
 ~System.Windows.Forms.DateTimePicker.CustomFormat.get -> string

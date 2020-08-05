@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  A delegate for an updown event handler.
     /// </summary>
-    public delegate void UpDownEventHandler(object source, UpDownEventArgs e);
+    public delegate void UpDownEventHandler(object? source, UpDownEventArgs e);
 }
