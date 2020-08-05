@@ -2,26 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
-using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
     internal static class UnsafeNativeMethods
     {
-        [DllImport(ExternDll.User32)]
+        [DllImport(Libraries.User32)]
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
 
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
 
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
 
         public static StringBuilder GetModuleFileNameLongPath(HandleRef hModule)
@@ -43,10 +41,10 @@ namespace System.Windows.Forms
             return buffer;
         }
 
-        [DllImport(ExternDll.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
+        [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
-        [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto)]
+        [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto)]
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
 
         [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
