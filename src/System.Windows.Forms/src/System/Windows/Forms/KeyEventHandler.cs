@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -11,5 +9,5 @@ namespace System.Windows.Forms
     ///  or <see cref='Control.KeyDown'/> event of a
     /// <see cref='Control'/>.
     /// </summary>
-    public delegate void KeyEventHandler(object sender, KeyEventArgs e);
+    public delegate void KeyEventHandler(object? sender, KeyEventArgs e);
 }

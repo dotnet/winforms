@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -11,5 +9,5 @@ namespace System.Windows.Forms
     ///  <see cref='Control.MouseUp'/> or <see cref='Control.MouseMove'/> events of a form,
     ///  control or other component.
     /// </summary>
-    public delegate void MouseEventHandler(object sender, MouseEventArgs e);
+    public delegate void MouseEventHandler(object? sender, MouseEventArgs e);
 }
