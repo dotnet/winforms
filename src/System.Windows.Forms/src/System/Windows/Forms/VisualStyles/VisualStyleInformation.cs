@@ -21,7 +21,7 @@ namespace System.Windows.Forms.VisualStyles
     {
         // Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer? visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
 
         /// <summary>
         ///  Used to find whether visual styles are supported by the current OS. Same as
@@ -219,16 +219,16 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer is null)
+                    if (t_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
+                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
                     }
                     else
                     {
-                        visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
+                        t_visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
                     }
 
-                    return UxTheme.GetThemeSysBool(visualStyleRenderer, UxTheme.TMT.FLATMENUS).IsTrue();
+                    return UxTheme.GetThemeSysBool(t_visualStyleRenderer, UxTheme.TMT.FLATMENUS).IsTrue();
                 }
 
                 return false;
@@ -244,18 +244,18 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer is null)
+                    if (t_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
+                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Window.Caption.Active);
                     }
                     else
                     {
-                        visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
+                        t_visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
                     }
 
                     int mcDepth = 0;
 
-                    UxTheme.GetThemeSysInt(visualStyleRenderer, UxTheme.TMT.MINCOLORDEPTH, ref mcDepth);
+                    UxTheme.GetThemeSysInt(t_visualStyleRenderer, UxTheme.TMT.MINCOLORDEPTH, ref mcDepth);
                     return mcDepth;
                 }
 
@@ -272,15 +272,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer is null)
+                    if (t_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
+                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.TextBox.TextEdit.Normal);
                     }
                     else
                     {
-                        visualStyleRenderer.SetParameters(VisualStyleElement.TextBox.TextEdit.Normal);
+                        t_visualStyleRenderer.SetParameters(VisualStyleElement.TextBox.TextEdit.Normal);
                     }
-                    Color borderColor = visualStyleRenderer.GetColor(ColorProperty.BorderColor);
+                    Color borderColor = t_visualStyleRenderer.GetColor(ColorProperty.BorderColor);
                     return borderColor;
                 }
 
@@ -297,15 +297,15 @@ namespace System.Windows.Forms.VisualStyles
             {
                 if (Application.RenderWithVisualStyles)
                 {
-                    if (visualStyleRenderer is null)
+                    if (t_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
+                        t_visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
                     }
                     else
                     {
-                        visualStyleRenderer.SetParameters(VisualStyleElement.Button.PushButton.Normal);
+                        t_visualStyleRenderer.SetParameters(VisualStyleElement.Button.PushButton.Normal);
                     }
-                    Color accentColor = visualStyleRenderer.GetColor(ColorProperty.AccentColorHint);
+                    Color accentColor = t_visualStyleRenderer.GetColor(ColorProperty.AccentColorHint);
                     return accentColor;
                 }
 
