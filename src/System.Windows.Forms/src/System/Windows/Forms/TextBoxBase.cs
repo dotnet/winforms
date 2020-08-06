@@ -897,9 +897,8 @@ namespace System.Windows.Forms
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
 
-            // Fit the text to the remaining space
-            // Fix for Dev10
-
+            // Fit the text to the remaining space.
+            // Fixed for .NET Framework 4.0
             TextFormatFlags format = TextFormatFlags.NoPrefix;
             if (!Multiline)
             {

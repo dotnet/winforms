@@ -2902,8 +2902,7 @@ namespace System.Windows.Forms
                     Array.Copy(_currentObjects, 0, newObjects, 0, i);
                     if (i < newObjects.Length)
                     {
-                        // Dev10
-
+                        // Fixed for .NET Framework 4.0
                         Array.Copy(_currentObjects, i + 1, newObjects, i, newObjects.Length - i);
                     }
 
