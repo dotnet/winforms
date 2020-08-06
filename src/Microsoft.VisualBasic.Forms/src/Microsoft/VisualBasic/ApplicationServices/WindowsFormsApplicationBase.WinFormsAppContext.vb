@@ -1,0 +1,63 @@
+﻿' Licensed to the .NET Foundation under one or more agreements.
+' The .NET Foundation licenses this file to you under the MIT license.
+' See the LICENSE file in the project root for more information.
+
+Option Strict On
+Option Explicit On
+Option Infer On
+
+Imports System.Security
+Imports System.Security.Permissions
+
+Namespace Microsoft.VisualBasic.ApplicationServices
+
+    Partial Public Class WindowsFormsApplicationBase
+
+        ''' <summary>
+        ''' Encapsulates an ApplicationContext.  We have our own to get the shutdown behaviors we
+        ''' offer in the application model.  This derivation of the ApplicationContext listens for when
+        ''' the main form closes and provides for shutting down when the main form closes or the
+        ''' last form closes, depending on the mode this application is running in.
+        ''' </summary>
+        Private Class WinFormsAppContext
+            Inherits Windows.Forms.ApplicationContext
+
+            Private ReadOnly _app As WindowsFormsApplicationBase
+
+            Sub New(App As WindowsFormsApplicationBase)
+                _app = App
+            End Sub
+
+            ''' <summary>
+            ''' Handles the two types of application shutdown:
+            '''   1 - shutdown when the main form closes
+            '''   2 - shutdown only after the last form closes
+            ''' </summary>
+            ''' <param name="sender"></param>
+            ''' <param name="e"></param>
+            <SecuritySafeCritical()>
+            Protected Overrides Sub OnMainFormClosed(sender As Object, e As EventArgs)
+                If _app.ShutdownStyle = ShutdownMode.AfterMainFormCloses Then
+                    MyBase.OnMainFormClosed(sender, e)
+                Else 'identify a new main form so we can keep running
+#Disable Warning BC40000 ' Type or member is obsolete
+                    Call New UIPermission(UIPermissionWindow.AllWindows).Assert()
+                    Dim forms As Windows.Forms.FormCollection = Windows.Forms.Application.OpenForms
+                    PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function.
+#Enable Warning BC40000 ' Type or member is obsolete
+
+                    If forms.Count > 0 Then
+                        'Note: Initially I used Process::MainWindowHandle to obtain an open form.  But that is bad for two reasons:
+                        '1 - It appears to be broken and returns NULL sometimes even when there is still a window around.  WinForms people are looking at that issue.
+                        '2 - It returns the first window it hits from enum thread windows, which is not necessarily a windows forms form, so that doesn't help us even if it did work
+                        'all the time.  So I'll use one of our open forms.  We may not necessarily get a visible form here but that's OK.  Some apps may run on an invisible window
+                        'and we need to keep them going until all windows close.
+                        MainForm = forms(0)
+                    Else
+                        MyBase.OnMainFormClosed(sender, e)
+                    End If
+                End If
+            End Sub
+        End Class
+    End Class
+End Namespace

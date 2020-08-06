@@ -1,0 +1,2 @@
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode() -> System.Windows.Forms.HighDpiMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode(value As System.Windows.Forms.HighDpiMode) -> Void
