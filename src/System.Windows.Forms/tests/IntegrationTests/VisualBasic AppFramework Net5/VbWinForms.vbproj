@@ -27,12 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-	    <None Include="My Project\Application.Designer.vb">
-		    <DependentUpon>Application.myapp</DependentUpon>
-	    </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="My Project\Application.Designer.vb">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -45,5 +39,9 @@
         <Generator>MyApplicationCodeGenerator</Generator>
         <LastGenOutput>Application.Designer.vb</LastGenOutput>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="My Project\" />
     </ItemGroup>
 </Project>
