@@ -12448,15 +12448,15 @@ static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.
 ~static System.Windows.Forms.TrackBarRenderer.GetRightPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
 ~static System.Windows.Forms.TrackBarRenderer.GetTopPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, System.IntPtr handle) -> System.Windows.Forms.TreeNode
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Author.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.ColorScheme.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Company.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Copyright.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Description.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.DisplayName.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Size.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Url.get -> string
-~static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> string
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Author.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.ColorScheme.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Company.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Copyright.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Description.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.DisplayName.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Size.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Url.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> string!
 ~static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string
 ~static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string
 ~static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string
