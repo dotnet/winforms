@@ -29,10 +29,6 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "netcoreapp3.0",
-          "description": "Target netcoreapp3.0"
-        },
-        {
           "choice": "netcoreapp3.1",
           "description": "Target netcoreapp3.1"
         },
@@ -41,8 +37,12 @@
           "description": "Target net5.0"
         }
       ],
-      "replaces": "net5.0",
+      "replaces": "FrameworkParameter",
       "defaultValue": "net5.0"
+    },
+    "UseWindowsDesktopSdk": {
+      "type": "computed",
+      "value": "(Framework == \"netcoreapp3.1\")"
     },
     "langVersion": {
       "type": "parameter",
@@ -67,6 +67,27 @@
     {
       "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
       "path": "Class1.cs"
+    }
+  ],
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(UseWindowsDesktopSdk)",
+          "exclude": [
+            "Company.ClassLibrary1.csproj"
+          ],
+          "rename": {
+            "Company.ClassLibrary3x1.csproj": "Company.ClassLibrary1.csproj"
+          }
+        },
+        {
+          "condition": "(!UseWindowsDesktopSdk)",
+          "exclude": [
+            "Company.ClassLibrary3x1.csproj"
+          ]
+        }
+      ]
     }
   ],
   "defaultName": "WinFormsLibrary1",
