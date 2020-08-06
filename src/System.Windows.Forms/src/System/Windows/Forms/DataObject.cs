@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -410,26 +409,6 @@ namespace System.Windows.Forms
         }
 
         // END - WHIDBEY ADDITIONS -->
-
-        /// <summary>
-        ///  Retrieves a list of distinct strings from the array.
-        /// </summary>
-        private static string[] GetDistinctStrings(string[] formats)
-        {
-            ArrayList distinct = new ArrayList();
-            for (int i = 0; i < formats.Length; i++)
-            {
-                string s = formats[i];
-                if (!distinct.Contains(s))
-                {
-                    distinct.Add(s);
-                }
-            }
-
-            string[] temp = new string[distinct.Count];
-            distinct.CopyTo(temp, 0);
-            return temp;
-        }
 
         /// <summary>
         ///  Returns all the "synonyms" for the specified format.

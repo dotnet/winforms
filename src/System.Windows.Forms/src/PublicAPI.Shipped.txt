@@ -9218,10 +9218,10 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter textWriter, System.Func<System.Type, string> typeNameConverter) -> void
 ~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName) -> void
 ~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName, System.Func<System.Type, string> typeNameConverter) -> void
-~System.Windows.Forms.AmbientProperties.Cursor.get -> System.Windows.Forms.Cursor
-~System.Windows.Forms.AmbientProperties.Cursor.set -> void
-~System.Windows.Forms.AmbientProperties.Font.get -> System.Drawing.Font
-~System.Windows.Forms.AmbientProperties.Font.set -> void
+System.Windows.Forms.AmbientProperties.Cursor.get -> System.Windows.Forms.Cursor?
+System.Windows.Forms.AmbientProperties.Cursor.set -> void
+System.Windows.Forms.AmbientProperties.Font.get -> System.Drawing.Font?
+System.Windows.Forms.AmbientProperties.Font.set -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Add(string value) -> int
 ~System.Windows.Forms.AutoCompleteStringCollection.AddRange(string[] value) -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Contains(string value) -> bool

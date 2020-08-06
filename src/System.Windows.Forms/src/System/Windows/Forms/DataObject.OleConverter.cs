@@ -4,11 +4,12 @@
 
 #nullable disable
 
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -599,7 +600,9 @@ namespace System.Windows.Forms
                 Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
 
                 IEnumFORMATETC enumFORMATETC = null;
-                ArrayList formats = new ArrayList();
+
+                // Since we are only adding elements to the HashSet, the order will be preserved.
+                HashSet<string> distinctFormats = new HashSet<string>();
                 try
                 {
                     enumFORMATETC = innerData.EnumFormatEtc(DATADIR.DATADIR_GET);
@@ -634,20 +637,18 @@ namespace System.Windows.Forms
                                 string[] mappedFormats = GetMappedFormats(name);
                                 for (int i = 0; i < mappedFormats.Length; i++)
                                 {
-                                    formats.Add(mappedFormats[i]);
+                                    distinctFormats.Add(mappedFormats[i]);
                                 }
                             }
                             else
                             {
-                                formats.Add(name);
+                                distinctFormats.Add(name);
                             }
                         }
                     }
                 }
 
-                string[] temp = new string[formats.Count];
-                formats.CopyTo(temp, 0);
-                return GetDistinctStrings(temp);
+                return distinctFormats.ToArray();
             }
 
             public virtual string[] GetFormats()
