@@ -581,7 +581,8 @@ namespace System.Windows.Forms
                     var p when
                         p == NativeMethods.UIA_ValuePatternId ||
                         p == NativeMethods.UIA_GridPatternId ||
-                        p == NativeMethods.UIA_TablePatternId => true,
+                        p == NativeMethods.UIA_TablePatternId ||
+                        p == NativeMethods.UIA_LegacyIAccessiblePatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
 

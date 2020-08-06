@@ -24,14 +24,14 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void ToolStripTextBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue()
+        public void ToolStripTextBoxAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsFalse()
         {
             using var toolStripTextBox = new ToolStripTextBox();
             AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
 
             bool supportsLegacyIAccessiblePatternId = toolStripTextBoxAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
 
-            Assert.True(supportsLegacyIAccessiblePatternId);
+            Assert.False(supportsLegacyIAccessiblePatternId);
         }
 
         [WinFormsFact]

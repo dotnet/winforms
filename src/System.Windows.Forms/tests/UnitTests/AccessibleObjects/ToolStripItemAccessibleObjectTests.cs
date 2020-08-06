@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -41,7 +42,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ToolStripItemAccessibleObject_TestData()
         {
-            return ReflectionHelper.GetPublicNotAbstractClasses<ToolStripItem>();
+            return ReflectionHelper.GetPublicNotAbstractClasses<ToolStripItem>().Select(type => new object[] { type });
         }
 
         [Theory]
@@ -59,14 +60,14 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
-        public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
+        public void ToolStripItemAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsFalse(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
             AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
             bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
 
-            Assert.True(supportsLegacyIAccessiblePatternId);
+            Assert.False(supportsLegacyIAccessiblePatternId);
         }
 
         [WinFormsTheory]

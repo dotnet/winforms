@@ -10,7 +10,7 @@ namespace System
 {
     public static class ReflectionHelper
     {
-        public static IEnumerable<object[]> GetPublicNotAbstractClasses<T>()
+        public static IEnumerable<Type> GetPublicNotAbstractClasses<T>()
         {
             var types = typeof(T).Assembly.GetTypes().Where(type => IsPublicNonAbstract<T>(type));
             foreach (var type in types)
@@ -24,7 +24,7 @@ namespace System
                     continue;
                 }
                 
-                yield return new object[] { type };
+                yield return type ;
             }
         }
 

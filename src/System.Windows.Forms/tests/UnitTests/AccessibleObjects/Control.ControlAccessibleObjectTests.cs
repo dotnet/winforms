@@ -3,15 +3,46 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class Control_ControlAccessibleObjectTests
     {
+        public static IEnumerable<object[]> ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_TestData()
+        {
+            var supportedLegacyIAccessiblePatternClasses = new List<Type> {
+                typeof(Form),
+                typeof(ListBox), 
+                typeof(MonthCalendar),
+                typeof(PrintPreviewDialog) 
+            };
+
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type, supportedLegacyIAccessiblePatternClasses.Contains(type) });
+        }
+
+        [StaTheory]
+        [MemberData(nameof(ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_TestData))]
+        public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsExpexted(Type type, bool legacyIAccessiblePatternSupported)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (control == null || !control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+
+            bool supportsLegacyIAccessiblePatternId = controlAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
+
+            Assert.Equal(legacyIAccessiblePatternSupported, supportsLegacyIAccessiblePatternId);
+        }
+
         public static IEnumerable<object[]> ControlAccessibleObject_TestData()
         {
-            return ReflectionHelper.GetPublicNotAbstractClasses<Control>();
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type });
         }
 
         [StaTheory]
@@ -31,24 +62,6 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             var accessibleObjectRole = controlAccessibleObject.Role;
 
             Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
-        }
-
-        [StaTheory]
-        [MemberData(nameof(ControlAccessibleObject_TestData))]
-        public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsTrue(Type type)
-        {
-            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
-
-            if (control == null || !control.SupportsUiaProviders)
-            {
-                return;
-            }
-
-            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
-
-            bool supportsLegacyIAccessiblePatternId = controlAccessibleObject.IsPatternSupported(NativeMethods.UIA_LegacyIAccessiblePatternId);
-
-            Assert.True(supportsLegacyIAccessiblePatternId);
         }
 
         [StaTheory]

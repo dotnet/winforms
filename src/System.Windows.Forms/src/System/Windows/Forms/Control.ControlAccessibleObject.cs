@@ -441,17 +441,6 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported()
                 => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-            internal override bool IsPatternSupported(int patternId)
-            {
-                // Override this, in your derived class, if you implement UIAutomation patterns
-                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
             internal override object GetPropertyValue(int propertyID)
             {
                 if (propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion)
