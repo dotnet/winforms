@@ -249,7 +249,6 @@ namespace System.Windows.Forms
                 _toolStrip.ResumeLayout(false);  // SetupToolbar should perform the layout
                 SetupToolbar();
                 PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
-                Text = "PropertyGrid";
                 SetSelectState(0);
             }
             catch (Exception ex)
@@ -5764,7 +5763,7 @@ namespace System.Windows.Forms
                     return name;
                 }
 
-                return _parentPropertyGrid?.Name;
+                return _parentPropertyGrid?.AccessibilityObject.Name;
             }
         }
     }

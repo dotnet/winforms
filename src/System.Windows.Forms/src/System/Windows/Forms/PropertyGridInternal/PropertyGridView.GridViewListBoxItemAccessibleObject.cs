@@ -69,7 +69,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     return base.Name;
                 }
-                set => base.Name = value;
             }
 
             /// <summary>
