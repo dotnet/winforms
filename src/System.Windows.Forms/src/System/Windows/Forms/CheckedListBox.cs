@@ -900,6 +900,7 @@ namespace System.Windows.Forms
         public void SetItemCheckState(int index, CheckState value)
         {
             if (index < 0 || index >= Items.Count)
+
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }

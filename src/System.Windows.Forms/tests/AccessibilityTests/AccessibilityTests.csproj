@@ -7,6 +7,7 @@
     <!--<TargetFrameworks>net472;netcoreapp5.0</TargetFrameworks>-->
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <UsingToolXliff>false</UsingToolXliff>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
 
@@ -16,6 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Binding_Data.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

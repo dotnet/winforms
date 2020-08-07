@@ -61,5 +61,11 @@ namespace AccessibilityTests
             ContainersTesting containerControl = new ContainersTesting();
             containerControl.Show();
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Binding_Data binding_Data = new Binding_Data();
+            binding_Data.Show();
+        }
     }
 }
