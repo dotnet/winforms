@@ -395,13 +395,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
+            ' Apply HighDpiMode
+            Dim dpiSetResult = Application.SetHighDpiMode(_highDpiMode)
+            If dpiSetResult Then
+                _highDpiMode = Application.HighDpiMode
+            End If
+            Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
+
             ' EnableVisualStyles
             If _enableVisualStyles Then
                 Application.EnableVisualStyles()
             End If
-
-            ' Apply HighDpiMode
-            Application.SetHighDpiMode(_highDpiMode)
 
             'We'll handle /nosplash for you
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
