@@ -9401,6 +9401,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">複数行エディット コントロールで、行が自動的に折り返されるかどうかを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">テキスト ("{0}") を解析することができませんでした。必要なテキストの形式は "{1}" です。</target>

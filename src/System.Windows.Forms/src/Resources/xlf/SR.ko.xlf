@@ -9401,6 +9401,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">다중 행 편집 컨트롤의 자동 래핑 여부를 나타냅니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">텍스트("{0}")를 구문 분석하지 못했습니다. "{1}" 서식의 텍스트가 필요합니다.</target>

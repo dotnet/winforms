@@ -9401,6 +9401,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wskazuje, czy wiersze w wielowierszowych formantach edycyjnych są automatycznie zawijane.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">Nie można analizować elementu Text(„{0}”), oczekiwano tekstu w formacie „{1}”.</target>

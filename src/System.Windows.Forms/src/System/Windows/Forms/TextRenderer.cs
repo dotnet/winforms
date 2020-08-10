@@ -23,7 +23,24 @@ namespace System.Windows.Forms
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
 
-        public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor, Color backColor)
+        public static void DrawText(IDeviceContext dc, ReadOnlySpan<char> text, Font font, Point pt, Color foreColor)
+            => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
+
+        public static void DrawText(
+            IDeviceContext dc,
+            string? text,
+            Font? font,
+            Point pt,
+            Color foreColor,
+            Color backColor)
+            => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
+
+        public static void DrawText(
+            IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font font, Point pt,
+            Color foreColor,
+            Color backColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
 
         public static void DrawText(
@@ -37,6 +54,23 @@ namespace System.Windows.Forms
 
         public static void DrawText(
             IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Point pt,
+            Color foreColor,
+            TextFormatFlags flags)
+            => DrawTextInternal(
+                dc,
+                text,
+                font,
+                pt,
+                foreColor,
+                Color.Empty,
+                flags:
+                GetTextFormatFlags(flags, blockModifyString: true));
+
+        public static void DrawText(
+            IDeviceContext dc,
             string? text,
             Font? font,
             Point pt,
@@ -45,13 +79,44 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor, flags: GetTextFormatFlags(flags));
 
+        public static void DrawText(
+            IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Point pt,
+            Color foreColor,
+            Color backColor,
+            TextFormatFlags flags)
+            => DrawTextInternal(
+                dc,
+                text,
+                font,
+                pt,
+                foreColor,
+                backColor,
+                flags:
+                GetTextFormatFlags(flags, blockModifyString: true));
+
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
+            => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
+
+        public static void DrawText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font, Rectangle bounds, Color foreColor)
             => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
 
         public static void DrawText(
             IDeviceContext dc,
-            string? text, Font?
-            font, Rectangle bounds,
+            string? text,
+            Font? font,
+            Rectangle bounds,
+            Color foreColor,
+            Color backColor)
+            => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
+
+        public static void DrawText(
+            IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Rectangle bounds,
             Color foreColor,
             Color backColor)
             => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
@@ -67,6 +132,22 @@ namespace System.Windows.Forms
 
         public static void DrawText(
             IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Rectangle bounds,
+            Color foreColor,
+            TextFormatFlags flags)
+            => DrawTextInternal(
+                dc,
+                text,
+                font,
+                bounds,
+                foreColor,
+                Color.Empty,
+                flags: GetTextFormatFlags(flags, blockModifyString: true));
+
+        public static void DrawText(
+            IDeviceContext dc,
             string? text,
             Font? font,
             Rectangle bounds,
@@ -74,6 +155,23 @@ namespace System.Windows.Forms
             Color backColor,
             TextFormatFlags flags)
             => DrawTextInternal(dc, text, font, bounds, foreColor, backColor, flags: GetTextFormatFlags(flags));
+
+        public static void DrawText(
+            IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Rectangle bounds,
+            Color foreColor,
+            Color backColor,
+            TextFormatFlags flags)
+            => DrawTextInternal(
+                dc,
+                text,
+                font,
+                bounds,
+                foreColor,
+                backColor,
+                flags: GetTextFormatFlags(flags, blockModifyString: true));
 
         private static void DrawTextInternal(
             IDeviceContext dc,
@@ -166,8 +264,13 @@ namespace System.Windows.Forms
             hdc.DrawText(text, hfont, bounds, foreColor, flags, backColor);
         }
 
-        private static User32.DT GetTextFormatFlags(TextFormatFlags flags)
+        private static User32.DT GetTextFormatFlags(TextFormatFlags flags, bool blockModifyString = false)
         {
+            if (blockModifyString && flags.HasFlag(TextFormatFlags.ModifyString))
+            {
+                throw new ArgumentOutOfRangeException(nameof(flags), SR.TextFormatFlagsModifyStringNotAllowed);
+            }
+
             if (((uint)flags & GdiUnsupportedFlagMask) == 0)
             {
                 return (User32.DT)flags;
@@ -182,16 +285,31 @@ namespace System.Windows.Forms
         public static Size MeasureText(string? text, Font? font)
             => MeasureTextInternal(text, font, MaxSize);
 
+        public static Size MeasureText(ReadOnlySpan<char> text, Font? font)
+            => MeasureTextInternal(text, font, MaxSize);
+
         public static Size MeasureText(string? text, Font? font, Size proposedSize)
+            => MeasureTextInternal(text, font, proposedSize);
+
+        public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize)
             => MeasureTextInternal(text, font, proposedSize);
 
         public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
             => MeasureTextInternal(text, font, proposedSize, flags);
 
+        public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize, TextFormatFlags flags)
+            => MeasureTextInternal(text, font, proposedSize, flags, blockModifyString: true);
+
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
             => MeasureTextInternal(dc, text, font, MaxSize);
 
+        public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font)
+            => MeasureTextInternal(dc, text, font, MaxSize);
+
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
+            => MeasureTextInternal(dc, text, font, proposedSize);
+
+        public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font, Size proposedSize)
             => MeasureTextInternal(dc, text, font, proposedSize);
 
         public static Size MeasureText(
@@ -202,19 +320,30 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => MeasureTextInternal(dc, text, font, proposedSize, flags);
 
+        public static Size MeasureText(
+            IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Size proposedSize,
+            TextFormatFlags flags)
+            => MeasureTextInternal(dc, text, font, proposedSize, flags, blockModifyString: true);
+
         private static Size MeasureTextInternal(
             ReadOnlySpan<char> text,
             Font? font,
             Size proposedSize,
-            TextFormatFlags flags = TextFormatFlags.Bottom)
+            TextFormatFlags flags = TextFormatFlags.Bottom,
+            bool blockModifyString = false)
         {
+            User32.DT drawTextFlags = GetTextFormatFlags(flags, blockModifyString);
+
             if (text.IsEmpty)
                 return Size.Empty;
 
             using var screen = GdiCache.GetScreenHdc();
             using var hfont = GdiCache.GetHFONT(font, Gdi32.QUALITY.DEFAULT, screen);
 
-            return screen.HDC.MeasureText(text, hfont, proposedSize, GetTextFormatFlags(flags));
+            return screen.HDC.MeasureText(text, hfont, proposedSize, drawTextFlags);
         }
 
         private static Size MeasureTextInternal(
@@ -222,10 +351,13 @@ namespace System.Windows.Forms
             ReadOnlySpan<char> text,
             Font? font,
             Size proposedSize,
-            TextFormatFlags flags = TextFormatFlags.Bottom)
+            TextFormatFlags flags = TextFormatFlags.Bottom,
+            bool blockModifyString = false)
         {
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
+
+            User32.DT drawTextFlags = GetTextFormatFlags(flags, blockModifyString);
 
             if (text.IsEmpty)
                 return Size.Empty;
@@ -235,7 +367,7 @@ namespace System.Windows.Forms
 
             using var hdc = new DeviceContextHdcScope(dc);
             using var hfont = GdiCache.GetHFONT(font, quality, hdc);
-            return hdc.MeasureText(text, hfont, proposedSize, GetTextFormatFlags(flags));
+            return hdc.MeasureText(text, hfont, proposedSize, drawTextFlags);
         }
 
         internal static Color DisabledTextColor(Color backColor)
