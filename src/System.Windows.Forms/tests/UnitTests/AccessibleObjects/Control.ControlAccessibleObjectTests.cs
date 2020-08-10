@@ -19,16 +19,17 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
                 typeof(PrintPreviewDialog) 
             };
 
-            return ReflectionHelper.GetPublicNotAbstractClasses<Control>().Select(type => new object[] { type, supportedLegacyIAccessiblePatternClasses.Contains(type) });
+            return ReflectionHelper.GetPublicNotAbstractClasses<Control>()
+                .Select(type => new object[] { type, supportedLegacyIAccessiblePatternClasses.Contains(type) });
         }
 
         [StaTheory]
         [MemberData(nameof(ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_TestData))]
-        public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsExpexted(Type type, bool legacyIAccessiblePatternSupported)
+        public void ControlAccessibleObject_IsPatternSupported_LegacyIAccessible_ReturnsExpected(Type type, bool legacyIAccessiblePatternSupported)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (control == null)
             {
                 return;
             }
@@ -47,11 +48,11 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
         [StaTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
-        public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
+        public void ControlAccessibleObject_Custom_Role_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (control == null)
             {
                 return;
             }
@@ -66,11 +67,11 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
         [StaTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
-        public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
+        public void ControlAccessibleObject_Custom_Description_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
-            if (control == null || !control.SupportsUiaProviders)
+            if (control == null)
             {
                 return;
             }

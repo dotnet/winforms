@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
-        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
+        public void ToolStripItemAccessibleObject_Custom_Role_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
             item.AccessibleRole = AccessibleRole.Link;
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
-        public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
+        public void ToolStripItemAccessibleObject_Custom_Description_ReturnsExpected(Type type)
         {
             using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
             item.AccessibleDescription = "Test Accessible Description";
