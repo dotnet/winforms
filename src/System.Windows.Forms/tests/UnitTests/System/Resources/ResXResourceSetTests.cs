@@ -10,7 +10,6 @@ using Xunit;
 namespace System.Resources.Tests
 {
     // NB: doesn't require thread affinity
-	// Unit Tests for System.Resources.ResXResourceSet
     public class ResXResourceSetTests : IClassFixture<ThreadExceptionFixture>
     {
         #region Resource names and contents
