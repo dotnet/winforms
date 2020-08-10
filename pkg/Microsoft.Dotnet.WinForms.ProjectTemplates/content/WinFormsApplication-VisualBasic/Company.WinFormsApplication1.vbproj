@@ -5,7 +5,7 @@
     <TargetFramework Condition="'$(TargetFrameworkOverride)' == ''">FrameworkParameter-windows</TargetFramework>
     <TargetFramework Condition="'$(TargetFrameworkOverride)' != ''">TargetFrameworkOverride-windows</TargetFramework>
     <RootNamespace>Company.WinFormsApplication1</RootNamespace>
-    <StartupObject>Company.WinFormsApplication1.Form1</StartupObject>
+    <StartupObject>Sub Main</StartupObject>
     <LangVersion Condition="'$(langVersion)' != ''">$(ProjectLanguageVersion)</LangVersion>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
