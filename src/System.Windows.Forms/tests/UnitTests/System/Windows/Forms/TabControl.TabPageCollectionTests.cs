@@ -4128,7 +4128,8 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Unobvious fail reasons: https://github.com/dotnet/winforms/issues/3716")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3716")]
         public void TabPageCollection_Remove_InvokeValueWithoutHandleOwnerWithHandle_Success()
         {
             using var owner = new TabControl

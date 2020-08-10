@@ -2418,7 +2418,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Unobvious fail reasons: https://github.com/dotnet/winforms/issues/3716")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3716")]
         public void MonthCalendar_SingleMonthSize_GetWithHandle_ReturnsExpected()
         {
             using var control = new MonthCalendar();

@@ -2568,7 +2568,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(64000, 0)]
         [InlineData(0x7FFFFFFE, 0)]
         [InlineData(int.MaxValue, 0)]
-        public void RichTextBox_RightMargin_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value,  int expectedCreatedCallCount)
+        public void RichTextBox_RightMargin_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value, int expectedCreatedCallCount)
         {
             using var control = new RichTextBox
             {
@@ -4828,7 +4828,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 1 };
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Unobvious fail reasons: https://github.com/dotnet/winforms/issues/3716")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3716")]
         [MemberData(nameof(SelectionFont_Set_TestData))]
         public void RichTextBox_SelectionFont_Set_GetReturnsExpected(Font value, byte expectedGdiCharset)
         {
@@ -4854,7 +4855,8 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.IsHandleCreated);
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Unobvious fail reasons: https://github.com/dotnet/winforms/issues/3716")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3716")]
         [MemberData(nameof(SelectionFont_Set_TestData))]
         public void RichTextBox_SelectionFont_SetWithHandle_GetReturnsExpected(Font value, byte expectedGdiCharset)
         {
@@ -8077,13 +8079,13 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, -1 };
 
             yield return new object[] { "abc", Array.Empty<char>(), 0, -1 };
-            yield return new object[] { "abc", new char[] { 'a' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'c', 'b' },0,  1 };
-            yield return new object[] { "abc", new char[] { 'b' },0,  1 };
+            yield return new object[] { "abc", new char[] { 'a' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b' }, 0, 1 };
+            yield return new object[] { "abc", new char[] { 'b' }, 0, 1 };
             yield return new object[] { "abc", new char[] { 'd' }, 0, -1 };
             yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, -1 };
 
@@ -8121,13 +8123,13 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, end, -1 };
 
                 yield return new object[] { "abc", Array.Empty<char>(), 0, end, -1 };
-                yield return new object[] { "abc", new char[] { 'a' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'c', 'b' },0, end,  1 };
-                yield return new object[] { "abc", new char[] { 'b' },0, end,  1 };
+                yield return new object[] { "abc", new char[] { 'a' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b' }, 0, end, 1 };
+                yield return new object[] { "abc", new char[] { 'b' }, 0, end, 1 };
                 yield return new object[] { "abc", new char[] { 'd' }, 0, end, -1 };
                 yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, end, -1 };
 

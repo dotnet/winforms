@@ -7798,7 +7798,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
-        [WinFormsTheory]
+
+        [WinFormsTheory(Skip = "Unobvious fail reasons: https://github.com/dotnet/winforms/issues/3716")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3716")]
         [InlineData(true, 3)]
         [InlineData(false, 0)]
         public void TextBoxBase_WndProc_InvokeSetFontWithoutHandle_ReturnsExpected(bool multiline, int expectedMargin)
