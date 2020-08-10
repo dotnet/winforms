@@ -204,6 +204,12 @@ namespace System.ComponentModel.Design.Tests
             nullMockServiceProvider
                 .Setup(p => p.GetService(typeof(TypeDescriptionProviderService)))
                 .Returns(null);
+            nullMockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(new object());
+            nullMockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
+                .Returns(new object());
             yield return new object[] { nullMockServiceProvider.Object };
 
             var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -218,6 +224,12 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(null);
             invalidMockServiceProvider
                 .Setup(p => p.GetService(typeof(INameCreationService)))
+                .Returns(new object());
+            invalidMockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(new object());
+            invalidMockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
                 .Returns(new object());
             yield return new object[] { invalidMockServiceProvider.Object };
         }
@@ -244,6 +256,12 @@ namespace System.ComponentModel.Design.Tests
                     .Returns(null);
                 mockServiceProvider
                     .Setup(p => p.GetService(typeof(ContainerFilterService)))
+                    .Returns(null);
+                mockServiceProvider
+                    .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                    .Returns(null);
+                mockServiceProvider
+                    .Setup(p => p.GetService(typeof(IInheritanceService)))
                     .Returns(null);
                 mockServiceProvider
                     .Setup(p => p.GetService(typeof(INameCreationService)))
