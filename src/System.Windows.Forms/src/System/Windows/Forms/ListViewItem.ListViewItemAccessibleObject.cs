@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             public ListViewItemAccessibleObject(ListViewItem owningItem, ListViewGroup? owningGroup)
             {
                 _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
-                _owningListView = owningItem.ListView ?? throw new ArgumentNullException(nameof(owningItem.ListView));
+                _owningListView = owningItem.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 _owningGroup = owningGroup;
                 _systemIAccessible = _owningListView.AccessibilityObject.GetSystemIAccessibleInternal();
             }

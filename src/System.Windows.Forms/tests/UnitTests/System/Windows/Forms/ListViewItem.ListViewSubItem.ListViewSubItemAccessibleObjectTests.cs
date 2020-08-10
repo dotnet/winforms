@@ -4,11 +4,12 @@
 
 using System.Drawing;
 using Xunit;
+using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewSubItem_ListViewSubItemAccessibleObjectTests
+    public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
     {
         [WinFormsFact]
         public void ListViewSubItemAccessibleObject_GetChild_ReturnCorrectValue()
@@ -34,7 +35,7 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = listViewItem1.AccessibilityObject.GetChild(0);
             Assert.True(list.IsHandleCreated);
             Assert.NotNull(accessibleObject);
-            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(accessibleObject);
+            Assert.IsType<ListViewSubItemAccessibleObject>(accessibleObject);
         }
 
         [WinFormsFact]
@@ -106,19 +107,19 @@ namespace System.Windows.Forms.Tests
 
             Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
             UiaCore.IRawElementProviderFragment subItem1NextSibling = subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(subItem1NextSibling);
+            Assert.IsType<ListViewSubItemAccessibleObject>(subItem1NextSibling);
             Assert.NotNull(subItem1NextSibling);
 
             UiaCore.IRawElementProviderFragment subItem2NextSibling = subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
             UiaCore.IRawElementProviderFragment subItem2PreviousSibling = subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(subItem2NextSibling);
-            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(subItem2PreviousSibling);
+            Assert.IsType<ListViewSubItemAccessibleObject>(subItem2NextSibling);
+            Assert.IsType<ListViewSubItemAccessibleObject>(subItem2PreviousSibling);
             Assert.NotNull(subItem2NextSibling);
             Assert.NotNull(subItem2PreviousSibling);
 
             Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
             UiaCore.IRawElementProviderFragment subItem3PreviousSibling = subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(subItem3PreviousSibling);
+            Assert.IsType<ListViewSubItemAccessibleObject>(subItem3PreviousSibling);
             Assert.NotNull(subItem3PreviousSibling);
 
             // Parent

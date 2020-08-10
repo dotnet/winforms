@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             public ListViewGroupAccessibleObject(ListViewGroup owningGroup, bool owningGroupIsDefault)
             {
                 _owningGroup = owningGroup ?? throw new ArgumentNullException(nameof(owningGroup));
-                _owningListView = owningGroup.ListView ?? throw new ArgumentNullException(nameof(owningGroup.ListView));
+                _owningListView = owningGroup.ListView ?? throw new InvalidOperationException(nameof(owningGroup.ListView));
                 _owningGroupIsDefault = owningGroupIsDefault;
             }
 
