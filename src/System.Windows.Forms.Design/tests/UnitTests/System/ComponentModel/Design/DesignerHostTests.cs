@@ -779,6 +779,12 @@ namespace System.ComponentModel.Design.Tests
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
+                .Returns(null);
 
             var surface = new SubDesignSurface(mockServiceProvider.Object);
             IDesignerLoaderHost2 host = surface.Host;
@@ -1531,6 +1537,12 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(null);
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(ITypeResolutionService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
                 .Returns(null);
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(int)))
