@@ -9401,6 +9401,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje, zda jsou pro víceřádková textová pole automaticky zalamována slova.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">Analýza textu ({0}) se nezdařila. Byl očekáván text ve formátu {1}.</target>

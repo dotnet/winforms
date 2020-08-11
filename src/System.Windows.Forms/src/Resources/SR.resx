@@ -6717,6 +6717,9 @@ Stack trace where the illegal operation occurred was:
     <value>The ImageList control used by the ListView for ListViewGroup images in all views.</value>
   </data>
   <data name="ConstructorArgumentInvalidValueType" xml:space="preserve">
-    <value>Argument '{0}' cannot be converted to type '{1}'.</value> 
+    <value>Argument '{0}' cannot be converted to type '{1}'.</value>
+  </data>
+  <data name="TextFormatFlagsModifyStringNotAllowed" xml:space="preserve">
+    <value>TextFormatFlags.ModifyString is not allowed.</value>
   </data>
 </root>

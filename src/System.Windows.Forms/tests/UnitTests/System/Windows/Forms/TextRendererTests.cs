@@ -354,6 +354,38 @@ namespace System.Windows.Forms.Tests
             TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, Color.Blue, TextFormatFlags.Default);
             mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(8));
             mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(8));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, Point.Empty, Color.Red);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(9));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(9));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, Point.Empty, Color.Red, Color.Blue);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(10));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(10));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, Point.Empty, Color.Red, TextFormatFlags.Default);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(11));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(11));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, Point.Empty, Color.Red, Color.Blue, TextFormatFlags.Default);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(12));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(12));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(13));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(13));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, TextFormatFlags.Default);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(14));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(14));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, Color.Blue);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(15));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(15));
+
+            TextRenderer.DrawText(mockDeviceContext.Object, "text".AsSpan(), SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, Color.Blue, TextFormatFlags.Default);
+            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(16));
+            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(16));
         }
 
         public static IEnumerable<object[]> DrawText_InvalidHdc_TestData()
@@ -548,6 +580,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, TextRenderer.MeasureText(graphics, text, SystemFonts.MenuFont));
             Assert.Equal(Size.Empty, TextRenderer.MeasureText(graphics, text, SystemFonts.MenuFont, new Size(300, 400)));
             Assert.Equal(Size.Empty, TextRenderer.MeasureText(graphics, text, SystemFonts.MenuFont, new Size(300, 400), TextFormatFlags.Default));
+            Assert.Equal(Size.Empty, TextRenderer.MeasureText(text.AsSpan(), SystemFonts.MenuFont));
+            Assert.Equal(Size.Empty, TextRenderer.MeasureText(text.AsSpan(), SystemFonts.MenuFont, new Size(300, 400)));
+            Assert.Equal(Size.Empty, TextRenderer.MeasureText(text.AsSpan(), SystemFonts.MenuFont, new Size(300, 400), TextFormatFlags.Default));
+            Assert.Equal(Size.Empty, TextRenderer.MeasureText(graphics, text.AsSpan(), SystemFonts.MenuFont));
+            Assert.Equal(Size.Empty, TextRenderer.MeasureText(graphics, text.AsSpan(), SystemFonts.MenuFont, new Size(300, 400)));
+            Assert.Equal(Size.Empty, TextRenderer.MeasureText(graphics, text.AsSpan(), SystemFonts.MenuFont, new Size(300, 400), TextFormatFlags.Default));
         }
 
         [WinFormsFact]
@@ -649,10 +687,7 @@ namespace System.Windows.Forms.Tests
         }
 
         public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData
-        {
-            get
-            {
-                return new TheoryData<Func<IDeviceContext, Action>>
+            => new TheoryData<Func<IDeviceContext, Action>>
                 {
                     (IDeviceContext context) => () =>
                         TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
@@ -667,7 +702,68 @@ namespace System.Windows.Forms.Tests
                         TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
                             bounds: new Rectangle(0, 0, int.MaxValue, int.MaxValue), Color.Blue, flags: default),
                 };
-            }
+
+        [Theory]
+        [MemberData(nameof(TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange_TestData))]
+        public void TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange(Action action)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("flags", action);
+        }
+
+#pragma warning disable CS0618 // Type or member is obsolete
+        public static TheoryData<Action> TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange_TestData()
+            => new TheoryData<Action>
+            {
+                () => TextRenderer.DrawText(
+                    MockDC.Instance,
+                    string.Empty.AsSpan(),
+                    null,
+                    new Point(),
+                    Color.Empty,
+                    TextFormatFlags.ModifyString),
+                () => TextRenderer.DrawText(
+                    MockDC.Instance,
+                    string.Empty.AsSpan(),
+                    null,
+                    new Point(),
+                    Color.Empty,
+                    Color.Empty,
+                    TextFormatFlags.ModifyString),
+                () => TextRenderer.DrawText(
+                    MockDC.Instance,
+                    string.Empty.AsSpan(),
+                    null,
+                    new Rectangle(),
+                    Color.Empty,
+                    TextFormatFlags.ModifyString),
+                () => TextRenderer.DrawText(
+                    MockDC.Instance,
+                    string.Empty.AsSpan(),
+                    null,
+                    new Rectangle(),
+                    Color.Empty,
+                    Color.Empty,
+                    TextFormatFlags.ModifyString),
+                () => TextRenderer.MeasureText(
+                    MockDC.Instance,
+                    string.Empty.AsSpan(),
+                    null,
+                    new Size(),
+                    TextFormatFlags.ModifyString),
+                () => TextRenderer.MeasureText(
+                    string.Empty.AsSpan(),
+                    null,
+                    new Size(),
+                    TextFormatFlags.ModifyString),
+            };
+#pragma warning restore CS0618 // Type or member is obsolete
+
+        private class MockDC : IDeviceContext
+        {
+            public static MockDC Instance { get; } = new MockDC();
+            public void Dispose() { }
+            public IntPtr GetHdc() => IntPtr.Zero;
+            public void ReleaseHdc() { }
         }
     }
 }
