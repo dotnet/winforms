@@ -1,13 +1,11 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient; 
 
 namespace AccessibilityTests
 {
@@ -18,12 +16,9 @@ namespace AccessibilityTests
         public Binding_Data()
         {
             InitializeComponent();
-
         }
-
         private void Binding_Data_Load(object sender, EventArgs e)
         {
-
             for (int i = 0; i < 6; i++)
             {
                 studentA.Add(new Student(i, "Name 1" + i, "Male"));
@@ -45,7 +40,6 @@ namespace AccessibilityTests
              new Student(3, "StudentC", "Female", 12123, "1003","Football",false, 10, 11),
              new Student(4, "StudentD", "Male", 12124,"1004","Football",true, 10, 11),
             };
-
 
             //Binding Data For TextBox/Label control/DomianUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button by using DadaBindings property
             Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits" + "\n" + "Basketball" + '\n' + "Football", true, 10, 11);
@@ -107,11 +101,9 @@ namespace AccessibilityTests
                 {
                     item.SubItems.Add(ds.Tables[0].Rows[i][j].ToString());
                 }
-            }
-
+           }
         }
-
-       // Create DataSet 
+       // Create DataSet
         public DataSet CreateDataSet()
         {
             DataSet stuDS = new DataSet();

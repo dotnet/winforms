@@ -37,7 +37,6 @@ namespace AccessibilityTests
             bindingSource1.DataSource = dt;
             dataGridView2.DataSource = bindingSource1;
             bindingNavigator1.BindingSource = bindingSource1;
-
         }
     }
 }

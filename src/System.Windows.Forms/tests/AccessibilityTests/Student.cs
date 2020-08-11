@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace AccessibilityTests
 {
-
   class Student
   {
     public Student(int studentNo, string studentName, string studentSex)
@@ -16,7 +19,6 @@ namespace AccessibilityTests
       StudentName = studentName;
       StudentSex = studentSex;
     }
-
     public Student(int studentNo, string studentName, string studentSex, int studentPhoneNum, string homeNumber, string student_habit, bool is_Student, int student_Count, int Lucky_number)
     {
       StudentNo = studentNo;
@@ -38,8 +40,6 @@ namespace AccessibilityTests
     public bool Is_Student { get; set; }
     public int Student_Count { get; set; }
     public int Lucky_Number { get; set; }
-    
   }
-
 }
 
