@@ -64,7 +64,7 @@ namespace AccessibilityTests
 
         private void button9_Click(object sender, EventArgs e)
         {
-            Binding_Data binding_Data = new Binding_Data();
+            DataBindingExample binding_Data = new DataBindingExample();
             binding_Data.Show();
         }
     }

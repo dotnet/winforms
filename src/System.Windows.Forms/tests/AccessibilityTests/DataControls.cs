@@ -13,11 +13,8 @@ namespace AccessibilityTests
         public DataControls()
         {
             InitializeComponent();
-            dataGridView1.Rows[0].Cells[0].Value = "TextBox";
-            dataGridView1.Rows[0].Cells[1].Value = "Link";
-
-            dataGridView1.Rows[0].Cells[5].Value = "Button";
         }
+
         private void DataControls_Load(object sender, EventArgs e)
         {
             DataTable dt = new DataTable();
@@ -37,6 +34,14 @@ namespace AccessibilityTests
             bindingSource1.DataSource = dt;
             dataGridView2.DataSource = bindingSource1;
             bindingNavigator1.BindingSource = bindingSource1;
+
+            dataGridView1.Rows.Add("abc");
+            dataGridView1.CurrentCell = dataGridView1.Rows[0].Cells[4];
+            dataGridView1.Rows[0].Cells[4].Value = "Item2";
+            dataGridView1.BeginEdit(false);
+            DataGridViewComboBoxEditingControl cbox = dataGridView1.EditingControl as DataGridViewComboBoxEditingControl;
+            if (cbox != null)
+                cbox.DroppedDown = true;
         }
     }
 }

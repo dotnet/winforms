@@ -1,6 +1,6 @@
 ﻿namespace AccessibilityTests
 {
-    partial class Binding_Data
+    partial class DataBindingExample
     {
         /// <summary>
         ///  Required designer variable.
