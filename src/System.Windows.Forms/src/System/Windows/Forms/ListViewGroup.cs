@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             {
                 if (_accessibilityObject is null)
                 {
-                    _accessibilityObject = new ListViewGroupAccessibleObject(this, IsDefault);
+                    _accessibilityObject = new ListViewGroupAccessibleObject(this, ListView?.Groups.Contains(this) == false);
                 }
 
                 return _accessibilityObject;
@@ -187,19 +187,6 @@ namespace System.Windows.Forms
         }
 
         internal bool Focused { get; set; }
-
-        private bool IsDefault
-        {
-            get
-            {
-                if (ListView is null || ListView.Groups.Contains(this))
-                {
-                    return false;
-                }
-
-                return true;
-            }
-        }
 
         /// <summary>
         ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.

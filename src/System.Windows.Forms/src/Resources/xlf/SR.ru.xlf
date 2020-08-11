@@ -6347,11 +6347,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">FindNearestItem поддерживается, только когда для ListView используется представление SMALLICON или LARGEICON.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFocusedGroupDescription">
-        <source>The ListView group that currently has the user focus.</source>
-        <target state="new">The ListView group that currently has the user focus.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFocusedItemDescr">
         <source>The ListView item that currently has the user focus.</source>
         <target state="translated">Текущий элемент ListView, на который пользователь переключил фокус.</target>

@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(firstChild, listItem3.AccessibilityObject);
         }
 
-        [WinFormsFact(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
+        [WinFormsFact]
         public void ListViewGroupAccessibleObject_Bounds_ReturnsCorrectValue()
         {
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
@@ -143,7 +143,6 @@ namespace System.Windows.Forms.Tests
                 list.CreateControl();
                 form.Controls.Add(list);
                 form.Show();
-                Thread.Sleep(40000);
 
                 AccessibleObject accessibleObject = list.AccessibilityObject;
                 AccessibleObject group1AccObj = listGroup.AccessibilityObject;

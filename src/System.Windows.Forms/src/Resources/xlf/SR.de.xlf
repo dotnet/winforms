@@ -6346,11 +6346,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">FindNearestItem wird nur unterstützt, wenn sich die ListView in der SMALLICON- oder LARGEICON-Ansicht befindet.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewFocusedGroupDescription">
-        <source>The ListView group that currently has the user focus.</source>
-        <target state="new">The ListView group that currently has the user focus.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewFocusedItemDescr">
         <source>The ListView item that currently has the user focus.</source>
         <target state="translated">Das ListView-Element, das zurzeit den Benutzerfokus hat.</target>

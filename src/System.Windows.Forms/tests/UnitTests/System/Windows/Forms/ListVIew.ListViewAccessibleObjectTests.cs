@@ -32,6 +32,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ListViewAccessibleObject_GetMultiViewProviderCurrentView_ReturnsCorrectValue()
+        {
+            using ListView listView = new ListView();
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal((int)listView.View, accessibleObject.GetMultiViewProviderCurrentView());
+        }
+
+        [WinFormsFact]
+        public void ListViewAccessibleObject_GetMultiViewProviderSupportedViews_ReturnsExpected()
+        {
+            using ListView listView = new ListView();
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(new int[] { (int)View.Details }, accessibleObject.GetMultiViewProviderSupportedViews());
+        }
+
+        [WinFormsFact]
+        public void ListViewAccessibleObject_GetMultiViewProviderViewName_ReturnsCorrectValue()
+        {
+            using ListView listView = new ListView();
+            listView.View = View.Details;
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(((int)(listView.View)).ToString(), accessibleObject.GetMultiViewProviderViewName((int)View.Details));
+        }
+
+        [WinFormsFact]
         public void ListViewAccessibleObject_ListWithOneItem_GetChildCount_ReturnsCorrectValue()
         {
             using ListView listView = new ListView();

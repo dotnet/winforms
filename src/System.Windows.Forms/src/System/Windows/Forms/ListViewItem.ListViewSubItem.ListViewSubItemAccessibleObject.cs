@@ -29,11 +29,25 @@ namespace System.Windows.Forms
                     => _owningListView.AccessibilityObject;
 
                 public override Rectangle Bounds
-                    => new Rectangle(
+                {
+                    get
+                    {
+                        // Previously bounds was provided using MSAA,
+                        // but using UIA we found out that SendMessageW work incorrectly.
+                        // When we need to get bounds for first sub item it will return width of all item.
+                        int width = _owningSubItem.Bounds.Width;
+
+                        if (Column == 0 && _owningItem.SubItems.Count > 1)
+                        {
+                            width = _owningItem.SubItems[Column + 1].Bounds.X - _owningSubItem.Bounds.X;
+                        }
+
+                        return new Rectangle(
                             _owningListView.AccessibilityObject.Bounds.X + _owningSubItem.Bounds.X,
                             _owningListView.AccessibilityObject.Bounds.Y + _owningSubItem.Bounds.Y,
-                            _owningSubItem.Bounds.Width,
-                            _owningSubItem.Bounds.Height);
+                            width, _owningSubItem.Bounds.Height);
+                    }
+                }
 
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
@@ -65,7 +79,7 @@ namespace System.Windows.Forms
                 /// </summary>
                 public override string? Name
                 {
-                    get => _owningSubItem.Text;
+                    get => base.Name ?? _owningSubItem.Text;
                     set => base.Name = value;
                 }
 

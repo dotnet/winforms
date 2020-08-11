@@ -282,9 +282,9 @@ namespace System.Windows.Forms
 
             internal unsafe override void SelectItem()
             {
-                if (_owningListView.IsHandleCreated && _owningListView.selectedIndexCollection != null)
+                if (_owningListView.IsHandleCreated)
                 {
-                    _owningListView.selectedIndexCollection.Add(CurrentIndex);
+                    _owningListView.SelectedIndices.Add(CurrentIndex);
                     User32.InvalidateRect(new HandleRef(this, _owningListView.Handle), null, BOOL.FALSE);
                 }
 
