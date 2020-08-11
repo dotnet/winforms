@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// </summary>
     public static class TextRenderer
     {
-        private static readonly Gdi32.QUALITY _defaultQuality = GetDefaultFontQuality();
+        private static readonly Gdi32.QUALITY s_defaultQuality = GetDefaultFontQuality();
 
         // Used to clear TextRenderer specific flags from TextFormatFlags
         internal const int GdiUnsupportedFlagMask = (unchecked((int)0xFF000000));
@@ -23,6 +23,15 @@ namespace System.Windows.Forms
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Point pt, Color foreColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
 
+        /// <summary>
+        ///  Draws the specified text at the specified location using the specified device context, font, and color.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
         public static void DrawText(IDeviceContext dc, ReadOnlySpan<char> text, Font font, Point pt, Color foreColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty);
 
@@ -35,10 +44,21 @@ namespace System.Windows.Forms
             Color backColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
 
+        /// <summary>
+        ///  Draws the specified text at the specified location, using the specified device context, font, color, and back color.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
         public static void DrawText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
-            Font font, Point pt,
+            Font font,
+            Point pt,
             Color foreColor,
             Color backColor)
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor);
@@ -52,6 +72,20 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => DrawTextInternal(dc, text, font, pt, foreColor, Color.Empty, flags: GetTextFormatFlags(flags));
 
+        /// <summary>
+        ///  Draws the specified text at the specified location using the specified device context, font, color, and
+        ///  formatting instructions.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+        /// </exception>
         public static void DrawText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
@@ -79,6 +113,21 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => DrawTextInternal(dc, text, font, pt, foreColor, backColor, flags: GetTextFormatFlags(flags));
 
+        /// <summary>
+        ///  Draws the specified text at the specified location using the specified device context, font, color, back
+        ///  color, and formatting instructions.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="pt">The <see cref="Point"/> that represents the upper-left corner of the drawn text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+        /// </exception>
         public static void DrawText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
@@ -100,7 +149,21 @@ namespace System.Windows.Forms
         public static void DrawText(IDeviceContext dc, string? text, Font? font, Rectangle bounds, Color foreColor)
             => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
 
-        public static void DrawText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font, Rectangle bounds, Color foreColor)
+        /// <summary>
+        ///  Draws the specified text within the specified bounds, using the specified device context, font, and color.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+        public static void DrawText(
+            IDeviceContext dc,
+            ReadOnlySpan<char> text,
+            Font? font,
+            Rectangle bounds,
+            Color foreColor)
             => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty);
 
         public static void DrawText(
@@ -112,6 +175,17 @@ namespace System.Windows.Forms
             Color backColor)
             => DrawTextInternal(dc, text, font, bounds, foreColor, backColor);
 
+        /// <summary>
+        ///  Draws the specified text within the specified bounds using the specified device context, font, color, and
+        ///  back color.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
         public static void DrawText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
@@ -130,6 +204,20 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => DrawTextInternal(dc, text, font, bounds, foreColor, Color.Empty, flags: GetTextFormatFlags(flags));
 
+        /// <summary>
+        ///  Draws the specified text within the specified bounds using the specified device context, font, color, and
+        ///  formatting instructions.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+        /// </exception>
         public static void DrawText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
@@ -156,6 +244,21 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => DrawTextInternal(dc, text, font, bounds, foreColor, backColor, flags: GetTextFormatFlags(flags));
 
+        /// <summary>
+        ///  Draws the specified text within the specified bounds using the specified device context, font, color,
+        ///  back color, and formatting instructions.
+        /// </summary>
+        /// <param name="dc">The device context in which to draw the text.</param>
+        /// <param name="text">The text to draw.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the drawn text.</param>
+        /// <param name="bounds">The <see cref="Rectangle"/> that represents the bounds of the text.</param>
+        /// <param name="foreColor">The <see cref="Color"/> to apply to the drawn text.</param>
+        /// <param name="backColor">The <see cref="Color"/> to apply to the background area of the drawn text.</param>
+        /// <param name="flags">A bitwise combination of the <see cref="TextFormatFlags"/> values.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+        /// </exception>
         public static void DrawText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
@@ -236,7 +339,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                DrawTextInternal(hdc, text, font, bounds, foreColor, _defaultQuality, backColor, flags);
+                DrawTextInternal(hdc, text, font, bounds, foreColor, s_defaultQuality, backColor, flags);
             }
         }
 
@@ -285,30 +388,97 @@ namespace System.Windows.Forms
         public static Size MeasureText(string? text, Font? font)
             => MeasureTextInternal(text, font, MaxSize);
 
+        /// <summary>
+        ///  Provides the size, in pixels, of the specified text when drawn with the specified font.
+        /// </summary>
+        /// <param name="text">The text to measure.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+        /// <returns>
+        ///  The <see cref="Size"/>, in pixels, of text drawn on a single line with the specified font. You can
+        ///  manipulate how the text is drawn by using one of the
+        ///  <see cref="DrawText(IDeviceContext, ReadOnlySpan{char}, Font?, Rectangle, Color, TextFormatFlags)"/>
+        ///  overloads that takes a <see cref="TextFormatFlags"/> parameter. For example, the default behavior of the
+        ///  <see cref="TextRenderer"/> is to add padding to the bounding rectangle of the drawn text to accommodate
+        ///  overhanging glyphs. If you need to draw a line of text without these extra spaces you should use the
+        ///  versions of <see cref="DrawText(IDeviceContext, ReadOnlySpan{char}, Font, Point, Color)"/> and
+        ///  <see cref="MeasureText(IDeviceContext, ReadOnlySpan{char}, Font?)"/> that take a Size and
+        ///  <see cref="TextFormatFlags"/> parameter. For an example, see
+        ///  <see cref="MeasureText(IDeviceContext, string?, Font?, Size, TextFormatFlags)"/>.
+        /// </returns>
         public static Size MeasureText(ReadOnlySpan<char> text, Font? font)
             => MeasureTextInternal(text, font, MaxSize);
 
         public static Size MeasureText(string? text, Font? font, Size proposedSize)
             => MeasureTextInternal(text, font, proposedSize);
 
+        /// <summary>
+        ///  Provides the size, in pixels, of the specified text when drawn with the specified font, using the
+        ///  specified size to create an initial bounding rectangle.
+        /// </summary>
+        /// <param name="text">The text to measure.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+        /// <returns>
+        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+        ///  <paramref name="font"/>.
+        /// </returns>
         public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize)
             => MeasureTextInternal(text, font, proposedSize);
 
         public static Size MeasureText(string? text, Font? font, Size proposedSize, TextFormatFlags flags)
             => MeasureTextInternal(text, font, proposedSize, flags);
 
+        /// <summary>
+        ///  Provides the size, in pixels, of the specified text when drawn with the specified font and formatting
+        ///  instructions, using the specified size to create the initial bounding rectangle for the text.
+        /// </summary>
+        /// <param name="text">The text to measure.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+        /// <param name="flags">The formatting instructions to apply to the measured text.</param>
+        /// <returns>
+        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+        ///  <paramref name="font"/> and format.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+        /// </exception>
         public static Size MeasureText(ReadOnlySpan<char> text, Font? font, Size proposedSize, TextFormatFlags flags)
             => MeasureTextInternal(text, font, proposedSize, flags, blockModifyString: true);
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font)
             => MeasureTextInternal(dc, text, font, MaxSize);
 
+        /// <summary>
+        ///  Provides the size, in pixels, of the specified text drawn with the specified font in the specified device
+        ///  context.
+        /// </summary>
+        /// <param name="dc">The device context in which to measure the text.</param>
+        /// <param name="text">The text to measure.</param>
+        /// <returns>
+        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+        ///  <paramref name="font"/> in the specified device context.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
         public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font)
             => MeasureTextInternal(dc, text, font, MaxSize);
 
         public static Size MeasureText(IDeviceContext dc, string? text, Font? font, Size proposedSize)
             => MeasureTextInternal(dc, text, font, proposedSize);
 
+        /// <summary>
+        ///  Provides the size, in pixels, of the specified text when drawn with the specified font in the specified
+        ///  device context, using the specified size to create an initial bounding rectangle for the text.
+        /// </summary>
+        /// <param name="dc">The device context in which to measure the text.</param>
+        /// <param name="text">The text to measure.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+        /// <returns>
+        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+        ///  <paramref name="font"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
         public static Size MeasureText(IDeviceContext dc, ReadOnlySpan<char> text, Font? font, Size proposedSize)
             => MeasureTextInternal(dc, text, font, proposedSize);
 
@@ -320,6 +490,23 @@ namespace System.Windows.Forms
             TextFormatFlags flags)
             => MeasureTextInternal(dc, text, font, proposedSize, flags);
 
+        /// <summary>
+        ///  Provides the size, in pixels, of the specified text when drawn with the specified device context, font,
+        ///  and formatting instructions, using the specified size to create the initial bounding rectangle for the text.
+        /// </summary>
+        /// <param name="dc">The device context in which to measure the text.</param>
+        /// <param name="text">The text to measure.</param>
+        /// <param name="font">The <see cref="Font"/> to apply to the measured text.</param>
+        /// <param name="proposedSize">The <see cref="Size"/> of the initial bounding rectangle.</param>
+        /// <param name="flags">The formatting instructions to apply to the measured text.</param>
+        /// <returns>
+        ///  The <see cref="Size"/>, in pixels, of <paramref name="text"/> drawn with the specified
+        ///  <paramref name="font"/> and format.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"><paramref name="dc"/> is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  Thrown if <see cref="TextFormatFlags.ModifyString"/> is set.
+        /// </exception>
         public static Size MeasureText(
             IDeviceContext dc,
             ReadOnlySpan<char> text,
