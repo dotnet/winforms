@@ -60,7 +60,7 @@
             this.comboBox1.Location = new System.Drawing.Point(10, 9);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 0;
+            this.comboBox1.TabIndex = 2;
             this.comboBox1.Text = "ComboBox_DropDown";
             // 
             // dataGridView1
@@ -71,7 +71,8 @@
             this.dataGridView1.Location = new System.Drawing.Point(12, 21);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(240, 150);
-            this.dataGridView1.TabIndex = 4;
+            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.StandardTab = true;
             this.dataGridView1.Text = "dataGridView1";
             // 
             // label1
@@ -82,7 +83,7 @@
             this.label1.Location = new System.Drawing.Point(10, 48);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 15);
-            this.label1.TabIndex = 12;
+            this.label1.TabIndex = 3;
             this.label1.Text = "StudentPhoneNum";
             // 
             // textBox1
@@ -92,7 +93,7 @@
             this.textBox1.Location = new System.Drawing.Point(10, 77);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(142, 23);
-            this.textBox1.TabIndex = 13;
+            this.textBox1.TabIndex = 4;
             this.textBox1.Text = "TextBox";
             // 
             // button1
@@ -102,7 +103,7 @@
             this.button1.Location = new System.Drawing.Point(10, 136);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 14;
+            this.button1.TabIndex = 5;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             // 
@@ -124,7 +125,7 @@
             this.panel1.Location = new System.Drawing.Point(272, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(479, 198);
-            this.panel1.TabIndex = 15;
+            this.panel1.TabIndex = 1;
             // 
             // radioButton1
             // 
@@ -134,7 +135,7 @@
             this.radioButton1.Location = new System.Drawing.Point(336, 77);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(84, 19);
-            this.radioButton1.TabIndex = 22;
+            this.radioButton1.TabIndex = 12;
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "Agreement";
             this.radioButton1.UseVisualStyleBackColor = true;
@@ -146,7 +147,7 @@
             this.numericUpDown1.Location = new System.Drawing.Point(336, 39);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 23);
-            this.numericUpDown1.TabIndex = 21;
+            this.numericUpDown1.TabIndex = 11;
             // 
             // domainUpDown1
             // 
@@ -155,7 +156,7 @@
             this.domainUpDown1.Location = new System.Drawing.Point(336, 10);
             this.domainUpDown1.Name = "domainUpDown1";
             this.domainUpDown1.Size = new System.Drawing.Size(120, 23);
-            this.domainUpDown1.TabIndex = 20;
+            this.domainUpDown1.TabIndex = 10;
             this.domainUpDown1.Text = "Student count";
             // 
             // richTextBox1
@@ -165,7 +166,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(169, 102);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(151, 85);
-            this.richTextBox1.TabIndex = 19;
+            this.richTextBox1.TabIndex = 9;
             this.richTextBox1.Text = "RichTestBox";
             // 
             // checkBox1
@@ -176,7 +177,7 @@
             this.checkBox1.Location = new System.Drawing.Point(169, 77);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(80, 19);
-            this.checkBox1.TabIndex = 18;
+            this.checkBox1.TabIndex = 8;
             this.checkBox1.Text = "Is_Student";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
@@ -187,7 +188,7 @@
             this.maskedTextBox1.Location = new System.Drawing.Point(169, 45);
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(142, 23);
-            this.maskedTextBox1.TabIndex = 16;
+            this.maskedTextBox1.TabIndex = 7;
             this.maskedTextBox1.Text = "MaskedTextBox";
             // 
             // linkLabel1
@@ -198,7 +199,7 @@
             this.linkLabel1.Location = new System.Drawing.Point(169, 12);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(84, 15);
-            this.linkLabel1.TabIndex = 15;
+            this.linkLabel1.TabIndex = 6;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "HomeNumber";
             // 
@@ -210,7 +211,7 @@
             this.label2.Location = new System.Drawing.Point(37, 224);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 15);
-            this.label2.TabIndex = 16;
+            this.label2.TabIndex = 13;
             this.label2.Text = "TreeView";
             // 
             // treeView1
@@ -220,7 +221,7 @@
             this.treeView1.Location = new System.Drawing.Point(12, 242);
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(129, 101);
-            this.treeView1.TabIndex = 17;
+            this.treeView1.TabIndex = 14;
             // 
             // label3
             // 
@@ -230,7 +231,7 @@
             this.label3.Location = new System.Drawing.Point(244, 225);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 15);
-            this.label3.TabIndex = 18;
+            this.label3.TabIndex = 15;
             this.label3.Text = "ListView";
             // 
             // listView1
@@ -241,7 +242,7 @@
             this.listView1.Location = new System.Drawing.Point(162, 246);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(203, 97);
-            this.listView1.TabIndex = 19;
+            this.listView1.TabIndex = 16;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
             // 
@@ -253,7 +254,7 @@
             this.label5.Location = new System.Drawing.Point(476, 225);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 15);
-            this.label5.TabIndex = 22;
+            this.label5.TabIndex = 17;
             this.label5.Text = "ListBox";
             // 
             // listBox1
@@ -265,7 +266,7 @@
             this.listBox1.Location = new System.Drawing.Point(453, 249);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(120, 94);
-            this.listBox1.TabIndex = 23;
+            this.listBox1.TabIndex = 18;
             // 
             // Binding_Data
             // 
