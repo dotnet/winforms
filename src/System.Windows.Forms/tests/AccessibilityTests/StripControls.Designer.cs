@@ -676,4 +676,3 @@
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
     }
 }
-
