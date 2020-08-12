@@ -322,7 +322,7 @@
     <Rule Id="CA2225" Action="None" />             <!-- Operator overloads have named alternates -->
     <Rule Id="CA2226" Action="None" />             <!-- Operators should have symmetrical overloads -->
     <Rule Id="CA2227" Action="None" />             <!-- Collection properties should be read only -->
-    <Rule Id="CA2229" Action="Info" />             <!-- TODO: Implement serialization constructors -->
+    <Rule Id="CA2229" Action="Warning" />          <!-- Implement serialization constructors -->
     <Rule Id="CA2231" Action="None" />             <!-- Overload operator equals on overriding value type Equals -->
     <Rule Id="CA2234" Action="None" />             <!-- Pass system uri objects instead of strings -->
     <Rule Id="CA2235" Action="None" />             <!-- Mark all non-serializable fields -->

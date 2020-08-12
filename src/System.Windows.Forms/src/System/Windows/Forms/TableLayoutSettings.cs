@@ -39,7 +39,7 @@ namespace System.Windows.Forms
 
         internal TableLayoutSettings(IArrangedElement owner) : base(owner) { }
 
-        internal TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
+        private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = serializationInfo.GetString("SerializedString");
