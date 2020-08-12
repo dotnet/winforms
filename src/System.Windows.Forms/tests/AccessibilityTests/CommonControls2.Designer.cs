@@ -112,7 +112,7 @@
             this.radioButton1.Size = new System.Drawing.Size(94, 19);
             this.radioButton1.TabIndex = 8;
             this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "radioButton1";
+            this.radioButton1.Text = "RadioButton1";
             this.radioButton1.UseVisualStyleBackColor = true;
             // 
             // label5
@@ -123,7 +123,7 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 15);
             this.label5.TabIndex = 9;
-            this.label5.Text = "RichTextBox";
+            this.label5.Text = "RichtextBox";
             // 
             // richTextBox1
             // 

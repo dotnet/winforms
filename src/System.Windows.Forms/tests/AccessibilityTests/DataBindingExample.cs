@@ -27,7 +27,7 @@ namespace AccessibilityTests
                 _studentB.Add(new Student(i * 2, "Name 11" + i * 2, "Female"));
             }
 
-            // Binding Data For ListBox & ComboBox & CheckedListBox controls by using DadSource property
+            // Binding Data For ListBox & ComboBox & CheckedListBox controls by using DataSource property
             listBox1.DataSource = _studentA;
             comboBox1.DataSource = _studentB;
 
@@ -41,7 +41,7 @@ namespace AccessibilityTests
                  new Student(3, "StudentC", "Female", 12123, "1003","Football",false, 10, 11),
                  new Student(4, "StudentD", "Male", 12124,"1004","Football",true, 10, 11),};
 
-            // Binding Data For TextBox/Label control/DomianUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button by using DadaBindings property
+            // Binding Data For TextBox/Label/DomianUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
             Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
             this.textBox1.DataBindings.Add("Text", stu, "StudentNo");
             this.domainUpDown1.DataBindings.Add("Text", stu, "Lucky_Number");
