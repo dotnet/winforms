@@ -93,6 +93,12 @@
     <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\TestHelpers.cs">
       <Link>TestHelpers.cs</Link>
     </Compile>
+    <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\Person.cs">
+      <Link>Person.cs</Link>
+    </Compile>
+    <Compile Include="..\System.Windows.Forms.IntegrationTests.Common\TestDataSources.cs">
+      <Link>TestDataSources.cs</Link>
+    </Compile>
     <Compile Include="..\WinformsControlsTest\Buttons.cs">
       <Link>Buttons.cs</Link>
       <SubType>Form</SubType>

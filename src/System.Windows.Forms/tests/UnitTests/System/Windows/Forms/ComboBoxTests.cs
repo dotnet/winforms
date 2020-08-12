@@ -924,35 +924,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GettingComboBoxItemAccessibleObject_Not_ThrowsException()
-        {
-            var control = new ComboBox();
-
-            var h1 = new HashNotImplementedObject();
-            var h2 = new HashNotImplementedObject();
-            var h3 = new HashNotImplementedObject();
-
-            control.Items.AddRange(new[] { h1, h2, h3 });
-
-            var comboBoxAccObj = (ComboBox.ComboBoxAccessibleObject)control.AccessibilityObject;
-
-            var exceptionThrown = false;
-
-            try
-            {
-                var itemAccObj1 = comboBoxAccObj.ItemAccessibleObjects[h1];
-                var itemAccObj2 = comboBoxAccObj.ItemAccessibleObjects[h2];
-                var itemAccObj3 = comboBoxAccObj.ItemAccessibleObjects[h3];
-            }
-            catch
-            {
-                exceptionThrown = true;
-            }
-
-            Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
-        }
-
-        [Fact]
         public void ComboBox_SelectedIndexChanged_Doesnt_force_Handle_creating()
         {
             string[] items = new[] { "Item 1", "Item 2", "Item 3" };
@@ -963,14 +934,7 @@ namespace System.Windows.Forms.Tests
             comboBox.Items.AddRange(items);
             comboBox.SelectedItem = items[1];
             Assert.False(comboBox.IsHandleCreated);
-        }
 
-        public class HashNotImplementedObject
-        {
-            public override int GetHashCode()
-            {
-                throw new NotImplementedException();
-            }
         }
     }
 }
