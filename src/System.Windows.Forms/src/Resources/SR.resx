@@ -6722,4 +6722,7 @@ Stack trace where the illegal operation occurred was:
   <data name="TextFormatFlagsModifyStringNotAllowed" xml:space="preserve">
     <value>TextFormatFlags.ModifyString is not allowed.</value>
   </data>
+  <data name="AccessibleActionDoubleClick" xml:space="preserve">
+    <value>Double Click</value>
+  </data>
 </root>
