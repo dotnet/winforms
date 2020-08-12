@@ -29,15 +29,7 @@ namespace System.Resources.Tests
 
                 string strResXValue = resxSet.GetString(resourceName);
 
-                if (expected == null)
-                {
-                    Assert.Null(strResXValue);
-                }
-                else
-                {
-                    Assert.NotNull(strResXValue);
-                    Assert.Equal(expected, strResXValue);
-                }
+                Assert.Equal(expected, strResXValue);
             }
         }
 
