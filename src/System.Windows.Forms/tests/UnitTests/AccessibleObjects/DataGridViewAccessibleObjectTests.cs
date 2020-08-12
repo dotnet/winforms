@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
     public class DataGridViewAccessibleObjectTests
     {
         [Fact]
-        public void PropertyGridAccessibleObject_Ctor_Default()
+        public void DataGridViewAccessibleObject_Ctor_Default()
         {
             DataGridView dataGridView = new DataGridView();
 

@@ -5593,9 +5593,12 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyID)
             {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
+                switch (propertyID)
                 {
-                    return NativeMethods.UIA_ToolBarControlTypeId;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_ToolBarControlTypeId;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
                 }
 
                 return base.GetPropertyValue(propertyID);

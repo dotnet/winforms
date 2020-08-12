@@ -124,14 +124,15 @@ stages:
 
         # Run Integration Tests
         # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
-        # UI race conditions
-        - script: eng\cibuild.cmd
-            -integrationTest
-            -configuration $(_BuildConfig)
-            $(_OfficialBuildIdArgs)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
-            /m:1
-          displayName: Run Integration Tests
+        # UI race conditions 
+        # Flaky tests, see: https://github.com/dotnet/winforms/issues/3617
+        # - script: eng\cibuild.cmd
+        #     -integrationTest
+        #     -configuration $(_BuildConfig)
+        #     $(_OfficialBuildIdArgs)
+        #     /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+        #     /m:1
+        #   displayName: Run Integration Tests
 
         # Create Nuget package, sign, and publish
         - script: eng\cibuild.cmd
