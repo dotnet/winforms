@@ -1044,7 +1044,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
-        public void ControlAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
+        public void ControlAccessibleObject_Custom_Role_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ControlAccessibleObject_TestData))]
-        public void ControlAccessibleObject_LegacyIAccessible_Custom_Description_ReturnsExpected(Type type)
+        public void ControlAccessibleObject_Custom_Description_ReturnsExpected(Type type)
         {
             using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
 

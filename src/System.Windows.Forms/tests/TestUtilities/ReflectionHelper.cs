@@ -47,7 +47,7 @@ namespace System
             return obj;
         }
 
-        public static bool IsPublicNonAbstract<T>(Type type)
+        private static bool IsPublicNonAbstract<T>(Type type)
         {
             return !type.IsAbstract && type.IsPublic && typeof(T).IsAssignableFrom(type);
         }
