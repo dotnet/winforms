@@ -13,43 +13,42 @@ namespace AccessibilityTests
 {
     public class Student
     {
-        public Student(int studentNo, string studentName, string studentSex)
+        public Student(int studentNumber, string name, string sex)
         {
-            StudentNo = studentNo;
-            StudentName = studentName;
-            StudentSex = studentSex;
+            StudentNumber = studentNumber;
+            Name = name;
+            Sex = sex;
         }
 
-        public Student(int studentNo, string studentName, string studentSex, int studentPhoneNum, string homeNumber, string student_habit, bool is_Student, int student_Count, int Lucky_number)
+        public Student(int studentNumber, string name, string sex, int phoneNumber, string homeNumber, string hobby, bool isStudent, int count, int luckyNumber)
         {
-            StudentNo = studentNo;
-            StudentName = studentName;
-            StudentSex = studentSex;
-            StudentPhoneNum = studentPhoneNum;
+            StudentNumber = studentNumber;
+            Name = name;
+            Sex = sex;
+            PhoneNumber = phoneNumber;
             HomeNumber = homeNumber;
-            Is_Student = is_Student;
-            Student_habit = student_habit;
-            Student_Count = student_Count;
-            Lucky_Number = Lucky_number;
+            IsStudent = isStudent;
+            Hobby = hobby;
+            Count = count;
+            LuckyNumber = luckyNumber;
         }
 
-        public int StudentNo { get; set; }
+        public int StudentNumber { get; set; }
 
-        public string StudentName { get; set; }
+        public string Name { get; set; }
 
-        public string StudentSex { get; set; }
+        public string Sex { get; set; }
 
-        public int StudentPhoneNum { get; set; }
+        public int PhoneNumber { get; set; }
 
         public string HomeNumber { get; set; }
 
-        public string Student_habit { get; set; }
+        public string Hobby { get; set; }
 
-        public bool Is_Student { get; set; }
+        public bool IsStudent { get; set; }
 
-        public int Student_Count { get; set; }
+        public int Count { get; set; }
 
-        public int Lucky_Number { get; set; }
+        public int LuckyNumber { get; set; }
     }
 }
-

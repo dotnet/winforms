@@ -62,10 +62,10 @@ namespace AccessibilityTests
             containerControl.Show();
         }
 
-        private void button9_Click(object sender, EventArgs e)
+        private void btnDataBindingExample_Click(object sender, EventArgs e)
         {
-            DataBindingExample binding_Data = new DataBindingExample();
-            binding_Data.Show();
+            DataBindingExample dataBindingExample = new DataBindingExample();
+            dataBindingExample.Show();
         }
     }
 }

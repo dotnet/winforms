@@ -19,7 +19,12 @@ namespace AccessibilityTests
             InitializeComponent();
         }
 
-        private void Binding_Data_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
+        {
+            BindingData();
+        }
+
+        private void BindingData()
         {
             for (int i = 0; i < 6; i++)
             {
@@ -31,40 +36,39 @@ namespace AccessibilityTests
             listBox1.DataSource = _studentA;
             comboBox1.DataSource = _studentB;
 
-            listBox1.DisplayMember = "StudentName";
-            comboBox1.DisplayMember = "StudentName";
+            listBox1.DisplayMember = nameof(Student.Name);
+            comboBox1.DisplayMember = nameof(Student.Name);
 
             // Binding Data For DataGridView control by using DadSource property
             dataGridView1.DataSource = new List<Student>{
-                 new Student(1, "StudentA", "Female", 12121, "1001","Basketball",false, 10, 11),
-                 new Student(2, "StudentB", "Male", 12122, "1002","Basketball",true, 10, 11),
-                 new Student(3, "StudentC", "Female", 12123, "1003","Football",false, 10, 11),
-                 new Student(4, "StudentD", "Male", 12124,"1004","Football",true, 10, 11),};
+                     new Student(1, "StudentA", "Female", 12121, "1001", "Basketball", false, 10, 11),
+                     new Student(2, "StudentB", "Male", 12122, "1002", "Basketball", true, 10, 11),
+                     new Student(3, "StudentC", "Female", 12123, "1003", "Football", false, 10, 11),
+                     new Student(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),};
 
             // Binding Data For TextBox/Label/DomianUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
             Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
-            this.textBox1.DataBindings.Add("Text", stu, "StudentNo");
-            this.domainUpDown1.DataBindings.Add("Text", stu, "Lucky_Number");
-            this.numericUpDown1.DataBindings.Add("Text", stu, "Student_Count");
-            this.label1.DataBindings.Add("Text", stu, "StudentName");
-            this.button1.DataBindings.Add("Text", stu, "StudentSex");
-            this.maskedTextBox1.DataBindings.Add("Text", stu, "StudentPhoneNum");
+            this.textBox1.DataBindings.Add("Text", stu, "StudentNumber");
+            this.domainUpDown1.DataBindings.Add("Text", stu, "LuckyNumber");
+            this.numericUpDown1.DataBindings.Add("Text", stu, "Count");
+            this.label1.DataBindings.Add("Text", stu, "Name");
+            this.button1.DataBindings.Add("Text", stu, "Sex");
+            this.maskedTextBox1.DataBindings.Add("Text", stu, "PhoneNumber");
             this.linkLabel1.DataBindings.Add("Text", stu, "HomeNumber");
-            this.richTextBox1.DataBindings.Add("Text", stu, "Student_habit");
-            this.checkBox1.DataBindings.Add("Checked", stu, "Is_Student");
-            this.radioButton1.DataBindings.Add("Checked", stu, "Is_Student");
+            this.richTextBox1.DataBindings.Add("Text", stu, "Hobby");
+            this.checkBox1.DataBindings.Add("Checked", stu, "IsStudent");
+            this.radioButton1.DataBindings.Add("Checked", stu, "IsStudent");
 
             // Binding Data For TreeView control by using DataSet
-            BindTree();
+            BindTreeView();
 
             // Binding Data For ListView control by using DataSet
             BindListView();
         }
 
-        // Binding Data For TreeView control by using DataSet
-        public void BindTree()
+        private void BindTreeView()
         {
-            DataSet ds = CreateDataSet();
+            using DataSet ds = CreateDataSet();
 
             if (ds.Tables[0].Rows.Count > 0)
             {
@@ -75,15 +79,12 @@ namespace AccessibilityTests
                     this.treeView1.Nodes.Add(node);
                 }
             }
-
-            ds.Dispose();
         }
 
-        // Binding Data For ListView control by using DataSet
-        public void BindListView()
+        private void BindListView()
         {
             listView1.View = View.Details;
-            DataSet ds = CreateDataSet();
+            using DataSet ds = CreateDataSet();
 
             int row_Count = ds.Tables[0].Rows.Count;
             int col_Count = ds.Tables[0].Columns.Count;
@@ -105,8 +106,6 @@ namespace AccessibilityTests
                     item.SubItems.Add(ds.Tables[0].Rows[i][j].ToString());
                 }
             }
-
-            ds.Dispose();
         }
 
         // Create DataSet

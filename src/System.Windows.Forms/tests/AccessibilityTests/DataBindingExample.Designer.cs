@@ -266,7 +266,7 @@
             this.listBox1.Size = new System.Drawing.Size(120, 94);
             this.listBox1.TabIndex = 18;
             // 
-            // Binding_Data
+            // DataBindingExample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -279,9 +279,8 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label4);
-            this.Name = "Binding_Data";
-            this.Text = "BindingDataForControls";
-            this.Load += new System.EventHandler(this.Binding_Data_Load);
+            this.Name = "DataBindingExample";
+            this.Text = "DataBindingExampleForControls";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
