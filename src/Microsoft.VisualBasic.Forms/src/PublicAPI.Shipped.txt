@@ -1,0 +1,369 @@
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.ChangeCulture(cultureName As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.ChangeUICulture(cultureName As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.Culture() -> System.Globalization.CultureInfo
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.GetEnvironmentVariable(name As String) -> String
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.Info() -> Microsoft.VisualBasic.ApplicationServices.AssemblyInfo
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.Log() -> Microsoft.VisualBasic.Logging.Log
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplicationBase.UICulture() -> System.Globalization.CultureInfo
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.AssemblyName() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.CompanyName() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.Copyright() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.Description() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.DirectoryPath() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.LoadedAssemblies() -> System.Collections.ObjectModel.ReadOnlyCollection(Of System.Reflection.Assembly)
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.New(currentAssembly As System.Reflection.Assembly) -> Void
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.ProductName() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.StackTrace() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.Title() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.Trademark() -> String
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.Version() -> System.Version
+Microsoft.VisualBasic.ApplicationServices.AssemblyInfo.WorkingSet() -> Long
+Microsoft.VisualBasic.ApplicationServices.AuthenticationMode
+Microsoft.VisualBasic.ApplicationServices.AuthenticationMode.ApplicationDefined = 1 -> Microsoft.VisualBasic.ApplicationServices.AuthenticationMode
+Microsoft.VisualBasic.ApplicationServices.AuthenticationMode.Windows = 0 -> Microsoft.VisualBasic.ApplicationServices.AuthenticationMode
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(message As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.CantStartSingleInstanceException.New(message As String, inner As System.Exception) -> Void
+Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase
+Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase.CommandLineArgs() -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase.InternalCommandLine(value As System.Collections.ObjectModel.ReadOnlyCollection(Of String)) -> Void
+Microsoft.VisualBasic.ApplicationServices.ConsoleApplicationBase.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.NoStartupFormException
+Microsoft.VisualBasic.ApplicationServices.NoStartupFormException.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.NoStartupFormException.New(info As System.Runtime.Serialization.SerializationInfo, context As System.Runtime.Serialization.StreamingContext) -> Void
+Microsoft.VisualBasic.ApplicationServices.NoStartupFormException.New(message As String) -> Void
+Microsoft.VisualBasic.ApplicationServices.NoStartupFormException.New(message As String, inner As System.Exception) -> Void
+Microsoft.VisualBasic.ApplicationServices.ShutdownEventHandler
+Microsoft.VisualBasic.ApplicationServices.ShutdownMode
+Microsoft.VisualBasic.ApplicationServices.ShutdownMode.AfterAllFormsClose = 1 -> Microsoft.VisualBasic.ApplicationServices.ShutdownMode
+Microsoft.VisualBasic.ApplicationServices.ShutdownMode.AfterMainFormCloses = 0 -> Microsoft.VisualBasic.ApplicationServices.ShutdownMode
+Microsoft.VisualBasic.ApplicationServices.StartupEventArgs
+Microsoft.VisualBasic.ApplicationServices.StartupEventArgs.CommandLine() -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.ApplicationServices.StartupEventArgs.New(args As System.Collections.ObjectModel.ReadOnlyCollection(Of String)) -> Void
+Microsoft.VisualBasic.ApplicationServices.StartupEventHandler
+Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs
+Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs.BringToForeground() -> Boolean
+Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs.BringToForeground(AutoPropertyValue As Boolean) -> Void
+Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs.CommandLine() -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs.New(args As System.Collections.ObjectModel.ReadOnlyCollection(Of String), bringToForegroundFlag As Boolean) -> Void
+Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventHandler
+Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs
+Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs.ExitApplication() -> Boolean
+Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs.ExitApplication(AutoPropertyValue As Boolean) -> Void
+Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs.New(exitApplication As Boolean, exception As System.Exception) -> Void
+Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventHandler
+Microsoft.VisualBasic.ApplicationServices.User
+Microsoft.VisualBasic.ApplicationServices.User.CurrentPrincipal() -> System.Security.Principal.IPrincipal
+Microsoft.VisualBasic.ApplicationServices.User.CurrentPrincipal(value As System.Security.Principal.IPrincipal) -> Void
+Microsoft.VisualBasic.ApplicationServices.User.IsAuthenticated() -> Boolean
+Microsoft.VisualBasic.ApplicationServices.User.IsInRole(role As String) -> Boolean
+Microsoft.VisualBasic.ApplicationServices.User.Name() -> String
+Microsoft.VisualBasic.ApplicationServices.User.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplicationContext() -> System.Windows.Forms.ApplicationContext
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.DoEvents() -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.EnableVisualStyles() -> Boolean
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.EnableVisualStyles(value As Boolean) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HideSplashScreen() -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.IsSingleInstance() -> Boolean
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.IsSingleInstance(value As Boolean) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.MainForm() -> System.Windows.Forms.Form
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.MainForm(value As System.Windows.Forms.Form) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.MinimumSplashScreenDisplayTime() -> Integer
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.MinimumSplashScreenDisplayTime(value As Integer) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.NetworkAvailabilityChanged -> Microsoft.VisualBasic.Devices.NetworkAvailableEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.New() -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.New(authenticationMode As Microsoft.VisualBasic.ApplicationServices.AuthenticationMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OpenForms() -> System.Windows.Forms.FormCollection
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.Run(commandLine As String()) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.SaveMySettingsOnExit() -> Boolean
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.SaveMySettingsOnExit(value As Boolean) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ShowSplashScreen() -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.Shutdown -> Microsoft.VisualBasic.ApplicationServices.ShutdownEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ShutdownStyle() -> Microsoft.VisualBasic.ApplicationServices.ShutdownMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ShutdownStyle(value As Microsoft.VisualBasic.ApplicationServices.ShutdownMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.SplashScreen() -> System.Windows.Forms.Form
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.SplashScreen(value As System.Windows.Forms.Form) -> Void
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.Startup -> Microsoft.VisualBasic.ApplicationServices.StartupEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.StartupNextInstance -> Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.UnhandledException -> Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventHandler
+Microsoft.VisualBasic.AudioPlayMode
+Microsoft.VisualBasic.AudioPlayMode.Background = 1 -> Microsoft.VisualBasic.AudioPlayMode
+Microsoft.VisualBasic.AudioPlayMode.BackgroundLoop = 2 -> Microsoft.VisualBasic.AudioPlayMode
+Microsoft.VisualBasic.AudioPlayMode.WaitToComplete = 0 -> Microsoft.VisualBasic.AudioPlayMode
+Microsoft.VisualBasic.CompilerServices.HostServices
+Microsoft.VisualBasic.CompilerServices.HostServices.New() -> Void
+Microsoft.VisualBasic.CompilerServices.IVbHost
+Microsoft.VisualBasic.CompilerServices.IVbHost.GetParentWindow() -> System.Windows.Forms.IWin32Window
+Microsoft.VisualBasic.CompilerServices.IVbHost.GetWindowTitle() -> String
+Microsoft.VisualBasic.Devices.Audio
+Microsoft.VisualBasic.Devices.Audio.New() -> Void
+Microsoft.VisualBasic.Devices.Audio.Play(data As Byte(), playMode As Microsoft.VisualBasic.AudioPlayMode) -> Void
+Microsoft.VisualBasic.Devices.Audio.Play(location As String) -> Void
+Microsoft.VisualBasic.Devices.Audio.Play(location As String, playMode As Microsoft.VisualBasic.AudioPlayMode) -> Void
+Microsoft.VisualBasic.Devices.Audio.Play(stream As System.IO.Stream, playMode As Microsoft.VisualBasic.AudioPlayMode) -> Void
+Microsoft.VisualBasic.Devices.Audio.PlaySystemSound(systemSound As System.Media.SystemSound) -> Void
+Microsoft.VisualBasic.Devices.Audio.Stop() -> Void
+Microsoft.VisualBasic.Devices.Clock
+Microsoft.VisualBasic.Devices.Clock.GmtTime() -> Date
+Microsoft.VisualBasic.Devices.Clock.LocalTime() -> Date
+Microsoft.VisualBasic.Devices.Clock.New() -> Void
+Microsoft.VisualBasic.Devices.Clock.TickCount() -> Integer
+Microsoft.VisualBasic.Devices.Computer
+Microsoft.VisualBasic.Devices.Computer.Audio() -> Microsoft.VisualBasic.Devices.Audio
+Microsoft.VisualBasic.Devices.Computer.Clipboard() -> Microsoft.VisualBasic.MyServices.ClipboardProxy
+Microsoft.VisualBasic.Devices.Computer.Keyboard() -> Microsoft.VisualBasic.Devices.Keyboard
+Microsoft.VisualBasic.Devices.Computer.Mouse() -> Microsoft.VisualBasic.Devices.Mouse
+Microsoft.VisualBasic.Devices.Computer.New() -> Void
+Microsoft.VisualBasic.Devices.Computer.Screen() -> System.Windows.Forms.Screen
+Microsoft.VisualBasic.Devices.ComputerInfo
+Microsoft.VisualBasic.Devices.ComputerInfo.AvailablePhysicalMemory() -> ULong
+Microsoft.VisualBasic.Devices.ComputerInfo.AvailableVirtualMemory() -> ULong
+Microsoft.VisualBasic.Devices.ComputerInfo.InstalledUICulture() -> System.Globalization.CultureInfo
+Microsoft.VisualBasic.Devices.ComputerInfo.New() -> Void
+Microsoft.VisualBasic.Devices.ComputerInfo.OSFullName() -> String
+Microsoft.VisualBasic.Devices.ComputerInfo.OSPlatform() -> String
+Microsoft.VisualBasic.Devices.ComputerInfo.OSVersion() -> String
+Microsoft.VisualBasic.Devices.ComputerInfo.TotalPhysicalMemory() -> ULong
+Microsoft.VisualBasic.Devices.ComputerInfo.TotalVirtualMemory() -> ULong
+Microsoft.VisualBasic.Devices.Keyboard
+Microsoft.VisualBasic.Devices.Keyboard.AltKeyDown() -> Boolean
+Microsoft.VisualBasic.Devices.Keyboard.CapsLock() -> Boolean
+Microsoft.VisualBasic.Devices.Keyboard.CtrlKeyDown() -> Boolean
+Microsoft.VisualBasic.Devices.Keyboard.New() -> Void
+Microsoft.VisualBasic.Devices.Keyboard.NumLock() -> Boolean
+Microsoft.VisualBasic.Devices.Keyboard.ScrollLock() -> Boolean
+Microsoft.VisualBasic.Devices.Keyboard.SendKeys(keys As String) -> Void
+Microsoft.VisualBasic.Devices.Keyboard.SendKeys(keys As String, wait As Boolean) -> Void
+Microsoft.VisualBasic.Devices.Keyboard.ShiftKeyDown() -> Boolean
+Microsoft.VisualBasic.Devices.Mouse
+Microsoft.VisualBasic.Devices.Mouse.ButtonsSwapped() -> Boolean
+Microsoft.VisualBasic.Devices.Mouse.New() -> Void
+Microsoft.VisualBasic.Devices.Mouse.WheelExists() -> Boolean
+Microsoft.VisualBasic.Devices.Mouse.WheelScrollLines() -> Integer
+Microsoft.VisualBasic.Devices.Network
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As String, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, networkCredentials As System.Net.ICredentials, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, networkCredentials As System.Net.ICredentials, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, userName As String, password As String) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.Devices.Network.DownloadFile(address As System.Uri, destinationFileName As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, overwrite As Boolean, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.Devices.Network.IsAvailable() -> Boolean
+Microsoft.VisualBasic.Devices.Network.NetworkAvailabilityChanged -> Microsoft.VisualBasic.Devices.NetworkAvailableEventHandler
+Microsoft.VisualBasic.Devices.Network.New() -> Void
+Microsoft.VisualBasic.Devices.Network.Ping(address As System.Uri) -> Boolean
+Microsoft.VisualBasic.Devices.Network.Ping(address As System.Uri, timeout As Integer) -> Boolean
+Microsoft.VisualBasic.Devices.Network.Ping(hostNameOrAddress As String) -> Boolean
+Microsoft.VisualBasic.Devices.Network.Ping(hostNameOrAddress As String, timeout As Integer) -> Boolean
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As String) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As String, userName As String, password As String) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As String, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As System.Uri) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As System.Uri, networkCredentials As System.Net.ICredentials, showUI As Boolean, connectionTimeout As Integer) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As System.Uri, networkCredentials As System.Net.ICredentials, showUI As Boolean, connectionTimeout As Integer, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As System.Uri, userName As String, password As String) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As System.Uri, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer) -> Void
+Microsoft.VisualBasic.Devices.Network.UploadFile(sourceFileName As String, address As System.Uri, userName As String, password As String, showUI As Boolean, connectionTimeout As Integer, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.Devices.NetworkAvailableEventArgs
+Microsoft.VisualBasic.Devices.NetworkAvailableEventArgs.IsNetworkAvailable() -> Boolean
+Microsoft.VisualBasic.Devices.NetworkAvailableEventArgs.New(networkAvailable As Boolean) -> Void
+Microsoft.VisualBasic.Devices.NetworkAvailableEventHandler
+Microsoft.VisualBasic.Devices.ServerComputer
+Microsoft.VisualBasic.Devices.ServerComputer.Clock() -> Microsoft.VisualBasic.Devices.Clock
+Microsoft.VisualBasic.Devices.ServerComputer.FileSystem() -> Microsoft.VisualBasic.MyServices.FileSystemProxy
+Microsoft.VisualBasic.Devices.ServerComputer.Info() -> Microsoft.VisualBasic.Devices.ComputerInfo
+Microsoft.VisualBasic.Devices.ServerComputer.Name() -> String
+Microsoft.VisualBasic.Devices.ServerComputer.Network() -> Microsoft.VisualBasic.Devices.Network
+Microsoft.VisualBasic.Devices.ServerComputer.New() -> Void
+Microsoft.VisualBasic.Devices.ServerComputer.Registry() -> Microsoft.VisualBasic.MyServices.RegistryProxy
+Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption
+Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption.DiscardMessages = 1 -> Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption
+Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption.ThrowException = 0 -> Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption
+Microsoft.VisualBasic.Logging.FileLogTraceListener
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Append() -> Boolean
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Append(value As Boolean) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.AutoFlush() -> Boolean
+Microsoft.VisualBasic.Logging.FileLogTraceListener.AutoFlush(value As Boolean) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.BaseFileName() -> String
+Microsoft.VisualBasic.Logging.FileLogTraceListener.BaseFileName(value As String) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.CustomLocation() -> String
+Microsoft.VisualBasic.Logging.FileLogTraceListener.CustomLocation(value As String) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Delimiter() -> String
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Delimiter(value As String) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.DiskSpaceExhaustedBehavior() -> Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption
+Microsoft.VisualBasic.Logging.FileLogTraceListener.DiskSpaceExhaustedBehavior(value As Microsoft.VisualBasic.Logging.DiskSpaceExhaustedOption) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Encoding() -> System.Text.Encoding
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Encoding(value As System.Text.Encoding) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.FullLogFileName() -> String
+Microsoft.VisualBasic.Logging.FileLogTraceListener.IncludeHostName() -> Boolean
+Microsoft.VisualBasic.Logging.FileLogTraceListener.IncludeHostName(value As Boolean) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Location() -> Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.Logging.FileLogTraceListener.Location(value As Microsoft.VisualBasic.Logging.LogFileLocation) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.LogFileCreationSchedule() -> Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption
+Microsoft.VisualBasic.Logging.FileLogTraceListener.LogFileCreationSchedule(value As Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.MaxFileSize() -> Long
+Microsoft.VisualBasic.Logging.FileLogTraceListener.MaxFileSize(value As Long) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.New() -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.New(name As String) -> Void
+Microsoft.VisualBasic.Logging.FileLogTraceListener.ReserveDiskSpace() -> Long
+Microsoft.VisualBasic.Logging.FileLogTraceListener.ReserveDiskSpace(value As Long) -> Void
+Microsoft.VisualBasic.Logging.Log
+Microsoft.VisualBasic.Logging.Log.DefaultFileLogWriter() -> Microsoft.VisualBasic.Logging.FileLogTraceListener
+Microsoft.VisualBasic.Logging.Log.New() -> Void
+Microsoft.VisualBasic.Logging.Log.New(name As String) -> Void
+Microsoft.VisualBasic.Logging.Log.TraceSource() -> System.Diagnostics.TraceSource
+Microsoft.VisualBasic.Logging.Log.WriteEntry(message As String) -> Void
+Microsoft.VisualBasic.Logging.Log.WriteEntry(message As String, severity As System.Diagnostics.TraceEventType) -> Void
+Microsoft.VisualBasic.Logging.Log.WriteEntry(message As String, severity As System.Diagnostics.TraceEventType, id As Integer) -> Void
+Microsoft.VisualBasic.Logging.Log.WriteException(ex As System.Exception) -> Void
+Microsoft.VisualBasic.Logging.Log.WriteException(ex As System.Exception, severity As System.Diagnostics.TraceEventType, additionalInfo As String) -> Void
+Microsoft.VisualBasic.Logging.Log.WriteException(ex As System.Exception, severity As System.Diagnostics.TraceEventType, additionalInfo As String, id As Integer) -> Void
+Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption
+Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption.Daily = 1 -> Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption
+Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption.None = 0 -> Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption
+Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption.Weekly = 2 -> Microsoft.VisualBasic.Logging.LogFileCreationScheduleOption
+Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.Logging.LogFileLocation.CommonApplicationDirectory = 2 -> Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.Logging.LogFileLocation.Custom = 4 -> Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.Logging.LogFileLocation.ExecutableDirectory = 3 -> Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.Logging.LogFileLocation.LocalUserApplicationDirectory = 1 -> Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.Logging.LogFileLocation.TempDirectory = 0 -> Microsoft.VisualBasic.Logging.LogFileLocation
+Microsoft.VisualBasic.MyServices.ClipboardProxy
+Microsoft.VisualBasic.MyServices.ClipboardProxy.Clear() -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsAudio() -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsData(format As String) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsFileDropList() -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsImage() -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsText() -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.ContainsText(format As System.Windows.Forms.TextDataFormat) -> Boolean
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetAudioStream() -> System.IO.Stream
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetData(format As String) -> Object
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetDataObject() -> System.Windows.Forms.IDataObject
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetFileDropList() -> System.Collections.Specialized.StringCollection
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetImage() -> System.Drawing.Image
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetText() -> String
+Microsoft.VisualBasic.MyServices.ClipboardProxy.GetText(format As System.Windows.Forms.TextDataFormat) -> String
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetAudio(audioBytes As Byte()) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetAudio(audioStream As System.IO.Stream) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetData(format As String, data As Object) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetDataObject(data As System.Windows.Forms.DataObject) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetFileDropList(filePaths As System.Collections.Specialized.StringCollection) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetImage(image As System.Drawing.Image) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String) -> Void
+Microsoft.VisualBasic.MyServices.ClipboardProxy.SetText(text As String, format As System.Windows.Forms.TextDataFormat) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CombinePath(baseDirectory As String, relativePath As String) -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyFile(sourceFileName As String, destinationFileName As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyFile(sourceFileName As String, destinationFileName As String, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyFile(sourceFileName As String, destinationFileName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CopyFile(sourceFileName As String, destinationFileName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CreateDirectory(directory As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CurrentDirectory() -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.CurrentDirectory(value As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DeleteDirectory(directory As String, onDirectoryNotEmpty As Microsoft.VisualBasic.FileIO.DeleteDirectoryOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DeleteDirectory(directory As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, recycle As Microsoft.VisualBasic.FileIO.RecycleOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DeleteDirectory(directory As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, recycle As Microsoft.VisualBasic.FileIO.RecycleOption, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DeleteFile(file As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DeleteFile(file As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, recycle As Microsoft.VisualBasic.FileIO.RecycleOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DeleteFile(file As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, recycle As Microsoft.VisualBasic.FileIO.RecycleOption, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.DirectoryExists(directory As String) -> Boolean
+Microsoft.VisualBasic.MyServices.FileSystemProxy.Drives() -> System.Collections.ObjectModel.ReadOnlyCollection(Of System.IO.DriveInfo)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.FileExists(file As String) -> Boolean
+Microsoft.VisualBasic.MyServices.FileSystemProxy.FindInFiles(directory As String, containsText As String, ignoreCase As Boolean, searchType As Microsoft.VisualBasic.FileIO.SearchOption) -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.FindInFiles(directory As String, containsText As String, ignoreCase As Boolean, searchType As Microsoft.VisualBasic.FileIO.SearchOption, ParamArray fileWildcards As String()) -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetDirectories(directory As String) -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetDirectories(directory As String, searchType As Microsoft.VisualBasic.FileIO.SearchOption, ParamArray wildcards As String()) -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetDirectoryInfo(directory As String) -> System.IO.DirectoryInfo
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetDriveInfo(drive As String) -> System.IO.DriveInfo
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetFileInfo(file As String) -> System.IO.FileInfo
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetFiles(directory As String) -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetFiles(directory As String, searchType As Microsoft.VisualBasic.FileIO.SearchOption, ParamArray wildcards As String()) -> System.Collections.ObjectModel.ReadOnlyCollection(Of String)
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetName(path As String) -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetParentPath(path As String) -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.GetTempFileName() -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveDirectory(sourceDirectoryName As String, destinationDirectoryName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveFile(sourceFileName As String, destinationFileName As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveFile(sourceFileName As String, destinationFileName As String, overwrite As Boolean) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveFile(sourceFileName As String, destinationFileName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.MoveFile(sourceFileName As String, destinationFileName As String, showUI As Microsoft.VisualBasic.FileIO.UIOption, onUserCancel As Microsoft.VisualBasic.FileIO.UICancelOption) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFieldParser(file As String) -> Microsoft.VisualBasic.FileIO.TextFieldParser
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFieldParser(file As String, ParamArray delimiters As String()) -> Microsoft.VisualBasic.FileIO.TextFieldParser
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFieldParser(file As String, ParamArray fieldWidths As Integer()) -> Microsoft.VisualBasic.FileIO.TextFieldParser
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFileReader(file As String) -> System.IO.StreamReader
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFileReader(file As String, encoding As System.Text.Encoding) -> System.IO.StreamReader
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFileWriter(file As String, append As Boolean) -> System.IO.StreamWriter
+Microsoft.VisualBasic.MyServices.FileSystemProxy.OpenTextFileWriter(file As String, append As Boolean, encoding As System.Text.Encoding) -> System.IO.StreamWriter
+Microsoft.VisualBasic.MyServices.FileSystemProxy.ReadAllBytes(file As String) -> Byte()
+Microsoft.VisualBasic.MyServices.FileSystemProxy.ReadAllText(file As String) -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.ReadAllText(file As String, encoding As System.Text.Encoding) -> String
+Microsoft.VisualBasic.MyServices.FileSystemProxy.RenameDirectory(directory As String, newName As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.RenameFile(file As String, newName As String) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.SpecialDirectories() -> Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy
+Microsoft.VisualBasic.MyServices.FileSystemProxy.WriteAllBytes(file As String, data As Byte(), append As Boolean) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.WriteAllText(file As String, text As String, append As Boolean) -> Void
+Microsoft.VisualBasic.MyServices.FileSystemProxy.WriteAllText(file As String, text As String, append As Boolean, encoding As System.Text.Encoding) -> Void
+Microsoft.VisualBasic.MyServices.Internal.ContextValue(Of T)
+Microsoft.VisualBasic.MyServices.Internal.ContextValue(Of T).New() -> Void
+Microsoft.VisualBasic.MyServices.Internal.ContextValue(Of T).Value() -> T
+Microsoft.VisualBasic.MyServices.Internal.ContextValue(Of T).Value(value As T) -> Void
+Microsoft.VisualBasic.MyServices.RegistryProxy
+Microsoft.VisualBasic.MyServices.RegistryProxy.ClassesRoot() -> Microsoft.Win32.RegistryKey
+Microsoft.VisualBasic.MyServices.RegistryProxy.CurrentConfig() -> Microsoft.Win32.RegistryKey
+Microsoft.VisualBasic.MyServices.RegistryProxy.CurrentUser() -> Microsoft.Win32.RegistryKey
+Microsoft.VisualBasic.MyServices.RegistryProxy.GetValue(keyName As String, valueName As String, defaultValue As Object) -> Object
+Microsoft.VisualBasic.MyServices.RegistryProxy.LocalMachine() -> Microsoft.Win32.RegistryKey
+Microsoft.VisualBasic.MyServices.RegistryProxy.PerformanceData() -> Microsoft.Win32.RegistryKey
+Microsoft.VisualBasic.MyServices.RegistryProxy.SetValue(keyName As String, valueName As String, value As Object) -> Void
+Microsoft.VisualBasic.MyServices.RegistryProxy.SetValue(keyName As String, valueName As String, value As Object, valueKind As Microsoft.Win32.RegistryValueKind) -> Void
+Microsoft.VisualBasic.MyServices.RegistryProxy.Users() -> Microsoft.Win32.RegistryKey
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.AllUsersApplicationData() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.CurrentUserApplicationData() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Desktop() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.MyDocuments() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.MyMusic() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.MyPictures() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.ProgramFiles() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Programs() -> String
+Microsoft.VisualBasic.MyServices.SpecialDirectoriesProxy.Temp() -> String
+Overridable Microsoft.VisualBasic.ApplicationServices.User.InternalPrincipal() -> System.Security.Principal.IPrincipal
+Overridable Microsoft.VisualBasic.ApplicationServices.User.InternalPrincipal(value As System.Security.Principal.IPrincipal) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnCreateMainForm() -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnCreateSplashScreen() -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnInitialize(commandLineArgs As System.Collections.ObjectModel.ReadOnlyCollection(Of String)) -> Boolean
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnRun() -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnShutdown() -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnStartup(eventArgs As Microsoft.VisualBasic.ApplicationServices.StartupEventArgs) -> Boolean
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnStartupNextInstance(eventArgs As Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnUnhandledException(e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) -> Boolean
+Overridable Microsoft.VisualBasic.Logging.Log.InitializeWithDefaultsSinceNoConfigExists() -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Close() -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Dispose(disposing As Boolean) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Flush() -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.GetSupportedAttributes() -> String()
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, ParamArray data As Object()) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, data As Object) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceEvent(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, format As String, ParamArray args As Object()) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceEvent(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, message As String) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Write(message As String) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.WriteLine(message As String) -> Void
+Shared Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.UseCompatibleTextRendering() -> Boolean
+Shared Microsoft.VisualBasic.CompilerServices.HostServices.VBHost() -> Microsoft.VisualBasic.CompilerServices.IVbHost
+Shared Microsoft.VisualBasic.CompilerServices.HostServices.VBHost(Value As Microsoft.VisualBasic.CompilerServices.IVbHost) -> Void

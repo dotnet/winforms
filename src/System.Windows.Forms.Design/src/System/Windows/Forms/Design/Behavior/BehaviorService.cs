@@ -7,29 +7,27 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
-using System.Security;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     The BehaviorService essentially manages all things UI in the designer.
-    ///     When the BehaviorService is created it adds a transparent window over the
-    ///     designer frame.  The BehaviorService can then use this window to render UI
-    ///     elements (called Glyphs) as well as catch all mouse messages.  By doing
-    ///     so - the BehaviorService can control designer behavior.  The BehaviorService
-    ///     supports a BehaviorStack.  'Behavior' objects can be pushed onto this stack.
-    ///     When a message is intercepted via the transparent window, the BehaviorService
-    ///     can send the message to the Behavior at the top of the stack.  This allows
-    ///     for different UI modes depending on the currently pushed Behavior.  The
-    ///     BehaviorService is used to render all 'Glyphs': selection borders, grab handles,
-    ///     smart tags etc... as well as control many of the design-time behaviors: dragging,
-    ///     selection, snap lines, etc...
+    ///  The BehaviorService essentially manages all things UI in the designer.
+    ///  When the BehaviorService is created it adds a transparent window over the
+    ///  designer frame.  The BehaviorService can then use this window to render UI
+    ///  elements (called Glyphs) as well as catch all mouse messages.  By doing
+    ///  so - the BehaviorService can control designer behavior.  The BehaviorService
+    ///  supports a BehaviorStack.  'Behavior' objects can be pushed onto this stack.
+    ///  When a message is intercepted via the transparent window, the BehaviorService
+    ///  can send the message to the Behavior at the top of the stack.  This allows
+    ///  for different UI modes depending on the currently pushed Behavior.  The
+    ///  BehaviorService is used to render all 'Glyphs': selection borders, grab handles,
+    ///  smart tags etc... as well as control many of the design-time behaviors: dragging,
+    ///  selection, snap lines, etc...
     /// </summary>
     public sealed class BehaviorService : IDisposable
     {
@@ -40,31 +38,32 @@ namespace System.Windows.Forms.Design.Behavior
         private Behavior _captureBehavior;  //the behavior that currently has capture; may be null
         private Glyph _hitTestedGlyph; //the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc; //allows us to have the toolbox choose a cursor
+        private Control _dropSource; //actual control used to call .dodragdrop
         private DragEventArgs _validDragArgs; //if valid - this is used to fabricate drag enter/leave envents
         private BehaviorDragDropEventHandler _beginDragHandler; //fired directly before we call .DoDragDrop()
         private BehaviorDragDropEventHandler _endDragHandler; //fired directly after we call .DoDragDrop()
         private EventHandler _synchronizeEventHandler; //fired when we want to synchronize the selection
-        private NativeMethods.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
+        private User32.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
         private bool _trackingMouseEvent; //state identifying current mouse tracking
         private string[] _testHook_RecentSnapLines; //we keep track of the last snaplines we found - for testing purposes
-        private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands 
+        private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands
         private bool _useSnapLines; //indicates if this designer session is using snaplines or snapping to a grid
         private bool _queriedSnapLines; //only query for this once since we require the user restart design sessions when this changes
         private readonly Hashtable _dragEnterReplies; // we keep track of whether glyph has already responded to a DragEnter this D&D.
         private static readonly TraceSwitch s_dragDropSwitch = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
-        private bool _cancelDrag = false; // should we cancel the drag on the next QueryContinueDrag
+        private bool _dragging; // are we in a drag
+        private bool _cancelDrag; // should we cancel the drag on the next QueryContinueDrag
 
-        private int _adornerWindowIndex = -1;
+        private readonly int _adornerWindowIndex = -1;
 
         //test hooks for SnapLines
-        private static int WM_GETALLSNAPLINES;
-        private static int WM_GETRECENTSNAPLINES;
+        private static User32.WM WM_GETALLSNAPLINES;
+        private static User32.WM WM_GETRECENTSNAPLINES;
 
-        private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications      
+        private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 
         private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
-        [SuppressMessage("Microsoft.Performance", "CA1805:DoNotInitializeUnnecessarily")]
         internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
         {
             _serviceProvider = serviceProvider;
@@ -87,7 +86,7 @@ namespace System.Windows.Forms.Design.Behavior
             _hitTestedGlyph = null;
             _validDragArgs = null;
             _actionPointer = null;
-            _trackMouseEvent = null;
+            _trackMouseEvent = default;
             _trackingMouseEvent = false;
 
             //create out object that will handle all menucommands
@@ -103,11 +102,14 @@ namespace System.Windows.Forms.Design.Behavior
             _queriedSnapLines = false;
 
             //test hooks
-            WM_GETALLSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETALLSNAPLINES");
-            WM_GETRECENTSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
+            WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
+            WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
+
+            // Listen to the SystemEvents so that we can resync selection based on display settings etc.
+            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
         /// <summary>
-        ///     Read-only property that returns the AdornerCollection that the BehaivorService manages.
+        ///  Read-only property that returns the AdornerCollection that the BehaivorService manages.
         /// </summary>
         public BehaviorServiceAdornerCollection Adorners
         {
@@ -115,11 +117,16 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Returns the actual Control that represents the transparent AdornerWindow.
+        ///  Returns the actual Control that represents the transparent AdornerWindow.
         /// </summary>
         internal Control AdornerWindowControl
         {
             get => _adornerWindow;
+        }
+
+        internal int AdornerWindowIndex
+        {
+            get => _adornerWindowIndex;
         }
 
         internal bool HasCapture
@@ -128,7 +135,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
+        ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
         /// </summary>
         internal bool UseSnapLines
         {
@@ -146,7 +153,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Creates and returns a Graphics object for the AdornerWindow
+        ///  Creates and returns a Graphics object for the AdornerWindow
         /// </summary>
         public Graphics AdornerWindowGraphics
         {
@@ -173,6 +180,11 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
+        internal bool Dragging
+        {
+            get => _dragging;
+        }
+
         internal bool CancelDrag
         {
             get => _cancelDrag;
@@ -185,14 +197,14 @@ namespace System.Windows.Forms.Design.Behavior
             set => _actionPointer = value;
         }
         /// <summary>
-        /// Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
+        ///  Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
         /// </summary>
         internal string[] RecentSnapLines
         {
             set => _testHook_RecentSnapLines = value;
         }
         /// <summary>
-        ///     Disposes the behavior service.
+        ///  Disposes the behavior service.
         /// </summary>
         public void Dispose()
         {
@@ -205,7 +217,9 @@ namespace System.Windows.Forms.Design.Behavior
 
             MenuCommandHandler menuCommandHandler = null;
             if (_serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService)
+            {
                 menuCommandHandler = menuCommandService as MenuCommandHandler;
+            }
 
             if (menuCommandHandler != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
@@ -215,20 +229,106 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             _adornerWindow.Dispose();
+            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+        }
+
+        private Control DropSource
+        {
+            get
+            {
+                if (_dropSource is null)
+                {
+                    _dropSource = new Control();
+                }
+                return _dropSource;
+            }
+        }
+
+        internal DragDropEffects DoDragDrop(DropSourceBehavior dropSourceBehavior)
+        {
+            //hook events
+            DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
+            DropSource.GiveFeedback += new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
+
+            DragDropEffects res = DragDropEffects.None;
+
+            //build up the eventargs for firing our dragbegin/end events
+            ICollection dragComponents = ((DropSourceBehavior.BehaviorDataObject)dropSourceBehavior.DataObject).DragComponents;
+            BehaviorDragDropEventArgs eventArgs = new BehaviorDragDropEventArgs(dragComponents);
+
+            try
+            {
+                try
+                {
+                    OnBeginDrag(eventArgs);
+                    _dragging = true;
+                    _cancelDrag = false;
+                    // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
+                    // So let's make sure it is really cleared when we start the drag.
+                    _dragEnterReplies.Clear();
+                    res = DropSource.DoDragDrop(dropSourceBehavior.DataObject, dropSourceBehavior.AllowedEffects);
+                }
+                finally
+                {
+                    DropSource.QueryContinueDrag -= new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
+                    DropSource.GiveFeedback -= new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
+                    //If the drop gets cancelled, we won't get a OnDragDrop, so let's make sure that we stop
+                    //processing drag notifications. Also VSWhidbey #354552 and 133339.
+                    EndDragNotification();
+                    _validDragArgs = null;
+                    _dragging = false;
+                    _cancelDrag = false;
+                    OnEndDrag(eventArgs);
+                }
+            }
+            catch (CheckoutException cex)
+            {
+                if (cex == CheckoutException.Canceled)
+                {
+                    res = DragDropEffects.None;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            finally
+            {
+                // It's possible we did not receive an EndDrag, and therefore we weren't able to cleanup the drag.  We will do that here. Scenarios where this happens: dragging from designer to recycle-bin, or over the taskbar.
+                if (dropSourceBehavior != null)
+                {
+                    dropSourceBehavior.CleanupDrag();
+                }
+            }
+            return res;
+        }
+
+        internal void EndDragNotification()
+        {
+            _adornerWindow.EndDragNotification();
+        }
+
+        private void OnEndDrag(BehaviorDragDropEventArgs e)
+        {
+            _endDragHandler?.Invoke(this, e);
+        }
+
+        private void OnBeginDrag(BehaviorDragDropEventArgs e)
+        {
+            _beginDragHandler?.Invoke(this, e);
         }
 
         /// <summary>
-        ///     Translates a point in the AdornerWindow to screen coords.
+        ///  Translates a point in the AdornerWindow to screen coords.
         /// </summary>
         public Point AdornerWindowPointToScreen(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT(p.X, p.Y);
-            NativeMethods.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, offset, 1);
-            return new Point(offset.x, offset.y);
+            User32.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, ref p, 1);
+            return p;
         }
 
         /// <summary>
-        ///     Gets the location (upper-left corner) of the AdornerWindow in screen coords.
+        ///  Gets the location (upper-left corner) of the AdornerWindow in screen coords.
         /// </summary>
         public Point AdornerWindowToScreen()
         {
@@ -237,44 +337,39 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Returns the location of a Control translated to AdornerWindow coords.
+        ///  Returns the location of a Control translated to AdornerWindow coords.
         /// </summary>
         public Point ControlToAdornerWindow(Control c)
         {
-            if (c.Parent == null)
+            if (c.Parent is null)
             {
                 return Point.Empty;
             }
 
-            NativeMethods.POINT pt = new NativeMethods.POINT();
-            pt.x = c.Left;
-            pt.y = c.Top;
-            NativeMethods.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, pt, 1);
+            var pt = new Point(c.Left, c.Top);
+            User32.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, ref pt, 1);
             if (c.Parent.IsMirrored)
             {
-                pt.x -= c.Width;
+                pt.X -= c.Width;
             }
-            return new Point(pt.x, pt.y);
+            return pt;
         }
 
         /// <summary>
-        ///     Converts a point in handle's coordinate system to AdornerWindow coords.
+        ///  Converts a point in handle's coordinate system to AdornerWindow coords.
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            NativeMethods.POINT nativePoint = new NativeMethods.POINT();
-            nativePoint.x = pt.X;
-            nativePoint.y = pt.Y;
-            NativeMethods.MapWindowPoints(handle, _adornerWindow.Handle, nativePoint, 1);
-            return new Point(nativePoint.x, nativePoint.y);
+            User32.MapWindowPoints(handle, _adornerWindow.Handle, ref pt, 1);
+            return pt;
         }
 
         /// <summary>
-        ///     Returns the bounding rectangle of a Control translated to AdornerWindow coords.
+        ///  Returns the bounding rectangle of a Control translated to AdornerWindow coords.
         /// </summary>
         public Rectangle ControlRectInAdornerWindow(Control c)
         {
-            if (c.Parent == null)
+            if (c.Parent is null)
             {
                 return Rectangle.Empty;
             }
@@ -284,57 +379,39 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     The BehaviorService fires the BeginDrag event immediately
-        ///     before it starts a drop/drop operation via DoBeginDragDrop.
+        ///  The BehaviorService fires the BeginDrag event immediately
+        ///  before it starts a drop/drop operation via DoBeginDragDrop.
         /// </summary>
         public event BehaviorDragDropEventHandler BeginDrag
         {
-            add
-            {
-                _beginDragHandler += value;
-            }
-            remove
-            {
-                _beginDragHandler -= value;
-            }
+            add => _beginDragHandler += value;
+            remove => _beginDragHandler -= value;
         }
 
         /// <summary>
-        ///     The BehaviorService fires the EndDrag event immediately
-        ///     after the drag operation has completed.
+        ///  The BehaviorService fires the EndDrag event immediately
+        ///  after the drag operation has completed.
         /// </summary>
         public event BehaviorDragDropEventHandler EndDrag
         {
-            add
-            {
-                _endDragHandler += value;
-            }
-            remove
-            {
-                _endDragHandler -= value;
-            }
+            add => _endDragHandler += value;
+            remove => _endDragHandler -= value;
         }
 
         /// <summary>
-        ///     The BehaviorService fires the Synchronize event when the current selection should be synchronized (refreshed).
+        ///  The BehaviorService fires the Synchronize event when the current selection should be synchronized (refreshed).
         /// </summary>
         public event EventHandler Synchronize
         {
-            add
-            {
-                _synchronizeEventHandler += value;
-            }
+            add => _synchronizeEventHandler += value;
 
-            remove
-            {
-                _synchronizeEventHandler -= value;
-            }
+            remove => _synchronizeEventHandler -= value;
         }
 
         /// <summary>
-        ///     Given a behavior returns the behavior immediately
-        ///     after the behavior in the behaviorstack.
-        ///     Can return null.
+        ///  Given a behavior returns the behavior immediately
+        ///  after the behavior in the behaviorstack.
+        ///  Can return null.
         /// </summary>
         public Behavior GetNextBehavior(Behavior behavior)
         {
@@ -359,8 +436,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
-        ///     and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate()
         {
@@ -368,8 +445,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
-        ///     and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect)
         {
@@ -377,8 +454,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
-        ///     and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r)
         {
@@ -386,18 +463,15 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Synchronizes all selection glyphs.
+        ///  Synchronizes all selection glyphs.
         /// </summary>
         public void SyncSelection()
         {
-            if (_synchronizeEventHandler != null)
-            {
-                _synchronizeEventHandler(this, EventArgs.Empty);
-            }
+            _synchronizeEventHandler?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
-        ///     Removes the behavior from the behavior stack
+        ///  Removes the behavior from the behavior stack
         /// </summary>
         public Behavior PopBehavior(Behavior behavior)
         {
@@ -421,19 +495,25 @@ namespace System.Windows.Forms.Design.Behavior
                 if (_captureBehavior != null)
                 {
                     OnLoseCapture();
-                    Debug.Assert(_captureBehavior == null, "OnLostCapture should have cleared captureBehavior");
+                    Debug.Assert(_captureBehavior is null, "OnLostCapture should have cleared captureBehavior");
                 }
             }
             return behavior;
         }
 
+        internal void ProcessPaintMessage(Rectangle paintRect)
+        {
+            //Note, we don't call BehSvc.Invalidate because this will just cause the messages to recurse. Instead, invalidating this adornerWindow will just cause a "propagatePaint" and draw the glyphs.
+            _adornerWindow.Invalidate(paintRect);
+        }
+
         /// <summary>
-        ///     Pushes a Behavior object onto the BehaviorStack.  This is often done through hit-tested
-        ///     Glyph.
+        ///  Pushes a Behavior object onto the BehaviorStack.  This is often done through hit-tested
+        ///  Glyph.
         /// </summary>
         public void PushBehavior(Behavior behavior)
         {
-            if (behavior == null)
+            if (behavior is null)
             {
                 throw new ArgumentNullException(nameof(behavior));
             }
@@ -448,9 +528,9 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     Pushes a Behavior object onto the BehaviorStack and assigns mouse capture to the behavior.
-        ///     This is often done through hit-tested Glyph.  If a behavior calls this the behavior's OnLoseCapture
-        ///     will be called if mouse capture is lost.
+        ///  Pushes a Behavior object onto the BehaviorStack and assigns mouse capture to the behavior.
+        ///  This is often done through hit-tested Glyph.  If a behavior calls this the behavior's OnLoseCapture
+        ///  will be called if mouse capture is lost.
         /// </summary>
         public void PushCaptureBehavior(Behavior behavior)
         {
@@ -458,31 +538,27 @@ namespace System.Windows.Forms.Design.Behavior
             _captureBehavior = behavior;
             _adornerWindow.Capture = true;
 
-            // Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
+            //VSWhidbey #373836. Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
             if (uiService != null)
             {
                 IWin32Window hwnd = uiService.GetDialogOwnerWindow();
-                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != UnsafeNativeMethods.GetActiveWindow())
+                if (hwnd != null && hwnd.Handle != IntPtr.Zero && hwnd.Handle != User32.GetActiveWindow())
                 {
-                    UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, hwnd.Handle));
+                    User32.SetActiveWindow(hwnd.Handle);
                 }
             }
         }
 
         /// <summary>
-        ///     Translates a screen coord into a coord relative to the BehaviorService's AdornerWindow.
+        ///  Translates a screen coord into a coord relative to the BehaviorService's AdornerWindow.
         /// </summary>
         public Point ScreenToAdornerWindow(Point p)
         {
-            NativeMethods.POINT offset = new NativeMethods.POINT();
-            offset.x = p.X;
-            offset.y = p.Y;
-            NativeMethods.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, offset, 1);
-            return new Point(offset.x, offset.y);
+            User32.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, ref p, 1);
+            return p;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         internal void OnLoseCapture()
         {
             if (_captureBehavior != null)
@@ -500,25 +576,24 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
+        ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
         /// </summary>
         private class AdornerWindow : Control
         {
-            private BehaviorService _behaviorService;//ptr back to BehaviorService
+            private readonly BehaviorService _behaviorService;//ptr back to BehaviorService
             private Control _designerFrame;//the designer's frame
             private static MouseHook s_mouseHook; // shared mouse hook
-            private static List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
+            private static readonly List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
             private bool _processingDrag; // is this particular window in a drag operation
 
             /// <summary>
-            ///     Constructor that parents itself to the Designer Frame and hooks all
-            ///     necessary events.
+            ///  Constructor that parents itself to the Designer Frame and hooks all
+            ///  necessary events.
             /// </summary>
-            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             internal AdornerWindow(BehaviorService behaviorService, Control designerFrame)
             {
-                this._behaviorService = behaviorService;
-                this._designerFrame = designerFrame;
+                _behaviorService = behaviorService;
+                _designerFrame = designerFrame;
                 Dock = DockStyle.Fill;
                 AllowDrop = true;
                 Text = "AdornerWindow";
@@ -526,15 +601,15 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///     The key here is to set the appropriate TransparetWindow style.
+            ///  The key here is to set the appropriate TransparetWindow style.
             /// </summary>
             protected override CreateParams CreateParams
             {
                 get
                 {
                     CreateParams cp = base.CreateParams;
-                    cp.Style &= ~(NativeMethods.WS_CLIPCHILDREN | NativeMethods.WS_CLIPSIBLINGS);
-                    cp.ExStyle |= 0x00000020/*WS_EX_TRANSPARENT*/;
+                    cp.Style &= ~(int)(User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS);
+                    cp.ExStyle |= (int)User32.WS_EX.TRANSPARENT;
                     return cp;
                 }
             }
@@ -546,20 +621,20 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// We'll use CreateHandle as our notification for creating our mouse hooker.
+            ///  We'll use CreateHandle as our notification for creating our mouse attacher.
             /// </summary>
             protected override void OnHandleCreated(EventArgs e)
             {
                 base.OnHandleCreated(e);
                 s_adornerWindowList.Add(this);
-                if (s_mouseHook == null)
+                if (s_mouseHook is null)
                 {
                     s_mouseHook = new MouseHook();
                 }
             }
 
             /// <summary>
-            /// Unhook and null out our mouseHook.
+            ///  Unhook and null out our mouseHook.
             /// </summary>
             protected override void OnHandleDestroyed(EventArgs e)
             {
@@ -574,7 +649,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Null out our mouseHook and unhook any events.
+            ///  Null out our mouseHook and unhook any events.
             /// </summary>
             protected override void Dispose(bool disposing)
             {
@@ -588,16 +663,13 @@ namespace System.Windows.Forms.Design.Behavior
                 base.Dispose(disposing);
             }
 
-            /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
-            /// </summary>
             internal Control DesignerFrame
             {
                 get => _designerFrame;
             }
 
             /// <summary>
-            /// Returns the display rectangle for the adorner window
+            ///  Returns the display rectangle for the adorner window
             /// </summary>
             internal Rectangle DesignerFrameDisplayRectangle
             {
@@ -615,13 +687,13 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Returns true if the DesignerFrame is created & not being disposed.
+            ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
             {
                 get
                 {
-                    if (_designerFrame == null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
+                    if (_designerFrame is null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
                     {
                         return false;
                     }
@@ -632,7 +704,7 @@ namespace System.Windows.Forms.Design.Behavior
             public IEnumerable<Adorner> Adorners { get; private set; }
 
             /// <summary>
-            /// Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
+            ///  Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
             /// </summary>
             internal void EndDragNotification()
             {
@@ -640,7 +712,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow()
             {
@@ -652,7 +724,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Region region)
             {
@@ -668,7 +740,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Rectangle rectangle)
             {
@@ -684,7 +756,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragDrop(DragEventArgs e)
             {
@@ -731,7 +803,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragEnter(DragEventArgs e)
             {
@@ -741,18 +813,15 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt, 1);
-                    Point mousePos = new Point(pt.x, pt.y);
-                    _behaviorService.PropagateHitTest(mousePos);
-
+                    User32.GetCursorPos(out Point pt);
+                    User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    _behaviorService.PropagateHitTest(pt);
                 }
                 _behaviorService.OnDragEnter(null, e);
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragLeave(EventArgs e)
             {
@@ -769,7 +838,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragOver(DragEventArgs e)
             {
@@ -777,18 +846,16 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    NativeMethods.POINT pt = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(pt);
-                    NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt, 1);
-                    Point mousePos = new Point(pt.x, pt.y);
-                    _behaviorService.PropagateHitTest(mousePos);
+                    User32.GetCursorPos(out Point pt);
+                    User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
+                    _behaviorService.PropagateHitTest(pt);
                 }
 
                 _behaviorService.OnDragOver(e);
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
             {
@@ -796,7 +863,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
             /// </summary>
             protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
             {
@@ -804,7 +871,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
+            ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
             /// </summary>
             internal void StartDragNotification()
             {
@@ -812,75 +879,65 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            /// The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
+            ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 //special test hooks
-                if (m.Msg == BehaviorService.WM_GETALLSNAPLINES)
+                if (m.Msg == (int)BehaviorService.WM_GETALLSNAPLINES)
                 {
                     _behaviorService.TestHook_GetAllSnapLines(ref m);
                 }
-                else if (m.Msg == BehaviorService.WM_GETRECENTSNAPLINES)
+                else if (m.Msg == (int)BehaviorService.WM_GETRECENTSNAPLINES)
                 {
                     _behaviorService.TestHook_GetRecentSnapLines(ref m);
                 }
 
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case NativeMethods.WM_PAINT:
-                        // Stash off the region we have to update
-                        IntPtr hrgn = NativeMethods.CreateRectRgn(0, 0, 0, 0);
-                        NativeMethods.GetUpdateRgn(m.HWnd, hrgn, true);
-                        // The region we have to update in terms of the smallest rectangle that completely encloses the update region of the window gives us the clip rectangle
-                        NativeMethods.RECT clip = new NativeMethods.RECT();
-                        NativeMethods.GetUpdateRect(m.HWnd, ref clip, true);
-                        Rectangle paintRect = new Rectangle(clip.left, clip.top, clip.right - clip.left, clip.bottom - clip.top);
+                    case User32.WM.PAINT:
+                        {
+                            // Stash off the region we have to update.
+                            using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
+                            User32.GetUpdateRgn(m.HWnd, hrgn, BOOL.TRUE);
 
-                        try
-                        {
-                            using (Region r = Region.FromHrgn(hrgn))
-                            {
-                                // Call the base class to do its painting.
-                                DefWndProc(ref m);
-                                // Now do our own painting.
-                                using (Graphics g = Graphics.FromHwnd(m.HWnd))
-                                {
-                                    using (PaintEventArgs pevent = new PaintEventArgs(g, paintRect))
-                                    {
-                                        g.Clip = r;
-                                        _behaviorService.PropagatePaint(pevent);
-                                    }
-                                }
-                            }
-                        }
-                        finally
-                        {
-                            NativeMethods.DeleteObject(hrgn);
-                        }
-                        break;
+                            // The region we have to update in terms of the smallest rectangle that completely encloses
+                            // the update region of the window gives us the clip rectangle.
+                            RECT clip = new RECT();
+                            User32.GetUpdateRect(m.HWnd, ref clip, BOOL.TRUE);
+                            Rectangle paintRect = clip;
 
-                    case NativeMethods.WM_NCHITTEST:
-                        Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
-                                             (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
-                        NativeMethods.POINT pt1 = new NativeMethods.POINT
-                        {
-                            x = 0,
-                            y = 0
-                        };
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, Handle, pt1, 1);
-                        pt.Offset(pt1.x, pt1.y);
+                            using Region region = hrgn.CreateGdiPlusRegion();
+
+                            // Call the base class to do its painting.
+                            DefWndProc(ref m);
+
+                            // Now do our own painting.
+                            using Graphics g = Graphics.FromHwnd(m.HWnd);
+                            using PaintEventArgs pevent = new PaintEventArgs(g, paintRect);
+                            g.Clip = region;
+                            _behaviorService.PropagatePaint(pevent);
+
+                            break;
+                        }
+
+                    case User32.WM.NCHITTEST:
+                        Point pt = new Point((short)PARAM.LOWORD(m.LParam),
+                                             (short)PARAM.HIWORD(m.LParam));
+                        var pt1 = new Point();
+                        User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt.Offset(pt1.X, pt1.Y);
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
-                            m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
+                            m.Result = (IntPtr)User32.HT.TRANSPARENT;
                         }
                         else
                         {
-                            m.Result = (IntPtr)(NativeMethods.HTCLIENT);
+                            m.Result = (IntPtr)User32.HT.CLIENT;
                         }
                         break;
 
-                    case NativeMethods.WM_CAPTURECHANGED:
+                    case User32.WM.CAPTURECHANGED:
                         base.WndProc(ref m);
                         _behaviorService.OnLoseCapture();
                         break;
@@ -892,65 +949,65 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///     Called by our mouseHook when it spies a mouse message that the adornerWindow would be interested in.
-            ///     Returning 'true' signifies that the message was processed and should not continue to child windows.
+            ///  Called by our mouseHook when it spies a mouse message that the adornerWindow would be interested in.
+            ///  Returning 'true' signifies that the message was processed and should not continue to child windows.
             /// </summary>
             private bool WndProcProxy(ref Message m, int x, int y)
             {
                 Point mouseLoc = new Point(x, y);
                 _behaviorService.PropagateHitTest(mouseLoc);
-                switch (m.Msg)
+                switch ((User32.WM)m.Msg)
                 {
-                    case NativeMethods.WM_LBUTTONDOWN:
+                    case User32.WM.LBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_RBUTTONDOWN:
+                    case User32.WM.RBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Right, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case User32.WM.MOUSEMOVE:
                         if (_behaviorService.OnMouseMove(Control.MouseButtons, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_LBUTTONUP:
+                    case User32.WM.LBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Left))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_RBUTTONUP:
+                    case User32.WM.RBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Right))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_MOUSEHOVER:
+                    case User32.WM.MOUSEHOVER:
                         if (_behaviorService.OnMouseHover(mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_LBUTTONDBLCLK:
+                    case User32.WM.LBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_RBUTTONDBLCLK:
+                    case User32.WM.RBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Right, mouseLoc))
                         {
                             return false;
@@ -961,20 +1018,18 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///     This class knows how to hook all the messages to a given process/thread.
-            ///     On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propogate it to the control it was meant for.   This allows us to synchrounously process mouse messages when the AdornerWindow itself may be pumping messages.
-            /// </summary>           
-            [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
+            ///  This class knows how to hook all the messages to a given process/thread.
+            ///  On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propogate it to the control it was meant for.   This allows us to synchrounously process mouse messages when the AdornerWindow itself may be pumping messages.
+            /// </summary>
             private class MouseHook
             {
                 private AdornerWindow _currentAdornerWindow;
-                private int _thisProcessID = 0;
+                private uint _thisProcessID;
                 private GCHandle _mouseHookRoot;
-                [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
 
-                private bool _isHooked = false;
+                private bool _isHooked; //VSWHIDBEY # 474112
                 private int _lastLButtonDownTimeStamp;
 
                 public MouseHook()
@@ -999,29 +1054,27 @@ namespace System.Windows.Forms.Design.Behavior
 
                 private void HookMouse()
                 {
-                    Debug.Assert(AdornerWindow.s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
+                    Debug.Assert(s_adornerWindowList.Count > 0, "No AdornerWindow available to create the mouse hook");
                     lock (this)
                     {
-                        if (_mouseHookHandle != IntPtr.Zero || AdornerWindow.s_adornerWindowList.Count == 0)
+                        if (_mouseHookHandle != IntPtr.Zero || s_adornerWindowList.Count == 0)
                         {
                             return;
                         }
 
                         if (_thisProcessID == 0)
                         {
-                            AdornerWindow adornerWindow = AdornerWindow.s_adornerWindowList[0];
-                            UnsafeNativeMethods.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
+                            AdornerWindow adornerWindow = s_adornerWindowList[0];
+                            User32.GetWindowThreadProcessId(adornerWindow, out _thisProcessID);
                         }
 
-                        NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
+                        var hook = new User32.HOOKPROC(MouseHookProc);
                         _mouseHookRoot = GCHandle.Alloc(hook);
-
-#pragma warning disable 618
-                        _mouseHookHandle = UnsafeNativeMethods.SetWindowsHookEx(NativeMethods.WH_MOUSE,
-                                                                   hook,
-                                                                   new HandleRef(null, IntPtr.Zero),
-                                                                   AppDomain.GetCurrentThreadId());
-#pragma warning restore 618
+                        _mouseHookHandle = User32.SetWindowsHookExW(
+                            User32.WH.MOUSE,
+                            hook,
+                            IntPtr.Zero,
+                            (uint)AppDomain.GetCurrentThreadId());
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
                             _isHooked = true;
@@ -1030,18 +1083,16 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
-                [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-                private unsafe IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam)
+                private unsafe IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
                 {
-                    if (_isHooked && nCode == NativeMethods.HC_ACTION)
+                    if (_isHooked && nCode == User32.HC.ACTION)
                     {
-                        NativeMethods.MOUSEHOOKSTRUCT mhs = (NativeMethods.MOUSEHOOKSTRUCT)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.MOUSEHOOKSTRUCT));
+                        User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
                         if (mhs != null)
                         {
                             try
                             {
-                                if (ProcessMouseMessage(mhs.hWnd, unchecked((int)(long)wparam), mhs.pt_x, mhs.pt_y))
+                                if (ProcessMouseMessage(mhs->hWnd, unchecked((int)(long)wparam), mhs->pt.X, mhs->pt.Y))
                                 {
                                     return (IntPtr)1;
                                 }
@@ -1066,7 +1117,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     Debug.Assert(_isHooked, "How did we get here when we are diposed?");
-                    return UnsafeNativeMethods.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
                 }
 
                 private void UnhookMouse()
@@ -1075,7 +1126,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
-                            UnsafeNativeMethods.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
+                            User32.UnhookWindowsHookEx(new HandleRef(this, _mouseHookHandle));
                             _mouseHookRoot.Free();
                             _mouseHookHandle = IntPtr.Zero;
                             _isHooked = false;
@@ -1089,10 +1140,6 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         return false;
                     }
-                    // We could have hooked a control in a semitrust web page.  This would put semitrust frames above us, which could cause this to fail.
-                    // SECREVIEW, UNDONE. Think hard about this. Does this allow a project to have a web page that pointed to a malicious control?
-                    // I don't think so, because the malicious control would still be on the frame.
-                    new NamedPermissionSet("FullTrust").Assert();
 
                     foreach (AdornerWindow adornerWindow in AdornerWindow.s_adornerWindowList)
                     {
@@ -1105,12 +1152,14 @@ namespace System.Windows.Forms.Design.Behavior
                         IntPtr handle = adornerWindow.DesignerFrame.Handle;
 
                         // if it's us or one of our children, just process as normal
-                        if (adornerWindow.ProcessingDrag || (hWnd != handle && SafeNativeMethods.IsChild(new HandleRef(this, handle), new HandleRef(this, hWnd))))
+                        if (adornerWindow.ProcessingDrag || (hWnd != handle && User32.IsChild(new HandleRef(this, handle), hWnd).IsTrue()))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
-                            // make sure the window is in our process
-                            UnsafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWnd), out int pid);
-                            // if this isn't our process, bail
+
+                            // Make sure the window is in our process
+                            User32.GetWindowThreadProcessId(hWnd, out uint pid);
+
+                            // If this isn't our process, bail
                             if (pid != _thisProcessID)
                             {
                                 return false;
@@ -1119,34 +1168,29 @@ namespace System.Windows.Forms.Design.Behavior
                             try
                             {
                                 _processingMessage = true;
-                                NativeMethods.POINT pt = new NativeMethods.POINT
-                                {
-                                    x = x,
-                                    y = y
-                                };
-                                NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, pt, 1);
-                                Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.y, pt.x));
+                                var pt = new Point(x, y);
+                                User32.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, ref pt, 1);
+                                Message m = Message.Create(hWnd, msg, (IntPtr)0, PARAM.FromLowHigh(pt.Y, pt.X));
 
-                                // DevDiv Bugs 79616, No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                                if (m.Msg == NativeMethods.WM_LBUTTONDOWN)
+                                // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
+                                if (m.Msg == (int)User32.WM.LBUTTONDOWN)
                                 {
-                                    _lastLButtonDownTimeStamp = UnsafeNativeMethods.GetMessageTime();
+                                    _lastLButtonDownTimeStamp = User32.GetMessageTime();
                                 }
-                                else if (m.Msg == NativeMethods.WM_LBUTTONDBLCLK)
+                                else if (m.Msg == (int)User32.WM.LBUTTONDBLCLK)
                                 {
-                                    int lButtonDoubleClickTimeStamp = UnsafeNativeMethods.GetMessageTime();
+                                    int lButtonDoubleClickTimeStamp = User32.GetMessageTime();
                                     if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)
                                     {
                                         return true;
                                     }
                                 }
 
-                                if (!adornerWindow.WndProcProxy(ref m, pt.x, pt.y))
+                                if (!adornerWindow.WndProcProxy(ref m, pt.X, pt.Y))
                                 {
                                     // we did the work, stop the message propogation
                                     return true;
                                 }
-
                             }
                             finally
                             {
@@ -1156,11 +1200,6 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
                     return false;
-                }
-
-                public static int MAKELONG(int low, int high)
-                {
-                    return (high << 16) | (low & 0xffff);
                 }
             }
         }
@@ -1179,12 +1218,12 @@ namespace System.Windows.Forms.Design.Behavior
                     Cursor hitTestCursor = _adorners[i].Glyphs[j].GetHitTest(pt);
                     if (hitTestCursor != null)
                     {
-                        // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave.
+                        // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
                         Glyph newGlyph = _adorners[i].Glyphs[j];
 
                         //with a valid hit test, fire enter/leave events
                         InvokeMouseEnterLeave(_hitTestedGlyph, newGlyph);
-                        if (_validDragArgs == null)
+                        if (_validDragArgs is null)
                         {
                             //if we're not dragging, set the appropriate cursor
                             SetAppropriateCursor(hitTestCursor);
@@ -1198,7 +1237,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             InvokeMouseEnterLeave(_hitTestedGlyph, null);
-            if (_validDragArgs == null)
+            if (_validDragArgs is null)
             {
                 Cursor cursor = Cursors.Default;
                 if ((_behaviorStack != null) && (_behaviorStack.Count > 0))
@@ -1219,23 +1258,23 @@ namespace System.Windows.Forms.Design.Behavior
             private readonly BehaviorService _owner; // ptr back to the behavior service
             private readonly IMenuCommandService _menuService; // core service used for most implementations of the IMCS interface
             private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
-         
+
             public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
             {
                 _owner = owner;
                 _menuService = menuService;
             }
-          
+
             public IMenuCommandService MenuService
             {
                 get => _menuService;
             }
-          
+
             void IMenuCommandService.AddCommand(MenuCommand command)
             {
                 _menuService.AddCommand(command);
             }
-           
+
             void IMenuCommandService.RemoveVerb(DesignerVerb verb)
             {
                 _menuService.RemoveVerb(verb);
@@ -1245,7 +1284,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 _menuService.RemoveCommand(command);
             }
-         
+
             MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
             {
                 try
@@ -1267,21 +1306,26 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return _menuService.GlobalInvoke(commandID);
             }
-          
+
             void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
             {
                 _menuService.ShowContextMenu(menuID, x, y);
             }
-          
+
             void IMenuCommandService.AddVerb(DesignerVerb verb)
             {
                 _menuService.AddVerb(verb);
             }
-           
+
             DesignerVerbCollection IMenuCommandService.Verbs
             {
                 get => _menuService.Verbs;
             }
+        }
+
+        internal void StartDragNotification()
+        {
+            _adornerWindow.StartDragNotification();
         }
 
         private MenuCommand FindCommand(CommandID commandID, IMenuCommandService menuService)
@@ -1313,15 +1357,18 @@ namespace System.Windows.Forms.Design.Behavior
             return menuService.FindCommand(commandID);
         }
 
-        private Behavior GetAppropriateBehavior(Glyph g) {
-            if (_behaviorStack != null && _behaviorStack.Count > 0) {
+        private Behavior GetAppropriateBehavior(Glyph g)
+        {
+            if (_behaviorStack != null && _behaviorStack.Count > 0)
+            {
                 return _behaviorStack[0] as Behavior;
             }
-            
-            if (g != null && g.Behavior != null) {
+
+            if (g != null && g.Behavior != null)
+            {
                 return g.Behavior;
             }
-            
+
             return null;
         }
 
@@ -1338,14 +1385,14 @@ namespace System.Windows.Forms.Design.Behavior
             //default cursors will let the toolbox svc set a cursor if needed
             if (cursor == Cursors.Default)
             {
-                if (_toolboxSvc == null)
+                if (_toolboxSvc is null)
                 {
                     _toolboxSvc = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
                 }
 
                 if (_toolboxSvc != null && _toolboxSvc.SetCursor())
                 {
-                    cursor = new Cursor(NativeMethods.GetCursor());
+                    cursor = new Cursor(User32.GetCursor());
                 }
             }
             _adornerWindow.Cursor = cursor;
@@ -1386,13 +1433,13 @@ namespace System.Windows.Forms.Design.Behavior
         {
             // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragEnter");
-            if (g == null)
+            if (g is null)
             {
                 g = _hitTestedGlyph;
             }
 
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, returning");
                 return;
@@ -1410,18 +1457,18 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnDragLeave(Glyph g, EventArgs e)
         {
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragLeave");
-            // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it.
+            // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
             // So let's make sure it is really cleared when we start the drag.
             _dragEnterReplies.Clear();
 
             // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one
-            if (g == null)
+            if (g is null)
             {
                 g = _hitTestedGlyph;
             }
 
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\t No behavior returning ");
                 return;
@@ -1433,7 +1480,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseDoubleClick(MouseButtons button, Point mouseLoc)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1443,7 +1490,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseDown(MouseButtons button, Point mouseLoc)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1453,7 +1500,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseEnter(Glyph g)
         {
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1463,7 +1510,7 @@ namespace System.Windows.Forms.Design.Behavior
         private bool OnMouseHover(Point mouseLoc)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1476,7 +1523,7 @@ namespace System.Windows.Forms.Design.Behavior
             UnHookMouseEvent();
 
             Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1489,7 +1536,7 @@ namespace System.Windows.Forms.Design.Behavior
             HookMouseEvent();
 
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1501,7 +1548,7 @@ namespace System.Windows.Forms.Design.Behavior
             _dragEnterReplies.Clear();
             _validDragArgs = null;
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return false;
             }
@@ -1512,15 +1559,18 @@ namespace System.Windows.Forms.Design.Behavior
             if (!_trackingMouseEvent)
             {
                 _trackingMouseEvent = true;
-                if (_trackMouseEvent == null)
+                if (_trackMouseEvent.IsDefault())
                 {
-                    _trackMouseEvent = new NativeMethods.TRACKMOUSEEVENT
+                    _trackMouseEvent = new User32.TRACKMOUSEEVENT
                     {
-                        dwFlags = NativeMethods.TME_HOVER,
-                        hwndTrack = _adornerWindow.Handle
+                        cbSize = (uint)Marshal.SizeOf<User32.TRACKMOUSEEVENT>(),
+                        dwFlags = User32.TME.HOVER,
+                        hwndTrack = _adornerWindow.Handle,
+                        dwHoverTime = 100
                     };
                 }
-                SafeNativeMethods.TrackMouseEvent(_trackMouseEvent);
+
+                User32.TrackMouseEvent(ref _trackMouseEvent);
             }
         }
         private void UnHookMouseEvent()
@@ -1533,7 +1583,7 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragDrop");
             _validDragArgs = null;//be sure to null out our cached drag args
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior. returning");
                 return;
@@ -1541,7 +1591,6 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragDrop(_hitTestedGlyph, e);
         }
-
         private void PropagatePaint(PaintEventArgs pe)
         {
             for (int i = 0; i < _adorners.Count; i++)
@@ -1557,8 +1606,6 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void TestHook_GetRecentSnapLines(ref Message m)
         {
             string snapLineInfo = string.Empty;
@@ -1572,7 +1619,6 @@ namespace System.Windows.Forms.Design.Behavior
             TestHook_SetText(ref m, snapLineInfo);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]
         private void TestHook_SetText(ref Message m, string text)
         {
             if (m.LParam == IntPtr.Zero)
@@ -1594,13 +1640,13 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (Marshal.SystemDefaultCharSize == 1)
             {
-                bytes = Text.Encoding.Default.GetBytes(text);
-                nullBytes = Text.Encoding.Default.GetBytes(nullChar);
+                bytes = System.Text.Encoding.Default.GetBytes(text);
+                nullBytes = System.Text.Encoding.Default.GetBytes(nullChar);
             }
             else
             {
-                bytes = Text.Encoding.Unicode.GetBytes(text);
-                nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
+                bytes = System.Text.Encoding.Unicode.GetBytes(text);
+                nullBytes = System.Text.Encoding.Unicode.GetBytes(nullChar);
             }
 
             Marshal.Copy(bytes, 0, m.LParam, bytes.Length);
@@ -1608,10 +1654,9 @@ namespace System.Windows.Forms.Design.Behavior
             m.Result = (IntPtr)((bytes.Length + nullBytes.Length) / Marshal.SystemDefaultCharSize);
         }
 
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void TestHook_GetAllSnapLines(ref Message m)
         {
-            string snapLineInfo = "";
+            string snapLineInfo = string.Empty;
             if (!(_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host))
             {
                 return;
@@ -1634,19 +1679,20 @@ namespace System.Windows.Forms.Design.Behavior
             }
             TestHook_SetText(ref m, snapLineInfo);
         }
+
         private void OnDragOver(DragEventArgs e)
         {
             // cache off our validDragArgs so we can re-fabricate enter/leave drag events
             _validDragArgs = e;
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragOver");
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, exiting with DragDropEffects.None");
                 e.Effect = DragDropEffects.None;
                 return;
             }
-            if (_hitTestedGlyph == null ||
+            if (_hitTestedGlyph is null ||
                (_hitTestedGlyph != null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tFound glyph, forwarding to behavior");
@@ -1662,7 +1708,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnGiveFeedback(GiveFeedbackEventArgs e)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return;
             }
@@ -1672,7 +1718,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnQueryContinueDrag(QueryContinueDragEventArgs e)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior == null)
+            if (behavior is null)
             {
                 return;
             }

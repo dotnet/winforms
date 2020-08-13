@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowsAddedEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewRowsAddedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-2, -2)]

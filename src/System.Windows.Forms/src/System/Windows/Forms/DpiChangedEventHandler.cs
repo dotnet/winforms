@@ -2,12 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that will handle the <see cref='System.Windows.Forms.Control.DpiChanged'/>,
-    /// <see cref='System.Windows.Forms.Control.DpiChanged'/>, or <see cref='System.Windows.Forms.Control.DpiChanged'/>
-    /// event of a <see cref='System.Windows.Forms.Control'/>.
-    /// </devdoc>
+    /// <summary>
+    /// Represents a method that will handle the <see cref='Form.DpiChanged'/> event.
+    /// </summary>
     public delegate void DpiChangedEventHandler(object sender, DpiChangedEventArgs e);
 }

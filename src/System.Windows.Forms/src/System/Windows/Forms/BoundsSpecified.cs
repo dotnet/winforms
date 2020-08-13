@@ -4,54 +4,54 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the bounds of the control to use when defining a control's size
-    /// and position.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the bounds of the control to use when defining a control's size
+    ///  and position.
+    /// </summary>
     [Flags]
     public enum BoundsSpecified
     {
-        /// <devdoc>
-        /// Specifies the left edge of the control is defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies the left edge of the control is defined.
+        /// </summary>
         X = 0x1,
 
-        /// <devdoc>
-        /// Specifies the top edge of the control of the control is defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies the top edge of the control of the control is defined.
+        /// </summary>
         Y = 0x2,
 
-        /// <devdoc>
-        /// Specifies the width of the control is defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies the width of the control is defined.
+        /// </summary>
         Width = 0x4,
 
-        /// <devdoc>
-        /// Specifies the height of the control is defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies the height of the control is defined.
+        /// </summary>
         Height = 0x8,
 
-        /// <devdoc>
-        /// Both <see langword='X'/> and <see langword='Y'/> coordinates of the
-        /// control are defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Both <see cref='X'/> and <see cref='Y'/> coordinates of the
+        ///  control are defined.
+        /// </summary>
         Location = X | Y,
 
-        /// <devdoc>
-        /// Both <see cref='System.Windows.Forms.Control.Width'/> and <see cref='System.Windows.Forms.Control.Height'/>
-        /// property values of the control are defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Both <see cref='Control.Width'/> and <see cref='Control.Height'/>
+        ///  property values of the control are defined.
+        /// </summary>
         Size = Width | Height,
 
-        /// <devdoc>
-        /// Both <see cref='System.Windows.Forms.Control.Location'/> and <see cref='System.Windows.Forms.Control.Size'/>
-        /// property values are defined.
-        /// </devdoc>
+        /// <summary>
+        ///  Both <see cref='Control.Location'/> and <see cref='Control.Size'/>
+        ///  property values are defined.
+        /// </summary>
         All = Location | Size,
 
-        /// <devdoc>
-        /// No bounds are specified.
-        /// </devdoc>
+        /// <summary>
+        ///  No bounds are specified.
+        /// </summary>
         None = 0,
     }
 }

@@ -2,21 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     [SRDescription(nameof(SR.ICurrencyManagerProviderDescr))]
     public interface ICurrencyManagerProvider
     {
-        /// <devdoc>
-        /// Return the main currency manager for this data source.
-        /// </devdoc>
+        /// <summary>
+        ///  Return the main currency manager for this data source.
+        /// </summary>
         CurrencyManager CurrencyManager { get; }
 
-        /// <devdoc>
-        /// Return a related currency manager for specified data member on this data source.
-        /// If data member is null or empty, this method returns the data source's main currency
-        /// manager (ie. this method returns the same value as the CurrencyManager property).
-        /// </devdoc>
+        /// <summary>
+        ///  Return a related currency manager for specified data member on this data source.
+        ///  If data member is null or empty, this method returns the data source's main currency
+        ///  manager (ie. this method returns the same value as the CurrencyManager property).
+        /// </summary>
         CurrencyManager GetRelatedCurrencyManager(string dataMember);
     }
 }

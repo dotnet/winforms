@@ -1,0 +1,13 @@
+<Project>
+
+  <ItemGroup Condition="'$(UsePublicApiAnalyzers)' == 'true'">
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="$(MicrosoftCodeAnalysisPublicApiAnalyzers)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <AdditionalFiles Include="$(ProjectDir)PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(ProjectDir)PublicAPI.Unshipped.txt" />
+  </ItemGroup>
+
+</Project>

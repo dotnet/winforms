@@ -12,7 +12,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ListViewGroupConverterTests
+    // NB: doesn't require thread affinity
+    public class ListViewGroupConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         public static TheoryData<Type, bool> CanConvertFromData =>
             CommonTestHelper.GetConvertFromTheoryData();
@@ -29,10 +30,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CanConvertFrom_Context_TestData()
         {
-            yield return new object [] { null, false };
-            yield return new object [] { new object(), false };
-            yield return new object [] { new ListViewItem(), true };
-            
+            yield return new object[] { null, false };
+            yield return new object[] { new object(), false };
+            yield return new object[] { new ListViewItem(), true };
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);
@@ -142,10 +143,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> CanConvertTo_Context_TestData()
         {
-            yield return new object [] { null, true };
-            yield return new object [] { new object(), true };
-            yield return new object [] { new ListViewItem(), true };
-            
+            yield return new object[] { null, true };
+            yield return new object[] { new object(), true };
+            yield return new object[] { new ListViewItem(), true };
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);
@@ -258,10 +259,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetStandardValues_TestData()
         {
-            yield return new object [] { null, null };
-            yield return new object [] { new object(), null };
-            yield return new object [] { new ListViewItem(), null };
-            
+            yield return new object[] { null, null };
+            yield return new object[] { new object(), null };
+            yield return new object[] { new ListViewItem(), null };
+
             var listView = new ListView();
             var item1 = new ListViewItem();
             listView.Items.Add(item1);

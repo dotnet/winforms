@@ -6,38 +6,37 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the initial position of a form.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Specifies the initial position of a form.
+    /// </summary>
     public enum FormStartPosition
     {
-        /// <devdoc>
-        /// The location and size of the form will determine its starting position.
-        /// </devdoc>
+        /// <summary>
+        ///  The location and size of the form will determine its starting position.
+        /// </summary>
         Manual = 0,
 
-        /// <devdoc>
-        /// The form is centered on the current display, and has the dimensions
-        /// specified in the form's size.
-        /// </devdoc>
+        /// <summary>
+        ///  The form is centered on the current display, and has the dimensions
+        ///  specified in the form's size.
+        /// </summary>
         CenterScreen = 1,
 
-        /// <devdoc>
-        /// The form is positioned at the Windows default location and has the
-        /// dimensions specified in the form's size.
-        /// </devdoc>
+        /// <summary>
+        ///  The form is positioned at the Windows default location and has the
+        ///  dimensions specified in the form's size.
+        /// </summary>
         WindowsDefaultLocation = 2,
 
-        /// <devdoc>
-        /// The form is positioned at the Windows default location and has the
-        /// bounds determined by Windows default.
-        /// </devdoc>
+        /// <summary>
+        ///  The form is positioned at the Windows default location and has the
+        ///  bounds determined by Windows default.
+        /// </summary>
         WindowsDefaultBounds = 3,
 
-        /// <devdoc>
-        /// The form is centered within the bounds of its parent form.
-        /// </devdoc>
+        /// <summary>
+        ///  The form is centered within the bounds of its parent form.
+        /// </summary>
         CenterParent = 4
     }
 }

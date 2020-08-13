@@ -2,7 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
+#nullable disable
+
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -16,9 +17,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!this.replaced)
+                if (!replaced)
                 {
-                    this.replaced = true;
+                    replaced = true;
                     base.DescriptionValue = SR.GetResourceString(base.Description);
                 }
                 return base.Description;

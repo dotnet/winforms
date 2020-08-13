@@ -1,64 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -171,6 +112,12 @@
   <data name="DesignerOptions_SnapToGridDesc" xml:space="preserve">
     <value>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>(None)</value>
+  </data>
+  <data name="None_lc" xml:space="preserve">
+    <value>(none)</value>
+  </data>
   <data name="NotImplementedByDesign" xml:space="preserve">
     <value>This method/object is not implemented by design.</value>
   </data>
@@ -185,12 +132,6 @@
   </data>
   <data name="InheritanceServiceReadOnlyCollection" xml:space="preserve">
     <value>Read-Only</value>
-  </data>
-  <data name="CannotConvertDoubleToDate" xml:space="preserve">
-    <value>Double cannot be converted to a date.</value>
-  </data>
-  <data name="CannotConvertIntToFloat" xml:space="preserve">
-    <value>Integer cannot be converted to a float.</value>
   </data>
   <data name="COM2UnhandledVT" xml:space="preserve">
     <value>Unhandled VT: {0}.</value>
@@ -229,7 +170,8 @@
     <value>Delete {0} components</value>
   </data>
   <data name="CommandSetError" xml:space="preserve">
-    <value>An error occurred while processing this command.\r\n{0}</value>
+    <value>An error occurred while processing this command.
+      {0}</value>
   </data>
   <data name="CommandSetFormatSpacing" xml:space="preserve">
     <value>Format {0} components (spacing)</value>
@@ -395,7 +337,9 @@
     <value>Cannot create a view for this design surface because the designer is not loaded.</value>
   </data>
   <data name="DesignSurfaceFatalError" xml:space="preserve">
-    <value>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</value>
+    <value>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</value>
   </data>
   <data name="DesignSurfaceNoRootComponent" xml:space="preserve">
     <value>The designer loader did not provide a root component but has not indicated why.</value>
@@ -409,14 +353,49 @@
   <data name="ExtenderProviderServiceDuplicateProvider" xml:space="preserve">
     <value>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</value>
   </data>
-  <data name="SerializerBadElementTypes" xml:space="preserve">
-    <value>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</value>
+  <data name="BehaviorServiceResizeControl" xml:space="preserve">
+    <value>Resize {0}</value>
+  </data>
+  <data name="BehaviorServiceResizeControls" xml:space="preserve">
+    <value>Resize {0} Controls</value>
+  </data>
+  <data name="DesignerShortcutDockInParent" xml:space="preserve">
+    <value>Dock in Parent Container</value>
+  </data>
+  <data name="DesignerShortcutUndockInParent" xml:space="preserve">
+    <value>Undock in Parent Container</value>
+  </data>
+  <data name="ControlDesigner_WndProcException" xml:space="preserve">
+    <value>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</value>
+  </data>
+  <data name="lockedDescr" xml:space="preserve">
+    <value>The Locked property determines if we can move or resize the control.</value>
+  </data>
+  <data name="InvalidArgument" xml:space="preserve">
+    <value>'{1}' is not a valid value for '{0}'.</value>
+  </data>
+  <data name="InvalidBoundArgument" xml:space="preserve">
+    <value>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</value>
   </data>
   <data name="SerializerFieldTargetEvalFailed" xml:space="preserve">
     <value>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</value>
   </data>
+  <data name="SerializerInvalidArrayRank" xml:space="preserve">
+    <value>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</value>
+  </data>
+  <data name="SerializerLostStatements" xml:space="preserve">
+    <value>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</value>
+  </data>
   <data name="SerializerNoRootExpression" xml:space="preserve">
     <value>The source code contains a reference to the class definition, but the class definition cannot be found.</value>
+  </data>
+  <data name="SerializerNoSerializerForComponent" xml:space="preserve">
+    <value>The object '{0}' failed to serialize itself.  It may not support code generation.</value>
   </data>
   <data name="SerializerNoSuchEvent" xml:space="preserve">
     <value>The type '{0}' has no event named '{1}'.</value>
@@ -427,11 +406,11 @@
   <data name="SerializerNoSuchProperty" xml:space="preserve">
     <value>The type '{0}' has no property named '{1}'.</value>
   </data>
-  <data name="SerializerResourceException" xml:space="preserve">
-    <value>Error reading resources from the resource file for the culture {0}: {1}</value>
+  <data name="SerializerNullNestedProperty" xml:space="preserve">
+    <value>The object '{0}' returned null for the property '{1}' but this is not allowed.</value>
   </data>
-  <data name="SerializerResourceExceptionInvariant" xml:space="preserve">
-    <value>Error reading resources from the resource file for the default culture: {0}</value>
+  <data name="SerializerPropertyGenFailed" xml:space="preserve">
+    <value>Code generation for property '{0}' failed.  Error was: '{1}'</value>
   </data>
   <data name="SerializerTypeNotFound" xml:space="preserve">
     <value>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</value>
@@ -439,11 +418,176 @@
   <data name="SerializerUndeclaredName" xml:space="preserve">
     <value>The variable '{0}' is either undeclared or was never assigned.</value>
   </data>
+  <data name="StandardMenuAbout" xml:space="preserve">
+    <value>&amp;About...</value>
+  </data>
+  <data name="StandardMenuContents" xml:space="preserve">
+    <value>&amp;Contents</value>
+  </data>
+  <data name="StandardMenuCopy" xml:space="preserve">
+    <value>&amp;Copy</value>
+  </data>
+  <data name="StandardMenuCreateDesc" xml:space="preserve">
+    <value>Create Standard Menu</value>
+  </data>
+  <data name="StandardMenuCustomize" xml:space="preserve">
+    <value>&amp;Customize</value>
+  </data>
+  <data name="StandardMenuCut" xml:space="preserve">
+    <value>Cu&amp;t</value>
+  </data>
+  <data name="StandardMenuEdit" xml:space="preserve">
+    <value>&amp;Edit</value>
+  </data>
+  <data name="StandardMenuExit" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
+  <data name="StandardMenuFile" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="StandardMenuHelp" xml:space="preserve">
+    <value>&amp;Help</value>
+  </data>
+  <data name="StandardMenuIndex" xml:space="preserve">
+    <value>&amp;Index</value>
+  </data>
+  <data name="StandardMenuNew" xml:space="preserve">
+    <value>&amp;New</value>
+  </data>
+  <data name="StandardMenuOpen" xml:space="preserve">
+    <value>&amp;Open</value>
+  </data>
+  <data name="StandardMenuOptions" xml:space="preserve">
+    <value>&amp;Options</value>
+  </data>
+  <data name="StandardMenuPaste" xml:space="preserve">
+    <value>&amp;Paste</value>
+  </data>
+  <data name="StandardMenuPrint" xml:space="preserve">
+    <value>&amp;Print</value>
+  </data>
+  <data name="StandardMenuPrintPreview" xml:space="preserve">
+    <value>Print Pre&amp;view</value>
+  </data>
+  <data name="StandardMenuRedo" xml:space="preserve">
+    <value>&amp;Redo</value>
+  </data>
+  <data name="StandardMenuSave" xml:space="preserve">
+    <value>&amp;Save</value>
+  </data>
+  <data name="StandardMenuSaveAs" xml:space="preserve">
+    <value>Save &amp;As</value>
+  </data>
+  <data name="StandardMenuSearch" xml:space="preserve">
+    <value>&amp;Search</value>
+  </data>
+  <data name="StandardMenuSelectAll" xml:space="preserve">
+    <value>Select &amp;All</value>
+  </data>
+  <data name="StandardMenuTools" xml:space="preserve">
+    <value>&amp;Tools</value>
+  </data>
+  <data name="StandardMenuUndo" xml:space="preserve">
+    <value>&amp;Undo</value>
+  </data>
+  <data name="StandardToolCut" xml:space="preserve">
+    <value>C&amp;ut</value>
+  </data>
+  <data name="ToolStripActionList_Dock" xml:space="preserve">
+    <value>Dock:</value>
+  </data>
+  <data name="ToolStripActionList_DockDesc" xml:space="preserve">
+    <value>Changes the Dock property</value>
+  </data>
+  <data name="ToolStripActionList_GripStyle" xml:space="preserve">
+    <value>GripStyle:</value>
+  </data>
+  <data name="ToolStripActionList_GripStyleDesc" xml:space="preserve">
+    <value>Changes the GripStyle property</value>
+  </data>
+  <data name="ToolStripActionList_Layout" xml:space="preserve">
+    <value>Layout &amp;&amp; Appearance</value>
+  </data>
+  <data name="ToolStripActionList_RenderMode" xml:space="preserve">
+    <value>RenderMode:</value>
+  </data>
+  <data name="ToolStripActionList_RenderModeDesc" xml:space="preserve">
+    <value>Changes the RenderMode property</value>
+  </data>
+  <data name="ToolStripAddingItem" xml:space="preserve">
+    <value>Adding {0} Item</value>
+  </data>
+  <data name="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue" xml:space="preserve">
+    <value>AllowItemReorder and AllowDrop cannot both be true.</value>
+  </data>
+  <data name="ToolStripCreatingNewItemTransaction" xml:space="preserve">
+    <value>ToolStrip New Item create Transaction.</value>
+  </data>
+  <data name="ToolStripDesignerEmbedVerb" xml:space="preserve">
+    <value>Embed in ToolStripContainer</value>
+  </data>
+  <data name="ToolStripDesignerEmbedVerbDesc" xml:space="preserve">
+    <value>Embeds the current ToolStrip in ToolStripContainer</value>
+  </data>
+  <data name="ToolStripDesignerStandardItemsVerb" xml:space="preserve">
+    <value>&amp;Insert Standard Items</value>
+  </data>
+  <data name="ToolStripDesignerStandardItemsVerbDesc" xml:space="preserve">
+    <value>Inserts standard items in the current ToolStrip</value>
+  </data>
+  <data name="ToolStripDesignerTemplateNodeEnterText" xml:space="preserve">
+    <value>Type Here</value>
+  </data>
+  <data name="ToolStripDesignerTemplateNodeLabelToolTip" xml:space="preserve">
+    <value>Type Text for ToolStripMenuItem</value>
+  </data>
+  <data name="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName" xml:space="preserve">
+    <value>Add Menu Item</value>
+  </data>
+  <data name="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip" xml:space="preserve">
+    <value>Add ToolStripStatusLabel</value>
+  </data>
+  <data name="ToolStripDesignerTemplateNodeSplitButtonToolTip" xml:space="preserve">
+    <value>Add ToolStripButton</value>
+  </data>
+  <data name="ToolStripDesignerToolStripAccessibleName" xml:space="preserve">
+    <value>New item selection</value>
+  </data>
+  <data name="ToolStripDesignerTransactionRemovingItem" xml:space="preserve">
+    <value>Removing Item</value>
+  </data>
+  <data name="ToolStripInsertingIntoDropDownTransaction" xml:space="preserve">
+    <value>ToolStrip MenuItem Insert in DropDown Transaction.</value>
+  </data>
+  <data name="ToolStripItemCollectionEditorVerb" xml:space="preserve">
+    <value>&amp;Edit Items...</value>
+  </data>
+  <data name="ToolStripItemContextMenuInsert" xml:space="preserve">
+    <value>&amp;Insert</value>
+  </data>
+  <data name="ToolStripItemPropertyChangeTransaction" xml:space="preserve">
+    <value>ToolStripItem Property Change Transaction.</value>
+  </data>
+  <data name="ToolStripMorphingItemTransaction" xml:space="preserve">
+    <value>ToolStripItem Morphing Transaction.</value>
+  </data>
+  <data name="ToolStripSeparatorError" xml:space="preserve">
+    <value>Cannot add ToolStripSeparator to MenuStrip.</value>
+  </data>
   <data name="TypeNotFoundInTargetFramework" xml:space="preserve">
     <value>Type '{0}' is not available in the target framework.</value>
   </data>
-  <data name="SerializationManagerAreadyInSession" xml:space="preserve">
-    <value>You cannot create a new session because this serialization manager already has an active serialization session.</value>
+  <data name="ContextMenuStripActionList_ShowCheckMargin" xml:space="preserve">
+    <value>ShowCheckMargin</value>
+  </data>
+  <data name="ContextMenuStripActionList_ShowCheckMarginDesc" xml:space="preserve">
+    <value>Toggles the ShowCheckMargin property</value>
+  </data>
+  <data name="ContextMenuStripActionList_ShowImageMargin" xml:space="preserve">
+    <value>ShowImageMargin</value>
+  </data>
+  <data name="ContextMenuStripActionList_ShowImageMarginDesc" xml:space="preserve">
+    <value>Toggles the ShowImageMargin property</value>
   </data>
   <data name="SerializationManagerDuplicateComponentDecl" xml:space="preserve">
     <value>Duplicate declaration of member '{0}'</value>
@@ -451,29 +595,29 @@
   <data name="SerializationManagerNameInUse" xml:space="preserve">
     <value>The name '{0}' is already used by another object.</value>
   </data>
-  <data name="SerializationManagerNoMatchingCtor" xml:space="preserve">
-    <value>Type '{0}' does not have a constructor with parameters of types {1}.</value>
-  </data>
-  <data name="SerializationManagerNoSession" xml:space="preserve">
-    <value>This method cannot be invoked because the serialization manager does not have an active serialization session.</value>
-  </data>
   <data name="SerializationManagerObjectHasName" xml:space="preserve">
     <value>Cannot name the object '{0}' because it is already named '{1}'.</value>
   </data>
-  <data name="SerializationManagerWithinSession" xml:space="preserve">
-    <value>This method cannot be invoked because the serialization manager has an active serialization session.</value>
+  <data name="SerializerBadElementTypes" xml:space="preserve">
+    <value>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</value>
   </data>
-  <data name="SerializerLostStatements" xml:space="preserve">
-    <value>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</value>
+  <data name="SerializerResourceException" xml:space="preserve">
+    <value>Error reading resources from the resource file for the culture {0}: {1}</value>
   </data>
-  <data name="SerializerNoSerializerForComponent" xml:space="preserve">
-    <value>The object '{0}' failed to serialize itself.  It may not support code generation.</value>
+  <data name="SerializerResourceExceptionInvariant" xml:space="preserve">
+    <value>Error reading resources from the resource file for the default culture: {0}</value>
   </data>
-  <data name="SerializerInvalidArrayRank" xml:space="preserve">
-    <value>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</value>
+  <data name="ToolStripDesignerTransactionAddingItem" xml:space="preserve">
+    <value>Adding Item</value>
   </data>
-  <data name="SerializerMemberTypeNotSerializable" xml:space="preserve">
-    <value>Members of type '{0}' cannot be serialized.</value>
+  <data name="ToolStripDropDownItemCollectionEditorVerb" xml:space="preserve">
+    <value>&amp;Edit DropDownItems...</value>
+  </data>
+  <data name="ToolStripItemContextMenuConvertTo" xml:space="preserve">
+    <value>Con&amp;vert To</value>
+  </data>
+  <data name="CodeDomComponentSerializationServiceClosedStore" xml:space="preserve">
+    <value>The serialization store is closed.  New objects cannot be added to a closed store.</value>
   </data>
   <data name="CodeDomComponentSerializationServiceDeserializationError" xml:space="preserve">
     <value>Complete deserialization of {0} failed.</value>
@@ -481,7 +625,448 @@
   <data name="CodeDomComponentSerializationServiceUnknownStore" xml:space="preserve">
     <value>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</value>
   </data>
-  <data name="CodeDomComponentSerializationServiceClosedStore" xml:space="preserve">
-    <value>The serialization store is closed.  New objects cannot be added to a closed store.</value>
+  <data name="ContextMenuAlignToGrid" xml:space="preserve">
+    <value>Align To &amp;Grid</value>
+  </data>
+  <data name="ContextMenuBringToFront" xml:space="preserve">
+    <value>&amp;Bring To Front</value>
+  </data>
+  <data name="ContextMenuCopy" xml:space="preserve">
+    <value>C&amp;opy</value>
+  </data>
+  <data name="ContextMenuCut" xml:space="preserve">
+    <value>&amp;Cut</value>
+  </data>
+  <data name="ContextMenuDelete" xml:space="preserve">
+    <value>&amp;Delete</value>
+  </data>
+  <data name="ContextMenuDocumentOutline" xml:space="preserve">
+    <value>&amp;Document Outline</value>
+  </data>
+  <data name="ContextMenuLockControls" xml:space="preserve">
+    <value>&amp;Lock Controls</value>
+  </data>
+  <data name="ContextMenuPaste" xml:space="preserve">
+    <value>&amp;Paste</value>
+  </data>
+  <data name="ContextMenuProperties" xml:space="preserve">
+    <value>&amp;Properties</value>
+  </data>
+  <data name="ContextMenuSelect" xml:space="preserve">
+    <value>&amp;Select</value>
+  </data>
+  <data name="ContextMenuSendToBack" xml:space="preserve">
+    <value>&amp;Send To Back</value>
+  </data>
+  <data name="ContextMenuViewCode" xml:space="preserve">
+    <value>View &amp;Code</value>
+  </data>
+  <data name="SerializationManagerAreadyInSession" xml:space="preserve">
+    <value>You cannot create a new session because this serialization manager already has an active serialization session.</value>
+  </data>
+  <data name="SerializationManagerNoMatchingCtor" xml:space="preserve">
+    <value>Type '{0}' does not have a constructor with parameters of types {1}.</value>
+  </data>
+  <data name="SerializationManagerNoSession" xml:space="preserve">
+    <value>This method cannot be invoked because the serialization manager does not have an active serialization session.</value>
+  </data>
+  <data name="SerializationManagerWithinSession" xml:space="preserve">
+    <value>This method cannot be invoked because the serialization manager has an active serialization session.</value>
+  </data>
+  <data name="SerializerMemberTypeNotSerializable" xml:space="preserve">
+    <value>Members of type '{0}' cannot be serialized.</value>
+  </data>
+  <data name="SerializerTypeAbstract" xml:space="preserve">
+    <value>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</value>
+  </data>
+  <data name="StandardToolHelp" xml:space="preserve">
+    <value>He&amp;lp</value>
+  </data>
+  <data name="ToolStripItemContextMenuSetImage" xml:space="preserve">
+    <value>Set I&amp;mage...</value>
+  </data>
+  <data name="ToolStripSelectMenuItem" xml:space="preserve">
+    <value>'{0}'</value>
+  </data>
+  <data name="CodeDomDesignerLoaderPropGenerateMember" xml:space="preserve">
+    <value>Indicates if a member variable will be generated for this component.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderPropModifiers" xml:space="preserve">
+    <value>Indicates the visibility level of the object.</value>
+  </data>
+  <data name="LocalizationProviderManualReload" xml:space="preserve">
+    <value>You must close and re-open the designer for this change to take effect.</value>
+  </data>
+  <data name="LocalizationProviderMissingService" xml:space="preserve">
+    <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
+  </data>
+  <data name="BasicDesignerLoaderDifferentHost" xml:space="preserve">
+    <value>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</value>
+  </data>
+  <data name="BasicDesignerLoaderMissingService" xml:space="preserve">
+    <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
+  </data>
+  <data name="BasicDesignerLoaderNotInitialized" xml:space="preserve">
+    <value>The designer loader has not been initialized yet.  You may only call this method after initialization.</value>
+  </data>
+  <data name="BasicDesignerLoaderAlreadyLoaded" xml:space="preserve">
+    <value>The designer is already loaded.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderBadSerializationObject" xml:space="preserve">
+    <value>The serialization data object is not of the proper type.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled" xml:space="preserve">
+    <value>	{0} --- The designer for base class '{1}' is not installed.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable" xml:space="preserve">
+    <value>	{0} --- The base class '{1}' cannot be designed.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderDocumentFailureTypeNotFound" xml:space="preserve">
+    <value>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderDupComponentName" xml:space="preserve">
+    <value>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderInvalidBlankIdentifier" xml:space="preserve">
+    <value>Empty identifiers are not valid.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderInvalidIdentifier" xml:space="preserve">
+    <value>'{0}' is not a valid identifier.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderNoLanguageSupport" xml:space="preserve">
+    <value>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderNoRootSerializer" xml:space="preserve">
+    <value>The designer could not be shown for this file because none of the classes within it can be designed.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderNoRootSerializerWithFailures" xml:space="preserve">
+    <value>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+{0}</value>
+  </data>
+  <data name="CodeDomDesignerLoaderNoTypeResolution" xml:space="preserve">
+    <value>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</value>
+  </data>
+  <data name="CodeDomDesignerLoaderSerializerTypeNotFirstType" xml:space="preserve">
+    <value>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</value>
+  </data>
+  <data name="EventBindingServiceBadArgType" xml:space="preserve">
+    <value>The event {0} expects an argument type of {1}.</value>
+  </data>
+  <data name="EventBindingServiceEventReadOnly" xml:space="preserve">
+    <value>The event {0} is read-only and cannot be changed.</value>
+  </data>
+  <data name="EventBindingServiceMissingService" xml:space="preserve">
+    <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
+  </data>
+  <data name="EventBindingServiceNoSite" xml:space="preserve">
+    <value>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</value>
+  </data>
+  <data name="EventBindingServiceSetValue" xml:space="preserve">
+    <value>Set {0}.{1} event</value>
+  </data>
+  <data name="BinaryEditorAllFiles" xml:space="preserve">
+    <value>All Files</value>
+  </data>
+  <data name="BinaryEditorFileError" xml:space="preserve">
+    <value>Error writing to file: {0}</value>
+  </data>
+  <data name="BinaryEditorFileName" xml:space="preserve">
+    <value>ByteArray</value>
+  </data>
+  <data name="BinaryEditorSaveFile" xml:space="preserve">
+    <value>Save File As</value>
+  </data>
+  <data name="BinaryEditorTitle" xml:space="preserve">
+    <value>Byte Array Property Editor</value>
+  </data>
+  <data name="MaskDescriptorNullOrEmptyRequiredProperty" xml:space="preserve">
+    <value>One or more required properties are null or empty.</value>
+  </data>
+  <data name="MaskDescriptorNull" xml:space="preserve">
+    <value>The provided MaskDescriptor is null.</value>
+  </data>
+  <data name="MaskDescriptorNotMaskFullErrorMsg" xml:space="preserve">
+    <value>Mask is not full.</value>
+  </data>
+  <data name="MaskDescriptorValidatingTypeNone" xml:space="preserve">
+    <value>(none)</value>
+  </data>
+  <data name="MaskDesignerDialogCustomEntry" xml:space="preserve">
+    <value>&lt;Custom&gt;</value>
+  </data>
+  <data name="MaskDesignerDialogDataFormat" xml:space="preserve">
+    <value>Data Format</value>
+  </data>
+  <data name="MaskDesignerDialogDlgCaption" xml:space="preserve">
+    <value>Input Mask</value>
+  </data>
+  <data name="MaskDesignerDialogMaskDescription" xml:space="preserve">
+    <value>Mask Description</value>
+  </data>
+  <data name="MaskDesignerDialogValidatingType" xml:space="preserve">
+    <value>Validating Type</value>
+  </data>
+  <data name="MaskedTextBoxDesignerVerbsSetMaskDesc" xml:space="preserve">
+    <value>Set Mask...</value>
+  </data>
+  <data name="MaskedTextBoxTextEditorErrorFormatString" xml:space="preserve">
+    <value>Error at position {0}: {1}.</value>
+  </data>
+  <data name="MaskedTextBoxHintAsciiCharacterExpected" xml:space="preserve">
+    <value>ASCII character expected</value>
+  </data>
+  <data name="MaskedTextBoxHintAlphanumericCharacterExpected" xml:space="preserve">
+    <value>Alphanumeric character expected</value>
+  </data>
+  <data name="MaskedTextBoxHintDigitExpected" xml:space="preserve">
+    <value>Digit expected</value>
+  </data>
+  <data name="MaskedTextBoxHintSignedDigitExpected" xml:space="preserve">
+    <value>Signed digit expected</value>
+  </data>
+  <data name="MaskedTextBoxHintLetterExpected" xml:space="preserve">
+    <value>Letter expected</value>
+  </data>
+  <data name="MaskedTextBoxHintPromptCharNotAllowed" xml:space="preserve">
+    <value>Prompt character disallowed as input</value>
+  </data>
+  <data name="MaskedTextBoxHintUnavailableEditPosition" xml:space="preserve">
+    <value>Unavailable edit position</value>
+  </data>
+  <data name="MaskedTextBoxHintNonEditPosition" xml:space="preserve">
+    <value>Non edit position</value>
+  </data>
+  <data name="MaskedTextBoxHintPositionOutOfRange" xml:space="preserve">
+    <value>Position out of range</value>
+  </data>
+  <data name="MaskedTextBoxHintInvalidInput" xml:space="preserve">
+    <value>Invalid input character</value>
+  </data>
+  <data name="MenuCommandService_DuplicateCommand" xml:space="preserve">
+    <value>There is already a command handler for the menu command '{0}'.</value>
+  </data>
+  <data name="AnchorEditorAccName" xml:space="preserve">
+    <value>Anchor Editor</value>
+  </data>
+  <data name="AnchorEditorBottomAccName" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="AnchorEditorLeftAccName" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="AnchorEditorRightAccName" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="AnchorEditorTopAccName" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="bitmapFileDescription" xml:space="preserve">
+    <value>Bitmap files</value>
+  </data>
+  <data name="ColorEditorAccName" xml:space="preserve">
+    <value>Color Picker</value>
+  </data>
+  <data name="ColorEditorPaletteTab" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="ColorEditorStandardTab" xml:space="preserve">
+    <value>Web</value>
+    <comment>{Locked="Web"}</comment>
+  </data>
+  <data name="ColorEditorSystemTab" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="DataSourceLocksItems" xml:space="preserve">
+    <value>Items collection cannot be modified when the DataSource property is set.</value>
+  </data>
+  <data name="DockEditorAccName" xml:space="preserve">
+    <value>Dock Picker</value>
+  </data>
+  <data name="DockEditorBottomAccName" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="DockEditorFillAccName" xml:space="preserve">
+    <value>Fill</value>
+  </data>
+  <data name="DockEditorLeftAccName" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="DockEditorNoneAccName" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DockEditorRightAccName" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="DockEditorTopAccName" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="GenericFileFilter" xml:space="preserve">
+    <value>All Files(*.*)|*.*</value>
+  </data>
+  <data name="GenericOpenFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="imageFileDescription" xml:space="preserve">
+    <value>All image files</value>
+  </data>
+  <data name="ListViewSubItemBaseName" xml:space="preserve">
+    <value>ListViewSubItem</value>
+  </data>
+  <data name="metafileFileDescription" xml:space="preserve">
+    <value>Metafiles</value>
+  </data>
+  <data name="ShortcutKeys_InvalidKey" xml:space="preserve">
+    <value>(Unknown)</value>
+  </data>
+  <data name="CollectionEditorCantRemoveItem" xml:space="preserve">
+    <value>The item '{0}' cannot be removed.</value>
+  </data>
+  <data name="CollectionEditorCaption" xml:space="preserve">
+    <value>{0} Collection Editor</value>
+  </data>
+  <data name="CollectionEditorInheritedReadOnlySelection" xml:space="preserve">
+    <value>Read-only component(s) selected.</value>
+  </data>
+  <data name="CollectionEditorProperties" xml:space="preserve">
+    <value>{0} &amp;properties:</value>
+  </data>
+  <data name="CollectionEditorPropertiesMultiSelect" xml:space="preserve">
+    <value>Multi-Select &amp;Properties:</value>
+  </data>
+  <data name="CollectionEditorPropertiesNone" xml:space="preserve">
+    <value>&amp;Properties:</value>
+  </data>
+  <data name="CollectionEditorUndoBatchDesc" xml:space="preserve">
+    <value>Add or remove {0} objects</value>
+  </data>
+  <data name="MultilineStringEditorWatermark" xml:space="preserve">
+    <value>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</value>
+  </data>
+  <data name="ImageCollectionEditorFormText" xml:space="preserve">
+    <value>Images Collection Editor</value>
+  </data>
+  <data name="ContentAlignmentEditorAccName" xml:space="preserve">
+    <value>Alignment Picker</value>
+  </data>
+  <data name="ContentAlignmentEditorBottomCenterAccName" xml:space="preserve">
+    <value>Bottom Middle</value>
+  </data>
+  <data name="ContentAlignmentEditorBottomLeftAccName" xml:space="preserve">
+    <value>Bottom Left</value>
+  </data>
+  <data name="ContentAlignmentEditorBottomRightAccName" xml:space="preserve">
+    <value>Bottom Right</value>
+  </data>
+  <data name="ContentAlignmentEditorMiddleCenterAccName" xml:space="preserve">
+    <value>Middle Center</value>
+  </data>
+  <data name="ContentAlignmentEditorMiddleLeftAccName" xml:space="preserve">
+    <value>Middle Left</value>
+  </data>
+  <data name="ContentAlignmentEditorMiddleRightAccName" xml:space="preserve">
+    <value>Middle Right</value>
+  </data>
+  <data name="ContentAlignmentEditorTopCenterAccName" xml:space="preserve">
+    <value>Top Center</value>
+  </data>
+  <data name="ContentAlignmentEditorTopLeftAccName" xml:space="preserve">
+    <value>Top Left</value>
+  </data>
+  <data name="ContentAlignmentEditorTopRightAccName" xml:space="preserve">
+    <value>Top Right</value>
+  </data>
+  <data name="LinkAreaEditorCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="LinkAreaEditorCaption" xml:space="preserve">
+    <value>LinkArea Editor</value>
+  </data>
+  <data name="LinkAreaEditorDescription" xml:space="preserve">
+    <value>Select a &amp;range of text to make your link:</value>
+  </data>
+  <data name="LinkAreaEditorOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="iconFileDescription" xml:space="preserve">
+    <value>Icon files</value>
+  </data>
+  <data name="SelectedPathEditorLabel" xml:space="preserve">
+    <value>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</value>
+  </data>
+  <data name="BindingFormattingDialogCustomFormat" xml:space="preserve">
+    <value>Custo&amp;m format</value>
+  </data>
+  <data name="BindingFormattingDialogCustomFormatAccessibleDescription" xml:space="preserve">
+    <value>Custom format</value>
+  </data>
+  <data name="BindingFormattingDialogDecimalPlaces" xml:space="preserve">
+    <value>&amp;Decimal places</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeCurrency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeCurrencyExplanation" xml:space="preserve">
+    <value>Specify the format for monetary values.</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeCustom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeCustomExplanation" xml:space="preserve">
+    <value>Type a custom format string. A custom string may require extra handling unless it is a read-only value.</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeCustomInvalidFormat" xml:space="preserve">
+    <value>Invalid format</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeDateTime" xml:space="preserve">
+    <value>Date Time</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeDateTimeExplanation" xml:space="preserve">
+    <value>Specify the format for date and time values.</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeNoFormatting" xml:space="preserve">
+    <value>No Formatting</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeNoFormattingExplanation" xml:space="preserve">
+    <value>Use no formatting to display the value from the source without adornment.</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeNumeric" xml:space="preserve">
+    <value>Numeric</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeNumericExplanation" xml:space="preserve">
+    <value>Specify the format for numbers. Note that the Currency format type offers specialized formatting for monetary values.</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeScientific" xml:space="preserve">
+    <value>Scientific</value>
+  </data>
+  <data name="BindingFormattingDialogFormatTypeScientificExplanation" xml:space="preserve">
+    <value>Specify the format for values that use scientific notation.</value>
+  </data>
+  <data name="BindingFormattingDialogNullValue" xml:space="preserve">
+    <value>&amp;Null value:</value>
+  </data>
+  <data name="BindingFormattingDialogType" xml:space="preserve">
+    <value>&amp;Type</value>
+  </data>
+  <data name="DataGridView_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DataGridView_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="FormatStringDialogTitle" xml:space="preserve">
+    <value>Format String Dialog</value>
+  </data>
+  <data name="HelpProviderEditorFilter" xml:space="preserve">
+    <value>All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</value>
+  </data>
+  <data name="HelpProviderEditorTitle" xml:space="preserve">
+    <value>Open Help File</value>
+  </data>
+  <data name="CellStyleBuilderNormalPreviewAccName" xml:space="preserve">
+    <value>Normal Preview</value>
+  </data>
+  <data name="CellStyleBuilderSelectedPreviewAccName" xml:space="preserve">
+    <value>Selected Preview</value>
   </data>
 </root>

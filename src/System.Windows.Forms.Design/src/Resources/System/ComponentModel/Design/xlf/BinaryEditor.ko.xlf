@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../BinaryEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Byte Array Property Editor</source>
+        <target state="translated">바이트 배열 속성 편집기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="buttonOK.Text">
+        <source>OK</source>
+        <target state="translated">확인</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="buttonSave.Text">
+        <source>&amp;Save...</source>
+        <target state="translated">저장(&amp;S)...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="groupBoxMode.Text">
+        <source>Display Mode</source>
+        <target state="translated">표시 모드</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="radioAnsi.Text">
+        <source>A&amp;NSI</source>
+        <target state="translated">ANSI(&amp;N)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="radioAuto.Text">
+        <source>&amp;Auto</source>
+        <target state="translated">자동(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="radioHex.Text">
+        <source>&amp;Hexadecimal</source>
+        <target state="translated">16진수(&amp;H)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="radioUnicode.Text">
+        <source>&amp;Unicode</source>
+        <target state="translated">유니코드(&amp;U)</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

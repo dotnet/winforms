@@ -2,30 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
+using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
 
-namespace System.Windows.Forms.Func.Tests
+namespace System.Windows.Forms.IntegrationTests
 {
-    public class WinformsControlsTestTests : IFunctionalPathTest
+    public partial class WinformsControlsTest
     {
+        private const string ProjectName = "WinformsControlsTest";
+        private readonly string _exePath;
 
-        public string GetPathToTestFromBin()
+        public WinformsControlsTest()
         {
-            string buildType = "Release"; 
-
-            #if DEBUG
-                buildType = "Debug";
-            #endif
-
-            return "WinformsControlsTest\\" + buildType + "\\netcoreapp3.0\\WinformsControlsTest.exe";
+            _exePath = TestHelpers.GetExePath(ProjectName);
         }
 
         [Fact]
         public void WinformsControlsTest_OpenAndClose()
         {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
+            Process process = TestHelpers.StartProcess(_exePath);
 
             Assert.NotNull(process);
             Assert.NotNull(Process.GetProcessById(process.Id));
@@ -37,13 +33,36 @@ namespace System.Windows.Forms.Func.Tests
             Assert.True(process.HasExited);
         }
 
-        [Fact]
-        public void WinformsControlsTest_ButtonsTest()
+        [Theory]
+        [InlineData(MainFormControlsTabOrder.ButtonsButton)]
+        [InlineData(MainFormControlsTabOrder.CalendarButton)]
+        [InlineData(MainFormControlsTabOrder.MultipleControlsButton)]
+        [InlineData(MainFormControlsTabOrder.ComboBoxesButton)]
+        [InlineData(MainFormControlsTabOrder.DateTimePickerButton)]
+        [InlineData(MainFormControlsTabOrder.FolderBrowserDialogButton)]
+        [InlineData(MainFormControlsTabOrder.ThreadExceptionDialogButton)]
+        [InlineData(MainFormControlsTabOrder.PrintDialogButton)]
+        [InlineData(MainFormControlsTabOrder.DataGridViewButton)]
+        [InlineData(MainFormControlsTabOrder.TreeViewButton)]
+        [InlineData(MainFormControlsTabOrder.ContentAlignmentButton)]
+        [InlineData(MainFormControlsTabOrder.MenusButton)]
+        [InlineData(MainFormControlsTabOrder.PanelsButton)]
+        [InlineData(MainFormControlsTabOrder.SplitterButton)]
+        [InlineData(MainFormControlsTabOrder.MdiParentButton)]
+        [InlineData(MainFormControlsTabOrder.PropertyGridButton)]
+        [InlineData(MainFormControlsTabOrder.ListViewButton)]
+        [InlineData(MainFormControlsTabOrder.FontNameEditorButton)]
+        [InlineData(MainFormControlsTabOrder.CollectionEditorsButton)]
+        [InlineData(MainFormControlsTabOrder.RichTextBoxesButton)]
+        [InlineData(MainFormControlsTabOrder.PictureBoxesButton)]
+        [InlineData(MainFormControlsTabOrder.FormBorderStylesButton)]
+        [InlineData(MainFormControlsTabOrder.ToggleIconButton)]
+        [InlineData(MainFormControlsTabOrder.FileDialogButton)]
+        public void WinformsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
         {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-
-            TestHelpers.PressEnterOnProcess(process);
-
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, tabOrder);
+            TestHelpers.SendEnterKeyToProcess(process);
             Assert.False(process.HasExited);
 
             process.Kill();
@@ -55,42 +74,11 @@ namespace System.Windows.Forms.Func.Tests
         [Fact]
         public void WinformsControlsTest_CalendarTest()
         {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 1);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-
-        // [Fact]
-        // Commenting out until this gets fixed
-        // public void WinformsControlsTest_TreeViewAndImageListTest()
-        // {
-        //     var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-        //     TestHelpers.PressTabsOnProcess(process, 2);
-        //     TestHelpers.PressEnterOnProcess(process);
-
-        //     Assert.False(process.HasExited);
-
-        //     process.Kill();
-        //     process.WaitForExit();
-
-        //     Assert.True(process.HasExited);
-        // }
-
-        [Fact]
-        public void WinformsControlsTest_ContentAlignmentTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 3);
-            TestHelpers.PressEnterOnProcess(process);
-
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.CalendarButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
             Assert.False(process.HasExited);
 
             process.Kill();
@@ -100,116 +88,13 @@ namespace System.Windows.Forms.Func.Tests
         }
 
         [Fact]
-        public void WinformsControlsTest_MultipleControlsTest()
+        public void WinformsControlsTest_ThreadExceptionDialogTest()
         {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 4);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_DataGridViewTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 5);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_MenusTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 6);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_PanelsTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 7);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_SplitterTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 8);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_ComboBoxesTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 9);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_MDIParentTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 10);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        [Fact]
-        public void WinformsControlsTest_PropertyGridTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 11);
-            TestHelpers.PressEnterOnProcess(process);
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.ThreadExceptionDialogButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendTabKeysToProcess(process, 2);
+            TestHelpers.SendEnterKeyToProcess(process);
 
             Assert.False(process.HasExited);
 
@@ -222,46 +107,14 @@ namespace System.Windows.Forms.Func.Tests
         [Fact]
         public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
         {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 11);
-            TestHelpers.PressEnterOnProcess(process);
-
-            TestHelpers.PressTabOnProcess(process);
-            TestHelpers.PressRightOnProcess(process); // once   
-            TestHelpers.PressRightOnProcess(process); // twice
-            TestHelpers.PressTabsOnProcess(process, 2);
-            TestHelpers.PressEnterOnProcess(process);
-
-            Assert.False(process.HasExited);
-
-            process.Kill();
-            process.WaitForExit();
-
-            Assert.True(process.HasExited);
-        }
-
-        // [Fact]
-        // Commenting this out until this is fixed
-        // public void WinformsControlsTest_ListViewTest()
-        // {
-        //     var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-        //     TestHelpers.PressTabsOnProcess(process, 12);
-        //     TestHelpers.PressEnterOnProcess(process);
-
-        //     Assert.False(process.HasExited);
-
-        //     process.Kill();
-        //     process.WaitForExit();
-
-        //     Assert.True(process.HasExited);
-        // }
-
-        [Fact]
-        public void WinformsControlsTest_DateTimePickerTest()
-        {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 13);
-            TestHelpers.PressEnterOnProcess(process);
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.PropertyGridButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendTabKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // once
+            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // twice
+            TestHelpers.SendTabKeysToProcess(process, 2, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
 
             Assert.False(process.HasExited);
 
@@ -272,14 +125,24 @@ namespace System.Windows.Forms.Func.Tests
         }
 
         [Fact]
-        public void WinformsControlsTest_ThreadExceptionDialogTest()
+        public void WinformsControlsTest_FileDialogTest()
         {
-            var process = TestHelpers.StartProcess(GetPathToTestFromBin());
-            TestHelpers.PressTabsOnProcess(process, 15);
-            TestHelpers.PressEnterOnProcess(process);
-
-            TestHelpers.PressTabsOnProcess(process, 2);
-            TestHelpers.PressEnterOnProcess(process);
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.FileDialogButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
 
             Assert.False(process.HasExited);
 
@@ -287,6 +150,28 @@ namespace System.Windows.Forms.Func.Tests
             process.WaitForExit();
 
             Assert.True(process.HasExited);
+        }
+
+        [Fact]
+        public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
+        {
+            var mainObject = new Mocks.MainObject();
+            mainObject.Text = "Test text";
+            Form form = new Form();
+            TextBox textBox = new TextBox();
+            Binding binding = new Binding("Text", mainObject, "Text");
+            textBox.DataBindings.Add(binding);
+            textBox.Parent = form;
+            form.Show();
+
+            // bindings set
+            Assert.True(mainObject.IsPropertyChangedAssigned);
+
+            // remove bindings
+            textBox.DataBindings.Clear();
+
+            // bindings unset
+            Assert.False(mainObject.IsPropertyChangedAssigned);
         }
     }
 }

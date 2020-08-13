@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// This class represents all the information to render the winbar
-    /// </devdoc>
+    /// <summary>
+    ///  This class represents all the information to render the ToolStrip
+    /// </summary>
     public class ToolStripSeparatorRenderEventArgs : ToolStripItemRenderEventArgs
     {
-        /// <devdoc>
-        /// This class represents all the information to render the winbar
-        /// </devdoc>
+        /// <summary>
+        ///  This class represents all the information to render the ToolStrip
+        /// </summary>
         public ToolStripSeparatorRenderEventArgs(Graphics g, ToolStripSeparator separator, bool vertical) : base(g, separator)
         {
             Vertical = vertical;

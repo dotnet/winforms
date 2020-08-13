@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripArrowRenderEventArgsTests
+    public class ToolStripArrowRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_Color_ArrowDirection_TestData()
         {
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { graphics, new ToolStripButton(), new Rectangle(-1, -2, -3, -4), Color.Blue, ArrowDirection.Down };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStripItem_Rectangle_Color_ArrowDirection_TestData))]
         public void Ctor_Graphics_ToolStripItem_Rectangle_Color_ArrowDirection(Graphics g, ToolStripItem toolStripItem, Rectangle arrowRectangle, Color arrowColor, ArrowDirection arrowDirection)
         {
@@ -39,14 +39,15 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Rectangle(-1, -2, -3, -4) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ArrowRectangle_TestData))]
         public void ArrowRectangle_Set_GetReturnsExpected(Rectangle value)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new ToolStripArrowRenderEventArgs(graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
+                using var button = new ToolStripButton();
+                var e = new ToolStripArrowRenderEventArgs(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
                 {
                     ArrowRectangle = value
                 };
@@ -60,14 +61,15 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { Color.Red };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ArrowColor_TestData))]
         public void ArrowColor_Set_GetReturnsExpected(Color value)
         {
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new ToolStripArrowRenderEventArgs(graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
+                using var button = new ToolStripButton();
+                var e = new ToolStripArrowRenderEventArgs(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
                 {
                     ArrowColor = value
                 };
@@ -75,7 +77,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData((ArrowDirection)(ArrowDirection.Down + 1))]
         [InlineData(ArrowDirection.Up)]
         public void Direction_Set_GetReturnsExpected(ArrowDirection value)
@@ -83,7 +85,8 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new ToolStripArrowRenderEventArgs(graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
+                using var button = new ToolStripButton();
+                var e = new ToolStripArrowRenderEventArgs(graphics, button, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down)
                 {
                     Direction = value
                 };

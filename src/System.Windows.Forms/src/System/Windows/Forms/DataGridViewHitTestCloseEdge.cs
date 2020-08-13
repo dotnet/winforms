@@ -4,12 +4,12 @@
 
 namespace System.Windows.Forms
 {
-    internal enum DataGridViewHitTestTypeCloseEdge 
+    internal enum DataGridViewHitTestTypeCloseEdge
     {
-        None   = 0,
-        Left   = 1,
-        Right  = 2,
-        Top    = 3,
+        None = 0,
+        Left = 1,
+        Right = 2,
+        Top = 3,
         Bottom = 4
     }
 }

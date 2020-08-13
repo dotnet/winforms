@@ -2,181 +2,195 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+#nullable disable
 
+using System.Drawing;
+using System.Windows.Forms.Layout;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 
+namespace System.Windows.Forms
+{
+    internal abstract class ArrangedElement : Component, IArrangedElement
+    {
+        private Rectangle bounds = Rectangle.Empty;
+        private IArrangedElement parent;
+        private BitVector32 state;
+        private readonly PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
 
-      using System.Drawing;
-      using System.Windows.Forms.Layout;
-      using System.Collections.Specialized;
-      using System.Collections;
-      using System.ComponentModel;
-      using System.Diagnostics;
-      
-      
-      internal abstract class ArrangedElement : Component, IArrangedElement {
+        private static readonly int stateVisible = BitVector32.CreateMask();
 
-          /// <devdoc>
-          /// </devdoc>
-          /// <internalonly/>
-
-          private Rectangle bounds = Rectangle.Empty;
-          private IArrangedElement parent = null;
-          private BitVector32 state = new BitVector32();
-          private PropertyStore propertyStore = new PropertyStore();  // Contains all properties that are not always set.
-          private int suspendCount = 0;
-       
-          private static readonly int stateVisible   = BitVector32.CreateMask();
-          private static readonly int stateDisposing = BitVector32.CreateMask(stateVisible);
-          private static readonly int stateLocked    = BitVector32.CreateMask(stateDisposing);
-                
-    
-          private static readonly int PropControlsCollection = PropertyStore.CreateKey();
-          private Control spacer = new Control();
-
-          internal ArrangedElement() {
-            this.Padding = DefaultPadding;
-            this.Margin  = DefaultMargin;
+        internal ArrangedElement()
+        {
+            Padding = DefaultPadding;
+            Margin = DefaultMargin;
             state[stateVisible] = true;
-          }
-        
-          public Rectangle Bounds {
-              get {
-                  return bounds;
-              }
-          }
+        }
 
-          ArrangedElementCollection IArrangedElement.Children {
-                get { return GetChildren(); }
-          }
+        public Rectangle Bounds
+        {
+            get
+            {
+                return bounds;
+            }
+        }
 
-          IArrangedElement IArrangedElement.Container {
-              get { return GetContainer(); }
-          }
+        ArrangedElementCollection IArrangedElement.Children
+        {
+            get { return GetChildren(); }
+        }
 
-          protected virtual Padding DefaultMargin {
-              get { return Padding.Empty; }
-          }
-   
-          protected virtual Padding DefaultPadding {
-              get { return Padding.Empty; }
-          }
- 
-          public virtual Rectangle DisplayRectangle {
-              get {
-                  Rectangle displayRectangle = this.Bounds;
-                  return displayRectangle;
-              }
-           }
-          
-           public abstract LayoutEngine LayoutEngine {
-               get;
-           }
-   
-           public Padding Margin {
-               get { return CommonProperties.GetMargin(this); }
-               set { 
+        IArrangedElement IArrangedElement.Container
+        {
+            get { return GetContainer(); }
+        }
 
-                Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >=0),  "who's setting margin negative?");
+        protected virtual Padding DefaultMargin
+        {
+            get { return Padding.Empty; }
+        }
+
+        protected virtual Padding DefaultPadding
+        {
+            get { return Padding.Empty; }
+        }
+
+        public virtual Rectangle DisplayRectangle
+        {
+            get
+            {
+                Rectangle displayRectangle = Bounds;
+                return displayRectangle;
+            }
+        }
+
+        public abstract LayoutEngine LayoutEngine
+        {
+            get;
+        }
+
+        public Padding Margin
+        {
+            get { return CommonProperties.GetMargin(this); }
+            set
+            {
+                Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >= 0), "who's setting margin negative?");
                 value = LayoutUtils.ClampNegativePaddingToZero(value);
-                if (Margin != value ) { CommonProperties.SetMargin(this, value); }
+                if (Margin != value)
+                { CommonProperties.SetMargin(this, value); }
+            }
+        }
 
-               }
-           }
-   
-           public virtual Padding Padding {
-               get { return CommonProperties.GetPadding(this, DefaultPadding); }
-               set {
-                   Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >=0),  "who's setting padding negative?");
-                   value = LayoutUtils.ClampNegativePaddingToZero(value);
-                   if (Padding != value) { CommonProperties.SetPadding(this, value); }
-               }
-           }
+        public virtual Padding Padding
+        {
+            get { return CommonProperties.GetPadding(this, DefaultPadding); }
+            set
+            {
+                Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >= 0), "who's setting padding negative?");
+                value = LayoutUtils.ClampNegativePaddingToZero(value);
+                if (Padding != value)
+                { CommonProperties.SetPadding(this, value); }
+            }
+        }
 
-          public virtual IArrangedElement Parent {
-              get {
-                  return parent;
-              }
-              set {
-                  parent = value as IArrangedElement;
-              }
-          }
+        public virtual IArrangedElement Parent
+        {
+            get
+            {
+                return parent;
+            }
+            set
+            {
+                parent = value as IArrangedElement;
+            }
+        }
 
-          public virtual bool ParticipatesInLayout {
-              get {
-                  return Visible;
-              }
-          }
+        public virtual bool ParticipatesInLayout
+        {
+            get
+            {
+                return Visible;
+            }
+        }
 
-          PropertyStore IArrangedElement.Properties {
-              get {
-                  return this.Properties;
-              }
-          }
+        PropertyStore IArrangedElement.Properties
+        {
+            get
+            {
+                return Properties;
+            }
+        }
 
+        private PropertyStore Properties
+        {
+            get
+            {
+                return propertyStore;
+            }
+        }
 
-          private PropertyStore Properties {
-               get {
-                   return propertyStore;
-               }
-           }
+        public virtual bool Visible
+        {
+            get
+            {
+                return state[stateVisible];
+            }
+            set
+            {
+                if (state[stateVisible] != value)
+                {
+                    state[stateVisible] = value;
+                    if (Parent != null)
+                    {
+                        LayoutTransaction.DoLayout(Parent, this, PropertyNames.Visible);
+                    }
+                }
+            }
+        }
 
-          public virtual bool Visible {
-               get {
-                   return state[stateVisible];
-               }
-               set {
-                   if ( state[stateVisible] != value) {
-                       state[stateVisible] = value;
-                       if (Parent != null){
-                           LayoutTransaction.DoLayout(this.Parent, this, PropertyNames.Visible);
-                       }
-                   }
-               }
-           }
+        protected abstract IArrangedElement GetContainer();
 
-          protected abstract IArrangedElement GetContainer();
-          
-          protected abstract ArrangedElementCollection GetChildren();
-          
-          public virtual Size GetPreferredSize(Size constrainingSize) {
-              Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
+        protected abstract ArrangedElementCollection GetChildren();
 
-              return preferredSize;
-          }
+        public virtual Size GetPreferredSize(Size constrainingSize)
+        {
+            Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
-          public virtual void PerformLayout(IArrangedElement container, string propertyName) {
-              if (suspendCount <= 0) {
-                  OnLayout(new LayoutEventArgs(container, propertyName));
-              }
-          }
+            return preferredSize;
+        }
 
-          protected virtual void OnLayout(LayoutEventArgs e) {
-              bool parentNeedsLayout = LayoutEngine.Layout(this, e);
-          }
+        public virtual void PerformLayout(IArrangedElement container, string propertyName)
+        {
+            OnLayout(new LayoutEventArgs(container, propertyName));
+        }
 
-          protected virtual void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds) {
-              ((IArrangedElement)this).PerformLayout((IArrangedElement)this, PropertyNames.Size);
-          }
+        protected virtual void OnLayout(LayoutEventArgs e)
+        {
+            bool parentNeedsLayout = LayoutEngine.Layout(this, e);
+        }
 
-          public void SetBounds(Rectangle bounds, BoundsSpecified specified) {
-              // in this case the parent is telling us to refresh our bounds - dont 
-              // call PerformLayout
-              SetBoundsCore(bounds, specified);
-          }
+        protected virtual void OnBoundsChanged(Rectangle oldBounds, Rectangle newBounds)
+        {
+            ((IArrangedElement)this).PerformLayout((IArrangedElement)this, PropertyNames.Size);
+        }
 
+        public void SetBounds(Rectangle bounds, BoundsSpecified specified)
+        {
+            // in this case the parent is telling us to refresh our bounds - dont
+            // call PerformLayout
+            SetBoundsCore(bounds, specified);
+        }
 
-          protected virtual void SetBoundsCore(Rectangle bounds, BoundsSpecified specified) {
-              if (bounds != this.bounds) {
-                  Rectangle oldBounds = this.bounds;
-          
-                  this.bounds = bounds;
-                  OnBoundsChanged(oldBounds, bounds);
-              }
-          }
+        protected virtual void SetBoundsCore(Rectangle bounds, BoundsSpecified specified)
+        {
+            if (bounds != this.bounds)
+            {
+                Rectangle oldBounds = this.bounds;
 
-      }
-
+                this.bounds = bounds;
+                OnBoundsChanged(oldBounds, bounds);
+            }
+        }
+    }
 }
-
-

@@ -13,10 +13,7 @@ namespace System.ComponentModel.Design
             _verbs = verbs;
         }
 
-        public override bool AutoShow
-        {
-            get => false;
-        }
+        public override bool AutoShow => false;
 
         public override DesignerActionItemCollection GetSortedActionItems()
         {

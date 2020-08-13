@@ -1,56 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <VersionPrefix>4.8.0</VersionPrefix>
+    <VersionPrefix>5.0.0</VersionPrefix>
     <!-- version in our package name #.#.#-below.#####.## -->
-    <PreReleaseVersionLabel>preview5</PreReleaseVersionLabel>
-    <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp3.0 yet -->
+    <PreReleaseVersionLabel>rc</PreReleaseVersionLabel>
+    <PreReleaseVersionIteration>1</PreReleaseVersionIteration>
+    <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp5.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
-    <!-- Additional sources required for restore of PackageReferences -->
-    <RestoreSources>
-      $(RestoreSources);
-      https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json
-    </RestoreSources>
   </PropertyGroup>
-  <!-- Corefx-updated dependencies -->
+  <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview5.19210.5</MicrosoftWin32RegistryPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview5.19210.5</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview5.19210.5</SystemDrawingCommonPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview5.19210.5</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview5.19210.5</SystemSecurityCryptographyCngPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview5.19210.5</SystemCodeDomPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview5.19210.5</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview5.19210.5</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview5.19210.5</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreAppPackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>5.0.0-rc.1.20411.5</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>5.0.0-rc.1.20411.5</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>5.0.0-rc.1.20411.5</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityAccessControlPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityAccessControlPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemSecurityPrincipalWindowsPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityPrincipalWindowsPackageVersion>
+    <SystemIOPackagingPackageVersion>5.0.0-rc.1.20411.5</SystemIOPackagingPackageVersion>
+    <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftNETCoreAppInternalPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreAppInternalPackageVersion>
+    <MicrosoftNETCoreTargetsPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreTargetsPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>5.0.0-rc.1.20411.5</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <SystemIOFileSystemAccessControlPackageVersion>5.0.0-rc.1.20411.5</SystemIOFileSystemAccessControlPackageVersion>
+    <SystemIOPipesAccessControlPackageVersion>5.0.0-rc.1.20411.5</SystemIOPipesAccessControlPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>5.0.0-rc.1.20411.5</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>5.0.0-rc.1.20411.5</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>5.0.0-rc.1.20411.5</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>5.0.0-rc.1.20411.5</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>5.0.0-rc.1.20411.5</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-rc.1.20411.5</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>5.0.0-rc.1.20411.5</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-rc.1.20411.5</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>5.0.0-rc.1.20411.5</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>5.0.0-rc.1.20411.5</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>5.0.0-rc.1.20411.5</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>5.0.0-rc.1.20411.5</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.1.20411.5</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.1.20411.5</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.1.20411.5</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <!-- 
+      Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
+    -->
+    <MicrosoftNETCoreILAsmVersion>$(MicrosoftNETCoreILAsmPackageVersion)</MicrosoftNETCoreILAsmVersion>
   </PropertyGroup>
-  <!-- CoreCLR-updated dependencies -->
+  <!-- Arcade -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27604-73</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>5.0.0-beta.20407.3</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetRemoteExecutorVersion>5.0.0-beta.20407.3</MicrosoftDotNetRemoteExecutorVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>5.0.0-beta.20407.3</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftNETTestSdkVersion>16.5.0</MicrosoftNETTestSdkVersion>
   </PropertyGroup>
-  <!-- Arcade-updated dependencies -->
+  <!-- Below have no corresponding entries in Versions.Details.XML because they are not updated via Maestro -->
+  <!-- XUnit-related (not extensions) -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19209.2</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19209.2</MicrosoftDotNetXUnitExtensionsPackageVersion>
-  </PropertyGroup>
-  <!-- XUnit-related unchanging dependencies -->
-  <PropertyGroup>
-    <XUnitVersion>2.4.1-pre.build.4059</XUnitVersion>
+    <XUnitVersion>2.4.1</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
     <XUnitRunnerVisualStudioVersion>$(XUnitVersion)</XUnitRunnerVisualStudioVersion>
     <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>
-    <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
+    <XUnitStaFactPackageVersion>1.0.33-beta</XUnitStaFactPackageVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
-    <CoverletMSBuildPackageVersion>2.6.0</CoverletMSBuildPackageVersion>
-    <CodecovVersion>1.1.1</CodecovVersion>
+    <CoverletMSBuildPackageVersion>2.7.0</CoverletMSBuildPackageVersion>
+    <CodecovVersion>1.9.0</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
+  </PropertyGroup>
+  <!-- External Analyzers -->
+  <PropertyGroup>
+    <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
+    <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
+    <NewtonsoftJsonVersion>9.0.1</NewtonsoftJsonVersion>
   </PropertyGroup>
 </Project>

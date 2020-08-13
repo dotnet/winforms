@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     Describes the designer selection state of a Glyph object.
+    ///  Describes the designer selection state of a Glyph object.
     /// </summary>
     public enum GlyphSelectionType
     {

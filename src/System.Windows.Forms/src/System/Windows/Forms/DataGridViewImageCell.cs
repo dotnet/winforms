@@ -2,58 +2,51 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.Drawing.Drawing2D;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
-    /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell"]/*' />
-    public class DataGridViewImageCell : DataGridViewCell
+    public partial class DataGridViewImageCell : DataGridViewCell
     {
-        private static ColorMap[] colorMap = new ColorMap[] { new ColorMap() };
-        private static readonly int PropImageCellDescription = PropertyStore.CreateKey();
-        private static readonly int PropImageCellLayout = PropertyStore.CreateKey();
-        private static Type defaultTypeImage = typeof(System.Drawing.Image);
-        private static Type defaultTypeIcon = typeof(System.Drawing.Icon);
-        private static Type cellType = typeof(DataGridViewImageCell);
-        private static Bitmap errorBmp = null;
-        private static Icon errorIco = null;
+        private static readonly int s_propImageCellDescription = PropertyStore.CreateKey();
+        private static readonly int s_propImageCellLayout = PropertyStore.CreateKey();
+        private static readonly Type s_defaultTypeImage = typeof(Image);
+        private static readonly Type s_defaultTypeIcon = typeof(Icon);
+        private static readonly Type s_cellType = typeof(DataGridViewImageCell);
+        private static Bitmap s_errorBitmap;
+        private static Icon s_errorIcon;
 
-        private const byte DATAGRIDVIEWIMAGECELL_valueIsIcon = 0x01;
+        private const byte CellValueIsIcon = 0x01;
 
-        private byte flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
+        private byte _flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.DataGridViewImageCell1"]/*' />
         public DataGridViewImageCell() : this(false /*valueIsIcon*/)
         {
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.DataGridViewImageCell2"]/*' />
         public DataGridViewImageCell(bool valueIsIcon)
         {
             if (valueIsIcon)
             {
-                this.flags = DATAGRIDVIEWIMAGECELL_valueIsIcon;
+                _flags = CellValueIsIcon;
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.DefaultNewRowValue"]/*' />
         public override object DefaultNewRowValue
         {
             get
             {
-                if (defaultTypeImage.IsAssignableFrom(this.ValueType))
+                if (s_defaultTypeImage.IsAssignableFrom(ValueType))
                 {
                     return ErrorBitmap;
                 }
-                else if (defaultTypeIcon.IsAssignableFrom(this.ValueType))
+                else if (s_defaultTypeIcon.IsAssignableFrom(ValueType))
                 {
                     return ErrorIcon;
                 }
@@ -64,32 +57,28 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.Description"]/*' />
-        [
-            DefaultValue("")
-        ]
+        [DefaultValue("")]
         public string Description
-        { 
+        {
             get
             {
-                object description = this.Properties.GetObject(PropImageCellDescription);
+                object description = Properties.GetObject(s_propImageCellDescription);
                 if (description != null)
                 {
-                    return (string) description;
+                    return (string)description;
                 }
                 return string.Empty;
             }
 
             set
             {
-                if (!string.IsNullOrEmpty(value) || this.Properties.ContainsObject(PropImageCellDescription))
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propImageCellDescription))
                 {
-                    this.Properties.SetObject(PropImageCellDescription, value);
+                    Properties.SetObject(s_propImageCellDescription, value);
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.EditType"]/*' />
         public override Type EditType
         {
             get
@@ -103,11 +92,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorBmp == null)
+                if (s_errorBitmap is null)
                 {
-                    errorBmp = new Bitmap(typeof(DataGridView), "ImageInError.bmp");
+                    s_errorBitmap = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
                 }
-                return errorBmp;
+                return s_errorBitmap;
             }
         }
 
@@ -115,40 +104,35 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (errorIco == null)
+                if (s_errorIcon is null)
                 {
-                    errorIco = new Icon(typeof(DataGridView), "IconInError.ico");
+                    s_errorIcon = new Icon(typeof(DataGridView), "IconInError");
                 }
-                return errorIco;
+                return s_errorIcon;
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.FormattedValueType"]/*' />
         public override Type FormattedValueType
         {
             get
             {
-                if (this.ValueIsIcon)
+                if (ValueIsIcon)
                 {
-                    return defaultTypeIcon;
+                    return s_defaultTypeIcon;
                 }
                 else
                 {
-                    return defaultTypeImage;
+                    return s_defaultTypeImage;
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ImageLayout"]/*' />
-        [
-            DefaultValue(DataGridViewImageCellLayout.NotSet)
-        ]
+        [DefaultValue(DataGridViewImageCellLayout.NotSet)]
         public DataGridViewImageCellLayout ImageLayout
         {
             get
             {
-                bool found;
-                int imageLayout = this.Properties.GetInteger(PropImageCellLayout, out found);
+                int imageLayout = Properties.GetInteger(s_propImageCellLayout, out bool found);
                 if (found)
                 {
                     return (DataGridViewImageCellLayout)imageLayout;
@@ -160,11 +144,11 @@ namespace System.Windows.Forms
                 // Sequential enum.  Valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewImageCellLayout.NotSet, (int)DataGridViewImageCellLayout.Zoom))
                 {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewImageCellLayout)); 
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewImageCellLayout));
                 }
-                if (this.ImageLayout != value)
+                if (ImageLayout != value)
                 {
-                    this.Properties.SetInteger(PropImageCellLayout, (int)value);
+                    Properties.SetInteger(s_propImageCellLayout, (int)value);
                     OnCommonChange();
                 }
             }
@@ -175,37 +159,34 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(value >= DataGridViewImageCellLayout.NotSet && value <= DataGridViewImageCellLayout.Zoom);
-                if (this.ImageLayout != value)
+                if (ImageLayout != value)
                 {
-                    this.Properties.SetInteger(PropImageCellLayout, (int)value);
+                    Properties.SetInteger(s_propImageCellLayout, (int)value);
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ValueIsIcon"]/*' />
-        [
-            DefaultValue(false)
-        ]
+        [DefaultValue(false)]
         public bool ValueIsIcon
         {
             get
             {
-                return ((this.flags & DATAGRIDVIEWIMAGECELL_valueIsIcon) != 0x00);
+                return ((_flags & CellValueIsIcon) != 0x00);
             }
             set
             {
-                if (this.ValueIsIcon != value)
+                if (ValueIsIcon != value)
                 {
-                    this.ValueIsIconInternal = value;
-                    if (this.DataGridView != null)
+                    ValueIsIconInternal = value;
+                    if (DataGridView != null)
                     {
-                        if (this.RowIndex != -1)
+                        if (RowIndex != -1)
                         {
-                            this.DataGridView.InvalidateCell(this);
+                            DataGridView.InvalidateCell(this);
                         }
                         else
                         {
-                            this.DataGridView.InvalidateColumnInternal(this.ColumnIndex);
+                            DataGridView.InvalidateColumnInternal(ColumnIndex);
                         }
                     }
                 }
@@ -216,33 +197,32 @@ namespace System.Windows.Forms
         {
             set
             {
-                if (this.ValueIsIcon != value)
+                if (ValueIsIcon != value)
                 {
                     if (value)
                     {
-                        this.flags |= (byte) DATAGRIDVIEWIMAGECELL_valueIsIcon;
+                        _flags |= (byte)CellValueIsIcon;
                     }
                     else
                     {
-                        this.flags = (byte) (this.flags & ~DATAGRIDVIEWIMAGECELL_valueIsIcon);
+                        _flags = (byte)(_flags & ~CellValueIsIcon);
                     }
-                    if (this.DataGridView != null && 
-                        this.RowIndex != -1 && 
-                        this.DataGridView.NewRowIndex == this.RowIndex && 
-                        !this.DataGridView.VirtualMode)
+                    if (DataGridView != null &&
+                        RowIndex != -1 &&
+                        DataGridView.NewRowIndex == RowIndex &&
+                        !DataGridView.VirtualMode)
                     {
-                        Debug.Assert(this.DataGridView.AllowUserToAddRowsInternal);
+                        Debug.Assert(DataGridView.AllowUserToAddRowsInternal);
                         // We automatically update the content of the new row's cell based on the new ValueIsIcon value.
-                        if ((value && this.Value == ErrorBitmap) || (!value && this.Value == ErrorIcon))
+                        if ((value && Value == ErrorBitmap) || (!value && Value == ErrorIcon))
                         {
-                            this.Value = this.DefaultNewRowValue;
+                            Value = DefaultNewRowValue;
                         }
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ValueType"]/*' />
         public override Type ValueType
         {
             get
@@ -254,60 +234,57 @@ namespace System.Windows.Forms
                     return baseValueType;
                 }
 
-                if (this.ValueIsIcon)
+                if (ValueIsIcon)
                 {
-                    return defaultTypeIcon;
+                    return s_defaultTypeIcon;
                 }
                 else
                 {
-                    return defaultTypeImage;
+                    return s_defaultTypeImage;
                 }
             }
             set
             {
                 base.ValueType = value;
-                this.ValueIsIcon = (value != null && defaultTypeIcon.IsAssignableFrom(value));
+                ValueIsIcon = (value != null && s_defaultTypeIcon.IsAssignableFrom(value));
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewImageCell dataGridViewCell;
-            Type thisType = this.GetType();
+            Type thisType = GetType();
 
-            if (thisType == cellType) //performance improvement
+            if (thisType == s_cellType) //performance improvement
             {
                 dataGridViewCell = new DataGridViewImageCell();
             }
             else
             {
-                // 
+                //
 
                 dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType);
             }
             base.CloneInternal(dataGridViewCell);
-            dataGridViewCell.ValueIsIconInternal = this.ValueIsIcon;
-            dataGridViewCell.Description = this.Description;
-            dataGridViewCell.ImageLayoutInternal = this.ImageLayout;
+            dataGridViewCell.ValueIsIconInternal = ValueIsIcon;
+            dataGridViewCell.Description = Description;
+            dataGridViewCell.ImageLayoutInternal = ImageLayout;
             return dataGridViewCell;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewImageCellAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetContentBounds"]/*' />
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (this.DataGridView == null || rowIndex < 0 || this.OwningColumn == null)
+            if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
                 return Rectangle.Empty;
             }
@@ -315,11 +292,7 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
-
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle imgBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -355,18 +328,22 @@ namespace System.Windows.Forms
             return imgBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetErrorIconBounds"]/*' />
+        private protected override string GetDefaultToolTipText()
+        {
+            return SR.DefaultDataGridViewImageCellToolTipText;
+        }
+
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            if (this.DataGridView == null ||
+            if (DataGridView is null ||
                 rowIndex < 0 ||
-                this.OwningColumn == null ||
-                !this.DataGridView.ShowCellErrors ||
+                OwningColumn is null ||
+                !DataGridView.ShowCellErrors ||
                 string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
@@ -375,11 +352,7 @@ namespace System.Windows.Forms
             object value = GetValue(rowIndex);
             object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
 
-            DataGridViewAdvancedBorderStyle dgvabsEffective;
-            DataGridViewElementStates cellState;
-            Rectangle cellBounds;
-
-            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out dgvabsEffective, out cellState, out cellBounds);
+            ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
             Rectangle errBounds = PaintPrivate(graphics,
                 cellBounds,
@@ -415,9 +388,6 @@ namespace System.Windows.Forms
             return errBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetFormattedValue"]/*' />
-        
-        
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
                                                     ref DataGridViewCellStyle cellStyle,
@@ -427,18 +397,17 @@ namespace System.Windows.Forms
         {
             if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
             {
-                return this.Description;
+                return Description;
             }
 
             object formattedValue = base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
-            if (formattedValue == null && cellStyle.NullValue == null)
+            if (formattedValue is null && cellStyle.NullValue is null)
             {
                 return null;
             }
-            if (this.ValueIsIcon)
+            if (ValueIsIcon)
             {
-                Icon ico = formattedValue as Icon;
-                if (ico == null)
+                if (!(formattedValue is Icon ico))
                 {
                     ico = ErrorIcon;
                 }
@@ -446,8 +415,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                Image img = formattedValue as Image;
-                if (img == null)
+                if (!(formattedValue is Image img))
                 {
                     img = ErrorBitmap;
                 }
@@ -455,34 +423,33 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetPreferredSize"]/*' />
         protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
         {
-            if (this.DataGridView == null)
+            if (DataGridView is null)
             {
                 return new Size(-1, -1);
             }
 
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
             Size preferredSize;
-            Rectangle borderWidthsRect = this.StdBorderWidths;
+            Rectangle borderWidthsRect = StdBorderWidths;
             int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
             int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
             DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
             object formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
             Image img = formattedValue as Image;
             Icon ico = null;
-            if (img == null)
+            if (img is null)
             {
                 ico = formattedValue as Icon;
             }
 
             if (freeDimension == DataGridViewFreeDimension.Height &&
-                this.ImageLayout == DataGridViewImageCellLayout.Zoom)
+                ImageLayout == DataGridViewImageCellLayout.Zoom)
             {
                 if (img != null || ico != null)
                 {
@@ -517,7 +484,7 @@ namespace System.Windows.Forms
                 }
             }
             else if (freeDimension == DataGridViewFreeDimension.Width &&
-                     this.ImageLayout == DataGridViewImageCellLayout.Zoom)
+                     ImageLayout == DataGridViewImageCellLayout.Zoom)
             {
                 if (img != null || ico != null)
                 {
@@ -551,7 +518,7 @@ namespace System.Windows.Forms
                     preferredSize = new Size(1, 0);
                 }
             }
-            else 
+            else
             {
                 if (img != null)
                 {
@@ -578,34 +545,32 @@ namespace System.Windows.Forms
             if (freeDimension != DataGridViewFreeDimension.Height)
             {
                 preferredSize.Width += borderAndPaddingWidths;
-                if (this.DataGridView.ShowCellErrors)
+                if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
-                    preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + DATAGRIDVIEWCELL_iconMarginWidth * 2 + iconsWidth);
+                    preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 preferredSize.Height += borderAndPaddingHeights;
-                if (this.DataGridView.ShowCellErrors)
+                if (DataGridView.ShowCellErrors)
                 {
                     // Making sure that there is enough room for the potential error icon
-                    preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + DATAGRIDVIEWCELL_iconMarginHeight * 2 + iconsHeight);
+                    preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
             return preferredSize;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetValue"]/*' />
         protected override object GetValue(int rowIndex)
         {
             object valueBase = base.GetValue(rowIndex);
-            if (valueBase == null)
+            if (valueBase is null)
             {
-                DataGridViewImageColumn owningImageColumn = this.OwningColumn as DataGridViewImageColumn;
-                if (owningImageColumn != null)
+                if (OwningColumn is DataGridViewImageColumn owningImageColumn)
                 {
-                    if (defaultTypeImage.IsAssignableFrom(this.ValueType))
+                    if (s_defaultTypeImage.IsAssignableFrom(ValueType))
                     {
                         Image image = owningImageColumn.Image;
                         if (image != null)
@@ -613,7 +578,7 @@ namespace System.Windows.Forms
                             return image;
                         }
                     }
-                    else if (defaultTypeIcon.IsAssignableFrom(this.ValueType))
+                    else if (s_defaultTypeIcon.IsAssignableFrom(ValueType))
                     {
                         Icon icon = owningImageColumn.Icon;
                         if (icon != null)
@@ -623,87 +588,77 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return valueBase;
         }
 
-        private Rectangle ImgBounds(Rectangle bounds, int imgWidth, int imgHeight, DataGridViewImageCellLayout imageLayout, DataGridViewCellStyle cellStyle)
+        private Rectangle ImageBounds(
+            Rectangle bounds,
+            int imgWidth,
+            int imgHeight,
+            DataGridViewImageCellLayout imageLayout,
+            DataGridViewCellStyle cellStyle)
         {
-            // when the imageLayout == stretch there is nothing to do
+            // When the imageLayout == stretch there is nothing to do
             Debug.Assert(imageLayout != DataGridViewImageCellLayout.Stretch);
 
-            Rectangle imgBounds = Rectangle.Empty;
+            Rectangle imageBounds = Rectangle.Empty;
 
             switch (imageLayout)
             {
                 case DataGridViewImageCellLayout.Normal:
                 case DataGridViewImageCellLayout.NotSet:
-                    imgBounds = new Rectangle(bounds.X, bounds.Y, imgWidth, imgHeight);
+                    imageBounds = new Rectangle(bounds.X, bounds.Y, imgWidth, imgHeight);
                     break;
                 case DataGridViewImageCellLayout.Zoom:
-                    // we have to determine which side will be fully filled: the height or the width
+                    // We have to determine which side will be fully filled: the height or the width
                     if (imgWidth * bounds.Height < imgHeight * bounds.Width)
                     {
-                        // we fill the height
-                        imgBounds = new Rectangle(bounds.X, bounds.Y, decimal.ToInt32((decimal)imgWidth * bounds.Height / imgHeight), bounds.Height);
+                        // We fill the height
+                        imageBounds = new Rectangle(
+                            bounds.X,
+                            bounds.Y,
+                            decimal.ToInt32((decimal)imgWidth * bounds.Height / imgHeight),
+                            bounds.Height);
                     }
                     else
                     {
                         // we fill the width
-                        imgBounds = new Rectangle(bounds.X, bounds.Y, bounds.Width, decimal.ToInt32((decimal)imgHeight * bounds.Width / imgWidth));
+                        imageBounds = new Rectangle(
+                            bounds.X,
+                            bounds.Y,
+                            bounds.Width,
+                            decimal.ToInt32((decimal)imgHeight * bounds.Width / imgWidth));
                     }
-                    break;
-                default:
                     break;
             }
 
-            // now use the alignment on the cellStyle to determine the final bounds
-            if (this.DataGridView.RightToLeftInternal)
+            // Now use the alignment on the cellStyle to determine the final bounds
+            if (DataGridView.RightToLeftInternal)
             {
-                switch (cellStyle.Alignment)
+                imageBounds.X = cellStyle.Alignment switch
                 {
-                    case DataGridViewContentAlignment.TopRight:
-                        imgBounds.X = bounds.X;
-                        break;
-                    case DataGridViewContentAlignment.TopLeft:
-                        imgBounds.X = bounds.Right - imgBounds.Width;
-                        break;
-                    case DataGridViewContentAlignment.MiddleRight:
-                        imgBounds.X = bounds.X;
-                        break;
-                    case DataGridViewContentAlignment.MiddleLeft:
-                        imgBounds.X = bounds.Right - imgBounds.Width;
-                        break;
-                    case DataGridViewContentAlignment.BottomRight:
-                        imgBounds.X = bounds.X;
-                        break;
-                    case DataGridViewContentAlignment.BottomLeft:
-                        imgBounds.X = bounds.Right - imgBounds.Width;
-                        break;
-                }
+                    DataGridViewContentAlignment.TopRight => bounds.X,
+                    DataGridViewContentAlignment.TopLeft => bounds.Right - imageBounds.Width,
+                    DataGridViewContentAlignment.MiddleRight => bounds.X,
+                    DataGridViewContentAlignment.MiddleLeft => bounds.Right - imageBounds.Width,
+                    DataGridViewContentAlignment.BottomRight => bounds.X,
+                    DataGridViewContentAlignment.BottomLeft => bounds.Right - imageBounds.Width,
+                    _ => imageBounds.X
+                };
             }
             else
             {
-                switch (cellStyle.Alignment)
+                imageBounds.X = cellStyle.Alignment switch
                 {
-                    case DataGridViewContentAlignment.TopLeft:
-                        imgBounds.X = bounds.X;
-                        break;
-                    case DataGridViewContentAlignment.TopRight:
-                        imgBounds.X = bounds.Right - imgBounds.Width;
-                        break;
-                    case DataGridViewContentAlignment.MiddleLeft:
-                        imgBounds.X = bounds.X;
-                        break;
-                    case DataGridViewContentAlignment.MiddleRight:
-                        imgBounds.X = bounds.Right - imgBounds.Width;
-                        break;
-                    case DataGridViewContentAlignment.BottomLeft:
-                        imgBounds.X = bounds.X;
-                        break;
-                    case DataGridViewContentAlignment.BottomRight:
-                        imgBounds.X = bounds.Right - imgBounds.Width;
-                        break;
-                }
+                    DataGridViewContentAlignment.TopRight => bounds.Right - imageBounds.Width,
+                    DataGridViewContentAlignment.TopLeft => bounds.X,
+                    DataGridViewContentAlignment.MiddleRight => bounds.Right - imageBounds.Width,
+                    DataGridViewContentAlignment.MiddleLeft => bounds.X,
+                    DataGridViewContentAlignment.BottomRight => bounds.Right - imageBounds.Width,
+                    DataGridViewContentAlignment.BottomLeft => bounds.X,
+                    _ => imageBounds.X
+                };
             }
 
             switch (cellStyle.Alignment)
@@ -711,7 +666,7 @@ namespace System.Windows.Forms
                 case DataGridViewContentAlignment.TopCenter:
                 case DataGridViewContentAlignment.MiddleCenter:
                 case DataGridViewContentAlignment.BottomCenter:
-                    imgBounds.X = bounds.X + (bounds.Width - imgBounds.Width) / 2;
+                    imageBounds.X = bounds.X + (bounds.Width - imageBounds.Width) / 2;
                     break;
             }
 
@@ -720,373 +675,261 @@ namespace System.Windows.Forms
                 case DataGridViewContentAlignment.TopLeft:
                 case DataGridViewContentAlignment.TopCenter:
                 case DataGridViewContentAlignment.TopRight:
-                    imgBounds.Y = bounds.Y;
+                    imageBounds.Y = bounds.Y;
                     break;
 
                 case DataGridViewContentAlignment.MiddleLeft:
                 case DataGridViewContentAlignment.MiddleCenter:
                 case DataGridViewContentAlignment.MiddleRight:
-                    imgBounds.Y = bounds.Y + (bounds.Height - imgBounds.Height) / 2;
+                    imageBounds.Y = bounds.Y + (bounds.Height - imageBounds.Height) / 2;
                     break;
 
                 case DataGridViewContentAlignment.BottomLeft:
                 case DataGridViewContentAlignment.BottomCenter:
                 case DataGridViewContentAlignment.BottomRight:
-                    imgBounds.Y = bounds.Bottom - imgBounds.Height;
+                    imageBounds.Y = bounds.Bottom - imageBounds.Height;
                     break;
 
                 default:
-                    Debug.Assert(cellStyle.Alignment == DataGridViewContentAlignment.NotSet, "this is the only alignment left");
+                    Debug.Assert(
+                        cellStyle.Alignment == DataGridViewContentAlignment.NotSet,
+                        "this is the only alignment left");
                     break;
             }
-            return imgBounds;
+            return imageBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.Paint"]/*' />
-        protected override void Paint(Graphics graphics, 
+        protected override void Paint(Graphics graphics,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates elementState,
             object value,
             object formattedValue,
-            string errorText, 
-            DataGridViewCellStyle cellStyle, 
+            string errorText,
+            DataGridViewCellStyle cellStyle,
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle == null)
+            if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
 
-            PaintPrivate(graphics, 
+            PaintPrivate(graphics,
                 clipBounds,
-                cellBounds, 
-                rowIndex, 
+                cellBounds,
+                rowIndex,
                 elementState,
                 formattedValue,
-                errorText, 
-                cellStyle, 
+                errorText,
+                cellStyle,
                 advancedBorderStyle,
                 paintParts,
-                false /*computeContentBounds*/,
-                false /*computeErrorIconBounds*/,
-                true /*paint*/);
+                computeContentBounds: false,
+                computeErrorIconBounds: false,
+                paint: true);
         }
 
         // PaintPrivate is used in three places that need to duplicate the paint code:
         // 1. DataGridViewCell::Paint method
         // 2. DataGridViewCell::GetContentBounds
         // 3. DataGridViewCell::GetErrorIconBounds
-        // 
+        //
         // if computeContentBounds is true then PaintPrivate returns the contentBounds
         // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
         // else it returns Rectangle.Empty;
-        private Rectangle PaintPrivate(Graphics g, 
+        private Rectangle PaintPrivate(Graphics g,
             Rectangle clipBounds,
-            Rectangle cellBounds, 
-            int rowIndex, 
+            Rectangle cellBounds,
+            int rowIndex,
             DataGridViewElementStates elementState,
             object formattedValue,
-            string errorText, 
-            DataGridViewCellStyle cellStyle, 
+            string errorText,
+            DataGridViewCellStyle cellStyle,
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts,
             bool computeContentBounds,
             bool computeErrorIconBounds,
             bool paint)
         {
-            // Parameter checking.
-            // One bit and one bit only should be turned on
+            // Parameter checking. One bit and one bit only should be turned on.
             Debug.Assert(paint || computeContentBounds || computeErrorIconBounds);
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
             Debug.Assert(cellStyle != null);
 
-            if (paint && DataGridViewCell.PaintBorder(paintParts))
+            if (paint && PaintBorder(paintParts))
             {
                 PaintBorder(g, clipBounds, cellBounds, cellStyle, advancedBorderStyle);
             }
 
-            Rectangle resultBounds;
+            Rectangle resultBounds = Rectangle.Empty;
             Rectangle valBounds = cellBounds;
             Rectangle borderWidths = BorderWidths(advancedBorderStyle);
             valBounds.Offset(borderWidths.X, borderWidths.Y);
             valBounds.Width -= borderWidths.Right;
             valBounds.Height -= borderWidths.Bottom;
 
-            if (valBounds.Width > 0 && valBounds.Height > 0 && (paint || computeContentBounds))
+            if (valBounds.Width <= 0 || valBounds.Height <= 0 || (!paint && !computeContentBounds))
             {
-                Rectangle imgBounds = valBounds;
-                if (cellStyle.Padding != Padding.Empty)
+                if (computeErrorIconBounds)
                 {
-                    if (this.DataGridView.RightToLeftInternal)
-                    {
-                        imgBounds.Offset(cellStyle.Padding.Right, cellStyle.Padding.Top);
-                    }
-                    else
-                    {
-                        imgBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
-                    }
-                    imgBounds.Width -= cellStyle.Padding.Horizontal;
-                    imgBounds.Height -= cellStyle.Padding.Vertical;
-                }
-
-                bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
-                SolidBrush br = this.DataGridView.GetCachedBrush((DataGridViewCell.PaintSelectionBackground(paintParts) && cellSelected) ? cellStyle.SelectionBackColor : cellStyle.BackColor);
-
-                if (imgBounds.Width > 0 && imgBounds.Height > 0)
-                {
-                    Image img = formattedValue as Image;
-                    Icon ico = null;
-                    if (img == null)
-                    {
-                        ico = formattedValue as Icon;
-                    }
-                    if (ico != null || img != null)
-                    {
-                        DataGridViewImageCellLayout imageLayout = this.ImageLayout;
-                        if (imageLayout == DataGridViewImageCellLayout.NotSet)
-                        {
-                            if (this.OwningColumn is DataGridViewImageColumn)
-                            {
-                                imageLayout = ((DataGridViewImageColumn) this.OwningColumn).ImageLayout;
-                                Debug.Assert(imageLayout != DataGridViewImageCellLayout.NotSet);
-                            }
-                            else
-                            {
-                                imageLayout = DataGridViewImageCellLayout.Normal;
-                            }
-                        }
-
-                        if (imageLayout == DataGridViewImageCellLayout.Stretch)
-                        {
-                            if (paint)
-                            {
-                                if (DataGridViewCell.PaintBackground(paintParts))
-                                {
-                                    DataGridViewCell.PaintPadding(g, valBounds, cellStyle, br, this.DataGridView.RightToLeftInternal);
-                                }
-                                if (DataGridViewCell.PaintContentForeground(paintParts))
-                                {
-                                    if (img != null)
-                                    {
-                                        // 
-
-                                        ImageAttributes attr = new ImageAttributes();
-
-                                        attr.SetWrapMode(WrapMode.TileFlipXY);
-                                        g.DrawImage(img, imgBounds, 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, attr);
-                                        attr.Dispose();
-                                    }
-                                    else
-                                    {
-                                        g.DrawIcon(ico, imgBounds);
-                                    }
-                                }
-                            }
-
-                            resultBounds = imgBounds;
-                        }
-                        else
-                        {
-                            Rectangle imgBounds2 = ImgBounds(imgBounds, (img == null) ? ico.Width : img.Width, (img == null) ? ico.Height : img.Height, imageLayout, cellStyle);
-                            resultBounds = imgBounds2;
-
-                            if (paint)
-                            {
-                                if (DataGridViewCell.PaintBackground(paintParts) && br.Color.A == 255)
-                                {
-                                    g.FillRectangle(br, valBounds);
-                                }
-                                if (DataGridViewCell.PaintContentForeground(paintParts))
-                                {
-                                    //paint the image
-                                    Region reg = g.Clip;
-                                    g.SetClip(Rectangle.Intersect(Rectangle.Intersect(imgBounds2, imgBounds), Rectangle.Truncate(g.VisibleClipBounds)));
-                                    if (img != null)
-                                    {
-                                        g.DrawImage(img, imgBounds2);
-                                    }
-                                    else
-                                    {
-                                        g.DrawIconUnstretched(ico, imgBounds2);
-                                    }
-                                    g.Clip = reg;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (paint && DataGridViewCell.PaintBackground(paintParts) && br.Color.A == 255)
-                        {
-                            g.FillRectangle(br, valBounds);
-                        }
-                        resultBounds = Rectangle.Empty;
-                    }
+                    return string.IsNullOrEmpty(errorText)
+                        ? Rectangle.Empty
+                        : ComputeErrorIconBounds(valBounds);
                 }
                 else
                 {
-                    if (paint && DataGridViewCell.PaintBackground(paintParts) && br.Color.A == 255)
-                    {
-                        g.FillRectangle(br, valBounds);
-                    }
-                    resultBounds = Rectangle.Empty;
-                }
-
-                Point ptCurrentCell = this.DataGridView.CurrentCellAddress;
-                if (paint && 
-                    DataGridViewCell.PaintFocus(paintParts) && 
-                    ptCurrentCell.X == this.ColumnIndex && 
-                    ptCurrentCell.Y == rowIndex &&
-                    this.DataGridView.ShowFocusCues && 
-                    this.DataGridView.Focused)
-                {
-                    // Draw focus rectangle
-                    ControlPaint.DrawFocusRectangle(g, valBounds, Color.Empty, br.Color);
-                }
-
-                if (this.DataGridView.ShowCellErrors && paint && DataGridViewCell.PaintErrorIcon(paintParts))
-                {
-                    PaintErrorIcon(g, cellStyle, rowIndex, cellBounds, valBounds, errorText);
+                    Debug.Assert(valBounds.Height <= 0 || valBounds.Width <= 0);
+                    return Rectangle.Empty;
                 }
             }
-            else if (computeErrorIconBounds)
+
+            Rectangle imageBounds = valBounds;
+            if (cellStyle.Padding != Padding.Empty)
             {
-                if (!string.IsNullOrEmpty(errorText))
+                imageBounds.Offset(
+                    DataGridView.RightToLeftInternal ? cellStyle.Padding.Right : cellStyle.Padding.Left,
+                    cellStyle.Padding.Top);
+                imageBounds.Width -= cellStyle.Padding.Horizontal;
+                imageBounds.Height -= cellStyle.Padding.Vertical;
+            }
+
+            bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
+            Color brushColor = PaintSelectionBackground(paintParts) && cellSelected
+                ? cellStyle.SelectionBackColor
+                : cellStyle.BackColor;
+
+            using var brush = paint ? brushColor.GetCachedSolidBrushScope() : default;
+
+            Image image = formattedValue as Image;
+            Icon icon = image is null ? formattedValue as Icon : null;
+
+            if (imageBounds.Width <= 0 || imageBounds.Height <= 0 || (icon is null && image is null))
+            {
+                if (paint && !brushColor.HasTransparency() && PaintBackground(paintParts))
                 {
-                    resultBounds = ComputeErrorIconBounds(valBounds);
+                    g.FillRectangle(brush, valBounds);
                 }
-                else
+
+                if (!paint)
                 {
-                    resultBounds = Rectangle.Empty;
+                    return Rectangle.Empty;
                 }
             }
             else
             {
-                Debug.Assert(valBounds.Height <= 0 || valBounds.Width <= 0);
-                resultBounds = Rectangle.Empty;
+                DataGridViewImageCellLayout imageLayout = ImageLayout;
+                if (imageLayout == DataGridViewImageCellLayout.NotSet)
+                {
+                    if (OwningColumn is DataGridViewImageColumn column)
+                    {
+                        imageLayout = column.ImageLayout;
+                        Debug.Assert(imageLayout != DataGridViewImageCellLayout.NotSet);
+                    }
+                    else
+                    {
+                        imageLayout = DataGridViewImageCellLayout.Normal;
+                    }
+                }
+
+                if (imageLayout == DataGridViewImageCellLayout.Stretch)
+                {
+                    resultBounds = imageBounds;
+                    if (!paint)
+                    {
+                        return resultBounds;
+                    }
+
+                    if (PaintBackground(paintParts))
+                    {
+                        PaintPadding(g, valBounds, cellStyle, brush, DataGridView.RightToLeftInternal);
+                    }
+
+                    if (PaintContentForeground(paintParts))
+                    {
+                        if (image != null)
+                        {
+                            using ImageAttributes attr = new ImageAttributes();
+                            attr.SetWrapMode(WrapMode.TileFlipXY);
+                            g.DrawImage(image, imageBounds, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, attr);
+                        }
+                        else
+                        {
+                            g.DrawIcon(icon, imageBounds);
+                        }
+                    }
+                }
+                else
+                {
+                    Rectangle imageBounds2 = ImageBounds(
+                        imageBounds,
+                        (image is null) ? icon.Width : image.Width,
+                        (image is null) ? icon.Height : image.Height,
+                        imageLayout,
+                        cellStyle);
+
+                    resultBounds = imageBounds2;
+
+                    if (!paint)
+                    {
+                        return resultBounds;
+                    }
+
+                    if (PaintBackground(paintParts) && !brushColor.HasTransparency())
+                    {
+                        g.FillRectangle(brush, valBounds);
+                    }
+
+                    if (PaintContentForeground(paintParts))
+                    {
+                        // Paint the image
+                        using Region originalClip = g.Clip;
+                        try
+                        {
+                            g.SetClip(Rectangle.Intersect(
+                                Rectangle.Intersect(imageBounds2, imageBounds),
+                                Rectangle.Truncate(g.VisibleClipBounds)));
+
+                            if (image != null)
+                            {
+                                g.DrawImage(image, imageBounds2);
+                            }
+                            else
+                            {
+                                g.DrawIconUnstretched(icon, imageBounds2);
+                            }
+                        }
+                        finally
+                        {
+                            g.Clip = originalClip;
+                        }
+                    }
+                }
+            }
+
+            Point ptCurrentCell = DataGridView.CurrentCellAddress;
+            if (paint
+                && PaintFocus(paintParts)
+                && ptCurrentCell.X == ColumnIndex
+                && ptCurrentCell.Y == rowIndex
+                && DataGridView.ShowFocusCues
+                && DataGridView.Focused)
+            {
+                // Draw focus rectangle
+                ControlPaint.DrawFocusRectangle(g, valBounds, Color.Empty, brushColor);
+            }
+
+            if (paint && DataGridView.ShowCellErrors && PaintErrorIcon(paintParts))
+            {
+                PaintErrorIcon(g, cellStyle, rowIndex, cellBounds, valBounds, errorText);
             }
 
             return resultBounds;
         }
 
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.ToString"]/*' />
-        public override string ToString()
-        {
-            return "DataGridViewImageCell { ColumnIndex=" + ColumnIndex.ToString(CultureInfo.CurrentCulture) + ", RowIndex=" + RowIndex.ToString(CultureInfo.CurrentCulture) + " }";
-        }
-
-        /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject"]/*' />
-        protected class DataGridViewImageCellAccessibleObject : DataGridViewCellAccessibleObject
-        {
-
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DataGridViewImageCellAccessibleObject"]/*' />
-            public DataGridViewImageCellAccessibleObject(DataGridViewCell owner) : base (owner)
-            {
-            }
-
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DefaultAction"]/*' />
-            public override string DefaultAction
-            {
-                get
-                {
-                    return string.Empty;
-                }
-            }
-
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Description"]/*' />
-            public override string Description
-            {
-                get
-                {
-                    DataGridViewImageCell imageCell = this.Owner as DataGridViewImageCell;
-                    if (imageCell != null)
-                    {
-                        return imageCell.Description;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-            }
-
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Value"]/*' />
-            public override string Value
-            {
-                get 
-                {
-                    return base.Value;
-                }
-
-                set
-                {
-                    // do nothing.
-                }
-            }
-
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DoDefaultAction"]/*' />
-            public override void DoDefaultAction()
-            {
-                // do nothing if Level < 3
-
-                if (AccessibilityImprovements.Level3)
-                {
-                    DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)this.Owner;
-                    DataGridView dataGridView = dataGridViewCell.DataGridView;
-
-                    if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
-                        dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
-                    {
-                        dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                    }
-                }
-            }
-
-            /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.GetChildCount"]/*' />
-            public override int GetChildCount()
-            {
-                return 0;
-            }
-
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
-
-            internal override object GetPropertyValue(int propertyID)
-            {
-                if (propertyID == NativeMethods.UIA_ControlTypePropertyId)
-                {
-                    return NativeMethods.UIA_ImageControlTypeId;
-                }
-
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
-                {
-                    return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override bool IsPatternSupported(int patternId)
-            {
-                if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_InvokePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-        }
+        public override string ToString() => $"DataGridViewImageCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
     }
 }

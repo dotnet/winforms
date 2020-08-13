@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Common diagnostic rules for all non-shipping projects" Description="Enables/disable rules specific to all non-shipping projects." ToolsVersion="14.0">
   <Include Path=".\Shipping.ruleset" Action="Default" />
+
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
+    <Rule Id="CA1507" Action="None" />          <!-- Use nameof to express symbol names -->
+    <Rule Id="CA1810" Action="None" />          <!-- Initialize reference type static fields inline (micro-performance rule is not relevant in test code) -->
+  </Rules>
+
+  <Rules AnalyzerId="xunit.analyzers" RuleNamespace="xunit.analyzers">
+    <Rule Id="xUnit2013" Action="None" />       <!-- Do not use equality check to check for collection size. -->
+  </Rules>
+
 </RuleSet>

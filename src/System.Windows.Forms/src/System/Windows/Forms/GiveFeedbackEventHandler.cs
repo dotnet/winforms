@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that handles the <see cref='System.Windows.Forms.Control.GiveFeedback'/>
-    /// event of a <see cref='System.Windows.Forms.Control'/>.
-    /// </devdoc>
-    public delegate void GiveFeedbackEventHandler(object sender, GiveFeedbackEventArgs e);
+    /// <summary>
+    ///  Represents a method that handles the <see cref='Control.GiveFeedback'/>
+    ///  event of a <see cref='Control'/>.
+    /// </summary>
+    public delegate void GiveFeedbackEventHandler(object? sender, GiveFeedbackEventArgs e);
 }

@@ -5,31 +5,30 @@
 using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// A design surface is an object that contains multiple designers and presents a user-editable surface for them.
+    ///  A design surface is an object that contains multiple designers and presents a user-editable surface for them.
     /// </summary>
     public class DesignSurface : IDisposable, IServiceProvider
     {
-        private IServiceProvider _parentProvider;
+        private readonly IServiceProvider _parentProvider;
         private ServiceContainer _serviceContainer;
         private DesignerHost _host;
         private ICollection _loadErrors;
         private bool _loaded;
 
         /// <summary>
-        /// Creates a new DesignSurface.
+        ///  Creates a new DesignSurface.
         /// </summary>
         public DesignSurface() : this((IServiceProvider)null)
         {
         }
 
         /// <summary>
-        /// Creates a new DesignSurface given a parent service provider.
+        ///  Creates a new DesignSurface given a parent service provider.
         /// </summary>
         /// <param name="parentProvider"> The parent service provider. If there is no parent used to resolve services this can be null. </param>
         public DesignSurface(IServiceProvider parentProvider)
@@ -50,19 +49,19 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates a new DesignSurface.
+        ///  Creates a new DesignSurface.
         /// </summary>
         public DesignSurface(Type rootComponentType) : this(null, rootComponentType)
         {
         }
 
         /// <summary>
-        /// Creates a new DesignSurface given a parent service provider.
+        ///  Creates a new DesignSurface given a parent service provider.
         /// </summary>
         /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
         public DesignSurface(IServiceProvider parentProvider, Type rootComponentType) : this(parentProvider)
         {
-            if (rootComponentType == null)
+            if (rootComponentType is null)
             {
                 throw new ArgumentNullException(nameof(rootComponentType));
             }
@@ -70,22 +69,22 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Provides access to the design surface's container, which contains all components currently being designed.
+        ///  Provides access to the design surface's container, which contains all components currently being designed.
         /// </summary>
         public IContainer ComponentContainer
         {
             get
             {
-                if (_host == null)
+                if (_host is null)
                 {
-                    throw new ObjectDisposedException(this.GetType().FullName);
+                    throw new ObjectDisposedException(GetType().FullName);
                 }
                 return ((IDesignerHost)_host).Container;
             }
         }
 
         /// <summary>
-        /// Returns true if the design surface is currently loaded. This will be true when a successful load has completed, or false for all other cases.
+        ///  Returns true if the design surface is currently loaded. This will be true when a successful load has completed, or false for all other cases.
         /// </summary>
         public bool IsLoaded
         {
@@ -96,7 +95,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Returns a collection of LoadErrors or a void collection.
+        ///  Returns a collection of LoadErrors or a void collection.
         /// </summary>
         public ICollection LoadErrors
         {
@@ -106,14 +105,13 @@ namespace System.ComponentModel.Design
                 {
                     return _loadErrors;
                 }
-                return new object[0];
+                return Array.Empty<object>();
             }
         }
 
         /// <summary>
-        /// Returns true if DTEL (WSOD) is currently loading.
+        ///  Returns true if DTEL (WSOD) is currently loading.
         /// </summary>
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Dtel", Justification = "DTEL - is an abbreviation for Design Time Error Loader")]
         public bool DtelLoading
         {
             get;
@@ -121,13 +119,13 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Provides access to the design surface's ServiceContainer. This property allows inheritors to add their own services.
+        ///  Provides access to the design surface's ServiceContainer. This property allows inheritors to add their own services.
         /// </summary>
         protected ServiceContainer ServiceContainer
         {
             get
             {
-                if (_serviceContainer == null)
+                if (_serviceContainer is null)
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
@@ -136,119 +134,114 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This property will return the view for the root designer. BeginLoad must have been called beforehand to start the loading process. It is possible to return a view before the designer loader finishes loading because the root designer, which supplies the view, is the first object created by the designer loader. If a view is unavailable this method will throw an exception.
-        /// Possible exceptions:
-        /// The design surface is not loading or the designer loader has not yet created a root designer: InvalidOperationException
-        /// The design surface finished the load, but failed. (Various. This will throw the first exception the designer loader added to the error collection).
+        ///  This property will return the view for the root designer. BeginLoad must have been called beforehand to start the loading process. It is possible to return a view before the designer loader finishes loading because the root designer, which supplies the view, is the first object created by the designer loader. If a view is unavailable this method will throw an exception.
+        ///  Possible exceptions:
+        ///  The design surface is not loading or the designer loader has not yet created a root designer: InvalidOperationException
+        ///  The design surface finished the load, but failed. (Various. This will throw the first exception the designer loader added to the error collection).
         /// </summary>
         public object View
         {
             get
             {
-                Exception ex;
-                if (_host == null)
+                if (_host is null)
                 {
                     throw new ObjectDisposedException(ToString());
                 }
 
                 IComponent rootComponent = ((IDesignerHost)_host).RootComponent;
-                if (rootComponent == null)
+                if (rootComponent is null)
                 {
                     // Check to see if we have any load errors.  If so, use them.
                     if (_loadErrors != null)
                     {
                         foreach (object o in _loadErrors)
                         {
-                            ex = o as Exception;
-                            if (ex != null)
+                            if (o is Exception ex)
                             {
                                 throw new InvalidOperationException(ex.Message, ex);
                             }
-                            else
+                            else if (o != null)
                             {
                                 throw new InvalidOperationException(o.ToString());
                             }
                         }
                     }
                     // loader didn't provide any help.  Just generally fail.
-                    ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
+                    throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
-                    throw ex;
                 }
 
-                IRootDesigner rootDesigner = ((IDesignerHost)_host).GetDesigner(rootComponent) as IRootDesigner;
-                if (rootDesigner == null)
+                if (!(((IDesignerHost)_host).GetDesigner(rootComponent) is IRootDesigner rootDesigner))
                 {
-                    ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
+                    throw new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {
                         HelpLink = SR.DesignSurfaceDesignerNotLoaded
                     };
-                    throw ex;
                 }
 
                 ViewTechnology[] designerViews = rootDesigner.SupportedTechnologies;
-                // We just feed the available technologies back into the root designer. ViewTechnology itself is outdated.
-                foreach (ViewTechnology availableTech in designerViews)
+                if (designerViews is null || designerViews.Length == 0)
                 {
-                    return rootDesigner.GetView(availableTech);
+                    throw new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology)
+                    {
+                        HelpLink = SR.DesignSurfaceNoSupportedTechnology
+                    };
                 }
 
-                // We are out of luck here.  Throw.
-                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology);
-                ex.HelpLink = SR.DesignSurfaceNoSupportedTechnology;
-                throw ex;
+                // We just feed the available technologies back into the root designer. ViewTechnology itself is outdated.
+                return rootDesigner.GetView(designerViews[0]);
             }
         }
 
         /// <summary>
-        /// Adds a event handler to listen to the Disposed event on the component.
+        ///  Adds a event handler to listen to the Disposed event on the component.
         /// </summary>
         public event EventHandler Disposed;
 
         /// <summary>
-        /// Adds a event handler to listen to the Flushed event on the component. This is called after the design surface has asked the designer loader to flush its state.
+        ///  Adds a event handler to listen to the Flushed event on the component. This is called after the design surface has asked the designer loader to flush its state.
         /// </summary>
         public event EventHandler Flushed;
 
         /// <summary>
-        /// Called when the designer load has completed.  This is called for successful loads as well as unsuccessful ones.  If code in this event handler throws an exception the designer will be unloaded.
+        ///  Called when the designer load has completed.  This is called for successful loads as well as unsuccessful ones.  If code in this event handler throws an exception the designer will be unloaded.
         /// </summary>
         public event LoadedEventHandler Loaded;
 
         /// <summary>
-        /// Called when the designer load is about to begin the loading process.
+        ///  Called when the designer load is about to begin the loading process.
         /// </summary>
         public event EventHandler Loading;
 
         /// <summary>
-        /// Called when the designer has completed the unloading
-        /// process.
+        ///  Called when the designer has completed the unloading
+        ///  process.
         /// </summary>
         public event EventHandler Unloaded;
 
         /// <summary>
-        /// Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
+        ///  Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
         /// </summary>
         public event EventHandler Unloading;
 
         /// <summary>
-        /// Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
+        ///  Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
         /// </summary>
         public event EventHandler ViewActivated;
 
         /// <summary>
-        /// This method begins the loading process with the given designer loader.  Designer loading can be asynchronous, so the loading may continue to  progress after this call has returned.  Listen to the Loaded event to know when the design surface has completed loading.
+        ///  This method begins the loading process with the given designer loader.  Designer loading can be asynchronous, so the loading may continue to  progress after this call has returned.  Listen to the Loaded event to know when the design surface has completed loading.
         /// </summary>
         public void BeginLoad(DesignerLoader loader)
         {
-            if (loader == null)
+            if (loader is null)
             {
                 throw new ArgumentNullException(nameof(loader));
             }
 
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -259,16 +252,16 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This method begins the loading process for a component of the given type.  This will create an instance of the component type and initialize a designer for that instance.  Loaded is raised before this method returns.
+        ///  This method begins the loading process for a component of the given type.  This will create an instance of the component type and initialize a designer for that instance.  Loaded is raised before this method returns.
         /// </summary>
         public void BeginLoad(Type rootComponentType)
         {
-            if (rootComponentType == null)
+            if (rootComponentType is null)
             {
                 throw new ArgumentNullException(nameof(rootComponentType));
             }
 
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -276,7 +269,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This method is called to create a component of the given type.
+        ///  This method is called to create a component of the given type.
         /// </summary>
         [Obsolete("CreateComponent has been replaced by CreateInstance and will be removed after Beta2")]
         protected internal virtual IComponent CreateComponent(Type componentType)
@@ -285,16 +278,16 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This method is called to create a designer for a component.
+        ///  This method is called to create a designer for a component.
         /// </summary>
         protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
 
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -312,22 +305,22 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This method is called to create an instance of the given type.  If the type is a component
-        /// this will search for a constructor of type IContainer first, and then an empty constructor.
+        ///  This method is called to create an instance of the given type.  If the type is a component
+        ///  this will search for a constructor of type IContainer first, and then an empty constructor.
         /// </summary>
         protected internal virtual object CreateInstance(Type type)
         {
-            if (type == null)
+            if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
             }
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
-            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(new Type[0]);
+            ConstructorInfo ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(Array.Empty<Type>());
             if (ctor != null)
             {
-                instance = TypeDescriptor.CreateInstance(this, type, new Type[0], new object[0]);
+                instance = TypeDescriptor.CreateInstance(this, type, Array.Empty<Type>(), Array.Empty<object>());
             }
             else
             {
@@ -341,7 +334,7 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            if (instance == null)
+            if (instance is null)
             {
                 instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
             }
@@ -349,7 +342,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent)
         {
@@ -357,16 +350,16 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
-            if (_host == null)
+            if (_host is null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            if (owningComponent == null)
+            if (owningComponent is null)
             {
                 throw new ArgumentNullException(nameof(owningComponent));
             }
@@ -374,7 +367,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Disposes the design surface.
+        ///  Disposes the design surface.
         /// </summary>
         public void Dispose()
         {
@@ -382,10 +375,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Protected override of Dispose that allows for cleanup.
+        ///  Protected override of Dispose that allows for cleanup.
         /// </summary>
-        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        /// <param name="disposing"> True if Dispose is being called or false if this is being invoked by a finalizer. </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
@@ -421,7 +413,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Flushes any design changes to the underlying loader.
+        ///  Flushes any design changes to the underlying loader.
         /// </summary>
         public void Flush()
         {
@@ -434,7 +426,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves a service in this design surface's service container.
+        ///  Retrieves a service in this design surface's service container.
         /// </summary>
         /// <param name="serviceType"> The type of service to retrieve. </param>
         /// <returns> An instance of the requested service or null if the service could not be found. </returns>
@@ -448,7 +440,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called by the designer host in response to an Activate call on its interface.
+        ///  Called by the designer host in response to an Activate call on its interface.
         /// </summary>
         internal void OnViewActivate()
         {
@@ -456,7 +448,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Private method that demand-creates services we offer.
+        ///  Private method that demand-creates services we offer.
         /// </summary>
         /// <param name="container"> The service container requesting the service. </param>
         /// <param name="serviceType"> The type of service being requested. </param>
@@ -483,17 +475,12 @@ namespace System.ComponentModel.Design
                 return new TypeDescriptorFilterService();
             }
 
-            if (serviceType == typeof(IReferenceService))
-            {
-                return new ReferenceService(container);
-            }
-
-            Debug.Fail("Demand created service not supported: " + serviceType.Name);
-            return null;
+            Debug.Assert(serviceType == typeof(IReferenceService), "Demand created service not supported: " + serviceType.Name);
+            return new ReferenceService(container);
         }
 
         /// <summary>
-        /// This is invoked by the designer host when it has finished the load.
+        ///  This is invoked by the designer host when it has finished the load.
         /// </summary>
         internal void OnLoaded(bool successful, ICollection errors)
         {
@@ -503,7 +490,7 @@ namespace System.ComponentModel.Design
             if (successful)
             {
                 IComponent rootComponent = ((IDesignerHost)_host).RootComponent;
-                if (rootComponent == null)
+                if (rootComponent is null)
                 {
                     ArrayList newErrors = new ArrayList();
                     Exception ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
@@ -523,17 +510,16 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when the loading process has completed.  This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.  It can also be used to create a view for this design surface.  If code in this event handler or override throws an exception,
-        /// the designer will be unloaded.
+        ///  Called when the loading process has completed.  This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.  It can also be used to create a view for this design surface.  If code in this event handler or override throws an exception,
+        ///  the designer will be unloaded.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoaded(LoadedEventArgs e)
         {
             Loaded?.Invoke(this, e);
         }
 
         /// <summary>
-        /// Called when the loading process is about to begin.
+        ///  Called when the loading process is about to begin.
         /// </summary>
         internal void OnLoading()
         {
@@ -541,16 +527,15 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when the loading process is about to begin.
+        ///  Called when the loading process is about to begin.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoading(EventArgs e)
         {
             Loading?.Invoke(this, e);
         }
 
         /// <summary>
-        /// This is invoked by the designer host after it has unloaded a document.
+        ///  This is invoked by the designer host after it has unloaded a document.
         /// </summary>
         internal void OnUnloaded()
         {
@@ -558,16 +543,15 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when a designer has finished unloading a document.
+        ///  Called when a designer has finished unloading a document.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloaded(EventArgs e)
         {
             Unloaded?.Invoke(this, e);
         }
 
         /// <summary>
-        /// This is invoked by the designer host when it is about to unload a document.
+        ///  This is invoked by the designer host when it is about to unload a document.
         /// </summary>
         internal void OnUnloading()
         {
@@ -576,59 +560,37 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
+        ///  Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloading(EventArgs e)
         {
             Unloading?.Invoke(this, e);
         }
 
         /// <summary>
-        /// Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
+        ///  Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnViewActivate(EventArgs e)
         {
             ViewActivated?.Invoke(this, e);
         }
 
         /// <summary>
-        /// This is a simple designer loader that creates an instance of the given type and then calls EndLoad.  If a collection of objects was passed, this will simply add those objects to the container.
+        ///  This is a simple designer loader that creates an instance of the given type and then calls EndLoad.  If a collection of objects was passed, this will simply add those objects to the container.
         /// </summary>
         private class DefaultDesignerLoader : DesignerLoader
         {
             private readonly Type _type;
-            private readonly ICollection _components;
 
             public DefaultDesignerLoader(Type type)
             {
                 _type = type;
             }
 
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-            public DefaultDesignerLoader(ICollection components)
-            {
-                _components = components;
-            }
-
             public override void BeginLoad(IDesignerLoaderHost loaderHost)
             {
-                string typeName = null;
-                if (_type != null)
-                {
-                    loaderHost.CreateComponent(_type);
-                    typeName = _type.FullName;
-                }
-                else
-                {
-                    foreach (IComponent component in _components)
-                    {
-                        loaderHost.Container.Add(component);
-                    }
-                }
-
-                loaderHost.EndLoad(typeName, true, null);
+                loaderHost.CreateComponent(_type);
+                loaderHost.EndLoad(_type.FullName, true, null);
             }
             public override void Dispose()
             {

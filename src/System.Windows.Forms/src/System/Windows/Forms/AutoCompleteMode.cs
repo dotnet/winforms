@@ -2,33 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the autocomplete mode for ComboBox and TextBox AutoComplete Feature.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the autocomplete mode for ComboBox and TextBox AutoComplete Feature.
+    /// </summary>
     public enum AutoCompleteMode
     {
-        /// <devdoc>
-        /// Disables the AutoComplete Feature for ComboBox and TextBox.
-        /// </devdoc>
-        None = 0,
+        /// <summary>
+        ///  Disables the AutoComplete Feature for ComboBox and TextBox.
+        /// </summary>
+        None = (int)Shell32.AUTOCOMPLETEOPTIONS.NONE,
 
-        /// <devdoc>
-        /// Displays the auxiliary drop-down list associated with the edit control,
-        /// this drop-down is populated with one or more suggested completed strings.
-        /// </devdoc>
-        Suggest = 0x1,
+        /// <summary>
+        ///  Displays the auxiliary drop-down list associated with the edit control,
+        ///  this drop-down is populated with one or more suggested completed strings.
+        /// </summary>
+        Suggest = (int)Shell32.AUTOCOMPLETEOPTIONS.AUTOSUGGEST,
 
-        /// <devdoc>
-        /// Appends the remainder of the most likely candidate string to the existing
-        /// characters, hightlighting the appended characters.
-        /// </devdoc>
-        Append = 0x2,
+        /// <summary>
+        ///  Appends the remainder of the most likely candidate string to the existing
+        ///  characters, hightlighting the appended characters.
+        /// </summary>
+        Append = (int)Shell32.AUTOCOMPLETEOPTIONS.AUTOAPPEND,
 
-        /// <devdoc>
-        /// The AutoSuggest and AutoAppend are applied in conjuction.
-        /// </devdoc>
+        /// <summary>
+        ///  The AutoSuggest and AutoAppend are applied in conjuction.
+        /// </summary>
         SuggestAppend = Suggest | Append
     }
 }

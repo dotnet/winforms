@@ -2,35 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Constants that specify how the date and time picker control displays
-    /// date and time information.
-    /// </devdoc>    
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
+    /// <summary>
+    ///  Constants that specify how the date and time picker control displays
+    ///  date and time information.
+    /// </summary>
     public enum DateTimePickerFormat
     {
-        /// <devdoc>
-        /// Long format - produces output in the form "Wednesday, April 7, 1999"
-        /// </devdoc>
+        /// <summary>
+        ///  Long format - produces output in the form "Wednesday, April 7, 1999"
+        /// </summary>
         Long = 0x0001,
 
-        /// <devdoc>
-        /// Short format - produces output in the form "4/7/99"
-        /// </devdoc>
+        /// <summary>
+        ///  Short format - produces output in the form "4/7/99"
+        /// </summary>
         Short = 0x0002,
 
-        /// <devdoc>
-        /// Time format - produces output in time format
-        /// </devdoc>
+        /// <summary>
+        ///  Time format - produces output in time format
+        /// </summary>
         Time = 0x0004,
 
-        /// <devdoc>
-        /// Custom format - produces output in custom format.
-        /// </devdoc>
+        /// <summary>
+        ///  Custom format - produces output in custom format.
+        /// </summary>
         Custom = 0x0008,
     }
 }

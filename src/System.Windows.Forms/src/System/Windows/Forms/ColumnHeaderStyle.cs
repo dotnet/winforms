@@ -4,25 +4,25 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies how <see cref='System.Windows.Forms.ListView'/> column headers
-    /// behave.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies how <see cref='ListView'/> column headers
+    ///  behave.
+    /// </summary>
     public enum ColumnHeaderStyle
     {
-        /// <devdoc>
-        /// No visible column header.
-        /// </devdoc>
+        /// <summary>
+        ///  No visible column header.
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
-        /// Visible column header that does not respond to clicking.
-        /// </devdoc>
+        /// <summary>
+        ///  Visible column header that does not respond to clicking.
+        /// </summary>
         Nonclickable = 1,
 
-        /// <devdoc>
-        /// Visible column header that responds to clicking.
-        /// </devdoc>
+        /// <summary>
+        ///  Visible column header that responds to clicking.
+        /// </summary>
         Clickable = 2,
     }
 }

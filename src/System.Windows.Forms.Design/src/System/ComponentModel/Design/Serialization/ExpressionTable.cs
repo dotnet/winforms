@@ -8,7 +8,7 @@ using System.Collections;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// An expression table allows a lookup from expression to object and object to expression.  It is similar to the serialization manager's GetName and GetInstance methods, only with rich code expressions.  
+    ///  An expression table allows a lookup from expression to object and object to expression.  It is similar to the serialization manager's GetName and GetInstance methods, only with rich code expressions.
     /// </summary>
     internal sealed class ExpressionTable
     {
@@ -18,7 +18,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_expressions == null)
+                if (_expressions is null)
                 {
                     _expressions = new Hashtable(new ReferenceComparer());
                 }

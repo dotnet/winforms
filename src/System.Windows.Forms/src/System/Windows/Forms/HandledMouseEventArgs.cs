@@ -15,9 +15,9 @@ namespace System.Windows.Forms
             Handled = defaultHandledValue;
         }
 
-        /// <devdoc>
-        /// Gets or sets a value indicating whether the event is handled.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets or sets a value indicating whether the event is handled.
+        /// </summary>
         public bool Handled { get; set; }
     }
 }

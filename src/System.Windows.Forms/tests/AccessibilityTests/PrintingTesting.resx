@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="toolStrip1.AccessibleName">
+    <value xml:space="preserve">PrintPreviewToolStrip</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="toolStrip1.AutoSize" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="printToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Print the document</value>
+  </data>
+  <data name="printToolStripButton.AccessibleName">
+    <value xml:space="preserve">Print Button</value>
+  </data>
+  <data name="printToolStripButton.Text">
+    <value xml:space="preserve">Print</value>
+  </data>
+  <data name="zoomToolStripSplitButton.AccessibleDescription">
+    <value xml:space="preserve">Zoom the document</value>
+  </data>
+  <data name="zoomToolStripSplitButton.AccessibleName">
+    <value xml:space="preserve">Zoom</value>
+  </data>
+  <data name="autoToolStripMenuItem.AccessibleDescription">
+    <value xml:space="preserve">Fit to window</value>
+  </data>
+  <data name="autoToolStripMenuItem.AccessibleName">
+    <value xml:space="preserve">Auto</value>
+  </data>
+  <data name="autoToolStripMenuItem.Text">
+    <value xml:space="preserve">Auto</value>
+  </data>
+  <data name="toolStripMenuItem1.AccessibleDescription">
+    <value xml:space="preserve">500%</value>
+  </data>
+  <data name="toolStripMenuItem1.AccessibleName">
+    <value xml:space="preserve">500%</value>
+  </data>
+  <data name="toolStripMenuItem1.Text">
+    <value xml:space="preserve">500%</value>
+  </data>
+  <data name="toolStripMenuItem2.AccessibleDescription">
+    <value xml:space="preserve">200%</value>
+  </data>
+  <data name="toolStripMenuItem2.AccessibleName">
+    <value xml:space="preserve">200%</value>
+  </data>
+  <data name="toolStripMenuItem2.Text">
+    <value xml:space="preserve">200%</value>
+  </data>
+  <data name="toolStripMenuItem3.AccessibleDescription">
+    <value xml:space="preserve">150%</value>
+  </data>
+  <data name="toolStripMenuItem3.AccessibleName">
+    <value xml:space="preserve">150%</value>
+  </data>
+  <data name="toolStripMenuItem3.Text">
+    <value xml:space="preserve">150%</value>
+  </data>
+  <data name="toolStripMenuItem4.AccessibleDescription">
+    <value xml:space="preserve">100%</value>
+  </data>
+  <data name="toolStripMenuItem4.AccessibleName">
+    <value xml:space="preserve">100%</value>
+  </data>
+  <data name="toolStripMenuItem4.Text">
+    <value xml:space="preserve">100%</value>
+  </data>
+  <data name="toolStripMenuItem5.AccessibleDescription">
+    <value xml:space="preserve">75%</value>
+  </data>
+  <data name="toolStripMenuItem5.AccessibleName">
+    <value xml:space="preserve">75%</value>
+  </data>
+  <data name="toolStripMenuItem5.Text">
+    <value xml:space="preserve">75%</value>
+  </data>
+  <data name="toolStripMenuItem6.AccessibleDescription">
+    <value xml:space="preserve">50%</value>
+  </data>
+  <data name="toolStripMenuItem6.AccessibleName">
+    <value xml:space="preserve">50%</value>
+  </data>
+  <data name="toolStripMenuItem6.Text">
+    <value xml:space="preserve">50%</value>
+  </data>
+  <data name="toolStripMenuItem7.AccessibleDescription">
+    <value xml:space="preserve">25%</value>
+  </data>
+  <data name="toolStripMenuItem7.AccessibleName">
+    <value xml:space="preserve">25%</value>
+  </data>
+  <data name="toolStripMenuItem7.Text">
+    <value xml:space="preserve">25%</value>
+  </data>
+  <data name="toolStripMenuItem8.AccessibleDescription">
+    <value xml:space="preserve">10%</value>
+  </data>
+  <data name="toolStripMenuItem8.AccessibleName">
+    <value xml:space="preserve">10%</value>
+  </data>
+  <data name="toolStripMenuItem8.Text">
+    <value xml:space="preserve">10%</value>
+  </data>
+  <data name="zoomToolStripSplitButton.Text">
+    <value xml:space="preserve">Zoom</value>
+  </data>
+  <data name="onepageToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Display one page</value>
+  </data>
+  <data name="onepageToolStripButton.AccessibleName">
+    <value xml:space="preserve">One page</value>
+  </data>
+  <data name="onepageToolStripButton.Text">
+    <value xml:space="preserve">One page</value>
+  </data>
+  <data name="twopagesToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Display two pages</value>
+  </data>
+  <data name="twopagesToolStripButton.AccessibleName">
+    <value xml:space="preserve">Two pages</value>
+  </data>
+  <data name="twopagesToolStripButton.Text">
+    <value xml:space="preserve">Two pages</value>
+  </data>
+  <data name="threepagesToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Display three pages</value>
+  </data>
+  <data name="threepagesToolStripButton.AccessibleName">
+    <value xml:space="preserve">Three pages</value>
+  </data>
+  <data name="threepagesToolStripButton.Text">
+    <value xml:space="preserve">Three pages</value>
+  </data>
+  <data name="fourpagesToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Display four pages</value>
+  </data>
+  <data name="fourpagesToolStripButton.AccessibleName">
+    <value xml:space="preserve">Four pages</value>
+  </data>
+  <data name="fourpagesToolStripButton.Text">
+    <value xml:space="preserve">Four pages</value>
+  </data>
+  <data name="sixpagesToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Display six pages</value>
+  </data>
+  <data name="sixpagesToolStripButton.AccessibleName">
+    <value xml:space="preserve">Six pages</value>
+  </data>
+  <data name="sixpagesToolStripButton.Text">
+    <value xml:space="preserve">Six pages</value>
+  </data>
+  <data name="closeToolStripButton.AccessibleDescription">
+    <value xml:space="preserve">Close this window</value>
+  </data>
+  <data name="closeToolStripButton.AccessibleName">
+    <value xml:space="preserve">Close</value>
+  </data>
+  <data name="closeToolStripButton.Text">
+    <value xml:space="preserve">&amp;Close</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pageToolStripLabel.Text">
+    <value xml:space="preserve">&amp;Page</value>
+  </data>
+  <data name="toolStrip1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="toolStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>483, 22</value>
+  </data>
+  <data name="toolStrip1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="toolStrip1.Text">
+    <value xml:space="preserve">toolStrip1</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.Name">
+    <value xml:space="preserve">toolStrip1</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.Parent">
+    <value xml:space="preserve">$this</value>
+  </data>
+  <data name="&gt;&gt;toolStrip1.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="pageCounter.AccessibleDescription">
+    <value xml:space="preserve">Page up and down</value>
+  </data>
+  <data name="pageCounter.AccessibleName">
+    <value xml:space="preserve">PageUpDown</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="pageCounter.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="pageCounter.Location" type="System.Drawing.Point, System.Drawing">
+    <value>419, 0</value>
+  </data>
+  <data name="pageCounter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 20</value>
+  </data>
+  <data name="pageCounter.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="pageCounter.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;pageCounter.Name">
+    <value xml:space="preserve">pageCounter</value>
+  </data>
+  <data name="&gt;&gt;pageCounter.Type">
+    <value xml:space="preserve">System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pageCounter.Parent">
+    <value xml:space="preserve">$this</value>
+  </data>
+  <data name="&gt;&gt;pageCounter.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="previewControl.AccessibleDescription">
+    <value />
+  </data>
+  <data name="previewControl.AccessibleName">
+    <value xml:space="preserve">PreviewControl</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleBaseSize" type="System.Drawing.Size, System.Drawing">
+    <value>5, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>483, 338</value>
+  </data>
+  <data name="$this.Text">
+    <value xml:space="preserve">Print preview</value>
+  </data>
+  <data name="&gt;&gt;printToolStripButton.Name">
+    <value xml:space="preserve">printToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;printToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;zoomToolStripSplitButton.Name">
+    <value xml:space="preserve">zoomToolStripSplitButton</value>
+  </data>
+  <data name="&gt;&gt;zoomToolStripSplitButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripSplitButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;autoToolStripMenuItem.Name">
+    <value xml:space="preserve">autoToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;autoToolStripMenuItem.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem1.Name">
+    <value xml:space="preserve">toolStripMenuItem1</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem1.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem2.Name">
+    <value xml:space="preserve">toolStripMenuItem2</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem2.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem3.Name">
+    <value xml:space="preserve">toolStripMenuItem3</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem3.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem4.Name">
+    <value xml:space="preserve">toolStripMenuItem4</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem4.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem5.Name">
+    <value xml:space="preserve">toolStripMenuItem5</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem5.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem6.Name">
+    <value xml:space="preserve">toolStripMenuItem6</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem6.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem7.Name">
+    <value xml:space="preserve">toolStripMenuItem7</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem7.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem8.Name">
+    <value xml:space="preserve">toolStripMenuItem8</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItem8.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;separatorToolStripSeparator.Name">
+    <value xml:space="preserve">separatorToolStripSeparator</value>
+  </data>
+  <data name="&gt;&gt;separatorToolStripSeparator.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;onepageToolStripButton.Name">
+    <value xml:space="preserve">onepageToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;onepageToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;twopagesToolStripButton.Name">
+    <value xml:space="preserve">twopagesToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;twopagesToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;threepagesToolStripButton.Name">
+    <value xml:space="preserve">threepagesToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;threepagesToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fourpagesToolStripButton.Name">
+    <value xml:space="preserve">fourpagesToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;fourpagesToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sixpagesToolStripButton.Name">
+    <value xml:space="preserve">sixpagesToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;sixpagesToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;separatorToolStripSeparator1.Name">
+    <value xml:space="preserve">separatorToolStripSeparator1</value>
+  </data>
+  <data name="&gt;&gt;separatorToolStripSeparator1.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;closeToolStripButton.Name">
+    <value xml:space="preserve">closeToolStripButton</value>
+  </data>
+  <data name="&gt;&gt;closeToolStripButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pageToolStripLabel.Name">
+    <value xml:space="preserve">pageToolStripLabel</value>
+  </data>
+  <data name="&gt;&gt;pageToolStripLabel.Type">
+    <value xml:space="preserve">System.Windows.Forms.ToolStripLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name">
+    <value xml:space="preserve">Printpreview</value>
+  </data>
+  <data name="&gt;&gt;$this.Type">
+    <value xml:space="preserve">System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>

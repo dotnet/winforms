@@ -4,53 +4,53 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies values for navigating between accessible objects.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies values for navigating between accessible objects.
+    /// </summary>
     public enum AccessibleNavigation
     {
-        /// <devdoc>
-        /// Navigation to a sibling object located below the starting object.
-        /// </devdoc>
+        /// <summary>
+        ///  Navigation to a sibling object located below the starting object.
+        /// </summary>
         Down = 0x2,
 
-        /// <devdoc>
-        /// Navigation to the first child of the object.
-        /// </devdoc>
+        /// <summary>
+        ///  Navigation to the first child of the object.
+        /// </summary>
         FirstChild = 0x7,
 
-        /// <devdoc>
-        /// Navigation to the last child of the object
-        /// </devdoc>
+        /// <summary>
+        ///  Navigation to the last child of the object
+        /// </summary>
         LastChild = 0x8,
 
-        /// <devdoc>
-        /// Navigation to the sibling object located to the left of the
-        /// starting object.
-        /// </devdoc>
+        /// <summary>
+        ///  Navigation to the sibling object located to the left of the
+        ///  starting object.
+        /// </summary>
         Left = 0x3,
 
-        /// <devdoc>
-        /// Navigation to the next logical object, generally from the starting
-        /// object to a sibling object.
-        /// </devdoc>
+        /// <summary>
+        ///  Navigation to the next logical object, generally from the starting
+        ///  object to a sibling object.
+        /// </summary>
         Next = 0x5,
-        
-        /// <devdoc>
-        /// Navigation to the previous logical object, generally from a sibling
-        /// object to the starting object.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Navigation to the previous logical object, generally from a sibling
+        ///  object to the starting object.
+        /// </summary>
         Previous = 0x6,
-        
-        /// <devdoc>
-        /// Navigation to the sibling object located to the right of the
-        /// starting object.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Navigation to the sibling object located to the right of the
+        ///  starting object.
+        /// </summary>
         Right = 0x4,
-        
-        /// <devdoc>
-        /// Navigation to a sibling object located above the starting object.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Navigation to a sibling object located above the starting object.
+        /// </summary>
         Up = 0x1,
     }
 }

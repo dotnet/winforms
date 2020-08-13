@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Handler for the DrawTreeNode event of the TreeView control.
-    /// </devdoc>
+    /// <summary>
+    ///  Handler for the DrawTreeNode event of the TreeView control.
+    /// </summary>
     public delegate void DrawTreeNodeEventHandler(object sender, DrawTreeNodeEventArgs e);
 }

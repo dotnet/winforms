@@ -4,26 +4,26 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the state of a control,  such as a check box, that can be
-    /// checked, unchecked, or set to an indeterminate state.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the state of a control,  such as a check box, that can be
+    ///  checked, unchecked, or set to an indeterminate state.
+    /// </summary>
     public enum CheckState
     {
-        /// <devdoc>
-        /// The control is unchecked.
-        /// </devdoc>
+        /// <summary>
+        ///  The control is unchecked.
+        /// </summary>
         Unchecked = 0,
 
-        /// <devdoc>
-        /// The control is checked.
-        /// </devdoc>
+        /// <summary>
+        ///  The control is checked.
+        /// </summary>
         Checked = 1,
 
-        /// <devdoc>
-        /// The control is indeterminate. An indeterminate control generally has
-        /// a shaded appearance.
-        /// </devdoc>
+        /// <summary>
+        ///  The control is indeterminate. An indeterminate control generally has
+        ///  a shaded appearance.
+        /// </summary>
         Indeterminate = 2,
     }
 }

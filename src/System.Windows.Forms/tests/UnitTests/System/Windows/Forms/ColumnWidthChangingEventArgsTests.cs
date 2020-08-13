@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColumnWidthChangingEventArgsTests
+    // NB: doesn't require thread affinity
+    public class ColumnWidthChangingEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-1, -1, true)]

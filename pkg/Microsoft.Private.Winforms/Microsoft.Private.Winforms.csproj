@@ -14,14 +14,17 @@
   -->
 
   <PropertyGroup>
-    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
-    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+
+    <!-- Suppress some nuget warnings that are breaking our build until https://github.com/dotnet/arcade/issues/4337 is resolved -->
+    <NoWarn>$(NoWarn);NU5131;NU5128</NoWarn>
+
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -48,6 +51,13 @@
       <PrivateAssets>All</PrivateAssets>
     </ProjectReference>
   </ItemDefinitionGroup>
+  
+  <ItemGroup>
+    <None Include="FrameworkListFiles.props">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
   <!-- Any projects referenced here will have their outputs automatically put into the package -->
   <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->
@@ -64,11 +74,20 @@
     <!-- Reference and Source System.Windows.Forms includes -->
     <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
+    <!-- Reference and Source System.Windows.Forms.Primitives includes -->
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
+
     <!-- Reference and Source System.Windows.Forms.Design includes -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
+
+    <!-- Facade for System.Windows.Forms.Design.Editors includes -->
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.Facade3x.csproj" />
     
-    <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
-    <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
+    <!-- Facade for Microsoft.VisualBasic include -->
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic\src\Microsoft.VisualBasic.Facade.csproj" />
+
+    <!-- Reference and Source Microsoft.VisualBasic.Forms includes -->
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms\src\Microsoft.VisualBasic.Forms.vbproj" />
 
     <ProjectReference Include="..\..\src\Accessibility\src\Accessibility.ilproj" />
 

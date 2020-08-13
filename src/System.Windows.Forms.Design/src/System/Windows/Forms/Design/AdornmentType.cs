@@ -5,22 +5,20 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Specifies numeric IDs for different types of adornments on a component.
+    ///  Specifies numeric IDs for different types of adornments on a component.
     /// </summary>
     internal enum AdornmentType
     {
         /// <summary>
-        /// Specifies the type as grab handle adornments.
+        ///  Specifies the type as grab handle adornments.
         /// </summary>
         GrabHandle = 1,
-
         /// <summary>
-        /// Specifies the type as container selector adornments.
+        ///  Specifies the type as container selector adornments.
         /// </summary>
         ContainerSelector = 2,
-
         /// <summary>
-        /// Specifies the type as the maximum size of any adornment.
+        ///  Specifies the type as the maximum size of any adornment.
         /// </summary>
         Maximum = 3,
     }

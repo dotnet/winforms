@@ -3,46 +3,46 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the sides of a rectangle to apply a three-dimensional border to.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Specifies the sides of a rectangle to apply a three-dimensional border to.
+    /// </summary>
     [Flags]
     public enum Border3DSide
     {
-        /// <devdoc>
-        /// A three-dimensional border on the left edge of the control.
-        /// </devdoc>
-        Left = NativeMethods.BF_LEFT,
+        /// <summary>
+        ///  A three-dimensional border on the left edge of the control.
+        /// </summary>
+        Left = (int)User32.BF.LEFT,
 
-        /// <devdoc>
-        /// A three-dimensional border on the top edge of the rectangle.
-        /// </devdoc>
-        Top = NativeMethods.BF_TOP,
+        /// <summary>
+        ///  A three-dimensional border on the top edge of the rectangle.
+        /// </summary>
+        Top = (int)User32.BF.TOP,
 
-        /// <devdoc>
-        /// A three-dimensional border on the right side of the rectangle.
-        /// </devdoc>
-        Right = NativeMethods.BF_RIGHT,
+        /// <summary>
+        ///  A three-dimensional border on the right side of the rectangle.
+        /// </summary>
+        Right = (int)User32.BF.RIGHT,
 
-        /// <devdoc>
-        /// A three-dimensional border on the bottom side of the rectangle.
-        /// </devdoc>
-        Bottom = NativeMethods.BF_BOTTOM,
+        /// <summary>
+        ///  A three-dimensional border on the bottom side of the rectangle.
+        /// </summary>
+        Bottom = (int)User32.BF.BOTTOM,
 
-        /// <devdoc>
-        /// The interior of the rectangle is filled with the color defined for
-        /// three-dimensional controls instead of the background color for the form.
-        /// </devdoc>
-        Middle = NativeMethods.BF_MIDDLE,
+        /// <summary>
+        ///  The interior of the rectangle is filled with the color defined for
+        ///  three-dimensional controls instead of the background color for the form.
+        /// </summary>
+        Middle = (int)User32.BF.MIDDLE,
 
-        /// <devdoc>
-        /// A three-dimensional border on all four edges and fill the middle of
-        /// the rectangle with the color defeined for three-dimensional controls.
-        /// </devdoc>
-        All  = Left | Top | Right | Bottom | Middle,
+        /// <summary>
+        ///  A three-dimensional border on all four edges and fill the middle of
+        ///  the rectangle with the color defeined for three-dimensional controls.
+        /// </summary>
+        All = Left | Top | Right | Bottom | Middle,
     }
 }

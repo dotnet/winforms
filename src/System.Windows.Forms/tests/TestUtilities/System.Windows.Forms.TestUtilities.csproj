@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>System.Windows.Forms.TestUtilities</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>System</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
+    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="xunit.assert" Version="$(XUnitAssertVersion)" />
+    <PackageReference Include="Microsoft.DotNet.RemoteExecutor" Version="$(MicrosoftDotNetRemoteExecutorVersion)" />
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

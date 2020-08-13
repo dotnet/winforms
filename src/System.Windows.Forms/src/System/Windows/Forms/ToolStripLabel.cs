@@ -2,432 +2,477 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Windows.Forms.Design;    
+#nullable disable
 
-    /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel"]/*' />
-    /// <devdoc>
-    /// A non selectable winbar item
-    /// </devdoc>
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms.Design;
+using static Interop;
+
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  A non selectable ToolStrip item
+    /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
-    public class ToolStripLabel : ToolStripItem {
+    public class ToolStripLabel : ToolStripItem
+    {
+        private LinkBehavior _linkBehavior = LinkBehavior.SystemDefault;
+        private bool _isLink;
+        private bool _linkVisited;
 
-        private LinkBehavior linkBehavior = LinkBehavior.SystemDefault;
-        private bool isLink = false, linkVisited = false;
-   
-        private Color linkColor = Color.Empty;
-        private Color activeLinkColor = Color.Empty;
-        private Color visitedLinkColor = Color.Empty;
-        private Font hoverLinkFont, linkFont;
-        private Cursor lastCursor;
-        
-                     
-              
+        private Color _linkColor = Color.Empty;
+        private Color _activeLinkColor = Color.Empty;
+        private Color _visitedLinkColor = Color.Empty;
+        private Font _hoverLinkFont, _linkFont;
+        private Cursor _lastCursor;
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.ToolStripLabel"]/*' />
-        /// <devdoc>
-        /// A non selectable winbar item
-        /// </devdoc>
-        public ToolStripLabel() {
+        /// <summary>
+        ///  A non selectable ToolStrip item
+        /// </summary>
+        public ToolStripLabel()
+        {
         }
-        public ToolStripLabel(string text):base(text,null,null) {
+
+        public ToolStripLabel(string text) : base(text, null, null)
+        {
         }
-        public ToolStripLabel(Image image):base(null,image,null) {
+
+        public ToolStripLabel(Image image) : base(null, image, null)
+        {
         }
-        public ToolStripLabel(string text, Image image):base(text,image,null) {
+        public ToolStripLabel(string text, Image image) : base(text, image, null)
+        {
         }
-        public ToolStripLabel(string text, Image image, bool isLink):this(text,image,isLink, null) {
+        public ToolStripLabel(string text, Image image, bool isLink) : this(text, image, isLink, null)
+        {
         }
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick):this(text,image,isLink,onClick,null) {         
+        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick) : this(text, image, isLink, onClick, null)
+        {
         }
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text,image,onClick,name) {
+        public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text, image, onClick, name)
+        {
             IsLink = isLink;
         }
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.CanSelect"]/*' />
-        public override bool CanSelect {
+        public override bool CanSelect
+        {
             get { return (IsLink || DesignMode); }
         }
 
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ToolStripLabelIsLinkDescr))
-        ]
-        public bool IsLink {
-          get {
-              return isLink;
-          }
-          set {
-              if (isLink != value) {
-                  isLink = value;
-                  Invalidate();
-              }
-          }
-        }
-        
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelActiveLinkColorDescr))
-        ]
-        public Color ActiveLinkColor {
-            get {
-                if (activeLinkColor.IsEmpty) {
-                    return IEActiveLinkColor;
-                }
-                else {
-                    return activeLinkColor;
-                }
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripLabelIsLinkDescr))]
+        public bool IsLink
+        {
+            get
+            {
+                return _isLink;
             }
-            set {
-                if (activeLinkColor != value) {
-                    activeLinkColor = value;
+            set
+            {
+                if (_isLink != value)
+                {
+                    _isLink = value;
                     Invalidate();
                 }
             }
         }
-        private Color IELinkColor {
-          get {
-              return LinkUtilities.IELinkColor;
-          }
-        }
 
-        private Color IEActiveLinkColor {
-          get {
-              return LinkUtilities.IEActiveLinkColor;
-          }
-        }
-        private Color IEVisitedLinkColor {
-          get {
-              return LinkUtilities.IEVisitedLinkColor;
-          }
-        }
-
-        [
-        DefaultValue(LinkBehavior.SystemDefault),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ToolStripLabelLinkBehaviorDescr))
-        ]
-        public LinkBehavior LinkBehavior {
-            get {
-                return linkBehavior;
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelActiveLinkColorDescr))]
+        public Color ActiveLinkColor
+        {
+            get
+            {
+                if (_activeLinkColor.IsEmpty)
+                {
+                    return IEActiveLinkColor;
+                }
+                else
+                {
+                    return _activeLinkColor;
+                }
             }
-            set {
+            set
+            {
+                if (_activeLinkColor != value)
+                {
+                    _activeLinkColor = value;
+                    Invalidate();
+                }
+            }
+        }
+        private Color IELinkColor
+        {
+            get
+            {
+                return LinkUtilities.IELinkColor;
+            }
+        }
+
+        private Color IEActiveLinkColor
+        {
+            get
+            {
+                return LinkUtilities.IEActiveLinkColor;
+            }
+        }
+        private Color IEVisitedLinkColor
+        {
+            get
+            {
+                return LinkUtilities.IEVisitedLinkColor;
+            }
+        }
+
+        [DefaultValue(LinkBehavior.SystemDefault)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ToolStripLabelLinkBehaviorDescr))]
+        public LinkBehavior LinkBehavior
+        {
+            get
+            {
+                return _linkBehavior;
+            }
+            set
+            {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline))
                 {
                     throw new InvalidEnumArgumentException(nameof(LinkBehavior), (int)value, typeof(LinkBehavior));
                 }
-                if (linkBehavior != value) {
-                    linkBehavior = value;
+                if (_linkBehavior != value)
+                {
+                    _linkBehavior = value;
                     InvalidateLinkFonts();
                     Invalidate();
                 }
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelLinkColorDescr))
-        ]
-        public Color LinkColor {
-            get {
-                if (linkColor.IsEmpty) {
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelLinkColorDescr))]
+        public Color LinkColor
+        {
+            get
+            {
+                if (_linkColor.IsEmpty)
+                {
                     return IELinkColor;
                 }
-                else {
-                    return linkColor;
+                else
+                {
+                    return _linkColor;
                 }
             }
-            set {
-                if (linkColor != value) {
-                    linkColor = value;
+            set
+            {
+                if (_linkColor != value)
+                {
+                    _linkColor = value;
                     Invalidate();
                 }
             }
         }
 
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelLinkVisitedDescr))
-        ]
-        public bool LinkVisited {
-            get {
-                return linkVisited;
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelLinkVisitedDescr))]
+        public bool LinkVisited
+        {
+            get
+            {
+                return _linkVisited;
             }
-            set {
-                if (linkVisited != value) {
-                    linkVisited = value;
+            set
+            {
+                if (_linkVisited != value)
+                {
+                    _linkVisited = value;
                     Invalidate();
                 }
             }
         }
 
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ToolStripLabelVisitedLinkColorDescr))
-        ]
-        public Color VisitedLinkColor {
-            get {
-                if (visitedLinkColor.IsEmpty) {
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.ToolStripLabelVisitedLinkColorDescr))]
+        public Color VisitedLinkColor
+        {
+            get
+            {
+                if (_visitedLinkColor.IsEmpty)
+                {
                     return IEVisitedLinkColor;
                 }
-                else {
-                    return visitedLinkColor;
+                else
+                {
+                    return _visitedLinkColor;
                 }
             }
-            set {
-                if (visitedLinkColor != value) {
-                    visitedLinkColor = value;
+            set
+            {
+                if (_visitedLinkColor != value)
+                {
+                    _visitedLinkColor = value;
                     Invalidate();
                 }
             }
         }
-        
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.InvalidateLinkFonts"]/*' />
-        /// <devdoc>
-        ///     Invalidates the current set of fonts we use when painting
-        ///     links.  The fonts will be recreated when needed.
-        /// </devdoc>
-        private void InvalidateLinkFonts() {
-  
-            if (linkFont != null) {
-                linkFont.Dispose();
+
+        /// <summary>
+        ///  Invalidates the current set of fonts we use when painting
+        ///  links.  The fonts will be recreated when needed.
+        /// </summary>
+        private void InvalidateLinkFonts()
+        {
+            if (_linkFont != null)
+            {
+                _linkFont.Dispose();
             }
-  
-            if (hoverLinkFont != null && hoverLinkFont != linkFont) {
-                hoverLinkFont.Dispose();
+
+            if (_hoverLinkFont != null && _hoverLinkFont != _linkFont)
+            {
+                _hoverLinkFont.Dispose();
             }
-  
-            linkFont = null;
-            hoverLinkFont = null;
-        }
-  
-        protected override void OnFontChanged(EventArgs e) {
-           InvalidateLinkFonts();
-           base.OnFontChanged(e);
+
+            _linkFont = null;
+            _hoverLinkFont = null;
         }
 
-    
-        protected override void OnMouseEnter(EventArgs e) {
-            if (IsLink) {
-                ToolStrip parent = this.Parent;
-                if (parent != null) {
-                    lastCursor = parent.Cursor;
+        protected override void OnFontChanged(EventArgs e)
+        {
+            InvalidateLinkFonts();
+            base.OnFontChanged(e);
+        }
+
+        protected override void OnMouseEnter(EventArgs e)
+        {
+            if (IsLink)
+            {
+                ToolStrip parent = Parent;
+                if (parent != null)
+                {
+                    _lastCursor = parent.Cursor;
                     parent.Cursor = Cursors.Hand;
                 }
             }
             base.OnMouseEnter(e);
-  
         }
-  
-        protected override void OnMouseLeave(EventArgs e) {
-            if (IsLink) {
-                ToolStrip parent = this.Parent;
-                if (parent != null) {
-                    parent.Cursor = lastCursor;
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            if (IsLink)
+            {
+                ToolStrip parent = Parent;
+                if (parent != null)
+                {
+                    parent.Cursor = _lastCursor;
                 }
             }
             base.OnMouseLeave(e);
-  
         }
 
-       private void ResetActiveLinkColor()
-       {
+        private void ResetActiveLinkColor()
+        {
             ActiveLinkColor = IEActiveLinkColor;
-       }
+        }
 
-       private void ResetLinkColor()
-       {
+        private void ResetLinkColor()
+        {
             LinkColor = IELinkColor;
-       }
+        }
 
-       private void ResetVisitedLinkColor()
-       {
+        private void ResetVisitedLinkColor()
+        {
             VisitedLinkColor = IEVisitedLinkColor;
-       }
-  
-       [EditorBrowsable(EditorBrowsableState.Never)]
-       private bool ShouldSerializeActiveLinkColor() {
-           return !activeLinkColor.IsEmpty;
-       }
-       
-       [EditorBrowsable(EditorBrowsableState.Never)]
-       private bool ShouldSerializeLinkColor() {
-           return !linkColor.IsEmpty;
-       }
+        }
 
-       [EditorBrowsable(EditorBrowsableState.Never)]
-       private bool ShouldSerializeVisitedLinkColor() {
-           return !visitedLinkColor.IsEmpty;
-       }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private bool ShouldSerializeActiveLinkColor()
+        {
+            return !_activeLinkColor.IsEmpty;
+        }
 
-       
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private bool ShouldSerializeLinkColor()
+        {
+            return !_linkColor.IsEmpty;
+        }
 
-        /// <devdoc>
-        /// Creates an instance of the object that defines how image and text
-        /// gets laid out in the ToolStripItem
-        /// </devdoc>
-        internal override ToolStripItemInternalLayout CreateInternalLayout() {
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private bool ShouldSerializeVisitedLinkColor()
+        {
+            return !_visitedLinkColor.IsEmpty;
+        }
+
+        /// <summary>
+        ///  Creates an instance of the object that defines how image and text
+        ///  gets laid out in the ToolStripItem
+        /// </summary>
+        private protected override ToolStripItemInternalLayout CreateInternalLayout()
+        {
             return new ToolStripLabelLayout(this);
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new ToolStripLabelAccessibleObject(this);
         }
 
-        /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.OnPaint"]/*' />
-        /// <devdoc>
-        /// Inheriting classes should override this method to handle this event.
-        /// </devdoc>
-        protected override void OnPaint(System.Windows.Forms.PaintEventArgs e) {
+        /// <summary>
+        ///  Inheriting classes should override this method to handle this event.
+        /// </summary>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            if (Owner != null)
+            {
+                ToolStripRenderer renderer = Renderer;
 
-            if (this.Owner != null) {
-                ToolStripRenderer renderer = this.Renderer;
-                  
                 renderer.DrawLabelBackground(new ToolStripItemRenderEventArgs(e.Graphics, this));
 
-                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image) { 
+                if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image)
+                {
                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle));
                 }
                 PaintText(e.Graphics);
             }
         }
 
-        internal void PaintText(Graphics g) {
-            ToolStripRenderer renderer = this.Renderer;
-              
-            if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) { 
-                 Font font = this.Font;
-                 Color textColor = this.ForeColor;
-                 if (IsLink) {
-                      LinkUtilities.EnsureLinkFonts(font, this.LinkBehavior, ref this.linkFont, ref this.hoverLinkFont);
-        
-                      if (this.Pressed) {
-                          font = hoverLinkFont;
-                          textColor = this.ActiveLinkColor;
-                      }
-                      else if (this.Selected) {
-                          font = hoverLinkFont;
-                          textColor = (this.LinkVisited) ? this.VisitedLinkColor : this.LinkColor;
-                      }
-                      else {
-                          font = linkFont;
-                          textColor = (this.LinkVisited) ? this.VisitedLinkColor : this.LinkColor;
-                      }
-                  }
-                  Rectangle textRect = InternalLayout.TextRectangle;
-                  renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, textRect, textColor, font, InternalLayout.TextFormat));
-             }
+        internal void PaintText(Graphics g)
+        {
+            ToolStripRenderer renderer = Renderer;
+
+            if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text)
+            {
+                Font font = Font;
+                Color textColor = ForeColor;
+                if (IsLink)
+                {
+                    LinkUtilities.EnsureLinkFonts(font, LinkBehavior, ref _linkFont, ref _hoverLinkFont);
+
+                    if (Pressed)
+                    {
+                        font = _hoverLinkFont;
+                        textColor = ActiveLinkColor;
+                    }
+                    else if (Selected)
+                    {
+                        font = _hoverLinkFont;
+                        textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
+                    }
+                    else
+                    {
+                        font = _linkFont;
+                        textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
+                    }
+                }
+                Rectangle textRect = InternalLayout.TextRectangle;
+                renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, textRect, textColor, font, InternalLayout.TextFormat));
+            }
         }
-        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
-        protected internal override bool ProcessMnemonic(char charCode) {
+
+        protected internal override bool ProcessMnemonic(char charCode)
+        {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
-            if (ParentInternal != null) {
-                if (!CanSelect) {
+            if (ParentInternal != null)
+            {
+                if (!CanSelect)
+                {
                     ParentInternal.SetFocusUnsafe();
                     ParentInternal.SelectNextToolStripItem(this, /*forward=*/true);
                 }
-                else {
+                else
+                {
                     FireEvent(ToolStripItemEventType.Click);
                 }
                 return true;
-           
             }
             return false;
         }
 
-        
-        [System.Runtime.InteropServices.ComVisible(true)]        
-        [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
-        internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject {
-            private ToolStripLabel ownerItem = null;
+        internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
+        {
+            private readonly ToolStripLabel ownerItem;
 
-            public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem) {
-              this.ownerItem = ownerItem;
+            public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem)
+            {
+                this.ownerItem = ownerItem;
             }
 
-            public override string DefaultAction {
-                get {
-                    if (ownerItem.IsLink) {
+            public override string DefaultAction
+            {
+                get
+                {
+                    if (ownerItem.IsLink)
+                    {
                         return SR.AccessibleActionClick;
                     }
-                    else {
+                    else
+                    {
                         return string.Empty;
                     }
                 }
             }
 
-            public override void DoDefaultAction() {
-                if (ownerItem.IsLink) {
+            public override void DoDefaultAction()
+            {
+                if (ownerItem.IsLink)
+                {
                     base.DoDefaultAction();
                 }
             }
 
-            internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_TextControlTypeId;
-                    }
-                    else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId) {
-                        return this.State;
-                    }
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
+                {
+                    return UiaCore.UIA.TextControlTypeId;
+                }
+                else if (propertyID == UiaCore.UIA.LegacyIAccessibleStatePropertyId)
+                {
+                    return State;
                 }
 
                 return base.GetPropertyValue(propertyID);
             }
 
-            public override AccessibleRole Role {
-               get {
-                   AccessibleRole role = Owner.AccessibleRole;
-                   if (role != AccessibleRole.Default) {
-                       return role;
-                   }
-                   return (ownerItem.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
-               }
-            }
-
-            public override AccessibleStates State {
-                get {
-                    return base.State | AccessibleStates.ReadOnly;
+            public override AccessibleRole Role
+            {
+                get
+                {
+                    AccessibleRole role = Owner.AccessibleRole;
+                    if (role != AccessibleRole.Default)
+                    {
+                        return role;
+                    }
+                    return (ownerItem.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
                 }
             }
+
+            public override AccessibleStates State
+            {
+                get => base.State | AccessibleStates.ReadOnly;
+            }
         }
-        /// <devdoc>
+        /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so
         ///  that layout can be performed using the correct graphics context.
-        /// </devdoc>
-        private class ToolStripLabelLayout : ToolStripItemInternalLayout {
-
-             ToolStripLabel owner;
-
-            public ToolStripLabelLayout(ToolStripLabel owner) : base(owner) {
-                this.owner = owner;
+        /// </summary>
+        private class ToolStripLabelLayout : ToolStripItemInternalLayout
+        {
+            public ToolStripLabelLayout(ToolStripLabel owner) : base(owner)
+            {
             }
 
-            protected override ToolStripItemLayoutOptions CommonLayoutOptions() {
-               ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
-               layoutOptions.borderSize = 0;
-               return layoutOptions;
+            protected override ToolStripItemLayoutOptions CommonLayoutOptions()
+            {
+                ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
+                layoutOptions.borderSize = 0;
+                return layoutOptions;
             }
         }
-        
     }
-
 }
-    
-
-

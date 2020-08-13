@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewEditingControlShowingEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewEditingControlShowingEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Control_DataGridViewCellStyle_TestData()
         {
@@ -15,7 +16,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Button(), new DataGridViewCellStyle() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_DataGridViewCellStyle_TestData))]
         public void Ctor_Control_DataGridViewCellStyle(Control control, DataGridViewCellStyle cellStyle)
         {

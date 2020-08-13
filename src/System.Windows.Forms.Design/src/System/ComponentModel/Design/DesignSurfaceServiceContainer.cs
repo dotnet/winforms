@@ -7,14 +7,14 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// A service container that supports "fixed" services.  Fixed  services cannot be removed.
+    ///  A service container that supports "fixed" services.  Fixed  services cannot be removed.
     /// </summary>
     internal sealed class DesignSurfaceServiceContainer : ServiceContainer
     {
-        private Hashtable _fixedServices;
+        private readonly Hashtable _fixedServices = new Hashtable();
 
         /// <summary>
-        /// We always add ourselves as a service.
+        ///  We always add ourselves as a service.
         /// </summary>
         internal DesignSurfaceServiceContainer(IServiceProvider parentProvider) : base(parentProvider)
         {
@@ -22,39 +22,33 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Removes the given service type from the service container.
+        ///  Removes the given service type from the service container.
         /// </summary>
         internal void AddFixedService(Type serviceType, object serviceInstance)
         {
             AddService(serviceType, serviceInstance);
-            if (_fixedServices == null)
-            {
-                _fixedServices = new Hashtable();
-            }
             _fixedServices[serviceType] = serviceType;
         }
 
         /// <summary>
-        /// Removes a previously added fixed service.
+        ///  Removes a previously added fixed service.
         /// </summary>
         internal void RemoveFixedService(Type serviceType)
         {
-            if (_fixedServices != null)
-            {
-                _fixedServices.Remove(serviceType);
-            }
+            _fixedServices.Remove(serviceType);
             RemoveService(serviceType);
         }
 
         /// <summary>
-        /// Removes the given service type from the service container.  Throws an exception if the service is fixed.
+        ///  Removes the given service type from the service container.  Throws an exception if the service is fixed.
         /// </summary>
         public override void RemoveService(Type serviceType, bool promote)
         {
-            if (serviceType != null && _fixedServices != null && _fixedServices.ContainsKey(serviceType))
+            if (serviceType != null && _fixedServices.ContainsKey(serviceType))
             {
                 throw new InvalidOperationException(string.Format(SR.DesignSurfaceServiceIsFixed, serviceType.Name));
             }
+
             base.RemoveService(serviceType, promote);
         }
     }

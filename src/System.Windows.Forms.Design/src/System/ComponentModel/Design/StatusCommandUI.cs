@@ -9,12 +9,12 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and SelectionService to update the StatusBar Information.  
+    ///  This class provides a single entrypoint used by the Behaviors, KeySize and KeyMoves (in CommandSets) and SelectionService to update the StatusBar Information.
     /// </summary>
     internal class StatusCommandUI
     {
-        MenuCommand _statusRectCommand = null;
-        IMenuCommandService _menuService = null;
+        MenuCommand _statusRectCommand;
+        IMenuCommandService _menuService;
         readonly IServiceProvider _serviceProvider;
 
         public StatusCommandUI(IServiceProvider provider)
@@ -23,13 +23,13 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves the menu editor service, which we cache for speed.
+        ///  Retrieves the menu editor service, which we cache for speed.
         /// </summary>
         private IMenuCommandService MenuService
         {
             get
             {
-                if (_menuService == null)
+                if (_menuService is null)
                 {
                     _menuService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
                 }
@@ -38,13 +38,13 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves the actual StatusRectCommand, which we cache for speed.
+        ///  Retrieves the actual StatusRectCommand, which we cache for speed.
         /// </summary>
         private MenuCommand StatusRectCommand
         {
             get
             {
-                if (_statusRectCommand == null)
+                if (_statusRectCommand is null)
                 {
                     if (MenuService != null)
                     {
@@ -56,11 +56,11 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Actual Function which invokes the command.
+        ///  Actual Function which invokes the command.
         /// </summary>
         public void SetStatusInformation(Component selectedComponent, Point location)
         {
-            if (selectedComponent == null)
+            if (selectedComponent is null)
             {
                 return;
             }
@@ -89,11 +89,11 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Actual Function which invokes the command.
+        ///  Actual Function which invokes the command.
         /// </summary>
         public void SetStatusInformation(Component selectedComponent)
         {
-            if (selectedComponent == null)
+            if (selectedComponent is null)
             {
                 return;
             }
@@ -117,7 +117,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Actual Function which invokes the command.
+        ///  Actual Function which invokes the command.
         /// </summary>
         public void SetStatusInformation(Rectangle bounds)
         {

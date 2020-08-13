@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DateRangeEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DateRangeEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_DateTime_DateTime_TestData()
         {

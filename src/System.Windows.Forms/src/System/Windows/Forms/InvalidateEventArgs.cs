@@ -6,24 +6,24 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.Invalidate'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='Control.Invalidate()'/> event.
+    /// </summary>
     public class InvalidateEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.InvalidateEventArgs'/>
-        /// class.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='InvalidateEventArgs'/>
+        ///  class.
+        /// </summary>
         public InvalidateEventArgs(Rectangle invalidRect)
         {
             InvalidRect = invalidRect;
         }
 
-        /// <devdoc>
-        /// Gets a value indicating the <see cref='System.Drawing.Rectangle'/> that contains the
-        /// invalidated window area.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets a value indicating the <see cref='Rectangle'/> that contains the
+        ///  invalidated window area.
+        /// </summary>
         public Rectangle InvalidRect { get; }
     }
 }

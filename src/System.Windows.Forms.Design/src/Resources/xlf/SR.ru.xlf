@@ -2,24 +2,204 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ru" original="../SR.resx">
     <body>
+      <trans-unit id="AnchorEditorAccName">
+        <source>Anchor Editor</source>
+        <target state="translated">Редактор привязки</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorBottomAccName">
+        <source>Bottom</source>
+        <target state="translated">Снизу</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorLeftAccName">
+        <source>Left</source>
+        <target state="translated">Слева</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorRightAccName">
+        <source>Right</source>
+        <target state="translated">Справа</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AnchorEditorTopAccName">
+        <source>Top</source>
+        <target state="translated">Сверху</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
+        <source>The designer is already loaded.</source>
+        <target state="translated">Конструктор уже загружен.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderDifferentHost">
+        <source>The designer loader has already been loaded from another host.  You can only have one designer loader for each host.</source>
+        <target state="translated">Загрузчик конструктора уже был загружен с другого узла. Для каждого приложения может существовать только один загрузчик конструктора.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BasicDesignerLoaderNotInitialized">
+        <source>The designer loader has not been initialized yet.  You may only call this method after initialization.</source>
+        <target state="translated">Загрузчик конструктора еще не инициализирован.  Этот метод можно вызвать только после инициализации.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BehaviorServiceCopyControl">
         <source>Copy and move {0}</source>
-        <target state="new">Copy and move {0}</target>
+        <target state="translated">Копировать и переместить {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControls">
         <source>Copy and move {0} Controls</source>
-        <target state="new">Copy and move {0} Controls</target>
+        <target state="translated">Копировать и переместить {0} элементы управления</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControl">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">Переместить {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControls">
         <source>Move {0} Controls</source>
-        <target state="new">Move {0} Controls</target>
+        <target state="translated">Переместить {0} элементы управления</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControl">
+        <source>Resize {0}</source>
+        <target state="translated">Изменить размер {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControls">
+        <source>Resize {0} Controls</source>
+        <target state="translated">Изменить размер {0} элементов управления</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorAllFiles">
+        <source>All Files</source>
+        <target state="translated">Все файлы</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorFileError">
+        <source>Error writing to file: {0}</source>
+        <target state="translated">Ошибка записи в файл: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorFileName">
+        <source>ByteArray</source>
+        <target state="translated">ByteArray</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorSaveFile">
+        <source>Save File As</source>
+        <target state="translated">Сохранить файл как</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BinaryEditorTitle">
+        <source>Byte Array Property Editor</source>
+        <target state="translated">Редактор свойств байтового массива</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogCustomFormat">
+        <source>Custo&amp;m format</source>
+        <target state="translated">Спец&amp;иальный формат</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogCustomFormatAccessibleDescription">
+        <source>Custom format</source>
+        <target state="translated">Специальный формат</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogDecimalPlaces">
+        <source>&amp;Decimal places</source>
+        <target state="translated">&amp;Десятичные разряды</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeCurrency">
+        <source>Currency</source>
+        <target state="translated">Валюта</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeCurrencyExplanation">
+        <source>Specify the format for monetary values.</source>
+        <target state="translated">Укажите формат денежных значений.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeCustom">
+        <source>Custom</source>
+        <target state="translated">Настраиваемое</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeCustomExplanation">
+        <source>Type a custom format string. A custom string may require extra handling unless it is a read-only value.</source>
+        <target state="translated">Введите строку специального формата. Специальная строка может потребовать дополнительной обработки, если не предназначена только для чтения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeCustomInvalidFormat">
+        <source>Invalid format</source>
+        <target state="translated">Недопустимый формат</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeDateTime">
+        <source>Date Time</source>
+        <target state="translated">Дата и время</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeDateTimeExplanation">
+        <source>Specify the format for date and time values.</source>
+        <target state="translated">Укажите формат даты и времени.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeNoFormatting">
+        <source>No Formatting</source>
+        <target state="translated">Без форматирования</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeNoFormattingExplanation">
+        <source>Use no formatting to display the value from the source without adornment.</source>
+        <target state="translated">Не использовать форматирование, если значения  из источника отображаются без оформления.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeNumeric">
+        <source>Numeric</source>
+        <target state="translated">Числовой</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeNumericExplanation">
+        <source>Specify the format for numbers. Note that the Currency format type offers specialized formatting for monetary values.</source>
+        <target state="translated">Задайте формат чисел. Помните, что формат "Денежный" обеспечивает специальное форматирование денежных значений.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeScientific">
+        <source>Scientific</source>
+        <target state="translated">Научный</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogFormatTypeScientificExplanation">
+        <source>Specify the format for values that use scientific notation.</source>
+        <target state="translated">Задайте формат для значений, использующих экспоненциальное представление чисел.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogNullValue">
+        <source>&amp;Null value:</source>
+        <target state="translated">&amp;Значение Null:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BindingFormattingDialogType">
+        <source>&amp;Type</source>
+        <target state="translated">&amp;Тип</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CellStyleBuilderNormalPreviewAccName">
+        <source>Normal Preview</source>
+        <target state="translated">Обычный предварительный просмотр</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CellStyleBuilderSelectedPreviewAccName">
+        <source>Selected Preview</source>
+        <target state="translated">Выборочный предварительный просмотр</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -37,6 +217,185 @@
         <target state="translated">Этот тип хранилища сериализованных объектов не поддерживается.  Используйте хранилище, возвращенное методом CreateStore.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderBadSerializationObject">
+        <source>The serialization data object is not of the proper type.</source>
+        <target state="translated">Неправильный тип объекта данных сериализации.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeDesignerNotInstalled">
+        <source>	{0} --- The designer for base class '{1}' is not installed.</source>
+        <target state="translated">	{0} --- Конструктор для базового класса '{1}' не установлен.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotDesignable">
+        <source>	{0} --- The base class '{1}' cannot be designed.</source>
+        <target state="translated">	{0} --- Невозможно создать базовый класс '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDocumentFailureTypeNotFound">
+        <source>	{0} --- The base class '{1}' could not be loaded.  Ensure the assembly has been referenced and that all projects have been built.</source>
+        <target state="translated">	{0} --- Невозможно загрузить базовый класс '{1}'.  Проверьте, что есть ссылка на сборку и все проекты созданы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderDupComponentName">
+        <source>There is already a component named '{0}'.  Components must have unique names, and names must be case-insensitive.  A name also cannot conflict with the name of any component in an inherited class.</source>
+        <target state="translated">Компонент с именем "{0}" уже существует. Компоненты должны иметь уникальные имена, независимые от регистра. Кроме того, имя не может конфликтовать с именем какого-либо компонента в унаследованном классе.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderInvalidBlankIdentifier">
+        <source>Empty identifiers are not valid.</source>
+        <target state="translated">Пустые идентификаторы недопустимы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderInvalidIdentifier">
+        <source>'{0}' is not a valid identifier.</source>
+        <target state="translated">{0} не является допустимым идентификатором.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoLanguageSupport">
+        <source>The language did not provide a code parser for this file.  Please make sure that this file type supports a designer.</source>
+        <target state="translated">Язык не предоставил анализатор кода для этого файла.  Убедитесь, что для этого типа файлов поддерживается использование конструктора.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
+        <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
+        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать  ни один из входящих в него классов.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
+        <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
+{0}</source>
+        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать  ни один из входящих в него классов.  Конструктор проверил следующие классы в этом файле: 
+{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderNoTypeResolution">
+        <source>The designer loader did not supply a type resolution service, which is a requirement for CodeDom serialization.</source>
+        <target state="translated">Загрузчик конструктора не предоставил службу определения типа, необходимую для сериализации CodeDom.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderPropGenerateMember">
+        <source>Indicates if a member variable will be generated for this component.</source>
+        <target state="translated">Указывает, будет ли создана переменная члена для этого компонента.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderPropModifiers">
+        <source>Indicates the visibility level of the object.</source>
+        <target state="translated">Указывает уровень видимости объекта.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomDesignerLoaderSerializerTypeNotFirstType">
+        <source>The class {0} can be designed, but is not the first class in the file.  Visual Studio requires that designers use the first class in the file.  Move the class code so that it is the first class in the file and try loading the designer again.</source>
+        <target state="translated">Класс {0} можно сконструировать, но это не первый класс в файле.  В Visual Studio конструктор должен использовать первый класс в файле.  Переместите код класса, чтобы он был первым в файле, и еще раз попробуйте загрузить конструктор.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="translated">Невозможно удалить элемент '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="translated">Редактор коллекции {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="translated">Выбран компонент(-ы) с доступом только для чтения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="translated">Свойства {0}:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="translated">&amp;Свойства множественного выбора:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="translated">&amp;Свойства:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="translated">Добавить или удалить {0} объектов</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorAccName">
+        <source>Color Picker</source>
+        <target state="translated">Палитра</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorPaletteTab">
+        <source>Custom</source>
+        <target state="translated">Настраиваемое</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ColorEditorStandardTab">
+        <source>Web</source>
+        <target state="translated">Web</target>
+        <note>{Locked="Web"}</note>
+      </trans-unit>
+      <trans-unit id="ColorEditorSystemTab">
+        <source>System</source>
+        <target state="translated">Система</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignByPrimary">
+        <source>Format {0} components (alignment)</source>
+        <target state="translated">Форматировать {0} компонентов (выравнивание)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignToGrid">
+        <source>Align {0} components to grid</source>
+        <target state="translated">Выровнять {0} компонентов по сетке</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetCutMultiple">
+        <source>Cut {0} Components</source>
+        <target state="translated">Вырезать {0} компонентов</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetDelete">
+        <source>Delete {0} components</source>
+        <target state="translated">Удалить {0} компонентов</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetError">
+        <source>An error occurred while processing this command.
+      {0}</source>
+        <target state="translated">Ошибка при обработке этой команды.
+      {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetFormatSpacing">
+        <source>Format {0} components (spacing)</source>
+        <target state="translated">Форматировать {0} компонентов (с интервалом)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetPaste">
+        <source>Paste components</source>
+        <target state="translated">Вставить компоненты</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSize">
+        <source>Size {0} components</source>
+        <target state="translated">Изменить размер {0} компонентов</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSizeToGrid">
+        <source>Size {0} components to grid</source>
+        <target state="translated">Изменить размер {0} компонентов по сетке</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetUnknownSpacingCommand">
+        <source>Unknown spacing command</source>
+        <target state="translated">Неизвестная команда задания интервала</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
         <target state="translated">Добавляется событие '{0}'</target>
@@ -47,114 +406,214 @@
         <target state="translated">Необработанный VT: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Тип double нельзя привести к типу date.</target>
+      <trans-unit id="ContentAlignmentEditorAccName">
+        <source>Alignment Picker</source>
+        <target state="translated">Выбор выравнивания</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Тип integer нельзя привести к типу float.</target>
+      <trans-unit id="ContentAlignmentEditorBottomCenterAccName">
+        <source>Bottom Middle</source>
+        <target state="translated">Снизу в середине</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetAlignByPrimary">
-        <source>Format {0} components (alignment)</source>
-        <target state="new">Format {0} components (alignment)</target>
+      <trans-unit id="ContentAlignmentEditorBottomLeftAccName">
+        <source>Bottom Left</source>
+        <target state="translated">Внизу слева</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetAlignToGrid">
-        <source>Align {0} components to grid</source>
-        <target state="new">Align {0} components to grid</target>
+      <trans-unit id="ContentAlignmentEditorBottomRightAccName">
+        <source>Bottom Right</source>
+        <target state="translated">Снизу справа</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetCutMultiple">
-        <source>Cut {0} Components</source>
-        <target state="new">Cut {0} Components</target>
+      <trans-unit id="ContentAlignmentEditorMiddleCenterAccName">
+        <source>Middle Center</source>
+        <target state="translated">Посередине по центру</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetDelete">
-        <source>Delete {0} components</source>
-        <target state="new">Delete {0} components</target>
+      <trans-unit id="ContentAlignmentEditorMiddleLeftAccName">
+        <source>Middle Left</source>
+        <target state="translated">Посередине слева</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetError">
-        <source>An error occurred while processing this command.\r\n{0}</source>
-        <target state="new">An error occurred while processing this command.\r\n{0}</target>
+      <trans-unit id="ContentAlignmentEditorMiddleRightAccName">
+        <source>Middle Right</source>
+        <target state="translated">Посередине справа</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetFormatSpacing">
-        <source>Format {0} components (spacing)</source>
-        <target state="new">Format {0} components (spacing)</target>
+      <trans-unit id="ContentAlignmentEditorTopCenterAccName">
+        <source>Top Center</source>
+        <target state="translated">Сверху по центру</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetPaste">
-        <source>Paste components</source>
-        <target state="new">Paste components</target>
+      <trans-unit id="ContentAlignmentEditorTopLeftAccName">
+        <source>Top Left</source>
+        <target state="translated">Вверху слева</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetSize">
-        <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+      <trans-unit id="ContentAlignmentEditorTopRightAccName">
+        <source>Top Right</source>
+        <target state="translated">Вверху справа</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetSizeToGrid">
-        <source>Size {0} components to grid</source>
-        <target state="new">Size {0} components to grid</target>
+      <trans-unit id="ContextMenuAlignToGrid">
+        <source>Align To &amp;Grid</source>
+        <target state="translated">Выровнять по р&amp;ешетке</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandSetUnknownSpacingCommand">
-        <source>Unknown spacing command</source>
-        <target state="new">Unknown spacing command</target>
+      <trans-unit id="ContextMenuBringToFront">
+        <source>&amp;Bring To Front</source>
+        <target state="translated">&amp;На передний план</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCopy">
+        <source>C&amp;opy</source>
+        <target state="translated">К&amp;опировать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCut">
+        <source>&amp;Cut</source>
+        <target state="translated">&amp;Вырезать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDelete">
+        <source>&amp;Delete</source>
+        <target state="translated">&amp;Удалить</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDocumentOutline">
+        <source>&amp;Document Outline</source>
+        <target state="translated">Структура до&amp;кумента</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuLockControls">
+        <source>&amp;Lock Controls</source>
+        <target state="translated">&amp;Блокировка элементов управления</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="translated">Вст&amp;авка</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuProperties">
+        <source>&amp;Properties</source>
+        <target state="translated">&amp;Свойства</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSelect">
+        <source>&amp;Select</source>
+        <target state="translated">Выб&amp;рать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSendToBack">
+        <source>&amp;Send To Back</source>
+        <target state="translated">&amp;На задний план</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
+        <source>ShowCheckMargin</source>
+        <target state="translated">ShowCheckMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
+        <source>Toggles the ShowCheckMargin property</source>
+        <target state="translated">Переключает свойство ShowCheckMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
+        <source>ShowImageMargin</source>
+        <target state="translated">ShowImageMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
+        <source>Toggles the ShowImageMargin property</source>
+        <target state="translated">Переключает свойство ShowImageMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuViewCode">
+        <source>View &amp;Code</source>
+        <target state="translated">Перейти к ко&amp;ду</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDesigner_WndProcException">
+        <source>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</source>
+        <target state="translated">Элемент управления {0} возвратил необработанное исключение в конструкторе и был отключен.
+
+      Исключение:
+      {1}
+
+      Трассировка стека:{2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_Cancel">
+        <source>Cancel</source>
+        <target state="translated">Отмена</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_OK">
+        <source>OK</source>
+        <target state="translated">ОК</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataSourceLocksItems">
+        <source>Items collection cannot be modified when the DataSource property is set.</source>
+        <target state="translated">Изменение коллекции элементов невозможно, если задано свойство DataSource.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
         <source>Could not convert value '{0}' to the type '{1}'.</source>
-        <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
+        <target state="translated">Невозможно преобразовать значение '{0}' в тип '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'.</source>
-        <target state="new">Could not find method '{0}'.</target>
+        <target state="translated">Невозможно найти метод {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
         <source>Could not find property '{0}' on '{1}'.</source>
-        <target state="new">Could not find property '{0}' on '{1}'.</target>
+        <target state="translated">Невозможно найти свойство {0} в '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
         <source>{0} Tasks</source>
-        <target state="new">{0} Tasks</target>
+        <target state="translated">{0} Задачи</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
         <source>Error using the dropdown: {0}</source>
-        <target state="new">Error using the dropdown: {0}</target>
+        <target state="translated">Ошибка при использовании раскрывающегося списка: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
         <source>Error invoking '{0}'.  Details: {1}</source>
-        <target state="new">Error invoking '{0}'.  Details: {1}</target>
+        <target state="translated">Ошибка при вызове '{0}'.  Подробно: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorSettingValue">
         <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
-        <target state="new">Error setting value '{0}' to property '{1}'.  Details: {2}</target>
+        <target state="translated">Ошибка при установке значения '{0}' для свойства '{1}'.  Подробно: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
-        <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <target state="translated">Перед вызовом функций перетаскивания необходимо, чтобы успешно завершился вызов функции BeginDrag.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
         <source>Inherited control</source>
-        <target state="new">Inherited control</target>
+        <target state="translated">Унаследованный элемент управления</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInheritedReadOnly">
         <source>Inherited control (Private)</source>
-        <target state="new">Inherited control (Private)</target>
+        <target state="translated">Унаследованный элемент управления (Частный)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
@@ -168,8 +627,12 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="translated">Произошла ошибка при загрузке документа. Исправьте ошибку и повторите загрузку.  Сообщение об ошибке:\r\n\r\n{0}</target>
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</source>
+        <target state="translated">Ошибка при загрузке документа. Исправьте ошибку и повторите загрузку. Сообщение об ошибке:
+
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
@@ -337,6 +800,51 @@
         <target state="translated">Определяет, будут ли конструкторы использовать линии выравнивания.  Если задано значение true, линии выравнивания используются в качестве направляющих.  В случае false используются линии сетки.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInParent">
+        <source>Dock in Parent Container</source>
+        <target state="translated">Закрепить в родительском контейнере</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutUndockInParent">
+        <source>Undock in Parent Container</source>
+        <target state="translated">Открепить в родительском контейнере</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorAccName">
+        <source>Dock Picker</source>
+        <target state="translated">Выбор дока</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorBottomAccName">
+        <source>Bottom</source>
+        <target state="translated">Снизу</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorFillAccName">
+        <source>Fill</source>
+        <target state="translated">Заполнение</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorLeftAccName">
+        <source>Left</source>
+        <target state="translated">Слева</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorNoneAccName">
+        <source>None</source>
+        <target state="translated">Отсутствует</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorRightAccName">
+        <source>Right</source>
+        <target state="translated">Справа</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DockEditorTopAccName">
+        <source>Top</source>
+        <target state="translated">Сверху</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DotNET_ComponentType">
         <source>.NET Component</source>
         <target state="translated">Компонент .NET</target>
@@ -344,17 +852,17 @@
       </trans-unit>
       <trans-unit id="DragDropDragComponents">
         <source>Drag {0} components</source>
-        <target state="new">Drag {0} components</target>
+        <target state="translated">Перетащить {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">Переместить {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponents">
         <source>Move {0} components</source>
-        <target state="new">Move {0} components</target>
+        <target state="translated">Переместить {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -362,9 +870,74 @@
         <target state="translated">Этот объект IDataObject не поддерживает SetData.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DragDropSizeComponent">
+        <source>Size {0}</source>
+        <target state="translated">Изменить размер {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponents">
+        <source>Size {0} components</source>
+        <target state="translated">Изменить размер {0} компонентов</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceBadArgType">
+        <source>The event {0} expects an argument type of {1}.</source>
+        <target state="translated">Событие {0} ожидает тип аргумента {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceEventReadOnly">
+        <source>The event {0} is read-only and cannot be changed.</source>
+        <target state="translated">Событие {0} доступно только для чтения и не может быть изменено.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceNoSite">
+        <source>Events cannot be set on the object passed to the event binding service because a site associated with the object could not be located.</source>
+        <target state="translated">Невозможно установить события для объекта, переданного в службу привязки событий, так как сайт, связанный с объектом, не найден.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EventBindingServiceSetValue">
+        <source>Set {0}.{1} event</source>
+        <target state="translated">Задать {0}.{1} событие</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
         <target state="translated">Поставщик расширений {0} уже добавлен в качестве расширения.  Добавление другого поставщика приведет к появлению повторяющихся свойств.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormatStringDialogTitle">
+        <source>Format String Dialog</source>
+        <target state="translated">Диалог формата строки</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GenericFileFilter">
+        <source>All Files(*.*)|*.*</source>
+        <target state="translated">Все файлы(*.*)|*.*</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GenericOpenFile">
+        <source>Open File</source>
+        <target state="translated">Открыть файл</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpProviderEditorFilter">
+        <source>All Help Files(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Compressed HTML Files(*.chm)|*.chm|Help Collection Files(*.col)|*.col|HTML Files(*.htm,*.html)|*.htm;*.html|All Files(*.*)|*.*</source>
+        <target state="translated">Все файлы справки(*.chm,*.col,*.htm,*.html)|*.chm;*.col;*.htm;*.html|Сжатые файлы HTML(*.chm)|*.chm|Файлы коллекции справки(*.col)|*.col|Файлы HTML(*.htm,*.html)|*.htm;*.html|Все файлы(*.*)|*.*</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpProviderEditorTitle">
+        <source>Open Help File</source>
+        <target state="translated">Открыть файл справки</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageCollectionEditorFormText">
+        <source>Images Collection Editor</source>
+        <target state="translated">Редактор коллекции изображений</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -372,14 +945,176 @@
         <target state="translated">Только для чтения</target>
         <note />
       </trans-unit>
-      <trans-unit id="DragDropSizeComponent">
-        <source>Size {0}</source>
-        <target state="new">Size {0}</target>
+      <trans-unit id="InvalidArgument">
+        <source>'{1}' is not a valid value for '{0}'.</source>
+        <target state="translated">'{1}' не является допустимым значением для '{0}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DragDropSizeComponents">
-        <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+      <trans-unit id="InvalidBoundArgument">
+        <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
+        <target state="translated">'{1}' не является допустимым значением для '{0}'. Значение '{0}' должно лежать в диапазоне от {2} до {3}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorCancel">
+        <source>Cancel</source>
+        <target state="translated">Отмена</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorCaption">
+        <source>LinkArea Editor</source>
+        <target state="translated">Редактор LinkArea</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorDescription">
+        <source>Select a &amp;range of text to make your link:</source>
+        <target state="translated">&amp;Выберите часть текста для преобразов. в ссылку:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LinkAreaEditorOK">
+        <source>OK</source>
+        <target state="translated">ОК</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewSubItemBaseName">
+        <source>ListViewSubItem</source>
+        <target state="translated">ListViewSubItem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LocalizationProviderManualReload">
+        <source>You must close and re-open the designer for this change to take effect.</source>
+        <target state="translated">Чтобы изменения начали действовать, необходимо закрыть и вновь открыть конструктор.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LocalizationProviderMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
+        <source>Mask is not full.</source>
+        <target state="translated">Маска не полная.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorNull">
+        <source>The provided MaskDescriptor is null.</source>
+        <target state="translated">Предоставленный MaskDescriptor равен null.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorNullOrEmptyRequiredProperty">
+        <source>One or more required properties are null or empty.</source>
+        <target state="translated">Одно или несколько обязательных свойств пусты или равны null.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDescriptorValidatingTypeNone">
+        <source>(none)</source>
+        <target state="translated">(нет)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogCustomEntry">
+        <source>&lt;Custom&gt;</source>
+        <target state="translated">&lt;Специальный&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogDataFormat">
+        <source>Data Format</source>
+        <target state="translated">Формат данных</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogDlgCaption">
+        <source>Input Mask</source>
+        <target state="translated">Маска ввода</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogMaskDescription">
+        <source>Mask Description</source>
+        <target state="translated">Описание маски</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskDesignerDialogValidatingType">
+        <source>Validating Type</source>
+        <target state="translated">Проверка типа</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxDesignerVerbsSetMaskDesc">
+        <source>Set Mask...</source>
+        <target state="translated">Установка маски...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintAlphanumericCharacterExpected">
+        <source>Alphanumeric character expected</source>
+        <target state="translated">Ожидается алфавитно-цифровой символ</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintAsciiCharacterExpected">
+        <source>ASCII character expected</source>
+        <target state="translated">Ожидается символ ASCII</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintDigitExpected">
+        <source>Digit expected</source>
+        <target state="translated">Ожидается цифра</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintInvalidInput">
+        <source>Invalid input character</source>
+        <target state="translated">Недействительный входной символ</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintLetterExpected">
+        <source>Letter expected</source>
+        <target state="translated">Ожидается буква</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintNonEditPosition">
+        <source>Non edit position</source>
+        <target state="translated">Неизменяемое положение</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintPositionOutOfRange">
+        <source>Position out of range</source>
+        <target state="translated">Положение вне диапазона</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintPromptCharNotAllowed">
+        <source>Prompt character disallowed as input</source>
+        <target state="translated">Нельзя использовать на входе символ приглашения к вводу</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintSignedDigitExpected">
+        <source>Signed digit expected</source>
+        <target state="translated">Ожидается десятичное число</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxHintUnavailableEditPosition">
+        <source>Unavailable edit position</source>
+        <target state="translated">Недоступное положение правки</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MaskedTextBoxTextEditorErrorFormatString">
+        <source>Error at position {0}: {1}.</source>
+        <target state="translated">Ошибка в положении {0}: {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MenuCommandService_DuplicateCommand">
+        <source>There is already a command handler for the menu command '{0}'.</source>
+        <target state="translated">Уже существует дескриптор команд для команды меню '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MultilineStringEditorWatermark">
+        <source>Press Enter to begin a new line.
+Press Ctrl+Enter to accept Text.</source>
+        <target state="translated">Нажмите клавишу ВВОД, чтобы начать новую строку.
+Нажмите клавиши Ctrl+ВВОД, чтобы принять текст.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None">
+        <source>(None)</source>
+        <target state="translated">(Нет)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="None_lc">
+        <source>(none)</source>
+        <target state="translated">(нет)</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -394,8 +1129,13 @@
       </trans-unit>
       <trans-unit id="RTL">
         <source>RTL_False</source>
-        <target state="new">RTL_False</target>
+        <target state="translated">RTL_False</target>
         <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
+      </trans-unit>
+      <trans-unit id="SelectedPathEditorLabel">
+        <source>Select the path to the folder that will initially be selected in the FolderBrowserDialog.</source>
+        <target state="translated">Выберите путь к папке, которая изначально будет выбираться в FolderBrowserDialog.</target>
+        <note />
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
@@ -482,6 +1222,16 @@
         <target state="translated">Тип '{0}' не содержит свойства с именем '{1}'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="translated">Объект '{0}' вернул для свойства '{1}' значение NULL, что не допускается.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="translated">Ошибка при генерации кода для свойства "{0}".  Произошла следующая ошибка: '{1}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
         <target state="translated">Ошибка чтения ресурсов из файла ресурсов для культуры {0}: {1}</target>
@@ -492,6 +1242,11 @@
         <target state="translated">Ошибка чтения ресурсов из файла ресурсов для культуры по умолчанию: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="translated">Проектировщик должен создать экземпляр типа '{0}', однако это невозможно, поскольку тип объявлен как абстрактный.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">Не удалось найти тип "{0}".  Проверьте, что есть ссылка на сборку, содержащую этот тип.  Если этот тип является частью разрабатываемого проекта, убедитесь в том, что проект успешно откомпилирован с использованием параметров для вашей текущей платформы или для любого процессора.</target>
@@ -500,6 +1255,301 @@
       <trans-unit id="SerializerUndeclaredName">
         <source>The variable '{0}' is either undeclared or was never assigned.</source>
         <target state="translated">Переменная '{0}' либо не объявлена, либо ей не было присвоено значение.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ShortcutKeys_InvalidKey">
+        <source>(Unknown)</source>
+        <target state="translated">(Неизвестный)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuAbout">
+        <source>&amp;About...</source>
+        <target state="translated">&amp;О программе...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuContents">
+        <source>&amp;Contents</source>
+        <target state="translated">&amp;Содержание</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCopy">
+        <source>&amp;Copy</source>
+        <target state="translated">&amp;Копировать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCreateDesc">
+        <source>Create Standard Menu</source>
+        <target state="translated">Создание стандартного меню</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCustomize">
+        <source>&amp;Customize</source>
+        <target state="translated">&amp;Настройки</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCut">
+        <source>Cu&amp;t</source>
+        <target state="translated">Вырезат&amp;ь</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuEdit">
+        <source>&amp;Edit</source>
+        <target state="translated">&amp;Правка</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuExit">
+        <source>E&amp;xit</source>
+        <target state="translated">Вы&amp;ход</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuFile">
+        <source>&amp;File</source>
+        <target state="translated">&amp;Файл</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuHelp">
+        <source>&amp;Help</source>
+        <target state="translated">&amp;Справка</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuIndex">
+        <source>&amp;Index</source>
+        <target state="translated">&amp;Индекс</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuNew">
+        <source>&amp;New</source>
+        <target state="translated">Со&amp;здать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOpen">
+        <source>&amp;Open</source>
+        <target state="translated">&amp;Открыть</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOptions">
+        <source>&amp;Options</source>
+        <target state="translated">&amp;Параметры</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="translated">Вст&amp;авка</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrint">
+        <source>&amp;Print</source>
+        <target state="translated">&amp;Печать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrintPreview">
+        <source>Print Pre&amp;view</source>
+        <target state="translated">Предварительный прос&amp;мотр</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuRedo">
+        <source>&amp;Redo</source>
+        <target state="translated">&amp;Отмена действия</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSave">
+        <source>&amp;Save</source>
+        <target state="translated">Со&amp;хранить</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSaveAs">
+        <source>Save &amp;As</source>
+        <target state="translated">Сохранить &amp;как</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSearch">
+        <source>&amp;Search</source>
+        <target state="translated">&amp;Поиск</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSelectAll">
+        <source>Select &amp;All</source>
+        <target state="translated">Выделить &amp;все</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuTools">
+        <source>&amp;Tools</source>
+        <target state="translated">Сер&amp;вис</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuUndo">
+        <source>&amp;Undo</source>
+        <target state="translated">&amp;Отмена действия</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolCut">
+        <source>C&amp;ut</source>
+        <target state="translated">В&amp;ырезать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolHelp">
+        <source>He&amp;lp</source>
+        <target state="translated">Спр&amp;авка</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Dock">
+        <source>Dock:</source>
+        <target state="translated">Закрепить:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_DockDesc">
+        <source>Changes the Dock property</source>
+        <target state="translated">Изменяет свойство Dock</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyle">
+        <source>GripStyle:</source>
+        <target state="translated">Стиль захвата:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyleDesc">
+        <source>Changes the GripStyle property</source>
+        <target state="translated">Изменяет свойство GripStyle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Layout">
+        <source>Layout &amp;&amp; Appearance</source>
+        <target state="translated">Раскладка и внешний вид</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderMode">
+        <source>RenderMode:</source>
+        <target state="translated">RenderMode:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderModeDesc">
+        <source>Changes the RenderMode property</source>
+        <target state="translated">Изменяет свойство RenderMode</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAddingItem">
+        <source>Adding {0} Item</source>
+        <target state="translated">Добавление элемента {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
+        <source>AllowItemReorder and AllowDrop cannot both be true.</source>
+        <target state="translated">AllowItemReorder и AllowDrop не могут одновременно иметь значение true.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripCreatingNewItemTransaction">
+        <source>ToolStrip New Item create Transaction.</source>
+        <target state="translated">Новый элемент ToolStrip создает транзакцию.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerb">
+        <source>Embed in ToolStripContainer</source>
+        <target state="translated">Внедрить в ToolStripContainer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerbDesc">
+        <source>Embeds the current ToolStrip in ToolStripContainer</source>
+        <target state="translated">Внедряет текущий ToolStrip в ToolStripContainer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerb">
+        <source>&amp;Insert Standard Items</source>
+        <target state="translated">&amp;Вставить стандартные элементы</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
+        <source>Inserts standard items in the current ToolStrip</source>
+        <target state="translated">Вставляет стандартные элементы в текущий ToolStrip</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
+        <source>Type Here</source>
+        <target state="translated">Прототип для текста</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
+        <source>Type Text for ToolStripMenuItem</source>
+        <target state="translated">Введите текст для ToolStripMenuItem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
+        <source>Add Menu Item</source>
+        <target state="translated">Добавить пункт меню</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
+        <source>Add ToolStripStatusLabel</source>
+        <target state="translated">Добавить ToolStripStatusLabel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
+        <source>Add ToolStripButton</source>
+        <target state="translated">Добавить ToolStripButton</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerToolStripAccessibleName">
+        <source>New item selection</source>
+        <target state="translated">Выбор нового элемента</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionAddingItem">
+        <source>Adding Item</source>
+        <target state="translated">Добавление элемента</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionRemovingItem">
+        <source>Removing Item</source>
+        <target state="translated">Удаление элемента</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
+        <source>&amp;Edit DropDownItems...</source>
+        <target state="translated">&amp;Правка DropDownItems...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
+        <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
+        <target state="translated">Вставка элементов меню ToolStrip в транзакцию DropDown.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorVerb">
+        <source>&amp;Edit Items...</source>
+        <target state="translated">&amp;Правка элементов…</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuConvertTo">
+        <source>Con&amp;vert To</source>
+        <target state="translated">Пр&amp;еобразовать в</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuInsert">
+        <source>&amp;Insert</source>
+        <target state="translated">&amp;Вставить</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuSetImage">
+        <source>Set I&amp;mage...</source>
+        <target state="translated">Задать р&amp;исунок...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemPropertyChangeTransaction">
+        <source>ToolStripItem Property Change Transaction.</source>
+        <target state="translated">Транзакция изменения свойства ToolStripItem.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripMorphingItemTransaction">
+        <source>ToolStripItem Morphing Transaction.</source>
+        <target state="translated">Транзакция преобразования ToolStripItem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSelectMenuItem">
+        <source>'{0}'</source>
+        <target state="translated">"{0}"</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSeparatorError">
+        <source>Cannot add ToolStripSeparator to MenuStrip.</source>
+        <target state="translated">Не удается добавить ToolStripSeparator в MenuStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -522,9 +1572,29 @@
         <target state="translated">Тип данных {0} не является упорядочиваемым. В словарь свойств можно добавлять только упорядочиваемые элементы.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrayAutoArrange">
+        <source>Auto Arrange Tray Icons</source>
+        <target state="translated">Автоматически упорядочить значки на панели задач</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayLineUpIcons">
+        <source>Line Up Tray Icons</source>
+        <target state="translated">Выстроить значки на панели задач</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayShowLargeIcons">
+        <source>Show Large or Small Icons</source>
+        <target state="translated">Отображать крупные или мелкие значки</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
         <source>Type '{0}' is not available in the target framework.</source>
         <target state="translated">Тип "{0}" недоступен в целевой платформе.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UIServiceHelper_ErrorCaption">
+        <source>Error</source>
+        <target state="translated">Ошибка</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
@@ -572,26 +1642,6 @@
         <target state="translated">Требуется служба {0}, но она не найдена.  Если вы перенесли эту службу, убедитесь в том, что обеспечили замену.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TrayAutoArrange">
-        <source>Auto Arrange Tray Icons</source>
-        <target state="new">Auto Arrange Tray Icons</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrayLineUpIcons">
-        <source>Line Up Tray Icons</source>
-        <target state="new">Line Up Tray Icons</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrayShowLargeIcons">
-        <source>Show Large or Small Icons</source>
-        <target state="new">Show Large or Small Icons</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UIServiceHelper_ErrorCaption">
-        <source>Error</source>
-        <target state="new">Error</target>
-        <note />
-      </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
         <target state="translated">Не реализовано.</target>
@@ -599,17 +1649,42 @@
       </trans-unit>
       <trans-unit id="WindowsFormsAddEvent">
         <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
-        <target state="new">&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</target>
+        <target state="translated">&lt;невозможно найти строку ресурса "WindowsFormsAddEvent"&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterX">
         <source>Horizontal center of {0} component(s)</source>
-        <target state="new">Horizontal center of {0} component(s)</target>
+        <target state="translated">Центр {0} компонентов по горизонтали</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
-        <target state="new">Vertical center of {0} component(s)</target>
+        <target state="translated">Центр {0} компонентов по вертикали</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="bitmapFileDescription">
+        <source>Bitmap files</source>
+        <target state="translated">Файлы точечных рисунков</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="iconFileDescription">
+        <source>Icon files</source>
+        <target state="translated">Файлы значков</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="imageFileDescription">
+        <source>All image files</source>
+        <target state="translated">Все файлы изображений</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lockedDescr">
+        <source>The Locked property determines if we can move or resize the control.</source>
+        <target state="translated">Свойство Locked определяет, можно ли перемещать элемент управления или изменять его размеры.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="metafileFileDescription">
+        <source>Metafiles</source>
+        <target state="translated">Метафайлы</target>
         <note />
       </trans-unit>
     </body>

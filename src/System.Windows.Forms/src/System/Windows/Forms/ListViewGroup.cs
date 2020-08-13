@@ -2,628 +2,443 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.ComponentModel;
-using System.Runtime.Serialization;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Win32;
 using System.Globalization;
+using System.Runtime.Serialization;
 
-namespace System.Windows.Forms {
-                               
-    /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///         Represents a group within a ListView.
-    ///
-    ///    </para>
-    /// </devdoc>
-    [
-    TypeConverterAttribute(typeof(ListViewGroupConverter)),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty(nameof(Header)),
-    Serializable
-    ]
-    public sealed class ListViewGroup : ISerializable {
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Represents a group within a ListView.
+    /// </summary>
+    [TypeConverter(typeof(ListViewGroupConverter))]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultProperty(nameof(Header))]
+    [Serializable] // This type is participating in resx serialization scenarios.
+    public sealed partial class ListViewGroup : ISerializable
+    {
+        private string? _header;
+        private HorizontalAlignment _headerAlignment = HorizontalAlignment.Left;
+        private string? _footer;
+        private HorizontalAlignment _footerAlignment = HorizontalAlignment.Left;
+        private ListViewGroupCollapsedState _collapsedState = ListViewGroupCollapsedState.Default;
+        private string? _subtitle;
+        private string? _taskLink;
 
-        private ListView listView;              
-        private int id;
+        private ListView.ListViewItemCollection? _items;
 
-        private string header;
-        private HorizontalAlignment headerAlignment = HorizontalAlignment.Left;
+        private static int s_nextID;
 
-        private ListView.ListViewItemCollection items;        
+        private static int s_nextHeader = 1;
 
-        private static int nextID;
+        private ListViewGroupImageIndexer? _imageIndexer;
+        private AccessibleObject? _accessibilityObject;
 
-        private static int nextHeader = 1;
-
-        private object userData;
-
-        private string name;
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup"]/*' />
-        /// <devdoc>
-        ///     Creates a ListViewGroup.
-        /// </devdoc>
-        public ListViewGroup() : this(string.Format(SR.ListViewGroupDefaultHeader, nextHeader++))
+        /// <summary>
+        ///  Creates a ListViewGroup.
+        /// </summary>
+        public ListViewGroup() : this(string.Format(SR.ListViewGroupDefaultHeader, s_nextHeader++))
         {
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup1"]/*' />
-        /// <devdoc>
-        ///     Creates a ListViewItem object from an Stream.
-        /// </devdoc>
-        private ListViewGroup(SerializationInfo info, StreamingContext context) : this() {
+        /// <summary>
+        ///  Creates a ListViewItem object from an Stream.
+        /// </summary>
+        private ListViewGroup(SerializationInfo info, StreamingContext context) : this()
+        {
             Deserialize(info, context);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup2"]/*' />
-        /// <devdoc>
-        ///     Creates a ListViewItem object from a Key and a Name
-        /// </devdoc>
-        public ListViewGroup(string key, string headerText) : this() {
-            this.name = key;
-            this.header = headerText;
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup2"]/*' />
-        /// <devdoc>
-        ///     Creates a ListViewGroup.
-        /// </devdoc>
-        public ListViewGroup(string header) 
+        /// <summary>
+        ///  Creates a ListViewItem object from a Key and a Name
+        /// </summary>
+        public ListViewGroup(string? key, string? headerText) : this()
         {
-            this.header = header;
-            this.id = nextID++;
+            Name = key;
+            _header = headerText;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroup3"]/*' />
-        /// <devdoc>
-        ///     Creates a ListViewGroup.
-        /// </devdoc>
-    	public ListViewGroup(string header, HorizontalAlignment headerAlignment) : this(header) {        
-            this.headerAlignment = headerAlignment;
-        }    	                
+        /// <summary>
+        ///  Creates a ListViewGroup.
+        /// </summary>
+        public ListViewGroup(string? header)
+        {
+            _header = header;
+            ID = s_nextID++;
+        }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Header"]/*' />
-        /// <devdoc>
-        ///     The text displayed in the group header.
-        /// </devdoc>
-        [SRCategory(nameof(SR.CatAppearance))]
-        public string Header {
+        /// <summary>
+        ///  Creates a ListViewGroup.
+        /// </summary>
+        public ListViewGroup(string? header, HorizontalAlignment headerAlignment) : this(header)
+        {
+            _headerAlignment = headerAlignment;
+        }
+
+        internal AccessibleObject? AccessibilityObject
+        {
             get
             {
-                return header == null ? "" : header;
-            }
-            set
-            {
-                if (header != value) {
-                    header = value;
-
-                    if (listView != null) {
-                        listView.RecreateHandleInternal();
-                    }
+                if (_accessibilityObject is null)
+                {
+                    _accessibilityObject = new ListViewGroupAccessibleObject(this, ListView?.Groups.Contains(this) == false);
                 }
+
+                return _accessibilityObject;
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.HeaderAlignment"]/*' />
-        /// <devdoc>
-        ///     The alignment of the group header.
-        /// </devdoc>
-        [
-            DefaultValue(HorizontalAlignment.Left),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
-        public HorizontalAlignment HeaderAlignment {
-            get
-            {
-                return headerAlignment;
-            }
+        /// <summary>
+        ///  The text displayed in the group header.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string Header
+        {
+            get => _header ?? string.Empty;
             set
             {
-                // Verify that the value is within the enum's range.
-                //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center)){
+                if (_header == value)
+                {
+                    return;
+                }
+
+                _header = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The alignment of the group header.
+        /// </summary>
+        [DefaultValue(HorizontalAlignment.Left)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public HorizontalAlignment HeaderAlignment
+        {
+            get => _headerAlignment;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
                 }
-                if (headerAlignment != value) {
-                    headerAlignment = value;
-                    UpdateListView();
-                }
-            }
-        }
 
-        internal int ID {
-            get
-            {
-                return id;
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Items"]/*' />
-        /// <devdoc>
-        ///     The items that belong to this group.
-        /// </devdoc>
-        [Browsable(false)]
-        public ListView.ListViewItemCollection Items {
-            get
-            {
-                if (items == null) {
-                    items = new ListView.ListViewItemCollection(new ListViewGroupItemCollection(this));
-                }
-                return items;
-            }
-        }
-
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public ListView ListView
-        {
-            get
-            {
-                return listView;
-            }
-        }        
-
-        internal ListView ListViewInternal
-        {
-            set
-            {
-                if (listView != value)
+                if (_headerAlignment == value)
                 {
-                    listView = value;
+                    return;
                 }
+
+                _headerAlignment = value;
+                UpdateListView();
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Name"]/*' />
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ListViewGroupNameDescr)),
-        Browsable(true),
-        DefaultValue("")
-        ]
-        public string Name
+        /// <summary>
+        ///  The text displayed in the group footer.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string Footer
+        {
+            get => _footer ?? string.Empty;
+            set
+            {
+                if (_footer == value)
+                {
+                    return;
+                }
+
+                _footer = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The alignment of the group footer.
+        /// </summary>
+        /// <value>
+        ///  One of the <see cref="HorizontalAlignment"/> values that specifies the alignment of the footer text. The default is <see cref="HorizontalAlignment.Left"/>.
+        /// </value>
+        /// <exception cref="InvalidEnumArgumentException">
+        ///  The specified value when setting this property is not a valid <see cref="HorizontalAlignment"/> value.
+        /// </exception>
+        [DefaultValue(HorizontalAlignment.Left)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public HorizontalAlignment FooterAlignment
+        {
+            get => _footerAlignment;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
+                }
+
+                if (_footerAlignment == value)
+                {
+                    return;
+                }
+
+                _footerAlignment = value;
+                UpdateListView();
+            }
+        }
+
+        internal bool Focused { get; set; }
+
+        /// <summary>
+        ///  Controls which <see cref="ListViewGroupCollapsedState"/> the group will appear as.
+        /// </summary>
+        /// <value>
+        ///  One of the <see cref="ListViewGroupCollapsedState"/> values that specifies how the group is displayed.
+        ///  The default is <see cref="ListViewGroupCollapsedState.Default"/>.
+        /// </value>
+        /// <exception cref="InvalidEnumArgumentException">
+        ///  The specified value when setting this property is not a valid <see cref="ListViewGroupCollapsedState"/> value.
+        /// </exception>
+        [DefaultValue(ListViewGroupCollapsedState.Default)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public ListViewGroupCollapsedState CollapsedState
+        {
+            get => _collapsedState;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ListViewGroupCollapsedState.Default, (int)ListViewGroupCollapsedState.Collapsed))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewGroupCollapsedState));
+                }
+
+                if (_collapsedState == value)
+                {
+                    return;
+                }
+
+                _collapsedState = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The text displayed in the group subtitle.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string Subtitle
+        {
+            get => _subtitle ?? string.Empty;
+            set
+            {
+                if (_subtitle == value)
+                {
+                    return;
+                }
+
+                _subtitle = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  The name of the task link displayed in the group header.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [AllowNull]
+        public string TaskLink
+        {
+            get => _taskLink ?? string.Empty;
+            set
+            {
+                if (value == _taskLink)
+                {
+                    return;
+                }
+
+                _taskLink = value;
+                UpdateListView();
+            }
+        }
+
+        /// <summary>
+        ///  Gets or sets the index of the image that is displayed for the group.
+        /// </summary>
+        /// <value>
+        ///  The zero-based index of the image in the ImageList that is displayed for the group. The default is -1.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///  The value specified is less than -1.
+        /// </exception>
+        [DefaultValue(-1)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [Localizable(true)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
+        public int TitleImageIndex
         {
             get
             {
-                return this.name;
+                ImageList? imageList = ImageIndexer.ImageList;
+                return imageList is null || ImageIndexer.Index < imageList.Images.Count
+                    ? ImageIndexer.Index
+                    : imageList.Images.Count - 1;
             }
             set
             {
-                this.name = value;
+                if (value < ImageList.Indexer.DefaultIndex)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(TitleImageIndex), value, ImageList.Indexer.DefaultIndex));
+                }
+
+                if (ImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
+                {
+                    return;
+                }
+
+                ImageIndexer.Index = value;
+                UpdateListView();
             }
         }
 
+        /// <summary>
+        ///  Gets or sets the key of the image that is displayed for the group.
+        /// </summary>
+        /// <value>
+        ///  The key for the image that is displayed for the group.
+        /// </value>
+        [DefaultValue("")]
+        [TypeConverter(typeof(ImageKeyConverter))]
+        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [Localizable(true)]
+        public string TitleImageKey
+        {
+            get => ImageIndexer.Key;
+            set
+            {
+                if (ImageIndexer.Key == value && value != ImageList.Indexer.DefaultKey)
+                {
+                    return;
+                }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Tag"]/*' />
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
-        public object Tag {
-            get {
-                return userData;
-            }
-            set {
-                userData = value;
+                ImageIndexer.Key = value;
+                UpdateListView();
             }
         }
 
+        internal ListViewGroupImageIndexer ImageIndexer => _imageIndexer ??= new ListViewGroupImageIndexer(this);
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.Deserialize"]/*' />
-        private void Deserialize(SerializationInfo info, StreamingContext context) {
+        internal int ID { get; }
 
+        /// <summary>
+        ///  The items that belong to this group.
+        /// </summary>
+        [Browsable(false)]
+        public ListView.ListViewItemCollection Items => _items ??= new ListView.ListViewItemCollection(new ListViewGroupItemCollection(this));
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public ListView? ListView { get; internal set; }
+
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.ListViewGroupNameDescr))]
+        [Browsable(true)]
+        [DefaultValue("")]
+        public string? Name { get; set; }
+
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
+        public object? Tag { get; set; }
+
+        private void Deserialize(SerializationInfo info, StreamingContext context)
+        {
             int count = 0;
-            
-            foreach (SerializationEntry entry in info) {
-                if (entry.Name == "Header") {
-                    Header = (string)entry.Value;
+
+            foreach (SerializationEntry entry in info)
+            {
+                if (entry.Name == "Header")
+                {
+                    Header = (string)entry.Value!;
                 }
-                else if (entry.Name == "HeaderAlignment") {
-                    HeaderAlignment = (HorizontalAlignment)entry.Value;
+                else if (entry.Name == "HeaderAlignment")
+                {
+                    HeaderAlignment = (HorizontalAlignment)entry.Value!;
                 }
-                else if (entry.Name == "Tag") { 
+                else if (entry.Name == "Footer")
+                {
+                    Footer = (string)entry.Value!;
+                }
+                else if (entry.Name == "FooterAlignment")
+                {
+                    FooterAlignment = (HorizontalAlignment)entry.Value!;
+                }
+                else if (entry.Name == "Tag")
+                {
                     Tag = entry.Value;
                 }
-                else if (entry.Name == "ItemsCount") {
-                    count = (int)entry.Value;
+                else if (entry.Name == "ItemsCount")
+                {
+                    count = (int)entry.Value!;
                 }
-                else if (entry.Name == "Name") {
-                    Name =  (string) entry.Value;
+                else if (entry.Name == "Name")
+                {
+                    Name = (string)entry.Value!;
                 }
             }
-            if (count > 0) {
+            if (count > 0)
+            {
                 ListViewItem[] items = new ListViewItem[count];
-
-                for (int i = 0; i < count; i++) {
-                    items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem));
+                for (int i = 0; i < count; i++)
+                {
+                    items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem))!;
                 }
                 Items.AddRange(items);
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ToString"]/*' />
-        public override string ToString() {
-            return Header;
+        public override string ToString() => Header;
+
+        private void UpdateListView()
+        {
+            if (ListView != null && ListView.IsHandleCreated)
+            {
+                ListView.UpdateGroupNative(this);
+            }
         }
 
-        private void UpdateListView() {
-            if (listView != null && listView.IsHandleCreated) {
-                listView.UpdateGroupNative(this);                
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info is null)
+            {
+                throw new ArgumentNullException(nameof(info));
             }
-        }                
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.GetObjectData"]/*' />
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
-            info.AddValue("Header", this.Header);
-            info.AddValue("HeaderAlignment", this.HeaderAlignment);
-            info.AddValue("Tag", this.Tag);
-            if (!string.IsNullOrEmpty(this.Name)) {
-                info.AddValue("Name", this.Name);
+            info.AddValue(nameof(Header), Header);
+            info.AddValue(nameof(HeaderAlignment), HeaderAlignment);
+            info.AddValue(nameof(Footer), Footer);
+            info.AddValue(nameof(FooterAlignment), FooterAlignment);
+            info.AddValue(nameof(Tag), Tag);
+            if (!string.IsNullOrEmpty(Name))
+            {
+                info.AddValue(nameof(Name), Name);
             }
-            if (items != null && items.Count > 0) {
-                info.AddValue("ItemsCount", this.Items.Count);
-                for (int i = 0; i < Items.Count; i ++) {
+            if (_items != null && _items.Count > 0)
+            {
+                info.AddValue("ItemsCount", Items.Count);
+                for (int i = 0; i < Items.Count; i++)
+                {
                     info.AddValue("Item" + i.ToString(CultureInfo.InvariantCulture), Items[i], typeof(ListViewItem));
                 }
             }
         }
     }
-        
-    /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///         A collection of listview groups.
-    ///    </para>
-    /// </devdoc>
-    [ListBindable(false)]
-    public class ListViewGroupCollection : IList {
-
-        private ListView listView;
-
-        private ArrayList list;
-
-        internal ListViewGroupCollection(ListView listView) {
-            this.listView = listView;
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Count"]/*' />
-        public int Count
-        {
-            get
-            {
-                return this.List.Count;
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
-        object ICollection.SyncRoot {
-            get {
-                return this;
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
-        bool ICollection.IsSynchronized {
-            get {
-                return true;
-            }
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
-        bool IList.IsFixedSize {
-            get {
-                return false;
-            }
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IsReadOnly"]/*' />
-        /// <internalonly/>
-        bool IList.IsReadOnly {
-            get {
-                return false;
-            }
-        }
-
-        private ArrayList List
-        {
-            get
-            {
-                if (list == null) {
-                    list = new ArrayList();
-                }
-                return list;
-            }
-        }
-                
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this"]/*' />
-        public ListViewGroup this[int index] {
-            get
-            {
-                return (ListViewGroup)this.List[index];
-            }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                if (this.List.Contains(value)) {
-                    return;
-                }
-                this.List[index] = value;
-            }
-        }
-                
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this2"]/*' />
-        public ListViewGroup this[string key] {
-            get {
-
-                if (list == null) {
-                    return null;
-                }
-
-                for (int i = 0; i < list.Count; i ++) {
-                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) == 0) {
-                        return this[i];
-                    }
-                }
-
-                return null;
-            }
-            set {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                int index = -1;
-
-                if (this.list == null) {
-                    return; // nothing to do
-                }
-
-                for (int i = 0; i < this.list.Count; i ++) {
-                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) ==0) {
-                        index = i;
-                        break;
-                    }
-                }
-
-                if (index != -1) {
-                    this.list[index] = value;
-                }
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.this"]/*' />
-        /// <internalonly/>
-        object IList.this[int index] {
-            get
-            {
-                return this[index];
-            }
-            set
-            {
-                if (value is ListViewGroup) {
-                    this[index] = (ListViewGroup)value;
-                }
-            }
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add"]/*' />
-        public int Add(ListViewGroup group)
-        {
-            if (group == null)
-            {
-                throw new ArgumentNullException(nameof(group));
-            }
-
-            if (this.Contains(group)) {
-                return -1;
-            }
-
-            // Will throw InvalidOperationException if group contains items which are parented by another listView.
-            CheckListViewItems(group);
-            group.ListViewInternal = this.listView;
-            int index = this.List.Add(group);
-            if (listView.IsHandleCreated) {
-                listView.InsertGroupInListView(this.List.Count, group);
-                MoveGroupItems(group);
-            }            
-            return index;
-        }        
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add1"]/*' />
-        public ListViewGroup Add(string key, string headerText)
-        {
-            ListViewGroup group = new ListViewGroup(key, headerText);
-            this.Add(group);
-            return group;
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Add"]/*' />
-        /// <internalonly/>
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "value" is the name of the param passed in.
-                                                                                                        // So we don't have to localize it.
-        ]
-        int IList.Add(object value) {
-            if (value is ListViewGroup) {
-                return Add((ListViewGroup)value);
-            }
-            throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
-        }
-                
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange"]/*' />
-        public void AddRange(ListViewGroup[] groups)
-        {
-            if (groups == null)
-            {
-                throw new ArgumentNullException(nameof(groups));
-            }
-
-            for(int i=0; i < groups.Length; i++) {
-                Add(groups[i]);
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange2"]/*' />
-        public void AddRange(ListViewGroupCollection groups)
-        {
-            if (groups == null)
-            {
-                throw new ArgumentNullException(nameof(groups));
-            }
-
-            for(int i=0; i < groups.Count; i++) {
-                Add(groups[i]);
-            }
-        }
-
-        private void CheckListViewItems(ListViewGroup group) {
-            for (int i = 0; i < group.Items.Count; i ++) {
-                ListViewItem item = group.Items[i];
-                if (item.ListView != null && item.ListView != this.listView) {
-                    throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text));
-                }
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Clear"]/*' />
-        public void Clear() {
-            if (listView.IsHandleCreated) {
-                for(int i=0; i < Count; i++) {
-                    listView.RemoveGroupFromListView(this[i]);
-                }
-            }
-            // Dissociate groups from the ListView
-            //
-            for(int i=0; i < Count; i++) {
-                this[i].ListViewInternal = null;
-            }
-            this.List.Clear();
-
-            // we have to tell the listView that there are no more groups
-            // so the list view knows to remove items from the default group
-            this.listView.UpdateGroupView();
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Contains"]/*' />
-        public bool Contains(ListViewGroup value) {
-            return this.List.Contains(value);
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Contains"]/*' />
-        /// <internalonly/>
-        bool IList.Contains(object value)
-        {
-            if (value is ListViewGroup) {
-                return Contains((ListViewGroup)value);
-            }
-            return false;
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.CopyTo"]/*' />
-        public void CopyTo(Array array, int index) {
-            this.List.CopyTo(array, index);
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.GetEnumerator"]/*' />
-        public IEnumerator GetEnumerator()
-        {
-            return this.List.GetEnumerator();
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IndexOf"]/*' />
-        public int IndexOf(ListViewGroup value) {
-            return this.List.IndexOf(value);
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
-        int IList.IndexOf(object value) {
-            if (value is ListViewGroup) {
-                return IndexOf((ListViewGroup)value);
-            }
-            return -1;
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Insert"]/*' />
-        public void Insert(int index, ListViewGroup group) {
-            if (group == null)
-            {
-                throw new ArgumentNullException(nameof(group));
-            }
-
-            if (Contains(group)) {
-                return;
-            }
-            group.ListViewInternal = this.listView;
-            this.List.Insert(index, group);
-            if (listView.IsHandleCreated) {
-                listView.InsertGroupInListView(index, group);
-                MoveGroupItems(group);
-            }            
-        }       
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Insert"]/*' />
-        /// <internalonly/>
-        void IList.Insert(int index, object value) {
-            if (value is ListViewGroup) {
-                Insert(index, (ListViewGroup)value);
-            }            
-        }
-
-        private void MoveGroupItems(ListViewGroup group) {
-            Debug.Assert(listView.IsHandleCreated, "MoveGroupItems pre-condition: listView handle must be created");
-
-            foreach(ListViewItem item in group.Items) {
-                if (item.ListView == this.listView) {
-                    item.UpdateStateToListView(item.Index);                    
-                }
-            }
-        }
-       
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Remove"]/*' />
-        public void Remove(ListViewGroup group) {
-            group.ListViewInternal = null;            
-            this.List.Remove(group);
-
-            if (listView.IsHandleCreated) {
-                listView.RemoveGroupFromListView(group);
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Remove"]/*' />
-        /// <internalonly/>
-        void IList.Remove(object value)
-        {
-            if (value is ListViewGroup) {
-                Remove((ListViewGroup)value);
-            }
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.RemoveAt"]/*' />
-        public void RemoveAt(int index) {
-            Remove(this[index]);
-        }        
-    }        
 }
-

@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms
 {
-    public enum DataGridViewSelectionMode 
+    public enum DataGridViewSelectionMode
     {
         CellSelect = 0,
         FullRowSelect = 1,

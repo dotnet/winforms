@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     public class DataGridViewCellFormattingEventArgs : ConvertEventArgs
@@ -29,9 +31,9 @@ namespace System.Windows.Forms
         public DataGridViewCellStyle CellStyle { get; set; }
 
         public int ColumnIndex { get; }
-        
+
         public bool FormattingApplied { get; set; }
-        
+
         public int RowIndex { get; }
     }
 }

@@ -8,7 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SelectedGridItemChangedEventArgsTests
+    // NB: doesn't require thread affinity
+    public class SelectedGridItemChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_GridItem_Object_TestData()
         {

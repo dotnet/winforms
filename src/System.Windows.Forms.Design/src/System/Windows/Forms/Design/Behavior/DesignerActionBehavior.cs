@@ -6,15 +6,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This is the Behavior that represents DesignerActions for a particular control.
-    /// The DesignerActionBehavior is responsible for responding to the MouseDown message and either 1) selecting the control and changing the DesignerActionGlyph's image or 2) building up a chrome menu  and requesting it to be shown.
-    /// Also, this Behavior acts as a proxy between "clicked" context menu items and the actual DesignerActions that they represent.
+    ///  This is the Behavior that represents DesignerActions for a particular control.  The DesignerActionBehavior is responsible for responding to the MouseDown message and either 1) selecting the control and changing the  DesignerActionGlyph's image or 2) building up a chrome menu  and requesting it to be shown. Also, this Behavior acts as a proxy between "clicked" context menu items and the actual DesignerActions that they represent.
     /// </summary>
     internal sealed class DesignerActionBehavior : Behavior
     {
@@ -22,10 +19,10 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly DesignerActionUI _parentUI; //ptr to the parenting UI, used for showing menus and setting selection
         private DesignerActionListCollection _actionLists; //all the shortcuts!
         private readonly IServiceProvider _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
-        private bool _ignoreNextMouseUp = false;
+        private bool _ignoreNextMouseUp;
 
         /// <summary>
-        /// Constructor that calls base and caches off the action lists.
+        ///  Constructor that calls base and caches off the action lists.
         /// </summary>
         internal DesignerActionBehavior(IServiceProvider serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
         {
@@ -36,8 +33,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the collection of DesignerActionLists this Behavior is managing.
-        /// These will be dynamically updated (some can be removed, new ones can be added, etc...).
+        ///  Returns the collection of DesignerActionLists this Behavior is managing. These will be dynamically updated (some can be removed, new ones can be added, etc...).
         /// </summary>
         internal DesignerActionListCollection ActionLists
         {
@@ -46,7 +42,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the parenting UI (a DesignerActionUI)
+        ///  Returns the parenting UI (a DesignerActionUI)
         /// </summary>
         internal DesignerActionUI ParentUI
         {
@@ -54,7 +50,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Returns the Component that this glyph is attached to.
+        ///  Returns the Component that this glyph is attached to.
         /// </summary>
         internal IComponent RelatedComponent
         {
@@ -62,44 +58,39 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Hides the designer action panel UI.
+        ///  Hides the designer action panel UI.
         /// </summary>
         internal void HideUI()
         {
             ParentUI.HideDesignerActionPanel();
         }
 
-
         internal DesignerActionPanel CreateDesignerActionPanel(IComponent relatedComponent)
         {
             // BUILD AND SHOW THE CHROME UI
             DesignerActionListCollection lists = new DesignerActionListCollection();
             lists.AddRange(ActionLists);
-
             DesignerActionPanel dap = new DesignerActionPanel(_serviceProvider);
             dap.UpdateTasks(lists, new DesignerActionListCollection(), string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name), null);
             return dap;
         }
 
         /// <summary>
-        /// Shows the designer action panel UI associated with this glyph.
+        ///  Shows the designer action panel UI associated with this glyph.
         /// </summary>
         internal void ShowUI(Glyph g)
         {
-
             if (!(g is DesignerActionGlyph glyph))
             {
                 Debug.Fail("Why are we trying to 'showui' on a glyph that's not a DesignerActionGlyph?");
                 return;
             }
-
             DesignerActionPanel dap = CreateDesignerActionPanel(RelatedComponent);
             ParentUI.ShowDesignerActionPanel(RelatedComponent, dap, glyph);
         }
 
         internal bool IgnoreNextMouseUp
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             set
             {
                 _ignoreNextMouseUp = value;
@@ -113,17 +104,16 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
-        {
+        { // we take the msg
             return (!ParentUI.IsDesignerActionPanelVisible);
         }
 
-
         /// <summary>
-        /// In response to a MouseUp, we will either 1) select the Glyph and control if not selected, or 2) Build up our context menu representing our DesignerActions and show it.
+        ///  In response to a MouseUp, we will either 1) select the Glyph and control if not selected, or 2) Build up our context menu representing our DesignerActions and show it.
         /// </summary>
         public override bool OnMouseUp(Glyph g, MouseButtons button)
         {
-            if (button != MouseButtons.Left || ParentUI == null)
+            if (button != MouseButtons.Left || ParentUI is null)
             {
                 return true;
             }

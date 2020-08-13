@@ -4,9 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that will handle the the <see cref='System.Windows.Forms.ListView.OnColumnClick'/>
-    /// event of a <see cref='System.Windows.Forms.ListView'/>
-    /// </devdoc>
-    public delegate void ColumnClickEventHandler(object sender, ColumnClickEventArgs e);
+    /// <summary>
+    /// Represents a method that will handle the the <see cref='ListView.OnColumnClick'/> event.
+    /// </summary>
+    public delegate void ColumnClickEventHandler(object? sender, ColumnClickEventArgs e);
 }

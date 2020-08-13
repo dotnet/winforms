@@ -13,37 +13,39 @@ using System.Reflection;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This serializer serializes collections.  This can either create statements or expressions.  It will create an expression and assign it to the statement in the current context stack if the object is an array.  If it is a collection with an add range or similar method, it will create a statement calling the method.
+    ///  This serializer serializes collections.  This can either create statements or expressions.  It will create an expression and assign it to the statement in the current context stack if the object is an array.  If it is a collection with an add range or similar method, it will create a statement calling the method.
     /// </summary>
     public class CollectionCodeDomSerializer : CodeDomSerializer
     {
         private static CollectionCodeDomSerializer s_defaultSerializer;
 
         /// <summary>
-        /// Retrieves a default static instance of this serializer.
+        ///  Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static CollectionCodeDomSerializer GetDefault()
+        internal new static CollectionCodeDomSerializer Default
         {
-            if (s_defaultSerializer == null)
+            get
             {
-                s_defaultSerializer = new CollectionCodeDomSerializer();
+                if (s_defaultSerializer is null)
+                {
+                    s_defaultSerializer = new CollectionCodeDomSerializer();
+                }
+                return s_defaultSerializer;
             }
-            return s_defaultSerializer;
         }
 
         /// <summary>
-        /// Computes the delta between an existing collection and a modified one. This is for the case of inherited items that have collection properties so we only generate Add/AddRange calls for the items that have been added.  It works by Hashing up the items in the original collection and then walking the modified collection and only returning those items which do not exist in the base collection.
+        ///  Computes the delta between an existing collection and a modified one. This is for the case of inherited items that have collection properties so we only generate Add/AddRange calls for the items that have been added.  It works by Hashing up the items in the original collection and then walking the modified collection and only returning those items which do not exist in the base collection.
         /// </summary>
         private ICollection GetCollectionDelta(ICollection original, ICollection modified)
         {
-
-            if (original == null || modified == null || original.Count == 0)
+            if (original is null || modified is null || original.Count == 0)
             {
                 return modified;
             }
 
             IEnumerator modifiedEnum = modified.GetEnumerator();
-            if (modifiedEnum == null)
+            if (modifiedEnum is null)
             {
                 Debug.Fail("Collection of type " + modified.GetType().FullName + " doesn't return an enumerator");
                 return modified;
@@ -74,7 +76,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (originalValues.Contains(value))
                 {
                     // we've got one we need to remove, so  create our array list, and push all the values we've passed into it.
-                    if (result == null)
+                    if (result is null)
                     {
                         result = new ArrayList();
                         modifiedEnum.Reset();
@@ -113,11 +115,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Checks the attributes on this method to see if they support serialization.
+        ///  Checks the attributes on this method to see if they support serialization.
         /// </summary>
         protected bool MethodSupportsSerialization(MethodInfo method)
         {
-            if (method == null)
+            if (method is null)
             {
                 throw new ArgumentNullException(nameof(method));
             }
@@ -137,21 +139,21 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            if (manager == null)
+            if (manager is null)
             {
                 throw new ArgumentNullException(nameof(manager));
             }
 
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
             object result = null;
-            using (TraceScope("CollectionCodeDomSerializer::Serialize"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
             {
                 // We serialize collections as follows:
                 //      If the collection is an array, we write out the array.
@@ -179,10 +181,10 @@ namespace System.ComponentModel.Design.Serialization
                 if (value is ICollection collection)
                 {
                     ICollection subset = collection;
-                    Type collectionType = cxt == null ? collection.GetType() : cxt.ExpressionType;
+                    Type collectionType = cxt is null ? collection.GetType() : cxt.ExpressionType;
                     bool isArray = typeof(Array).IsAssignableFrom(collectionType);
                     // If we don't have a target expression and this isn't an array, let's try to create one.
-                    if (target == null && !isArray)
+                    if (target is null && !isArray)
                     {
                         target = SerializeCreationExpression(manager, collection, out bool isComplete);
                         if (isComplete)
@@ -205,12 +207,12 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             CodeStatementCollection resultCol = result as CodeStatementCollection;
                             // If non empty collection is being serialized, but no statements were generated, there is no need to clear.
-                            if (collection.Count > 0 && (result == null || (resultCol != null && resultCol.Count == 0)))
+                            if (collection.Count > 0 && (result is null || (resultCol != null && resultCol.Count == 0)))
                             {
                                 return null;
                             }
 
-                            if (resultCol == null)
+                            if (resultCol is null)
                             {
                                 resultCol = new CodeStatementCollection();
                                 if (result is CodeStatement resultStmt)
@@ -231,15 +233,15 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    Debug.Fail("Collection serializer invoked for non-collection: " + (value == null ? "(null)" : value.GetType().Name));
-                    TraceError("Collection serializer invoked for non collection: {0}", (value == null ? "(null)" : value.GetType().Name));
+                    Debug.Fail("Collection serializer invoked for non-collection: " + (value is null ? "(null)" : value.GetType().Name));
+                    TraceError("Collection serializer invoked for non collection: {0}", (value is null ? "(null)" : value.GetType().Name));
                 }
             }
             return result;
         }
 
         /// <summary>
-        /// Given a set of methods and objects, determines the method with the correct of  parameter type for all objects.
+        ///  Given a set of methods and objects, determines the method with the correct of  parameter type for all objects.
         /// </summary>
         private static MethodInfo ChooseMethodByType(TypeDescriptionProvider provider, List<MethodInfo> methods, ICollection values)
         {
@@ -251,7 +253,7 @@ namespace System.ComponentModel.Design.Serialization
                 Type objType = provider.GetReflectionType(obj);
                 MethodInfo candidate = null;
                 Type candidateType = null;
-                if (final == null || (finalType != null && !finalType.IsAssignableFrom(objType)))
+                if (final is null || (finalType != null && !finalType.IsAssignableFrom(objType)))
                 {
                     foreach (MethodInfo method in methods)
                     {
@@ -272,7 +274,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                                 else
                                 {
-                                    if (candidate == null)
+                                    if (candidate is null)
                                     {
                                         candidate = method;
                                         candidateType = type;
@@ -291,7 +293,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (final == null)
+                if (final is null)
                 {
                     final = candidate;
                     finalType = candidateType;
@@ -301,14 +303,29 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given collection.  targetExpression will refer to the expression used to rever to the  collection, but it can be null.
+        ///  Serializes the given collection.  targetExpression will refer to the expression used to rever to the  collection, but it can be null.
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
-            if (originalCollection == null) throw new ArgumentNullException(nameof(originalCollection));
-            if (valuesToSerialize == null) throw new ArgumentNullException(nameof(valuesToSerialize));
+            if (manager is null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (targetType is null)
+            {
+                throw new ArgumentNullException(nameof(targetType));
+            }
+
+            if (originalCollection is null)
+            {
+                throw new ArgumentNullException(nameof(originalCollection));
+            }
+
+            if (valuesToSerialize is null)
+            {
+                throw new ArgumentNullException(nameof(valuesToSerialize));
+            }
 
             object result = null;
             bool serialized = false;
@@ -334,7 +351,7 @@ namespace System.ComponentModel.Design.Serialization
                 Trace("Searching for AddRange or Add");
                 // Use the TargetFrameworkProviderService to create a provider, or use the default for the collection if the service is not available.  Since TargetFrameworkProvider reflection types are not compatible with RuntimeTypes, they can only be used with other reflection types from the same provider.
                 TypeDescriptionProvider provider = GetTargetFrameworkProvider(manager, originalCollection);
-                if (provider == null)
+                if (provider is null)
                 {
                     provider = TypeDescriptor.GetProvider(originalCollection);
                 }
@@ -401,12 +418,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given array.
+        ///  Serializes the given array.
         /// </summary>
         private CodeArrayCreateExpression SerializeArray(IDesignerSerializationManager manager, Type targetType, ICollection array, ICollection valuesToSerialize)
         {
             CodeArrayCreateExpression result = null;
-            using (TraceScope("CollectionCodeDomSerializer::SerializeArray"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeArray)))
             {
                 if (((Array)array).Rank != 1)
                 {
@@ -484,7 +501,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given collection by creating multiple calls to an Add method.
+        ///  Serializes the given collection by creating multiple calls to an Add method.
         /// </summary>
         private object SerializeViaAdd(
             IDesignerSerializationManager manager,
@@ -494,7 +511,7 @@ namespace System.ComponentModel.Design.Serialization
             ICollection valuesToSerialize)
         {
             CodeStatementCollection statements = new CodeStatementCollection();
-            using (TraceScope("CollectionCodeDomSerializer::SerializeViaAdd"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeViaAdd)))
             {
                 Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
                 // Here we need to invoke Add once for each and every item in the collection. We can re-use the property reference and method reference, but we will need to recreate the invoke statement each time.
@@ -512,9 +529,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {
@@ -531,7 +552,7 @@ namespace System.ComponentModel.Design.Serialization
                             };
                             CodeExpression serializedObj = null;
 
-                            // If there is an expression context on the stack at this point, 
+                            // If there is an expression context on the stack at this point,
                             // we need to fix up the ExpressionType on it to be the element type.
                             ExpressionContext newCxt = null;
 
@@ -572,7 +593,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Serializes the given collection by creating an array and passing it to the AddRange method.
+        ///  Serializes the given collection by creating an array and passing it to the AddRange method.
         /// </summary>
         private object SerializeViaAddRange(
             IDesignerSerializationManager manager,
@@ -582,7 +603,7 @@ namespace System.ComponentModel.Design.Serialization
             ICollection valuesToSerialize)
         {
             CodeStatementCollection statements = new CodeStatementCollection();
-            using (TraceScope("CollectionCodeDomSerializer::SerializeViaAddRange"))
+            using (TraceScope("CollectionCodeDomSerializer::" + nameof(SerializeViaAddRange)))
             {
                 Trace("Elements: {0}", valuesToSerialize.Count.ToString(CultureInfo.InvariantCulture));
 
@@ -600,9 +621,13 @@ namespace System.ComponentModel.Design.Serialization
                             if (ia != null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                                {
                                     genCode = false;
+                                }
                                 else
+                                {
                                     genCode = true;
+                                }
                             }
                             else
                             {
@@ -676,7 +701,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Returns true if we should clear the collection contents.
+        ///  Returns true if we should clear the collection contents.
         /// </summary>
         private bool ShouldClearCollection(IDesignerSerializationManager manager, ICollection collection)
         {
@@ -699,8 +724,8 @@ namespace System.ComponentModel.Design.Serialization
 
             if (shouldClear)
             {
-                MethodInfo clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, new Type[0], null);
-                if (clearMethod == null || !MethodSupportsSerialization(clearMethod))
+                MethodInfo clearMethod = TypeDescriptor.GetReflectionType(collection).GetMethod("Clear", BindingFlags.Public | BindingFlags.Instance, null, Array.Empty<Type>(), null);
+                if (clearMethod is null || !MethodSupportsSerialization(clearMethod))
                 {
                     shouldClear = false;
                 }

@@ -8,8 +8,8 @@ namespace System.Windows.Forms
     {
         StackWithOverflow = 0x0,
         HorizontalStackWithOverflow = 0x1,
-        VerticalStackWithOverflow =  0x2,
+        VerticalStackWithOverflow = 0x2,
         Flow = 0x3,
-        Table = 0x4    
+        Table = 0x4
     }
 }

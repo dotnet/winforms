@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// A delegate for an updown event handler.
-    /// </devdoc>
-    public delegate void UpDownEventHandler(object source, UpDownEventArgs e);
+    /// <summary>
+    ///  A delegate for an updown event handler.
+    /// </summary>
+    public delegate void UpDownEventHandler(object? source, UpDownEventArgs e);
 }

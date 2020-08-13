@@ -4,16 +4,16 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.ListView.OnColumnClick'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='ListView.OnColumnClick'/> event.
+    /// </summary>
     public class ColumnClickEventArgs : EventArgs
     {
         public ColumnClickEventArgs(int column)
         {
             Column = column;
         }
-        
+
         public int Column { get; }
     }
 }

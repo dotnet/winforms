@@ -8,22 +8,23 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PaintEventArgsTests
+    // NB: doesn't require thread affinity
+    public class PaintEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_Graphics_Rectangle_TestData()
+        public static IEnumerable<object[]> Ctor_Rectangle_TestData()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-
-            yield return new object[] { graphics, Rectangle.Empty };
-            yield return new object[] { graphics, new Rectangle(1, 2, 3, 4) };
-            yield return new object[] { graphics, new Rectangle(-1, -2, -3, -4) };
+            yield return new object[] { Rectangle.Empty };
+            yield return new object[] { new Rectangle(1, 2, 3, 4) };
+            yield return new object[] { new Rectangle(-1, -2, -3, -4) };
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_Graphics_Rectangle_TestData))]
-        public void Ctor_Graphics_Rectangle(Graphics graphics, Rectangle clipRect)
+        [MemberData(nameof(Ctor_Rectangle_TestData))]
+        public void Ctor_Graphics_Rectangle(Rectangle clipRect)
         {
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+
             var e = new PaintEventArgs(graphics, clipRect);
             Assert.Equal(graphics, e.Graphics);
             Assert.Equal(clipRect, e.ClipRectangle);
@@ -32,14 +33,14 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Ctor_NullGraphics_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("graphics", () => new PaintEventArgs(null, new Rectangle(1, 2, 3, 4)));
+            Assert.Throws<ArgumentNullException>("graphics", () => new PaintEventArgs((Graphics)null, new Rectangle(1, 2, 3, 4)));
         }
 
         [Fact]
         public void Dispose_Invoke_Success()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
             var e = new PaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
             e.Dispose();
             e.Dispose();
@@ -50,8 +51,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(false)]
         public void Dispose_InvokeDisposing_Success(bool disposing)
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
             var e = new SubPaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
             e.DisposeEntry(disposing);
             e.DisposeEntry(disposing);

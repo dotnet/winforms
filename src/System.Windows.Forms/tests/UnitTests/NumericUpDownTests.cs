@@ -6,12 +6,12 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class NumericUpDownTests
+    public class NumericUpDownTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void NumericUpDown_Constructor()
         {
-            var nud = new NumericUpDown();
+            using var nud = new NumericUpDown();
 
             Assert.NotNull(nud);
             Assert.Equal("0", nud.Text);

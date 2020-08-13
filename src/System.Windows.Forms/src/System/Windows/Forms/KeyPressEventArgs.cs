@@ -6,30 +6,29 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.KeyPress'/> event.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Provides data for the <see cref='Control.KeyPress'/> event.
+    /// </summary>
     public class KeyPressEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.KeyPressEventArgs'/>
-        /// class.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='KeyPressEventArgs'/>
+        ///  class.
+        /// </summary>
         public KeyPressEventArgs(char keyChar)
         {
             KeyChar = keyChar;
         }
 
-        /// <devdoc>
-        /// Gets the character corresponding to the key pressed.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the character corresponding to the key pressed.
+        /// </summary>
         public char KeyChar { get; set; }
 
-        /// <devdoc>
-        /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.Control.KeyPress'/>
-        /// event was handled.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets or sets a value indicating whether the <see cref='Control.KeyPress'/>
+        ///  event was handled.
+        /// </summary>
         public bool Handled { get; set; }
     }
 }

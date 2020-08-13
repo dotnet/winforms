@@ -2,26 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the collection of data bindings for a control.
-    /// </devdoc>
+    /// <summary>
+    ///  Represents the collection of data bindings for a control.
+    /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     [Editor("System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing, typeof(UITypeEditor))]
     [TypeConverter("System.Windows.Forms.Design.ControlBindingsConverter, " + AssemblyRef.SystemDesign)]
     public class ControlBindingsCollection : BindingsCollection
     {
-        private IBindableComponent _control;
+        private readonly IBindableComponent _control;
 
         public ControlBindingsCollection(IBindableComponent control)
         {
-            this._control = control;
+            _control = control;
         }
 
         public IBindableComponent BindableComponent => _control;
@@ -44,22 +45,22 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Adds the binding to the collection. An ArgumentNullException is thrown if this
-        /// binding is null. An exception is thrown if a binding to the same target and
-        /// Property as an existing binding or if the binding's column isn't a valid column
-        /// given this DataSource.Table's schema.
-        /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// <summary>
+        ///  Adds the binding to the collection. An ArgumentNullException is thrown if this
+        ///  binding is null. An exception is thrown if a binding to the same target and
+        ///  Property as an existing binding or if the binding's column isn't a valid column
+        ///  given this DataSource.Table's schema.
+        ///  Fires the CollectionChangedEvent.
+        /// </summary>
         public new void Add(Binding binding) => base.Add(binding);
 
-        /// <devdoc>
-        /// Creates the binding and adds it to the collection. An InvalidBindingException is
-        /// thrown if this binding can't be constructed. An exception is thrown if a binding
-        /// to the same target and Property as an existing binding or if the binding's column
-        /// isn't a valid column given this DataSource.Table's schema.
-        /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates the binding and adds it to the collection. An InvalidBindingException is
+        ///  thrown if this binding can't be constructed. An exception is thrown if a binding
+        ///  to the same target and Property as an existing binding or if the binding's column
+        ///  isn't a valid column given this DataSource.Table's schema.
+        ///  Fires the CollectionChangedEvent.
+        /// </summary>
         public Binding Add(string propertyName, object dataSource, string dataMember)
         {
             return Add(propertyName, dataSource, dataMember, false, DefaultDataSourceUpdateMode, null, string.Empty, null);
@@ -87,7 +88,7 @@ namespace System.Windows.Forms
 
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
-            if (dataSource == null)
+            if (dataSource is null)
             {
                 throw new ArgumentNullException(nameof(dataSource));
             }
@@ -97,16 +98,16 @@ namespace System.Windows.Forms
             return binding;
         }
 
-        /// <devdoc>
-        /// Creates the binding and adds it to the collection. An InvalidBindingException is
-        /// thrown if this binding can't be constructed. An exception is thrown if a binding to
-        /// the same target and Property as an existing binding or if the binding's column isn't
-        /// a valid column given this DataSource.Table's schema.
-        /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates the binding and adds it to the collection. An InvalidBindingException is
+        ///  thrown if this binding can't be constructed. An exception is thrown if a binding to
+        ///  the same target and Property as an existing binding or if the binding's column isn't
+        ///  a valid column given this DataSource.Table's schema.
+        ///  Fires the CollectionChangedEvent.
+        /// </summary>
         protected override void AddCore(Binding dataBinding)
         {
-            if (dataBinding == null)
+            if (dataBinding is null)
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
@@ -140,10 +141,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Clears the collection of any bindings.
-        /// Fires the CollectionChangedEvent.
-        /// </devdoc>
+        /// <summary>
+        ///  Clears the collection of any bindings.
+        ///  Fires the CollectionChangedEvent.
+        /// </summary>
         public new void Clear() => base.Clear();
 
         protected override void ClearCore()
@@ -160,24 +161,24 @@ namespace System.Windows.Forms
 
         public DataSourceUpdateMode DefaultDataSourceUpdateMode { get; set; } = DataSourceUpdateMode.OnValidation;
 
-        /// <devdoc>
-        /// Removes the given binding from the collection.
-        /// An ArgumentNullException is thrown if this binding is null. An ArgumentException is
-        /// thrown if this binding doesn't belong to this collection.
-        /// The CollectionChanged event is fired if it succeeds.
-        /// </devdoc>
+        /// <summary>
+        ///  Removes the given binding from the collection.
+        ///  An ArgumentNullException is thrown if this binding is null. An ArgumentException is
+        ///  thrown if this binding doesn't belong to this collection.
+        ///  The CollectionChanged event is fired if it succeeds.
+        /// </summary>
         public new void Remove(Binding binding) => base.Remove(binding);
 
-        /// <devdoc>
-        /// Removes the given binding from the collection.
-        /// It throws an IndexOutOfRangeException if this doesn't have a valid binding.
-        /// The CollectionChanged event is fired if it succeeds.
-        /// </devdoc>
+        /// <summary>
+        ///  Removes the given binding from the collection.
+        ///  It throws an IndexOutOfRangeException if this doesn't have a valid binding.
+        ///  The CollectionChanged event is fired if it succeeds.
+        /// </summary>
         public new void RemoveAt(int index) => base.RemoveAt(index);
 
         protected override void RemoveCore(Binding dataBinding)
         {
-            if (dataBinding == null)
+            if (dataBinding is null)
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }

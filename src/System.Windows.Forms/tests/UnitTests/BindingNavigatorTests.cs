@@ -10,32 +10,32 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingNavigatorTests
+    public class BindingNavigatorTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void BindingNavigator_Constructor()
         {
-            var bn = new BindingNavigator();
+            using var bn = new BindingNavigator();
 
             Assert.NotNull(bn);
         }
-        
-       [Fact]
+
+        [WinFormsFact]
         public void BindingNavigator_ConstructorBindingSource()
         {
-            var bindingSource = new BindingSource();
+            using var bindingSource = new BindingSource();
             var data = new List<string>() { "Foo", "Bar" };
             bindingSource.DataSource = data;
 
-            var bn = new BindingNavigator(bindingSource);
+            using var bn = new BindingNavigator(bindingSource);
 
             Assert.NotNull(bn);
             Assert.Equal(bindingSource, bn.BindingSource);
-            
+
             // need more thorough binding source testing
         }
 
-        [Fact]
+        [WinFormsFact]
         public void BindingNavigator_ConstructorIContainer()
         {
             IContainer nullContainer = null;
@@ -43,18 +43,18 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<BindingNavigator>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new BindingNavigator(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new BindingNavigator(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
-            var bn = new BindingNavigator(mockContainer.Object);
+            using var bn = new BindingNavigator(mockContainer.Object);
             Assert.NotNull(bn);
             mockContainer.Verify(x => x.Add(bn));
         }
-        
-        [Fact]
+
+        [WinFormsFact]
         public void BindingNavigator_ConstructorBool()
         {
-            var bn = new BindingNavigator(true);
+            using var bn = new BindingNavigator(true);
 
             Assert.NotNull(bn);
 
@@ -98,9 +98,9 @@ namespace System.Windows.Forms.Tests
                 SR.BindingNavigatorDeleteItemText
             };
 
-            for (var i=0; i<items.Count; i++)
+            for (var i = 0; i < items.Count; i++)
             {
-                var item = items[i];
+                ToolStripItem item = items[i];
                 Assert.NotNull(item);
                 Assert.Equal(itemNames[i], item.Name.Trim());
                 Assert.Equal(itemTexts[i], item.Text.Trim());

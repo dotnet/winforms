@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="de" original="../SR.resx">
+    <body>
+      <trans-unit id="COM2UnhandledVT">
+        <source>Unhandled VT: {0}.</source>
+        <target state="translated">Unbehandelter VT: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyValueInvalidEntry">
+        <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
+        <target state="translated">Mindestens ein Eintrag im IDictionary-Parameter ist ungültig. Stellen Sie sicher, dass alle Werte den Eigenschaften des Objekts entsprechen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextParseFailedFormat">
+        <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
+        <target state="translated">Fehler beim Analysieren des erwarteten Texts Text({0}) im Format: {1}.</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -7,21 +7,20 @@ using System.Collections;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The extender provider service actually provides two services:  IExtenderProviderService, which allows other objects to add and remove extender providers, and IExtenderListService, which is used by TypeDescriptor to discover the set of extender providers.
+    ///  The extender provider service actually provides two services: IExtenderProviderService,
+    ///  which allows other objects to add and remove extender providers, and IExtenderListService,
+    ///  which is used by TypeDescriptor to discover the set of extender providers.
     /// </summary>
     internal sealed class ExtenderProviderService : IExtenderProviderService, IExtenderListService
     {
         private ArrayList _providers;
 
-        /// <summary>
-        /// Internal ctor to prevent semitrust from creating us.
-        /// </summary>
         internal ExtenderProviderService()
         {
         }
 
         /// <summary>
-        /// Gets the set of extender providers for the component.
+        ///  Gets the set of extender providers for the component.
         /// </summary>
         IExtenderProvider[] IExtenderListService.GetExtenderProviders()
         {
@@ -31,46 +30,43 @@ namespace System.ComponentModel.Design
                 _providers.CopyTo(providers, 0);
                 return providers;
             }
-            return new IExtenderProvider[0];
+            return Array.Empty<IExtenderProvider>();
         }
 
         /// <summary>
-        /// Adds an extender provider.
+        ///  Adds an extender provider.
         /// </summary>
         void IExtenderProviderService.AddExtenderProvider(IExtenderProvider provider)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 throw new ArgumentNullException(nameof(provider));
             }
 
-            if (_providers == null)
+            if (_providers is null)
             {
                 _providers = new ArrayList(4);
             }
 
             if (_providers.Contains(provider))
             {
-                throw new ArgumentException(string.Format(SR.ExtenderProviderServiceDuplicateProvider, provider));
+                throw new ArgumentException(string.Format(SR.ExtenderProviderServiceDuplicateProvider, provider), nameof(provider));
             }
 
             _providers.Add(provider);
         }
 
         /// <summary>
-        /// Removes an extender provider.
+        ///  Removes an extender provider.
         /// </summary>
         void IExtenderProviderService.RemoveExtenderProvider(IExtenderProvider provider)
         {
-            if (provider == null)
+            if (provider is null)
             {
                 throw new ArgumentNullException(nameof(provider));
             }
 
-            if (_providers != null)
-            {
-                _providers.Remove(provider);
-            }
+            _providers?.Remove(provider);
         }
     }
 }

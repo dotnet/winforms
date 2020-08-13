@@ -11,7 +11,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellStyleTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewCellStyleTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewCellStyle_Ctor_Default()
@@ -119,7 +120,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.Alignment);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Alignment = value;
             Assert.Equal(value, style.Alignment);
         }
@@ -133,7 +134,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void DataGridViewCellStyle_BackColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -142,7 +143,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.BackColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.BackColor = value;
             Assert.Equal(value, style.BackColor);
         }
@@ -178,7 +179,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.DataSourceNullValue = value;
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
@@ -196,7 +197,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.DataSourceNullValue = value;
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
@@ -214,7 +215,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.DataSourceNullValue = value;
             Assert.Equal(value, style.DataSourceNullValue);
             Assert.Equal(expectedIsDataSourceNullValueDefault, style.IsDataSourceNullValueDefault);
@@ -274,7 +275,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.Font);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Font = value;
             Assert.Equal(value, style.Font);
         }
@@ -300,7 +301,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.ForeColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.ForeColor = value;
             Assert.Equal(value, style.ForeColor);
         }
@@ -317,30 +318,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
             {
                 Format = value
             };
-            Assert.Equal(value ?? string.Empty, style.Format);
+            Assert.Equal(expected, style.Format);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Format = value;
-            Assert.Equal(value ?? string.Empty, style.Format);
+            Assert.Equal(expected, style.Format);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
             {
                 Format = "value"
             };
             style.Format = value;
-            Assert.Equal(value ?? string.Empty, style.Format);
+            Assert.Equal(expected, style.Format);
         }
 
         public static IEnumerable<object[]> FormatProvider_TestData()
@@ -362,7 +363,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, style.FormatProvider);
             Assert.Equal(expectedIsFormatProviderDefault, style.IsFormatProviderDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.FormatProvider = value;
             Assert.Equal(expected, style.FormatProvider);
             Assert.Equal(expectedIsFormatProviderDefault, style.IsFormatProviderDefault);
@@ -400,7 +401,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.NullValue = value;
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
@@ -418,7 +419,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.NullValue = value;
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
@@ -436,7 +437,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.NullValue = value;
             Assert.Equal(value, style.NullValue);
             Assert.Equal(expectedIsNullValueDefault, style.IsNullValueDefault);
@@ -503,13 +504,13 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expected, style.Padding);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Padding = value;
             Assert.Equal(expected, style.Padding);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void DataGridViewCellStyle_SelectionBackColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -518,7 +519,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.SelectionBackColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.SelectionBackColor = value;
             Assert.Equal(value, style.SelectionBackColor);
         }
@@ -544,7 +545,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.SelectionForeColor);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.SelectionForeColor = value;
             Assert.Equal(value, style.SelectionForeColor);
         }
@@ -568,11 +569,11 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, style.Tag);
+            Assert.Same(value, style.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Tag = value;
-            Assert.Equal(value, style.Tag);
+            Assert.Same(value, style.Tag);
         }
 
         [Theory]
@@ -586,7 +587,7 @@ namespace System.Windows.Forms.Tests
             style.Tag = value;
             Assert.Equal(value, style.Tag);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.Tag = value;
             Assert.Equal(value, style.Tag);
         }
@@ -601,7 +602,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(value, style.WrapMode);
 
-            // Set again to test caching behaviour.
+            // Set same.
             style.WrapMode = value;
             Assert.Equal(value, style.WrapMode);
         }
@@ -845,7 +846,7 @@ namespace System.Windows.Forms.Tests
             var formatProvider = new NumberFormatInfo();
 
             yield return new object[] { new DataGridViewCellStyle(), new DataGridViewCellStyle(), true };
-            
+
             yield return new object[]
             {
                 new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomCenter },
@@ -1121,6 +1122,8 @@ namespace System.Windows.Forms.Tests
                 new DataGridViewCellStyle { WrapMode = DataGridViewTriState.True },
                 "DataGridViewCellStyle { WrapMode=True }"
             };
+
+            Font font = SystemFonts.DefaultFont;
             yield return new object[]
             {
                 new DataGridViewCellStyle
@@ -1128,7 +1131,7 @@ namespace System.Windows.Forms.Tests
                     Alignment = DataGridViewContentAlignment.BottomCenter,
                     BackColor = Color.Red,
                     DataSourceNullValue = "dbNull",
-                    Font = SystemFonts.DefaultFont,
+                    Font = font,
                     ForeColor = Color.Blue,
                     Format = "format",
                     FormatProvider = new NumberFormatInfo(),
@@ -1139,7 +1142,7 @@ namespace System.Windows.Forms.Tests
                     Tag = "tag",
                     WrapMode = DataGridViewTriState.True
                 },
-                "DataGridViewCellStyle { BackColor=Color [Red], ForeColor=Color [Blue], SelectionBackColor=Color [Green], SelectionForeColor=Color [Yellow], Font=[Font: Name=Microsoft Sans Serif, Size=8.25, Units=3, GdiCharSet=1, GdiVerticalFont=False], NullValue=null, DataSourceNullValue=dbNull, Format=format, WrapMode=True, Alignment=BottomCenter, Padding={Left=1,Top=2,Right=3,Bottom=4}, Tag=tag }"
+                $"DataGridViewCellStyle {{ BackColor=Color [Red], ForeColor=Color [Blue], SelectionBackColor=Color [Green], SelectionForeColor=Color [Yellow], Font={font}, NullValue=null, DataSourceNullValue=dbNull, Format=format, WrapMode=True, Alignment=BottomCenter, Padding={{Left=1,Top=2,Right=3,Bottom=4}}, Tag=tag }}"
             };
         }
 
@@ -1147,10 +1150,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToString_TestData))]
         public void DataGridViewCellStyle_ToString_Invoke_ReturnsExpected(DataGridViewCellStyle style, string expected)
         {
-            if (expected != style.ToString())
-            {
-                Console.WriteLine("\"" + style.ToString() + "\"");
-            }
+            Assert.Equal(expected, style.ToString());
         }
 
         private class AlwaysEqual

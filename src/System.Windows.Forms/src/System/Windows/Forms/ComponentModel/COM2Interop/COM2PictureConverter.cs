@@ -2,132 +2,145 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop {
-    using System.Runtime.Serialization.Formatters;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;    
-    using System.Drawing;    
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
+#nullable disable
 
-    /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter"]/*' />
-    /// <devdoc>
-    /// This class maps an IPicture to a System.Drawing.Image.
-    /// </devdoc>
-    internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter {
+using System.Diagnostics;
+using System.Drawing;
+using static Interop;
+using static Interop.Ole32;
 
-        object lastManaged;
-        IntPtr lastNativeHandle;
-        WeakReference pictureRef;
-        IntPtr lastPalette = IntPtr.Zero;
+namespace System.Windows.Forms.ComponentModel.Com2Interop
+{
+    /// <summary>
+    ///  This class maps an IPicture to a System.Drawing.Image.
+    /// </summary>
+    internal class Com2PictureConverter : Com2DataTypeToManagedDataTypeConverter
+    {
+        private object _lastManaged;
+        private IntPtr _lastNativeHandle;
+        private WeakReference _pictureRef;
 
-        Type pictureType = typeof(Bitmap);
+        private Type _pictureType = typeof(Bitmap);
 
-        public Com2PictureConverter(Com2PropertyDescriptor pd) {
-            if (pd.DISPID == NativeMethods.ActiveX.DISPID_MOUSEICON || pd.Name.IndexOf("Icon") != -1) {
-                pictureType = typeof(Icon);
+        public Com2PictureConverter(Com2PropertyDescriptor pd)
+        {
+            if (pd.DISPID == DispatchID.MOUSEICON || pd.Name.IndexOf("Icon") != -1)
+            {
+                _pictureType = typeof(Icon);
             }
         }
 
-        /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter.ManagedType"]/*' />
-        /// <devdoc>
-        ///     Returns the managed type that this editor maps the property type to.
-        /// </devdoc>
-        public override Type ManagedType {
-            get {
-                return pictureType;
+        /// <summary>
+        ///  Returns the managed type that this editor maps the property type to.
+        /// </summary>
+        public override Type ManagedType
+        {
+            get
+            {
+                return _pictureType;
             }
         }
 
-        /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter.ConvertNativeToManaged"]/*' />
-        /// <devdoc>
-        ///     Converts the native value into a managed value
-        /// </devdoc>
-        public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
-
-            if (nativeValue == null) {
+        /// <summary>
+        ///  Converts the native value into a managed value
+        /// </summary>
+        public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd)
+        {
+            if (nativeValue is null)
+            {
                 return null;
             }
 
-            Debug.Assert(nativeValue is UnsafeNativeMethods.IPicture, "nativevalue is not IPicture");
+            Debug.Assert(nativeValue is IPicture, "nativevalue is not IPicture");
 
-            UnsafeNativeMethods.IPicture nativePicture = (UnsafeNativeMethods.IPicture)nativeValue;
-            IntPtr handle = nativePicture.GetHandle();
+            IPicture nativePicture = (IPicture)nativeValue;
+            IntPtr handle = (IntPtr)nativePicture.Handle;
 
-            if (lastManaged != null && handle == lastNativeHandle) {
-                return lastManaged;
+            if (_lastManaged != null && handle == _lastNativeHandle)
+            {
+                return _lastManaged;
             }
 
-            lastNativeHandle = handle;
-            //lastPalette = nativePicture.GetHPal();
-            if (handle != IntPtr.Zero) {
-                switch (nativePicture.GetPictureType()) {
-                    case  NativeMethods.Ole.PICTYPE_ICON:
-                        pictureType = typeof(Icon);
-                        lastManaged = Icon.FromHandle(handle);
+            if (handle != IntPtr.Zero)
+            {
+                switch ((PICTYPE)nativePicture.Type)
+                {
+                    case PICTYPE.ICON:
+                        _pictureType = typeof(Icon);
+                        _lastManaged = Icon.FromHandle(handle);
                         break;
-                    case   NativeMethods.Ole.PICTYPE_BITMAP:
-                        pictureType = typeof(Bitmap);
-                        lastManaged = Image.FromHbitmap(handle);
+                    case PICTYPE.BITMAP:
+                        _pictureType = typeof(Bitmap);
+                        _lastManaged = Image.FromHbitmap(handle);
                         break;
                     default:
                         Debug.Fail("Unknown picture type");
-			break;
+                        return null;
                 }
-                pictureRef = new WeakReference(nativePicture);
+
+                _lastNativeHandle = handle;
+                _pictureRef = new WeakReference(nativePicture);
             }
-            else {
-                lastManaged = null;
-                pictureRef = null;
+            else
+            {
+                _lastManaged = null;
+                _pictureRef = null;
             }
-            return lastManaged;
+            return _lastManaged;
         }
 
-        /// <include file='doc\COM2PictureConverter.uex' path='docs/doc[@for="Com2PictureConverter.ConvertManagedToNative"]/*' />
-        /// <devdoc>
-        ///     Converts the managed value into a native value
-        /// </devdoc>
-        public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {
-            // don't cancel the set
+        /// <summary>
+        ///  Converts the managed value into a native value
+        /// </summary>
+        public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet)
+        {
+            // Don't cancel the set
             cancelSet = false;
 
-            if (lastManaged != null && lastManaged.Equals(managedValue) && pictureRef != null && pictureRef.IsAlive) {
-                return pictureRef.Target;
+            if (_lastManaged?.Equals(managedValue) == true)
+            {
+                object target = _pictureRef?.Target;
+                if (target != null)
+                {
+                    return target;
+                }
             }
 
-            // we have to build an IPicture
-            lastManaged = managedValue;
+            // We have to build an IPicture
+            if (managedValue != null)
+            {
+                BOOL own = BOOL.FALSE;
 
-            if (managedValue != null) {
-                Guid g = typeof(UnsafeNativeMethods.IPicture).GUID;
-                NativeMethods.PICTDESC pictdesc = null;
-                bool own = false;
+                PICTDESC pictdesc;
+                if (managedValue is Icon icon)
+                {
+                    pictdesc = PICTDESC.FromIcon(icon, copy: false);
+                }
+                else if (managedValue is Bitmap bitmap)
+                {
+                    pictdesc = PICTDESC.FromBitmap(bitmap);
+                    own = BOOL.TRUE;
+                }
+                else
+                {
+                    Debug.Fail($"Unknown Image type: {managedValue.GetType().Name}");
+                    return null;
+                }
 
-                if (lastManaged is Icon) {
-                    pictdesc = NativeMethods.PICTDESC.CreateIconPICTDESC(((Icon)lastManaged).Handle);
-                }
-                else if (lastManaged is Bitmap) {
-                    pictdesc = NativeMethods.PICTDESC.CreateBitmapPICTDESC(((Bitmap)lastManaged).GetHbitmap(), lastPalette);
-                    own = true;
-                }
-                else {
-                    Debug.Fail("Unknown Image type: " + managedValue.GetType().Name);
-                }
-
-                UnsafeNativeMethods.IPicture pict = UnsafeNativeMethods.OleCreatePictureIndirect(pictdesc, ref g, own);
-                lastNativeHandle = pict.GetHandle();
-                pictureRef = new WeakReference(pict);
+                Guid iid = typeof(IPicture).GUID;
+                IPicture pict = (IPicture)OleCreatePictureIndirect(ref pictdesc, ref iid, own);
+                _lastManaged = managedValue;
+                _lastNativeHandle = (IntPtr)pict.Handle;
+                _pictureRef = new WeakReference(pict);
                 return pict;
             }
-            else {
-                lastManaged = null;
-                lastNativeHandle = lastPalette = IntPtr.Zero;
-                pictureRef = null;
+            else
+            {
+                _lastManaged = null;
+                _lastNativeHandle = IntPtr.Zero;
+                _pictureRef = null;
                 return null;
             }
         }
     }
 }
-

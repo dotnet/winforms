@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../SR.resx">
+    <body>
+      <trans-unit id="AppModel_NoStartupForm">
+        <source>A startup form has not been specified.</source>
+        <target state="translated">시작 폼이 지정되지 않았습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceCantConnect">
+        <source>This single-instance application could not connect to the original instance.</source>
+        <target state="translated">이 단일 인스턴스 응용 프로그램을 원본 인스턴스에 연결할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AppModel_SplashAndMainFormTheSame">
+        <source>Splash screen and main form cannot be the same form.</source>
+        <target state="translated">시작 화면과 기본 폼은 같은 폼일 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLogBaseNameNull">
+        <source>BaseFileName cannot be Nothing or an empty String.</source>
+        <target state="translated">BaseFileName은 Nothing이나 빈 문자열일 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLogNumberTooSmall">
+        <source>The value of {0} must be greater than or equal to 1000.</source>
+        <target state="translated">{0}의 값은 1000보다 크거나 같아야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_ExhaustedPossibleStreamNames">
+        <source>Unable to obtain a stream for the log.  Potential file names based on {0} are already in use.</source>
+        <target state="translated">로그의 스트림을 가져올 수 없습니다. {0}에 기반한 파일 이름이 이미 사용 중입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_FileExceedsMaximumSize">
+        <source>Unable to write to log file because writing to it would cause it to exceed the MaxFileSize value.</source>
+        <target state="translated">MaxFileSize 값을 초과할 수 있기 때문에 로그 파일에 쓸 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_FreeSpaceError">
+        <source>Cannot determine the amount of available disk space.</source>
+        <target state="translated">사용 가능한 디스크 공간을 확인할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_NegativeNumber">
+        <source>The value of {0} must be a positive number.</source>
+        <target state="translated">{0}의 값은 양수여야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_ReservedSpaceEncroached">
+        <source>Unable to write to log file because writing to it would reduce free disk space below ReservedSpace value.</source>
+        <target state="translated">사용 가능한 디스크 공간이 ReservedSpace 값 미만으로 줄어들 수 있기 때문에 로그 파일에 쓸 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidNullValue1">
+        <source>Argument '{0}' is Nothing.</source>
+        <target state="translated">'{0}' 인수가 Nothing입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidValue1">
+        <source>Argument '{0}' is not a valid value.</source>
+        <target state="translated">'{0}' 인수는 잘못된 값입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidValueType2">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">'{0}' 인수를 '{1}' 형식으로 변환할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DiagnosticInfo_FullOSName">
+        <source>Could not obtain full operation system name due to internal error. This might be caused by WMI not existing on the current machine.</source>
+        <target state="translated">내부 오류 때문에 작업 시스템의 전체 이름을 가져올 수 없습니다. 이 오류는 현재 컴퓨터에 WMI가 없기 때문에 발생할 수 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DiagnosticInfo_Memory">
+        <source>Could not obtain memory information due to internal error.</source>
+        <target state="translated">내부 오류 때문에 메모리 정보를 가져올 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EnvVarNotFound_Name">
+        <source>Environment variable is not defined: '{0}'.</source>
+        <target state="translated">환경 변수가 정의되지 않았습니다. '{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="General_ArgumentNullException">
+        <source>Argument cannot be Nothing.</source>
+        <target state="translated">인수는 Nothing일 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="General_PropertyNothing">
+        <source>Property {0} cannot be set to Nothing.</source>
+        <target state="translated">{0} 속성을 Nothing으로 설정할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ID53">
+        <source>File not found.</source>
+        <target state="translated">파일을 찾을 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ID70">
+        <source>Permission denied.</source>
+        <target state="translated">사용 권한이 거부되었습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FileExists_Path">
+        <source>Could not complete operation since a file already exists in this path '{0}'.</source>
+        <target state="translated">파일이 이 '{0}' 경로에 이미 있기 때문에 작업을 완료할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FileNotFound_Path">
+        <source>Could not find file '{0}'.</source>
+        <target state="translated">'{0}' 파일을 찾을 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FilePathException">
+        <source>The given file path ends with a directory separator character.</source>
+        <target state="translated">지정한 파일 경로가 디렉터리 구분 문자로 끝납니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Mouse_NoMouseIsPresent">
+        <source>No mouse is present.</source>
+        <target state="translated">마우스가 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Mouse_NoWheelIsPresent">
+        <source>No mouse wheel is present.</source>
+        <target state="translated">마우스 휠이 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_BadConnectionTimeout">
+        <source>The ConnectionTimeout must be greater than 0.</source>
+        <target state="translated">ConnectionTimeout은 0보다 커야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_DownloadNeedsFilename">
+        <source>destinationFileName needs to include a file name.</source>
+        <target state="translated">destinationFileName에는 파일 이름이 포함되어야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_InvalidUriString">
+        <source>'{0}' is not a valid remote file address. A valid address should include a protocol, a path and a file name.</source>
+        <target state="translated">'{0}'은(는) 올바른 원격 파일 주소가 아닙니다. 올바른 주소에는 프로토콜, 경로 및 파일 이름이 포함되어야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_NetworkNotAvailable">
+        <source>Unable to ping because a network connection is not available.</source>
+        <target state="translated">네트워크 연결을 사용할 수 없어 ping을 실행할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_UploadAddressNeedsFilename">
+        <source>The address for UploadFile needs to include a file name.</source>
+        <target state="translated">UploadFile의 주소에는 파일 이름이 포함되어야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProcessNotFound">
+        <source>Process '{0}' was not found.</source>
+        <target state="translated">프로세스 '{0}'을(를) 찾을 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogDownloadingLabel">
+        <source>Downloading {0} to {1}</source>
+        <target state="translated">{0}을(를) {1}(으)로 다운로드하고 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogDownloadingTitle">
+        <source>Downloading {0}</source>
+        <target state="translated">{0}을(를) 다운로드하는 중</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogUploadingLabel">
+        <source>Uploading {0} to {1}</source>
+        <target state="translated">{0}을(를) {1}(으)로 업로드하고 있습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogUploadingTitle">
+        <source>Uploading {0}</source>
+        <target state="translated">{0} 업로드 중</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -2,17 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewItemSelectionChangedEvent.uex' path='docs/doc[@for="ListViewItemSelectionChangedEventArgs"]/*' />
-    /// <devdoc>
-    /// The event class that is created when the selection state of a ListViewItem is changed.
-    /// </devdoc>
+    /// <summary>
+    ///  The event class that is created when the selection state of a ListViewItem is changed.
+    /// </summary>
     public class ListViewItemSelectionChangedEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Constructs a ListViewItemSelectionChangedEventArgs object.
-        /// </devdoc>
+        /// <summary>
+        ///  Constructs a ListViewItemSelectionChangedEventArgs object.
+        /// </summary>
         public ListViewItemSelectionChangedEventArgs(ListViewItem item, int itemIndex, bool isSelected)
         {
             Item = item;
@@ -20,19 +21,19 @@ namespace System.Windows.Forms
             IsSelected = isSelected;
         }
 
-        /// <devdoc>
-        /// The list view item whose selection changed
-        /// </devdoc>
+        /// <summary>
+        ///  The list view item whose selection changed
+        /// </summary>
         public ListViewItem Item { get; }
 
-        /// <devdoc>
-        /// The list view item's index
-        /// </devdoc>
+        /// <summary>
+        ///  The list view item's index
+        /// </summary>
         public int ItemIndex { get; }
 
-        /// <devdoc>
-        /// Return true if the item is selected
-        /// </devdoc>
+        /// <summary>
+        ///  Return true if the item is selected
+        /// </summary>
         public bool IsSelected { get; }
     }
 }

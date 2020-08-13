@@ -2,21 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.CheckedListBox.ItemCheck'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='CheckedListBox.ItemCheck'/> event.
+    /// </summary>
     public class ItemCheckedEventArgs : EventArgs
     {
         public ItemCheckedEventArgs(ListViewItem item)
         {
             Item = item;
         }
-        
-        /// <devdoc>
-        /// The index of the item that is about to change.
-        /// </devdoc>
+
+        /// <summary>
+        ///  The index of the item that is about to change.
+        /// </summary>
         public ListViewItem Item { get; }
     }
 }

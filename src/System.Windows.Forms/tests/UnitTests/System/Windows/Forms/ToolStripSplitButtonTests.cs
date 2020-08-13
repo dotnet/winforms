@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripSplitButtonTests
+    public class ToolStripSplitButtonTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> ToolStripItem_Set_TestData()
         {
@@ -15,11 +15,11 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubToolStripItem() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ToolStripItem_Set_TestData))]
         public void ToolStripSplitButton_DefaultItem_Set_GetReturnsExpected(ToolStripItem value)
         {
-            var button = new ToolStripSplitButton
+            using var button = new ToolStripSplitButton
             {
                 DefaultItem = value
             };
@@ -30,10 +30,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(value, button.DefaultItem);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ToolStripSplitButton_DefaultItem_SetWithHandler_CallsOnDefaultItemChanged()
         {
-            var button = new ToolStripSplitButton();
+            using var button = new ToolStripSplitButton();
 
             int callCount = 0;
             EventHandler handler = (sender, e) =>
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
             button.DefaultItemChanged += handler;
 
             // Set non-null.
-            var item1 = new SubToolStripItem();
+            using var item1 = new SubToolStripItem();
             button.DefaultItem = item1;
             Assert.Same(item1, button.DefaultItem);
             Assert.Equal(1, callCount);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
 
             // Set different.
-            var item2 = new SubToolStripItem();
+            using var item2 = new SubToolStripItem();
             button.DefaultItem = item2;
             Assert.Same(item2, button.DefaultItem);
             Assert.Equal(2, callCount);

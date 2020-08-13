@@ -2,137 +2,170 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// This event is fired by owner draw Controls, such as ListBoxes and
-    /// ComboBoxes. It contains all the information needed for the user to
-    /// paint the given item, including the item index, the Rectangle in which
-    /// the drawing should be done, and the Graphics object with which the drawing
-    /// should be done.
-    /// </devdoc>
-    public class DrawItemEventArgs : EventArgs
+    /// <summary>
+    ///  This event is fired by owner drawn <see cref="Control"/> objects, such as <see cref="ListBox"/> and
+    ///  <see cref="ComboBox"/>. It contains all the information needed for the user to paint the given item,
+    ///  including the item index, the <see cref="Rectangle"/> in which the drawing should be done, and the
+    ///  <see cref="Graphics"/> object with which the drawing should be done.
+    /// </summary>
+    public class DrawItemEventArgs : EventArgs, IDisposable, IDeviceContext, IGraphicsHdcProvider
     {
-        /// <devdoc>
-        /// The backColor to paint each menu item with.
-        /// </devdoc>
-        private Color _backColor;
+        private readonly DrawingEventArgs _event;
 
-        /// <devdoc>
-        /// The foreColor to paint each menu item with.
-        /// </devdoc>
-        private Color _foreColor;
+        /// <summary>
+        ///  The backColor to paint each menu item with.
+        /// </summary>
+        private readonly Color _backColor;
 
-        /// <devdoc>
-        /// Creates a new DrawItemEventArgs with the given parameters.
-        /// </devdoc>
-        public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect,
-                                 int index, DrawItemState state)
+        /// <summary>
+        ///  The foreColor to paint each menu item with.
+        /// </summary>
+        private readonly Color _foreColor;
+
+        /// <summary>
+        ///  Creates a new DrawItemEventArgs with the given parameters.
+        /// </summary>
+        public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect, int index, DrawItemState state)
+            : this(graphics, font, rect, index, state, SystemColors.WindowText, SystemColors.Window)
+        { }
+
+        /// <summary>
+        ///  Creates a new DrawItemEventArgs with the given parameters, including the foreColor and backColor
+        ///  of the control.
+        /// </summary>
+        public DrawItemEventArgs(
+            Graphics graphics,
+            Font font,
+            Rectangle rect,
+            int index,
+            DrawItemState state,
+            Color foreColor,
+            Color backColor)
         {
-            Graphics = graphics;
+            _event = new DrawingEventArgs(graphics, rect, DrawingEventFlags.GraphicsStateUnclean);
             Font = font;
-            Bounds = rect;
-            Index = index;
-            State = state;
-            _foreColor = SystemColors.WindowText;
-            _backColor = SystemColors.Window;
-        }
-
-        /// <devdoc>
-        /// Creates a new DrawItemEventArgs with the given parameters, including the foreColor and backColor of the control.
-        /// </devdoc>
-        public DrawItemEventArgs(Graphics graphics, Font font, Rectangle rect,
-                                 int index, DrawItemState state, Color foreColor, Color backColor)
-        {
-            Graphics = graphics;
-            Font = font;
-            Bounds = rect;
             Index = index;
             State = state;
             _foreColor = foreColor;
             _backColor = backColor;
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Graphics"]/*' />
-        /// <devdoc>
-        /// Graphics object with which painting should be done.
-        /// </devdoc>
-        public Graphics Graphics { get; }
+        internal DrawItemEventArgs(
+            Gdi32.HDC hdc,
+            Font font,
+            Rectangle rect,
+            uint index,
+            User32.ODS state)
+            : this(hdc, font, rect, index, state, SystemColors.WindowText, SystemColors.Window)
+        { }
 
-        /// <devdoc>
-        /// A suggested font, usually the parent control's Font property.
-        /// </devdoc>
+        internal DrawItemEventArgs(
+            Gdi32.HDC hdc,
+            Font font,
+            Rectangle rect,
+            uint index,
+            User32.ODS state,
+            Color foreColor,
+            Color backColor)
+        {
+            _event = new DrawingEventArgs(hdc, rect, DrawingEventFlags.CheckState);
+            Font = font;
+            Index = (int)index;
+            State = (DrawItemState)state;
+            _foreColor = foreColor;
+            _backColor = backColor;
+        }
+
+        /// <summary>
+        ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
+        /// </summary>
+        public Graphics Graphics => _event.Graphics;
+
+        /// <summary>
+        ///  A suggested font, usually the parent control's Font property.
+        /// </summary>
         public Font Font { get; }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Bounds"]/*' />
-        /// <devdoc>
-        /// The rectangle outlining the area in which the painting should be  done.
-        /// </devdoc>
-        public Rectangle Bounds { get; }
+        /// <summary>
+        ///  The rectangle outlining the area in which the painting should be  done.
+        /// </summary>
+        public Rectangle Bounds => _event.ClipRectangle;
 
-        /// <devdoc>
-        /// The index of the item that should be painted.
-        /// </devdoc>
+        /// <summary>
+        ///  The index of the item that should be painted.
+        /// </summary>
         public int Index { get; }
 
-        /// <devdoc>
-        /// Miscellaneous state information, such as whether the item is
-        /// "selected", "focused", or some other such information.  ComboBoxes
-        /// have one special piece of information which indicates if the item
-        /// being painted is the editable portion of the ComboBox.
-        /// </devdoc>
+        /// <summary>
+        ///  Miscellaneous state information, such as whether the item is
+        ///  "selected", "focused", or some other such information.  ComboBoxes
+        ///  have one special piece of information which indicates if the item
+        ///  being painted is the editable portion of the ComboBox.
+        /// </summary>
         public DrawItemState State { get; }
 
-        /// <devdoc>
-        /// A suggested color drawing: either SystemColors.WindowText or SystemColors.HighlightText,
-        /// depending on whether this item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  A suggested color drawing: either SystemColors.WindowText or SystemColors.HighlightText,
+        ///  depending on whether this item is selected.
+        /// </summary>
         public Color ForeColor
-        {
-            get
-            {
-                if ((State & DrawItemState.Selected) == DrawItemState.Selected)
-                {
-                    return SystemColors.HighlightText;
-                }
-                return _foreColor;
-            }
-        }
+            => (State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.HighlightText : _foreColor;
 
         public Color BackColor
-        {
-            get
-            {
-                if ((State & DrawItemState.Selected) == DrawItemState.Selected)
-                {
-                    return SystemColors.Highlight;
-                }
-                return _backColor;
-            }
-        }
+            => (State & DrawItemState.Selected) == DrawItemState.Selected ? SystemColors.Highlight : _backColor;
 
-        /// <devdoc>
-        /// Draws the background of the given rectangle with the color returned from the BackColor property.
-        /// </devdoc>
+        /// <summary>
+        ///  Fills the <see cref="Bounds"/> with the <see cref="BackColor"/>.
+        /// </summary>
         public virtual void DrawBackground()
         {
-            Brush backBrush = new SolidBrush(BackColor);
-            Graphics.FillRectangle(backBrush, Bounds);
-            backBrush.Dispose();
+            using var backBrush = BackColor.GetCachedSolidBrushScope();
+            GraphicsInternal.FillRectangle(backBrush, Bounds);
         }
 
-        /// <devdoc>
-        /// Draws a handy focus rect in the given rectangle.
-        /// </devdoc>
+        /// <summary>
+        ///  Draws a handy focus rect in the given rectangle.
+        /// </summary>
         public virtual void DrawFocusRectangle()
         {
-            if ((State & DrawItemState.Focus) == DrawItemState.Focus &&
-                (State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
+            if ((State & DrawItemState.Focus) == DrawItemState.Focus
+                && (State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
             {
-                ControlPaint.DrawFocusRectangle(Graphics, Bounds, ForeColor, BackColor);
+                ControlPaint.DrawFocusRectangle(GraphicsInternal, Bounds, ForeColor, BackColor);
             }
         }
+
+        public void Dispose() => Dispose(disposing: true);
+
+        protected virtual void Dispose(bool disposing)
+        {
+            // We need this because of IDeviceContext, but we historically didn't take ownership of the Graphics
+            // object, so there is nothing to do here unless we specifically created the Graphics object.
+            _event.Dispose(true);
+        }
+
+        /// <summary>
+        ///  For internal use to improve performance. DO NOT use this method if you modify the <see cref="Graphics"/>
+        ///  <see cref="Graphics.Clip"/> or <see cref="Graphics.Transform"/>.
+        /// </summary>
+        internal Graphics GraphicsInternal => _event.GetOrCreateGraphicsInternal();
+
+        /// <summary>
+        ///  Returns the <see cref="Gdi32.HDC"/> the event was created off of, if any.
+        /// </summary>
+        internal Gdi32.HDC HDC => _event.HDC;
+
+        IntPtr IDeviceContext.GetHdc() => Graphics?.GetHdc() ?? IntPtr.Zero;
+        void IDeviceContext.ReleaseHdc() => Graphics?.ReleaseHdc();
+        Gdi32.HDC IGraphicsHdcProvider.GetHDC() => _event.GetHDC();
+        Graphics IGraphicsHdcProvider.GetGraphics(bool create) => _event.GetGraphics(create);
+        bool IGraphicsHdcProvider.IsGraphicsStateClean => _event.IsStateClean;
     }
 }

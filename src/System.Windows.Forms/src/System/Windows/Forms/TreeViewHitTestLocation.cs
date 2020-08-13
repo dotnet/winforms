@@ -3,69 +3,69 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the return value for HITTEST on treeview.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the return value for HITTEST on treeview.
+    /// </summary>
     [Flags]
-    [ComVisible(true)]
     public enum TreeViewHitTestLocations
     {
-        /// <devdoc>
-        /// No Information.
-        /// </devdoc>
-        None = NativeMethods.TVHT_NOWHERE,
+        /// <summary>
+        ///  No Information.
+        /// </summary>
+        None = (int)ComCtl32.TVHT.NOWHERE,
 
-        /// <devdoc>
-        /// On Image.
-        /// </devdoc>
-        Image = NativeMethods.TVHT_ONITEMICON,
+        /// <summary>
+        ///  On Image.
+        /// </summary>
+        Image = (int)ComCtl32.TVHT.ONITEMICON,
 
-        /// <devdoc>
-        /// On Label.
-        /// </devdoc>
-        Label = NativeMethods.TVHT_ONITEMLABEL,
+        /// <summary>
+        ///  On Label.
+        /// </summary>
+        Label = (int)ComCtl32.TVHT.ONITEMLABEL,
 
-        /// <devdoc>
-        /// Indent.
-        /// </devdoc>
-        Indent = NativeMethods.TVHT_ONITEMINDENT,
+        /// <summary>
+        ///  Indent.
+        /// </summary>
+        Indent = (int)ComCtl32.TVHT.ONITEMINDENT,
 
-        /// <devdoc>
-        /// AboveClientArea.
-        /// </devdoc>
-        AboveClientArea =  NativeMethods.TVHT_ABOVE,
+        /// <summary>
+        ///  AboveClientArea.
+        /// </summary>
+        AboveClientArea = (int)ComCtl32.TVHT.ABOVE,
 
-        /// <devdoc>
-        /// BelowClientArea.
-        /// </devdoc>
-        BelowClientArea = NativeMethods.TVHT_BELOW,
+        /// <summary>
+        ///  BelowClientArea.
+        /// </summary>
+        BelowClientArea = (int)ComCtl32.TVHT.BELOW,
 
-        /// <devdoc>
-        /// LeftOfClientArea.
-        /// </devdoc>
-        LeftOfClientArea = NativeMethods.TVHT_TOLEFT,
+        /// <summary>
+        ///  LeftOfClientArea.
+        /// </summary>
+        LeftOfClientArea = (int)ComCtl32.TVHT.TOLEFT,
 
-        /// <devdoc>
-        /// RightOfClientArea.
-        /// </devdoc>
-        RightOfClientArea = NativeMethods.TVHT_TORIGHT,
+        /// <summary>
+        ///  RightOfClientArea.
+        /// </summary>
+        RightOfClientArea = (int)ComCtl32.TVHT.TORIGHT,
 
-        /// <devdoc>
-        /// RightOfNode.
-        /// </devdoc>
-        RightOfLabel =   NativeMethods.TVHT_ONITEMRIGHT,
+        /// <summary>
+        ///  RightOfNode.
+        /// </summary>
+        RightOfLabel = (int)ComCtl32.TVHT.ONITEMRIGHT,
 
-        /// <devdoc>
-        /// StateImage.
-        /// </devdoc>
-        StateImage = NativeMethods.TVHT_ONITEMSTATEICON,
+        /// <summary>
+        ///  StateImage.
+        /// </summary>
+        StateImage = (int)ComCtl32.TVHT.ONITEMSTATEICON,
 
-        /// <devdoc>
-        ///      PlusMinus.
-        /// </devdoc>
-        PlusMinus = NativeMethods.TVHT_ONITEMBUTTON,
+        /// <summary>
+        ///  PlusMinus.
+        /// </summary>
+        PlusMinus = (int)ComCtl32.TVHT.ONITEMBUTTON,
     }
 }

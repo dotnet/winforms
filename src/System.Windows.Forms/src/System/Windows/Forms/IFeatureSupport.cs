@@ -2,28 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies a standard interface for retrieving feature information from the current system.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies a standard interface for retrieving feature information from the current system.
+    /// </summary>
     public interface IFeatureSupport
     {
-        /// <devdoc>
-        /// Determines whether any version of the specified feature is currently available
-        /// on the system.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines whether any version of the specified feature is currently available
+        ///  on the system.
+        /// </summary>
         bool IsPresent(object feature);
 
-        /// <devdoc>
-        /// Determines whether the specified or newer version of the specified feature
-        /// is currently available on the system.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines whether the specified or newer version of the specified feature
+        ///  is currently available on the system.
+        /// </summary>
         bool IsPresent(object feature, Version minimumVersion);
 
-        /// <devdoc>
-        /// Retrieves the version of the specified feature.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the version of the specified feature.
+        /// </summary>
         Version GetVersionPresent(object feature);
     }
 }

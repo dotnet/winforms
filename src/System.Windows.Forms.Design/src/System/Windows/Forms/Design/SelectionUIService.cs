@@ -6,16 +6,14 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The selection manager handles selection within a form.  There is one selection manager for each form or top level designer.
-    /// A selection consists of an array of components.  One component is designated the "primary" selection and is displayed with different grab handles.
-    /// An individual selection may or may not have UI associated with it.  If the selection manager can find a suitable designer that is representing the selection, it will highlight the designer's border.  If the merged property set has a location property, the selection's rules will allow movement.  Also, if the property set has a size property, the selection's rules will allow for sizing.  Grab handles may be drawn around the designer and user interactions involving the selection frame and grab handles are initiated here, but the actual movement of the objects is done in a designer object that implements the ISelectionHandler interface.
+    ///  The selection manager handles selection within a form.  There is one selection manager for each form or top level designer. A selection consists of an array of components.  One component is designated the "primary" selection and is displayed with different grab handles. An individual selection may or may not have UI associated with it.  If the selection manager can find a suitable designer that is representing the selection, it will highlight the designer's border.  If the merged property set has a location property, the selection's rules will allow movement.  Also, if the property set has a size property, the selection's rules will allow for sizing.  Grab handles may be drawn around the designer and user interactions involving the selection frame and grab handles are initiated here, but the actual movement of the objects is done in a designer object that implements the ISelectionHandler interface.
     /// </summary>
     internal sealed class SelectionUIService : Control, ISelectionUIService
     {
@@ -23,22 +21,21 @@ namespace System.Windows.Forms.Design
         private const int HITTEST_CONTAINER_SELECTOR = 0x0001;
         private const int HITTEST_NORMAL_SELECTION = 0x0002;
         private const int HITTEST_DEFAULT = HITTEST_CONTAINER_SELECTOR | HITTEST_NORMAL_SELECTION;
+
         // These are used during a drag operation, either through our own handle drag or through ISelectionUIService
         private ISelectionUIHandler _dragHandler; // the current drag handler
         private object[] _dragComponents; // the controls being dragged
         private SelectionRules _dragRules; // movement constraints for the drag
-        private bool _dragMoved = false;
+        private bool _dragMoved;
         private object _containerDrag; // object being dragged during a container drag
-
         // These are used during a drag of a selection grab handle
-        private bool _ignoreCaptureChanged = false;
+        private bool _ignoreCaptureChanged;
         private int _mouseDragHitTest; // where the hit occurred that caused the drag
         private Point _mouseDragAnchor = s_invalidPoint; // anchor point of the drag
         private Rectangle _mouseDragOffset = Rectangle.Empty; // current drag offset
         private Point _lastMoveScreenCoord = Point.Empty;
-        private bool _ctrlSelect = false; // was the CTRL key down when the drag began
-        private bool _mouseDragging = false; // Are we actually doing a drag?
-
+        private bool _ctrlSelect; // was the CTRL key down when the drag began
+        private bool _mouseDragging; // Are we actually doing a drag?
         private ContainerSelectorActiveEventHandler _containerSelectorActive; // the event we fire when user interacts with container selector
         private Hashtable _selectionItems;
         private readonly Hashtable _selectionHandlers; // Component UI handlers
@@ -52,9 +49,8 @@ namespace System.Windows.Forms.Design
         private DesignerTransaction _dragTransaction;
 
         /// <summary>
-        /// Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
+        ///  Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
+        /// </summary>
         public SelectionUIService(IDesignerHost host) : base()
         {
             SetStyle(ControlStyles.StandardClick | ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
@@ -64,9 +60,9 @@ namespace System.Windows.Forms.Design
             _selectionItems = new Hashtable();
             _selectionHandlers = new Hashtable();
             AllowDrop = true;
-
             // Not really any reason for this, except that it can be handy when using Spy++
             Text = "SelectionUIOverlay";
+
             _selSvc = (ISelectionService)host.GetService(typeof(ISelectionService));
             if (_selSvc != null)
             {
@@ -88,20 +84,20 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// override of control.
+        ///  override of control.
         /// </summary>
         protected override CreateParams CreateParams
         {
             get
             {
                 CreateParams cp = base.CreateParams;
-                cp.Style &= ~(NativeMethods.WS_CLIPSIBLINGS | NativeMethods.WS_CLIPCHILDREN);
+                cp.Style &= ~(int)(User32.WS.CLIPSIBLINGS | User32.WS.CLIPCHILDREN);
                 return cp;
             }
         }
 
         /// <summary>
-        /// Called to initiate a mouse drag on the selection overlay.  We cache some state here.
+        ///  Called to initiate a mouse drag on the selection overlay.  We cache some state here.
         /// </summary>
         private void BeginMouseDrag(Point anchor, int hitTest)
         {
@@ -115,7 +111,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Displays the given exception to the user.
+        ///  Displays the given exception to the user.
         /// </summary>
         private void DisplayError(Exception e)
         {
@@ -127,7 +123,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 string message = e.Message;
-                if (message == null || message.Length == 0)
+                if (message is null || message.Length == 0)
                 {
                     message = e.ToString();
                 }
@@ -136,7 +132,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Disposes the entire selection UI manager.
+        ///  Disposes the entire selection UI manager.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -146,6 +142,7 @@ namespace System.Windows.Forms.Design
                 {
                     _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
+
                 if (_host != null)
                 {
                     _host.TransactionOpened -= new EventHandler(OnTransactionOpened);
@@ -155,6 +152,7 @@ namespace System.Windows.Forms.Design
                         OnTransactionClosed(_host, new DesignerTransactionCloseEventArgs(true, true));
                     }
                 }
+
                 foreach (SelectionUIItem s in _selectionItems.Values)
                 {
                     s.Dispose();
@@ -170,7 +168,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when we want to finish a mouse drag and clean up our variables.  We call this from multiple places, depending on the state of the finish.  This does NOT end the drag -- for that must call EndDrag. This just cleans up the state of the mouse.
+        ///  Called when we want to finish a mouse drag and clean up our variables.  We call this from multiple places, depending on the state of the finish.  This does NOT end the drag -- for that must call EndDrag. This just cleans up the state of the mouse.
         /// </summary>
         private void EndMouseDrag(Point position)
         {
@@ -179,7 +177,6 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
-
             _ignoreCaptureChanged = true;
             Capture = false;
             _mouseDragAnchor = s_invalidPoint;
@@ -191,7 +188,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines the selection hit test at the given point.  The point should be in screen coordinates.
+        ///  Determines the selection hit test at the given point.  The point should be in screen coordinates.
         /// </summary>
         private HitTestInfo GetHitTest(Point value, int flags)
         {
@@ -235,7 +232,7 @@ namespace System.Windows.Forms.Design
         private ISelectionUIHandler GetHandler(object component) => (ISelectionUIHandler)_selectionHandlers[component];
 
         /// <summary>
-        /// This method returns a well-formed name for a drag transaction based on the rules it is given.
+        ///  This method returns a well-formed name for a drag transaction based on the rules it is given.
         /// </summary>
         public static string GetTransactionName(SelectionRules rules, object[] objects)
         {
@@ -291,12 +288,11 @@ namespace System.Windows.Forms.Design
             {
                 transactionName = string.Format(SR.DragDropDragComponents, objects.Length);
             }
-
             return transactionName;
         }
 
         /// <summary>
-        /// Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
+        ///  Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
         /// </summary>
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
@@ -317,7 +313,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn offour UI.
+        ///  Called by the designer host when it is entering or leaving a batch operation. Here we queue up selection notification and we turn off our UI.
         /// </summary>
         private void OnTransactionOpened(object sender, EventArgs e)
         {
@@ -325,7 +321,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// update our window region on first create.  We shouldn't do this before the handle is created or else we will force creation.
+        ///  update our window region on first create.  We shouldn't do this before the handle is created or else we will force creation.
         /// </summary>
         protected override void OnHandleCreated(EventArgs e)
         {
@@ -336,7 +332,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called whenever a component changes.  Here we update our selection information so that the selection rectangles are all up to date.
+        ///  Called whenever a component changes.  Here we update our selection information so that the selection rectangles are all up to date.
         /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs ccevent)
         {
@@ -351,7 +347,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// called by the formcore when someone has removed a component.  This will remove any selection on the component without disturbing the rest of the selection
+        ///  called by the formcore when someone has removed a component.  This will remove any selection on the component without disturbing the rest of the selection
         /// </summary>
         private void OnComponentRemove(object sender, ComponentEventArgs ce)
         {
@@ -361,7 +357,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called to invoke the container active event, if a designer has bound to it.
+        ///  Called to invoke the container active event, if a designer has bound to it.
         /// </summary>
         private void OnContainerSelectorActive(ContainerSelectorActiveEventArgs e)
         {
@@ -369,7 +365,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when the selection changes.  We sync up the UI with the selection at this point.
+        ///  Called when the selection changes.  We sync up the UI with the selection at this point.
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
@@ -417,17 +413,17 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// User setting requires that we repaint.
+        ///  User setting requires that we repaint.
         /// </summary>
         private void OnSystemSettingChanged(object sender, EventArgs e) => Invalidate();
 
         /// <summary>
-        /// User setting requires that we repaint.
+        ///  User setting requires that we repaint.
         /// </summary>
         private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) => Invalidate();
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event. Call super.onDragEnter to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call super.onDragEnter to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDragEnter(DragEventArgs devent)
         {
@@ -439,7 +435,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event. Call super.onDragOver to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call super.onDragOver to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDragOver(DragEventArgs devent)
         {
@@ -450,7 +446,7 @@ namespace System.Windows.Forms.Design
             }
         }
         /// <summary>
-        /// Inheriting classes should override this method to handle this event. Call super.onDragLeave to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call super.onDragLeave to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDragLeave(EventArgs e)
         {
@@ -462,7 +458,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event. Call super.onDragDrop to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call super.onDragDrop to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDragDrop(DragEventArgs devent)
         {
@@ -474,7 +470,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Inheriting classes should override this method to handle this event. Call base.OnDoiubleClick to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call base.OnDoiubleClick to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDoubleClick(EventArgs devent)
         {
@@ -495,14 +491,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overrides Control to handle our selection grab handles.
+        ///  Overrides Control to handle our selection grab handles.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         protected override void OnMouseDown(MouseEventArgs me)
         {
-            if (_dragHandler == null && _selSvc != null)
+            if (_dragHandler is null && _selSvc != null)
             {
                 try
                 {
@@ -554,6 +548,7 @@ namespace System.Windows.Forms.Design
                             {
                                 rules |= SelectionRules.BottomSizeable;
                             }
+
                             if (((ISelectionUIService)this).BeginDrag(rules, anchor.X, anchor.Y))
                             {
                                 BeginMouseDrag(anchor, hitTest);
@@ -588,7 +583,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overrides Control to handle our selection grab handles.
+        ///  Overrides Control to handle our selection grab handles.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs me)
         {
@@ -600,11 +595,11 @@ namespace System.Windows.Forms.Design
             {
                 OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit._component));
             }
+
             if (_lastMoveScreenCoord == screenCoord)
             {
                 return;
             }
-
             // If we're not dragging then set the cursor correctly.
             if (!_mouseDragging)
             {
@@ -679,12 +674,10 @@ namespace System.Windows.Forms.Design
                     delta.Y -= old.Y;
                     delta.Width -= old.Width;
                     delta.Height -= old.Height;
-
                     if (delta.X != 0 || delta.Y != 0 || delta.Width != 0 || delta.Height != 0)
                     {
                         // Go to default cursor for moves...
-                        if ((_mouseDragHitTest & SelectionUIItem.MOVE_X) != 0
-                            || (_mouseDragHitTest & SelectionUIItem.MOVE_Y) != 0)
+                        if ((_mouseDragHitTest & SelectionUIItem.MOVE_X) != 0 || (_mouseDragHitTest & SelectionUIItem.MOVE_Y) != 0)
                         {
                             Cursor = Cursors.Default;
                         }
@@ -695,11 +688,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Overrides Control to handle our selection grab handles.
+        ///  Overrides Control to handle our selection grab handles.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         protected override void OnMouseUp(MouseEventArgs me)
         {
             try
@@ -710,6 +701,7 @@ namespace System.Windows.Forms.Design
                     HitTestInfo hti = GetHitTest(screenCoord, HITTEST_DEFAULT);
                     _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
                 }
+
                 if (_mouseDragging)
                 {
                     object oldContainerDrag = _containerDrag;
@@ -719,6 +711,7 @@ namespace System.Windows.Forms.Design
                     {
                         ((ISelectionUIService)this).EndDrag(false);
                     }
+
                     if (me.Button == MouseButtons.Right && oldContainerDrag != null && !oldDragMoved)
                     {
                         OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(oldContainerDrag, ContainerSelectorActiveEventArgsType.Contextmenu));
@@ -739,7 +732,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// If the selection manager move, this indicates that the form has autoscolling enabled and has been scrolled.  We have to invalidate here because we may get moved before the rest of the components so we may draw the selection in the wrong spot.
+        ///  If the selection manager move, this indicates that the form has autoscolling enabled and has been scrolled.  We have to invalidate here because we may get moved before the rest of the components so we may draw the selection in the wrong spot.
         /// </summary>
         protected override void OnMove(EventArgs e)
         {
@@ -748,7 +741,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// overrides control.onPaint.  here we paint the selection handles.  The window's region was setup earlier.
+        ///  overrides control.onPaint.  here we paint the selection handles.  The window's region was setup earlier.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -772,7 +765,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Sets the appropriate selection cursor at the given point.
+        ///  Sets the appropriate selection cursor at the given point.
         /// </summary>
         private void SetSelectionCursor(Point pt)
         {
@@ -823,7 +816,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// called when the overlay region is invalid and should be updated
+        ///  called when the overlay region is invalid and should be updated
         /// </summary>
         private void UpdateWindowRegion()
         {
@@ -832,25 +825,25 @@ namespace System.Windows.Forms.Design
             {
                 region.Union(item.GetRegion());
             }
+
             Region = region;
         }
 
         /// <summary>
-        /// Override of our control's WNDPROC.  We diddle with capture a bit, and it's important to turn this off if the capture changes.
+        ///  Override of our control's WNDPROC.  We diddle with capture a bit, and it's important to turn this off if the capture changes.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch ((User32.WM)m.Msg)
             {
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_RBUTTONUP:
+                case User32.WM.LBUTTONUP:
+                case User32.WM.RBUTTONUP:
                     if (_mouseDragAnchor != s_invalidPoint)
                     {
                         _ignoreCaptureChanged = true;
                     }
                     break;
-
-                case NativeMethods.WM_CAPTURECHANGED:
+                case User32.WM.CAPTURECHANGED:
                     if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                     {
                         EndMouseDrag(MousePosition);
@@ -866,7 +859,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This can be used to determine if the user is in the middle of a drag operation.
+        ///  This can be used to determine if the user is in the middle of a drag operation.
         /// </summary>
         bool ISelectionUIService.Dragging
         {
@@ -874,7 +867,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Determines if the selection UI is shown or not.
+        ///  Determines if the selection UI is shown or not.
         /// </summary>
         bool ISelectionUIService.Visible
         {
@@ -883,30 +876,23 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Adds an event handler to the ContainerSelectorActive event. This event is fired whenever the user interacts with the container selector in a manor that would indicate that the selector should continued to be displayed. Since the container selector normally will vanish after a timeout, designers should listen to this event and reset the timeout when this event occurs.
+        ///  Adds an event handler to the ContainerSelectorActive event. This event is fired whenever the user interacts with the container selector in a manor that would indicate that the selector should continued to be displayed. Since the container selector normally will vanish after a timeout, designers should listen to this event and reset the timeout when this event occurs.
         /// </summary>
         event ContainerSelectorActiveEventHandler ISelectionUIService.ContainerSelectorActive
         {
-            add
-            {
-                _containerSelectorActive += value;
-            }
-            remove
-            {
-                _containerSelectorActive -= value;
-            }
+            add => _containerSelectorActive += value;
+            remove => _containerSelectorActive -= value;
         }
 
         /// <summary>
-        /// Assigns a selection UI handler to a given component.  The handler will be called when the UI service needs information about the component.  A single selection UI handler can be assigned to multiple components.
-        /// When multiple components are dragged, only a single handler may control the drag.  Because of this, only components that are assigned the same handler as the primary selection are included in drag operations. A selection UI handler is automatically unassigned when the component is removed from the container or disposed.
+        ///  Assigns a selection UI handler to a given component.  The handler will be called when the UI service needs information about the component.  A single selection UI handler can be assigned to multiple components. When multiple components are dragged, only a single handler may control the drag.  Because of this, only components that are assigned the same handler as the primary selection are included in drag operations. A selection UI handler is automatically unassigned when the component is removed from the container or disposed.
         /// </summary>
         void ISelectionUIService.AssignSelectionUIHandler(object component, ISelectionUIHandler handler)
         {
             ISelectionUIHandler oldHandler = (ISelectionUIHandler)_selectionHandlers[component];
             if (oldHandler != null)
             {
-                // ASURT #44582: The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
+                // The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
                 if (handler == oldHandler)
                 {
                     return;
@@ -935,11 +921,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This can be called by an outside party to begin a drag of the currently selected set of components.
+        ///  This can be called by an outside party to begin a drag of the currently selected set of components.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         bool ISelectionUIService.BeginDrag(SelectionRules rules, int initialX, int initialY)
         {
             if (_dragHandler != null)
@@ -954,7 +938,7 @@ namespace System.Windows.Forms.Design
                 return false;
             }
 
-            if (_selSvc == null)
+            if (_selSvc is null)
             {
                 return false;
             }
@@ -977,7 +961,7 @@ namespace System.Windows.Forms.Design
             {
                 primaryHandler = GetHandler(primary);
             }
-            if (primaryHandler == null)
+            if (primaryHandler is null)
             {
                 return false; // no UI handler for selection
             }
@@ -1005,7 +989,6 @@ namespace System.Windows.Forms.Design
             _dragComponents = objects;
             _dragRules = rules;
             _dragHandler = primaryHandler;
-
             string transactionName = GetTransactionName(rules, objects);
             _dragTransaction = _host.CreateTransaction(transactionName);
             try
@@ -1033,6 +1016,7 @@ namespace System.Windows.Forms.Design
                     _dragComponents = null;
                     _dragRules = 0;
                     _dragHandler = null;
+
                     // Always commit this -- BeginDrag returns false for our drags because it is a complete operation.
                     if (_dragTransaction != null)
                     {
@@ -1045,12 +1029,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by an outside party to update drag information.  This can only be called after a successful call to beginDrag.
+        ///  Called by an outside party to update drag information.  This can only be called after a successful call to beginDrag.
         /// </summary>
         void ISelectionUIService.DragMoved(Rectangle offset)
         {
             Rectangle newOffset = Rectangle.Empty;
-            if (_dragHandler == null)
+            if (_dragHandler is null)
             {
                 throw new Exception(SR.DesignerBeginDragNotCalled);
             }
@@ -1083,22 +1067,19 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by an outside party to finish a drag operation.  This can only be called after a successful call to beginDrag.
+        ///  Called by an outside party to finish a drag operation.  This can only be called after a successful call to beginDrag.
         /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         void ISelectionUIService.EndDrag(bool cancel)
         {
             _containerDrag = null;
             ISelectionUIHandler handler = _dragHandler;
             object[] components = _dragComponents;
-
             // Clean these out so that even if we throw an exception we don't die.
             _dragHandler = null;
             _dragComponents = null;
             _dragRules = SelectionRules.None;
-            if (handler == null)
+            if (handler is null)
             {
                 throw new InvalidOperationException();
             }
@@ -1107,9 +1088,8 @@ namespace System.Windows.Forms.Design
             DesignerTransaction trans = null;
             try
             {
-
                 IComponent comp = components[0] as IComponent;
-                if (components.Length > 1 || (components.Length == 1 && comp != null && comp.Site == null))
+                if (components.Length > 1 || (components.Length == 1 && comp != null && comp.Site is null))
                 {
                     trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                 }
@@ -1120,7 +1100,6 @@ namespace System.Windows.Forms.Design
                         trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
                     }
                 }
-
                 try
                 {
                     handler.EndDrag(components, cancel);
@@ -1133,7 +1112,9 @@ namespace System.Windows.Forms.Design
             finally
             {
                 if (trans != null)
+                {
                     trans.Commit();
+                }
                 // Reset the selection.  This will re-display our selection.
                 Visible = _savedVisible;
                 ((ISelectionUIService)this).SyncSelection();
@@ -1148,14 +1129,15 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter this set down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
+        ///  Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter this set down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
         /// </summary>
         object[] ISelectionUIService.FilterSelection(object[] components, SelectionRules selectionRules)
         {
             object[] selection = null;
-            if (components == null)
-                return new object[0];
-
+            if (components is null)
+            {
+                return Array.Empty<object>();
+            }
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
@@ -1173,11 +1155,11 @@ namespace System.Windows.Forms.Design
                 }
                 selection = (object[])list.ToArray();
             }
-            return selection ?? (new object[0]);
+            return selection ?? (Array.Empty<object>());
         }
 
         /// <summary>
-        /// Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
+        ///  Retrieves the width and height of a selection border grab handle. Designers may need this to properly position their user interfaces.
         /// </summary>
         Size ISelectionUIService.GetAdornmentDimensions(AdornmentType adornmentType)
         {
@@ -1193,29 +1175,22 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Tests to determine if the given screen coordinate is over an adornment for the specified component. This will only return true if the adornment, and selection UI, is visible.
+        ///  Tests to determine if the given screen coordinate is over an adornment for the specified component. This will only return true if the adornment, and selection UI, is visible.
         /// </summary>
-        bool ISelectionUIService.GetAdornmentHitTest(object component, Point value)
-        {
-            if (GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT)
-            {
-                return true;
-            }
-            return false;
-        }
+        bool ISelectionUIService.GetAdornmentHitTest(object component, Point value) => GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
 
         /// <summary>
-        /// Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
+        ///  Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
         /// </summary>
         bool ISelectionUIService.GetContainerSelected(object component) => (component != null && _selectionItems[component] is ContainerSelectionUIItem);
 
         /// <summary>
-        /// Retrieves a set of flags that define rules for the selection.  Selection rules indicate if the given component can be moved or sized, for example.
+        ///  Retrieves a set of flags that define rules for the selection.  Selection rules indicate if the given component can be moved or sized, for example.
         /// </summary>
         SelectionRules ISelectionUIService.GetSelectionRules(object component)
         {
             SelectionUIItem sel = (SelectionUIItem)_selectionItems[component];
-            if (sel == null)
+            if (sel is null)
             {
                 Debug.Fail("The component is not currently selected.");
                 throw new InvalidOperationException();
@@ -1224,12 +1199,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows you to configure the style of the selection frame that a component uses.  This is useful if your component supports different modes of operation (such as an in-place editing mode and a static design mode).  Where possible, you should leave the selection style as is and use the design-time hit testing feature of the IDesigner interface to provide features at design time.  The value of style must be one of the  SelectionStyle enum values. The selection style is only valid for the duration that the component is selected.
+        ///  Allows you to configure the style of the selection frame that a component uses.  This is useful if your component supports different modes of operation (such as an in-place editing mode and a static design mode).  Where possible, you should leave the selection style as is and use the design-time hit testing feature of the IDesigner interface to provide features at design time.  The value of style must be one of the  SelectionStyle enum values. The selection style is only valid for the duration that the component is selected.
         /// </summary>
         SelectionStyles ISelectionUIService.GetSelectionStyle(object component)
         {
             SelectionUIItem s = (SelectionUIItem)_selectionItems[component];
-            if (s == null)
+            if (s is null)
             {
                 return SelectionStyles.None;
             }
@@ -1237,7 +1212,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Changes the container selection status of the given component. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
+        ///  Changes the container selection status of the given component. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
         /// </summary>
         void ISelectionUIService.SetContainerSelected(object component, bool selected)
         {
@@ -1252,9 +1227,7 @@ namespace System.Windows.Forms.Design
                     }
                     SelectionUIItem item = new ContainerSelectionUIItem(this, component);
                     _selectionItems[component] = item;
-
                     // Now update our region and invalidate
-                    //
                     UpdateWindowRegion();
                     if (existingItem != null)
                     {
@@ -1266,7 +1239,7 @@ namespace System.Windows.Forms.Design
             else
             {
                 SelectionUIItem existingItem = (SelectionUIItem)_selectionItems[component];
-                if (existingItem == null || existingItem is ContainerSelectionUIItem)
+                if (existingItem is null || existingItem is ContainerSelectionUIItem)
                 {
                     _selectionItems.Remove(component);
                     if (existingItem != null)
@@ -1280,7 +1253,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Allows you to configure the style of the selection frame that a component uses.  This is useful if your component supports different modes of operation (such as an in-place editing mode and a static design mode).  Where possible, you should leave the selection style as is and use the design-time hit testing feature of the IDesigner interface to provide features at design time.  The value of style must be one of the  SelectionStyle enum values. The selection style is only valid for the duration that the component is selected.
+        ///  Allows you to configure the style of the selection frame that a component uses.  This is useful if your component supports different modes of operation (such as an in-place editing mode and a static design mode).  Where possible, you should leave the selection style as is and use the design-time hit testing feature of the IDesigner interface to provide features at design time.  The value of style must be one of the  SelectionStyle enum values. The selection style is only valid for the duration that the component is selected.
         /// </summary>
         void ISelectionUIService.SetSelectionStyle(object component, SelectionStyles style)
         {
@@ -1300,7 +1273,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This should be called when a component has been moved, sized or re-parented, but the change was not the result of a property change.  All property changes are monitored by the selection UI service, so this is automatic most of the time.  There are times, however, when a component may be moved without a property change notification occurring.  Scrolling an auto scroll Win32 form is an example of this. This method simply re-queries all currently selected components for their bounds and udpates the selection handles for any that have changed.
+        ///  This should be called when a component has been moved, sized or re-parented, but the change was not the result of a property change.  All property changes are monitored by the selection UI service, so this is automatic most of the time.  There are times, however, when a component may be moved without a property change notification occurring.  Scrolling an auto scroll Win32 form is an example of this. This method simply re-queries all currently selected components for their bounds and udpates the selection handles for any that have changed.
         /// </summary>
         void ISelectionUIService.SyncSelection()
         {
@@ -1318,7 +1291,6 @@ namespace System.Windows.Forms.Design
                         updateRegion |= item.UpdateSize();
                         item.UpdateRules();
                     }
-
                     if (updateRegion)
                     {
                         UpdateWindowRegion();
@@ -1329,7 +1301,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This should be called when a component's property changed, that the designer thinks should result in a selection UI change. This method simply re-queries all currently selected components for their bounds and udpates the selection handles for any that have changed.
+        ///  This should be called when a component's property changed, that the designer thinks should result in a selection UI change. This method simply re-queries all currently selected components for their bounds and udpates the selection handles for any that have changed.
         /// </summary>
         void ISelectionUIService.SyncComponent(object component)
         {
@@ -1354,7 +1326,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This class represents a single selected object.
+        ///  This class represents a single selected object.
         /// </summary>
         private class SelectionUIItem
         {
@@ -1410,8 +1382,7 @@ namespace System.Windows.Forms.Design
             private SelectionRules _selectionRules;
             private readonly ISelectionUIHandler _handler; // the components selection UI handler (can be null)
 
-            /// Its ok to call virtual method as this is a private class.            
-            [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+            ///  Its ok to call virtual method as this is a private class.
             public SelectionUIItem(SelectionUIService selUIsvc, object component)
             {
                 _selUIsvc = selUIsvc;
@@ -1434,7 +1405,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the style of the selection frame for this selection.
+            ///  Retrieves the style of the selection frame for this selection.
             /// </summary>
             public virtual SelectionStyles Style
             {
@@ -1454,13 +1425,16 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// paints the selection
+            ///  paints the selection
             /// </summary>
             public virtual void DoPaint(Graphics gr)
             {
                 // If we're not visible, then there's nothing to do...
+                //
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
+                {
                     return;
+                }
 
                 bool fActive = false;
                 if (_selUIsvc._selSvc != null)
@@ -1521,7 +1495,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves an appropriate cursor at the given point.  If there is no appropriate cursor here (ie, the point lies outside the selection rectangle), then this will return null.
+            ///  Retrieves an appropriate cursor at the given point.  If there is no appropriate cursor here (ie, the point lies outside the selection rectangle), then this will return null.
             /// </summary>
             public virtual Cursor GetCursorAtPoint(Point pt)
             {
@@ -1554,7 +1528,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// returns the hit test code of the given point.  This may be one of:
+            ///  returns the hit test code of the given point.  This may be one of:
             /// </summary>
             public virtual int GetHitTest(Point pt)
             {
@@ -1566,7 +1540,6 @@ namespace System.Windows.Forms.Design
 
                 // Which index in the array is this?
                 int nOffset = GetHandleIndexOfPoint(pt);
-
                 // If no index, the user has picked on the hatch
                 if (-1 == nOffset || _sizes[nOffset] == 0)
                 {
@@ -1575,9 +1548,8 @@ namespace System.Windows.Forms.Design
                 return _sizes[nOffset];
             }
 
-
             /// <summary>
-            /// gets the array offset of the handle at the given point
+            ///  gets the array offset of the handle at the given point
             /// </summary>
             private int GetHandleIndexOfPoint(Point pt)
             {
@@ -1585,13 +1557,22 @@ namespace System.Windows.Forms.Design
                 {
                     // Something on the left side.
                     if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
-                        return 0;   // top left
+                    {
+                        return 0; // top left
+                    }
+
                     if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
-                        return 5;   // bottom left
+                    {
+                        return 5; // bottom left
+                    }
+
                     if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
                         && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
-                        return 3;   // middle left
-                    return -1;    // unknown hit
+                    {
+                        return 3; // middle left
+                    }
+
+                    return -1; // unknown hit
                 }
 
                 if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
@@ -1599,11 +1580,17 @@ namespace System.Windows.Forms.Design
                     // something on the top
                     Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left top check");
                     if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
-                        return 2;   // top right
+                    {
+                        return 2; // top right
+                    }
+
                     if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2
                         && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
-                        return 1;   // top middle
-                    return -1;    // unknown hit
+                    {
+                        return 1; // top middle
+                    }
+
+                    return -1; // unknown hit
                 }
 
                 if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
@@ -1611,31 +1598,42 @@ namespace System.Windows.Forms.Design
                     // something on the right side
                     Debug.Assert(!(pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y), "Should be handled by top right check");
                     if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
-                        return 7;   // bottom right
+                    {
+                        return 7; // bottom right
+                    }
+
                     if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
                         && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
-                        return 4;   // middle right
-                    return -1;    // unknown hit
+                    {
+                        return 4; // middle right
+                    }
+
+                    return -1; // unknown hit
                 }
 
                 if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
                 {
                     // something on the bottom
                     Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left bottom check");
+
                     Debug.Assert(!(pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width), "Should be handled by right bottom check");
+
                     if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2 && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
-                        return 6;   // bottom middle
-                    return -1;    // unknown hit
+                    {
+                        return 6; // bottom middle
+                    }
+
+                    return -1; // unknown hit
                 }
                 return -1; // unknown hit
             }
 
             /// <summary>
-            /// returns a region handle that defines this selection.  This is used to piece together a paint region for the surface that we draw our selection handles on
+            ///  returns a region handle that defines this selection.  This is used to piece together a paint region for the surface that we draw our selection handles on
             /// </summary>
             public virtual Region GetRegion()
             {
-                if (_region == null)
+                if (_region is null)
                 {
                     if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                     {
@@ -1660,7 +1658,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Retrieves the rules associated with this selection.
+            ///  Retrieves the rules associated with this selection.
             /// </summary>
             public SelectionRules GetRules() => _selectionRules;
 
@@ -1674,7 +1672,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Invalidates the region for this selection glyph.
+            ///  Invalidates the region for this selection glyph.
             /// </summary>
             public void Invalidate()
             {
@@ -1685,7 +1683,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Part of our hit testing logic; determines if the point is somewhere within our selection.
+            ///  Part of our hit testing logic; determines if the point is somewhere within our selection.
             /// </summary>
             protected bool PointWithinSelection(Point pt)
             {
@@ -1694,17 +1692,14 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
-
                 if (pt.X < _outerRect.X || pt.X > _outerRect.X + _outerRect.Width)
                 {
                     return false;
                 }
-
                 if (pt.Y < _outerRect.Y || pt.Y > _outerRect.Y + _outerRect.Height)
                 {
                     return false;
                 }
-
                 if (pt.X > _innerRect.X
                     && pt.X < _innerRect.X + _innerRect.Width
                     && pt.Y > _innerRect.Y
@@ -1716,7 +1711,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Updates the available grab handle settings based on the current rules.
+            ///  Updates the available grab handle settings based on the current rules.
             /// </summary>
             private void UpdateGrabSettings()
             {
@@ -1772,11 +1767,11 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Updates our cached selection rules based on current handler values.
+            ///  Updates our cached selection rules based on current handler values.
             /// </summary>
             public void UpdateRules()
             {
-                if (_handler == null)
+                if (_handler is null)
                 {
                     _selectionRules = SelectionRules.None;
                 }
@@ -1793,30 +1788,34 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// rebuilds the inner and outer rectangles based on the current selItem.component dimensions.  We could calcuate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
+            ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions.  We could calcuate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
             /// </summary>
             public virtual bool UpdateSize()
             {
                 bool sizeChanged = false;
                 // Short circuit common cases
-                if (_handler == null)
+                if (_handler is null)
+                {
                     return false;
+                }
+
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
+                {
                     return false;
+                }
 
                 _innerRect = _handler.GetComponentBounds(_component);
                 if (!_innerRect.IsEmpty)
                 {
                     _innerRect = _selUIsvc.RectangleToClient(_innerRect);
-                    Rectangle rcOuterNew = new Rectangle(
-                                                        _innerRect.X - GRABHANDLE_WIDTH,
-                                                        _innerRect.Y - GRABHANDLE_HEIGHT,
-                                                        _innerRect.Width + 2 * GRABHANDLE_WIDTH,
-                                                        _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
+                    Rectangle rcOuterNew = new Rectangle(_innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
                     if (_outerRect.IsEmpty || !_outerRect.Equals(rcOuterNew))
                     {
                         if (!_outerRect.IsEmpty)
+                        {
                             Invalidate();
+                        }
+
                         _outerRect = rcOuterNew;
                         Invalidate();
                         if (_region != null)
@@ -1864,6 +1863,7 @@ namespace System.Windows.Forms.Design
                 if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                 {
                     Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+
                     if (r.Contains(pt))
                     {
                         ht = CONTAINER_SELECTOR;
@@ -1880,14 +1880,17 @@ namespace System.Windows.Forms.Design
             {
                 // If we're not visible, then there's nothing to do...
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
+                {
                     return;
+                }
+
                 Rectangle glyphBounds = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
                 ControlPaint.DrawContainerGrabHandle(gr, glyphBounds);
             }
 
             public override Region GetRegion()
             {
-                if (_region == null)
+                if (_region is null)
                 {
                     if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                     {
@@ -1924,8 +1927,6 @@ namespace System.Windows.Forms.Design
             }
 
             // Standard 'catch all - rethrow critical' exception pattern
-            [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-            [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
             public override bool Equals(object obj)
             {
                 try
@@ -1945,9 +1946,7 @@ namespace System.Windows.Forms.Design
 
             public static bool operator ==(HitTestInfo left, HitTestInfo right)
             {
-                return (left.hitTest == right.hitTest
-                        && left.selectionUIHit == right.selectionUIHit
-                        && left.containerSelector == right.containerSelector);
+                return (left.hitTest == right.hitTest && left.selectionUIHit == right.selectionUIHit && left.containerSelector == right.containerSelector);
             }
 
             public static bool operator !=(HitTestInfo left, HitTestInfo right) => !(left == right);

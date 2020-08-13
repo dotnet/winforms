@@ -4,48 +4,48 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Determines which child controls in a ContainerControl will be validated
-    /// by the <see cref='ContainerControl.ValidateChildren'/> method.
-    /// </devdoc>
+    /// <summary>
+    ///  Determines which child controls in a ContainerControl will be validated
+    ///  by the <see cref='ContainerControl.ValidateChildren(ValidationConstraints)'/> method.
+    /// </summary>
     [Flags]
     public enum ValidationConstraints
     {
-        /// <devdoc>
-        /// All child controls and their descendants are validated.
-        /// </devdoc>
+        /// <summary>
+        ///  All child controls and their descendants are validated.
+        /// </summary>
         None = 0x00,
 
-        /// <devdoc>
-        /// Child control must be selectable to be validated.
+        /// <summary>
+        ///  Child control must be selectable to be validated.
         ///
-        /// Note: This flag allows validation of a control that has the
-        /// ControlStyles.Selectable style, ie. has the ability to be selected,
-        /// even when that control is currently unselectable because it has been
-        /// disabled or hidden. To prevent validation of selectable controls that
-        /// are currently disabled or hidden,
-        /// </devdoc>
+        ///  Note: This flag allows validation of a control that has the
+        ///  ControlStyles.Selectable style, ie. has the ability to be selected,
+        ///  even when that control is currently unselectable because it has been
+        ///  disabled or hidden. To prevent validation of selectable controls that
+        ///  are currently disabled or hidden,
+        /// </summary>
         Selectable = 0x01,
 
-        /// <devdoc>
-        /// Child control must be enabled to be validated (Control.Enabled = true).
-        /// </devdoc>
+        /// <summary>
+        ///  Child control must be enabled to be validated (Control.Enabled = true).
+        /// </summary>
         Enabled = 0x02,
 
-        /// <devdoc>
-        /// Child control must be visible to be validated (Control.Visible = true).
-        /// </devdoc>
+        /// <summary>
+        ///  Child control must be visible to be validated (Control.Visible = true).
+        /// </summary>
         Visible = 0x04,
 
-        /// <devdoc>
-        /// Child control must be a tab stops to be validated (Control.TabStop = true).
-        /// </devdoc>
+        /// <summary>
+        ///  Child control must be a tab stops to be validated (Control.TabStop = true).
+        /// </summary>
         TabStop = 0x08,
 
-        /// <devdoc>
-        /// Only immediate children of container control are validated.
-        /// Descendants are not validated.
-        /// </devdoc>
+        /// <summary>
+        ///  Only immediate children of container control are validated.
+        ///  Descendants are not validated.
+        /// </summary>
         ImmediateChildren = 0x10,
     }
 }

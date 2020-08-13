@@ -4,45 +4,44 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies how a <see cref='System.Windows.Forms.RichTextBox'/> control displays scroll bars.
-    ///
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies how a <see cref='RichTextBox'/> control displays scroll bars.
+    /// </summary>
     public enum RichTextBoxScrollBars
     {
-        /// <devdoc>
-        /// Never display scroll bars.
-        /// </devdoc>
+        /// <summary>
+        ///  Never display scroll bars.
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
-        /// Display only a horizontal scroll bar when needed.
-        /// </devdoc>
+        /// <summary>
+        ///  Display only a horizontal scroll bar when needed.
+        /// </summary>
         Horizontal = RichTextBoxConstants.RTB_HORIZ,
 
-        /// <devdoc>
-        /// Display only a vertical scroll bar when needed.
-        /// </devdoc>
+        /// <summary>
+        ///  Display only a vertical scroll bar when needed.
+        /// </summary>
         Vertical = RichTextBoxConstants.RTB_VERT,
 
-        /// <devdoc>
-        /// Display both a horizontal and a vertical scroll bar when needed.
-        /// </devdoc>
+        /// <summary>
+        ///  Display both a horizontal and a vertical scroll bar when needed.
+        /// </summary>
         Both = Horizontal | Vertical,
 
-        /// <devdoc>
-        /// Always display only a horizontal scroll bar.
-        /// </devdoc>
+        /// <summary>
+        ///  Always display only a horizontal scroll bar.
+        /// </summary>
         ForcedHorizontal = RichTextBoxConstants.RTB_FORCE | Horizontal,
 
-        /// <devdoc>
-        /// Always display only a vertical scroll bar.
-        /// </devdoc>
+        /// <summary>
+        ///  Always display only a vertical scroll bar.
+        /// </summary>
         ForcedVertical = RichTextBoxConstants.RTB_FORCE | Vertical,
 
-        /// <devdoc>
-        /// Always display both a horizontal and a vertical scroll bar.
-        /// </devdoc>
+        /// <summary>
+        ///  Always display both a horizontal and a vertical scroll bar.
+        /// </summary>
         ForcedBoth = ForcedHorizontal | ForcedVertical,
 
         // Be careful when adding new members -- this enum is part normal, part flags

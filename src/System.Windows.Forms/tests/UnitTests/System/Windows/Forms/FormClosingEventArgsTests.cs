@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class FormClosingEventArgsTests
+    // NB: doesn't require thread affinity
+    public class FormClosingEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(CloseReason.None, true)]

@@ -16,21 +16,21 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This class serializes a set of components or serializable objects into a  serialization store.  The store can then be deserialized at a later  date.  CodeDomComponentSerializationService differs from other serialization  schemes in that the serialization format is opaque, and it allows for  partial serialization of objects.  For example, you can choose to  serialize only selected properties for an object.
+    ///  This class serializes a set of components or serializable objects into a  serialization store.  The store can then be deserialized at a later  date.  CodeDomComponentSerializationService differs from other serialization  schemes in that the serialization format is opaque, and it allows for  partial serialization of objects.  For example, you can choose to  serialize only selected properties for an object.
     /// </summary>
     public sealed class CodeDomComponentSerializationService : ComponentSerializationService
     {
         private readonly IServiceProvider _provider;
 
         /// <summary>
-        /// Creates a new CodeDomComponentSerializationService object.
+        ///  Creates a new CodeDomComponentSerializationService object.
         /// </summary>
         public CodeDomComponentSerializationService() : this(null)
         {
         }
 
         /// <summary>
-        /// Creates a new CodeDomComponentSerializationService object using the given  service provider to resolve services.
+        ///  Creates a new CodeDomComponentSerializationService object using the given  service provider to resolve services.
         /// </summary>
         public CodeDomComponentSerializationService(IServiceProvider provider)
         {
@@ -38,7 +38,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method creates a new SerializationStore.  The serialization store can be passed to any of the various Serialize methods to build up serialization  state for a group of objects.
+        ///  This method creates a new SerializationStore.  The serialization store can be passed to any of the various Serialize methods to build up serialization  state for a group of objects.
         /// </summary>
         public override SerializationStore CreateStore()
         {
@@ -46,98 +46,187 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method loads a SerializationStore and from the given stream.  This store can then be used to deserialize objects by passing it to  the various Deserialize methods.
+        ///  This method loads a SerializationStore and from the given stream.  This store can then be used to deserialize objects by passing it to  the various Deserialize methods.
         /// </summary>
         public override SerializationStore LoadStore(Stream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-            return CodeDomSerializationStore.Load(stream);
+            throw new PlatformNotSupportedException();
         }
 
         /// <summary>
-        /// This method serializes the given object to the store.  The store  can be used to serialize more than one object by calling this method  more than once. 
+        ///  This method serializes the given object to the store.  The store  can be used to serialize more than one object by calling this method  more than once.
         /// </summary>
         public override void Serialize(SerializationStore store, object value)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddObject(value, false);
         }
 
         /// <summary>
-        /// This method serializes the given object to the store.  The store can be used to serialize more than one object by calling this method more than once. 
+        ///  This method serializes the given object to the store.  The store can be used to serialize more than one object by calling this method more than once.
         /// </summary>
         public override void SerializeAbsolute(SerializationStore store, object value)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddObject(value, true);
         }
 
         /// <summary>
-        /// This method serializes the given member on the given object.  This method  can be invoked multiple times for the same object to build up a list of  serialized members within the serialization store.  The member generally  has to be a property or an event.
+        ///  This method serializes the given member on the given object.  This method  can be invoked multiple times for the same object to build up a list of  serialized members within the serialization store.  The member generally  has to be a property or an event.
         /// </summary>
         public override void SerializeMember(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
-            if (member == null) throw new ArgumentNullException(nameof(member));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (owningObject is null)
+            {
+                throw new ArgumentNullException(nameof(owningObject));
+            }
+
+            if (member is null)
+            {
+                throw new ArgumentNullException(nameof(member));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddMember(owningObject, member, false);
         }
 
         /// <summary>
-        /// This method serializes the given member on the given object,  but also serializes the member if it contains the default value.  
-        /// Note that for some members, containing the default value and setting  the same value back to the member are different concepts.  For example, if a property inherits its value from a parent object if no local value  is set, setting the value back to the property can may not be what is desired.   SerializeMemberAbsolute takes this into account and would clear the state of  the property in this case.
+        ///  This method serializes the given member on the given object,  but also serializes the member if it contains the default value.
+        ///  Note that for some members, containing the default value and setting  the same value back to the member are different concepts.  For example, if a property inherits its value from a parent object if no local value  is set, setting the value back to the property can may not be what is desired.   SerializeMemberAbsolute takes this into account and would clear the state of  the property in this case.
         /// </summary>
         public override void SerializeMemberAbsolute(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
-            if (member == null) throw new ArgumentNullException(nameof(member));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (owningObject is null)
+            {
+                throw new ArgumentNullException(nameof(owningObject));
+            }
+
+            if (member is null)
+            {
+                throw new ArgumentNullException(nameof(member));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.AddMember(owningObject, member, true);
         }
 
         /// <summary>
-        /// This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container. 
+        ///  This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container.
         /// </summary>
         public override ICollection Deserialize(SerializationStore store)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             return cdStore.Deserialize(_provider);
         }
 
         /// <summary>
-        /// This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container. 
+        ///  This method deserializes the given store to produce a collection of  objects contained within it.  If a container is provided, objects  that are created that implement IComponent will be added to the container.
         /// </summary>
         public override ICollection Deserialize(SerializationStore store, IContainer container)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (container == null) throw new ArgumentNullException(nameof(container));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             return cdStore.Deserialize(_provider, container);
         }
 
         /// <summary>
-        /// This method deserializes the given store, but rather than produce  new objects object, the data in the store is applied to an existing  set of objects that are taken from the provided container.  This  allows the caller to pre-create an object however it sees fit.  If an object has deserialization state and the object is not named in  the set of existing objects, a new object will be created.  If that  object also implements IComponent, it will be added to the given  container.  Objects in the container must have names and types that  match objects in the serialization store in order for an existing  object to be used.
+        ///  This method deserializes the given store, but rather than produce  new objects object, the data in the store is applied to an existing  set of objects that are taken from the provided container.  This  allows the caller to pre-create an object however it sees fit.  If an object has deserialization state and the object is not named in  the set of existing objects, a new object will be created.  If that  object also implements IComponent, it will be added to the given  container.  Objects in the container must have names and types that  match objects in the serialization store in order for an existing  object to be used.
         /// </summary>
         public override void DeserializeTo(SerializationStore store, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
-            if (store == null) throw new ArgumentNullException(nameof(store));
-            if (container == null) throw new ArgumentNullException(nameof(container));
-            if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            if (store is null)
+            {
+                throw new ArgumentNullException(nameof(store));
+            }
+
+            if (container is null)
+            {
+                throw new ArgumentNullException(nameof(container));
+            }
+
+            if (!(store is CodeDomSerializationStore cdStore))
+            {
+                throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
+            }
+
             cdStore.DeserializeTo(_provider, container, validateRecycledTypes, applyDefaults);
         }
 
         /// <summary>
-        /// The SerializationStore class is an implementation-specific class that stores  serialization data for the component serialization service.  The  service adds state to this serialization store.  Once the store is  closed it can be saved to a stream.  A serialization store can be  deserialized at a later date by the same type of serialization service.   SerializationStore implements the IDisposable interface such that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.  The IDisposable pattern is provided  for languages that support a "using" syntax like C# and VB .NET.
+        ///  The SerializationStore class is an implementation-specific class that stores serialization data for the component serialization service.
+        ///  The service adds state to this serialization store.  Once the store is closed it can be saved to a stream.  A serialization store can
+        ///  be deserialized at a later date by the same type of serialization service. SerializationStore implements the IDisposable interface such
+        ///  that Dispose  simply calls the Close method.  Dispose is implemented as a private interface to avoid confusion.
+        ///  The <see cref="IDisposable" /> pattern is provided for languages that support a "using" syntax like C# and VB .NET.
         /// </summary>
-        [Serializable]
         private sealed class CodeDomSerializationStore : SerializationStore, ISerializable
         {
 #if DEBUG
@@ -155,7 +244,7 @@ namespace System.ComponentModel.Design.Serialization
             private const int StateEvents = 4;
             private const int StateModifier = 5;
 
-            private MemoryStream _resourceStream = null;
+            private MemoryStream _resourceStream;
 
             // Transient fields only used during creation of the store
             private Hashtable _objects;
@@ -172,7 +261,7 @@ namespace System.ComponentModel.Design.Serialization
             private ICollection _errors;
 
             /// <summary>
-            /// Creates a new store.
+            ///  Creates a new store.
             /// </summary>
             internal CodeDomSerializationStore(IServiceProvider provider)
             {
@@ -183,24 +272,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Used to deserialize ourselves from binary serialization.
-            /// </summary>
-            private CodeDomSerializationStore(SerializationInfo info, StreamingContext context)
-            {
-                _objectState = (Hashtable)info.GetValue(StateKey, typeof(Hashtable));
-                _objectNames = (ArrayList)info.GetValue(NameKey, typeof(ArrayList));
-                _assemblies = (AssemblyName[])info.GetValue(AssembliesKey, typeof(AssemblyName[]));
-                _shimObjectNames = (List<string>)info.GetValue(ShimKey, typeof(List<string>));
-                Hashtable h = (Hashtable)info.GetValue(ResourcesKey, typeof(Hashtable));
-
-                if (h != null)
-                {
-                    _resources = new LocalResourceManager(h);
-                }
-            }
-
-            /// <summary>
-            /// Nested classes within us access this property to get to our array of saved assembly names.
+            ///  Nested classes within us access this property to get to our array of saved assembly names.
             /// </summary>
             private AssemblyName[] AssemblyNames
             {
@@ -208,15 +280,15 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// If there were errors generated during serialization or deserialization of the store, they will be added to this collection.
+            ///  If there were errors generated during serialization or deserialization of the store, they will be added to this collection.
             /// </summary>
             public override ICollection Errors
             {
                 get
                 {
-                    if (_errors == null)
+                    if (_errors is null)
                     {
-                        _errors = new object[0];
+                        _errors = Array.Empty<object>();
                     }
 
                     object[] errors = new object[_errors.Count];
@@ -226,13 +298,13 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Nested classes within us access this property to get to our collection of resources.
+            ///  Nested classes within us access this property to get to our collection of resources.
             /// </summary>
             private LocalResourceManager Resources
             {
                 get
                 {
-                    if (_resources == null)
+                    if (_resources is null)
                     {
                         _resources = new LocalResourceManager();
                     }
@@ -241,17 +313,23 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Adds a new member serialization to our list of things to serialize.
+            ///  Adds a new member serialization to our list of things to serialize.
             /// </summary>
             internal void AddMember(object value, MemberDescriptor member, bool absolute)
             {
-                if (_objectState != null) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
-                ObjectData data = (ObjectData)_objects[value];
-                if (data == null)
+                if (_objectState != null)
                 {
-                    data = new ObjectData();
-                    data._name = GetObjectName(value);
-                    data._value = value;
+                    throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
+                }
+
+                ObjectData data = (ObjectData)_objects[value];
+                if (data is null)
+                {
+                    data = new ObjectData
+                    {
+                        _name = GetObjectName(value),
+                        _value = value
+                    };
 
                     _objects[value] = data;
                     _objectNames.Add(data._name);
@@ -262,14 +340,17 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Adds a new object serialization to our list of things to serialize.
+            ///  Adds a new object serialization to our list of things to serialize.
             /// </summary>
             internal void AddObject(object value, bool absolute)
             {
                 if (_objectState != null)
+                {
                     throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
+                }
+
                 ObjectData data = (ObjectData)_objects[value];
-                if (data == null)
+                if (data is null)
                 {
                     data = new ObjectData
                     {
@@ -287,15 +368,15 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// The Close method closes this store and prevents any objects  from being serialized into it.  Once closed, the serialization store may be saved.
+            ///  The Close method closes this store and prevents any objects  from being serialized into it.  Once closed, the serialization store may be saved.
             /// </summary>
             public override void Close()
             {
-                if (_objectState == null)
+                if (_objectState is null)
                 {
                     Hashtable state = new Hashtable(_objects.Count);
                     DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
-                    if (_provider.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
+                    if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
                     {
                         foreach (IDesignerSerializationProvider provider in hostManager.SerializationProviders)
                         {
@@ -319,13 +400,15 @@ namespace System.ComponentModel.Design.Serialization
                     // also serialize out resources if we have any  we force this in order for undo to work correctly
                     if (_resources != null)
                     {
-                        Debug.Assert(_resourceStream == null, "Attempting to close a serialization store with already serialized resources");
-                        if (_resourceStream == null)
+                        Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
+                        if (_resourceStream is null)
                         {
                             BinaryFormatter formatter = new BinaryFormatter();
                             _resourceStream = new MemoryStream();
 
+#pragma warning disable CS0618 // Type or member is obsolete
                             formatter.Serialize(_resourceStream, _resources.Data);
+#pragma warning restore CS0618 // Type or member is obsolete
                         }
                     }
 
@@ -356,7 +439,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Deserializes the saved bits.
+            ///  Deserializes the saved bits.
             /// </summary>
             internal ICollection Deserialize(IServiceProvider provider)
             {
@@ -364,7 +447,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Deserializes the saved bits.
+            ///  Deserializes the saved bits.
             /// </summary>
             internal ICollection Deserialize(IServiceProvider provider, IContainer container)
             {
@@ -397,7 +480,9 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     _resourceStream.Seek(0, SeekOrigin.Begin);
+#pragma warning disable CS0618 // Type or member is obsolete
                     Hashtable resources = formatter.Deserialize(_resourceStream) as Hashtable;
+#pragma warning restore CS0618 // Type or member is obsolete
                     _resources = new LocalResourceManager(resources);
                 }
 
@@ -418,7 +503,7 @@ namespace System.ComponentModel.Design.Serialization
                             foreach (string compName in names)
                             {
                                 object instance = container.Components[compName];
-                                if (instance != null && dsm.GetInstance(compName) == null)
+                                if (instance != null && dsm.GetInstance(compName) is null)
                                 {
                                     dsm.SetName(instance, compName);
                                 }
@@ -445,7 +530,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Deserializes the saved bits.
+            ///  Deserializes the saved bits.
             /// </summary>
             internal void DeserializeTo(IServiceProvider provider, IContainer container, bool validateRecycledTypes, bool applyDefaults)
             {
@@ -453,7 +538,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Gets a name for this object.  It first tries the object's site, if it exists, and otherwise fabricates a unique name.
+            ///  Gets a name for this object.  It first tries the object's site, if it exists, and otherwise fabricates a unique name.
             /// </summary>
             private string GetObjectName(object value)
             {
@@ -480,22 +565,22 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Loads our state from a stream.
+            ///  Loads our state from a stream.
             /// </summary>
             internal static CodeDomSerializationStore Load(Stream stream)
             {
                 BinaryFormatter f = new BinaryFormatter();
+#pragma warning disable CS0618 // Type or member is obsolete
                 return (CodeDomSerializationStore)f.Deserialize(stream);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             /// <summary>
-            /// The Save method saves the store to the given stream.  If the store  is open, Save will automatically close it for you.  You  can call save as many times as you wish to save the store  to different streams.
+            ///  The Save method is not supported.
             /// </summary>
             public override void Save(Stream stream)
             {
-                Close();
-                BinaryFormatter f = new BinaryFormatter();
-                f.Serialize(stream, this);
+                throw new PlatformNotSupportedException();
             }
 
             [Conditional("DEBUG")]
@@ -510,8 +595,7 @@ namespace System.ComponentModel.Design.Serialization
 #if DEBUG
             internal static void TraceCode(string name, object code)
             {
-
-                if (code == null || !s_trace.TraceVerbose)
+                if (code is null || !s_trace.TraceVerbose)
                 {
                     return;
                 }
@@ -520,21 +604,21 @@ namespace System.ComponentModel.Design.Serialization
                 object[] state = (object[])code;
                 code = state[StateCode];
 
-                if (code == null)
+                if (code is null)
                 {
                     return;
                 }
 
 #pragma warning disable 618
                 System.CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-#pragma warning restore 618    
-                StringWriter sw = new StringWriter(CultureInfo.InvariantCulture);
+#pragma warning restore 618
+                using var sw = new StringWriter(CultureInfo.InvariantCulture);
                 Trace("Stored CodeDom for {0}: ", name);
                 Debug.Indent();
 
-                if (code is CodeTypeDeclaration)
+                if (code is CodeTypeDeclaration codeTypeDeclaration)
                 {
-                    codeGenerator.GenerateCodeFromType((CodeTypeDeclaration)code, sw, null);
+                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, sw, null);
                 }
                 else if (code is CodeStatementCollection statements)
                 {
@@ -543,13 +627,13 @@ namespace System.ComponentModel.Design.Serialization
                         codeGenerator.GenerateCodeFromStatement(statement, sw, null);
                     }
                 }
-                else if (code is CodeStatement)
+                else if (code is CodeStatement codeStatement)
                 {
-                    codeGenerator.GenerateCodeFromStatement((CodeStatement)code, sw, null);
+                    codeGenerator.GenerateCodeFromStatement(codeStatement, sw, null);
                 }
-                else if (code is CodeExpression)
+                else if (code is CodeExpression codeExpression)
                 {
-                    codeGenerator.GenerateCodeFromExpression((CodeExpression)code, sw, null);
+                    codeGenerator.GenerateCodeFromExpression(codeExpression, sw, null);
                 }
                 else
                 {
@@ -568,25 +652,24 @@ namespace System.ComponentModel.Design.Serialization
 #endif
 
             /// <summary>
-            /// Implements the save part of ISerializable.
+            ///  Implements the save part of ISerializable. Used in unit tests only.
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                Hashtable resources = null;
-                if (_resources != null)
+                if (info is null)
                 {
-                    resources = _resources.Data;
+                    throw new ArgumentNullException(nameof(info));
                 }
 
                 info.AddValue(StateKey, _objectState);
                 info.AddValue(NameKey, _objectNames);
                 info.AddValue(AssembliesKey, _assemblies);
-                info.AddValue(ResourcesKey, resources);
+                info.AddValue(ResourcesKey, _resources?.Data);
                 info.AddValue(ShimKey, _shimObjectNames);
             }
 
             /// <summary>
-            /// This is a simple code dom serializer that serializes a set of objects as a unit.
+            ///  This is a simple code dom serializer that serializes a set of objects as a unit.
             /// </summary>
             private class ComponentListCodeDomSerializer : CodeDomSerializer
             {
@@ -620,7 +703,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             exps = _expressions[name];
                         }
-                        if (exps == null)
+                        if (exps is null)
                         {
                             exps = new ArrayList();
                             _expressions[name] = exps;
@@ -633,7 +716,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
                 /// <summary>
-                /// Deserializes the given object state.  The results are contained within the  serialization manager's name table.  The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
+                ///  Deserializes the given object state.  The results are contained within the  serialization manager's name table.  The objectNames list is used to  deserialize in the proper order, as objectState is unordered.
                 /// </summary>
                 internal void Deserialize(IDesignerSerializationManager manager, IDictionary objectState, IList objectNames, bool applyDefaults)
                 {
@@ -769,9 +852,9 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 /// <summary>
-                /// This is used to resolve nested component references.  NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component.  This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
-                /// This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
-                /// </summary>                               
+                ///  This is used to resolve nested component references.  NestedComponents don't exist as sited components within the DesignerHost, they are actually sited within a parent component.  This method takes the FullName defined on INestedSite and returns the component which matches it. outerComponent is the name of the topmost component which does exist in the DesignerHost
+                ///  This code also exists in VSCodeDomDesignerLoader -- please keep them in sync.
+                /// </summary>
                 private IComponent ResolveNestedName(IDesignerSerializationManager manager, string name, ref string outerComponent)
                 {
                     IComponent curComp = null;
@@ -817,7 +900,6 @@ namespace System.ComponentModel.Design.Serialization
                     return curComp;
                 }
 
-                [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
                 private bool ResolveName(IDesignerSerializationManager manager, string name, bool canInvokeManager)
                 {
                     bool resolved = false;
@@ -862,7 +944,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (typeName != null)
                         {
                             Type type = manager.GetType(typeName);
-                            if (type == null)
+                            if (type is null)
                             {
                                 TraceError("Type does not exist: {0}", typeName);
                                 manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
@@ -872,7 +954,7 @@ namespace System.ComponentModel.Design.Serialization
                                 if (statements != null && statements.Count > 0)
                                 {
                                     CodeDomSerializer serializer = GetSerializer(manager, type);
-                                    if (serializer == null)
+                                    if (serializer is null)
                                     {
                                         // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
                                         TraceError("Type referenced in init method has no serializer: {0}", type.Name);
@@ -955,7 +1037,7 @@ namespace System.ComponentModel.Design.Serialization
                                     object exValue = DeserializeExpression(manager, name, exp);
                                     if (exValue != null && !resolved)
                                     {
-                                        if (canInvokeManager && manager.GetInstance(name) == null)
+                                        if (canInvokeManager && manager.GetInstance(name) is null)
                                         {
                                             manager.SetName(exValue, name);
                                             resolved = true;
@@ -970,7 +1052,7 @@ namespace System.ComponentModel.Design.Serialization
                                 resolved = manager.GetInstance(name) != null;
                             }
 
-                            // In this case we still need to correctly deserialize default properties &  design-time only properties.  
+                            // In this case we still need to correctly deserialize default properties &  design-time only properties.
                             if (resolved && state != null && state[StateProperties] != null)
                             {
                                 DeserializeDefaultProperties(manager, name, state[StateProperties]);
@@ -1045,9 +1127,12 @@ namespace System.ComponentModel.Design.Serialization
                     throw new NotSupportedException();
                 }
 
-                // <summary>
-                // For everything in the serialization manager's container, we need a variable ref, just in case something that has changed has a reference to another object. We also must do this for everything that we are serializing that is not marked as EntireObject.  Otherwise reference could leak and cause the entire object to be serialized.
-                // <summary>
+                /// <summary>
+                ///  For everything in the serialization manager's container, we need a variable ref,
+                ///  just in case something that has changed has a reference to another object. We also
+                ///  must do this for everything that we are serializing that is not marked as EntireObject.
+                ///  Otherwise reference could leak and cause the entire object to be serialized.
+                /// </summary>
                 internal void SetupVariableReferences(IDesignerSerializationManager manager, IContainer container, IDictionary objectData, IList shimObjectNames)
                 {
                     foreach (IComponent c in container.Components)
@@ -1083,7 +1168,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 /// <summary>
-                /// Serializes the given set of objects (contained in objectData) into the given object state dictionary.
+                ///  Serializes the given set of objects (contained in objectData) into the given object state dictionary.
                 /// </summary>
                 internal void Serialize(IDesignerSerializationManager manager, IDictionary objectData, IDictionary objectState, IList shimObjectNames)
                 {
@@ -1106,7 +1191,7 @@ namespace System.ComponentModel.Design.Serialization
                             // Slot 2 is an array of default properites.
                             // Slot 3 is for design time props.Any may be null.
                             // Slot 4 is for events that need to be reset.
-                            // Slot 5 is for the modifier property of the object.  
+                            // Slot 5 is for the modifier property of the object.
                             // Since it is DSV.Hidden, it won't be serialized. We special case it here.
 
                             object[] state = new object[6];
@@ -1155,7 +1240,7 @@ namespace System.ComponentModel.Design.Serialization
                                             // For design time properties, we write their value into a resource blob.
                                             if (md._member is PropertyDescriptor prop && prop.PropertyType.IsSerializable)
                                             {
-                                                if (state[StateResources] == null)
+                                                if (state[StateResources] is null)
                                                 {
                                                     state[StateResources] = new Hashtable();
                                                 }
@@ -1191,7 +1276,6 @@ namespace System.ComponentModel.Design.Serialization
                             ArrayList defaultPropList = null;
                             List<string> defaultEventList = null;
                             IEventBindingService ebs = manager.GetService(typeof(IEventBindingService)) as IEventBindingService;
-                            Debug.Assert(ebs != null, "No IEventBindingService is available.  Events will not be serialized correctly");
                             if (data.EntireObject)
                             {
                                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(data._value);
@@ -1202,7 +1286,7 @@ namespace System.ComponentModel.Design.Serialization
                                     {
                                         if (prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) || !prop.IsReadOnly)
                                         {
-                                            if (defaultPropList == null)
+                                            if (defaultPropList is null)
                                             {
                                                 defaultPropList = new ArrayList(data.Members.Count);
                                             }
@@ -1217,14 +1301,14 @@ namespace System.ComponentModel.Design.Serialization
                                     PropertyDescriptorCollection events = ebs.GetEventProperties(TypeDescriptor.GetEvents(data._value));
                                     foreach (PropertyDescriptor eventProp in events)
                                     {
-                                        if (eventProp == null || eventProp.IsReadOnly)
+                                        if (eventProp is null || eventProp.IsReadOnly)
                                         {
                                             continue;
                                         }
 
-                                        if (eventProp.GetValue(data._value) == null)
+                                        if (eventProp.GetValue(data._value) is null)
                                         {
-                                            if (defaultEventList == null)
+                                            if (defaultEventList is null)
                                             {
                                                 defaultEventList = new List<string>();
                                             }
@@ -1241,8 +1325,8 @@ namespace System.ComponentModel.Design.Serialization
                                     {
                                         if (ebs != null && ebs.GetEvent(prop) != null)
                                         {
-                                            Debug.Assert(prop.GetValue(data._value) == null, "ShouldSerializeValue and GetValue are differing");
-                                            if (defaultEventList == null)
+                                            Debug.Assert(prop.GetValue(data._value) is null, "ShouldSerializeValue and GetValue are differing");
+                                            if (defaultEventList is null)
                                             {
                                                 defaultEventList = new List<string>();
                                             }
@@ -1250,7 +1334,7 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                         else
                                         {
-                                            if (defaultPropList == null)
+                                            if (defaultPropList is null)
                                             {
                                                 defaultPropList = new ArrayList(data.Members.Count);
                                             }
@@ -1285,29 +1369,28 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     finally
                     {
-                        Debug.Assert(manager.Context.Current == statementCxt, "Context stack corrupted");
                         manager.Context.Pop();
                     }
                 }
             }
 
             /// <summary>
-            /// We create one of these for each specific member on an object.
+            ///  We create one of these for each specific member on an object.
             /// </summary>
             private class MemberData
             {
                 /// <summary>
-                /// The member we're serializing.
+                ///  The member we're serializing.
                 /// </summary>
                 internal MemberDescriptor _member;
 
                 /// <summary>
-                /// True if we should try to serialize values that contain their defaults as well.
+                ///  True if we should try to serialize values that contain their defaults as well.
                 /// </summary>
                 internal bool _absolute;
 
                 /// <summary>
-                /// Creates a new member data ready to be serialized.
+                ///  Creates a new member data ready to be serialized.
                 /// </summary>
                 internal MemberData(MemberDescriptor member, bool absolute)
                 {
@@ -1317,7 +1400,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// We create one of these for each object we process.
+            ///  We create one of these for each object we process.
             /// </summary>
             private class ObjectData
             {
@@ -1326,17 +1409,17 @@ namespace System.ComponentModel.Design.Serialization
                 private ArrayList _members;
 
                 /// <summary>
-                /// The object value we're serializing.
+                ///  The object value we're serializing.
                 /// </summary>
                 internal object _value;
 
                 /// <summary>
-                /// The name of the object we're serializing.
+                ///  The name of the object we're serializing.
                 /// </summary>
                 internal string _name;
 
                 /// <summary>
-                /// If true, the entire object should be serialized. If false, only the members in the member list should be serialized.
+                ///  If true, the entire object should be serialized. If false, only the members in the member list should be serialized.
                 /// </summary>
                 internal bool EntireObject
                 {
@@ -1352,7 +1435,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 /// <summary>
-                /// If true, the object should be serialized such that during deserialization to an existing object the object is reconstructed entirely. If false, serialize normally
+                ///  If true, the object should be serialized such that during deserialization to an existing object the object is reconstructed entirely. If false, serialize normally
                 /// </summary>
                 internal bool Absolute
                 {
@@ -1361,13 +1444,13 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 /// <summary>
-                /// A list of MemberData objects representing specific members that should be serialized.
+                ///  A list of MemberData objects representing specific members that should be serialized.
                 /// </summary>
                 internal IList Members
                 {
                     get
                     {
-                        if (_members == null)
+                        if (_members is null)
                         {
                             _members = new ArrayList();
                         }
@@ -1377,7 +1460,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// Our private resource manager...it just pushes all the data into a hashtable and then we serialize the hashtable.  On deseriaization, the hashtable is rebuilt for us and we have all the data we saved out.
+            ///  Our private resource manager...it just pushes all the data into a hashtable and then we serialize the hashtable.  On deseriaization, the hashtable is rebuilt for us and we have all the data we saved out.
             /// </summary>
             private class LocalResourceManager : ResourceManager, IResourceWriter, IResourceReader
             {
@@ -1390,7 +1473,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     get
                     {
-                        if (_hashtable == null)
+                        if (_hashtable is null)
                         {
                             _hashtable = new Hashtable();
                         }
@@ -1417,11 +1500,10 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            /// LocalServices contains the services that we add to our serialization manager.  We do this, rather than implement interfaces directly on CodeDomSerializationStore to prevent people from assuming what our implementation is (CodeDomSerializationStore is returned publicly as SerializationStore).
+            ///  LocalServices contains the services that we add to our serialization manager.  We do this, rather than implement interfaces directly on CodeDomSerializationStore to prevent people from assuming what our implementation is (CodeDomSerializationStore is returned publicly as SerializationStore).
             /// </summary>
             private class LocalServices : IServiceProvider, IResourceService
             {
-
                 private readonly CodeDomSerializationStore _store;
                 private readonly IServiceProvider _provider;
 
@@ -1438,7 +1520,7 @@ namespace System.ComponentModel.Design.Serialization
                 // IServiceProvider
                 object IServiceProvider.GetService(Type serviceType)
                 {
-                    if (serviceType == null)
+                    if (serviceType is null)
                     {
                         throw new ArgumentNullException(nameof(serviceType));
                     }
@@ -1495,14 +1577,8 @@ namespace System.ComponentModel.Design.Serialization
 
                 event EventHandler IDesignerSerializationManager.SerializationComplete
                 {
-                    add
-                    {
-                        ((IDesignerSerializationManager)_manager).SerializationComplete += value;
-                    }
-                    remove
-                    {
-                        ((IDesignerSerializationManager)_manager).SerializationComplete -= value;
-                    }
+                    add => ((IDesignerSerializationManager)_manager).SerializationComplete += value;
+                    remove => ((IDesignerSerializationManager)_manager).SerializationComplete -= value;
                 }
 
                 void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
@@ -1563,19 +1639,18 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     return ((IDesignerSerializationManager)_manager).GetService(serviceType);
                 }
-
             }
 
             /// <summary>
-            /// This is a serialzation manager that can load assemblies and search for types and provide a resource manager from our serialization store.
+            ///  This is a serialzation manager that can load assemblies and search for types and provide a resource manager from our serialization store.
             /// </summary>
             private class LocalDesignerSerializationManager : DesignerSerializationManager
             {
                 private readonly CodeDomSerializationStore _store;
-                private Nullable<bool> _typeSvcAvailable = new Nullable<bool>();
+                private bool? _typeSvcAvailable;
 
                 /// <summary>
-                /// Creates a new serilalization manager.
+                ///  Creates a new serilalization manager.
                 /// </summary>
                 internal LocalDesignerSerializationManager(CodeDomSerializationStore store, IServiceProvider provider) : base(provider)
                 {
@@ -1583,7 +1658,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 /// <summary>
-                /// We override CreateInstance here to provide a hook to our resource manager.
+                ///  We override CreateInstance here to provide a hook to our resource manager.
                 /// </summary>
                 protected override object CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)
                 {
@@ -1607,12 +1682,12 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 /// <summary>
-                /// Override of GetType.  We favor the base implementation first, which uses the type resolution service if it is available.  If that fails, we will try to load assemblies from the given array of assembly names.
+                ///  Override of GetType.  We favor the base implementation first, which uses the type resolution service if it is available.  If that fails, we will try to load assemblies from the given array of assembly names.
                 /// </summary>
                 protected override Type GetType(string name)
                 {
                     Type t = base.GetType(name);
-                    if (t == null && !TypeResolutionAvailable.Value)
+                    if (t is null && !TypeResolutionAvailable.Value)
                     {
                         AssemblyName[] names = _store.AssemblyNames;
                         // First try the assembly names directly.
@@ -1630,7 +1705,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         // Failing that go after their dependencies.
-                        if (t == null)
+                        if (t is null)
                         {
                             foreach (AssemblyName n in names)
                             {

@@ -4,45 +4,43 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies how an accessible object will be selected or receive focus.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies how an accessible object will be selected or receive focus.
+    /// </summary>
     [Flags]
     public enum AccessibleSelection
     {
-        /// <devdoc>
-        /// The selection or focus of an object is unchanged.
-        /// </devdoc>
+        /// <summary>
+        ///  The selection or focus of an object is unchanged.
+        /// </summary>
         None = 0,
 
-        /// <include file='doc\AccessibleSelection.uex' path='docs/doc[@for="AccessibleSelection.TakeFocus"]/*' />
-        /// <devdoc>
-        ///    <para>
-        /// Assigns focus to an object and makes it the anchor, which is the
-        /// starting point for the selection. Can be combined with
+        /// <summary>
+        ///  Assigns focus to an object and makes it the anchor, which is the
+        ///  starting point for the selection. Can be combined with
         /// <see cref='TakeSelection'/>, <see cref='ExtendSelection'/>,
         /// <see cref='AddSelection'/>, or  <see cref='RemoveSelection'/>.
-        /// </devdoc>
+        /// </summary>
         TakeFocus = 1,
 
-        /// <devdoc>
-        /// Selects the object and deselects all other objects in the container.
-        /// </devdoc>
+        /// <summary>
+        ///  Selects the object and deselects all other objects in the container.
+        /// </summary>
         TakeSelection = 2,
 
-        /// <devdoc>
-        /// Selects all objects between the anchor and the selected object.
-        /// </devdoc>
+        /// <summary>
+        ///  Selects all objects between the anchor and the selected object.
+        /// </summary>
         ExtendSelection = 4,
 
-        /// <devdoc>
-        /// Adds the object to the selection.
-        /// </devdoc>
+        /// <summary>
+        ///  Adds the object to the selection.
+        /// </summary>
         AddSelection = 8,
 
-        /// <devdoc>
-        /// Removes the object from the selection.
-        /// </devdoc>
+        /// <summary>
+        ///  Removes the object from the selection.
+        /// </summary>
         RemoveSelection = 16,
     }
 }

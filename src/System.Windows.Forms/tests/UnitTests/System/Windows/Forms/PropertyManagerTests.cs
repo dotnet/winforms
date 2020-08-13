@@ -12,7 +12,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyManagerTests
+    // NB: doesn't require thread affinity
+    public class PropertyManagerTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void PropertyManager_Ctor_Default()
@@ -55,7 +56,7 @@ namespace System.Windows.Forms.Tests
         /*
         public static IEnumerable<object[]> GetItemProperties_Parameterless_TestData()
         {
-            yield return new object[] { new PropertyManager(), new string[0] };
+            yield return new object[] { new PropertyManager(), Array.Empty<string>() };
 
             var singleContext = new BindingContext();
             yield return new object[] { singleContext[new DataSource()], new string[] { "Property" } };
@@ -74,8 +75,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> GetItemProperties_DataSourcesAndListAccessors_TestData()
         {
-            yield return new object[] { new PropertyManager(), null, null, new string[0] };
-            yield return new object[] { new PropertyManager(), new ArrayList(), new ArrayList(), new string[0] };
+            yield return new object[] { new PropertyManager(), null, null, Array.Empty<string>() };
+            yield return new object[] { new PropertyManager(), new ArrayList(), new ArrayList(), Array.Empty<string>() };
 
             var singleContext = new BindingContext();
             yield return new object[] { singleContext[new DataSource()], null, null, new string[] { "Property" } };
@@ -150,7 +151,7 @@ namespace System.Windows.Forms.Tests
             mockDataSource.Verify(o => o.EndEdit(), Times.Exactly(2));
         }
 
-        [Theory]
+        [WinFormsTheory(Skip = "Flaky test, see: https://github.com/dotnet/winforms/issues/1030")]
         [InlineData(true, 0)]
         [InlineData(false, 1)]
         public void PropertyManager_EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)
@@ -165,7 +166,7 @@ namespace System.Windows.Forms.Tests
             };
 
             var manager = new PropertyManager(dataSource);
-            var control = new SubControl { Visible = true };
+            using var control = new SubControl { Visible = true };
             control.CreateControl();
             var controlBindings = new ControlBindingsCollection(control);
             var cancelBinding = new Binding("Value", dataSource, "Property", true);
@@ -173,7 +174,7 @@ namespace System.Windows.Forms.Tests
             {
                 e.Cancel = cancel;
             };
-            
+
             cancelBinding.BindingComplete += bindingCompleteHandler;
             controlBindings.Add(cancelBinding);
             manager.Bindings.Add(cancelBinding);

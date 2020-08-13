@@ -6,51 +6,52 @@ using System.Globalization;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Form.InputLanguageChanged'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='Form.InputLanguageChanged'/> event.
+    /// </summary>
     public class InputLanguageChangedEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/> class with the
-        /// specified locale and character set.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='InputLanguageChangedEventArgs'/> class with the
+        ///  specified locale and character set.
+        /// </summary>
         public InputLanguageChangedEventArgs(CultureInfo culture, byte charSet)
         {
-            InputLanguage = InputLanguage.FromCulture(culture);
+            InputLanguage? language = InputLanguage.FromCulture(culture);
+            if (language is null)
+            {
+                throw new ArgumentException(string.Format(SR.InputLanguageCultureNotFound, culture), nameof(culture));
+            }
+
+            InputLanguage = language;
             Culture = culture;
             CharSet = charSet;
         }
 
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.InputLanguageChangedEventArgs'/>class with the specified input language and
-        /// character set.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='InputLanguageChangedEventArgs'/> class with the specified input language and
+        ///  character set.
+        /// </summary>
         public InputLanguageChangedEventArgs(InputLanguage inputLanguage, byte charSet)
         {
-            if (inputLanguage == null)
-            {
-                throw new ArgumentNullException(nameof(inputLanguage));
-            }
-
-            InputLanguage = inputLanguage;
+            InputLanguage = inputLanguage ?? throw new ArgumentNullException(nameof(inputLanguage));
             Culture = inputLanguage.Culture;
             CharSet = charSet;
         }
 
-        /// <devdoc>
-        /// Gets the input language.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the input language.
+        /// </summary>
         public InputLanguage InputLanguage { get; }
 
-        /// <devdoc>
-        /// Gets the locale of the input language.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the locale of the input language.
+        /// </summary>
         public CultureInfo Culture { get; }
 
-        /// <devdoc>
-        /// Gets the character set associated with the new input language.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the character set associated with the new input language.
+        /// </summary>
         public byte CharSet { get; }
     }
 }

@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that will handle the <see langword='ItemCheck'/>
-    /// event of a <see cref='System.Windows.Forms.CheckedListBox'/> or 
-    /// <see cref='System.Windows.Forms.ListView'/>.
-    /// </devdoc>
+    /// <summary>
+    ///  Represents a method that will handle the <c>ItemCheck</c>
+    ///  event of a <see cref='CheckedListBox'/> or <see cref='ListView'/>.
+    /// </summary>
     public delegate void ItemCheckedEventHandler(object sender, ItemCheckedEventArgs e);
 }

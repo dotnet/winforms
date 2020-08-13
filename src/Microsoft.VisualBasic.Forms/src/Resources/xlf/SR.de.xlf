@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="de" original="../SR.resx">
+    <body>
+      <trans-unit id="AppModel_NoStartupForm">
+        <source>A startup form has not been specified.</source>
+        <target state="translated">Es wurde kein Startformular angegeben.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceCantConnect">
+        <source>This single-instance application could not connect to the original instance.</source>
+        <target state="translated">Diese Einzelinstanzanwendung konnte keine Verbindung zur ursprünglichen Instanz herstellen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AppModel_SplashAndMainFormTheSame">
+        <source>Splash screen and main form cannot be the same form.</source>
+        <target state="translated">Das Formular für den Begrüßungsbildschirm und das Hauptformular dürfen nicht identisch sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLogBaseNameNull">
+        <source>BaseFileName cannot be Nothing or an empty String.</source>
+        <target state="translated">BaseFileName kann nicht "Nothing" oder eine leere Zeichenfolge sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLogNumberTooSmall">
+        <source>The value of {0} must be greater than or equal to 1000.</source>
+        <target state="translated">Der Wert von {0} muss größer als oder gleich 1000 sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_ExhaustedPossibleStreamNames">
+        <source>Unable to obtain a stream for the log.  Potential file names based on {0} are already in use.</source>
+        <target state="translated">Für das Protokoll kann kein Stream abgerufen werden. Die auf {0} basierenden potenziellen Dateinamen werden bereits verwendet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_FileExceedsMaximumSize">
+        <source>Unable to write to log file because writing to it would cause it to exceed the MaxFileSize value.</source>
+        <target state="translated">In der Protokolldatei kann nicht geschrieben werden, weil dies dazu führen würde, dass sie den MaxFileSize-Wert überschreitet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_FreeSpaceError">
+        <source>Cannot determine the amount of available disk space.</source>
+        <target state="translated">Der freie Speicherplatz auf dem Datenträger kann nicht bestimmt werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_NegativeNumber">
+        <source>The value of {0} must be a positive number.</source>
+        <target state="translated">Der Wert von {0} muss eine positive Zahl sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_ReservedSpaceEncroached">
+        <source>Unable to write to log file because writing to it would reduce free disk space below ReservedSpace value.</source>
+        <target state="translated">Die Protokolldatei kann nicht geschrieben werden, weil das Schreiben in dieser Datei dazu führen würde, dass der freie Speicherplatz auf dem Datenträger unter den ReservedSpace-Wert absinkt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidNullValue1">
+        <source>Argument '{0}' is Nothing.</source>
+        <target state="translated">Das Argument {0} ist "Nothing".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidValue1">
+        <source>Argument '{0}' is not a valid value.</source>
+        <target state="translated">Das Argument {0} ist kein gültiger Wert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidValueType2">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">Das Argument {0} kann nicht in den Typ {1} umgewandelt werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DiagnosticInfo_FullOSName">
+        <source>Could not obtain full operation system name due to internal error. This might be caused by WMI not existing on the current machine.</source>
+        <target state="translated">Interner Fehler. Der vollständige Betriebssystemname konnte nicht abgerufen werden. Mögliche Ursache: Auf dem aktuellen Computer ist keine WMI vorhanden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DiagnosticInfo_Memory">
+        <source>Could not obtain memory information due to internal error.</source>
+        <target state="translated">Interner Fehler. Die Speicherinformationen konnten nicht abgerufen werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EnvVarNotFound_Name">
+        <source>Environment variable is not defined: '{0}'.</source>
+        <target state="translated">Die Umgebungsvariable wurde nicht definiert: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="General_ArgumentNullException">
+        <source>Argument cannot be Nothing.</source>
+        <target state="translated">Das Argument kann nicht "Nothing" sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="General_PropertyNothing">
+        <source>Property {0} cannot be set to Nothing.</source>
+        <target state="translated">Die Eigenschaft {0} kann nicht auf "Nothing" festgelegt werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ID53">
+        <source>File not found.</source>
+        <target state="translated">Datei nicht gefunden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ID70">
+        <source>Permission denied.</source>
+        <target state="translated">Berechtigung verweigert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FileExists_Path">
+        <source>Could not complete operation since a file already exists in this path '{0}'.</source>
+        <target state="translated">Der Vorgang konnte nicht abgeschlossen werden, da bereits eine Datei im Pfad {0} vorhanden ist.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FileNotFound_Path">
+        <source>Could not find file '{0}'.</source>
+        <target state="translated">Die Datei "{0}" konnte nicht gefunden werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FilePathException">
+        <source>The given file path ends with a directory separator character.</source>
+        <target state="translated">Der angegebene Pfad endet mit einem Verzeichnistrennzeichen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Mouse_NoMouseIsPresent">
+        <source>No mouse is present.</source>
+        <target state="translated">Es ist keine Maus vorhanden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Mouse_NoWheelIsPresent">
+        <source>No mouse wheel is present.</source>
+        <target state="translated">Es ist kein Mausrad vorhanden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_BadConnectionTimeout">
+        <source>The ConnectionTimeout must be greater than 0.</source>
+        <target state="translated">Der Verbindungstimeout-Wert muss größer als 0 sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_DownloadNeedsFilename">
+        <source>destinationFileName needs to include a file name.</source>
+        <target state="translated">In destinationFileName muss ein Dateiname enthalten sein.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_InvalidUriString">
+        <source>'{0}' is not a valid remote file address. A valid address should include a protocol, a path and a file name.</source>
+        <target state="translated">"{0}" ist keine gültige Remotedateiadresse. Eine gültige Adresse muss ein Protokoll, einen Pfad und einen Dateinamen enthalten.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_NetworkNotAvailable">
+        <source>Unable to ping because a network connection is not available.</source>
+        <target state="translated">Pingfehler. Es ist keine Netzwerkverbindung verfügbar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_UploadAddressNeedsFilename">
+        <source>The address for UploadFile needs to include a file name.</source>
+        <target state="translated">Die Adresse für UploadFile muss einen Dateinamen enthalten.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProcessNotFound">
+        <source>Process '{0}' was not found.</source>
+        <target state="translated">Der Prozess {0} wurde nicht gefunden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogDownloadingLabel">
+        <source>Downloading {0} to {1}</source>
+        <target state="translated">{0} wird nach {1} heruntergeladen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogDownloadingTitle">
+        <source>Downloading {0}</source>
+        <target state="translated">{0} wird heruntergeladen</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogUploadingLabel">
+        <source>Uploading {0} to {1}</source>
+        <target state="translated">{0} wird nach {1} hochgeladen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogUploadingTitle">
+        <source>Uploading {0}</source>
+        <target state="translated">{0} wird hochgeladen</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -2,57 +2,56 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxIcon
     {
-        /// <devdoc>
-        /// Specifies that the message box contain no symbols.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies that the message box contain no symbols.
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
-        /// Specifies that the message box contains a hand symbol.
-        /// </devdoc>
-        Hand = 0x00000010,
+        /// <summary>
+        ///  Specifies that the message box contains a hand symbol.
+        /// </summary>
+        Hand = (int)MB.ICONHAND,
 
-        /// <devdoc>
-        /// Specifies that the message box contains a question mark symbol.
-        /// </devdoc>
-        Question = 0x00000020,
+        /// <summary>
+        ///  Specifies that the message box contains a question mark symbol.
+        /// </summary>
+        Question = (int)MB.ICONQUESTION,
 
-        /// <devdoc>
-        /// Specifies that the message box contains an exclamation symbol.
-        /// </devdoc>
-        Exclamation  = 0x00000030,
+        /// <summary>
+        ///  Specifies that the message box contains an exclamation symbol.
+        /// </summary>
+        Exclamation = (int)MB.ICONEXCLAMATION,
 
-        /// <devdoc>
-        /// Specifies that the message box contains an asterisk symbol.
-        /// </devdoc>
-        Asterisk = 0x00000040,
+        /// <summary>
+        ///  Specifies that the message box contains an asterisk symbol.
+        /// </summary>
+        Asterisk = (int)MB.ICONASTERISK,
 
-        /// <devdoc>
-        /// Specifies that the message box contains a hand icon. This field is
-        /// constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies that the message box contains a hand icon. This field is
+        ///  constant.
+        /// </summary>
         Stop = Hand,
 
-        /// <devdoc>
-        /// Specifies that the message box contains a hand icon.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies that the message box contains a hand icon.
+        /// </summary>
         Error = Hand,
 
-        /// <devdoc>
-        /// Specifies that the message box contains an exclamation icon.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies that the message box contains an exclamation icon.
+        /// </summary>
         Warning = Exclamation,
 
-        /// <devdoc>
-        /// Specifies that the message box contains an asterisk icon.
-        /// </devdoc>
-        Information  = Asterisk,
+        /// <summary>
+        ///  Specifies that the message box contains an asterisk icon.
+        /// </summary>
+        Information = Asterisk,
     }
 }

@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Indicates the result of a completed binding operation.
-    /// </devdoc>
+    /// <summary>
+    ///  Indicates the result of a completed binding operation.
+    /// </summary>
     public enum BindingCompleteState
     {
-        /// <devdoc>
-        /// Binding operation completed successfully.
-        /// </devdoc>
+        /// <summary>
+        ///  Binding operation completed successfully.
+        /// </summary>
         Success = 0,
 
-        /// <devdoc>
-        /// Binding operation failed with a data error.
-        /// </devdoc>
+        /// <summary>
+        ///  Binding operation failed with a data error.
+        /// </summary>
         DataError = 1,
 
-        /// <devdoc>
-        /// Binding operation failed with an exception.
-        /// </devdoc>
+        /// <summary>
+        ///  Binding operation failed with an exception.
+        /// </summary>
         Exception = 2,
     }
 }

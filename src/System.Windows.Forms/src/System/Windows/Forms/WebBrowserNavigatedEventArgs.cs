@@ -2,26 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.WebBrowser.OnNavigated'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='WebBrowser.OnNavigated'/> event.
+    /// </summary>
     public class WebBrowserNavigatedEventArgs : EventArgs
     {
         private readonly Uri _url;
 
-        /// <devdoc>
-        /// Creates an instance of the <see cref='System.Windows.Forms.WebBrowserNavigatedEventArgs'/> class.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates an instance of the <see cref='WebBrowserNavigatedEventArgs'/> class.
+        /// </summary>
         public WebBrowserNavigatedEventArgs(Uri url)
         {
             _url = url;
         }
-        
-        /// <devdoc>
-        /// Url the browser navigated to.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Url the browser navigated to.
+        /// </summary>
         public Uri Url
         {
             get

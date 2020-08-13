@@ -2,79 +2,90 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Windows.Forms.Layout;
-    
-    /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem"]/*' />
-    /// <devdoc>
-    /// Base class for ToolStripItems that display DropDown windows.
-    /// </devdoc>
+#nullable disable
+
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+using static Interop;
+
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Base class for ToolStripItems that display DropDown windows.
+    /// </summary>
     [Designer("System.Windows.Forms.Design.ToolStripMenuItemDesigner, " + AssemblyRef.SystemDesign)]
     [DefaultProperty(nameof(DropDownItems))]
-    public abstract class ToolStripDropDownItem : ToolStripItem {
-
-        private ToolStripDropDown dropDown     = null;
+    public abstract class ToolStripDropDownItem : ToolStripItem
+    {
+        private ToolStripDropDown dropDown;
         private ToolStripDropDownDirection toolStripDropDownDirection = ToolStripDropDownDirection.Default;
-        private static readonly object EventDropDownShow              = new object();
-        private static readonly object EventDropDownHide              = new object();
-        private static readonly object EventDropDownOpened               = new object();
-        private static readonly object EventDropDownClosed               = new object();
-        private static readonly object EventDropDownItemClicked               = new object();
-        
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ToolStripDropDownItem"]/*' />
-        /// <devdoc>
-        /// Protected ctor so you can't create one of these without deriving from it.
-        /// </devdoc>
-        protected ToolStripDropDownItem() {
+        private ToolTip hookedKeyboardTooltip;
+        private static readonly object EventDropDownShow = new object();
+        private static readonly object EventDropDownHide = new object();
+        private static readonly object EventDropDownOpened = new object();
+        private static readonly object EventDropDownClosed = new object();
+        private static readonly object EventDropDownItemClicked = new object();
+
+        /// <summary>
+        ///  Protected ctor so you can't create one of these without deriving from it.
+        /// </summary>
+        protected ToolStripDropDownItem()
+        {
         }
 
-        protected ToolStripDropDownItem(string text, Image image, EventHandler onClick) : base(text, image, onClick) {
+        protected ToolStripDropDownItem(string text, Image image, EventHandler onClick) : base(text, image, onClick)
+        {
         }
 
-        protected ToolStripDropDownItem(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name) {
+        protected ToolStripDropDownItem(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
+        {
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        protected ToolStripDropDownItem(string text, Image image, params ToolStripItem[] dropDownItems) : this(text, image, (EventHandler)null) {
-            if (dropDownItems != null) {
-                this.DropDownItems.AddRange(dropDownItems);
+        protected ToolStripDropDownItem(string text, Image image, params ToolStripItem[] dropDownItems) : this(text, image, (EventHandler)null)
+        {
+            if (dropDownItems != null)
+            {
+                DropDownItems.AddRange(dropDownItems);
             }
         }
 
-
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDown"]/*' />
-        /// <devdoc>
-        /// The ToolStripDropDown that will be displayed when this item is clicked.
-        /// </devdoc>
-        [
-        TypeConverter(typeof(ReferenceConverter)),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ToolStripDropDownDescr))
-        ]
-        public ToolStripDropDown DropDown {
-            get {               
-                if (dropDown == null) {
+        /// <summary>
+        ///  The ToolStripDropDown that will be displayed when this item is clicked.
+        /// </summary>
+        [TypeConverter(typeof(ReferenceConverter))]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripDropDownDescr))]
+        public ToolStripDropDown DropDown
+        {
+            get
+            {
+                if (dropDown is null)
+                {
                     DropDown = CreateDefaultDropDown();
                     if (!(this is ToolStripOverflowButton))
                     {
                         dropDown.SetAutoGeneratedInternal(true);
                     }
 
-                    if (ParentInternal != null) {
+                    if (ParentInternal != null)
+                    {
                         dropDown.ShowItemToolTips = ParentInternal.ShowItemToolTips;
                     }
-                }   
-                return dropDown; 
-            } 
-            set { 
-                if (dropDown != value) {
-
-                    if (dropDown != null) {
+                }
+                return dropDown;
+            }
+            set
+            {
+                if (dropDown != value)
+                {
+                    if (dropDown != null)
+                    {
+                        if (hookedKeyboardTooltip != null)
+                        {
+                            KeyboardToolTipStateMachine.Instance.Unhook(dropDown, hookedKeyboardTooltip);
+                        }
                         dropDown.Opened -= new EventHandler(DropDown_Opened);
                         dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                         dropDown.ItemClicked -= new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
@@ -82,113 +93,118 @@ namespace System.Windows.Forms {
                     }
 
                     dropDown = value;
-                    if (dropDown != null) {
+                    if (dropDown != null)
+                    {
+                        if (hookedKeyboardTooltip != null)
+                        {
+                            KeyboardToolTipStateMachine.Instance.Hook(dropDown, hookedKeyboardTooltip);
+                        }
                         dropDown.Opened += new EventHandler(DropDown_Opened);
                         dropDown.Closed += new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                         dropDown.ItemClicked += new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
                         dropDown.AssignToDropDownItem();
                     }
-                    
                 }
-                
-               
             }
         }
 
         // the area which activates the dropdown.
-        internal virtual Rectangle DropDownButtonArea {
-            get { return this.Bounds; }
-        }
+        internal virtual Rectangle DropDownButtonArea
+            => Bounds;
 
         [Browsable(false)]
         [SRDescription(nameof(SR.ToolStripDropDownItemDropDownDirectionDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
-        public ToolStripDropDownDirection DropDownDirection {
-            get { 
-                if (toolStripDropDownDirection == ToolStripDropDownDirection.Default) {
-                   ToolStrip parent = ParentInternal;
-                   if (parent != null) {
-                       ToolStripDropDownDirection dropDownDirection = parent.DefaultDropDownDirection;
-                       if (OppositeDropDownAlign || this.RightToLeft != parent.RightToLeft && (this.RightToLeft != RightToLeft.Inherit)) {
+        public ToolStripDropDownDirection DropDownDirection
+        {
+            get
+            {
+                if (toolStripDropDownDirection == ToolStripDropDownDirection.Default)
+                {
+                    ToolStrip parent = ParentInternal;
+                    if (parent != null)
+                    {
+                        ToolStripDropDownDirection dropDownDirection = parent.DefaultDropDownDirection;
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
+                        if (OppositeDropDownAlign || RightToLeft != parent.RightToLeft && (RightToLeft != RightToLeft.Inherit))
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                        {
                             dropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, RightToLeft);
-                       }
+                        }
 
-                       if  (IsOnDropDown) {
-                          // we gotta make sure that we dont collide with the existing menu.
-                          Rectangle bounds = GetDropDownBounds(dropDownDirection);
-                          Rectangle ownerItemBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
-                          Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
-                            
-                          // grab the intersection 
-                          if (intersectionBetweenChildAndParent.Width >= 2) {
-                              RightToLeft toggledRightToLeft = (RightToLeft == RightToLeft.Yes) ? RightToLeft.No : RightToLeft.Yes;
-                              ToolStripDropDownDirection newDropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, toggledRightToLeft);
+                        if (IsOnDropDown)
+                        {
+                            // we gotta make sure that we dont collide with the existing menu.
+                            Rectangle bounds = GetDropDownBounds(dropDownDirection);
+                            Rectangle ownerItemBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
+                            Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
 
-                              // verify that changing the dropdown direction actually causes less intersection.
-                              int newIntersectionWidth = Rectangle.Intersect(GetDropDownBounds(newDropDownDirection), ownerItemBounds).Width;
-                              if (newIntersectionWidth < intersectionBetweenChildAndParent.Width) {
-                                 dropDownDirection = newDropDownDirection;
-                              }
-                          }
-                          
-                       }
-                       return dropDownDirection;
+                            // grab the intersection
+                            if (intersectionBetweenChildAndParent.Width >= 2)
+                            {
+                                RightToLeft toggledRightToLeft = (RightToLeft == RightToLeft.Yes) ? RightToLeft.No : RightToLeft.Yes;
+                                ToolStripDropDownDirection newDropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, toggledRightToLeft);
 
-                   }
+                                // verify that changing the dropdown direction actually causes less intersection.
+                                int newIntersectionWidth = Rectangle.Intersect(GetDropDownBounds(newDropDownDirection), ownerItemBounds).Width;
+                                if (newIntersectionWidth < intersectionBetweenChildAndParent.Width)
+                                {
+                                    dropDownDirection = newDropDownDirection;
+                                }
+                            }
+                        }
+                        return dropDownDirection;
+                    }
                 }
 
                 // someone has set a custom override
-                return toolStripDropDownDirection; 
-
+                return toolStripDropDownDirection;
             }
-            set { 
+            set
+            {
                 // cant use Enum.IsValid as its not sequential
-                switch (value) {
-                   case ToolStripDropDownDirection.AboveLeft:
-                   case ToolStripDropDownDirection.AboveRight:
-                   case ToolStripDropDownDirection.BelowLeft:
-                   case ToolStripDropDownDirection.BelowRight:
-                   case ToolStripDropDownDirection.Left:
-                   case ToolStripDropDownDirection.Right:
-                   case ToolStripDropDownDirection.Default:
-                      break;
-                   default:
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripDropDownDirection));
+                switch (value)
+                {
+                    case ToolStripDropDownDirection.AboveLeft:
+                    case ToolStripDropDownDirection.AboveRight:
+                    case ToolStripDropDownDirection.BelowLeft:
+                    case ToolStripDropDownDirection.BelowRight:
+                    case ToolStripDropDownDirection.Left:
+                    case ToolStripDropDownDirection.Right:
+                    case ToolStripDropDownDirection.Default:
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripDropDownDirection));
                 }
 
-                if (toolStripDropDownDirection != value) {
+                if (toolStripDropDownDirection != value)
+                {
                     toolStripDropDownDirection = value;
-                    if (HasDropDownItems && DropDown.Visible) {
+                    if (HasDropDownItems && DropDown.Visible)
+                    {
                         DropDown.Location = DropDownLocation;
                     }
                 }
             }
         }
 
-    
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownClosed"]/*' />
-        /// <devdoc>
-        /// Occurs when the dropdown is closed
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripDropDownClosedDecr))
-        ]
-        public event EventHandler DropDownClosed {
-            add {
-                Events.AddHandler(EventDropDownClosed, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownClosed, value);
-            }
+        /// <summary>
+        ///  Occurs when the dropdown is closed
+        /// </summary>
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripDropDownClosedDecr))]
+        public event EventHandler DropDownClosed
+        {
+            add => Events.AddHandler(EventDropDownClosed, value);
+            remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownLocation"]/*' />
-        internal protected virtual Point DropDownLocation 
+        internal protected virtual Point DropDownLocation
         {
-            get { 
-                
-                if (ParentInternal == null || !HasDropDownItems){
+            get
+            {
+                if (ParentInternal is null || !HasDropDownItems)
+                {
                     return Point.Empty;
                 }
                 ToolStripDropDownDirection dropDownDirection = DropDownDirection;
@@ -196,175 +212,152 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpening"]/*' />
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
-        ]
-        public event EventHandler DropDownOpening {
-            add {
-                Events.AddHandler(EventDropDownShow, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownShow, value);
-            }
-        }   
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpened"]/*' />
-        /// <devdoc>
-        /// Occurs when the dropdown is opened
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatAction)),
-        SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))
-        ]
-        public event EventHandler DropDownOpened {
-            add {
-                Events.AddHandler(EventDropDownOpened, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownOpened, value);
-            }
-        }   
-
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItems"]/*' />
-        /// <devdoc>
-        /// Returns the DropDown's items collection.
-        /// </devdoc>
-        [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ToolStripDropDownItemsDescr))
-        ]
-        public ToolStripItemCollection DropDownItems {
-            get {
-                return DropDown.Items;
-            }
-        }
-
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItemClicked"]/*' />
-        /// <devdoc>
-        /// Occurs when the dropdown is opened
-        /// </devdoc>
         [SRCategory(nameof(SR.CatAction))]
-        public event ToolStripItemClickedEventHandler DropDownItemClicked {
-            add {
-                Events.AddHandler(EventDropDownItemClicked, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownItemClicked, value);
-            }
+        [SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))]
+        public event EventHandler DropDownOpening
+        {
+            add => Events.AddHandler(EventDropDownShow, value);
+            remove => Events.RemoveHandler(EventDropDownShow, value);
+        }
+        /// <summary>
+        ///  Occurs when the dropdown is opened
+        /// </summary>
+        [SRCategory(nameof(SR.CatAction))]
+        [SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))]
+        public event EventHandler DropDownOpened
+        {
+            add => Events.AddHandler(EventDropDownOpened, value);
+            remove => Events.RemoveHandler(EventDropDownOpened, value);
         }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDownItems"]/*' />
+        /// <summary>
+        ///  Returns the DropDown's items collection.
+        /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRCategory(nameof(SR.CatData))]
+        [SRDescription(nameof(SR.ToolStripDropDownItemsDescr))]
+        public ToolStripItemCollection DropDownItems
+            => DropDown.Items;
+
+        /// <summary>
+        ///  Occurs when the dropdown is opened
+        /// </summary>
+        [SRCategory(nameof(SR.CatAction))]
+        public event ToolStripItemClickedEventHandler DropDownItemClicked
+        {
+            add => Events.AddHandler(EventDropDownItemClicked, value);
+            remove => Events.RemoveHandler(EventDropDownItemClicked, value);
+        }
+
         [Browsable(false)]
-        public virtual bool HasDropDownItems {
-            get {
+        public virtual bool HasDropDownItems
+            =>
                 //Use count of visible DisplayedItems instead so that we take into account things that arent visible
-                return (dropDown != null) && dropDown.HasVisibleItems;
-            }
-        }
+                (dropDown != null) && dropDown.HasVisibleItems;
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDown"]/*' />
         [Browsable(false)]
-        public bool HasDropDown {
-            get { return dropDown != null; }
-        }
+        public bool HasDropDown
+            => dropDown != null;
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.Pressed"]/*' />
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public override bool Pressed {
-            get {
-                 // 
-                 if (dropDown != null) {
-                    if (DropDown.AutoClose || !IsInDesignMode || (IsInDesignMode && !IsOnDropDown)){
-                        return DropDown.OwnerItem == this && DropDown.Visible; 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override bool Pressed
+        {
+            get
+            {
+                if (dropDown != null)
+                {
+                    if (DropDown.AutoClose || !IsInDesignMode || (IsInDesignMode && !IsOnDropDown))
+                    {
+                        return DropDown.OwnerItem == this && DropDown.Visible;
                     }
-                 }
-                 return base.Pressed;
+                }
+                return base.Pressed;
             }
         }
 
-        internal virtual bool OppositeDropDownAlign {
-            get { return false; }
+        internal virtual bool OppositeDropDownAlign
+            => false;
+
+        internal virtual void AutoHide(ToolStripItem otherItemBeingSelected)
+            => HideDropDown();
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new ToolStripDropDownItemAccessibleObject(this);
+
+        protected virtual ToolStripDropDown CreateDefaultDropDown()
+        {
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
+            return new ToolStripDropDown(this, true);
         }
 
+        private Rectangle DropDownDirectionToDropDownBounds(ToolStripDropDownDirection dropDownDirection, Rectangle dropDownBounds)
+        {
+            Point offset = Point.Empty;
 
-        internal virtual void AutoHide(ToolStripItem otherItemBeingSelected) {
-            HideDropDown();
-        }
+            switch (dropDownDirection)
+            {
+                case ToolStripDropDownDirection.AboveLeft:
+                    offset.X = -dropDownBounds.Width + Width;
+                    offset.Y = -dropDownBounds.Height + 1;
+                    break;
+                case ToolStripDropDownDirection.AboveRight:
+                    offset.Y = -dropDownBounds.Height + 1;
+                    break;
+                case ToolStripDropDownDirection.BelowRight:
+                    offset.Y = Height - 1;
+                    break;
+                case ToolStripDropDownDirection.BelowLeft:
+                    offset.X = -dropDownBounds.Width + Width;
+                    offset.Y = Height - 1;
+                    break;
+                case ToolStripDropDownDirection.Right:
+                    offset.X = Width;
+                    if (!IsOnDropDown)
+                    {
+                        // overlap the toplevel toolstrip
+                        offset.X--;
+                    }
+                    break;
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateAccessibilityInstance"]/*' />
-        protected override AccessibleObject CreateAccessibilityInstance() {
-            return new ToolStripDropDownItemAccessibleObject(this);
-        }
+                case ToolStripDropDownDirection.Left:
+                    offset.X = -dropDownBounds.Width;
+                    break;
+            }
 
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateDefaultDropDown"]/*' />
-        protected virtual ToolStripDropDown CreateDefaultDropDown() {
-            // AutoGenerate a Winbar DropDown - set the property so we hook events
-             return new ToolStripDropDown(this, true);
-        }
-
-        private Rectangle DropDownDirectionToDropDownBounds(ToolStripDropDownDirection dropDownDirection, Rectangle dropDownBounds) {
-              Point offset = Point.Empty;
- 
-              switch (dropDownDirection) {
-                  case ToolStripDropDownDirection.AboveLeft:
-                      offset.X = - dropDownBounds.Width + this.Width;
-                      offset.Y = - dropDownBounds.Height+1;
-                      break;
-                  case ToolStripDropDownDirection.AboveRight:                        
-                      offset.Y = - dropDownBounds.Height+1;
-                      break;
-                  case ToolStripDropDownDirection.BelowRight:
-                      offset.Y = this.Height-1;
-                      break;
-                  case ToolStripDropDownDirection.BelowLeft:
-                      offset.X = - dropDownBounds.Width + this.Width;
-                      offset.Y = this.Height-1;
-                      break;
-                  case ToolStripDropDownDirection.Right:
-                      offset.X = this.Width;
-                      if (!IsOnDropDown) {
-                          // overlap the toplevel toolstrip
-                          offset.X--;
-                      }
-                      break;
-   
-                  case ToolStripDropDownDirection.Left:
-                      offset.X = - dropDownBounds.Width;
-                      break;
-              }
-              
-              Point itemScreenLocation = this.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
-              dropDownBounds.Location = new Point(itemScreenLocation.X + offset.X, itemScreenLocation.Y + offset.Y);
-              dropDownBounds =  WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds);
-              return dropDownBounds;
+            Point itemScreenLocation = TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords);
+            dropDownBounds.Location = new Point(itemScreenLocation.X + offset.X, itemScreenLocation.Y + offset.Y);
+            dropDownBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(dropDownBounds);
+            return dropDownBounds;
         }
 
-        
-        private void DropDown_Closed(object sender, ToolStripDropDownClosedEventArgs e) {
-            OnDropDownClosed(EventArgs.Empty);
-        }
-   
-        private void DropDown_Opened(object sender, EventArgs e) {
-            OnDropDownOpened(EventArgs.Empty);
-        }
+        private void DropDown_Closed(object sender, ToolStripDropDownClosedEventArgs e)
+            => OnDropDownClosed(EventArgs.Empty);
 
-        private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-            OnDropDownItemClicked(e);
-        }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.Dispose"]/*' />
-        /// <devdoc>
-        /// Make sure we unhook dropdown events.
-        /// </devdoc>
+        private void DropDown_Opened(object sender, EventArgs e)
+            => OnDropDownOpened(EventArgs.Empty);
+
+        private void DropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+            => OnDropDownItemClicked(e);
+
+        /// <summary>
+        ///  Make sure we unhook dropdown events.
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
-            if (this.dropDown != null) {
+            if (dropDown != null)
+            {
+                if (hookedKeyboardTooltip != null)
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(dropDown, hookedKeyboardTooltip);
+                }
+
                 dropDown.Opened -= new EventHandler(DropDown_Opened);
                 dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                 dropDown.ItemClicked -= new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
 
-                if (disposing && dropDown.IsAutoGenerated) {
+                if (disposing && dropDown.IsAutoGenerated)
+                {
                     // if we created the dropdown, dispose it and its children.
                     dropDown.Dispose();
                     dropDown = null;
@@ -373,463 +366,536 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-
-        private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection) {
-
+        private Rectangle GetDropDownBounds(ToolStripDropDownDirection dropDownDirection)
+        {
             Rectangle dropDownBounds = new Rectangle(Point.Empty, DropDown.GetSuggestedSize());
             // calculate the offset from the upper left hand corner of the item.
             dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
 
             // we should make sure we dont obscure the owner item.
-            Rectangle itemScreenBounds = new Rectangle(this.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), this.Size);
+            Rectangle itemScreenBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
 
-            if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1) {
-
+            if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
+            {
                 bool rtl = (RightToLeft == RightToLeft.Yes);
 
                 // try positioning to the left
-                if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Width > 1) {
+                if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Width > 1)
+                {
                     dropDownBounds = DropDownDirectionToDropDownBounds(!rtl ? ToolStripDropDownDirection.Right : ToolStripDropDownDirection.Left, dropDownBounds);
                 }
 
                 // try positioning to the right
-                if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Width > 1) {
+                if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Width > 1)
+                {
                     dropDownBounds = DropDownDirectionToDropDownBounds(!rtl ? ToolStripDropDownDirection.Left : ToolStripDropDownDirection.Right, dropDownBounds);
                 }
             }
 
             return dropDownBounds;
-
         }
-        
 
-        
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HideDropDown"]/*' />
-        /// <devdoc>
-        /// Hides the DropDown, if it is visible.  
-        /// </devdoc>
-        public void HideDropDown() {
+        /// <summary>
+        ///  Hides the DropDown, if it is visible.
+        /// </summary>
+        public void HideDropDown()
+        {
             // consider - CloseEventArgs to prevent shutting down.
             OnDropDownHide(EventArgs.Empty);
-        
-           if (this.dropDown != null && this.dropDown.Visible) {
-               DropDown.Visible = false;
-               if (AccessibilityImprovements.Level1) {
-                   AccessibilityNotifyClients(AccessibleEvents.StateChange);
-                   AccessibilityNotifyClients(AccessibleEvents.NameChange);
-               }
-           }
+
+            if (dropDown != null && dropDown.Visible)
+            {
+                DropDown.Visible = false;
+
+                AccessibilityNotifyClients(AccessibleEvents.StateChange);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange);
+            }
         }
 
-        protected override void OnFontChanged(EventArgs e) {
+        protected override void OnFontChanged(EventArgs e)
+        {
             base.OnFontChanged(e);
-            if (dropDown != null) {
+            if (dropDown != null)
+            {
                 dropDown.OnOwnerItemFontChanged(EventArgs.Empty);
             }
         }
 
-
-         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.OnBoundsChanged"]/*' />
-        protected override void OnBoundsChanged() {
+        protected override void OnBoundsChanged()
+        {
             base.OnBoundsChanged();
             //Reset the Bounds...
-            if (this.dropDown != null && this.dropDown.Visible)
+            if (dropDown != null && dropDown.Visible)
             {
-                this.dropDown.Bounds = GetDropDownBounds(DropDownDirection);
+                dropDown.Bounds = GetDropDownBounds(DropDownDirection);
             }
         }
 
-        protected override void OnRightToLeftChanged(EventArgs e) {
+        protected override void OnRightToLeftChanged(EventArgs e)
+        {
             base.OnRightToLeftChanged(e);
-            if (HasDropDownItems) {
+            if (HasDropDownItems)
+            {
                 // only perform a layout on a visible dropdown - otherwise clear the preferred size cache.
-                if (DropDown.Visible) {
+                if (DropDown.Visible)
+                {
                     LayoutTransaction.DoLayout(DropDown, this, PropertyNames.RightToLeft);
                 }
-                else {
+                else
+                {
                     CommonProperties.xClearPreferredSizeCache(DropDown);
                     DropDown.LayoutRequired = true;
                 }
             }
         }
 
-
-        internal override void OnImageScalingSizeChanged(EventArgs e) {            
+        internal override void OnImageScalingSizeChanged(EventArgs e)
+        {
             base.OnImageScalingSizeChanged(e);
-            if (HasDropDown && DropDown.IsAutoGenerated) {
+            if (HasDropDown && DropDown.IsAutoGenerated)
+            {
                 DropDown.DoLayoutIfHandleCreated(new ToolStripItemEventArgs(this));
             }
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownHide"]/*' />
-        /// <devdoc>
-        /// Called as a response to HideDropDown
-        /// </devdoc>
-        protected virtual void OnDropDownHide(EventArgs e) {
-            this.Invalidate();
 
-            EventHandler handler = (EventHandler)Events[EventDropDownHide];
-            if (handler != null) handler(this, e);
+        /// <summary>
+        ///  Called as a response to HideDropDown
+        /// </summary>
+        protected virtual void OnDropDownHide(EventArgs e)
+        {
+            Invalidate();
+
+            ((EventHandler)Events[EventDropDownHide])?.Invoke(this, e);
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownShow"]/*' />
-        /// <devdoc>
-        /// Last chance to stick in the DropDown before it is shown.
-        /// </devdoc>
-        protected virtual void OnDropDownShow(EventArgs e) {
-            EventHandler handler = (EventHandler)Events[EventDropDownShow];
-            if (handler != null) { 
-                handler(this, e);
-            }
+
+        /// <summary>
+        ///  Last chance to stick in the DropDown before it is shown.
+        /// </summary>
+        protected virtual void OnDropDownShow(EventArgs e)
+        {
+            ((EventHandler)Events[EventDropDownShow])?.Invoke(this, e);
         }
-        
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownOpened"]/*' />
-        /// <devdoc>
-        /// called when the default item is clicked
-        /// </devdoc>
-        protected internal virtual void OnDropDownOpened(System.EventArgs e) {
+
+        /// <summary>
+        ///  called when the default item is clicked
+        /// </summary>
+        protected internal virtual void OnDropDownOpened(EventArgs e)
+        {
             // only send the event if we're the thing that currently owns the DropDown.
-                         
-            if (DropDown.OwnerItem == this) {
-                EventHandler handler = (EventHandler)Events[EventDropDownOpened];
-                if (handler != null) handler(this, e);
+
+            if (DropDown.OwnerItem == this)
+            {
+                ((EventHandler)Events[EventDropDownOpened])?.Invoke(this, e);
             }
         }
 
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownClosed"]/*' />
-        /// <devdoc>
-        /// called when the default item is clicked
-        /// </devdoc>
-        protected internal virtual void OnDropDownClosed(System.EventArgs e) {
+        /// <summary>
+        ///  called when the default item is clicked
+        /// </summary>
+        protected internal virtual void OnDropDownClosed(EventArgs e)
+        {
             // only send the event if we're the thing that currently owns the DropDown.
-            this.Invalidate();  
-            
-            if (DropDown.OwnerItem == this)  {
-                EventHandler handler = (EventHandler)Events[EventDropDownClosed];
-                if (handler != null) handler(this, e);
-                
-                if (!DropDown.IsAutoGenerated) {
+            Invalidate();
+
+            if (DropDown.OwnerItem == this)
+            {
+                ((EventHandler)Events[EventDropDownClosed])?.Invoke(this, e);
+
+                if (!DropDown.IsAutoGenerated)
+                {
                     DropDown.OwnerItem = null;
                 }
             }
-            
         }
 
-       
-
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.OnDropDownItemClicked"]/*' />
-        /// <devdoc>
-        /// called when the default item is clicked
-        /// </devdoc>
-        protected internal virtual void OnDropDownItemClicked(ToolStripItemClickedEventArgs e) {
+        /// <summary>
+        ///  called when the default item is clicked
+        /// </summary>
+        protected internal virtual void OnDropDownItemClicked(ToolStripItemClickedEventArgs e)
+        {
             // only send the event if we're the thing that currently owns the DropDown.
-            
-            if (DropDown.OwnerItem == this) {
-                ToolStripItemClickedEventHandler handler = (ToolStripItemClickedEventHandler)Events[EventDropDownItemClicked];
-                if (handler != null) handler(this, e);
+
+            if (DropDown.OwnerItem == this)
+            {
+                ((ToolStripItemClickedEventHandler)Events[EventDropDownItemClicked])?.Invoke(this, e);
             }
         }
-        
-        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)  {
-            if (HasDropDownItems) {
+
+        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
+        {
+            if (HasDropDownItems)
+            {
                 return DropDown.ProcessCmdKeyInternal(ref m, keyData);
             }
             return base.ProcessCmdKey(ref m, keyData);
         }
 
-
-        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ProcessDialogKey"]/*' />
-        protected internal override bool ProcessDialogKey(Keys keyData) {
+        protected internal override bool ProcessDialogKey(Keys keyData)
+        {
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
 
-            if (HasDropDownItems) {
-
-                // Items on the overflow should have the same kind of keyboard handling as a toplevel 
+            if (HasDropDownItems)
+            {
+                // Items on the overflow should have the same kind of keyboard handling as a toplevel
                 bool isToplevel = (!IsOnDropDown || IsOnOverflow);
 
-                
-                if (isToplevel && (keyCode == Keys.Down || keyCode == Keys.Up || keyCode == Keys.Enter || (SupportsSpaceKey && keyCode == Keys.Space))) {                
-                    Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from toplevel item");
+                if (isToplevel && (keyCode == Keys.Down || keyCode == Keys.Up || keyCode == Keys.Enter || (SupportsSpaceKey && keyCode == Keys.Space)))
+                {
+                    Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from toplevel item");
 
-                    if (Enabled || DesignMode) {
-                         // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu
-                         this.ShowDropDown();
-                         if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                         }
-                         this.DropDown.SelectNextToolStripItem(null, true);
+                    if (Enabled || DesignMode)
+                    {
+                        // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu
+                        ShowDropDown();
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                        DropDown.SelectNextToolStripItem(null, true);
                     }// else eat the key
                     return true;
-                
-                } 
-                else if (!isToplevel) {
-                          
-
+                }
+                else if (!isToplevel)
+                {
                     // if we're on a DropDown - then cascade out.
                     bool menusCascadeRight = (((int)DropDownDirection & 0x0001) == 0);
                     bool forward = ((keyCode == Keys.Enter) || (SupportsSpaceKey && keyCode == Keys.Space));
-                    forward = (forward || (menusCascadeRight && keyCode == Keys.Left) ||  (!menusCascadeRight && keyCode == Keys.Right));
+                    forward = (forward || (menusCascadeRight && keyCode == Keys.Left) || (!menusCascadeRight && keyCode == Keys.Right));
 
-                   
-                    if (forward) {
-                        Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from NON-toplevel item");
-                                            
-                        if (Enabled || DesignMode) {
-                            this.ShowDropDown();
-                            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                            }
-                            this.DropDown.SelectNextToolStripItem(null, true);
+                    if (forward)
+                    {
+                        Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] open submenu from NON-toplevel item");
+
+                        if (Enabled || DesignMode)
+                        {
+                            ShowDropDown();
+                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                            DropDown.SelectNextToolStripItem(null, true);
                         } // else eat the key
                         return true;
                     }
-
                 }
             }
 
-
-            if (IsOnDropDown) {
-
+            if (IsOnDropDown)
+            {
                 bool menusCascadeRight = (((int)DropDownDirection & 0x0001) == 0);
-                bool backward = ((menusCascadeRight && keyCode == Keys.Right) ||  (!menusCascadeRight && keyCode == Keys.Left));
-                
-                if (backward) {
-                    
-                
-                   Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] close submenu from NON-toplevel item");
-                                        
-                   // we're on a drop down but we're heading back up the chain. 
-                   // remember to select the item that displayed this dropdown.
-                   ToolStripDropDown parent = GetCurrentParentDropDown();
-                   if (parent != null && !parent.IsFirstDropDown) {
-                      // we're walking back up the dropdown chain.
-                      parent.SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
-                      if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                          KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                      }
-                      parent.SelectPreviousToolStrip();
-                      return true;
-                   }
-                   // else if (parent.IsFirstDropDown)
-                   //    the base handling (ToolStripDropDown.ProcessArrowKey) will perform auto-expansion of 
-                   //    the previous item in the menu.
-                   
+                bool backward = ((menusCascadeRight && keyCode == Keys.Right) || (!menusCascadeRight && keyCode == Keys.Left));
+
+                if (backward)
+                {
+                    Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] close submenu from NON-toplevel item");
+
+                    // we're on a drop down but we're heading back up the chain.
+                    // remember to select the item that displayed this dropdown.
+                    ToolStripDropDown parent = GetCurrentParentDropDown();
+                    if (parent != null && !parent.IsFirstDropDown)
+                    {
+                        // we're walking back up the dropdown chain.
+                        parent.SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
+                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+                        parent.SelectPreviousToolStrip();
+                        return true;
+                    }
+                    // else if (parent.IsFirstDropDown)
+                    //    the base handling (ToolStripDropDown.ProcessArrowKey) will perform auto-expansion of
+                    //    the previous item in the menu.
                 }
             }
 
-            Debug.WriteLineIf(ToolStrip.SelectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] ddi calling base");
+            Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] ddi calling base");
             return base.ProcessDialogKey(keyData);
-     
-        }
-        
-        private ToolStripDropDownDirection RTLTranslateDropDownDirection(ToolStripDropDownDirection dropDownDirection, RightToLeft rightToLeft) {
-            switch (dropDownDirection) {
-                case ToolStripDropDownDirection.AboveLeft:
-                     return ToolStripDropDownDirection.AboveRight;
-                 case ToolStripDropDownDirection.AboveRight:
-                     return ToolStripDropDownDirection.AboveLeft;
-                 case ToolStripDropDownDirection.BelowRight:
-                     return ToolStripDropDownDirection.BelowLeft;
-                 case ToolStripDropDownDirection.BelowLeft:
-                     return ToolStripDropDownDirection.BelowRight;
-                 case ToolStripDropDownDirection.Right:
-                     return ToolStripDropDownDirection.Left;
-                 case ToolStripDropDownDirection.Left:
-                     return ToolStripDropDownDirection.Right;
-              }
-              Debug.Fail("Why are we here");
-              
-              // dont expect it to come to this but just in case here are the real defaults.
-              if (IsOnDropDown) {
-                   return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.Left : ToolStripDropDownDirection.Right;
-              }
-              else {
-                  return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.BelowLeft : ToolStripDropDownDirection.BelowRight;
-              }
-    
-    
-        }
-        
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ShowDropDown"]/*' />
-        /// <devdoc>
-        /// Shows the DropDown, if one is set.
-        /// </devdoc>
-        public void ShowDropDown() {
-            this.ShowDropDown(false);
         }
 
-        internal void ShowDropDown(bool mousePush) {
-            this.ShowDropDownInternal();
-            ToolStripDropDownMenu menu = this.dropDown as ToolStripDropDownMenu;
-            if (menu != null) {
-                if (!mousePush) {
+        private ToolStripDropDownDirection RTLTranslateDropDownDirection(ToolStripDropDownDirection dropDownDirection, RightToLeft rightToLeft)
+        {
+            switch (dropDownDirection)
+            {
+                case ToolStripDropDownDirection.AboveLeft:
+                    return ToolStripDropDownDirection.AboveRight;
+                case ToolStripDropDownDirection.AboveRight:
+                    return ToolStripDropDownDirection.AboveLeft;
+                case ToolStripDropDownDirection.BelowRight:
+                    return ToolStripDropDownDirection.BelowLeft;
+                case ToolStripDropDownDirection.BelowLeft:
+                    return ToolStripDropDownDirection.BelowRight;
+                case ToolStripDropDownDirection.Right:
+                    return ToolStripDropDownDirection.Left;
+                case ToolStripDropDownDirection.Left:
+                    return ToolStripDropDownDirection.Right;
+            }
+            Debug.Fail("Why are we here");
+
+            // dont expect it to come to this but just in case here are the real defaults.
+            if (IsOnDropDown)
+            {
+                return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.Left : ToolStripDropDownDirection.Right;
+            }
+            else
+            {
+                return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.BelowLeft : ToolStripDropDownDirection.BelowRight;
+            }
+        }
+
+        /// <summary>
+        ///  Shows the DropDown, if one is set.
+        /// </summary>
+        public void ShowDropDown()
+            => ShowDropDown(false);
+
+        internal void ShowDropDown(bool mousePush)
+        {
+            ShowDropDownInternal();
+            if (dropDown is ToolStripDropDownMenu menu)
+            {
+                if (!mousePush)
+                {
                     menu.ResetScrollPosition();
                 }
                 menu.RestoreScrollPosition();
             }
         }
 
-        private void ShowDropDownInternal() {
-
-            if (this.dropDown == null || (!this.dropDown.Visible)) {
+        private void ShowDropDownInternal()
+        {
+            if (dropDown is null || (!dropDown.Visible))
+            {
                 // We want to show if there's no dropdown
                 // or if the dropdown is not visible.
                 OnDropDownShow(EventArgs.Empty);
             }
 
             // the act of setting the drop down visible the first time sets the parent
-            // it seems that GetVisibleCore returns true if your parent is null.
-
-            if (this.dropDown != null && !this.dropDown.Visible) {
-
-                if (this.dropDown.IsAutoGenerated && this.DropDownItems.Count <= 0) {
+            // it seems that Visible returns true if your parent is null.
+            if (dropDown != null && !dropDown.Visible)
+            {
+                if (dropDown.IsAutoGenerated && DropDownItems.Count <= 0)
+                {
                     return;  // this is a no-op for autogenerated drop downs.
                 }
 
-                if (this.DropDown == this.ParentInternal) {
+                if (DropDown == ParentInternal)
+                {
                     throw new InvalidOperationException(SR.ToolStripShowDropDownInvalidOperation);
                 }
 
-                this.dropDown.OwnerItem = this;
-                this.dropDown.Location = DropDownLocation;
-                this.dropDown.Show();
-                this.Invalidate();
+                dropDown.OwnerItem = this;
+                dropDown.Location = DropDownLocation;
+                dropDown.Show();
+                Invalidate();
 
-                if (AccessibilityImprovements.Level1) {
-                    AccessibilityNotifyClients(AccessibleEvents.StateChange);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange);
-                }
+                AccessibilityNotifyClients(AccessibleEvents.StateChange);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange);
             }
         }
 
-        private bool ShouldSerializeDropDown() {
-            return dropDown != null && !dropDown.IsAutoGenerated;
-        }
+        private bool ShouldSerializeDropDown()
+            => dropDown != null && !dropDown.IsAutoGenerated;
 
-        private bool ShouldSerializeDropDownDirection() {
-            return (toolStripDropDownDirection != ToolStripDropDownDirection.Default);
-        }
+        private bool ShouldSerializeDropDownDirection()
+            => toolStripDropDownDirection != ToolStripDropDownDirection.Default;
 
-        private bool ShouldSerializeDropDownItems() {
-            return (dropDown != null && dropDown.IsAutoGenerated);
-        }
+        private bool ShouldSerializeDropDownItems()
+            => dropDown != null && dropDown.IsAutoGenerated;
 
-        internal override void OnKeyboardToolTipHook(ToolTip toolTip) {
+        internal override void OnKeyboardToolTipHook(ToolTip toolTip)
+        {
             base.OnKeyboardToolTipHook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Hook(this.DropDown, toolTip);
+            hookedKeyboardTooltip = toolTip;
+            if (dropDown != null)
+            {
+                KeyboardToolTipStateMachine.Instance.Hook(dropDown, toolTip);
+            }
         }
 
-        internal override void OnKeyboardToolTipUnhook(ToolTip toolTip) {
+        internal override void OnKeyboardToolTipUnhook(ToolTip toolTip)
+        {
             base.OnKeyboardToolTipUnhook(toolTip);
-            KeyboardToolTipStateMachine.Instance.Unhook(this.DropDown, toolTip);
+            hookedKeyboardTooltip = null;
+            if (dropDown != null)
+            {
+                KeyboardToolTipStateMachine.Instance.Unhook(dropDown, toolTip);
+            }
+        }
+
+        internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi)
+        {
+            RescaleConstantsInternal(newDpi);
+
+            // Traversing the tree of DropDownMenuItems non-recursively to set new
+            // Font (where necessary because not inherited from parent), DeviceDpi and reset the scaling.
+            var itemsStack = new Collections.Generic.Stack<ToolStripDropDownItem>();
+
+            itemsStack.Push(this);
+
+            while (itemsStack.Count > 0)
+            {
+                var item = itemsStack.Pop();
+
+                if (item.dropDown != null)
+                {
+                    // The following does not get set, since dropDown has no parent/is not part of the
+                    // controls collection, so this gets never called through the normal inheritance chain.
+                    item.dropDown._deviceDpi = newDpi;
+                    item.dropDown.ResetScaling(newDpi);
+
+                    foreach (ToolStripItem childItem in item.DropDown.Items)
+                    {
+                        if (childItem is null)
+                            continue;
+
+                        // Checking if font was inherited from parent.
+                        Font local = childItem.Font;
+                        if (!local.Equals(childItem.OwnerItem?.Font))
+                        {
+                            var factor = (float)newDpi / oldDpi;
+                            childItem.Font = new Font(local.FontFamily, local.Size * factor, local.Style,
+                                                    local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                        }
+
+                        childItem.DeviceDpi = newDpi;
+
+                        if (typeof(ToolStripDropDownItem).IsAssignableFrom(childItem.GetType()))
+                        {
+                            if (((ToolStripDropDownItem)childItem).dropDown != null)
+                            {
+                                itemsStack.Push((ToolStripDropDownItem)childItem);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // It's important to call the base class method only AFTER we processed all DropDown items,
+            // because we need the new DPI in place, before a Font change triggers new layout calc.
+            base.ToolStrip_RescaleConstants(oldDpi, newDpi);
         }
     }
-        
 
-    /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject"]/*' />
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject {
-        private ToolStripDropDownItem owner;
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject"]/*' />
-        public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item) {
+    public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItemAccessibleObject
+    {
+        private readonly ToolStripDropDownItem owner;
+        public ToolStripDropDownItemAccessibleObject(ToolStripDropDownItem item) : base(item)
+        {
             owner = item;
         }
-        /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItemAccessibleObject.Role"]/*' />
-        public override AccessibleRole Role {
-            get {
+        public override AccessibleRole Role
+        {
+            get
+            {
                 AccessibleRole role = Owner.AccessibleRole;
-                if (role != AccessibleRole.Default) {
+                if (role != AccessibleRole.Default)
+                {
                     return role;
                 }
                 return AccessibleRole.MenuItem;
             }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
-        public override void DoDefaultAction() {
-            ToolStripDropDownItem item = Owner as ToolStripDropDownItem;
-            if (item != null && item.HasDropDownItems) {
+        public override void DoDefaultAction()
+        {
+            if (Owner is ToolStripDropDownItem item && item.HasDropDownItems)
+            {
                 item.ShowDropDown();
             }
-            else {
+            else
+            {
                 base.DoDefaultAction();
             }
-
         }
 
-        internal override bool IsIAccessibleExSupported() {
-            if (owner!= null && AccessibilityImprovements.Level1 ) {
+        internal override bool IsIAccessibleExSupported()
+        {
+            if (owner != null)
+            {
                 return true;
             }
-            else {
+            else
+            {
                 return base.IsIAccessibleExSupported();
             }
         }
 
-        internal override bool IsPatternSupported(int patternId) {
-            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId && owner.HasDropDownItems) {
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        {
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.HasDropDownItems)
+            {
                 return true;
             }
-            else {
+            else
+            {
                 return base.IsPatternSupported(patternId);
             }
         }
 
-        internal override object GetPropertyValue(int propertyID) {
-            if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown) {
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
+        {
+            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
+            {
                 return !((ToolStripDropDown)owner.Owner).Visible;
             }
 
             return base.GetPropertyValue(propertyID);
         }
 
-        internal override void Expand() {
-            DoDefaultAction();            
-        }
+        internal override void Expand()
+            => DoDefaultAction();
 
-        internal override void Collapse() {
-            if (owner != null && owner.DropDown != null && owner.DropDown.Visible) {
+        internal override void Collapse()
+        {
+            if (owner != null && owner.DropDown != null && owner.DropDown.Visible)
+            {
                 owner.DropDown.Close();
-            }            
-        }
-
-        internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-            get {
-                return owner.DropDown.Visible ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;                
             }
         }
 
-        public override AccessibleObject GetChild(int index) {
-            if ((owner == null) || !owner.HasDropDownItems) {
+        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        {
+            get
+            {
+                return owner.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+            }
+        }
+
+        public override AccessibleObject GetChild(int index)
+        {
+            if ((owner is null) || !owner.HasDropDownItems)
+            {
                 return null;
             }
             return owner.DropDown.AccessibilityObject.GetChild(index);
-       
         }
-        public override int GetChildCount() {
-            if ((owner == null) || !owner.HasDropDownItems) {
+
+        public override int GetChildCount()
+        {
+            if ((owner is null) || !owner.HasDropDownItems)
+            {
                 return -1;
             }
 
             // Do not expose child items when the submenu is collapsed to prevent Narrator from announcing
             // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
             // in scan mode (CAPSLOCK + Space)
-            if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+            if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+            {
                 return 0;
             }
 
-            if (owner.DropDown.LayoutRequired) {
+            if (owner.DropDown.LayoutRequired)
+            {
                 LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
             }
             return owner.DropDown.AccessibilityObject.GetChildCount();
-
         }
 
-        internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child) {
-            if ((owner == null) || (owner.DropDownItems == null)) {
+        internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
+        {
+            if ((owner is null) || (owner.DropDownItems is null))
+            {
                 return -1;
             }
 
-            for (int i = 0; i < owner.DropDownItems.Count; i++) {
-                if (owner.DropDownItems[i].Available && child.Owner == owner.DropDownItems[i]) {
+            for (int i = 0; i < owner.DropDownItems.Count; i++)
+            {
+                if (owner.DropDownItems[i].Available && child.Owner == owner.DropDownItems[i])
+                {
                     return i;
                 }
             }
@@ -838,17 +904,21 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// Gets the number of children belonging to an accessible object.
+        ///  Gets the number of children belonging to an accessible object.
         /// </summary>
         /// <returns>The number of children.</returns>
-        internal int GetChildFragmentCount() {
-            if ((owner == null) || (owner.DropDownItems == null)) {
+        internal int GetChildFragmentCount()
+        {
+            if ((owner is null) || (owner.DropDownItems is null))
+            {
                 return -1;
             }
 
             int count = 0;
-            for (int i = 0; i < owner.DropDownItems.Count; i++) {
-                if (owner.DropDownItems[i].Available) {
+            for (int i = 0; i < owner.DropDownItems.Count; i++)
+            {
+                if (owner.DropDownItems[i].Available)
+                {
                     count++;
                 }
             }
@@ -856,55 +926,46 @@ namespace System.Windows.Forms {
             return count;
         }
 
-        internal AccessibleObject GetChildFragment(int index) {
-            var toolStripAccessibleObject = owner.DropDown.AccessibilityObject as ToolStrip.ToolStripAccessibleObject;
-            if (toolStripAccessibleObject != null) {
+        internal AccessibleObject GetChildFragment(int index)
+        {
+            if (owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
+            {
                 return toolStripAccessibleObject.GetChildFragment(index);
             }
 
             return null;
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-            if (owner == null || owner.DropDown == null) {
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+        {
+            if (owner is null || owner.DropDown is null)
+            {
                 return null;
             }
 
-            switch (direction) {
-                case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                    int childCount = GetChildCount();
-                    if (childCount > 0) {
-                        return GetChildFragment(0);
-                    }
-
-                    return null;
-                case UnsafeNativeMethods.NavigateDirection.LastChild:
-                    childCount = GetChildCount();
-                    if (childCount > 0) {
-                        return GetChildFragment(childCount - 1);
-                    }
-
-                    return null;
-                case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                    ToolStripDropDown dropDown = owner.Owner as ToolStripDropDown;
-
-                    if (dropDown == null) {
+            switch (direction)
+            {
+                case UiaCore.NavigateDirection.NextSibling:
+                case UiaCore.NavigateDirection.PreviousSibling:
+                    if (!(owner.Owner is ToolStripDropDown dropDown))
+                    {
                         break;
                     }
                     int index = dropDown.Items.IndexOf(owner);
 
-                    if (index == -1) {
+                    if (index == -1)
+                    {
                         Debug.Fail("No item matched the index?");
                         return null;
                     }
 
-                    index += direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
+                    index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
 
-                    if (index >= 0 && index < dropDown.Items.Count) {
-                        var item = dropDown.Items[index];
-                        var controlHostItem = item as ToolStripControlHost;
-                        if (controlHostItem != null) {
+                    if (index >= 0 && index < dropDown.Items.Count)
+                    {
+                        ToolStripItem item = dropDown.Items[index];
+                        if (item is ToolStripControlHost controlHostItem)
+                        {
                             return controlHostItem.ControlAccessibilityObject;
                         }
 

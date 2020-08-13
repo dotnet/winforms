@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class LayoutSettingsTests
+    // NB: doesn't require thread affinity
+    public class LayoutSettingsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void LayoutSettings_Ctor_Default()

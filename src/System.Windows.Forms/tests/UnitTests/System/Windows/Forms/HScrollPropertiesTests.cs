@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class HScrollPropertiesTests
+    public class HScrollPropertiesTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ScrollableControl_TestData()
         {
@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_ScrollableControl_TestData))]
         public void HScrollProperties_Ctor_Control(ScrollableControl container)
         {

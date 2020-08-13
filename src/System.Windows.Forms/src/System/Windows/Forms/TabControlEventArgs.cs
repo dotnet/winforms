@@ -2,17 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.TabControl.Selecting'/>,<see cref='System.Windows.Forms.TabControl.Selected'/>
-    /// event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for <see cref='TabControl.Selecting'/> and <see cref='TabControl.Selected'/> events.
+    /// </summary>
     public class TabControlEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.TabControlEventArgs'/>class.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='TabControlEventArgs'/> class.
+        /// </summary>
         public TabControlEventArgs(TabPage tabPage, int tabPageIndex, TabControlAction action)
         {
             TabPage = tabPage;
@@ -20,20 +21,19 @@ namespace System.Windows.Forms
             Action = action;
         }
 
-        /// <devdoc>
-        /// Stores the referemce to the tabpage that is undergoing the TabControl event.
-        /// </devdoc>
+        /// <summary>
+        ///  Stores the referemce to the tabpage that is undergoing the event.
+        /// </summary>
         public TabPage TabPage { get; }
 
-        /// <devdoc>
-        /// Stores the index to the tabpage that is undergoing the TabControl event.
-        /// </devdoc>
+        /// <summary>
+        ///  Stores the index to the tabpage that is undergoing the event.
+        /// </summary>
         public int TabPageIndex { get; }
 
-        /// <devdoc>
-        /// Stores the TabControl action which instigated the TabControl event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///  Stores the action which instigated the event.
+        /// </summary>
         public TabControlAction Action { get; }
     }
 }

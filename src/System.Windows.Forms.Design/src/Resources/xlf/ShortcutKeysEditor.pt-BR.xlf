@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="pt-BR" original="../ShortcutKeysEditor.resx">
+    <body>
+      <trans-unit id="$this.AccessibleName">
+        <source>Shortcut Keys Editor</source>
+        <target state="translated">Editor de Teclas de Atalho</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnReset.AccessibleName">
+        <source>Reset</source>
+        <target state="translated">Redefinir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnReset.Text">
+        <source>&amp;Reset</source>
+        <target state="translated">&amp;Redefinir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="chkAlt.AccessibleName">
+        <source>Alt key</source>
+        <target state="translated">Tecla Alt</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="chkAlt.Text">
+        <source>&amp;Alt</source>
+        <target state="translated">&amp;Alt</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="chkCtrl.AccessibleName">
+        <source>Control key</source>
+        <target state="translated">Tecla Control</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="chkCtrl.Text">
+        <source>&amp;Ctrl</source>
+        <target state="translated">&amp;Ctrl</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="chkShift.AccessibleName">
+        <source>Shift key</source>
+        <target state="translated">Tecla Shift</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="chkShift.Text">
+        <source>&amp;Shift</source>
+        <target state="translated">&amp;Shift</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cmbKey.AccessibleName">
+        <source>Shortcut key</source>
+        <target state="translated">Tecla de atalho</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblKey.Text">
+        <source>&amp;Key:</source>
+        <target state="translated">&amp;Chave:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblModifiers.Text">
+        <source>Modifiers:</source>
+        <target state="translated">Modificadores:</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

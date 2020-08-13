@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents a method that will handle the <see cref='System.Windows.Forms.Control.KeyUp'/>
-    /// or <see cref='System.Windows.Forms.Control.KeyDown'/> event of a
-    /// <see cref='System.Windows.Forms.Control'/>.
-    /// </devdoc>
-    public delegate void KeyEventHandler(object sender, KeyEventArgs e);
+    /// <summary>
+    ///  Represents a method that will handle the <see cref='Control.KeyUp'/>
+    ///  or <see cref='Control.KeyDown'/> event of a
+    /// <see cref='Control'/>.
+    /// </summary>
+    public delegate void KeyEventHandler(object? sender, KeyEventArgs e);
 }

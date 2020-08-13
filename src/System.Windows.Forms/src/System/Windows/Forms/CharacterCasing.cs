@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the case of characters in a Textbox control.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the case of characters in a Textbox control.
+    /// </summary>
     public enum CharacterCasing
     {
-        /// <devdoc>
-        /// The case of characters is left unchanged.
-        /// </devdoc>
+        /// <summary>
+        ///  The case of characters is left unchanged.
+        /// </summary>
         Normal = 0,
 
-        /// <devdoc>
-        /// Converts all characters to uppercase.
-        /// </devdoc>
+        /// <summary>
+        ///  Converts all characters to uppercase.
+        /// </summary>
         Upper = 1,
 
-        /// <devdoc>
-        /// Converts all characters to lowercase.
-        /// </devdoc>
+        /// <summary>
+        ///  Converts all characters to lowercase.
+        /// </summary>
         Lower = 2,
     }
 }

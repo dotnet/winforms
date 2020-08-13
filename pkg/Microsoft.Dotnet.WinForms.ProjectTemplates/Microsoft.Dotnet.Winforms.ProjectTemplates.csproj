@@ -1,16 +1,23 @@
-<Project InitialTargets="BuildPackage">
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props"/>
+﻿<Project InitialTargets="BuildPackage">
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
   <PropertyGroup>
-    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
-    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+    <TargetFrameworkName>net</TargetFrameworkName>
+    <TargetFrameworkVersion>5.0</TargetFrameworkVersion>
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    
+    <!-- Suppress some nuget warnings that are breaking our build until https://github.com/dotnet/arcade/issues/4337 is resolved -->
+    <NoWarn>$(NoWarn);NU5131;NU5128</NoWarn>
+
+    <!-- Opt-out repo features -->
+    <UsingToolXliff>false</UsingToolXliff>
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->
   <PropertyGroup>
-      <IsPackable>true</IsPackable>
+    <IsPackable>true</IsPackable>
+    <IsShipping>false</IsShipping>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -54,11 +61,15 @@
     </ItemGroup>
   </Target>
 
-  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets"/>
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
   
   <ItemGroup>
     <IntermediateAssembly Remove="@(IntermediateAssembly)" />
     <IntermediateRefAssembly Remove="@(IntermediateRefAssembly)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="readme.md" />
   </ItemGroup>
 
   <PropertyGroup>

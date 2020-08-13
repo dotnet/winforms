@@ -2,43 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+
 namespace System.ComponentModel.Design
 {
     internal class DesignerActionVerbItem : DesignerActionMethodItem
     {
         private readonly DesignerVerb _targetVerb;
 
-        public DesignerActionVerbItem(DesignerVerb verb)
+        public DesignerActionVerbItem(DesignerVerb verb) : base(null, null, null)
         {
-            _targetVerb = verb ?? throw new ArgumentNullException();
+            Debug.Assert(verb != null, "All callers check whether the verb is null.");
+            _targetVerb = verb;
         }
 
-        public override string Category
-        {
-            get => "Verbs";
-        }
+        public override string Category => "Verbs";
 
-        public override string Description { get; }
+        public override string DisplayName => _targetVerb.Text;
 
-        public override string DisplayName
-        {
-            get => _targetVerb.Text;
-        }
-
-        public override string MemberName
-        {
-            get => null;
-        }
-
-        public override bool IncludeAsDesignerVerb
-        {
-            get => false;
-        }
-
-        public override void Invoke()
-        {
-            _targetVerb.Invoke();
-        }
-
+        public override void Invoke() => _targetVerb.Invoke();
     }
 }

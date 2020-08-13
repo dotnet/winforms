@@ -6,62 +6,61 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    [ComVisible(true)]
     public enum SystemParameter
     {
-        /// <devdoc>
-        /// DropShadow.
-        /// </devdoc>
+        /// <summary>
+        ///  DropShadow.
+        /// </summary>
         DropShadow = 0,
 
-        /// <devdoc>
-        /// Flat Menu.
-        /// </devdoc>
+        /// <summary>
+        ///  Flat Menu.
+        /// </summary>
         FlatMenu = 1,
 
-        /// <devdoc>
-        /// FontSmoothingContrastMetric.
-        /// </devdoc>
+        /// <summary>
+        ///  FontSmoothingContrastMetric.
+        /// </summary>
         FontSmoothingContrastMetric = 2,
 
-        /// <devdoc>
-        /// FontSmoothingTypeMetric.
-        /// </devdoc>
+        /// <summary>
+        ///  FontSmoothingTypeMetric.
+        /// </summary>
         FontSmoothingTypeMetric = 3,
 
-        /// <devdoc>
-        /// MenuFadeEnabled.
-        /// </devdoc>
+        /// <summary>
+        ///  MenuFadeEnabled.
+        /// </summary>
         MenuFadeEnabled = 4,
 
-        /// <devdoc>
-        /// SelectionFade.
-        /// </devdoc>
+        /// <summary>
+        ///  SelectionFade.
+        /// </summary>
         SelectionFade = 5,
 
-        /// <devdoc>
-        /// ToolTipAnimationMetric.
-        /// </devdoc>
+        /// <summary>
+        ///  ToolTipAnimationMetric.
+        /// </summary>
         ToolTipAnimationMetric = 6,
 
-        /// <devdoc>
-        /// UIEffects.
-        /// </devdoc>
+        /// <summary>
+        ///  UIEffects.
+        /// </summary>
         UIEffects = 7,
 
-        /// <devdoc>
-        /// CaretWidthMetric.
-        /// </devdoc>
+        /// <summary>
+        ///  CaretWidthMetric.
+        /// </summary>
         CaretWidthMetric = 8,
 
-        /// <devdoc>
-        /// VerticalFocusThicknessMetric.
-        /// </devdoc>
+        /// <summary>
+        ///  VerticalFocusThicknessMetric.
+        /// </summary>
         VerticalFocusThicknessMetric = 9,
 
-        /// <devdoc>
-        /// HorizontalFocusThicknessMetric.
-        /// </devdoc>
+        /// <summary>
+        ///  HorizontalFocusThicknessMetric.
+        /// </summary>
         HorizontalFocusThicknessMetric = 10,
     }
 }

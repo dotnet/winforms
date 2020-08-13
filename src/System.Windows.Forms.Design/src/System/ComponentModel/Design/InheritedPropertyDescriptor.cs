@@ -2,37 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Collections;
+using System.Diagnostics;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// <para>Describes and represents inherited properties in an inherited class.</para>
+    ///  Describes and represents inherited properties in an inherited class.
     /// </summary>
-    internal class InheritedPropertyDescriptor : PropertyDescriptor
+    internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     {
         private PropertyDescriptor propertyDescriptor;
         private object _defaultValue;
-        private static object s_noDefault = new Object();
+        private static readonly object s_noDefault = new Object();
         private bool _initShouldSerialize;
         private object _originalValue;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
+        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component, bool rootComponent) : base(propertyDescriptor, new Attribute[] { })
+        public InheritedPropertyDescriptor( PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
         {
             Debug.Assert(!(propertyDescriptor is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
             this.propertyDescriptor = propertyDescriptor;
 
-            InitInheritedDefaultValue(component, rootComponent);
+            InitInheritedDefaultValue(component);
 
             // Check to see if this property points to a collection of objects that are not IComponents.  We cannot serialize the delta between two collections if they do not contain components, so if we detect this case we will make the property invisible to serialization.
             // We only do this if there are already items in the collection.  Otherwise, it is safe.
@@ -41,8 +38,7 @@ namespace System.ComponentModel.Design
             if (typeof(ICollection).IsAssignableFrom(propertyDescriptor.PropertyType) &&
                 propertyDescriptor.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content))
             {
-                ICollection collection = propertyDescriptor.GetValue(component) as ICollection;
-                if (collection != null && collection.Count > 0)
+                if (propertyDescriptor.GetValue(component) is ICollection collection && collection.Count > 0)
                 {
                     // Trawl Add and AddRange methods looking for the first compatible serializable method.  All we need is the data type.
                     bool addComponentExists = false;
@@ -72,7 +68,7 @@ namespace System.ComponentModel.Design
                                 }
                                 else
                                 {
-                                    // this collection has at least one Add(IComponent) method. 
+                                    // this collection has at least one Add(IComponent) method.
                                     addComponentExists = true;
                                     break;
                                 }
@@ -115,7 +111,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets the type of the component this property descriptor is bound to.
+        ///  Gets or sets the type of the component this property descriptor is bound to.
         /// </summary>
         public override Type ComponentType
         {
@@ -126,7 +122,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this property is read only.
+        ///  Gets or sets a value indicating whether this property is read only.
         /// </summary>
         public override bool IsReadOnly
         {
@@ -146,12 +142,10 @@ namespace System.ComponentModel.Design
 
         internal PropertyDescriptor PropertyDescriptor
         {
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] //property/reflection.
             get
             {
                 return propertyDescriptor;
             }
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] //property/reflection.
             set
             {
                 Debug.Assert(!(value is InheritedPropertyDescriptor), "Recursive inheritance propertyDescriptor " + propertyDescriptor.ToString());
@@ -160,7 +154,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets or sets the type of the property.
+        ///  Gets or sets the type of the property.
         /// </summary>
         public override Type PropertyType
         {
@@ -168,7 +162,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Indicates whether reset will change the value of the component.
+        ///  Indicates whether reset will change the value of the component.
         /// </summary>
         public override bool CanResetValue(object component)
         {
@@ -189,7 +183,7 @@ namespace System.ComponentModel.Design
             DesignerSerializationVisibility serializationVisibility;
 
             // if we have a persist contents guy, we'll need to try to clone the value because otherwise we won't be able to tell when it's been modified.
-            if (dsva == null)
+            if (dsva is null)
             {
                 serializationVisibility = DesignerSerializationVisibility.Visible;
             }
@@ -215,7 +209,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We need to merge in attributes from the wrapped property descriptor here.
+        ///  We need to merge in attributes from the wrapped property descriptor here.
         /// </summary>
         protected override void FillAttributes(IList attributeList)
         {
@@ -227,19 +221,19 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Gets the current value of the property on the component, invoking the getXXX method.
+        ///  Gets the current value of the property on the component, invoking the getXXX method.
         /// </summary>
         public override object GetValue(object component)
         {
             return propertyDescriptor.GetValue(component);
         }
 
-        private void InitInheritedDefaultValue(object component, bool rootComponent)
+        private void InitInheritedDefaultValue(object component)
         {
             try
             {
                 object currentValue;
-                // Don't just get the default value.  Check to see if the propertyDescriptor has indicated ShouldSerialize, and if it hasn't try to use the default value. 
+                // Don't just get the default value.  Check to see if the propertyDescriptor has indicated ShouldSerialize, and if it hasn't try to use the default value.
                 // We need to do this for properties that inherit from their parent.  If we are processing properties on the root component, we always favor the presence of a default value attribute.
                 // The root component is always inherited but some values should always be written into code.
                 if (!propertyDescriptor.ShouldSerializeValue(component))
@@ -273,7 +267,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Resets the default value for this property on the component.
+        ///  Resets the default value for this property on the component.
         /// </summary>
         public override void ResetValue(object component)
         {
@@ -301,7 +295,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Sets the value to be the new value of this property on the component by invoking the setXXX method on the component.
+        ///  Sets the value to be the new value of this property on the component by invoking the setXXX method on the component.
         /// </summary>
         public override void SetValue(object component, object value)
         {
@@ -309,7 +303,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Indicates whether the value of this property needs to be persisted.
+        ///  Indicates whether the value of this property needs to be persisted.
         /// </summary>
         public override bool ShouldSerializeValue(object component)
         {

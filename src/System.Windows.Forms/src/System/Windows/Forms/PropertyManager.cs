@@ -2,19 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-using System.ComponentModel;
+#nullable disable
+
 using System.Collections;
+using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     public class PropertyManager : BindingManagerBase
     {
         private object _dataSource;
-        private string _propName;
+        private readonly string _propName;
         private PropertyDescriptor _propInfo;
         private bool _bound;
 
+        /// <summary>
+        ///  An object that represents the object to which the property belongs.
+        /// </summary>
         public override object Current => _dataSource;
 
         private void PropertyChanged(object sender, EventArgs ea)
@@ -23,7 +27,7 @@ namespace System.Windows.Forms
             OnCurrentChanged(EventArgs.Empty);
         }
 
-        internal override void SetDataSource(object dataSource)
+        private protected override void SetDataSource(object dataSource)
         {
             if (_dataSource != null && !string.IsNullOrEmpty(_propName))
             {
@@ -36,7 +40,7 @@ namespace System.Windows.Forms
             if (_dataSource != null && !string.IsNullOrEmpty(_propName))
             {
                 _propInfo = TypeDescriptor.GetProperties(dataSource).Find(_propName, true);
-                if (_propInfo == null)
+                if (_propInfo is null)
                 {
                     throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, _propName, dataSource.ToString()));
                 }
@@ -49,16 +53,14 @@ namespace System.Windows.Forms
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
         internal PropertyManager(object dataSource) : base(dataSource)
         {
         }
 
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "If the constructor does not set the dataSource it would be a breaking change.")]
         internal PropertyManager(object dataSource, string propName) : base()
         {
-            this._propName = propName;
-            this.SetDataSource(dataSource);
+            _propName = propName;
+            SetDataSource(dataSource);
         }
 
         internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
@@ -92,6 +94,9 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Resumes data binding.
+        /// </summary>
         public override void ResumeBinding()
         {
             OnCurrentChanged(EventArgs.Empty);
@@ -111,8 +116,15 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets the name of the list supplying the data for the binding.
+        /// </summary>
+        /// <returns>Always returns an empty string.</returns>
         protected internal override string GetListName(ArrayList listAccessors) => string.Empty;
 
+        /// <summary>
+        ///  Cancels the current edit.
+        /// </summary>
         public override void CancelCurrentEdit()
         {
             IEditableObject obj = Current as IEditableObject;
@@ -120,10 +132,12 @@ namespace System.Windows.Forms
             PushData();
         }
 
+        /// <summary>
+        ///  Ends the current edit.
+        /// </summary>
         public override void EndCurrentEdit()
         {
-            bool success;
-            PullData(out success);
+            PullData(out bool success);
 
             if (success)
             {
@@ -140,28 +154,37 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Raises the <see cref="BindingManagerBase.CurrentChanged" /> event.
+        /// </summary>
+        /// <param name="ea">The event data.</param>
         internal protected override void OnCurrentChanged(EventArgs ea)
         {
             PushData();
 
             onCurrentChangedHandler?.Invoke(this, ea);
-            onCurrentItemChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
+        /// <summary>
+        ///  Raises the <see cref="BindingManagerBase.CurrentItemChanged" /> event.
+        /// </summary>
+        /// <param name="ea">The event data.</param>
         internal protected override void OnCurrentItemChanged(EventArgs ea)
         {
             PushData();
 
-            onCurrentItemChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
         internal override object DataSource => _dataSource;
 
         internal override bool IsBinding => _dataSource != null;
 
-        /// <remarks>
-        /// no op on the propertyManager
-        /// </remarks>
+        /// <summary>
+        ///  Gets the position in the underlying list that controls bound to this data source point to.
+        /// </summary>
+        /// <value>Always returns 0.</value>
         public override int Position
         {
             get => 0;
@@ -170,13 +193,26 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Gets the number of rows managed by the <see cref="BindingManagerBase" />.
+        /// </summary>
+        /// <value>Always returns 1.</value>
         public override int Count => 1;
 
+        /// <summary>
+        /// Throws a <see cref="NotSupportedException" /> in all cases.
+        /// </summary>
+        /// <exception cref="NotSupportedException">In all cases.</exception>
         public override void AddNew()
         {
             throw new NotSupportedException(SR.DataBindingAddNewNotSupportedOnPropertyManager);
         }
 
+        /// <summary>
+        ///  Throws a <see cref="NotSupportedException" /> in all cases.
+        /// </summary>
+        /// <param name="index">The index of the row to delete.</param>
+        /// <exception cref="NotSupportedException">In all cases.</exception>
         public override void RemoveAt(int index)
         {
             throw new NotSupportedException(SR.DataBindingRemoveAtNotSupportedOnPropertyManager);

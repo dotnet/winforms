@@ -8,7 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CreateParamsTests
+    // NB: doesn't require thread affinity
+    public class CreateParamsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
@@ -136,7 +137,7 @@ namespace System.Windows.Forms.Tests
         {
             var createParams = new CreateParams
             {
-                ClassName ="className",
+                ClassName = "className",
                 Caption = "caption",
                 Style = 10,
                 ExStyle = 11,

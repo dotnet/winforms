@@ -4,37 +4,36 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Defines the possible kinds of input/output streams used by RichTextBox
-    /// control's load/save mechansim. These stream options are also used the
-    /// control's text modification methods.
-    ///
-    /// </devdoc>
+    /// <summary>
+    ///  Defines the possible kinds of input/output streams used by RichTextBox
+    ///  control's load/save mechansim. These stream options are also used the
+    ///  control's text modification methods.
+    /// </summary>
     public enum RichTextBoxStreamType
     {
-        /// <devdoc>
-        /// Rich Text Format (RTF).
-        /// </devdoc>
+        /// <summary>
+        ///  Rich Text Format (RTF).
+        /// </summary>
         RichText = 0,
 
-        /// <devdoc>
-        /// Text with spaces in place of OLE objects.
-        /// </devdoc>
+        /// <summary>
+        ///  Text with spaces in place of OLE objects.
+        /// </summary>
         PlainText = 1,
 
-        /// <devdoc>
-        /// RTF with spaces in place of OLE object (valid only for saveFile).
-        /// </devdoc>
+        /// <summary>
+        ///  RTF with spaces in place of OLE object (valid only for saveFile).
+        /// </summary>
         RichNoOleObjs = 2,
 
-        /// <devdoc>
-        /// Text with a text representation of OLE objects (valid only for saveFile).
-        /// </devdoc>
+        /// <summary>
+        ///  Text with a text representation of OLE objects (valid only for saveFile).
+        /// </summary>
         TextTextOleObjs = 3,
 
-        /// <devdoc>
-        /// Text with spaces in place of OLE objects, encoded in Unicode.
-        /// </devdoc>
+        /// <summary>
+        ///  Text with spaces in place of OLE objects, encoded in Unicode.
+        /// </summary>
         UnicodePlainText = 4,
     }
 }

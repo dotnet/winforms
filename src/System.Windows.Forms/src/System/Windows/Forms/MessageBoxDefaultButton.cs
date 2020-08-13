@@ -2,29 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     public enum MessageBoxDefaultButton
     {
-        /// <devdoc>
-        /// Specifies that the first button on the message box should be the
-        /// default button.
-        /// </devdoc>
-        Button1 = 0x00000000,
+        /// <summary>
+        ///  Specifies that the first button on the message box should be the
+        ///  default button.
+        /// </summary>
+        Button1 = (int)MB.DEFBUTTON1,
 
-        /// <devdoc>
-        /// Specifies that the second button on the message box should be the
-        /// default button.
-        /// </devdoc>
-        Button2 = 0x00000100,
+        /// <summary>
+        ///  Specifies that the second button on the message box should be the
+        ///  default button.
+        /// </summary>
+        Button2 = (int)MB.DEFBUTTON2,
 
-        /// <devdoc>
-        /// Specifies that the third button on the message box should be the
-        /// default button.
-        /// </devdoc>
-        Button3 = 0x00000200,
+        /// <summary>
+        ///  Specifies that the third button on the message box should be the
+        ///  default button.
+        /// </summary>
+        Button3 = (int)MB.DEFBUTTON3,
     }
 }

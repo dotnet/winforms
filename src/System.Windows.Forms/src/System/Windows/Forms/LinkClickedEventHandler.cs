@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that will handle the <see cref='System.Windows.Forms.RichTextBox.LinkClicked'/>
-    /// event of a <see cref='System.Windows.Forms.RichTextBox'/>.
-    /// </devdoc>
+    /// <summary>
+    ///  Represents a method that will handle the <see cref='RichTextBox.LinkClicked'/>
+    ///  event of a <see cref='RichTextBox'/>.
+    /// </summary>
     public delegate void LinkClickedEventHandler(object sender, LinkClickedEventArgs e);
 }
-

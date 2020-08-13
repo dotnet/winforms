@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlEventArgsTests
+    public class ControlEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Control_TestData()
         {
@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Button() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_TestData))]
         public void Ctor_Control(Control control)
         {

@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class CacheVirtualItemsEventArgsTests
+    // NB: doesn't require thread affinity
+    public class CacheVirtualItemsEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-1, -1)]

@@ -4,27 +4,27 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies how the column headers are autoresized in a <see cref='System.Windows.Forms.ListView'/>
-    /// control.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies how the column headers are autoresized in a <see cref='ListView'/>
+    ///  control.
+    /// </summary>
     public enum ColumnHeaderAutoResizeStyle
     {
-        /// <devdoc>
-        /// Do not auto resize the column headers.
-        /// </devdoc>
+        /// <summary>
+        ///  Do not auto resize the column headers.
+        /// </summary>
         None,
 
-        /// <devdoc>
-        /// Autoresize the column headers based on the width of just the column
-        /// header.
-        /// </devdoc>
+        /// <summary>
+        ///  Autoresize the column headers based on the width of just the column
+        ///  header.
+        /// </summary>
         HeaderSize,
 
-        /// <devdoc>
-        /// Autoresize the column headers based on the width of the largest
-        /// subitem in the column.
-        /// </devdoc>
+        /// <summary>
+        ///  Autoresize the column headers based on the width of the largest
+        ///  subitem in the column.
+        /// </summary>
         ColumnContent,
     }
 }

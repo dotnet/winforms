@@ -4,29 +4,29 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Describes the times that the error icon supplied by an ErrorProvider
-    /// should blink to alert the user that an error has occurred.
-    /// </devdoc>
+    /// <summary>
+    ///  Describes the times that the error icon supplied by an ErrorProvider
+    ///  should blink to alert the user that an error has occurred.
+    /// </summary>
     public enum ErrorBlinkStyle
     {
-        /// <devdoc>
-        /// Blink only if the error icon is already displayed, but a new
-        /// error string is set for the control.  If the icon did not blink 
-        /// in this case, the user might not know that there is a new error.
-        /// </devdoc>
+        /// <summary>
+        ///  Blink only if the error icon is already displayed, but a new
+        ///  error string is set for the control.  If the icon did not blink
+        ///  in this case, the user might not know that there is a new error.
+        /// </summary>
         BlinkIfDifferentError,
-        
-        /// <devdoc>
-        /// Blink the error icon when the error is first displayed, or when 
-        /// a new error description string is set for the control and the
-        /// error icon is already displayed.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Blink the error icon when the error is first displayed, or when
+        ///  a new error description string is set for the control and the
+        ///  error icon is already displayed.
+        /// </summary>
         AlwaysBlink,
-        
-        /// <devdoc>
-        /// Never blink the error icon.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Never blink the error icon.
+        /// </summary>
         NeverBlink
     }
 }

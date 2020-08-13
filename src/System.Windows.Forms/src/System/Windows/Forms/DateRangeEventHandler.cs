@@ -4,5 +4,5 @@
 
 namespace System.Windows.Forms
 {
-    public delegate void DateRangeEventHandler(object sender, DateRangeEventArgs e);
+    public delegate void DateRangeEventHandler(object? sender, DateRangeEventArgs e);
 }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 using System.Diagnostics;
 
@@ -10,7 +12,6 @@ namespace System.Windows.Forms
     public class DataGridViewRowPostPaintEventArgs : EventArgs
     {
         private readonly DataGridView _dataGridView;
-
 
         public DataGridViewRowPostPaintEventArgs(DataGridView dataGridView,
                                                  Graphics graphics,
@@ -23,27 +24,14 @@ namespace System.Windows.Forms
                                                  bool isFirstDisplayedRow,
                                                  bool isLastVisibleRow)
         {
-            if (dataGridView == null)
-            {
-                throw new ArgumentNullException(nameof(dataGridView));
-            }
-            if (graphics == null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-            if (inheritedRowStyle == null)
-            {
-                throw new ArgumentNullException(nameof(inheritedRowStyle));
-            }
-
-            _dataGridView = dataGridView;
-            Graphics = graphics;
+            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             ClipBounds = clipBounds;
             RowBounds = rowBounds;
             RowIndex = rowIndex;
             State = rowState;
             ErrorText = errorText;
-            InheritedRowStyle = inheritedRowStyle;
+            InheritedRowStyle = inheritedRowStyle ?? throw new ArgumentNullException(nameof(inheritedRowStyle));
             IsFirstDisplayedRow = isFirstDisplayedRow;
             IsLastVisibleRow = isLastVisibleRow;
         }
@@ -72,12 +60,11 @@ namespace System.Windows.Forms
 
         public bool IsLastVisibleRow { get; private set; }
 
-
         public void DrawFocus(Rectangle bounds, bool cellsPaintSelectionBackground)
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).DrawFocus(Graphics,
@@ -93,7 +80,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintCells(Graphics,
@@ -106,12 +93,11 @@ namespace System.Windows.Forms
                                                               paintParts);
         }
 
-
         public void PaintCellsBackground(Rectangle clipBounds, bool cellsPaintSelectionBackground)
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             DataGridViewPaintParts paintParts = DataGridViewPaintParts.Background | DataGridViewPaintParts.Border;
@@ -133,7 +119,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintCells(Graphics,
@@ -160,7 +146,7 @@ namespace System.Windows.Forms
         {
             if (RowIndex < 0 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
 
             _dataGridView.Rows.SharedRow(RowIndex).PaintHeader(Graphics,

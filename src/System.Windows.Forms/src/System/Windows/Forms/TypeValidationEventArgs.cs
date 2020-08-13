@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     /// <summary>
-    /// Provides data for the TypeValidationEventHandler event.
+    ///  Provides data for the TypeValidationEventHandler event.
     /// </summary>
     public class TypeValidationEventArgs : EventArgs
     {
@@ -17,30 +19,30 @@ namespace System.Windows.Forms
             Message = message;
         }
 
-        /// <devdoc>
-        /// The position where the test failed the mask constraint.
-        /// </devdoc>
+        /// <summary>
+        ///  The position where the test failed the mask constraint.
+        /// </summary>
         public Type ValidatingType { get; }
 
-        /// <devdoc>
-        /// The exception thrown by the validating object while performing the data validation.
-        /// </devdoc>
+        /// <summary>
+        ///  The exception thrown by the validating object while performing the data validation.
+        /// </summary>
         public bool IsValidInput { get; }
 
-        /// <devdoc>
-        /// A message about the validation operation. Intended to be populated with
-        /// an exception information if any thrown.
-        /// </devdoc>
+        /// <summary>
+        ///  A message about the validation operation. Intended to be populated with
+        ///  an exception information if any thrown.
+        /// </summary>
         public string Message { get; }
 
-        /// <devdoc>
-        /// The value returned from the Parse method.
-        /// </devdoc>
+        /// <summary>
+        ///  The value returned from the Parse method.
+        /// </summary>
         public object ReturnValue { get; }
 
-        /// <devdoc>
-        /// Specifies whether focus should be allowed to be shifted from the control.
-        /// </devdoc>
+        /// <summary>
+        ///  Specifies whether focus should be allowed to be shifted from the control.
+        /// </summary>
         public bool Cancel { get; set; }
     }
 }

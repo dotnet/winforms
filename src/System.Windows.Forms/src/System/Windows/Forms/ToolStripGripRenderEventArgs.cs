@@ -2,32 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 
 namespace System.Windows.Forms
 {
     public class ToolStripGripRenderEventArgs : ToolStripRenderEventArgs
     {
-        /// <devdoc>
-        /// This class represents all the information to render the toolStrip
-        /// </devdoc>
+        /// <summary>
+        ///  This class represents all the information to render the toolStrip
+        /// </summary>
         public ToolStripGripRenderEventArgs(Graphics g, ToolStrip toolStrip) : base(g, toolStrip)
         {
         }
 
-        /// <devdoc>
-        /// The graphics object to draw with
-        /// </devdoc>
+        /// <summary>
+        ///  The graphics object to draw with
+        /// </summary>
         public Rectangle GripBounds => ToolStrip.GripRectangle;
 
-        /// <devdoc>
-        /// Vertical or horizontal
-        /// </devdoc>
+        /// <summary>
+        ///  Vertical or horizontal
+        /// </summary>
         public ToolStripGripDisplayStyle GripDisplayStyle => ToolStrip.GripDisplayStyle;
 
-        /// <devdoc>
-        /// Visible or hidden
-        /// </devdoc>
+        /// <summary>
+        ///  Visible or hidden
+        /// </summary>
         public ToolStripGripStyle GripStyle => ToolStrip.GripStyle;
     }
 }

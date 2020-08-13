@@ -2,541 +2,451 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
 
-namespace System.Windows.Forms {
-    using Accessibility;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
+using static Interop;
+using static Interop.User32;
+using Hashtable = System.Collections.Hashtable;
 
-    using System.Text;
-    using System.Runtime.Remoting;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.Windows.Forms.VisualStyles;
-    using System.Windows.Forms.ComponentModel;
-
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Runtime.InteropServices;
-
-    using Hashtable = System.Collections.Hashtable;
-    using Microsoft.Win32;
-
-    using System.Drawing.Design;
-    using System.Globalization;
-    using System.Drawing.Text;
-    
-
-    /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox"]/*' />
-    /// <devdoc>
-    ///    <para>
+namespace System.Windows.Forms
+{
+    /// <summary>
     ///
-    ///       Displays a list with a checkbox to the left
+    ///  Displays a list with a checkbox to the left
     ///
-    ///       of each item.
-    ///
-    ///    </para>
-    /// </devdoc>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    LookupBindingProperties(), // ...overrides equivalent attribute in ListControl
-    SRDescription(nameof(SR.DescriptionCheckedListBox))
-    ]
-    public class CheckedListBox : ListBox {
-
-        private int idealCheckSize = 13;
+    ///  of each item.
+    /// </summary>
+    [LookupBindingProperties]
+    [SRDescription(nameof(SR.DescriptionCheckedListBox))]
+    public class CheckedListBox : ListBox
+    {
+        private int _idealCheckSize = 13;
 
         private const int LB_CHECKED = 1;
         private const int LB_UNCHECKED = 0;
-        private const int LB_ERROR = -1;
         private const int BORDER_SIZE = 1;
 
+        /// <summary>
+        ///  Decides whether or not to ignore the next LBN_SELCHANGE message - used to prevent cursor keys from
+        ///  toggling checkboxes.
+        /// </summary>
+        private bool _killnextselect;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.killnextselect"]/*' />
-        /// <devdoc>
-        ///     Decides whether or not to ignore the next LBN_SELCHANGE
-        ///     message - used to prevent cursor keys from toggling checkboxes
-        /// </devdoc>
-        private bool killnextselect = false;
+        /// <summary>
+        ///  Current listener of the onItemCheck event.
+        /// </summary>
+        private ItemCheckEventHandler _onItemCheck;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.onItemCheck"]/*' />
-        /// <devdoc>
-        ///     Current listener of the onItemCheck event.
-        /// </devdoc>
-        private ItemCheckEventHandler onItemCheck;
+        /// <summary>
+        ///  Should we use 3d checkboxes or flat ones?
+        /// </summary>
+        private bool _flat = true;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.checkOnClick"]/*' />
-        /// <devdoc>
-        ///     Indicates whether or not we should toggle check state on the first
-        ///     click on an item, or whether we should wait for the user to click
-        ///     again.
-        /// </devdoc>
-        private bool checkOnClick = false;
+        /// <summary>
+        ///  Indicates which item was last selected.  We want to keep track of this so we can be a little less
+        ///  aggressive about checking/unchecking the items as the user moves around.
+        /// </summary>
+        private int _lastSelected = -1;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.flat"]/*' />
-        /// <devdoc>
-        ///     Should we use 3d checkboxes or flat ones?
-        /// </devdoc>
-        private bool flat = true;
+        /// <summary>
+        ///  The collection of checked items in the CheckedListBox.
+        /// </summary>
+        private CheckedItemCollection _checkedItemCollection;
+        private CheckedIndexCollection _checkedIndexCollection;
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.lastSelected"]/*' />
-        /// <devdoc>
-        ///     Indicates which item was last selected.  We want to keep track
-        ///     of this so we can be a little less aggressive about checking/
-        ///     unchecking the items as the user moves around.
-        /// </devdoc>
-        private int lastSelected = -1;
+        private static readonly WM LBC_GETCHECKSTATE = RegisterWindowMessageW("LBC_GETCHECKSTATE");
+        private static readonly WM LBC_SETCHECKSTATE = RegisterWindowMessageW("LBC_SETCHECKSTATE");
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.checkedItemCollection"]/*' />
-        /// <devdoc>
-        ///     The collection of checked items in the CheckedListBox.
-        /// </devdoc>
-        private CheckedItemCollection checkedItemCollection = null;
-        private CheckedIndexCollection checkedIndexCollection = null;
-
-        private static int LBC_GETCHECKSTATE;
-        private static int LBC_SETCHECKSTATE;
-
-        static CheckedListBox() {
-            LBC_GETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_GETCHECKSTATE");
-            LBC_SETCHECKSTATE = SafeNativeMethods.RegisterWindowMessage("LBC_SETCHECKSTATE");
-        }
-
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBox"]/*' />
-        /// <devdoc>
-        ///     Creates a new CheckedListBox for the user.
-        /// </devdoc>
-        public CheckedListBox() : base() {
+        /// <summary>
+        ///  Creates a new CheckedListBox for the user.
+        /// </summary>
+        public CheckedListBox() : base()
+        {
             // If we eat WM_ERASEBKGRND messages, the background will be
             // painted sometimes but not others.
             // SetStyle(ControlStyles.Opaque, true);
 
             // If a long item is drawn with ellipsis, we must redraw the ellipsed part
             // as well as the newly uncovered region.
-            SetStyle(ControlStyles.ResizeRedraw, true); 
-          
+            SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckOnClick"]/*' />
-        /// <devdoc>
-        ///     Indicates whether or not the checkbox should be toggled whenever an
-        ///     item is selected.  The default behaviour is to just change the
-        ///     selection, and then make the user click again to check it.  However,
-        ///     some may prefer checking the item as soon as it is clicked.
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.CheckedListBoxCheckOnClickDescr))
-        ]
-        public bool CheckOnClick {
-            get {
-                return checkOnClick;
-            }
+        /// <summary>
+        ///  Indicates whether or not the checkbox should be toggled whenever an
+        ///  item is selected.  The default behaviour is to just change the
+        ///  selection, and then make the user click again to check it.  However,
+        ///  some may prefer checking the item as soon as it is clicked.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CheckedListBoxCheckOnClickDescr))]
+        public bool CheckOnClick { get; set; }
 
-            set {
-                checkOnClick = value;
-            }
-        }
-
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndices"]/*' />
-        /// <devdoc>
-        ///     Collection of checked indices in this CheckedListBox.
-        /// </devdoc>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
-        public CheckedIndexCollection CheckedIndices {
-            get {
-                if (checkedIndexCollection == null) {
-                    checkedIndexCollection = new CheckedIndexCollection(this);
+        /// <summary>
+        ///  Collection of checked indices in this CheckedListBox.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public CheckedIndexCollection CheckedIndices
+        {
+            get
+            {
+                if (_checkedIndexCollection is null)
+                {
+                    _checkedIndexCollection = new CheckedIndexCollection(this);
                 }
-                return checkedIndexCollection;
+                return _checkedIndexCollection;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItems"]/*' />
-        /// <devdoc>
-        ///     Collection of checked items in this CheckedListBox.
-        /// </devdoc>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
-        public CheckedItemCollection CheckedItems {
-            get {
-                if (checkedItemCollection == null) {
-                    checkedItemCollection = new CheckedItemCollection(this);
+        /// <summary>
+        ///  Collection of checked items in this CheckedListBox.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public CheckedItemCollection CheckedItems
+        {
+            get
+            {
+                if (_checkedItemCollection is null)
+                {
+                    _checkedItemCollection = new CheckedItemCollection(this);
                 }
-                return checkedItemCollection;
+                return _checkedItemCollection;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateParams"]/*' />
-        /// <devdoc>
-        ///     This is called when creating a window.  Inheriting classes can ovveride
-        ///     this to add extra functionality, but should not forget to first call
-        ///     base.CreateParams() to make sure the control continues to work
-        ///     correctly.
-        /// </devdoc>
-        protected override CreateParams CreateParams {
-            get {
+        /// <summary>
+        ///  This is called when creating a window.  Inheriting classes can ovveride
+        ///  this to add extra functionality, but should not forget to first call
+        ///  base.CreateParams() to make sure the control continues to work
+        ///  correctly.
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= NativeMethods.LBS_OWNERDRAWFIXED | NativeMethods.LBS_WANTKEYBOARDINPUT;
+                cp.Style |= (int)(LBS.OWNERDRAWFIXED | LBS.WANTKEYBOARDINPUT);
                 return cp;
             }
         }
 
-
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DataSource"]/*' />
-        /// <devdoc>
-        ///     CheckedListBox DataSource.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new object DataSource {
-            get {
-                return base.DataSource;
-            }
-            set {
-                base.DataSource = value;
-            }
+        /// <summary>
+        ///  CheckedListBox DataSource.
+        /// </summary>
+        /// <hideinheritance/>
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new object DataSource
+        {
+            get => base.DataSource;
+            set => base.DataSource = value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DisplayMember"]/*' />
-        /// <devdoc>
-        ///     CheckedListBox DisplayMember.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new string DisplayMember {
-            get {
-                return base.DisplayMember ;
-            }
-            set {
-                base.DisplayMember = value;
-            }
+        /// <summary>
+        ///  CheckedListBox DisplayMember.
+        /// </summary>
+        /// <hideinheritance/>
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new string DisplayMember
+        {
+            get => base.DisplayMember;
+            set => base.DisplayMember = value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawMode"]/*' />
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
-        public override DrawMode DrawMode {
-            get {
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override DrawMode DrawMode
+        {
+            get
+            {
                 return DrawMode.Normal;
             }
-            set {
+            set
+            {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemHeight"]/*' />
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        ]
-        public override int ItemHeight {
-            get {
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override int ItemHeight
+        {
+            get
+            {
                 // this should take FontHeight + buffer into Consideration.
                 return Font.Height + scaledListItemBordersHeight;
             }
-            set {
+            set
+            {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Items"]/*' />
-        /// <devdoc>
-        ///     Collection of items in this listbox.
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        Localizable(true),
-        SRDescription(nameof(SR.ListBoxItemsDescr)),
-        Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-        ]
-        new public CheckedListBox.ObjectCollection Items {
-            get {
-                return(CheckedListBox.ObjectCollection)base.Items;
+        /// <summary>
+        ///  Collection of items in this listbox.
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ListBoxItemsDescr))]
+        [Editor("System.Windows.Forms.Design.ListControlStringCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        new public ObjectCollection Items
+        {
+            get
+            {
+                return (ObjectCollection)base.Items;
             }
         }
 
         // Computes the maximum width of all items in the ListBox
         //
-        internal override int MaxItemWidth {
-            get {
+        internal override int MaxItemWidth
+        {
+            get
+            {
                 // Overridden to include the size of the checkbox
                 // Allows for one pixel either side of the checkbox, plus another 1 pixel buffer = 3 pixels
                 //
-                return base.MaxItemWidth + idealCheckSize + scaledListItemPaddingBuffer;
+                return base.MaxItemWidth + _idealCheckSize + scaledListItemPaddingBuffer;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.SelectionMode"]/*' />
-        /// <devdoc>
-        ///     For CheckedListBoxes, multi-selection is not supported.  You can set
-        ///     selection to be able to select one item or no items.
-        /// </devdoc>
-        public override SelectionMode SelectionMode {
-            get {
-                return base.SelectionMode;
-            }
-            set {
+        /// <summary>
+        ///  For CheckedListBoxes, multi-selection is not supported.  You can set
+        ///  selection to be able to select one item or no items.
+        /// </summary>
+        public override SelectionMode SelectionMode
+        {
+            get => base.SelectionMode;
+            set
+            {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended)){
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SelectionMode));
                 }
                 if (value != SelectionMode.One
-                    && value != SelectionMode.None) {
+                    && value != SelectionMode.None)
+                {
                     throw new ArgumentException(SR.CheckedListBoxInvalidSelectionMode);
                 }
 
-                if (value != SelectionMode) {
+                if (value != SelectionMode)
+                {
                     base.SelectionMode = value;
                     RecreateHandle();
                 }
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ThreeDCheckBoxes"]/*' />
-        /// <devdoc>
-        ///     Indicates if the CheckBoxes should show up as flat or 3D in appearance.
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.CheckedListBoxThreeDCheckBoxesDescr))
-        ]
-        public bool ThreeDCheckBoxes {
-            get {
-                return !flat;
+        /// <summary>
+        ///  Indicates if the CheckBoxes should show up as flat or 3D in appearance.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.CheckedListBoxThreeDCheckBoxesDescr))]
+        public bool ThreeDCheckBoxes
+        {
+            get
+            {
+                return !_flat;
             }
-            set {
+            set
+            {
                 // change the style and repaint.
                 //
-                if (flat == value) {
-                    flat = !value;
+                if (_flat == value)
+                {
+                    _flat = !value;
 
                     // see if we have some items, and only invalidate if we do.
-                    CheckedListBox.ObjectCollection items = (CheckedListBox.ObjectCollection) Items;
-                    if ((items != null) && (items.Count > 0)) {
-                        this.Invalidate();
+                    ObjectCollection items = (ObjectCollection)Items;
+                    if ((items != null) && (items.Count > 0))
+                    {
+                        Invalidate();
                     }
                 }
             }
         }
 
-        /// <devdoc>
-        ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
-        /// </devdoc>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
-        ]
-        public bool UseCompatibleTextRendering {
-            get{
-                return base.UseCompatibleTextRenderingInt;
-            }
-            set{
-                base.UseCompatibleTextRenderingInt = value;
-            }
+        /// <summary>
+        ///  Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
+        /// </summary>
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))]
+        public bool UseCompatibleTextRendering
+        {
+            get => base.UseCompatibleTextRenderingInt;
+            set => base.UseCompatibleTextRenderingInt = value;
         }
 
-        /// <devdoc>
-        ///     Determines whether the control supports rendering text using GDI+ and GDI.
-        ///     This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
-        ///     value if the child control supports it.
-        /// </devdoc>
-        internal override bool SupportsUseCompatibleTextRendering {
-            get {
+        /// <summary>
+        ///  Determines whether the control supports rendering text using GDI+ and GDI.
+        ///  This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
+        ///  value if the child control supports it.
+        /// </summary>
+        internal override bool SupportsUseCompatibleTextRendering
+        {
+            get
+            {
                 return true;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ValueMember"]/*' />
-        /// <devdoc>
-        ///     CheckedListBox ValueMember.
-        /// </devdoc>
-        /// <internalonly/><hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new string ValueMember {
-            get {
-                return base.ValueMember;
-            }
-            set {
-                base.ValueMember = value;
-            }
+        /// <summary>
+        ///  CheckedListBox ValueMember.
+        /// </summary>
+        /// <hideinheritance/>
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new string ValueMember
+        {
+            get => base.ValueMember;
+            set => base.ValueMember = value;
         }
 
-
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DataSourceChanged"]/*' />
-        /// <internalonly/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DataSourceChanged {
-            add {
-                base.DataSourceChanged += value;
-            }
-            remove {
-                base.DataSourceChanged -= value;
-            }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler DataSourceChanged
+        {
+            add => base.DataSourceChanged += value;
+            remove => base.DataSourceChanged -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DisplayMemberChanged"]/*' />
-        /// <internalonly/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler DisplayMemberChanged {
-            add {
-                base.DisplayMemberChanged += value;
-            }
-            remove {
-                base.DisplayMemberChanged -= value;
-            }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler DisplayMemberChanged
+        {
+            add => base.DisplayMemberChanged += value;
+            remove => base.DisplayMemberChanged -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemCheck"]/*' />
-        [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
-        public event ItemCheckEventHandler ItemCheck {
-            add {
-                onItemCheck += value;
-            }
-            remove {
-                onItemCheck -= value;
-            }
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
+        public event ItemCheckEventHandler ItemCheck
+        {
+            add => _onItemCheck += value;
+            remove => _onItemCheck -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+        /// <hideinheritance/>
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new event EventHandler Click
+        {
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
-        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
-        public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+        /// <hideinheritance/>
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        public new event MouseEventHandler MouseClick
+        {
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawItem"]/*' />
-        /// <internalonly/><hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event DrawItemEventHandler DrawItem {
-            add {
-                base.DrawItem += value;
-            }
-            remove {
-                base.DrawItem -= value;
-            }
+        /// <hideinheritance/>
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event DrawItemEventHandler DrawItem
+        {
+            add => base.DrawItem += value;
+            remove => base.DrawItem -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MeasureItem"]/*' />
-        /// <internalonly/><hideinheritance/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        public new event MeasureItemEventHandler MeasureItem {
-            add {
-                base.MeasureItem += value;
-            }
-            remove {
-                base.MeasureItem -= value;
-            }
+        /// <hideinheritance/>
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public new event MeasureItemEventHandler MeasureItem
+        {
+            add => base.MeasureItem += value;
+            remove => base.MeasureItem -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Padding"]/*' />
-        [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public new Padding Padding {
-            get { return base.Padding; }
-            set { base.Padding = value;}
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public new Padding Padding
+        {
+            get => base.Padding;
+            set => base.Padding = value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.ValueMemberChanged"]/*' />
-        /// <internalonly/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler ValueMemberChanged {
-            add {
-                base.ValueMemberChanged += value;
-            }
-            remove {
-                base.ValueMemberChanged -= value;
-            }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler ValueMemberChanged
+        {
+            add => base.ValueMemberChanged += value;
+            remove => base.ValueMemberChanged -= value;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    Constructs the new instance of the accessibility object for this control. Subclasses
-        ///    should not call base.CreateAccessibilityObject.
-        /// </devdoc>
-        protected override AccessibleObject CreateAccessibilityInstance() {
+        /// <summary>
+        ///  Constructs the new instance of the accessibility object for this control. Subclasses
+        ///  should not call base.CreateAccessibilityObject.
+        /// </summary>
+        protected override AccessibleObject CreateAccessibilityInstance()
+        {
             return new CheckedListBoxAccessibleObject(this);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateItemCollection"]/*' />
-        protected override ListBox.ObjectCollection CreateItemCollection() {
+        protected override ListBox.ObjectCollection CreateItemCollection()
+        {
             return new ObjectCollection(this);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.GetItemCheckState"]/*' />
-        /// <devdoc>
-        ///     Gets the check value of the current item.  This value will be from the
-        ///     System.Windows.Forms.CheckState enumeration.
-        /// </devdoc>
-        public CheckState GetItemCheckState(int index) {
-
+        /// <summary>
+        ///  Gets the check value of the current item.  This value will be from the
+        ///  System.Windows.Forms.CheckState enumeration.
+        /// </summary>
+        public CheckState GetItemCheckState(int index)
+        {
             if (index < 0 || index >= Items.Count)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            }
+
             return CheckedItems.GetCheckedState(index);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.GetItemChecked"]/*' />
-        /// <devdoc>
-        ///     Indicates if the given item is, in any way, shape, or form, checked.
-        ///     This will return true if the item is fully or indeterminately checked.
-        /// </devdoc>
-        public bool GetItemChecked(int index) {
-            return(GetItemCheckState(index) != CheckState.Unchecked);
+        /// <summary>
+        ///  Indicates if the given item is, in any way, shape, or form, checked.
+        ///  This will return true if the item is fully or indeterminately checked.
+        /// </summary>
+        public bool GetItemChecked(int index)
+        {
+            return (GetItemCheckState(index) != CheckState.Unchecked);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.InvalidateItem"]/*' />
-        /// <devdoc>
-        ///     Invalidates the given item in the listbox
-        /// </devdoc>
-        /// <internalonly/>
-        private void InvalidateItem(int index) {
-            if (IsHandleCreated) {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
-                SendMessage(NativeMethods.LB_GETITEMRECT, index, ref rect);
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rect, false);
+        /// <summary>
+        ///  Invalidates the given item in the listbox
+        /// </summary>
+        private unsafe void InvalidateItem(int index)
+        {
+            if (IsHandleCreated)
+            {
+                var rect = new RECT();
+                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.LbnSelChange"]/*' />
-        /// <devdoc>
-        ///     A redirected LBN_SELCHANGE message notification.
-        /// </devdoc>
-        /// <internalonly/>
-        private void LbnSelChange() {
-
+        /// <summary>
+        ///  A redirected LBN_SELCHANGE message notification.
+        /// </summary>
+        private void LbnSelChange()
+        {
             // prepare to change the selection.  we'll fire an event for
             // this.  Note that we'll only change the selection when the
             // user clicks again on a currently selected item, or when the
@@ -551,16 +461,18 @@ namespace System.Windows.Forms {
             // make sure we have a valid index, otherwise we're going to
             // fail ahead...
             if (index < 0 || index >= Items.Count)
+            {
                 return;
+            }
 
             // Send an accessibility notification
             //
             AccessibilityNotifyClients(AccessibleEvents.Focus, index);
             AccessibilityNotifyClients(AccessibleEvents.Selection, index);
 
-
             //# VS7 86
-            if (!killnextselect && (index == lastSelected || checkOnClick == true)) {
+            if (!_killnextselect && (index == _lastSelected || CheckOnClick == true))
+            {
                 CheckState currentValue = CheckedItems.GetCheckedState(index);
                 CheckState newValue = (currentValue != CheckState.Unchecked)
                                       ? CheckState.Unchecked
@@ -574,76 +486,75 @@ namespace System.Windows.Forms {
                 CheckedItems.SetCheckedState(index, itemCheckEvent.NewValue);
 
                 // Send accessibility notifications for state change
-                if (AccessibilityImprovements.Level1) {
-                    AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange, index);
-                }
+                AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange, index);
             }
 
-            lastSelected = index;
+            _lastSelected = index;
             InvalidateItem(index);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnClick"]/*' />
-        /// <devdoc>
-        ///     Ensures that mouse clicks can toggle...
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void OnClick(EventArgs e) {
-            killnextselect = false;
+        /// <summary>
+        ///  Ensures that mouse clicks can toggle...
+        /// </summary>
+        protected override void OnClick(EventArgs e)
+        {
+            _killnextselect = false;
             base.OnClick(e);
         }
 
-        
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnHandleCreated"]/*' />
-        /// <devdoc>
-        ///     When the handle is created we can dump any cached item-check pairs.
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void OnHandleCreated(EventArgs e) {
+        /// <summary>
+        ///  When the handle is created we can dump any cached item-check pairs.
+        /// </summary>
+        protected override void OnHandleCreated(EventArgs e)
+        {
             base.OnHandleCreated(e);
-            SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
-            
+            SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnDrawItem"]/*' />
-        /// <devdoc>
-        ///     Actually goes and fires the drawItem event.  Inheriting controls
-        ///     should use this to know when the event is fired [this is preferable to
-        ///     adding an event handler yourself for this event].  They should,
-        ///     however, remember to call base.OnDrawItem(e); to ensure the event is
-        ///     still fired to external listeners
-        /// </devdoc>
-        protected override void OnDrawItem(DrawItemEventArgs e) {
+        /// <summary>
+        ///  Actually goes and fires the drawItem event.  Inheriting controls
+        ///  should use this to know when the event is fired [this is preferable to
+        ///  adding an event handler yourself for this event].  They should,
+        ///  however, remember to call base.OnDrawItem(e); to ensure the event is
+        ///  still fired to external listeners
+        /// </summary>
+        protected override void OnDrawItem(DrawItemEventArgs e)
+        {
             object item;
 
             if (Font.Height < 0)
             {
-                this.Font = Control.DefaultFont;
+                Font = Control.DefaultFont;
             }
 
-            if (e.Index >= 0) {
-                if (e.Index < Items.Count) {
+            if (e.Index >= 0)
+            {
+                if (e.Index < Items.Count)
+                {
                     item = Items[e.Index];
                 }
-                else {
-                    // If the item is not part of our collection, we will just
-                    // get the string for it and display it.
-                    //
+                else
+                {
+                    // If the item is not part of our collection, we will just get the string for it and display it.
+
                     item = NativeGetItemText(e.Index);
                 }
 
                 Rectangle bounds = e.Bounds;
-                int height = this.ItemHeight;
+                int height = ItemHeight;
 
-                // set up the appearance of the checkbox
-                //
+                // Set up the appearance of the checkbox
+
                 ButtonState state = ButtonState.Normal;
-                if (flat) {
+                if (_flat)
+                {
                     state |= ButtonState.Flat;
                 }
-                if (e.Index < Items.Count) {
-                    switch (CheckedItems.GetCheckedState(e.Index)) {
+                if (e.Index < Items.Count)
+                {
+                    switch (CheckedItems.GetCheckedState(e.Index))
+                    {
                         case CheckState.Checked:
                             state |= ButtonState.Checked;
                             break;
@@ -653,73 +564,85 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                // If we are drawing themed CheckBox .. get the size from renderer..
-                // the Renderer might return a different size in different DPI modes..
-                if (Application.RenderWithVisualStyles) {
-                   VisualStyles.CheckBoxState cbState = CheckBoxRenderer.ConvertFromButtonState(state, false, ((e.State & DrawItemState.HotLight) == DrawItemState.HotLight));
-                   idealCheckSize = (int)(CheckBoxRenderer.GetGlyphSize(e.Graphics, cbState, HandleInternal)).Width;
+                // If we are drawing themed CheckBox get the size from the renderer which can change with DPI.
+                if (Application.RenderWithVisualStyles)
+                {
+                    VisualStyles.CheckBoxState cbState = CheckBoxRenderer.ConvertFromButtonState(
+                        state,
+                        isMixed: false,
+                        (e.State & DrawItemState.HotLight) == DrawItemState.HotLight);
+
+                    _idealCheckSize = CheckBoxRenderer.GetGlyphSize(e, cbState, HandleInternal).Width;
                 }
 
                 // Determine bounds for the checkbox
-                //
-                int centeringFactor = Math.Max((height - idealCheckSize) / 2, 0);
+                int centeringFactor = Math.Max((height - _idealCheckSize) / 2, 0);
 
                 // Keep the checkbox within the item's upper and lower bounds
-                if (centeringFactor + idealCheckSize > bounds.Height) {
-                    centeringFactor = bounds.Height - idealCheckSize;
+                if (centeringFactor + _idealCheckSize > bounds.Height)
+                {
+                    centeringFactor = bounds.Height - _idealCheckSize;
                 }
 
-                Rectangle box = new Rectangle(bounds.X + scaledListItemStartPosition,
-                                              bounds.Y + centeringFactor,
-                                              idealCheckSize,
-                                              idealCheckSize);
+                Rectangle box = new Rectangle(
+                    bounds.X + scaledListItemStartPosition,
+                    bounds.Y + centeringFactor,
+                    _idealCheckSize,
+                    _idealCheckSize);
 
-                if (RightToLeft == RightToLeft.Yes) {
+                if (RightToLeft == RightToLeft.Yes)
+                {
                     // For a RightToLeft checked list box, we want the checkbox
                     // to be drawn at the right.
                     // So we override the X position.
-                    box.X = bounds.X + bounds.Width - idealCheckSize - scaledListItemStartPosition;
+                    box.X = bounds.X + bounds.Width - _idealCheckSize - scaledListItemStartPosition;
                 }
-
-                
 
                 // Draw the checkbox.
-                //
-                if (Application.RenderWithVisualStyles) {
-                    VisualStyles.CheckBoxState cbState = CheckBoxRenderer.ConvertFromButtonState(state, false, ((e.State & DrawItemState.HotLight) == DrawItemState.HotLight));
-                    CheckBoxRenderer.DrawCheckBox(e.Graphics, new Point(box.X, box.Y), cbState, HandleInternal);
+
+                if (Application.RenderWithVisualStyles)
+                {
+                    VisualStyles.CheckBoxState cbState = CheckBoxRenderer.ConvertFromButtonState(
+                        state,
+                        isMixed: false,
+                        ((e.State & DrawItemState.HotLight) == DrawItemState.HotLight));
+
+                    CheckBoxRenderer.DrawCheckBoxWithVisualStyles(e, new Point(box.X, box.Y), cbState, HandleInternal);
                 }
-                else {
+                else
+                {
                     ControlPaint.DrawCheckBox(e.Graphics, box, state);
                 }
 
                 // Determine bounds for the text portion of the item
-                //
                 Rectangle textBounds = new Rectangle(
-                                                    bounds.X + idealCheckSize + (scaledListItemStartPosition * 2),
-                                                    bounds.Y,
-                                                    bounds.Width - (idealCheckSize + (scaledListItemStartPosition * 2)),
-                                                    bounds.Height);
-                if (RightToLeft == RightToLeft.Yes) {
+                    bounds.X + _idealCheckSize + (scaledListItemStartPosition * 2),
+                    bounds.Y,
+                    bounds.Width - (_idealCheckSize + (scaledListItemStartPosition * 2)),
+                    bounds.Height);
+
+                if (RightToLeft == RightToLeft.Yes)
+                {
                     // For a RightToLeft checked list box, we want the text
                     // to be drawn at the left.
                     // So we override the X position.
                     textBounds.X = bounds.X;
                 }
 
-                // Setup text font, color, and text
-                //
-                string text = "";
                 Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
                 Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
-                if (!Enabled) {
+                if (!Enabled)
+                {
                     foreColor = SystemColors.GrayText;
-				}
+                }
                 Font font = Font;
 
-                text = GetItemText(item);
+                // Setup text font, color, and text
 
-                if (SelectionMode != SelectionMode.None && (e.State & DrawItemState.Selected) == DrawItemState.Selected) {
+                string text = GetItemText(item);
+
+                if (SelectionMode != SelectionMode.None && (e.State & DrawItemState.Selected) == DrawItemState.Selected)
+                {
                     if (Enabled)
                     {
                         backColor = SystemColors.Highlight;
@@ -733,136 +656,160 @@ namespace System.Windows.Forms {
                 }
 
                 // Draw the text
-                //
 
                 // Due to some sort of unpredictable painting optimization in the Windows ListBox control,
                 // we need to always paint the background rectangle for the current line.
-                using (Brush b = new SolidBrush(backColor)) {
-                    e.Graphics.FillRectangle(b, textBounds);
+
+                if (!backColor.HasTransparency())
+                {
+                    using var hdc = new DeviceContextHdcScope(e);
+                    using var hbrush = new Gdi32.CreateBrushScope(backColor);
+                    hdc.FillRectangle(textBounds, hbrush);
+                }
+                else
+                {
+                    // Need to use GDI+
+                    using var brush = backColor.GetCachedSolidBrushScope();
+                    e.GraphicsInternal.FillRectangle(brush, textBounds);
                 }
 
                 Rectangle stringBounds = new Rectangle(
-                                                      textBounds.X + BORDER_SIZE,
-                                                      textBounds.Y,
-                                                      textBounds.Width - BORDER_SIZE,
-                                                      textBounds.Height - 2 * BORDER_SIZE); // minus borders
+                    textBounds.X + BORDER_SIZE,
+                    textBounds.Y,
+                    textBounds.Width - BORDER_SIZE,
+                    textBounds.Height - 2 * BORDER_SIZE); // minus borders
 
-                if( UseCompatibleTextRendering ){
-                    using (StringFormat format = new StringFormat()) {
-                        if (UseTabStops) {
-                            //  Set tab stops so it looks similar to a ListBox, at least with the default font size.
-                            float tabDistance = 3.6f * Font.Height; // about 7 characters
-                            float[] tabStops = new float[15];
-                            float tabOffset = -(idealCheckSize + (scaledListItemStartPosition  * 2));
-                            for (int i = 1; i < tabStops.Length; i++)
-                                tabStops[i] = tabDistance;
-
-                            //(
-                            if (Math.Abs(tabOffset) < tabDistance) {
-                                tabStops[0] =  tabDistance +tabOffset;
-                            }
-                            else {
-                                tabStops[0] =  tabDistance;
-                            }
-                            format.SetTabStops(0, tabStops);
-                        }
-                        else if (UseCustomTabOffsets) {
-                            //Set TabStops to userDefined values
-                            int wpar = CustomTabOffsets.Count;
-                            float[] tabStops = new float[wpar];
-                            CustomTabOffsets.CopyTo(tabStops, 0);
-                            format.SetTabStops(0, tabStops);
+                if (UseCompatibleTextRendering)
+                {
+                    using StringFormat format = new StringFormat();
+                    if (UseTabStops)
+                    {
+                        //  Set tab stops so it looks similar to a ListBox, at least with the default font size.
+                        float tabDistance = 3.6f * Font.Height; // about 7 characters
+                        float[] tabStops = new float[15];
+                        float tabOffset = -(_idealCheckSize + (scaledListItemStartPosition * 2));
+                        for (int i = 1; i < tabStops.Length; i++)
+                        {
+                            tabStops[i] = tabDistance;
                         }
 
-                        // Adjust string format for Rtl controls
-                        if (RightToLeft == RightToLeft.Yes) {
-                            format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
+                        //(
+                        if (Math.Abs(tabOffset) < tabDistance)
+                        {
+                            tabStops[0] = tabDistance + tabOffset;
                         }
-
-                        // ListBox doesn't word-wrap its items, so neither should CheckedListBox
-                        //
-                        format.FormatFlags |= StringFormatFlags.NoWrap;
-
-                        // Set Trimming to None to prevent DrawString() from whacking the entire
-                        // string when there is only one character per tab included in the string.
-                        format.Trimming = StringTrimming.None;
-
-                        // Do actual drawing
-                        using (SolidBrush brush = new SolidBrush(foreColor)) {
-                            e.Graphics.DrawString(text, font, brush, stringBounds, format);
+                        else
+                        {
+                            tabStops[0] = tabDistance;
                         }
+                        format.SetTabStops(0, tabStops);
                     }
+                    else if (UseCustomTabOffsets)
+                    {
+                        //Set TabStops to userDefined values
+                        int wpar = CustomTabOffsets.Count;
+                        float[] tabStops = new float[wpar];
+                        CustomTabOffsets.CopyTo(tabStops, 0);
+                        format.SetTabStops(0, tabStops);
+                    }
+
+                    // Adjust string format for Rtl controls
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
+                        format.FormatFlags |= StringFormatFlags.DirectionRightToLeft;
+                    }
+
+                    // ListBox doesn't word-wrap its items, so neither should CheckedListBox
+                    //
+                    format.FormatFlags |= StringFormatFlags.NoWrap;
+
+                    // Set Trimming to None to prevent DrawString() from whacking the entire
+                    // string when there is only one character per tab included in the string.
+                    format.Trimming = StringTrimming.None;
+
+                    // Do actual drawing
+                    using var brush = foreColor.GetCachedSolidBrushScope();
+                    e.Graphics.DrawString(text, font, brush, stringBounds, format);
                 }
-                else{
+                else
+                {
                     TextFormatFlags flags = TextFormatFlags.Default;
                     flags |= TextFormatFlags.NoPrefix;
 
-                    if (UseTabStops || UseCustomTabOffsets) {
+                    if (UseTabStops || UseCustomTabOffsets)
+                    {
                         flags |= TextFormatFlags.ExpandTabs;
                     }
 
                     // Adjust string format for Rtl controls
-                    if (RightToLeft == RightToLeft.Yes) {
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
                         flags |= TextFormatFlags.RightToLeft;
                         flags |= TextFormatFlags.Right;
                     }
 
                     // Do actual drawing
-                    TextRenderer.DrawText(e.Graphics, text, font, stringBounds, foreColor, flags );
+                    TextRenderer.DrawText(e, text, font, stringBounds, foreColor, flags);
                 }
 
                 // Draw the focus rect if required
-                //
+
                 if ((e.State & DrawItemState.Focus) == DrawItemState.Focus &&
-                    (e.State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect) {
+                    (e.State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
+                {
                     ControlPaint.DrawFocusRectangle(e.Graphics, textBounds, foreColor, backColor);
                 }
             }
 
-            if (Items.Count == 0 && AccessibilityImprovements.Level3 &&
-                e.Bounds.Width > 2 * BORDER_SIZE && e.Bounds.Height > 2 * BORDER_SIZE) {
+            if (Items.Count == 0 &&
+                e.Bounds.Width > 2 * BORDER_SIZE && e.Bounds.Height > 2 * BORDER_SIZE)
+            {
                 Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
                 Rectangle bounds = e.Bounds;
                 Rectangle emptyRectangle = new Rectangle(
-                                      bounds.X + BORDER_SIZE,
-                                      bounds.Y,
-                                      bounds.Width - BORDER_SIZE,
-                                      bounds.Height - 2 * BORDER_SIZE); // Upper and lower borders.
-                if (Focused) {
+                    bounds.X + BORDER_SIZE,
+                    bounds.Y,
+                    bounds.Width - BORDER_SIZE,
+                    bounds.Height - 2 * BORDER_SIZE); // Upper and lower borders.
+
+                if (Focused)
+                {
                     // Draw focus rectangle for virtual first item in the list if there are no items in the list.
                     Color foreColor = (SelectionMode != SelectionMode.None) ? e.ForeColor : ForeColor;
-                    if (!Enabled) {
+                    if (!Enabled)
+                    {
                         foreColor = SystemColors.GrayText;
                     }
 
                     ControlPaint.DrawFocusRectangle(e.Graphics, emptyRectangle, foreColor, backColor);
                 }
-                else if (!Application.RenderWithVisualStyles) {
+                else if (!Application.RenderWithVisualStyles)
+                {
                     // If VisualStyles are off, rectangle needs to be explicitly erased, when focus is lost.
                     // This is because of persisting empty focus rectangle when VisualStyles are off.
-                    using (Brush brush = new SolidBrush(backColor)) {
-                        e.Graphics.FillRectangle(brush, emptyRectangle);
-                    }
+                    using var brush = backColor.GetCachedSolidBrushScope();
+                    e.Graphics.FillRectangle(brush, emptyRectangle);
                 }
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnBackColorChanged"]/*' />
-        protected override void OnBackColorChanged(EventArgs e) {
+        protected unsafe override void OnBackColorChanged(EventArgs e)
+        {
             base.OnBackColorChanged(e);
 
-            if (IsHandleCreated) {
-                SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), null, true);
+            if (IsHandleCreated)
+            {
+                InvalidateRect(new HandleRef(this, Handle), null, BOOL.TRUE);
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnFontChanged"]/*' />
-        protected override void OnFontChanged(EventArgs e) {
-
+        protected override void OnFontChanged(EventArgs e)
+        {
             // Update the item height
             //
-            if (IsHandleCreated) {
-                SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
+            if (IsHandleCreated)
+            {
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
@@ -870,18 +817,18 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnKeyPress"]/*' />
-        /// <devdoc>
-        ///     This is the code that actually fires the "keyPress" event.  The Checked
-        ///     ListBox overrides this to look for space characters, since we
-        ///     want to use those to check or uncheck items periodically.  Don't
-        ///     forget to call base.OnKeyPress() to ensure that KeyPrese events
-        ///     are correctly fired for all other keys.
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void OnKeyPress(KeyPressEventArgs e) {
-            if (e.KeyChar == ' ' && SelectionMode != SelectionMode.None) {
-               LbnSelChange();
+        /// <summary>
+        ///  This is the code that actually fires the "keyPress" event.  The Checked
+        ///  ListBox overrides this to look for space characters, since we
+        ///  want to use those to check or uncheck items periodically.  Don't
+        ///  forget to call base.OnKeyPress() to ensure that KeyPrese events
+        ///  are correctly fired for all other keys.
+        /// </summary>
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ' && SelectionMode != SelectionMode.None)
+            {
+                LbnSelChange();
             }
             if (FormattingEnabled) //We want to fire KeyPress only when FormattingEnabled (this is a whidbey property)
             {
@@ -889,117 +836,116 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnItemCheck"]/*' />
-        /// <devdoc>
-        ///     This is the code that actually fires the itemCheck event.  Don't
-        ///     forget to call base.onItemCheck() to ensure that itemCheck vents
-        ///     are correctly fired for all other keys.
-        /// </devdoc>
-        /// <internalonly/>
-        protected virtual void OnItemCheck(ItemCheckEventArgs ice) {
-            if (onItemCheck != null) onItemCheck(this, ice);
+        /// <summary>
+        ///  This is the code that actually fires the itemCheck event.  Don't
+        ///  forget to call base.onItemCheck() to ensure that itemCheck vents
+        ///  are correctly fired for all other keys.
+        /// </summary>
+        protected virtual void OnItemCheck(ItemCheckEventArgs ice)
+        {
+            _onItemCheck?.Invoke(this, ice);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnMeasureItem"]/*' />
-        protected override void OnMeasureItem(MeasureItemEventArgs e) {
+        protected override void OnMeasureItem(MeasureItemEventArgs e)
+        {
             base.OnMeasureItem(e);
 
             // we'll use the ideal checkbox size plus enough for padding on the top
             // and bottom
             //
-            if (e.ItemHeight < idealCheckSize + 2) {
-                e.ItemHeight = idealCheckSize + 2;
+            if (e.ItemHeight < _idealCheckSize + 2)
+            {
+                e.ItemHeight = _idealCheckSize + 2;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.OnSelectedIndexChanged"]/*' />
-        /// <devdoc>
-        ///     Actually goes and fires the selectedIndexChanged event.  Inheriting controls
-        ///     should use this to know when the event is fired [this is preferable to
-        ///     adding an event handler on yourself for this event].  They should,
-        ///     however, remember to call base.OnSelectedIndexChanged(e); to ensure the event is
-        ///     still fired to external listeners
-        /// </devdoc>
-        protected override void OnSelectedIndexChanged(EventArgs e) {
-
+        /// <summary>
+        ///  Actually goes and fires the selectedIndexChanged event.  Inheriting controls
+        ///  should use this to know when the event is fired [this is preferable to
+        ///  adding an event handler on yourself for this event].  They should,
+        ///  however, remember to call base.OnSelectedIndexChanged(e); to ensure the event is
+        ///  still fired to external listeners
+        /// </summary>
+        protected override void OnSelectedIndexChanged(EventArgs e)
+        {
             base.OnSelectedIndexChanged(e);
-            lastSelected = SelectedIndex;
-
+            _lastSelected = SelectedIndex;
         }
 
-
-        
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.RefreshItems"]/*' />
-        /// <devdoc>
-        /// Reparses the objects, getting new text strings for them.
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void RefreshItems() {
+        /// <summary>
+        ///  Reparses the objects, getting new text strings for them.
+        /// </summary>
+        protected override void RefreshItems()
+        {
             Hashtable savedcheckedItems = new Hashtable();
-            for (int i =0; i < Items.Count ; i ++)
+            for (int i = 0; i < Items.Count; i++)
             {
                 savedcheckedItems[i] = CheckedItems.GetCheckedState(i);
             }
-            
+
             //call the base
             base.RefreshItems();
             // restore the checkedItems...
 
-            for (int j =0; j < Items.Count; j++)
+            for (int j = 0; j < Items.Count; j++)
             {
                 CheckedItems.SetCheckedState(j, (CheckState)savedcheckedItems[j]);
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.SetItemCheckState"]/*' />
-        /// <devdoc>
-        ///     Sets the checked value of the given item.  This value should be from
-        ///     the System.Windows.Forms.CheckState enumeration.
-        /// </devdoc>
-        public void SetItemCheckState(int index, CheckState value) {
-            if (index < 0 || index >= Items.Count) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+        /// <summary>
+        ///  Sets the checked value of the given item.  This value should be from
+        ///  the System.Windows.Forms.CheckState enumeration.
+        /// </summary>
+        public void SetItemCheckState(int index, CheckState value)
+        {
+            if (index < 0 || index >= Items.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             // valid values are 0-2 inclusive.
-            if (!ClientUtils.IsEnumValid(value,(int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
+            if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
+            {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
             }
             CheckState currentValue = CheckedItems.GetCheckedState(index);
 
-            if (value != currentValue) {
+            if (value != currentValue)
+            {
                 ItemCheckEventArgs itemCheckEvent = new ItemCheckEventArgs(index, value, currentValue);
                 OnItemCheck(itemCheckEvent);
 
-                if (itemCheckEvent.NewValue != currentValue) {
+                if (itemCheckEvent.NewValue != currentValue)
+                {
                     CheckedItems.SetCheckedState(index, itemCheckEvent.NewValue);
                     InvalidateItem(index);
                 }
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.SetItemChecked"]/*' />
-        /// <devdoc>
-        ///     Sets the checked value of the given item.  This value should be a
-        ///     boolean.
-        /// </devdoc>
-        public void SetItemChecked(int index, bool value) {
+        /// <summary>
+        ///  Sets the checked value of the given item.  This value should be a
+        ///  boolean.
+        /// </summary>
+        public void SetItemChecked(int index, bool value)
+        {
             SetItemCheckState(index, value ? CheckState.Checked : CheckState.Unchecked);
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.WmReflectCommand"]/*' />
-        /// <devdoc>
-        ///     We need to get LBN_SELCHANGE notifications
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void WmReflectCommand(ref Message m) {
-            switch (NativeMethods.Util.HIWORD(m.WParam)) {
-                case NativeMethods.LBN_SELCHANGE:
+        /// <summary>
+        ///  We need to get LBN_SELCHANGE notifications
+        /// </summary>
+        protected override void WmReflectCommand(ref Message m)
+        {
+            switch (PARAM.HIWORD(m.WParam))
+            {
+                case (int)LBN.SELCHANGE:
                     LbnSelChange();
                     // finally, fire the OnSelectionChange event.
                     base.WmReflectCommand(ref m);
                     break;
 
-                case NativeMethods.LBN_DBLCLK:
+                case (int)LBN.DBLCLK:
                     // We want double-clicks to change the checkstate on each click - just like the CheckBox control
                     //
                     LbnSelChange();
@@ -1012,15 +958,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.WmReflectVKeyToItem"]/*' />
-        /// <devdoc>
-        ///     Handle keyboard input to prevent arrow keys from toggling
-        ///     checkboxes in CheckOnClick mode.
-        /// </devdoc>
-        /// <internalonly/>
-        private void WmReflectVKeyToItem(ref Message m) {
-            int keycode = NativeMethods.Util.LOWORD(m.WParam);
-            switch ((Keys)keycode) {
+        /// <summary>
+        ///  Handle keyboard input to prevent arrow keys from toggling
+        ///  checkboxes in CheckOnClick mode.
+        /// </summary>
+        private void WmReflectVKeyToItem(ref Message m)
+        {
+            int keycode = PARAM.LOWORD(m.WParam);
+            switch ((Keys)keycode)
+            {
                 case Keys.Up:
                 case Keys.Down:
                 case Keys.PageUp:
@@ -1029,425 +975,445 @@ namespace System.Windows.Forms {
                 case Keys.End:
                 case Keys.Left:
                 case Keys.Right:
-                    killnextselect = true;
+                    _killnextselect = true;
                     break;
                 default:
-                    killnextselect = false;
+                    _killnextselect = false;
                     break;
             }
             m.Result = NativeMethods.InvalidIntPtr;
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.WndProc"]/*' />
-        /// <devdoc>
-        ///     The listbox's window procedure.  Inheriting classes can override this
-        ///     to add extra functionality, but should not forget to call
-        ///     base.wndProc(m); to ensure the button continues to function properly.
-        /// </devdoc>
-        /// <internalonly/>
-        protected override void WndProc(ref Message m) {
-
-            switch (m.Msg) {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CHARTOITEM:
+        /// <summary>
+        ///  The listbox's window procedure.  Inheriting classes can override this
+        ///  to add extra functionality, but should not forget to call
+        ///  base.wndProc(m); to ensure the button continues to function properly.
+        /// </summary>
+        protected override void WndProc(ref Message m)
+        {
+            switch ((WM)m.Msg)
+            {
+                case WM.REFLECT_CHARTOITEM:
                     m.Result = NativeMethods.InvalidIntPtr;
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_VKEYTOITEM:
+                case WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
-            default:
-                    if (m.Msg == LBC_GETCHECKSTATE) {
-                        int item = unchecked( (int) (long)m.WParam);
-                        if (item < 0 || item >= Items.Count) {
-                            m.Result = (IntPtr)LB_ERROR;
+                default:
+                    if (m.Msg == (int)LBC_GETCHECKSTATE)
+                    {
+                        int item = unchecked((int)(long)m.WParam);
+                        if (item < 0 || item >= Items.Count)
+                        {
+                            m.Result = (IntPtr)LB_ERR;
                         }
-                        else {
+                        else
+                        {
                             m.Result = (IntPtr)(GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED);
                         }
                     }
-                    else if (m.Msg == LBC_SETCHECKSTATE) {
-                        int item = unchecked( (int) (long)m.WParam);
-                        int state = unchecked( (int) (long)m.LParam);
-                        if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED)) {
+                    else if (m.Msg == (int)LBC_SETCHECKSTATE)
+                    {
+                        int item = unchecked((int)(long)m.WParam);
+                        int state = unchecked((int)(long)m.LParam);
+                        if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED))
+                        {
                             m.Result = IntPtr.Zero;
                         }
-                        else {
+                        else
+                        {
                             SetItemChecked(item, (state == LB_CHECKED));
                             m.Result = (IntPtr)1;
                         }
                     }
-                    else {
+                    else
+                    {
                         base.WndProc(ref m);
                     }
                     break;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection"]/*' />
-        new public class ObjectCollection : ListBox.ObjectCollection {
-            private CheckedListBox owner;
+        new public class ObjectCollection : ListBox.ObjectCollection
+        {
+            private readonly CheckedListBox _owner;
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.ObjectCollection"]/*' />
-            public ObjectCollection(CheckedListBox owner)
-            : base(owner) {
-                this.owner = owner;
+            public ObjectCollection(CheckedListBox owner) : base(owner)
+            {
+                _owner = owner;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.Add"]/*' />
-            /// <devdoc>
-            ///     Lets the user add an item to the listbox with the given initial value
-            ///     for the Checked portion of the item.
-            /// </devdoc>
-            public int Add(object item, bool isChecked) {
+            /// <summary>
+            ///  Lets the user add an item to the listbox with the given initial value
+            ///  for the Checked portion of the item.
+            /// </summary>
+            public int Add(object item, bool isChecked)
+            {
                 return Add(item, isChecked ? CheckState.Checked : CheckState.Unchecked);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ObjectCollection.Add1"]/*' />
-            /// <devdoc>
-            ///     Lets the user add an item to the listbox with the given initial value
-            ///     for the Checked portion of the item.
-            /// </devdoc>
-            public int Add(object item, CheckState check) {
-
+            /// <summary>
+            ///  Lets the user add an item to the listbox with the given initial value
+            ///  for the Checked portion of the item.
+            /// </summary>
+            public int Add(object item, CheckState check)
+            {
                 //validate the enum that's passed in here
                 //
                 // Valid values are 0-2 inclusive.
-                if (!ClientUtils.IsEnumValid(check, (int)check, (int)CheckState.Unchecked, (int)CheckState.Indeterminate)){
+                if (!ClientUtils.IsEnumValid(check, (int)check, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
+                {
                     throw new InvalidEnumArgumentException(nameof(check), (int)check, typeof(CheckState));
                 }
 
                 int index = base.Add(item);
-                owner.SetItemCheckState(index, check);
+                _owner.SetItemCheckState(index, check);
 
                 return index;
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection"]/*' />
-        public class CheckedIndexCollection : IList {
-            private CheckedListBox owner;
+        public class CheckedIndexCollection : IList
+        {
+            private readonly CheckedListBox _owner;
 
-            internal CheckedIndexCollection(CheckedListBox owner) {
-                this.owner = owner;
+            internal CheckedIndexCollection(CheckedListBox owner)
+            {
+                _owner = owner;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.Count"]/*' />
-            /// <devdoc>
-            ///     Number of current checked items.
-            /// </devdoc>
-            public int Count {
-                get {
-                    return owner.CheckedItems.Count;
+            /// <summary>
+            ///  Number of current checked items.
+            /// </summary>
+            public int Count
+            {
+                get
+                {
+                    return _owner.CheckedItems.Count;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
-            object ICollection.SyncRoot {
-                get {
+            object ICollection.SyncRoot
+            {
+                get
+                {
                     return this;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
-            bool ICollection.IsSynchronized {
-                get {
+            bool ICollection.IsSynchronized
+            {
+                get
+                {
                     return false;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
-            bool IList.IsFixedSize {
-                get {
+            bool IList.IsFixedSize
+            {
+                get
+                {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.IsReadOnly"]/*' />
-            public bool IsReadOnly {
-                get {
+            public bool IsReadOnly
+            {
+                get
+                {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.this"]/*' />
-            /// <devdoc>
-            ///     Retrieves the specified checked item.
-            /// </devdoc>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public int this[int index] {
-                get {
-                    object identifier = InnerArray.GetEntryObject(index, CheckedItemCollection.AnyMask);
+            /// <summary>
+            ///  Retrieves the specified checked item.
+            /// </summary>
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public int this[int index]
+            {
+                get
+                {
+                    object identifier = InnerArray.GetEntryObject(index, CheckedItemCollection.s_anyMask);
                     return InnerArray.IndexOfIdentifier(identifier, 0);
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.this"]/*' />
-            /// <internalonly/>
-            object IList.this[int index] {
-                get {
+            object IList.this[int index]
+            {
+                get
+                {
                     return this[index];
                 }
-                set {
+                set
+                {
                     throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Add"]/*' />
-            /// <internalonly/>
-            int IList.Add(object value) {
+            int IList.Add(object value)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Clear"]/*' />
-            /// <internalonly/>
-            void IList.Clear() {
+            void IList.Clear()
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Insert"]/*' />
-            /// <internalonly/>
-            void IList.Insert(int index, object value) {
+            void IList.Insert(int index, object value)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Remove"]/*' />
-            /// <internalonly/>
-            void IList.Remove(object value) {
+            void IList.Remove(object value)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
-            void IList.RemoveAt(int index) {
+            void IList.RemoveAt(int index)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.Contains"]/*' />
-            public bool Contains(int index) {
-                 return (IndexOf(index) != -1);
+            public bool Contains(int index)
+            {
+                return (IndexOf(index) != -1);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Contains"]/*' />
-            /// <internalonly/>
-            bool IList.Contains(object index) {
-                if (index is int) {
+            bool IList.Contains(object index)
+            {
+                if (index is int)
+                {
                     return Contains((int)index);
                 }
-                else {
+                else
+                {
                     return false;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.CopyTo"]/*' />
-            public void CopyTo(Array dest, int index) {
-                int cnt = owner.CheckedItems.Count;
-                for (int i = 0; i < cnt; i++) {
+            public void CopyTo(Array dest, int index)
+            {
+                int cnt = _owner.CheckedItems.Count;
+                for (int i = 0; i < cnt; i++)
+                {
                     dest.SetValue(this[i], i + index);
                 }
             }
 
-            /// <devdoc>
-            ///     This is the item array that stores our data.  We share this backing store
-            ///     with the main object collection.
-            /// </devdoc>
-            private ItemArray InnerArray {
-                get {
-                    return ((ObjectCollection)owner.Items).InnerArray;
+            /// <summary>
+            ///  This is the item array that stores our data.  We share this backing store
+            ///  with the main object collection.
+            /// </summary>
+            private ItemArray InnerArray
+            {
+                get
+                {
+                    return ((ObjectCollection)_owner.Items).InnerArray;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.GetEnumerator"]/*' />
-            public IEnumerator GetEnumerator() {
-                int[] indices = new int[this.Count];
+            public IEnumerator GetEnumerator()
+            {
+                int[] indices = new int[Count];
                 CopyTo(indices, 0);
                 return indices.GetEnumerator();
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedIndexCollection.IndexOf"]/*' />
-            public int IndexOf(int index) {
-                if (index >= 0 && index < owner.Items.Count) {
+            public int IndexOf(int index)
+            {
+                if (index >= 0 && index < _owner.Items.Count)
+                {
                     object value = InnerArray.GetEntryObject(index, 0);
-                    return owner.CheckedItems.IndexOfIdentifier(value);
+                    return _owner.CheckedItems.IndexOfIdentifier(value);
                 }
                 return -1;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
-            int IList.IndexOf(object index) {
-                if (index is int) {
+            int IList.IndexOf(object index)
+            {
+                if (index is int)
+                {
                     return IndexOf((int)index);
                 }
-                else {
+                else
+                {
                     return -1;
                 }
             }
-
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection"]/*' />
-        public class CheckedItemCollection : IList {
+        public class CheckedItemCollection : IList
+        {
+            internal static int s_checkedItemMask = ItemArray.CreateMask();
+            internal static int s_indeterminateItemMask = ItemArray.CreateMask();
+            internal static int s_anyMask = s_checkedItemMask | s_indeterminateItemMask;
 
-            internal static int CheckedItemMask = ItemArray.CreateMask();
-            internal static int IndeterminateItemMask = ItemArray.CreateMask();
-            internal static int AnyMask = CheckedItemMask | IndeterminateItemMask;
+            private readonly CheckedListBox _owner;
 
-            private CheckedListBox owner;
-
-            internal CheckedItemCollection(CheckedListBox owner) {
-                this.owner = owner;
+            internal CheckedItemCollection(CheckedListBox owner)
+            {
+                _owner = owner;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.Count"]/*' />
-            /// <devdoc>
-            ///     Number of current checked items.
-            /// </devdoc>
-            public int Count {
-                get {
-                    return InnerArray.GetCount(AnyMask);
+            /// <summary>
+            ///  Number of current checked items.
+            /// </summary>
+            public int Count
+            {
+                get
+                {
+                    return InnerArray.GetCount(s_anyMask);
                 }
             }
 
-            /// <devdoc>
-            ///     This is the item array that stores our data.  We share this backing store
-            ///     with the main object collection.
-            /// </devdoc>
-            private ItemArray InnerArray {
-                get {
-                    return ((ListBox.ObjectCollection)owner.Items).InnerArray;
+            /// <summary>
+            ///  This is the item array that stores our data.  We share this backing store
+            ///  with the main object collection.
+            /// </summary>
+            private ItemArray InnerArray
+            {
+                get
+                {
+                    return ((ListBox.ObjectCollection)_owner.Items).InnerArray;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.this"]/*' />
-            /// <devdoc>
-            ///     Retrieves the specified checked item.
-            /// </devdoc>
-            [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public object this[int index] {
-                get {
-                    return InnerArray.GetItem(index, AnyMask);
+            /// <summary>
+            ///  Retrieves the specified checked item.
+            /// </summary>
+            [Browsable(false)]
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            public object this[int index]
+            {
+                get
+                {
+                    return InnerArray.GetItem(index, s_anyMask);
                 }
-                set {
+                set
+                {
                     throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
-            object ICollection.SyncRoot {
-                get {
+            object ICollection.SyncRoot
+            {
+                get
+                {
                     return this;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
-            bool ICollection.IsSynchronized {
-                get {
+            bool ICollection.IsSynchronized
+            {
+                get
+                {
                     return false;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
-            bool IList.IsFixedSize {
-                get {
+            bool IList.IsFixedSize
+            {
+                get
+                {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.IsReadOnly"]/*' />
-            public bool IsReadOnly {
-                get {
+            public bool IsReadOnly
+            {
+                get
+                {
                     return true;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.Contains"]/*' />
-            public bool Contains(object item) {
+            public bool Contains(object item)
+            {
                 return IndexOf(item) != -1;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.IndexOf"]/*' />
-            public int IndexOf(object item) {
-                return InnerArray.IndexOf(item, AnyMask);
+            public int IndexOf(object item)
+            {
+                return InnerArray.IndexOf(item, s_anyMask);
             }
 
-            internal int IndexOfIdentifier(object item) {
-                return InnerArray.IndexOfIdentifier(item, AnyMask);
+            internal int IndexOfIdentifier(object item)
+            {
+                return InnerArray.IndexOfIdentifier(item, s_anyMask);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Add"]/*' />
-            /// <internalonly/>
-            int IList.Add(object value) {
+            int IList.Add(object value)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Clear"]/*' />
-            /// <internalonly/>
-            void IList.Clear() {
+            void IList.Clear()
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Insert"]/*' />
-            /// <internalonly/>
-            void IList.Insert(int index, object value) {
+            void IList.Insert(int index, object value)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Remove"]/*' />
-            /// <internalonly/>
-            void IList.Remove(object value) {
+            void IList.Remove(object value)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
-            void IList.RemoveAt(int index) {
+            void IList.RemoveAt(int index)
+            {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.CopyTo"]/*' />
-            public void CopyTo(Array dest, int index) {
-                int cnt = InnerArray.GetCount(AnyMask);
-                for (int i = 0; i < cnt; i++) {
-                    dest.SetValue(InnerArray.GetItem(i, AnyMask), i + index);
+            public void CopyTo(Array dest, int index)
+            {
+                int cnt = InnerArray.GetCount(s_anyMask);
+                for (int i = 0; i < cnt; i++)
+                {
+                    dest.SetValue(InnerArray.GetItem(i, s_anyMask), i + index);
                 }
             }
 
-            /// <devdoc>
-            ///     This method returns if the actual item index is checked.  The index is the index to the MAIN
-            ///     collection, not this one.
-            /// </devdoc>
-            internal CheckState GetCheckedState(int index) {
-                bool isChecked = InnerArray.GetState(index, CheckedItemMask);
-                bool isIndeterminate = InnerArray.GetState(index, IndeterminateItemMask);
+            /// <summary>
+            ///  This method returns if the actual item index is checked.  The index is the index to the MAIN
+            ///  collection, not this one.
+            /// </summary>
+            internal CheckState GetCheckedState(int index)
+            {
+                bool isChecked = InnerArray.GetState(index, s_checkedItemMask);
+                bool isIndeterminate = InnerArray.GetState(index, s_indeterminateItemMask);
                 Debug.Assert(!isChecked || !isIndeterminate, "Can't be both checked and indeterminate.  Somebody broke our state.");
-                if (isIndeterminate) {
+                if (isIndeterminate)
+                {
                     return CheckState.Indeterminate;
                 }
-                else if (isChecked) {
+                else if (isChecked)
+                {
                     return CheckState.Checked;
                 }
 
                 return CheckState.Unchecked;
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedItemCollection.GetEnumerator"]/*' />
-            public IEnumerator GetEnumerator() {
-                return InnerArray.GetEnumerator(AnyMask, true);
+            public IEnumerator GetEnumerator()
+            {
+                return InnerArray.GetEnumerator(s_anyMask, true);
             }
 
-            /// <devdoc>
-            ///     Same thing for GetChecked.
-            /// </devdoc>
-            internal void SetCheckedState(int index, CheckState value) {
+            /// <summary>
+            ///  Same thing for GetChecked.
+            /// </summary>
+            internal void SetCheckedState(int index, CheckState value)
+            {
                 bool isChecked;
                 bool isIndeterminate;
 
-                switch(value) {
+                switch (value)
+                {
                     case CheckState.Checked:
                         isChecked = true;
                         isIndeterminate = false;
@@ -1464,102 +1430,109 @@ namespace System.Windows.Forms {
                         break;
                 }
 
-                bool wasChecked = InnerArray.GetState(index, CheckedItemMask);
-                bool wasIndeterminate = InnerArray.GetState(index, IndeterminateItemMask);
+                bool wasChecked = InnerArray.GetState(index, s_checkedItemMask);
+                bool wasIndeterminate = InnerArray.GetState(index, s_indeterminateItemMask);
 
-                InnerArray.SetState(index, CheckedItemMask, isChecked);
-                InnerArray.SetState(index, IndeterminateItemMask, isIndeterminate);
+                InnerArray.SetState(index, s_checkedItemMask, isChecked);
+                InnerArray.SetState(index, s_indeterminateItemMask, isIndeterminate);
 
-                if (wasChecked != isChecked || wasIndeterminate != isIndeterminate) {
+                if (wasChecked != isChecked || wasIndeterminate != isIndeterminate)
+                {
                     // Raise a notify event that this item has changed.
-                    owner.AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
+                    _owner.AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
                 }
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]
-        internal class CheckedListBoxAccessibleObject : ControlAccessibleObject {
+        internal override bool SupportsUiaProviders => false;
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject.CheckedListBoxAccessibleObject"]/*' />
-            /// <devdoc>
-            /// </devdoc>
-            public CheckedListBoxAccessibleObject(CheckedListBox owner) : base(owner) {
+        internal class CheckedListBoxAccessibleObject : ControlAccessibleObject
+        {
+            public CheckedListBoxAccessibleObject(CheckedListBox owner) : base(owner)
+            {
             }
 
-            private CheckedListBox CheckedListBox {
-                get {
+            private CheckedListBox CheckedListBox
+            {
+                get
+                {
                     return (CheckedListBox)Owner;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject.GetChild"]/*' />
-            /// <devdoc>
-            /// </devdoc>
-            public override AccessibleObject GetChild(int index) {
-                if (index >= 0 && index < CheckedListBox.Items.Count) {
-                    return new CheckedListBoxItemAccessibleObject(this.CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this);
+            public override AccessibleObject GetChild(int index)
+            {
+                if (index >= 0 && index < CheckedListBox.Items.Count)
+                {
+                    return new CheckedListBoxItemAccessibleObject(CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this);
                 }
-                else {
+                else
+                {
                     return null;
                 }
             }
 
-            /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject.GetChildCount"]/*' />
-            /// <devdoc>
-            /// </devdoc>
-            public override int GetChildCount() {
+            public override int GetChildCount()
+            {
                 return CheckedListBox.Items.Count;
             }
 
-            public override AccessibleObject GetFocused() {
+            public override AccessibleObject GetFocused()
+            {
                 int index = CheckedListBox.FocusedIndex;
-                if (index >= 0) {
+                if (index >= 0)
+                {
                     return GetChild(index);
                 }
 
                 return null;
             }
 
-            public override AccessibleObject GetSelected() {
+            public override AccessibleObject GetSelected()
+            {
                 int index = CheckedListBox.SelectedIndex;
-                if (index >= 0) {
+                if (index >= 0)
+                {
                     return GetChild(index);
                 }
 
                 return null;
             }
 
-            public override AccessibleObject HitTest(int x, int y) {
-
+            public override AccessibleObject HitTest(int x, int y)
+            {
                 // Within a child element?
                 //
                 int count = GetChildCount();
-                for(int index=0; index < count; ++index) {
+                for (int index = 0; index < count; ++index)
+                {
                     AccessibleObject child = GetChild(index);
-                    if (child.Bounds.Contains(x, y)) {
+                    if (child.Bounds.Contains(x, y))
+                    {
                         return child;
                     }
                 }
 
                 // Within the CheckedListBox bounds?
                 //
-                if (this.Bounds.Contains(x, y)) {
+                if (Bounds.Contains(x, y))
+                {
                     return this;
                 }
 
                 return null;
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation direction) {
-                if (GetChildCount() > 0) {
-                    if (direction == AccessibleNavigation.FirstChild) {
+            public override AccessibleObject Navigate(AccessibleNavigation direction)
+            {
+                if (GetChildCount() > 0)
+                {
+                    if (direction == AccessibleNavigation.FirstChild)
+                    {
                         return GetChild(0);
                     }
-                    if (direction == AccessibleNavigation.LastChild) {
+                    if (direction == AccessibleNavigation.LastChild)
+                    {
                         return GetChild(GetChildCount() - 1);
                     }
                 }
@@ -1567,81 +1540,107 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxItemAccessibleObject"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]
-        internal class CheckedListBoxItemAccessibleObject : AccessibleObject {
+        internal class CheckedListBoxItemAccessibleObject : AccessibleObject
+        {
+            private string _name;
+            private readonly int _index;
+            private readonly CheckedListBoxAccessibleObject _parent;
 
-            private string name;
-            private int index;
-            private CheckedListBoxAccessibleObject parent;
-
-            public CheckedListBoxItemAccessibleObject(string name, int index, CheckedListBoxAccessibleObject parent) : base() {
-                this.name = name;
-                this.parent = parent;
-                this.index = index;
+            public CheckedListBoxItemAccessibleObject(string name, int index, CheckedListBoxAccessibleObject parent) : base()
+            {
+                _name = name;
+                _parent = parent;
+                _index = index;
             }
 
-            public override Rectangle Bounds {
-                get {
-                    Rectangle rect = ParentCheckedListBox.GetItemRectangle(index);
+            public override Rectangle Bounds
+            {
+                get
+                {
+                    Rectangle rect = ParentCheckedListBox.GetItemRectangle(_index);
+
+                    if (rect.IsEmpty)
+                    {
+                        return rect;
+                    }
 
                     // Translate rect to screen coordinates
                     //
-                    NativeMethods.POINT pt = new NativeMethods.POINT(rect.X, rect.Y);
-                    UnsafeNativeMethods.ClientToScreen(new HandleRef(ParentCheckedListBox, ParentCheckedListBox.Handle), pt);
+                    rect = ParentCheckedListBox.RectangleToScreen(rect);
+                    Rectangle visibleArea = ParentCheckedListBox.RectangleToScreen(ParentCheckedListBox.ClientRectangle);
 
-                    return new Rectangle(pt.x, pt.y, rect.Width, rect.Height);
+                    if (visibleArea.Bottom < rect.Bottom)
+                    {
+                        rect.Height = visibleArea.Bottom - rect.Top;
+                    }
+
+                    rect.Width = visibleArea.Width;
+
+                    return rect;
                 }
             }
 
-            public override string DefaultAction {
-                get {
-                    if (ParentCheckedListBox.GetItemChecked(index)) {
+            public override string DefaultAction
+            {
+                get
+                {
+                    if (ParentCheckedListBox.GetItemChecked(_index))
+                    {
                         return SR.AccessibleActionUncheck;
                     }
-                    else {
+                    else
+                    {
                         return SR.AccessibleActionCheck;
                     }
                 }
             }
 
-            private CheckedListBox ParentCheckedListBox {
-                get {
-                    return(CheckedListBox)parent.Owner;
+            private CheckedListBox ParentCheckedListBox
+            {
+                get
+                {
+                    return (CheckedListBox)_parent.Owner;
                 }
             }
 
-            public override string Name {
-                get {
-                    return name;
+            public override string Name
+            {
+                get
+                {
+                    return _name;
                 }
-                set {
-                    name = value;
-                }
-            }
-
-            public override AccessibleObject Parent {
-                get {
-                    return parent;
+                set
+                {
+                    _name = value;
                 }
             }
 
-            public override AccessibleRole Role {
-                get {
+            public override AccessibleObject Parent
+            {
+                get
+                {
+                    return _parent;
+                }
+            }
+
+            public override AccessibleRole Role
+            {
+                get
+                {
                     return AccessibleRole.CheckButton;
                 }
             }
 
-            public override AccessibleStates State {
-                get {
+            public override AccessibleStates State
+            {
+                get
+                {
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
 
                     // Checked state
                     //
-                    switch (ParentCheckedListBox.GetItemCheckState(index)) {
+                    switch (ParentCheckedListBox.GetItemCheckState(_index))
+                    {
                         case CheckState.Checked:
                             state |= AccessibleStates.Checked;
                             break;
@@ -1655,55 +1654,68 @@ namespace System.Windows.Forms {
 
                     // Selected state
                     //
-                    if (ParentCheckedListBox.SelectedIndex == index) {
+                    if (ParentCheckedListBox.SelectedIndex == _index)
+                    {
                         state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
-                    if (AccessibilityImprovements.Level3 && ParentCheckedListBox.Focused && ParentCheckedListBox.SelectedIndex == -1) {
+                    if (ParentCheckedListBox.Focused && ParentCheckedListBox.SelectedIndex == -1)
+                    {
                         state |= AccessibleStates.Focused;
                     }
 
                     return state;
-
                 }
             }
 
-            public override string Value {
-                get {
-                    return ParentCheckedListBox.GetItemChecked(index).ToString();
+            public override string Value
+            {
+                get
+                {
+                    return ParentCheckedListBox.GetItemChecked(_index).ToString();
                 }
             }
 
-            public override void DoDefaultAction() {
-                ParentCheckedListBox.SetItemChecked(index, !ParentCheckedListBox.GetItemChecked(index));
+            public override void DoDefaultAction()
+            {
+                ParentCheckedListBox.SetItemChecked(_index, !ParentCheckedListBox.GetItemChecked(_index));
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation direction) {
+            public override AccessibleObject Navigate(AccessibleNavigation direction)
+            {
                 // Down/Next
                 //
                 if (direction == AccessibleNavigation.Down ||
-                    direction == AccessibleNavigation.Next) {
-                    if (index < parent.GetChildCount() - 1) {
-                        return parent.GetChild(index + 1);
+                    direction == AccessibleNavigation.Next)
+                {
+                    if (_index < _parent.GetChildCount() - 1)
+                    {
+                        return _parent.GetChild(_index + 1);
                     }
                 }
 
                 // Up/Previous
                 //
                 if (direction == AccessibleNavigation.Up ||
-                    direction == AccessibleNavigation.Previous) {
-                    if (index > 0) {
-                        return parent.GetChild(index - 1);
+                    direction == AccessibleNavigation.Previous)
+                {
+                    if (_index > 0)
+                    {
+                        return _parent.GetChild(_index - 1);
                     }
                 }
 
                 return base.Navigate(direction);
             }
 
-            public override void Select(AccessibleSelection flags) {
-                try {
-                    ParentCheckedListBox.AccessibilityObject.GetSystemIAccessibleInternal().accSelect((int) flags, index + 1);
-                } catch (ArgumentException) {
+            public override void Select(AccessibleSelection flags)
+            {
+                try
+                {
+                    ParentCheckedListBox.AccessibilityObject.GetSystemIAccessibleInternal().accSelect((int)flags, _index + 1);
+                }
+                catch (ArgumentException)
+                {
                     // In Everett, the CheckedListBox accessible children did not have any selection capability.
                     // In Whidbey, they delegate the selection capability to OLEACC.
                     // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
@@ -1713,6 +1725,5 @@ namespace System.Windows.Forms {
                 }
             }
         }
-
     }
 }

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
@@ -30,9 +29,9 @@ namespace System.Windows.Forms
                 {
                     value = _minimumHeight;
                 }
-                if (value > DataGridViewBand.maxBandThickness)
+                if (value > DataGridViewBand.MaxBandThickness)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(Height), string.Format(SR.InvalidHighBoundArgumentEx, "Height", (value).ToString(CultureInfo.CurrentCulture), (DataGridViewBand.maxBandThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(Height), value, DataGridViewBand.MaxBandThickness));
                 }
 
                 _height = value;
@@ -44,9 +43,9 @@ namespace System.Windows.Forms
             get => _minimumHeight;
             set
             {
-                if (value < DataGridViewBand.minBandThickness)
+                if (value < DataGridViewBand.MinBandThickness)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(MinimumHeight), value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, (DataGridViewBand.minBandThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewBand_MinimumHeightSmallerThanOne, DataGridViewBand.MinBandThickness));
                 }
 
                 if (_height < value)

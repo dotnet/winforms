@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Resources.Tests
 {
-    public class ResXFileRefTests
+    // NB: doesn't require thread affinity
+    public class ResXFileRefTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void ResXFileRef_Constructor()
@@ -27,7 +28,7 @@ namespace System.Resources.Tests
         {
             var fileName = "SomeFile";
             var typeName = "SomeType";
-            var encoding = Encoding.Default;
+            Encoding encoding = Encoding.Default;
 
             var fileRef = new ResXFileRef(fileName, typeName, encoding);
 

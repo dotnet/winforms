@@ -2,125 +2,88 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+#nullable disable
 
-    using System.Diagnostics;
+using System.ComponentModel;
+using System.IO;
+using System.Runtime.InteropServices;
+using static Interop;
+using static Interop.Shell32;
 
-    using System;
-    using System.IO;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
-
-    /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       Represents
-    ///       a common dialog box that allows the user to specify options for saving a
-    ///       file. This class cannot be inherited.
-    ///    </para>
-    /// </devdoc>
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Represents
+    ///  a common dialog box that allows the user to specify options for saving a
+    ///  file. This class cannot be inherited.
+    /// </summary>
     [
-    Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign),
-    SRDescription(nameof(SR.DescriptionSaveFileDialog))
+    Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionSaveFileDialog))
     ]
-    public sealed class SaveFileDialog : FileDialog {
-
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.CreatePrompt"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog box prompts the user for
-        ///       permission to create a file if the user specifies a file that does not exist.
-        ///    </para>
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(false),
-        SRDescription(nameof(SR.SaveFileDialogCreatePrompt))
-        ]
-        public bool CreatePrompt {
-            get {
-                return GetOption(NativeMethods.OFN_CREATEPROMPT);
-            }
-            set {
-                SetOption(NativeMethods.OFN_CREATEPROMPT, value);
-            }
+    public sealed class SaveFileDialog : FileDialog
+    {
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box prompts the user for
+        ///  permission to create a file if the user specifies a file that does not exist.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.SaveFileDialogCreatePrompt))]
+        public bool CreatePrompt
+        {
+            get => GetOption((int)Comdlg32.OFN.CREATEPROMPT);
+            set => SetOption((int)Comdlg32.OFN.CREATEPROMPT, value);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.OverwritePrompt"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
-        ///       a file name that already exists.
-        ///    </para>
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(true),
-        SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))
-        ]
-        public bool OverwritePrompt {
-            get {
-                return GetOption(NativeMethods.OFN_OVERWRITEPROMPT);
-            }
-            set {
-                SetOption(NativeMethods.OFN_OVERWRITEPROMPT, value);
-            }
+        /// <summary>
+        ///  Gets or sets a value indicating whether the Save As dialog box displays a warning if the user specifies
+        ///  a file name that already exists.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))]
+        public bool OverwritePrompt
+        {
+            get => GetOption((int)Comdlg32.OFN.OVERWRITEPROMPT);
+            set => SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, value);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.OpenFile"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Opens the file with read/write permission selected by the user.
-        ///    </para>
-        /// </devdoc>
-        
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
-        public Stream OpenFile() {
-            string filename = FileNamesInternal[0];
-
+        /// <summary>
+        ///  Opens the file with read/write permission selected by the user.
+        /// </summary>
+        public Stream OpenFile()
+        {
+            string filename = FileNames[0];
             if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException( "FileName" );
-                
+            {
+                throw new ArgumentNullException(nameof(FileName));
+            }
+
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileCreate"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
-        ///       when a file is about to be created. This method is
-        ///       invoked when the CreatePrompt property is true and the specified file
-        ///       does not exist. A return value of false prevents the dialog from
-        ///       closing.
-        ///    </para>
-        /// </devdoc>
-        private bool PromptFileCreate(string fileName) 
+        /// <summary>
+        ///  Prompts the user with a <see cref='MessageBox'/>
+        ///  when a file is about to be created. This method is
+        ///  invoked when the CreatePrompt property is true and the specified file
+        ///  does not exist. A return value of false prevents the dialog from
+        ///  closing.
+        /// </summary>
+        private bool PromptFileCreate(string fileName)
         {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogCreatePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.PromptFileOverwrite"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Prompts the user when a file is about to be overwritten. This method is
-        ///       invoked when the "overwritePrompt" property is true and the specified
-        ///       file already exists. A return value of false prevents the dialog from
-        ///       closing.
-        ///       
-        ///    </para>
-        /// </devdoc>
-        private bool PromptFileOverwrite(string fileName) {
+        /// <summary>
+        ///  Prompts the user when a file is about to be overwritten. This method is
+        ///  invoked when the "overwritePrompt" property is true and the specified
+        ///  file already exists. A return value of false prevents the dialog from
+        ///  closing.
+        /// </summary>
+        private bool PromptFileOverwrite(string fileName)
+        {
             return MessageBoxWithFocusRestore(string.Format(SR.FileDialogOverwritePrompt, fileName),
                     DialogCaption, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         }
@@ -128,68 +91,82 @@ namespace System.Windows.Forms {
         // If it's necessary to throw up a "This file exists, are you sure?" kind of
         // MessageBox, here's where we do it.
         // Return value is whether or not the user hit "okay".
-        internal override bool PromptUserIfAppropriate(string fileName) {
-            if (!base.PromptUserIfAppropriate(fileName)) {
+        private protected override bool PromptUserIfAppropriate(string fileName)
+        {
+            if (!base.PromptUserIfAppropriate(fileName))
+            {
                 return false;
             }
 
             //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal) {
-                if (!PromptFileOverwrite(fileName)) {
+            if ((_options & (int)Comdlg32.OFN.OVERWRITEPROMPT) != 0 && FileExists(fileName) && !UseVistaDialogInternal)
+            {
+                if (!PromptFileOverwrite(fileName))
+                {
                     return false;
                 }
             }
 
-            if ((options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName)) {
-                if (!PromptFileCreate(fileName)) {
+            if ((_options & (int)Comdlg32.OFN.CREATEPROMPT) != 0 && !FileExists(fileName))
+            {
+                if (!PromptFileCreate(fileName))
+                {
                     return false;
                 }
             }
-            
+
             return true;
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.Reset"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Resets all dialog box options to their default
-        ///       values.
-        ///    </para>
-        /// </devdoc>
-        public override void Reset() {
+        /// <summary>
+        ///  Resets all dialog box options to their default
+        ///  values.
+        /// </summary>
+        public override void Reset()
+        {
             base.Reset();
-            SetOption(NativeMethods.OFN_OVERWRITEPROMPT, true);
+            SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, true);
         }
 
-        /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.RunFileDialog"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+        {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 
-            if (!result) {
+            if (!result)
+            {
                 // Something may have gone wrong - check for error condition
-                //
-                int errorCode = SafeNativeMethods.CommDlgExtendedError();
-                switch(errorCode) {
-                    case NativeMethods.FNERR_INVALIDFILENAME:
+                switch (Comdlg32.CommDlgExtendedError())
+                {
+                    case Comdlg32.FNERR.INVALIDFILENAME:
                         throw new InvalidOperationException(string.Format(SR.FileDialogInvalidFileName, FileName));
                 }
             }
-            
+
             return result;
-         }
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        }
+
+        private protected override string[] ProcessVistaFiles(IFileDialog dialog)
         {
-            FileDialogNative.IFileSaveDialog saveDialog = (FileDialogNative.IFileSaveDialog)dialog;
-            FileDialogNative.IShellItem item;
-            dialog.GetResult(out item);
+            IFileSaveDialog saveDialog = (IFileSaveDialog)dialog;
+            dialog.GetResult(out IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
-        { return new FileDialogNative.NativeFileSaveDialog(); }
 
+        private protected override IFileDialog CreateVistaDialog() => new NativeFileSaveDialog();
 
+        [ComImport]
+        [Guid("84bccd23-5fde-4cdb-aea4-af64b83d78ab")]
+        [CoClass(typeof(FileSaveDialogRCW))]
+        private interface NativeFileSaveDialog : IFileSaveDialog
+        {
+        }
+
+        [ComImport]
+        [ClassInterface(ClassInterfaceType.None)]
+        [TypeLibType(TypeLibTypeFlags.FCanCreate)]
+        [Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B")]
+        private class FileSaveDialogRCW
+        {
+        }
     }
 }

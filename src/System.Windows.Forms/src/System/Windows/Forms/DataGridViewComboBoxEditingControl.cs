@@ -2,63 +2,44 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
+using System.Drawing;
+using System.Globalization;
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Runtime.InteropServices;
-    using Security.Permissions;
-
-    /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl"]/*' />
-    [
-        ComVisible(true),
-        ClassInterface(ClassInterfaceType.AutoDispatch)
-    ]
     public class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
     {
-        private DataGridView dataGridView;
-        private bool valueChanged;
-        private int rowIndex;
+        private DataGridView _dataGridView;
+        private bool _valueChanged;
+        private int _rowIndex;
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.DataGridViewComboBoxEditingControl"]/*' />
         public DataGridViewComboBoxEditingControl() : base()
         {
-            this.TabStop = false;
+            TabStop = false;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            if (AccessibilityImprovements.Level3)
-            {
-                return new DataGridViewComboBoxEditingControlAccessibleObject(this);
-            }
-            else if (AccessibilityImprovements.Level2)
-            {
-                return new DataGridViewEditingControlAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new DataGridViewComboBoxEditingControlAccessibleObject(this);
         }
 
         // IDataGridViewEditingControl interface implementation
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlDataGridView"]/*' />
         public virtual DataGridView EditingControlDataGridView
         {
             get
             {
-                return this.dataGridView;
+                return _dataGridView;
             }
             set
             {
-                this.dataGridView = value;
+                _dataGridView = value;
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlFormattedValue"]/*' />
         public virtual object EditingControlFormattedValue
         {
             get
@@ -67,45 +48,41 @@ namespace System.Windows.Forms
             }
             set
             {
-                string valueStr = value as string;
-                if (valueStr != null)
+                if (value is string valueStr)
                 {
-                    this.Text = valueStr;
-                    if (string.Compare(valueStr, this.Text, true, CultureInfo.CurrentCulture) != 0)
+                    Text = valueStr;
+                    if (string.Compare(valueStr, Text, true, CultureInfo.CurrentCulture) != 0)
                     {
-                        this.SelectedIndex = -1;
+                        SelectedIndex = -1;
                     }
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlRowIndex"]/*' />
         public virtual int EditingControlRowIndex
         {
             get
             {
-                return this.rowIndex;
+                return _rowIndex;
             }
             set
             {
-                this.rowIndex = value;
+                _rowIndex = value;
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlValueChanged"]/*' />
         public virtual bool EditingControlValueChanged
         {
             get
             {
-                return this.valueChanged;
+                return _valueChanged;
             }
             set
             {
-                this.valueChanged = value;
+                _valueChanged = value;
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingPanelCursor"]/*' />
         public virtual Cursor EditingPanelCursor
         {
             get
@@ -114,7 +91,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.RepositionOnValueChange"]/*' />
         public virtual bool RepositionEditingControlOnValueChange
         {
             get
@@ -123,43 +99,41 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.ApplyCellStyleToEditingControl"]/*' />
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            this.Font = dataGridViewCellStyle.Font;
+            Font = dataGridViewCellStyle.Font;
             if (dataGridViewCellStyle.BackColor.A < 255)
             {
                 // Our ComboBox does not support transparent back colors
                 Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
-                this.BackColor = opaqueBackColor;
-                this.dataGridView.EditingPanel.BackColor = opaqueBackColor;
+                BackColor = opaqueBackColor;
+                _dataGridView.EditingPanel.BackColor = opaqueBackColor;
             }
             else
             {
-                this.BackColor = dataGridViewCellStyle.BackColor;
+                BackColor = dataGridViewCellStyle.BackColor;
             }
-            this.ForeColor = dataGridViewCellStyle.ForeColor;
+            ForeColor = dataGridViewCellStyle.ForeColor;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlWantsInputKey"]/*' />
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
             if ((keyData & Keys.KeyCode) == Keys.Down ||
                 (keyData & Keys.KeyCode) == Keys.Up ||
-                (this.DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape) || (keyData & Keys.KeyCode) == Keys.Enter))
+#pragma warning disable SA1408 // Conditional expressions should declare precedence
+                (DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape) || (keyData & Keys.KeyCode) == Keys.Enter))
+#pragma warning restore SA1408 // Conditional expressions should declare precedence
             {
                 return true;
             }
             return !dataGridViewWantsInputKey;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.GetEditingControlFormattedValue"]/*' />
         public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
         {
-            return this.Text;
+            return Text;
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.PrepareEditingControlForEdit"]/*' />
         public virtual void PrepareEditingControlForEdit(bool selectAll)
         {
             if (selectAll)
@@ -170,35 +144,38 @@ namespace System.Windows.Forms
 
         private void NotifyDataGridViewOfValueChange()
         {
-            this.valueChanged = true;
-            this.dataGridView.NotifyCurrentCellDirty(true);
+            _valueChanged = true;
+            _dataGridView.NotifyCurrentCellDirty(true);
         }
 
-        /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.OnSelectedIndexChanged"]/*' />
-        protected override void OnSelectedIndexChanged(EventArgs e) 
+        protected override void OnSelectedIndexChanged(EventArgs e)
         {
             base.OnSelectedIndexChanged(e);
-            if (this.SelectedIndex != -1)
+            if (SelectedIndex != -1)
             {
                 NotifyDataGridViewOfValueChange();
             }
         }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+
+            _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+        }
     }
 
     /// <summary>
-    /// Defines the DataGridView ComboBox EditingControl accessible object.
+    ///  Defines the DataGridView ComboBox EditingControl accessible object.
     /// </summary>
-    /// <remarks>
-    /// This accessible object is only available in AccessibilityImprovements of Level 3.
-    /// </remarks>
-    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxUiaProvider
+    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
     {
-        private DataGridViewComboBoxEditingControl ownerControl;
+        private readonly DataGridViewComboBoxEditingControl ownerControl;
 
         /// <summary>
-        /// The parent is changed when the editing control is attached to another editing cell.
+        ///  The parent is changed when the editing control is attached to another editing cell.
         /// </summary>
-        private AccessibleObject _parentAccessibleObject = null;
+        private AccessibleObject _parentAccessibleObject;
 
         public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl) : base(ownerControl)
         {
@@ -207,20 +184,18 @@ namespace System.Windows.Forms
 
         public override AccessibleObject Parent
         {
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get
             {
                 return _parentAccessibleObject;
             }
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
-                case UnsafeNativeMethods.NavigateDirection.Parent:
-                    var owner = Owner as IDataGridViewEditingControl;
-                    if (owner != null && owner.EditingControlDataGridView.EditingControl == owner)
+                case UiaCore.NavigateDirection.Parent:
+                    if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
                     {
                         return _parentAccessibleObject;
                     }
@@ -231,7 +206,7 @@ namespace System.Windows.Forms
             return base.FragmentNavigate(direction);
         }
 
-        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot
+        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
         {
             get
             {
@@ -239,9 +214,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool IsPatternSupported(int patternId)
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
         {
-            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
             {
                 return ownerControl.DropDownStyle != ComboBoxStyle.Simple;
             }
@@ -249,26 +224,26 @@ namespace System.Windows.Forms
             return base.IsPatternSupported(patternId);
         }
 
-        internal override object GetPropertyValue(int propertyID)
+        internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId)
+            if (propertyID == UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId)
             {
-                return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
             }
 
             return base.GetPropertyValue(propertyID);
         }
 
-        internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+        internal override UiaCore.ExpandCollapseState ExpandCollapseState
         {
             get
             {
-                return ownerControl.DroppedDown ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                return ownerControl.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
             }
         }
 
         /// <summary>
-        /// Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
         /// </summary>
         /// <param name="parent">The parent accessible object.</param>
         internal override void SetParent(AccessibleObject parent)

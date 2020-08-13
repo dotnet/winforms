@@ -9,21 +9,35 @@ using System.Globalization;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///     The is a base class that can be used to serialize an object graph to a series of
-    ///     CodeDom statements.
+    ///  The is a base class that can be used to serialize an object graph to a series of
+    ///  CodeDom statements.
     /// </summary>
     [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
     public class CodeDomSerializer : CodeDomSerializerBase
     {
+        private static CodeDomSerializer s_default;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-        private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+        private static readonly CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+
+        internal static CodeDomSerializer Default
+        {
+            get
+            {
+                if (s_default is null)
+                {
+                    s_default = new CodeDomSerializer();
+                }
+
+                return s_default;
+            }
+        }
 
         /// <summary>
-        ///     Determines which statement group the given statement should belong to.  The expression parameter
-        ///     is an expression that the statement has been reduced to, and targetType represents the type
-        ///     of this statement.  This method returns the name of the component this statement should be grouped
-        ///     with.
+        ///  Determines which statement group the given statement should belong to.  The expression parameter
+        ///  is an expression that the statement has been reduced to, and targetType represents the type
+        ///  of this statement.  This method returns the name of the component this statement should be grouped
+        ///  with.
         /// </summary>
         public virtual string GetTargetComponentName(CodeStatement statement, CodeExpression expression, Type targetType)
         {
@@ -40,16 +54,16 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Deserilizes the given CodeDom object into a real object.  This
-        ///     will use the serialization manager to create objects and resolve
-        ///     data types.  The root of the object graph is returned.
+        ///  Deserilizes the given CodeDom object into a real object.  This
+        ///  will use the serialization manager to create objects and resolve
+        ///  data types.  The root of the object graph is returned.
         /// </summary>
         public virtual object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
             object instance = null;
-            if (manager == null || codeObject == null)
+            if (manager is null || codeObject is null)
             {
-                throw new ArgumentNullException(manager == null ? "manager" : "codeObject");
+                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
             }
 
             using (TraceScope("CodeDomSerializer::Deserialize"))
@@ -66,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
                         foreach (CodeStatement element in statements)
                         {
                             // If we do not yet have an instance, we will need to pick through the  statements and see if we can find one.
-                            if (instance == null)
+                            if (instance is null)
                             {
                                 instance = DeserializeStatementToInstance(manager, element);
                                 if (instance != null)
@@ -104,10 +118,10 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This method deserializes a single statement.  It is equivalent of calling
-        ///     DeserializeStatement, except that it returns an object instance if the
-        ///     resulting statement was a variable assign statement, a variable
-        ///     declaration with an init expression, or a field assign statement.
+        ///  This method deserializes a single statement.  It is equivalent of calling
+        ///  DeserializeStatement, except that it returns an object instance if the
+        ///  resulting statement was a variable assign statement, a variable
+        ///  declaration with an init expression, or a field assign statement.
         /// </summary>
         protected object DeserializeStatementToInstance(IDesignerSerializationManager manager, CodeStatement statement)
         {
@@ -146,14 +160,21 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public virtual object Serialize(IDesignerSerializationManager manager, object value)
         {
             object result = null;
-            if (manager == null || value == null) throw new ArgumentNullException(manager == null ? "manager" : "value");
+            if (manager is null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
-            using (TraceScope("CodeDomSerializer::Serialize"))
+            using (TraceScope("CodeDomSerializer::" + nameof(Serialize)))
             {
                 Trace("Type: {0}", value.GetType().Name);
 
@@ -182,7 +203,7 @@ namespace System.ComponentModel.Design.Serialization
                         isPreset = false;
                     }
 
-                    TraceIf(expression == null, "Unable to create object; aborting.");
+                    TraceIf(expression is null, "Unable to create object; aborting.");
                     // Short circuit common cases
                     if (expression != null)
                     {
@@ -226,7 +247,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     Serializes the given object into a CodeDom object.
+        ///  Serializes the given object into a CodeDom object.
         /// </summary>
         public virtual object SerializeAbsolute(IDesignerSerializationManager manager, object value)
         {
@@ -246,18 +267,29 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This serializes the given member on the given object.
+        ///  This serializes the given member on the given object.
         /// </summary>
         public virtual CodeStatementCollection SerializeMember(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
-            if (member == null) throw new ArgumentNullException(nameof(member));
+            if (manager is null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (owningObject is null)
+            {
+                throw new ArgumentNullException(nameof(owningObject));
+            }
+
+            if (member is null)
+            {
+                throw new ArgumentNullException(nameof(member));
+            }
 
             CodeStatementCollection statements = new CodeStatementCollection();
             // See if we have an existing expression for this member.  If not, fabricate one
             CodeExpression expression = GetExpression(manager, owningObject);
-            if (expression == null)
+            if (expression is null)
             {
                 string name = GetUniqueName(manager, owningObject);
                 expression = new CodeVariableReferenceExpression(name);
@@ -283,13 +315,24 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This serializes the given member on the given object.
+        ///  This serializes the given member on the given object.
         /// </summary>
         public virtual CodeStatementCollection SerializeMemberAbsolute(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null) throw new ArgumentNullException(nameof(manager));
-            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
-            if (member == null) throw new ArgumentNullException(nameof(member));
+            if (manager is null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+
+            if (owningObject is null)
+            {
+                throw new ArgumentNullException(nameof(owningObject));
+            }
+
+            if (member is null)
+            {
+                throw new ArgumentNullException(nameof(member));
+            }
 
             CodeStatementCollection statements;
             SerializeAbsoluteContext abs = new SerializeAbsoluteContext(member);
@@ -308,26 +351,26 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///     This serializes the given value to an expression.  It will return null if the value could not be
-        ///     serialized.  This is similar to SerializeToExpression, except that it will stop
-        ///     if it cannot obtain a simple reference expression for the value.  Call this method
-        ///     when you expect the resulting expression to be used as a parameter or target
-        ///     of a statement.
+        ///  This serializes the given value to an expression.  It will return null if the value could not be
+        ///  serialized.  This is similar to SerializeToExpression, except that it will stop
+        ///  if it cannot obtain a simple reference expression for the value.  Call this method
+        ///  when you expect the resulting expression to be used as a parameter or target
+        ///  of a statement.
         /// </summary>
         [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         protected CodeExpression SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
-            using (TraceScope("CodeDomSerializer::SerializeToReferenceExpression"))
+            using (TraceScope("CodeDomSerializer::" + nameof(SerializeToReferenceExpression)))
             {
                 // First - try GetExpression
                 expression = GetExpression(manager, value);
                 // Next, we check for a named IComponent, and return a reference to it.
-                if (expression == null && value is IComponent)
+                if (expression is null && value is IComponent)
                 {
                     string name = manager.GetName(value);
                     bool referenceName = false;
-                    if (name == null)
+                    if (name is null)
                     {
                         IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
                         if (referenceService != null)
@@ -363,7 +406,7 @@ namespace System.ComponentModel.Design.Serialization
         }
         private void ResetBrowsableProperties(object instance)
         {
-            if (instance == null)
+            if (instance is null)
             {
                 return;
             }

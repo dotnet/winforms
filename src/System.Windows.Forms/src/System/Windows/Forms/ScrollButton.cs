@@ -2,36 +2,37 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    //// Specifies the type of scroll arrow to create on a scroll bar.
-    ////
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the type of scroll arrow to create on a scroll bar.
+    /// </summary>
     public enum ScrollButton
     {
-        /// <devdoc>
-        //// A down-scroll arrow.
-        /// </devdoc>
-        Down = NativeMethods.DFCS_SCROLLDOWN,
+        /// <summary>
+        ///  A down-scroll arrow.
+        /// </summary>
+        Down = (int)User32.DFCS.SCROLLDOWN,
 
-        /// <devdoc>
-        //// A left-scroll arrow.
-        /// </devdoc>
-        Left = NativeMethods.DFCS_SCROLLLEFT,
+        /// <summary>
+        ///  A left-scroll arrow.
+        /// </summary>
+        Left = (int)User32.DFCS.SCROLLLEFT,
 
-        /// <devdoc>
-        //// A right-scroll arrow.
-        /// </devdoc>
-        Right = NativeMethods.DFCS_SCROLLRIGHT,
+        /// <summary>
+        ///  A right-scroll arrow.
+        /// </summary>
+        Right = (int)User32.DFCS.SCROLLRIGHT,
 
-        /// <devdoc>
-        //// An up-scroll arrow.
-        /// </devdoc>
-        Up = NativeMethods.DFCS_SCROLLUP,
+        /// <summary>
+        ///  An up-scroll arrow.
+        /// </summary>
+        Up = (int)User32.DFCS.SCROLLUP,
 
-        Min = NativeMethods.DFCS_SCROLLUP,
+        Min = (int)User32.DFCS.SCROLLUP,
 
-        Max = NativeMethods.DFCS_SCROLLRIGHT,
+        Max = (int)User32.DFCS.SCROLLRIGHT,
     }
 }

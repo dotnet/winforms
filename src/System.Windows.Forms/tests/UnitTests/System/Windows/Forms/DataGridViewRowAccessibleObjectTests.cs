@@ -8,7 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
+    // NB: doesn't require thread affinity
+    public class DataGridViewRowAccessibleObjectTests : DataGridViewRow, IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewRowAccessibleObject_Ctor_Default()
@@ -37,6 +38,18 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject.Help);
         }
 
+        public static IEnumerable<object[]> Bounds_TestData()
+        {
+            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), Rectangle.Empty };
+        }
+
+        [Theory]
+        [MemberData(nameof(Bounds_TestData))]
+        public void DataGridViewRowAccessibleObject_Bounds_Get_ReturnsExpected(AccessibleObject accessibleObject, Rectangle expected)
+        {
+            Assert.Equal(expected, accessibleObject.Bounds);
+        }
+
         public static IEnumerable<object[]> NoOwner_TestData()
         {
             yield return new object[] { new DataGridViewRowAccessibleObject() };
@@ -45,17 +58,9 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(NoOwner_TestData))]
-        public void DataGridViewRowAccessibleObject_Bounds_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
+        public void DataGridViewRowAccessibleObject_Bounds_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Bounds);
-        }
-
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Bounds_NoDataGridView_ThrowsNullReferenceException()
-        {
-            var row = new DataGridViewRow();
-            var accessibleObject = new DataGridViewRowAccessibleObject(row);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.Bounds);
         }
 
         public static IEnumerable<object[]> Name_TestData()
@@ -72,7 +77,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(NoOwner_TestData))]
-        public void DataGridViewRowAccessibleObject_Name_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
+        public void DataGridViewRowAccessibleObject_Name_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Name);
         }
@@ -80,7 +85,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_Owner_Set_GetReturnsExpected()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject
             {
                 Owner = owner
@@ -91,39 +96,59 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowAccessibleObject_Owner_SetAlreadyWithOwner_ThrowsInvalidOperationException()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Owner = owner);
         }
 
+        public static IEnumerable<object[]> Parent_TestData()
+        {
+            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), null  };
+        }
+
+        [Theory]
+        [MemberData(nameof(Parent_TestData))]
+        public void DataGridViewRowAccessibleObject_Parent_Get_ReturnsExpected(AccessibleObject accessibleObject, AccessibleObject expected)
+        {
+            Assert.Same(expected, accessibleObject.Parent);
+        }
+
         [Theory]
         [MemberData(nameof(NoOwner_TestData))]
-        public void DataGridViewRowAccessibleObject_Parent_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
+        public void DataGridViewRowAccessibleObject_Parent_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Parent);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Parent_NoDataGridView_ThrowsNullReferenceException()
+        public static IEnumerable<object[]> State_TestData()
         {
-            var owner = new DataGridViewRow();
-            var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.Parent);
+            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), AccessibleStates.Selected | AccessibleStates.Selectable };
+        }
+
+        [Theory]
+        [MemberData(nameof(State_TestData))]
+        public void DataGridViewRowAccessibleObject_State_Get_ReturnsExpected(AccessibleObject accessibleObject, AccessibleStates expected)
+        {
+            Assert.Equal(expected, accessibleObject.State);
         }
 
         [Theory]
         [MemberData(nameof(NoOwner_TestData))]
-        public void DataGridViewRowAccessibleObject_State_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
+        public void DataGridViewRowAccessibleObject_State_GetNoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.State);
         }
 
-        [Fact]
-        public void DataGridViewRowAccessibleObject_State_NoDataGridView_ThrowsNullReferenceException()
+        public static IEnumerable<object[]> Value_TestData()
         {
-            var owner = new DataGridViewRow();
-            var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.State);
+            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), string.Empty };
+        }
+
+        [Theory]
+        [MemberData(nameof(Value_TestData))]
+        public void DataGridViewRowAccessibleObject_Value_Get_ReturnsExpected(AccessibleObject accessibleObject, string expected)
+        {
+            Assert.Equal(expected, accessibleObject.Value);
         }
 
         [Theory]
@@ -131,14 +156,6 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRowAccessibleObject_Value_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Value);
-        }
-
-        [Fact]
-        public void DataGridViewRowAccessibleObject_Value_NoDataGridView_ThrowsNullReferenceException()
-        {
-            var owner = new DataGridViewRow();
-            var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.Value);
         }
 
         [Fact]
@@ -158,11 +175,11 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
-        public void DataGridViewRowAccessibleObject_GetChild_NoDataGridView_ThrowsNullReferenceException(int index)
+        public void DataGridViewRowAccessibleObject_GetChild_NoDataGridView_ReturnsNull(int index)
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.GetChild(index));
+            Assert.Null(accessibleObject.GetChild(index));
         }
 
         [Theory]
@@ -182,11 +199,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewRowAccessibleObject_GetChildCount_NoDataGridView_ThrowsNullReferenceException()
+        public void DataGridViewRowAccessibleObject_GetChildCount_NoDataGridView_ReturnsZero()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.GetChildCount());
+            Assert.Equal(0, accessibleObject.GetChildCount());
         }
 
         [Theory]
@@ -197,17 +214,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewRowAccessibleObject_GetFocused_NoDataGridView_ThrowsNullReferenceException()
+        public void DataGridViewRowAccessibleObject_GetFocused_NoDataGridView_ReturnsNull()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.GetFocused());
+            Assert.Null(accessibleObject.GetFocused());
         }
 
         [Fact]
         public void DataGridViewRowAccessibleObject_GetSelected_Invoke_ReturnsSameInstance()
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             Assert.Same(accessibleObject.GetSelected(), accessibleObject.GetSelected());
 
@@ -257,9 +274,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleNavigation.Up)]
         public void DataGridViewRowAccessibleObject_Navigate_NoDataGridView_ThrowsNullReferenceException(AccessibleNavigation navigationDirection)
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.Navigate(navigationDirection));
+            Assert.Null(accessibleObject.Navigate(navigationDirection));
         }
 
         [Theory]
@@ -272,7 +289,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.TakeFocus)]
         public void DataGridViewRowAccessibleObject_Select_NoDataGridView_Nop(AccessibleSelection flags)
         {
-            var owner = new DataGridViewRow();
+            using var owner = new DataGridViewRow();
             var accessibleObject = new DataGridViewRowAccessibleObject(owner);
             accessibleObject.Select(flags);
         }

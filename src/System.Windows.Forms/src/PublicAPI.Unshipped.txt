@@ -1,0 +1,16 @@
+System.Windows.Forms.DrawItemEventArgs.Dispose() -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font! font, System.Drawing.Point pt, System.Drawing.Color foreColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font! font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+virtual System.Windows.Forms.DrawItemEventArgs.Dispose(bool disposing) -> void

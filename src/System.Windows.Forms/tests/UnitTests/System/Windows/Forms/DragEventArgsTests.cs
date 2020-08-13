@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DragEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DragEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData()
         {
@@ -30,7 +31,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [InlineData(DragDropEffects.Copy)]
-        [InlineData((DragDropEffects)(DragDropEffects.None -1))]
+        [InlineData((DragDropEffects)(DragDropEffects.None - 1))]
         public void Effect_Set_GetReturnsExpected(DragDropEffects value)
         {
             var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move)
@@ -43,27 +44,27 @@ namespace System.Windows.Forms.Tests
         private class CustomDataObject : IDataObject
         {
             public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
-       
+
             public object GetData(string format) => throw new NotImplementedException();
-       
+
             public object GetData(Type format) => throw new NotImplementedException();
-       
+
             public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
-       
+
             public void SetData(string format, object data) => throw new NotImplementedException();
-       
+
             public void SetData(Type format, object data) => throw new NotImplementedException();
-       
+
             public void SetData(object data) => throw new NotImplementedException();
-       
+
             public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
-       
+
             public bool GetDataPresent(string format) => throw new NotImplementedException();
-       
+
             public bool GetDataPresent(Type format) => throw new NotImplementedException();
 
             public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
-            
+
             public string[] GetFormats() => throw new NotImplementedException();
         }
     }

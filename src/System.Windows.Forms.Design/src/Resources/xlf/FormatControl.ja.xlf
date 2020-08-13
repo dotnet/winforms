@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ja" original="../FormatControl.resx">
+    <body>
+      <trans-unit id="dateTimeFormatsListBox.AccessibleDescription">
+        <source>Type:</source>
+        <target state="translated">種類:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="decimalPlacesUpDown.AccessibleDescription">
+        <source>Decimal places</source>
+        <target state="translated">小数点以下桁数</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatGroupBox.Text">
+        <source>Format</source>
+        <target state="translated">形式</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatTypeLabel.Text">
+        <source>&amp;Format type:</source>
+        <target state="translated">形式の種類(&amp;F):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatTypeListBox.AccessibleDescription">
+        <source>Format type:</source>
+        <target state="translated">書式の種類:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nullValueLabel.Text">
+        <source>&amp;Null value</source>
+        <target state="translated">Null 値(&amp;N)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nullValueTextBox.AccessibleDescription">
+        <source>Null value</source>
+        <target state="translated">Null 値</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleGroupBox.Text">
+        <source>Sample</source>
+        <target state="translated">サンプル</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleLabel.Text">
+        <source>sample</source>
+        <target state="translated">サンプル</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="secondRowLabel.Text">
+        <source>&amp;Decimal places</source>
+        <target state="translated">小数点以下表示桁数(&amp;D)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="thirdRowLabel.Text">
+        <source>Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</source>
+        <target state="translated">メモ: カスタム形式の文字列は、データ ソースとバイン
+ドされたコントロール間の往復が正常に完了すること
+を保証されていません。カスタム形式の値がコントロー
+ルで正常に表示され、データ ベースに保存されるよう
+にするには、バインドの解析または形式イベントをハン
+ドルします。</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

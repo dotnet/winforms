@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the style of the sizing grip on a <see cref='System.Windows.Forms.Form'/>.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the style of the sizing grip on a <see cref='Form'/>.
+    /// </summary>
     public enum SizeGripStyle
     {
-        /// <devdoc>
-        /// The size grip is automatically display when needed.
-        /// </devdoc>
+        /// <summary>
+        ///  The size grip is automatically display when needed.
+        /// </summary>
         Auto = 0,
 
-        /// <devdoc>
-        /// The sizing grip is always shown on the form.
-        /// </devdoc>
+        /// <summary>
+        ///  The sizing grip is always shown on the form.
+        /// </summary>
         Show = 1,
 
-        /// <devdoc>
-        /// The sizing grip is hidden.
-        /// </devdoc>
+        /// <summary>
+        ///  The sizing grip is hidden.
+        /// </summary>
         Hide = 2,
     }
 }

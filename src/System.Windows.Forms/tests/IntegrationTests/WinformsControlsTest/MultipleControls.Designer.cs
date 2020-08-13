@@ -7,12 +7,12 @@ namespace WinformsControlsTest
     partial class MultipleControls
     {
         /// <summary>
-        /// Required designer variable.
+        ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// Clean up any resources being used.
+        ///  Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -27,8 +27,8 @@ namespace WinformsControlsTest
         #region Windows Form Designer generated code
 
         /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -56,22 +56,22 @@ namespace WinformsControlsTest
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // progressBar1
-            // 
+            //
             this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(284, 23);
             this.progressBar1.TabIndex = 0;
-            // 
+            //
             // backgroundWorker1
-            // 
+            //
             this.backgroundWorker1.WorkerReportsProgress = true;
             this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.button1.Location = new System.Drawing.Point(13, 43);
             this.button1.Name = "button1";
@@ -79,9 +79,9 @@ namespace WinformsControlsTest
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.AutoSize = true;
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label1.Location = new System.Drawing.Point(13, 73);
@@ -89,34 +89,37 @@ namespace WinformsControlsTest
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
-            // 
+            this.label1.AccessibleName = "Test Label AccessibleName";
+            this.label1.AccessibleDescription = "Test Label AccessibleDescription";
+            this.label1.AccessibleRole = System.Windows.Forms.AccessibleRole.Indicator;
+            //
             // maskedTextBox1
-            // 
+            //
             this.maskedTextBox1.Location = new System.Drawing.Point(13, 90);
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(100, 20);
             this.maskedTextBox1.TabIndex = 3;
             this.maskedTextBox1.Text = "Masked";
-            // 
+            //
             // richTextBox1
-            // 
+            //
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.Location = new System.Drawing.Point(13, 117);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(100, 96);
             this.richTextBox1.TabIndex = 4;
             this.richTextBox1.Text = "LLLL";
-            // 
+            //
             // textBox1
-            // 
+            //
             this.textBox1.Location = new System.Drawing.Point(13, 229);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 5;
             this.textBox1.Text = "LLLLL";
-            // 
+            //
             // tabControl1
-            // 
+            //
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(121, 43);
@@ -125,9 +128,9 @@ namespace WinformsControlsTest
             this.tabControl1.ShowToolTips = true;
             this.tabControl1.Size = new System.Drawing.Size(200, 100);
             this.tabControl1.TabIndex = 6;
-            // 
+            //
             // tabPage1
-            // 
+            //
             this.tabPage1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
@@ -136,18 +139,19 @@ namespace WinformsControlsTest
             this.tabPage1.Size = new System.Drawing.Size(192, 74);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
+            this.tabPage1.ToolTipText = "I am tabPage1!";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
+            //
             // comboBox1
-            // 
+            //
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(19, 26);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 0;
-            // 
+            //
             // tabPage2
-            // 
+            //
             this.tabPage2.Controls.Add(this.checkBox1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -155,10 +159,11 @@ namespace WinformsControlsTest
             this.tabPage2.Size = new System.Drawing.Size(192, 74);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
+            this.tabPage2.ToolTipText = "I am tabPage2!\r\nI am multiline tooltip!";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
+            //
             // checkBox1
-            // 
+            //
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(7, 19);
             this.checkBox1.Name = "checkBox1";
@@ -166,9 +171,9 @@ namespace WinformsControlsTest
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "checkBox1";
             this.checkBox1.UseVisualStyleBackColor = true;
-            // 
+            //
             // radioButton2
-            // 
+            //
             this.radioButton2.Location = new System.Drawing.Point(16, 48);
             this.radioButton2.Name = "radioButton2";
             this.radioButton2.Size = new System.Drawing.Size(85, 17);
@@ -176,9 +181,9 @@ namespace WinformsControlsTest
             this.radioButton2.TabStop = true;
             this.radioButton2.Text = "radioButton2";
             this.radioButton2.UseVisualStyleBackColor = true;
-            // 
+            //
             // radioButton1
-            // 
+            //
             this.radioButton1.Location = new System.Drawing.Point(16, 25);
             this.radioButton1.Name = "radioButton1";
             this.radioButton1.Size = new System.Drawing.Size(85, 17);
@@ -186,9 +191,9 @@ namespace WinformsControlsTest
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "radioButton1";
             this.radioButton1.UseVisualStyleBackColor = true;
-            // 
+            //
             // groupBox1
-            // 
+            //
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Location = new System.Drawing.Point(125, 171);
@@ -197,9 +202,12 @@ namespace WinformsControlsTest
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
-            // 
+            this.groupBox1.AccessibleName = "Test GroupBox AccessibleName";
+            this.groupBox1.AccessibleDescription = "Test GroupBox AccessibleDescription";
+            this.groupBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Table;
+            //
             // checkedListBox1
-            // 
+            //
             this.checkedListBox1.BackColor = System.Drawing.SystemColors.Window;
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Items.AddRange(new object[] {
@@ -211,24 +219,24 @@ namespace WinformsControlsTest
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(202, 94);
             this.checkedListBox1.TabIndex = 8;
-            // 
+            //
             // numericUpDown1
-            // 
+            //
             this.numericUpDown1.Location = new System.Drawing.Point(361, 134);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 9;
-            // 
+            //
             // domainUpDown1
-            // 
+            //
             this.domainUpDown1.Location = new System.Drawing.Point(361, 171);
             this.domainUpDown1.Name = "domainUpDown1";
             this.domainUpDown1.Size = new System.Drawing.Size(120, 20);
             this.domainUpDown1.TabIndex = 10;
             this.domainUpDown1.Text = "domainUpDown1";
-            // 
+            //
             // Test3
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(629, 269);

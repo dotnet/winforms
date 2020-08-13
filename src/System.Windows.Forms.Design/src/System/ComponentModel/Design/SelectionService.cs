@@ -5,18 +5,16 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The selection service handles selection within a form.  There is one selection service for each designer host. A selection consists of an array of objects.  One objects is designated the "primary" selection.
+    ///  The selection service handles selection within a form.  There is one selection service for each designer host. A selection consists of an array of objects.  One objects is designated the "primary" selection.
     /// </summary>
     internal sealed class SelectionService : ISelectionService, IDisposable
     {
-
         // These are the selection types we use for context help.
         private static readonly string[] s_selectionKeywords = new string[] { "None", "Single", "Multiple" };
 
@@ -38,7 +36,7 @@ namespace System.ComponentModel.Design
         private StatusCommandUI _statusCommandUI; // UI for setting the StatusBar Information..
 
         /// <summary>
-        /// Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
+        ///  Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
         /// </summary>
         internal SelectionService(IServiceProvider provider) : base()
         {
@@ -49,11 +47,11 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds the given selection to our selection list.
+        ///  Adds the given selection to our selection list.
         /// </summary>
         internal void AddSelection(object sel)
         {
-            if (_selection == null)
+            if (_selection is null)
             {
                 _selection = new ArrayList();
                 // Now is the opportune time to hook up all of our events
@@ -79,7 +77,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called when our visiblity or batch mode changes.  Flushes any pending notifications or updates if possible.
+        ///  Called when our visiblity or batch mode changes.  Flushes any pending notifications or updates if possible.
         /// </summary>
         private void FlushSelectionChanges()
         {
@@ -91,7 +89,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Helper function to retrieve services.
+        ///  Helper function to retrieve services.
         /// </summary>
         private object GetService(Type serviceType)
         {
@@ -103,7 +101,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// called by the formcore when someone has removed a component.  This will remove any selection on the component without disturbing the rest of the selection
+        ///  called by the formcore when someone has removed a component.  This will remove any selection on the component without disturbing the rest of the selection
         /// </summary>
         private void OnComponentRemove(object sender, ComponentEventArgs ce)
         {
@@ -115,9 +113,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// called anytime the selection has changed.  We update our UI for the selection, and then we fire a juicy change event.
+        ///  called anytime the selection has changed.  We update our UI for the selection, and then we fire a juicy change event.
         /// </summary>
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void OnSelectionChanged()
         {
             if (_state[s_stateTransaction])
@@ -147,7 +144,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
+        ///  Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
         /// </summary>
         private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
@@ -159,15 +156,20 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
+        ///  Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
         /// </summary>
         private void OnTransactionOpened(object sender, EventArgs e)
         {
             _state[s_stateTransaction] = true;
         }
 
+        internal object PrimarySelection
+        {
+            get => (_selection != null && _selection.Count > 0) ? _selection[0] : null;
+        }
+
         /// <summary>
-        /// Removes the given selection from the selection list.
+        ///  Removes the given selection from the selection list.
         /// </summary>
         internal void RemoveSelection(object sel)
         {
@@ -184,7 +186,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Pushes the help context into the help service for the current set of selected objects.
+        ///  Pushes the help context into the help service for the current set of selected objects.
         /// </summary>
         private void UpdateHelpKeyword(bool tryLater)
         {
@@ -258,9 +260,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Disposes the entire selection service.
-        /// </summary>        
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        ///  Disposes the entire selection service.
+        /// </summary>
         void IDisposable.Dispose()
         {
             if (_selection != null)
@@ -286,7 +287,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves the object that is currently the primary selection.  The primary selection has a slightly different UI look and is used as a "key" when an operation is to be done on multiple components.
+        ///  Retrieves the object that is currently the primary selection.  The primary selection has a slightly different UI look and is used as a "key" when an operation is to be done on multiple components.
         /// </summary>
         object ISelectionService.PrimarySelection
         {
@@ -302,7 +303,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves the count of selected objects.
+        ///  Retrieves the count of selected objects.
         /// </summary>
         int ISelectionService.SelectionCount
         {
@@ -317,41 +318,29 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Adds a <see cref='System.ComponentModel.Design.ISelectionService.SelectionChanged'/> event handler to the selection service.
+        ///  Adds a <see cref='System.ComponentModel.Design.ISelectionService.SelectionChanged'/> event handler to the selection service.
         /// </summary>
         event EventHandler ISelectionService.SelectionChanged
         {
-            add
-            {
-                _events.AddHandler(s_eventSelectionChanged, value);
-            }
-            remove
-            {
-                _events.RemoveHandler(s_eventSelectionChanged, value);
-            }
+            add => _events.AddHandler(s_eventSelectionChanged, value);
+            remove => _events.RemoveHandler(s_eventSelectionChanged, value);
         }
 
         /// <summary>
-        /// Occurs whenever the user changes the current list of selected components in the designer.  This event is raised before the actual selection changes.
+        ///  Occurs whenever the user changes the current list of selected components in the designer.  This event is raised before the actual selection changes.
         /// </summary>
         event EventHandler ISelectionService.SelectionChanging
         {
-            add
-            {
-                _events.AddHandler(s_eventSelectionChanging, value);
-            }
-            remove
-            {
-                _events.RemoveHandler(s_eventSelectionChanging, value);
-            }
+            add => _events.AddHandler(s_eventSelectionChanging, value);
+            remove => _events.RemoveHandler(s_eventSelectionChanging, value);
         }
 
         /// <summary>
-        /// Determines if the component is currently selected.  This is faster than getting the entire list of selelected components.
+        ///  Determines if the component is currently selected.  This is faster than getting the entire list of selelected components.
         /// </summary>
         bool ISelectionService.GetComponentSelected(object component)
         {
-            if (component == null)
+            if (component is null)
             {
                 throw new ArgumentNullException(nameof(component));
             }
@@ -359,7 +348,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Retrieves an array of components that are currently part of the user's selection.
+        ///  Retrieves an array of components that are currently part of the user's selection.
         /// </summary>
         ICollection ISelectionService.GetSelectedComponents()
         {
@@ -370,11 +359,11 @@ namespace System.ComponentModel.Design
                 _selection.CopyTo(selectedValues, 0);
                 return selectedValues;
             }
-            return new object[0];
+            return Array.Empty<object>();
         }
 
         /// <summary>
-        /// Changes the user's current set of selected components to the components in the given array.  If the array is null or doesn't contain any components, this will select the top level component in the designer.
+        ///  Changes the user's current set of selected components to the components in the given array.  If the array is null or doesn't contain any components, this will select the top level component in the designer.
         /// </summary>
         void ISelectionService.SetSelectedComponents(ICollection components)
         {
@@ -382,7 +371,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// Changes the user's current set of selected components to the components in the given array.  If the array is null or doesn't contain any components, this will select the top level component in the designer.
+        ///  Changes the user's current set of selected components to the components in the given array.  If the array is null or doesn't contain any components, this will select the top level component in the designer.
         /// </summary>
         void ISelectionService.SetSelectedComponents(ICollection components, SelectionTypes selectionType)
         {
@@ -394,15 +383,15 @@ namespace System.ComponentModel.Design
             bool fAuto = !(fToggle | fAdd | fRemove | fReplace);
 
             // We always want to allow NULL arrays coming in.
-            if (components == null)
+            if (components is null)
             {
-                components = new object[0];
+                components = Array.Empty<object>();
             }
             // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifer keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)
             {
                 fToggle = (Control.ModifierKeys & (Keys.Control | Keys.Shift)) > 0;
-                fAdd |= System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Shift;
+                fAdd |= Control.ModifierKeys == Keys.Shift;
                 // If we are in auto mode, and if we are toggling or adding new controls, then cancel out the primary flag.
                 if (fToggle || fAdd)
                 {
@@ -421,7 +410,7 @@ namespace System.ComponentModel.Design
                 foreach (object o in components)
                 {
                     requestedPrimary = o;
-                    if (o == null)
+                    if (o is null)
                     {
                         throw new ArgumentNullException(nameof(components));
                     }
@@ -454,8 +443,11 @@ namespace System.ComponentModel.Design
                             bool remove = true;
                             foreach (object comp in components)
                             {
-                                if (comp == null)
+                                if (comp is null)
+                                {
                                     throw new ArgumentNullException(nameof(components));
+                                }
+
                                 if (object.ReferenceEquals(comp, item))
                                 {
                                     remove = false;
@@ -475,8 +467,10 @@ namespace System.ComponentModel.Design
                 // Now select / toggle the components.
                 foreach (object comp in components)
                 {
-                    if (comp == null)
+                    if (comp is null)
+                    {
                         throw new ArgumentNullException(nameof(components));
+                    }
 
                     if (_selection != null && _selection.Contains(comp))
                     {

@@ -8,12 +8,12 @@ using Xunit;
 
 namespace System.Drawing.Design.Tests
 {
-    public class ToolboxComponentsCreatedEventArgsTests
+    public class ToolboxComponentsCreatedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_IComponentArray_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new IComponent[0] };
+            yield return new object[] { Array.Empty<IComponent>() };
             yield return new object[] { new IComponent[] { null } };
         }
 
@@ -22,7 +22,7 @@ namespace System.Drawing.Design.Tests
         public void Ctor_IComponentArray(IComponent[] components)
         {
             var e = new ToolboxComponentsCreatedEventArgs(components);
-            if (components == null)
+            if (components is null)
             {
                 Assert.Null(e.Components);
             }

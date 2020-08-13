@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ItemDragEventArgsTests
+    // NB: doesn't require thread affinity
+    public class ItemDragEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(MouseButtons.Left)]

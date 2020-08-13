@@ -6,45 +6,44 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the border styles for a form.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Specifies the border styles for a form.
+    /// </summary>
     public enum FormBorderStyle
     {
-        /// <devdoc>
-        /// No border.
-        /// </devdoc>
+        /// <summary>
+        ///  No border.
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
-        /// A fixed, single line border.
-        /// </devdoc>
+        /// <summary>
+        ///  A fixed, single line border.
+        /// </summary>
         FixedSingle = 1,
 
-        /// <devdoc>
-        /// A fixed, three-dimensional border.
-        /// </devdoc>
+        /// <summary>
+        ///  A fixed, three-dimensional border.
+        /// </summary>
         Fixed3D = 2,
 
-        /// <devdoc>
-        /// A thick, fixed dialog-style border.
-        /// </devdoc>
+        /// <summary>
+        ///  A thick, fixed dialog-style border.
+        /// </summary>
         FixedDialog = 3,
 
-        /// <devdoc>
-        /// A resizable border.
-        /// </devdoc>
+        /// <summary>
+        ///  A resizable border.
+        /// </summary>
         Sizable = 4,
 
-        /// <devdoc>
-        /// A tool window border that is not resizable.
-        /// </devdoc>
+        /// <summary>
+        ///  A tool window border that is not resizable.
+        /// </summary>
         FixedToolWindow = 5,
 
-        /// <devdoc>
-        /// A resizable tool window border.
-        /// </devdoc>
+        /// <summary>
+        ///  A resizable tool window border.
+        /// </summary>
         SizableToolWindow = 6,
     }
 }

@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that will handle the <see langword='MouseDown'/>,
-    /// <see langword='MouseUp'/>, or <see langword='MouseMove '/>
-    /// event of a form, control, or other component.
-    /// </devdoc>
-    public delegate void MouseEventHandler(object sender, MouseEventArgs e);
+    /// <summary>
+    ///  Represents a method that will handle the <see cref='Control.MouseDown'/>,
+    ///  <see cref='Control.MouseUp'/> or <see cref='Control.MouseMove'/> events of a form,
+    ///  control or other component.
+    /// </summary>
+    public delegate void MouseEventHandler(object? sender, MouseEventArgs e);
 }

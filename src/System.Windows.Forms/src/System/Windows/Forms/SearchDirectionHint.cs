@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum SearchDirectionHint
     {
-        Up = NativeMethods.VK_UP,
-        Down = NativeMethods.VK_DOWN,
-        Left = NativeMethods.VK_LEFT,
-        Right = NativeMethods.VK_RIGHT
+        Up = User32.VK.UP,
+        Down = User32.VK.DOWN,
+        Left = User32.VK.LEFT,
+        Right = User32.VK.RIGHT
     }
 }

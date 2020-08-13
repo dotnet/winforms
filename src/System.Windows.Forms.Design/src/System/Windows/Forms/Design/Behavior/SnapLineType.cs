@@ -5,8 +5,8 @@
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     Describes a type of SnapLine.  These are used by the SnapLine hueristic to
-    ///     determine which like-SnapLines can snap to one another.
+    ///  Describes a type of SnapLine.  These are used by the SnapLine hueristic to
+    ///  determine which like-SnapLines can snap to one another.
     /// </summary>
     public enum SnapLineType
     {

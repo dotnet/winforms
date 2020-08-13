@@ -6,15 +6,14 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.QueryContinueDrag'/> event.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Provides data for the <see cref='Control.QueryContinueDrag'/> event.
+    /// </summary>
     public class QueryContinueDragEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.QueryContinueDragEventArgs'/> class.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='QueryContinueDragEventArgs'/> class.
+        /// </summary>
         public QueryContinueDragEventArgs(int keyState, bool escapePressed, DragAction action)
         {
             KeyState = keyState;
@@ -22,19 +21,19 @@ namespace System.Windows.Forms
             Action = action;
         }
 
-        /// <devdoc>
-        /// Gets a value indicating the current state of the SHIFT, CTRL, and ALT keys.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets a value indicating the current state of the SHIFT, CTRL, and ALT keys.
+        /// </summary>
         public int KeyState { get; }
 
-        /// <devdoc>
-        /// Gets a value indicating whether the user pressed the ESC key.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets a value indicating whether the user pressed the ESC key.
+        /// </summary>
         public bool EscapePressed { get; }
 
-        /// <devdoc>
-        /// Gets or sets the status of a drag-and-drop operation.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets or sets the status of a drag-and-drop operation.
+        /// </summary>
         public DragAction Action { get; set; }
     }
 }

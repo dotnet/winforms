@@ -1,0 +1,15 @@
+﻿<Project>
+
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)\..'))"/>
+
+  <!--
+    SDK doesn't support conflict resolution with project references (see https://github.com/dotnet/sdk/issues/2674).
+    Remove Microsoft.VisualBasic from netcoreapp shared framework to use the project reference instead.
+  -->
+  <Target Name="RemoveVBNetCoreAppReference" AfterTargets="ResolveTargetingPackAssets">
+    <ItemGroup>
+      <Reference Remove="@(Reference)" Condition="'%(FileName)'=='Microsoft.VisualBasic' and '%(Reference.ResolvedFrom)'!='ProjectReference'" />
+    </ItemGroup>
+  </Target>
+
+</Project>

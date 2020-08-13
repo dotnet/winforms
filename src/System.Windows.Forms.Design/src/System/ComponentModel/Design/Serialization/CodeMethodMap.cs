@@ -7,7 +7,7 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This structure is used by IntegrateStatements to put statements in the right place.
+    ///  This structure is used by IntegrateStatements to put statements in the right place.
     /// </summary>
     internal class CodeMethodMap
     {
@@ -42,8 +42,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_begin == null)
+                if (_begin is null)
+                {
                     _begin = new CodeStatementCollection();
+                }
+
                 return _begin;
             }
         }
@@ -52,8 +55,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_end == null)
+                if (_end is null)
+                {
                     _end = new CodeStatementCollection();
+                }
+
                 return _end;
             }
         }
@@ -62,8 +68,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_container == null)
+                if (_container is null)
+                {
                     _container = new CodeStatementCollection();
+                }
+
                 return _container;
             }
         }
@@ -77,8 +86,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_statements == null)
+                if (_statements is null)
+                {
                     _statements = new CodeStatementCollection();
+                }
+
                 return _statements;
             }
         }
@@ -87,8 +99,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_locals == null)
+                if (_locals is null)
+                {
                     _locals = new CodeStatementCollection();
+                }
+
                 return _locals;
             }
         }
@@ -97,8 +112,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_fields == null)
+                if (_fields is null)
+                {
                     _fields = new CodeStatementCollection();
+                }
+
                 return _fields;
             }
         }
@@ -108,8 +126,11 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (_variables == null)
+                if (_variables is null)
+                {
                     _variables = new CodeStatementCollection();
+                }
+
                 return _variables;
             }
         }
@@ -165,19 +186,39 @@ namespace System.ComponentModel.Design.Serialization
         internal void Combine()
         {
             if (_container != null)
+            {
                 _targetStatements.AddRange(_container);
+            }
+
             if (_locals != null)
+            {
                 _targetStatements.AddRange(_locals);
+            }
+
             if (_fields != null)
+            {
                 _targetStatements.AddRange(_fields);
+            }
+
             if (_variables != null)
+            {
                 _targetStatements.AddRange(_variables);
+            }
+
             if (_begin != null)
+            {
                 _targetStatements.AddRange(_begin);
+            }
+
             if (_statements != null)
+            {
                 _targetStatements.AddRange(_statements);
+            }
+
             if (_end != null)
+            {
                 _targetStatements.AddRange(_end);
+            }
         }
     }
 }

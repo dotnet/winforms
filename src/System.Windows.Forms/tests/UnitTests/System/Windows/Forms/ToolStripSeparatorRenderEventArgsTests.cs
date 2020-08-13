@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripSeparatorRenderEventArgsTests
+    public class ToolStripSeparatorRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Bool_TestData()
         {
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { graphics, new ToolStripSeparator(), false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStripItem_Bool_TestData))]
         public void Ctor_Graphics_ToolStripItem_Bool(Graphics g, ToolStripSeparator separator, bool vertical)
         {

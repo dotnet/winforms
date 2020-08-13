@@ -9,7 +9,8 @@ using Xunit;
 
 namespace System.Resources.Tests
 {
-    public class ResXFileRef_Converter
+    // NB: doesn't require thread affinity
+    public class ResXFileRef_Converter : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData("\"File Name.txt\";", new[] { "File Name.txt", "" })]
@@ -63,7 +64,7 @@ namespace System.Resources.Tests
         [Fact]
         public void ConvertFrom_ReadsFileAsStringUsingEncodingFromRefString()
         {
-            var resxFileRefString = @"TestResources\Files\text.utf7.txt;System.String;utf-7";
+            var resxFileRefString = @"TestResources\Files\text.utf8.txt;System.String;utf-8";
             var expected = "Привет";
             var converter = new ResXFileRef.Converter();
 

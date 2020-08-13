@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="es" original="../StringCollectionEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>String Collection Editor</source>
+        <target state="translated">Editor de colección de cadenas</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">Cancelar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="instruction.Text">
+        <source>&amp;Enter the strings in the collection (one per line):</source>
+        <target state="translated">&amp;Agregue las cadenas de la colección (una por línea):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">Aceptar</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

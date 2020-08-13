@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-
-    /// <devdoc>
-    /// EventArgs for onerror event of HtmlElement
-    /// </devdoc>
+    /// <summary>
+    ///  EventArgs for onerror event of HtmlElement
+    /// </summary>
     public sealed class HtmlElementErrorEventArgs : EventArgs
     {
         private readonly string _urlString;
@@ -20,26 +21,25 @@ namespace System.Windows.Forms
             LineNumber = lineNumber;
         }
 
-        /// <devdoc>
-        /// Description of error
-        /// </devdoc>
+        /// <summary>
+        ///  Description of error
+        /// </summary>
         public string Description { get; }
 
-        /// <devdoc>
-        /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.HtmlWindow.Error'/>
-        /// event was handled.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets or sets a value indicating whether the <see cref='HtmlWindow.Error'/>
+        ///  event was handled.
+        /// </summary>
         public bool Handled { get; set; }
 
-        /// <devdoc>
-        /// Line number where error occurred
-        /// </devdoc>
+        /// <summary>
+        ///  Line number where error occurred
+        /// </summary>
         public int LineNumber { get; }
 
-        /// <devdoc>
-        /// Url where error occurred
-        /// </devdoc>
+        /// <summary>
+        ///  Url where error occurred
+        /// </summary>
         public Uri Url => _url ?? (_url = new Uri(_urlString));
     }
 }
-

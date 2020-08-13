@@ -12,11 +12,11 @@ namespace System.Windows.Forms
         {
             if (rowIndex < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowIndex), rowIndex.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(rowIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowIndex), rowIndex.ToString(CultureInfo.CurrentCulture), 0));
             }
             if (rowCount < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(rowCount), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowCount), rowCount.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(rowCount), string.Format(SR.InvalidLowBoundArgumentEx, nameof(rowCount), rowCount.ToString(CultureInfo.CurrentCulture), 1));
             }
 
             RowIndex = rowIndex;

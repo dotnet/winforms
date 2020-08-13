@@ -4,28 +4,28 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// The various tab controls will let you configure their appearance.
-    /// This enumeration contains the possible values.
-    /// </devdoc>
+    /// <summary>
+    ///  The various tab controls will let you configure their appearance.
+    ///  This enumeration contains the possible values.
+    /// </summary>
     public enum TabAppearance
     {
-        /// <devdoc>
-        /// Indicates that the tabs look like normal tabs typically seen in Property
-        /// page type situations.
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates that the tabs look like normal tabs typically seen in Property
+        ///  page type situations.
+        /// </summary>
         Normal = 0,
 
-        /// <devdoc>
-        /// Indicates that the tabs look like buttons as seen on the taskbar found
-        /// in Windows 95 or Windows NT.
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates that the tabs look like buttons as seen on the taskbar found
+        ///  in Windows 95 or Windows NT.
+        /// </summary>
         Buttons = 1,
 
-        /// <devdoc>
-        /// Indicates that buttons should be draw flat instead of like regular
-        /// windows pushbuttons.
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates that buttons should be draw flat instead of like regular
+        ///  windows pushbuttons.
+        /// </summary>
         FlatButtons = 2,
     }
 }

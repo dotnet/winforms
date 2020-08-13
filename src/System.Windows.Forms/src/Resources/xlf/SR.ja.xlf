@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">ActiveX コントロールはウィンドウレス コントロールです。このコントロールは、このバージョンの .NET Framework ではサポートされていません。</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">ActiveX コントロールはウィンドウレス コントロールです。このコントロールは、このバージョンの .NET ではサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -192,6 +192,11 @@
         <target state="translated">折りたたむ</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="new">Double Click</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">展開</target>
@@ -230,11 +235,6 @@
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">適用(&amp;A)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">配列 '{0}' と '{1}' は同じサイズでなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">
@@ -692,16 +692,6 @@
         <target state="translated">ドキュメントが印刷された後にドキュメントの変更やドキュメントへの追加はできません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">double を date に変換できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">integer を float に変換できません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">単一スレッド上で 2 回目のメッセージ ループを開始することは有効な操作ではありません。Form.ShowDialog を使用してください。</target>
@@ -1017,6 +1007,11 @@
         <target state="translated">コンボ ボックスが現在ドロップダウンしていることを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="translated">ComboBox</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">コントロールの表示を決定します。</target>
@@ -1177,6 +1172,11 @@
         <target state="translated">ハンドルされていない型 {0} です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">引数 '{0}' は型 '{1}' に変換できません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">現在アクティブなコントロールです。</target>
@@ -1184,7 +1184,7 @@
       </trans-unit>
       <trans-unit id="ContainerControlAutoScaleModeDescr">
         <source>Determines how the form or control will scale when screen resolution or fonts change.</source>
-        <target state="translated">解像度またはフォントが変更されたとき、フォームまたはコントロールのサイズ変更方法を決定します。</target>
+        <target state="translated">解像度またはフォントが変更されたとき、フォームまたはコントロールのスケーリング方法を決定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ContainerControlAutoValidate">
@@ -1210,31 +1210,6 @@
       <trans-unit id="ContainerControlParentFormDescr">
         <source>The parent form of this container control.</source>
         <target state="translated">このコンテナー コントロールの親フォームです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuCollapseDescr">
-        <source>Raised when the context menu collapses.</source>
-        <target state="translated">コンテキスト メニューが縮小するときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuImageListDescr">
-        <source>Gets or sets the ImageList associated with this context menu.</source>
-        <target state="translated">このコンテキスト メニューに関連付けられた ImageList を取得および設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuInvalidParent">
-        <source>ContextMenu cannot be shown on an invisible control.</source>
-        <target state="translated">非表示のコントロールでは、ContextMenu を表示できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuIsImageMarginPresentDescr">
-        <source>Gets or sets a value indicating whether the menu has an image margin.</source>
-        <target state="translated">メニューがイメージの余白を持つかどうかを示す値を取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuSourceControlDescr">
-        <source>The last control that caused this context menu to be displayed.</source>
-        <target state="translated">このコンテキスト メニューを最後に表示させたコントロールです。</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
@@ -1924,7 +1899,7 @@
       </trans-unit>
       <trans-unit id="ControlOnVisibleChangedDescr">
         <source>Occurs when the control's visibility changes.</source>
-        <target state="translated">コントロールの表示状態が変わったときに発生します。</target>
+        <target state="translated">コントロールの表示が変わったときに発生します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlPaddingDescr">
@@ -2100,466 +2075,6 @@
       <trans-unit id="DataBindingRemoveAtNotSupportedOnPropertyManager">
         <source>RemoveAt is not supported for property-to-property binding.</source>
         <target state="translated">RemoveAt は、プロパティからプロパティへの バインドに対してサポートされていません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridAllowSortingDescr">
-        <source>Indicates whether the grid can be re-sorted by clicking a column header.</source>
-        <target state="translated">列ヘッダーをクリックして、グリッドを再度並べ替えられるかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridAlternatingBackColorDescr">
-        <source>Indicates the background color of alternating rows for a ledger appearance.</source>
-        <target state="translated">帳簿の表示方法で、交互に色が変更される列の背景色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBackButtonClickDescr">
-        <source>Occurs when the user clicks the Back button on a child table to return to the parent table.</source>
-        <target state="translated">子テーブル上の [戻る] をクリックして親テーブルに戻ったときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBackgroundColorDescr">
-        <source>Indicates the color of the DataGrid background.</source>
-        <target state="translated">DataGrid の背景色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBeginInit">
-        <source>BeginInit() has already been called without an EndInit().</source>
-        <target state="translated">EndInit() なしに、BeginInit() は既に呼び出されました。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBoolColumnAllowNullValue">
-        <source>Specifies whether the DataGridBoolColumn allows null values.</source>
-        <target state="translated">DataGridBoolColumn が Null 値を許容するかどうかを指定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBorderStyleDescr">
-        <source>Indicates the border style for the DataGrid.</source>
-        <target state="translated">DataGrid の境界線スタイルを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionBackButtonToolTip">
-        <source>Navigates back to the parent rows.</source>
-        <target state="translated">親行に戻ります。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionBackColorDescr">
-        <source>Indicates the background color of the top caption.</source>
-        <target state="translated">上部のキャプションの背景色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionDetailsButtonToolTip">
-        <source>Shows/Hides the parent rows for the current set of child rows.</source>
-        <target state="translated">現在の子行のセットを表示/非表示にします。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionFontDescr">
-        <source>Indicates the font of the top caption.</source>
-        <target state="translated">上部のキャプションのフォントを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionForeColorDescr">
-        <source>Indicates the color of text that appears in the top caption.</source>
-        <target state="translated">上部のキャプションに表示されるテキストの色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionTextDescr">
-        <source>Indicates the text displayed in the top caption.</source>
-        <target state="translated">上部のキャプションに表示されるテキストを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionVisibleDescr">
-        <source>Indicates whether the top caption is visible.</source>
-        <target state="translated">上部のキャプションが表示可能かどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnCollectionMissing">
-        <source>DataGridColumn instance does not exist in the collection.</source>
-        <target state="translated">DataGridColumn インスタンスはコレクションに存在しません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnHeadersVisibleDescr">
-        <source>Indicates whether the column headers are visible.</source>
-        <target state="translated">列ヘッダーを表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnListManagerPosition">
-        <source>Position of ListManager must be equal to 'rowNum'.</source>
-        <target state="translated">ListManager の位置は 'rowNum' と同じでなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnNoPropertyDescriptor">
-        <source>PropertyDescriptor has not been set on this DataGridColumn.</source>
-        <target state="translated">PropertyDescriptor はこの DataGridColumn で設定されていません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnStyleDuplicateMappingName">
-        <source>Data grid column styles collection already contains a column style with the same mapping name.</source>
-        <target state="translated">データ グリッドの列スタイル コレクションには、既に同じマップ名の列スタイルが含まれています。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnUnbound">
-        <source>DataGridColumnStyle of '{0}' cannot be used because it is not associated with a Property or Column in the DataSource.</source>
-        <target state="translated">'{0}' の DataGridColumnStyle は、DataSource でプロパティまたは列に関連付けられていないため、使用できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnWidth">
-        <source>ColumnWidth must be greater than or equal to 0.</source>
-        <target state="translated">ColumnWidth は 0 以上でなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCurrentCellDescr">
-        <source>The currently selected cell in the DataGrid.</source>
-        <target state="translated">DataGrid で現在選択されているセルです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDataMemberDescr">
-        <source>Indicates a sub-list of the DataSource to show in the DataGrid.</source>
-        <target state="translated">DataGrid で表示する DataSource のサブリストを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDataSourceDescr">
-        <source>Indicates the source of data for the DataGrid.</source>
-        <target state="translated">DataGrid のデータのソースを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDefaultColumnCollectionChanged">
-        <source>User cannot change the contents of the default GridColumnStylesCollection.</source>
-        <target state="translated">ユーザーは、既定の GridColumnStylesCollection の内容を変更できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDefaultTableSet">
-        <source>Value of this property cannot be changed on the default DataGridTableStyle.</source>
-        <target state="translated">既定の DataGridTableStyle でこのプロパティの値を変更できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDownButtonClickDescr">
-        <source>Occurs when the user clicks the "show/hide parent rows" icon. </source>
-        <target state="translated">[親行の表示/非表示] アイコンをクリックしたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridEmptyColor">
-        <source>Value '{0}' cannot be set to an empty value.</source>
-        <target state="translated">値 '{0}' を空の値に設定できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridErrorMessageBoxCaption">
-        <source>Committing the row to the original data store has caused an error.</source>
-        <target state="translated">オリジナルのデータ ストアに行をコミットして、エラーが発生しました。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridExceptionInPaint">
-        <source>DataGrid received an exception at design time. Reset the DataSource and DataMember property on the grid.</source>
-        <target state="translated">DataGrid はデザイン時に例外を受け取りました。グリッドの DataSource と DataMember プロパティを再設定してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFailedToGetRegionInfo">
-        <source>Program cannot get information about the painting and scrolling region.</source>
-        <target state="translated">描画およびスクロールに使われる領域に関する情報をプログラムで取得できませんでした。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFirstVisibleColumnDescr">
-        <source>Indicates the index of the column that is first shown.</source>
-        <target state="translated">最初に表示される列のインデックスを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFlatModeDescr">
-        <source>Indicates whether the grid has a flat appearance.</source>
-        <target state="translated">グリッドの外観をフラットにするかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridLineColorDescr">
-        <source>Indicates the color of the grid lines.</source>
-        <target state="translated">グリッド線の色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridLineStyleDescr">
-        <source>Indicates the style of the grid lines.</source>
-        <target state="translated">グリッド線のスタイルを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridTablesDescr">
-        <source>The collection of DataGridTableStyle objects that the DataGrid can render its data with.</source>
-        <target state="translated">DataGrid がそのデータを表示できる DataGridTableStyle オブジェクトのコレクションです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderBackColorDescr">
-        <source>Indicates the background color of the column and row headers.</source>
-        <target state="translated">列と行のヘッダーの背景色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderFontDescr">
-        <source>Indicates the font of the text in the column and row headers.</source>
-        <target state="translated">列と行のヘッダーのテキストのフォントを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderForeColorDescr">
-        <source>Indicates the color of the text in the column and row headers.</source>
-        <target state="translated">列と行のヘッダーのテキストの色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHorizScrollBarDescr">
-        <source>Returns the horizontal scroll bar used by the grid.</source>
-        <target state="translated">グリッドが使用する水平スクロール バーを返します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridLinkColorDescr">
-        <source>Indicates the color of the text that appears inside the child links.</source>
-        <target state="translated">子リンク内部に表示されるテキストの色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridLinkHoverColorDescr">
-        <source>Indicates the color of the text that appears inside a child link when the mouse pointer moves over it.</source>
-        <target state="translated">マウス ポインターが移動したときに子リンク内に表示されるテキストの色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridListManagerDescr">
-        <source>The CurrencyManager that the DataGrid uses to get data from the data source.</source>
-        <target state="translated">DataGrid がデータ ソースからデータを取得するために使用する CurrencyManager です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNavigateEventDescr">
-        <source>Occurs when the user navigates to the child rows or when the user navigates back to the parent rows.</source>
-        <target state="translated">ユーザーが子行に移動したときまたは親行に戻ったときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNavigationModeDescr">
-        <source>Indicates whether links to child tables are shown.</source>
-        <target state="translated">子テーブルへのリンクを表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNodeClickEventDescr">
-        <source>Occurs when the user clicks on the expansion glyph on the row header.</source>
-        <target state="translated">ユーザーが行ヘッダーの拡張グラフィックスをクリックしたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNullText">
-        <source>(null)</source>
-        <target state="translated">(なし)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnBackgroundColorChangedDescr">
-        <source>Event raised when the value of the BackgroundColor property is changed on DataGrid.</source>
-        <target state="translated">BackgroundColor プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnBorderStyleChangedDescr">
-        <source>Event raised when the value of the BorderStyle property is changed on DataGrid.</source>
-        <target state="translated">BorderStyle プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnCaptionVisibleChangedDescr">
-        <source>Event raised when the value of the CaptionVisible property is changed on DataGrid.</source>
-        <target state="translated">CaptionVisible プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnCurrentCellChangedDescr">
-        <source>Event raised when the value of the CurrentCell property is changed on DataGrid.</source>
-        <target state="translated">CurrentCell プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnDataSourceChangedDescr">
-        <source>Event raised when the value of the DataSource property is changed on DataGrid.</source>
-        <target state="translated">DataSource プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnFlatModeChangedDescr">
-        <source>Event raised when the value of the FlatMode property is changed on DataGrid.</source>
-        <target state="translated">FlatMode プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnNavigationModeChangedDescr">
-        <source>Event raised when the value of the NavigationMode property is changed on DataGrid.</source>
-        <target state="translated">NavigationMode プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnParentRowsLabelStyleChangedDescr">
-        <source>Event raised when the value of the ParentRowsLabelStyle property is changed on DataGrid.</source>
-        <target state="translated">ParentRowsLabelStyle プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnParentRowsVisibleChangedDescr">
-        <source>Event raised when the value of the ParentRowsVisible property is changed on DataGrid.</source>
-        <target state="translated">ParentRowsVisible プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnReadOnlyChangedDescr">
-        <source>Event raised when the value of the ReadOnly property is changed on DataGrid.</source>
-        <target state="translated">ReadOnly プロパティの値が DataGrid で変更されたときに発生するイベントです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsBackColorDescr">
-        <source>Indicates the background color of the parent rows.</source>
-        <target state="translated">親の行の背景色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsForeColorDescr">
-        <source>Indicates the color of the text in the parent rows.</source>
-        <target state="translated">親の行のテキストの色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsLabelStyleDescr">
-        <source>Indicates whether the parent rows show labels for the table and for the columns.</source>
-        <target state="translated">親の行がテーブルと列のラベルを表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsVisibleDescr">
-        <source>Indicates whether the parent rows area is visible.</source>
-        <target state="translated">親の行領域を表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPreferredColumnWidthDescr">
-        <source>Specifies what the default pixel widths of the grid columns are. The default value for PreferredColumnWidth is 75.</source>
-        <target state="translated">グリッド コラムの既定のピクセル幅を指定します。PreferredColumnWidth の既定値は 75 です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPreferredRowHeightDescr">
-        <source>Indicates the preferred height of the rows.</source>
-        <target state="translated">行の適切な高さを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPushedIncorrectValueIntoColumn">
-        <source>Value {0} Do you want to correct this value?</source>
-        <target state="translated">値 {0} を修正しますか?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridReadOnlyDescr">
-        <source>Indicates whether rows in the grid can be edited, added, or deleted.</source>
-        <target state="translated">グリッドの行を編集、追加、削除できるかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowHeaderWidthDescr">
-        <source>Indicates the width of the row headers.</source>
-        <target state="translated">行ヘッダーの幅を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowHeadersVisibleDescr">
-        <source>Indicates whether the row headers are visible.</source>
-        <target state="translated">行ヘッダーが表示されているかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowRowHeight">
-        <source>DataGridRow.Height cannot be negative.</source>
-        <target state="translated">DataGridRow.Height を負の値にすることはできません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowRowNumber">
-        <source>DataGridRow cannot have a negative row number.</source>
-        <target state="translated">DataGridRow に負の値の行番号を指定することはできません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridScrollEventDescr">
-        <source>Occurs when the user scrolls either the horizontal or vertical scroll bar.</source>
-        <target state="translated">ユーザーが水平または垂直スクロール バーをスクロールしたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectedIndexDescr">
-        <source>Indicates the index of the current row.</source>
-        <target state="translated">現在の行のインデックスを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectionBackColorDescr">
-        <source>Indicates the background color of any selected cells or rows.</source>
-        <target state="translated">選択されているセルまたは行の背景色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectionForeColorDescr">
-        <source>Indicates the color of the text in any selected cells or rows.</source>
-        <target state="translated">選択されているセルまたは行のテキストの色を示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSetListManager">
-        <source>ListManager can be set using the DataSource and DataMember properties.</source>
-        <target state="translated">ListManager は DataSource および DataMember プロパティを使用して設定することができます。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSetSelectIndex">
-        <source>Position on a null ListManager cannot be set.</source>
-        <target state="translated">Null の ListManager で位置を設定できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSettingCurrentCellNotGood">
-        <source>CurrentCell cannot be set at this time. Moving your code to the Form.Load event should solve this problem.</source>
-        <target state="translated">CurrentCell は現時点では設定できません。この問題を解決するには、コードを Form.Load イベントに移動してください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableCollectionMissingTable">
-        <source>DataGridTable instance does not exist in the collection.</source>
-        <target state="translated">DataGridTable インスタンスはコレクションに存在しません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleCollectionAddedParentedTableStyle">
-        <source>DataGridTableStyle that is already parented to another DataGrid cannot be added.</source>
-        <target state="translated">既に別の DataGrid の親になっている DataGridTableStyle を追加することはできません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleDuplicateMappingName">
-        <source>Data grid table styles collection already contains a table style with the same mapping name.</source>
-        <target state="translated">このデータ グリッドのテーブル スタイル コレクションには既に同じマップ名のテーブル スタイルが含まれています。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentAlternatingBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent AlternatingBackColor.</source>
-        <target state="translated">DataGridTableStyle は、透明色の AlternatingBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent BackColor.</source>
-        <target state="translated">DataGridTableStyle は、透明色の BackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentHeaderBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent HeaderBackColor.</source>
-        <target state="translated">DataGridTableStyle は、透明色の HeaderBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentSelectionBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent SelectionBackColor.</source>
-        <target state="translated">DataGridTableStyle は、透明色の SelectionBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridToolTipEmptyIcon">
-        <source>null rectangle for icon bounds when adding tool tip.</source>
-        <target state="translated">ツールヒントを追加する場合に作成されるアイコンの境界線の Null 四角形です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentAlternatingBackColorNotAllowed">
-        <source>DataGrid control does not support transparent AlternatingBackColor.</source>
-        <target state="translated">DataGrid コントロールは、透明色の AlternatingBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentBackColorNotAllowed">
-        <source>DataGrid control does not support transparent BackColor.</source>
-        <target state="translated">DataGrid コントロールは、透明色の BackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentCaptionBackColorNotAllowed">
-        <source>DataGrid control does not support transparent CaptionBackColor.</source>
-        <target state="translated">DataGrid コントロールは、透明色の CaptionBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentHeaderBackColorNotAllowed">
-        <source>DataGrid control does not support transparent HeaderBackColor.</source>
-        <target state="translated">DataGrid コントロールは、透明色の HeaderBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentParentRowsBackColorNotAllowed">
-        <source>DataGrid control does not support transparent ParentRowsBackColor.</source>
-        <target state="translated">DataGrid コントロールは、透明色の ParentRowsBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentSelectionBackColorNotAllowed">
-        <source>DataGrid control does not support transparent SelectionBackColor.</source>
-        <target state="translated">DataGrid コントロールは、透明色の SelectionBackColor をサポートしません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridUnbound">
-        <source>Data cannot be read from a DataGrid which is not bound to a DataTable.</source>
-        <target state="translated">DataTable にバインドされていない DataGrid からデータを読み取ることができません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridVertScrollBarDescr">
-        <source>Returns the vertical scroll bar used by the grid.</source>
-        <target state="translated">グリッドが使用する垂直スクロール バーを返します。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewAlternatingRowsDefaultCellStyleChangedDescr">
@@ -3133,8 +2648,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
-        <source>Horizontal Scroll Bar</source>
-        <target state="translated">水平スクロール バー</target>
+        <source>Horizontal</source>
+        <target state="translated">横</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3188,8 +2703,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
-        <source>Vertical Scroll Bar</source>
-        <target state="translated">垂直スクロール バー</target>
+        <source>Vertical</source>
+        <target state="translated">縦</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -4544,6 +4059,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">ビットマップ オブジェクトは、デバイスに依存しないビットマップ フォーマットを直接サポートしません。  自動変換を指定するか、ビットマップ データ フォーマットで SetData を実行してください。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="translated">スペース文字列または空の文字列は、パラメーター 'format' の有効な値ではありません。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">DataMember プロパティ '{0}' は DataSource に見つかりません。</target>
@@ -4611,7 +4131,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DateTimePickerLocalizedControlType">
         <source>date and time picker</source>
-        <target state="translated">日付と時刻の選択</target>
+        <target state="translated">日付と時刻のピッカー</target>
         <note />
       </trans-unit>
       <trans-unit id="DateTimePickerMaxDate">
@@ -4672,6 +4192,46 @@ To replace this default dialog please handle the DataError event.</source>
       <trans-unit id="DefManifestNotFound">
         <source>Default manifest file required to enable visual styles cannot be found.</source>
         <target state="translated">visual スタイルを有効にする必要のある既定のマニフェスト ファイルが見つかりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="translated">ボタン</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="translated">コンボ ボックス</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="translated">イメージ</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="translated">リンク</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="translated">編集</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDomainUpDownAccessibleName">
+        <source>DomainUpDown</source>
+        <target state="translated">DomainUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultNumericUpDownAccessibleName">
+        <source>NumericUpDown</source>
+        <target state="translated">NumericUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultUpDownButtonsAccessibleName">
+        <source>UpDown</source>
+        <target state="translated">アップダウン</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -5029,6 +4589,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">エラーをバインドする、データのソースを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="translated">エラー プロバイダー</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
         <source>The error description for a control.</source>
         <target state="translated">コントロールのエラーの説明です。</target>
@@ -5065,8 +4630,8 @@ To replace this default dialog please handle the DataError event.</source>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,12 +4756,12 @@ just-in-time (JIT) debugging instead of this dialog box.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">セキュリティ ポリシーで許可されていない操作をアプリケーションが実行しようとしました。必要なアクセス許可をこのアプリケーションに与えるには、システム管理者に連絡するか、Microsoft .NET Framework 構成ツールを使用してください。
+        <target state="translated">セキュリティ ポリシーで許可されていない操作をアプリケーションが実行しようとしました。必要なアクセス許可をこのアプリケーションに与えるには、システム管理者に連絡するか、Microsoft .NET 構成ツールを使用してください。
 
 [続行] をクリックすると、アプリケーションはこのエラーを無視し、続行しようとします。
 
@@ -5204,12 +4769,12 @@ If you click Continue, the application will ignore this error and attempt to con
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">セキュリティ ポリシーで許可されていない操作をアプリケーションが実行しようとしました。必要なアクセス許可をこのアプリケーションに与えるには、システム管理者に連絡するか、Microsoft .NET Framework 構成ツールを使用してください。
+        <target state="translated">セキュリティ ポリシーで許可されていない操作をアプリケーションが実行しようとしました。必要なアクセス許可をこのアプリケーションに与えるには、システム管理者に連絡するか、Microsoft .NET 構成ツールを使用してください。
 
 [続行] をクリックすると、アプリケーションはこのエラーを無視し、続行しようとします。[終了] をクリックすると、アプリケーションは直ちに終了します。
 
@@ -5622,19 +5187,9 @@ Do you want to replace it?</source>
         <target state="translated">サイズを変更するときのフォームの最大値です。</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMenuDescr">
-        <source>The main menu of the form. This must be set to a component of type MainMenu.</source>
-        <target state="translated">フォームのメイン メニューです。このメニューを型 MainMenu のコンポーネントに設定しなければなりません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">フォームの主要な MenuStrip を指定します。このプロパティは、キーボードのアクティブ化および MDI での自動マージのために使用されます。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormMergedMenuDescr">
-        <source>The merged menu of this form, which is used when displaying a single merged MDI menu.</source>
-        <target state="translated">単一のマージされた MDI メニューを表示するときに使用される、このフォームのマージされたメニューです。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMinimizeBoxDescr">
@@ -5877,6 +5432,11 @@ Do you want to replace it?</source>
         <target state="translated">テーブルの行数です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="translated">横</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">ウィンドウ ハンドルは既に存在します。</target>
@@ -5986,11 +5546,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">イメージはビットマップでなければなりません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">リストが空でない限り、'{0}' は一度 ImageList が使用された後は、変更できません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">イメージの表示に使用する色の数です。</target>
@@ -5999,6 +5554,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ImageListCreateFailed">
         <source>Creation of the ImageList handle did not succeed.</source>
         <target state="translated">ImageList ハンドルを作成できませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="translated">ImageList ハンドルを複製できませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -6084,6 +5644,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="IndexOutOfRange">
         <source>Index {0} is out of range.</source>
         <target state="translated">インデックス {0} が範囲を超えています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="translated">カルチャ '{0}' の InputLanguage が見つかりませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6801,6 +6366,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">アイテムとサブアイテムの周りのグリッド線を表示します。詳細ビューでのみ表示されます。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
+        <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
+        <target state="translated">ListViewGroup の CollapsedState プロパティが変更するときに発生するイベントです。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">パラメーターは、型 ListViewGroup でなければなりません。</target>
@@ -6816,9 +6386,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ListViewGroup</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupImageListDescr">
+        <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
+        <target state="translated">すべてのビュー内の ListViewGroup イメージに対して、ListView により使用される ImageList コントロールです。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">このグループの名前です。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="translated">ListViewGroup の TaskLink プロパティがクリックされたときに発生するイベントです。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
@@ -7136,26 +6716,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">このフォームの MdiParent として指定されたフォームは MdiContainer ではありません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="MainMenuCollapseDescr">
-        <source>Occurs when the main menu collapses.</source>
-        <target state="translated">メイン メニューが縮小するときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuImageListDescr">
-        <source>Gets or sets the ImageList associated with this main menu.</source>
-        <target state="translated">このメイン メニューに関連付けられた ImageList を取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuIsImageMarginPresentDescr">
-        <source>Gets or sets a value indicating whether the menu has an image margin.</source>
-        <target state="translated">メニューがイメージの余白を持つかどうかを示す値を取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuToStringNoForm">
-        <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;フォームなし&gt;</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
         <source>Indicates whether the prompt character is valid as input.</source>
         <target state="translated">プロンプト文字が入力として有効であるかどうかを示します。</target>
@@ -7291,101 +6851,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">コントロールがフォーカスを失ったときに、入力テキストを解析するために使用されるオブジェクトの型を指定します。</target>
         <note />
       </trans-unit>
-      <trans-unit id="MenuBadMenuItem">
-        <source>Parameter must be of type MenuItem.</source>
-        <target state="translated">パラメーターは、型 MenuItem でなければなりません</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuImageMarginColorDescr">
-        <source>Gets or sets the background color of this menu's image margin.</source>
-        <target state="translated">このメニューのイメージの余白の背景色を取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuIsParentDescr">
-        <source>Indicates if this menu contains any child items.</source>
-        <target state="translated">メニューが子のアイテムを含んでいるかどうかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemAlreadyExists">
-        <source>Cannot add MenuItem '{0}'. It already exists as a parent of the current menu item.</source>
-        <target state="translated">MenuItem '{0}' を追加できません。現在のメニュー項目の親として既に存在します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemCheckedDescr">
-        <source>Indicates whether the item is checked.</source>
-        <target state="translated">アイテムがチェックされているかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemDefaultDescr">
-        <source>Indicates whether the item is the default item.</source>
-        <target state="translated">アイテムが既定のアイテムかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemEnabledDescr">
-        <source>Indicates whether the item is enabled.</source>
-        <target state="translated">アイテムが有効にされているかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageDescr">
-        <source>Gets or sets the image to be displayed on this menu item.</source>
-        <target state="translated">このメニュー項目で表示されるイメージを取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageListDescr">
-        <source>Gets or sets the ImageList associated with this menu item.</source>
-        <target state="translated">このメニュー項目に関連付けられた ImageList を取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageMarginColorDescr">
-        <source>Gets or sets the background color of this menu item's image margin.</source>
-        <target state="translated">このメニュー項目のイメージの余白の背景色を取得または設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemInvalidCheckProperty">
-        <source>True is not a valid value for the Checked property.  This is only valid for MenuItems that have no children and are not top-level.</source>
-        <target state="translated">True は Checked プロパティの有効な値ではありません。  子がなく、トップレベルでない MenuItem に対してのみ有効です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMDIListDescr">
-        <source>Determines whether the MDI child window list is appended to this item.</source>
-        <target state="translated">MDI 子ウィンドウのリストをこの項目に追加するかどうかを決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMergeOrderDescr">
-        <source>Determines the merge order of the item.</source>
-        <target state="translated">アイテムをマージする順序を決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMergeTypeDescr">
-        <source>Determines how the item is handled when menus are merged.</source>
-        <target state="translated">メニューがマージされるときに項目を処理する方法を決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnClickDescr">
-        <source>Occurs when the menu item is selected.</source>
-        <target state="translated">メニュー項目が選択されたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnInitDescr">
-        <source>Occurs before the containing menu is displayed.</source>
-        <target state="translated">メニューが表示される前に発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnSelectDescr">
-        <source>Occurs when the menu item is selected.</source>
-        <target state="translated">メニュー項目が選択されたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOwnerDrawDescr">
-        <source>Indicates if Windows will draw the menu item or if the user will handle the painting.</source>
-        <target state="translated">Windows がメニュー項目を描画するか、ユーザーが描画を行うかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemRadioCheckDescr">
-        <source>If the item is checked, this value will determine whether the check style is a radio button.</source>
-        <target state="translated">この項目がチェックされると、この値は、チェック スタイルをオプション ボタンにするかどうかを決定します。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
         <target state="translated">メニュー項目に関連付けられたショートカット キーです。</target>
@@ -7394,36 +6859,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
         <target state="translated">メニュー項目のショートカット キーをアイテムに表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemTextDescr">
-        <source>The caption displayed by the item.</source>
-        <target state="translated">アイテムによって表示されたタイトルです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemVisibleDescr">
-        <source>Indicates whether the item is visible.</source>
-        <target state="translated">アイテムを表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMDIListItemDescr">
-        <source>Retrieves the menu item that contains a list of MDI child windows.</source>
-        <target state="translated">MDI 子ウィンドウのリストを含むメニュー項目を取得します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMenuItemsDescr">
-        <source>The menu items for the menu.</source>
-        <target state="translated">メニューのメニュー項目です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMergeWithSelf">
-        <source>Cannot merge a menu with itself.</source>
-        <target state="translated">メニューをそれ自体にマージできません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuRightToLeftDescr">
-        <source>Indicates if this menu should display right to left</source>
-        <target state="translated">このメニューが右から左に表示されるかどうかを示します。</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -7444,6 +6879,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarAnnuallyBoldedDatesDescr">
         <source>Indicates which annual dates should be boldface.</source>
         <target state="translated">年間のどの日付を太字にするかを示します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="translated">カレンダー本体</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -7496,6 +6936,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">月ごとに太字で表示する日付を示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="translated">次へ</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">ユーザーの選択、または翌/先月の変更により、日にちの範囲が変更されたときに発生します。</target>
@@ -7504,6 +6949,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">ユーザーがある日付を選択したとき、または日数の範囲を指定したときに発生します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="translated">前へ</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7579,6 +7029,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">カレンダーの表題内のテキストの色です。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="translated">今日: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7803,7 +7258,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
-        <target state="translated">複数の場所にアイテム '{0}' を追加または挿入することはできません。最初に現在の場所から削除するか、複製を作成しなければなりません。</target>
+        <target state="translated">複数の場所にアイテム '{0}' を追加または挿入することはできません。最初に現在の場所から削除するか、クローンを作成しなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
@@ -7832,8 +7287,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">説明ペイン</target>
+        <source>Description</source>
+        <target state="translated">説明</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -8481,6 +7936,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ToolStripPanel で使用されるグラデーションの終わりの色です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="translated">ProgressBar</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">スタイルに Marquee が指定されている場合、インクリメントを呼び出さないでください。</target>
@@ -8568,7 +8028,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
         <source>Scale</source>
-        <target state="translated">スケール</target>
+        <target state="translated">スケーリング</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryText">
@@ -8641,9 +8101,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">プロパティ ウィンドウ</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
+        <source>{0} Properties Window</source>
+        <target state="translated">{0} プロパティ ウィンドウ</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
         <source>The foreground color of disabled text in the grid area.</source>
         <target state="translated">グリッド領域内の無効な文字の前景色。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">{0} 説明</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
@@ -8654,6 +8124,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridDropDownButtonComboBoxAccessibleName">
         <source>Open</source>
         <target state="translated">開く</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridEntryValuesListDefaultAccessibleName">
+        <source>Available values</source>
+        <target state="translated">使用可能な値</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridExceptionInfo">
@@ -8741,11 +8216,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{0} が選択されました。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">オブジェクト {0} は、インターフェイス探索をサポートしていないプロキシによってリモートされています。  この種類のリモート オブジェクトはサポートされていません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">スタティックのタブを PropertyGrid から削除することはできません。</target>
@@ -8812,8 +8282,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">ツール バー</target>
+        <source>PropertyGrid</source>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -9201,50 +8671,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">この ScrollableControl に垂直スクロール バーを取得します。</target>
         <note />
       </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMixedZone">
-        <source>Mixed Zone</source>
-        <target state="translated">混合ゾーン</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMultipleSites">
-        <source>Multiple Sites</source>
-        <target state="translated">複数のサイト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownSite">
-        <source>Unknown Site</source>
-        <target state="translated">不明なサイト</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
-        <source>Unknown Zone</source>
-        <target state="translated">不明なゾーン</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipCaption">
-        <source>Microsoft .NET Security Warning</source>
-        <target state="translated">Microsoft .NET セキュリティ警告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipMainText">
-        <source>Never enter personal information or passwords into a window unless you can verify and trust the source of the request.</source>
-        <target state="translated">要求元を検証および信頼できない場合、個人情報またはパスワードをウィンドウに入力しないでください。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipSourceInformation">
-        <source>Source: {0}</source>
-        <target state="translated">ソース: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}
-
-{1}</source>
-        <target state="translated">{0}
-
-{1}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SelTabCountRange">
         <source>SelTabCount out of range.</source>
         <target state="translated">SelTabCount が範囲外です。</target>
@@ -9445,91 +8871,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">IID {0} のマーシャラーを取得できませんでした。</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusBarAddFailed">
-        <source>Adding the panel to the native status bar control has not succeeded.</source>
-        <target state="translated">ネイティブ ステータス バー コントロールにパネルを追加できませんでした。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarBadStatusBarPanel">
-        <source>Parameter must be of type StatusBarPanel.</source>
-        <target state="translated">パラメーターは型 StatusBarPanel でなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarDrawItem">
-        <source>Occurs whenever a panel in the StatusBar needs to be painted.</source>
-        <target state="translated">ステータス バー内のパネルを描画する必要があるときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarOnPanelClickDescr">
-        <source>Occurs when a panel within the status bar is clicked.</source>
-        <target state="translated">ステータス バー内のパネルがクリックされたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAlignmentDescr">
-        <source>The alignment of the panel's text.</source>
-        <target state="translated">パネルのテキストの配置です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAutoSizeDescr">
-        <source>Determines how a panel will resize when the parent changes size.</source>
-        <target state="translated">親がサイズを変更したときに、パネルがどのようにサイズを変更するかを決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelBorderStyleDescr">
-        <source>Determines what type of border a panel has.</source>
-        <target state="translated">パネルの境界線の種類を決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelIconDescr">
-        <source>Determines what icon is displayed in the panel.</source>
-        <target state="translated">どのアイコンをパネルに表示するかを決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelMinWidthDescr">
-        <source>The minimum width of the panel.</source>
-        <target state="translated">パネル幅の最小値です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelNameDescr">
-        <source>The name of the panel.</source>
-        <target state="translated">パネルの名前です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelStyleDescr">
-        <source>The style of the panel.</source>
-        <target state="translated">パネルのスタイルです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelTextDescr">
-        <source>The text displayed in the panel.</source>
-        <target state="translated">パネルに表示されるテキストです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelToolTipTextDescr">
-        <source>The panel's ToolTip text.</source>
-        <target state="translated">パネルのツールヒント文字列です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelWidthDescr">
-        <source>The width of the panel.</source>
-        <target state="translated">パネルの幅です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelsDescr">
-        <source>The panels in the status bar.</source>
-        <target state="translated">ステータス バーのパネルです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarShowPanelsDescr">
-        <source>Determines if a status bar displays panels, or if it displays a single line of text.</source>
-        <target state="translated">ステータス バーがパネルを表示するか、または単一行のテキストを表示するかを決定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarSizingGripDescr">
-        <source>Determines whether a status bar has a sizing grip.</source>
-        <target state="translated">ステータスバーにサイズ変更ハンドルを付けるかどうかを決定します。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="StatusStripPanelBorderSidesDescr">
         <source>Specifies the sides of the panel that should display borders.</source>
         <target state="translated">境界線を表示するパネルの側面を指定します。</target>
@@ -9550,12 +8891,17 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">機能はこのオペレーティング システムでサポートされていません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="translated">パラメーターは型 TabPage でなければなりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">TabPage を '{0}' に追加できません。  TabPages は TabControls にのみ追加できます。</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">TabPage を他の TabPage に追加できません。  TabPages は、TabControls にのみ追加できます。</target>
         <note />
@@ -9725,6 +9071,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">TableLayoutSettings を直接設定する操作はサポートされていません。  各プロパティを使用してください。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TableLayoutSettingsConverterNoName">
+        <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
+        <target state="translated">TableLayoutSettings を文字列に変換できません: コントロールに 'Name' 文字列プロパティが見つかりませんでした。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
         <source>Indicates the row and column of the cell.</source>
         <target state="translated">セルの行および列を示します。</target>
@@ -9738,6 +9089,151 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TablePrintLayoutFromDifferentDocument">
         <source>TablePrintLayout instance specified was constructed for a different document.</source>
         <target state="translated">指定された TablePrintLayout インスタンスは別のドキュメント用に作成されました。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogButtonTextMustNotBeNull">
+        <source>The text of a custom button must not be null or an empty string.</source>
+        <target state="translated">カスタム ボタンのテキストを null または空の文字列にすることはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCanUpdateStateOnlyWhenShown">
+        <source>Can only update the state of a task dialog while it is shown.</source>
+        <target state="translated">表示中はタスク ダイアログの状態のみ更新できます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateClosedDialog">
+        <source>Cannot navigate the dialog when it has already closed.</source>
+        <target state="translated">既に閉じている場合、ダイアログを移動することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
+        <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
+        <target state="translated">ナビゲーション内で呼び出されるイベント ハンドラーからダイアログを移動することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
+        <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
+        <target state="translated">現在のタスク ダイアログのいずれかのオプション ボタンの {0} イベント内からダイアログを移動することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
+        <source>Cannot navigate from a page not bound to a dialog.</source>
+        <target state="translated">ダイアログにバインドされていないページから移動することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
+        <source>Cannot remove the progress bar while the task dialog is shown.</source>
+        <target state="translated">タスク ダイアログが表示されている間は、進行状況バーを削除できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetPropertyOfBoundPage">
+        <source>Cannot set this property or call this method while the page is bound to a task dialog.</source>
+        <target state="translated">ページがタスク ダイアログにバインドされている間は、このプロパティを設定したり、このメソッドを呼び出したりすることはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetPropertyOfShownDialog">
+        <source>Cannot set this property while the task dialog is shown.</source>
+        <target state="translated">タスク ダイアログが表示されている間は、このプロパティを設定できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
+        <source>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</source>
+        <target state="translated">現在のタスク ダイアログのいずれかのオプション ボタンの {1} イベント内で {0} プロパティを設定できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetTextForStandardButton">
+        <source>Cannot set the text for a standard button.</source>
+        <target state="translated">標準ボタンのテキストを設定できません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotShowCustomButtonsAndCommandLinks">
+        <source>Cannot show both custom buttons and command links at the same time.</source>
+        <target state="translated">カスタム ボタンとコマンド リンクの両方を同時に表示することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
+        <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
+        <target state="translated">タスク ダイアログにバインドされている間は、オプション ボタンのチェックを外すことはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
+        <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
+        <target state="translated">移動後すぐにタスク ダイアログを操作することはできません。次のページの {0} イベントが発生するまでお待ちください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUpdateIconType">
+        <source>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</source>
+        <target state="translated">アイコンを、ハンドル アイコンの種類からハンドル以外のアイコンの種類に更新することはできません。また、その逆も同様です。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCollectionAlreadyBound">
+        <source>One of the collections of this {0} is already bound to a {1} instance.</source>
+        <target state="translated">この {0} のいずれかのコレクションは、既に {1} インスタンスにバインドされています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlAlreadyAddedToCollection">
+        <source>This control has already been added to the collection.</source>
+        <target state="translated">このコントロールは既にコレクションに追加されています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlAlreadyBound">
+        <source>One of the controls of this {0} is already bound to a {1} instance.</source>
+        <target state="translated">この {0} のいずれかのコントロールは、既に {1} インスタンスにバインドされています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlIsPartOfOtherCollection">
+        <source>This control is already part of a different collection.</source>
+        <target state="translated">このコントロールは既に別のコレクションの一部になっています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlNotBound">
+        <source>This control is not currently bound to a task dialog.</source>
+        <target state="translated">現在、このコントロールはタスク ダイアログにバインドされていません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlNotCreated">
+        <source>The control has not been created.</source>
+        <target state="translated">コントロールはまだ作成されていません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogDefaultButtonMustExistInCollection">
+        <source>The default button must exist in the buttons collection.</source>
+        <target state="translated">既定のボタンは、ボタン コレクションに存在している必要があります。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogInstanceAlreadyShown">
+        <source>This {0} instance is already being shown.</source>
+        <target state="translated">この {0} インスタンスは既に表示されています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogNavigationNotCompleted">
+        <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
+        <target state="translated">タスク ダイアログの移動がまだ完了していません。{0} イベントが発生するまでお待ちください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">
+        <source>Only a single radio button can be set as checked.</source>
+        <target state="translated">チェックできるのは 1 つのオプション ボタンだけです。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogPageIsAlreadyBound">
+        <source>This {0} instance is already bound to a {1} instance.</source>
+        <target state="translated">この {0} インスタンスは既に {1} インスタンスにバインドされています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogRadioButtonTextMustNotBeNull">
+        <source>The text of a radio button must not be null or an empty string.</source>
+        <target state="translated">オプション ボタンのテキストを null または空の文字列にすることはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogTooManyButtonsAdded">
+        <source>Too many custom buttons or radio buttons have been added.</source>
+        <target state="translated">追加されたカスタム ボタンまたはオプション ボタンが多すぎます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogVisualStylesNotEnabled">
+        <source>Visual styles are not enabled. Please call {0} before showing the task dialog.</source>
+        <target state="translated">visual スタイルが有効になっていません。タスク ダイアログを表示する前に {0} を呼び出してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
@@ -9910,6 +9406,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">複数行エディット コントロールで、行が自動的に折り返されるかどうかを示します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">テキスト ("{0}") を解析することができませんでした。必要なテキストの形式は "{1}" です。</target>
@@ -9953,136 +9454,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">ResumeUpdateMenuHandles への呼び出しが多すぎます。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarAppearanceDescr">
-        <source>Controls the appearance of the ToolBar control, using values from the ToolBarAppearance enumeration.</source>
-        <target state="translated">ToolBarAppearance 列挙 からの値を用いて、ToolBar コントロールの外観を制御します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarAutoSizeDescr">
-        <source>Controls whether the ToolBar will automatically size itself based on Button size.</source>
-        <target state="translated">ボタンのサイズに基づいて、ツール バーのサイズを自動的に変更するかどうかを制御します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarBadToolBarButton">
-        <source>Parameter must be of type ToolBarButton.</source>
-        <target state="translated">パラメーターは型 ToolBarButton でなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarBorderStyleDescr">
-        <source>Controls what type of border the ToolBar control will have.</source>
-        <target state="translated">ツール バー コントロールの境界線の種類を設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonClickDescr">
-        <source>Occurs whenever a button in the ToolBar is clicked by the user.</source>
-        <target state="translated">ユーザーがツール バーのボタンをクリックしたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonDropDownDescr">
-        <source>Occurs whenever a button with the DropDownButton style is pressed.</source>
-        <target state="translated">DropDownButton スタイルのボタンがクリックされたときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonEnabledDescr">
-        <source>Controls whether this button responds to user input.</source>
-        <target state="translated">このボタンがユーザーの入力に応答するかどうかを制御します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonImageIndexDescr">
-        <source>Identifies the image displayed on the button.</source>
-        <target state="translated">ボタンに表示されたイメージを識別します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonInvalidDropDownMenuType">
-        <source>The drop-down menu for a ToolBarButton must be of type ContextMenu.</source>
-        <target state="translated">ToolBarButton のドロップダウン メニューは ContextMenu 型でなければなりません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonMenuDescr">
-        <source>The shortcut menu that will appear if this button's style is set to DropDownButton.</source>
-        <target state="translated">このボタンのスタイルが DropDownButton に設定されている場合に表示されるショートカット メニューです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonNotFound">
-        <source>References that a non-existent ToolBarButton has been received.</source>
-        <target state="translated">存在しない ToolBarButton を受け取ったことを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonPartialPushDescr">
-        <source>Controls whether the button should be displayed as partially pushed or not, but only if the style of the button is ToggleButton.</source>
-        <target state="translated">ボタンの種類が ToggleButton の場合のみ、ボタンが部分的にクリックされたとして表示するかどうかを制御します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonPushedDescr">
-        <source>Indicates whether the button is pushed or not. This is most commonly seen for buttons with the TOGGLEBUTTON style.</source>
-        <target state="translated">ボタンをクリックしたかどうかを示します。TOGGLEBUTTON スタイルのボタンによく使われます。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonSizeDescr">
-        <source>The size of the buttons on the control if the button contents do not require a larger size.</source>
-        <target state="translated">ボタンの内容により大きなサイズが必要でない場合の、コントロール上のボタンのサイズです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonStyleDescr">
-        <source>Indicates what style of ToolBarButton this will be.</source>
-        <target state="translated">ToolBarButton のスタイルを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonTextDescr">
-        <source>The caption to be displayed for this button.</source>
-        <target state="translated">このボタンに表示されるキャプションです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonToolTipTextDescr">
-        <source>The ToolTip text to be displayed for this button.</source>
-        <target state="translated">このボタンに表示されるツールヒント テキストです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonVisibleDescr">
-        <source>Indicates whether this button should be visible.</source>
-        <target state="translated">このボタンを表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonsDescr">
-        <source>The collection of ToolBarButtons that make up this ToolBar.</source>
-        <target state="translated">このツール バーを構成する ToolBarButtons のコレクションです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarDividerDescr">
-        <source>Controls whether the ToolBar will display a 3-D line at the top of its client area.</source>
-        <target state="translated">ツール バーがこのクライアント領域の上に 3D の線を表示するかどうかを設定します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarDropDownArrowsDescr">
-        <source>Controls whether the ToolBar will display an arrow on the side of drop-down buttons.</source>
-        <target state="translated">ツール バーがドロップダウン ボタンの横に矢印を表示するかどうかを制御します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarImageListDescr">
-        <source>The ImageList from which this ToolBar will get all of the button images.</source>
-        <target state="translated">ツール バーがすべてボタンのイメージを取得する ImageList です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarImageSizeDescr">
-        <source>The size of the images within the ToolBar's ImageList.</source>
-        <target state="translated">ツール バーの ImageList 内にある、イメージのサイズです。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarShowToolTipsDescr">
-        <source>Indicates whether ToolTips will be shown for each of the buttons, if available.</source>
-        <target state="translated">ツールヒントがある場合に、それぞれのボタンでそれを表示するかどうかを示します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarTextAlignDescr">
-        <source>Controls how the text is positioned relative to the Image in each button.</source>
-        <target state="translated">各ボタンのイメージに対して、テキストがどのように表示されるか制御します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarWrappableDescr">
-        <source>Indicates if more than one row of buttons is allowed.</source>
-        <target state="translated">複数行のボタンを許可するかどうかを示します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
@@ -10137,7 +9508,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerBottomToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the bottom panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の下のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の下のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerContentPanelDescr">
@@ -10157,7 +9528,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerLeftToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the left panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の左のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の左のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerRightToolStripPanelDescr">
@@ -10167,7 +9538,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerRightToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the right panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の右のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の右のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerTopToolStripPanelDescr">
@@ -10177,7 +9548,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripContainerTopToolStripPanelVisibleDescr">
         <source>Specifies the visibility of the top panel of the ToolStripContainer.</source>
-        <target state="translated">ToolStripContainer の上のパネルの表示状態を指定します。</target>
+        <target state="translated">ToolStripContainer の上のパネルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerUseContentPanel">
@@ -10282,7 +9653,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripGripStyleDescr">
         <source>Specifies visibility of the grip on the ToolStrip.</source>
-        <target state="translated">ToolStrip のハンドルの可視性を指定します。</target>
+        <target state="translated">ToolStrip のハンドルの表示を指定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripImageListDescr">
@@ -10562,7 +9933,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripItemOnVisibleChangedDescr">
         <source>Occurs when the visibility of an item has changed.</source>
-        <target state="translated">アイテムの表示状態が変更したときに発生します。</target>
+        <target state="translated">アイテムの表示が変更したときに発生します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOverflow">
@@ -11435,6 +10806,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ユーザー コントロールを読み込むときに発生します。</target>
         <note />
       </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="translated">縦</target>
+        <note />
+      </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
         <source>Visual Style handle creation operation did not succeed.</source>
         <target state="translated">Visual スタイル ハンドルを作成することができませんでした。</target>
@@ -11518,11 +10894,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="WebBrowserFileDownloadDescr">
         <source>Occurs when a file download occurs.</source>
         <target state="translated">ファイルのダウンロードが発生するときに発生します。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Internet Explorer に WebBrowser コントロールを追加する操作はサポートされていません。</target>
         <note />
       </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
@@ -11620,9 +10991,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">幅は MinWidth より大きくなければなりません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="translated">コントロールの Win32 親ウィンドウを設定できませんでした。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
         <target state="translated">最初の IWin32Window オブジェクトがアプリケーションで作成される前に、SetCompatibleTextRenderingDefault が呼び出されなければなりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
+        <source>The current window procedure is not the expected one.</source>
+        <target state="translated">現在のウィンドウ プロシージャは予期されていたものではありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">
@@ -11692,7 +11073,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Delete</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11712,7 +11093,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Insert</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11722,12 +11103,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">PageDown</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">PageUp</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

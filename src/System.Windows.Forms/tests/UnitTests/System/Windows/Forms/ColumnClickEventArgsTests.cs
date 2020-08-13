@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColumnClickEventArgsTests
+    // NB: doesn't require thread affinity
+    public class ColumnClickEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-1)]

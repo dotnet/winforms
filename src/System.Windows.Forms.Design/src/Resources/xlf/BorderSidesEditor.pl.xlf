@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="pl" original="../BorderSidesEditor.resx">
+    <body>
+      <trans-unit id="allCheckBox.Text">
+        <source>&amp;All</source>
+        <target state="translated">&amp;Wszystko</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="bottomCheckBox.Text">
+        <source>&amp;Bottom</source>
+        <target state="translated">&amp;Dół</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="leftCheckBox.Text">
+        <source>&amp;Left</source>
+        <target state="translated">Do &amp;lewej</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="noneCheckBox.Text">
+        <source>&amp;None</source>
+        <target state="translated">&amp;Brak</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="rightCheckBox.Text">
+        <source>&amp;Right</source>
+        <target state="translated">Do &amp;prawej</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="topCheckBox.Text">
+        <source>&amp;Top</source>
+        <target state="translated">&amp;Góra</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

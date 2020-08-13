@@ -2,37 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
+using System.Collections;
+using System.Diagnostics;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Diagnostics;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-
-    /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList"]/*' />
-    /// <devdoc>
-    /// <para>Represents a linked list of integers</para>
-    /// </devdoc>
+    /// <summary>
+    ///  Represents a linked list of integers
+    /// </summary>
     internal class DataGridViewIntLinkedList : IEnumerable
     {
-        private DataGridViewIntLinkedListElement lastAccessedElement;
-        private DataGridViewIntLinkedListElement headElement;
-        private int count, lastAccessedIndex;
+        private DataGridViewIntLinkedListElement _lastAccessedElement;
+        private DataGridViewIntLinkedListElement _headElement;
+        private int _lastAccessedIndex;
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.IEnumerable.GetEnumerator"]/*' />
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new DataGridViewIntLinkedListEnumerator(this.headElement);
+            return new DataGridViewIntLinkedListEnumerator(_headElement);
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.DataGridViewIntLinkedList"]/*' />
         public DataGridViewIntLinkedList()
         {
-            lastAccessedIndex = -1;
+            _lastAccessedIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.DataGridViewIntLinkedList2"]/*' />
         public DataGridViewIntLinkedList(DataGridViewIntLinkedList source)
         {
             Debug.Assert(source != null);
@@ -43,101 +38,89 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.BandAt"]/*' />
         public int this[int index]
         {
             get
             {
                 Debug.Assert(index >= 0);
-                Debug.Assert(index < this.count);
-                if (this.lastAccessedIndex == -1 || index < this.lastAccessedIndex)
+                Debug.Assert(index < Count);
+                if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
                 {
-                    DataGridViewIntLinkedListElement tmp = this.headElement;
+                    DataGridViewIntLinkedListElement tmp = _headElement;
                     int tmpIndex = index;
                     while (tmpIndex > 0)
                     {
                         tmp = tmp.Next;
                         tmpIndex--;
                     }
-                    this.lastAccessedElement = tmp;
-                    this.lastAccessedIndex = index;
+                    _lastAccessedElement = tmp;
+                    _lastAccessedIndex = index;
                     return tmp.Int;
                 }
                 else
                 {
-                    while (this.lastAccessedIndex < index)
+                    while (_lastAccessedIndex < index)
                     {
-                        this.lastAccessedElement = this.lastAccessedElement.Next;
-                        this.lastAccessedIndex++;
+                        _lastAccessedElement = _lastAccessedElement.Next;
+                        _lastAccessedIndex++;
                     }
-                    return this.lastAccessedElement.Int;
+                    return _lastAccessedElement.Int;
                 }
             }
             set
             {
                 Debug.Assert(index >= 0);
-                if (index != this.lastAccessedIndex)
+                if (index != _lastAccessedIndex)
                 {
                     int currentInt = this[index];
-                    Debug.Assert(index == this.lastAccessedIndex);
+                    Debug.Assert(index == _lastAccessedIndex);
                 }
-                this.lastAccessedElement.Int = value;
+                _lastAccessedElement.Int = value;
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Count"]/*' />
-        public int Count
-        {
-            get
-            {
-                return this.count;
-            }
-        }
+        public int Count { get; private set; }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.HeadInt"]/*' />
         public int HeadInt
         {
             get
             {
-                Debug.Assert(this.headElement != null);
-                return this.headElement.Int;
+                Debug.Assert(_headElement != null);
+                return _headElement.Int;
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Add"]/*' />
         public void Add(int integer)
         {
             DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
-            if (this.headElement != null)
+            if (_headElement != null)
             {
-                newHead.Next = this.headElement;
+                newHead.Next = _headElement;
             }
-            this.headElement = newHead;
-            this.count++;
-            this.lastAccessedElement = null;
-            this.lastAccessedIndex = -1;
+            _headElement = newHead;
+            Count++;
+            _lastAccessedElement = null;
+            _lastAccessedIndex = -1;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Clear"]/*' />
         public void Clear()
         {
-            this.lastAccessedElement = null;
-            this.lastAccessedIndex = -1;
-            this.headElement = null;
-            this.count = 0;
+            _lastAccessedElement = null;
+            _lastAccessedIndex = -1;
+            _headElement = null;
+            Count = 0;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Contains"]/*' />
         public bool Contains(int integer)
         {
             int index = 0;
-            DataGridViewIntLinkedListElement tmp = this.headElement;
+            DataGridViewIntLinkedListElement tmp = _headElement;
             while (tmp != null)
             {
                 if (tmp.Int == integer)
                 {
-                    this.lastAccessedElement = tmp;
-                    this.lastAccessedIndex = index;
+                    _lastAccessedElement = tmp;
+                    _lastAccessedIndex = index;
                     return true;
                 }
                 tmp = tmp.Next;
@@ -146,12 +129,11 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.IndexOf"]/*' />
         public int IndexOf(int integer)
         {
             if (Contains(integer))
             {
-                return this.lastAccessedIndex;
+                return _lastAccessedIndex;
             }
             else
             {
@@ -159,10 +141,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.Remove"]/*' />
         public bool Remove(int integer)
         {
-            DataGridViewIntLinkedListElement tmp1 = null, tmp2 = this.headElement;
+            DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
             while (tmp2 != null)
             {
                 if (tmp2.Int == integer)
@@ -175,26 +156,25 @@ namespace System.Windows.Forms
             if (tmp2.Int == integer)
             {
                 DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-                if (tmp1 == null)
+                if (tmp1 is null)
                 {
-                    this.headElement = tmp3;
+                    _headElement = tmp3;
                 }
                 else
                 {
                     tmp1.Next = tmp3;
                 }
-                this.count--;
-                this.lastAccessedElement = null;
-                this.lastAccessedIndex = -1;
+                Count--;
+                _lastAccessedElement = null;
+                _lastAccessedIndex = -1;
                 return true;
             }
             return false;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedList.RemoveAt"]/*' />
         public void RemoveAt(int index)
         {
-            DataGridViewIntLinkedListElement tmp1 = null, tmp2 = this.headElement;
+            DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
             while (index > 0)
             {
                 tmp1 = tmp2;
@@ -202,111 +182,79 @@ namespace System.Windows.Forms
                 index--;
             }
             DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-            if (tmp1 == null)
+            if (tmp1 is null)
             {
-                this.headElement = tmp3;
+                _headElement = tmp3;
             }
             else
             {
                 tmp1.Next = tmp3;
             }
-            this.count--;
-            this.lastAccessedElement = null;
-            this.lastAccessedIndex = -1;
+            Count--;
+            _lastAccessedElement = null;
+            _lastAccessedIndex = -1;
         }
     }
 
-    /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator"]/*' />
-    /// <devdoc>
-    /// <para>Represents an emunerator of elements in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/>  linked list.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  Represents an emunerator of elements in a <see cref='DataGridViewIntLinkedList'/>  linked list.
+    /// </summary>
     internal class DataGridViewIntLinkedListEnumerator : IEnumerator
     {
-        private DataGridViewIntLinkedListElement headElement;
-        private DataGridViewIntLinkedListElement current;
-        private bool reset;
+        private readonly DataGridViewIntLinkedListElement _headElement;
+        private DataGridViewIntLinkedListElement _current;
+        private bool _reset;
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.DataGridViewIntLinkedListEnumerator"]/*' />
         public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement headElement)
         {
-            this.headElement = headElement;
-            this.reset = true;
+            _headElement = headElement;
+            _reset = true;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.IEnumerator.Current"]/*' />
         object IEnumerator.Current
         {
             get
             {
-                Debug.Assert(this.current != null); // Since this is for internal use only.
-                return this.current.Int;
+                Debug.Assert(_current != null); // Since this is for internal use only.
+                return _current.Int;
             }
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.IEnumerator.MoveNext"]/*' />
         bool IEnumerator.MoveNext()
         {
-            if (this.reset)
+            if (_reset)
             {
-                Debug.Assert(this.current == null);
-                this.current = this.headElement;
-                this.reset = false;
+                Debug.Assert(_current is null);
+                _current = _headElement;
+                _reset = false;
             }
             else
             {
-                Debug.Assert(this.current != null); // Since this is for internal use only.
-                this.current = this.current.Next;
+                Debug.Assert(_current != null); // Since this is for internal use only.
+                _current = _current.Next;
             }
-            return (this.current != null);
+            return (_current != null);
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListEnumerator.IEnumerator.Reset"]/*' />
         void IEnumerator.Reset()
         {
-            this.reset = true;
-            this.current = null;
+            _reset = true;
+            _current = null;
         }
     }
 
-    /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement"]/*' />
-    /// <devdoc>
-    /// <para>Represents an element in a <see cref='System.Windows.Forms.DataGridViewIntLinkedList'/> linked list.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  Represents an element in a <see cref='DataGridViewIntLinkedList'/> linked list.
+    /// </summary>
     internal class DataGridViewIntLinkedListElement
     {
-        private int integer;
-        private DataGridViewIntLinkedListElement next;
-
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.DataGridViewIntLinkedListElement"]/*' />
         public DataGridViewIntLinkedListElement(int integer)
         {
-            this.integer = integer;
+            Int = integer;
         }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.Int"]/*' />
-        public int Int
-        {
-            get
-            {
-                return this.integer;
-            }
-            set
-            {
-                this.integer = value;
-            }
-        }
+        public int Int { get; set; }
 
-        /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.Next"]/*' />
-        public DataGridViewIntLinkedListElement Next
-        {
-            get
-            {
-                return this.next;
-            }
-            set
-            {
-                this.next = value;
-            }
-        }
+        public DataGridViewIntLinkedListElement Next { get; set; }
     }
 }

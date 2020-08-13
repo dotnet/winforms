@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="xunit.assert" Version="$(XUnitAssertVersion)" />
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms.Primitives\tests\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
+    <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Facade.csproj" />
+  </ItemGroup>
+
+</Project>

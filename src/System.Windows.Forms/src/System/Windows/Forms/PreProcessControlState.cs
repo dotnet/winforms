@@ -2,28 +2,24 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
-    [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
     public enum PreProcessControlState
     {
-        /// <devdoc>
-        /// Indicates the message has been processed, and no further processing
-        /// is necessary
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates the message has been processed, and no further processing
+        ///  is necessary
+        /// </summary>
         MessageProcessed = 0x00,
 
-        /// <devdoc>
-        /// Indicates the control wants the message and processing should continue
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates the control wants the message and processing should continue
+        /// </summary>
         MessageNeeded = 0x01,
 
-        /// <devdoc>
-        /// Indicates the control doesn't care about the message
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates the control doesn't care about the message
+        /// </summary>
         MessageNotNeeded = 0x02
     }
 }

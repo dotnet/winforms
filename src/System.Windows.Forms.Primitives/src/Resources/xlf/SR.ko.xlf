@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../SR.resx">
+    <body>
+      <trans-unit id="COM2UnhandledVT">
+        <source>Unhandled VT: {0}.</source>
+        <target state="translated">처리되지 않은 VT입니다. {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyValueInvalidEntry">
+        <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
+        <target state="translated">IDictionary 매개 변수에 잘못된 항목이 하나 이상 있습니다. 모든 값이 개체의 속성과 일치하는지 확인하십시오.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextParseFailedFormat">
+        <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
+        <target state="translated">텍스트("{0}")를 구문 분석하지 못했습니다. "{1}" 서식의 텍스트가 필요합니다.</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -8,13 +8,13 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     This Glyph is placed on every control sized to the exact bounds of
-    ///     the control.
+    ///  This Glyph is placed on every control sized to the exact bounds of
+    ///  the control.
     /// </summary>
     public class ControlBodyGlyph : ComponentGlyph
     {
         /// <summary>
-        ///     Standard Constructor.
+        ///  Standard Constructor.
         /// </summary>
         public ControlBodyGlyph(Rectangle bounds, Cursor cursor, IComponent relatedComponent, ControlDesigner designer)
             : base(relatedComponent, new ControlDesigner.TransparentBehavior(designer))
@@ -29,15 +29,14 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///     The bounds of this glyph.
+        ///  The bounds of this glyph.
         /// </summary>
-
         public override Rectangle Bounds => throw new NotImplementedException(SR.NotImplementedByDesign);
 
         /// <summary>
-        ///     Simple hit test rule: if the point is contained within the bounds
-        ///     AND the component is Visible (controls on some tab pages may
-        ///     not be, for ex) then it is a positive hit test.
+        ///  Simple hit test rule: if the point is contained within the bounds
+        ///  AND the component is Visible (controls on some tab pages may
+        ///  not be, for ex) then it is a positive hit test.
         /// </summary>
         public override Cursor GetHitTest(Point p)
         {

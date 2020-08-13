@@ -2,36 +2,38 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the type of caption button to display.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the type of caption button to display.
+    /// </summary>
     public enum CaptionButton
     {
-        /// <devdoc>
-        /// A Close button.
-        /// </devdoc>
-        Close = NativeMethods.DFCS_CAPTIONCLOSE,
+        /// <summary>
+        ///  A Close button.
+        /// </summary>
+        Close = (int)User32.DFCS.CAPTIONCLOSE,
 
-        /// <devdoc>
-        /// A Help button.
-        /// </devdoc>
-        Help = NativeMethods.DFCS_CAPTIONHELP,
+        /// <summary>
+        ///  A Help button.
+        /// </summary>
+        Help = (int)User32.DFCS.CAPTIONHELP,
 
-        /// <devdoc>
-        /// A Maximize button.
-        /// </devdoc>
-        Maximize = NativeMethods.DFCS_CAPTIONMAX,
+        /// <summary>
+        ///  A Maximize button.
+        /// </summary>
+        Maximize = (int)User32.DFCS.CAPTIONMAX,
 
-        /// <devdoc>
-        /// A Minimize button.
-        /// </devdoc>
-        Minimize = NativeMethods.DFCS_CAPTIONMIN,
+        /// <summary>
+        ///  A Minimize button.
+        /// </summary>
+        Minimize = (int)User32.DFCS.CAPTIONMIN,
 
-        /// <devdoc>
-        /// A Restore button.
-        /// </devdoc>
-        Restore = NativeMethods.DFCS_CAPTIONRESTORE,
+        /// <summary>
+        ///  A Restore button.
+        /// </summary>
+        Restore = (int)User32.DFCS.CAPTIONRESTORE,
     }
 }

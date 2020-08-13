@@ -8,7 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
+    // NB: doesn't require thread affinity
+    public class DataGridViewCellAccessibleObjectTests : DataGridViewCell, IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void DataGridViewCellAccessibleObject_Ctor_Default()
@@ -120,7 +121,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_Owner_Set_GetReturnsExpected()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject
             {
                 Owner = owner
@@ -131,7 +132,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewCellAccessibleObject_Owner_SetAlreadyWithOwner_ThrowsInvalidOperationException()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Owner = owner);
         }
@@ -168,11 +169,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewCellAccessibleObject_State_NoDataGridView_ThrowsNullReferenceException()
+        public void DataGridViewCellAccessibleObject_State_NoDataGridView_ReturnsExpected()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.State);
+            Assert.Equal(AccessibleStates.Focusable | AccessibleStates.Selectable, accessibleObject.State);
         }
 
         public static IEnumerable<object[]> Value_TestData()
@@ -202,11 +203,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewCellAccessibleObject_DoDefaultAction_NoDataGridView_ThrowsNullReferenceException()
+        public void DataGridViewCellAccessibleObject_DoDefaultAction_NoDataGridView_ThrowsInvalidOperationException()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.DoDefaultAction());
+            Assert.Throws<InvalidOperationException>(() => accessibleObject.DoDefaultAction());
         }
 
         [Theory]
@@ -217,11 +218,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewCellAccessibleObject_GetChild_NoDataGridView_ThrowsNullReferenceException()
+        public void DataGridViewCellAccessibleObject_GetChild_NoDataGridView_ReturnsNull()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.GetChild(-1));
+            Assert.Null(accessibleObject.GetChild(-1));
         }
 
         [Theory]
@@ -232,11 +233,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void DataGridViewCellAccessibleObject_GetChildCount_NoDataGridView_ThrowsNullReferenceException()
+        public void DataGridViewCellAccessibleObject_GetChildCount_NoDataGridView_ReturnsZero()
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.GetChildCount());
+            Assert.Equal(0, accessibleObject.GetChildCount());
         }
 
         [Fact]
@@ -282,7 +283,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.RemoveSelection)]
         public void DataGridViewCellAccessibleObject_Select_NothingToDo_Nop(AccessibleSelection flags)
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             accessibleObject.Select(flags);
         }
@@ -301,7 +302,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.TakeSelection | AccessibleSelection.RemoveSelection)]
         public void DataGridViewCellAccessibleObject_Select_HasSelectionFlagsWithoutDataGridView_ThrowsInvalidOperationException(AccessibleSelection flags)
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(flags));
         }
@@ -310,9 +311,9 @@ namespace System.Windows.Forms.Tests
         [InlineData(AccessibleSelection.TakeFocus)]
         public void DataGridViewCellAccessibleObject_Select_HasFocusFlagsWithoutDataGridView_ThrowsInvalidOperationException(AccessibleSelection flags)
         {
-            var owner = new SubDataGridViewCell();
+            using var owner = new SubDataGridViewCell();
             var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<NullReferenceException>(() => accessibleObject.Select(flags));
+            accessibleObject.Select(flags);
         }
 
         private class SubDataGridViewCell : DataGridViewCell

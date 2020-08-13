@@ -2,25 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
+using System.IO;
+using static Interop;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-    using System;
-    using System.IO;
-
-
-    /// <include file='doc\DataStreamFromComStream.uex' path='docs/doc[@for="DataStreamFromComStream"]/*' />
-    /// <internalonly/>
-    /// <devdoc>
-    /// </devdoc>
     internal class DataStreamFromComStream : Stream
     {
+        private Ole32.IStream comStream;
 
-        private UnsafeNativeMethods.IStream comStream;
-
-        public DataStreamFromComStream(UnsafeNativeMethods.IStream comStream) : base()
+        public DataStreamFromComStream(Ole32.IStream comStream) : base()
         {
             this.comStream = comStream;
         }
@@ -66,28 +59,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                long curPos = this.Position;
+                long curPos = Position;
                 long endPos = Seek(0, SeekOrigin.End);
-                this.Position = curPos;
+                Position = curPos;
                 return endPos - curPos;
             }
-        }
-
-        /*
-        private void _NotImpl(string message) {
-            NotSupportedException ex = new NotSupportedException(message, new ExternalException(SR.ExternalException, NativeMethods.E_NOTIMPL));
-            throw ex;
-        }
-        */
-
-        private unsafe int _Read(void* handle, int bytes)
-        {
-            return comStream.Read((IntPtr)handle, bytes);
-        }
-
-        private unsafe int _Write(void* handle, int bytes)
-        {
-            return comStream.Write((IntPtr)handle, bytes);
         }
 
         public override void Flush()
@@ -95,7 +71,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Read the data into the given buffer
+        ///  Read the data into the given buffer
         /// </summary>
         /// <param name="buffer">The buffer receiving the data</param>
         /// <param name="index">The offset from the beginning of the buffer</param>
@@ -113,35 +89,38 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Read the data into the given buffer
+        ///  Read the data into the given buffer
         /// </summary>
         /// <param name="buffer">The buffer receiving the data</param>
         /// <returns>The number of bytes read</returns>
         public unsafe override int Read(Span<byte> buffer)
         {
-            int bytesRead = 0;
+            uint bytesRead = 0;
             if (!buffer.IsEmpty)
             {
                 fixed (byte* ch = &buffer[0])
                 {
-                    bytesRead = _Read(ch, buffer.Length);
+                    comStream.Read(ch, (uint)buffer.Length, &bytesRead);
                 }
             }
-            return bytesRead;
+
+            return (int)bytesRead;
         }
 
         public override void SetLength(long value)
         {
-            comStream.SetSize(value);
+            comStream.SetSize((ulong)value);
         }
 
-        public override long Seek(long offset, SeekOrigin origin)
+        public unsafe override long Seek(long offset, SeekOrigin origin)
         {
-            return comStream.Seek(offset, (int)origin);
+            ulong newPosition = 0;
+            comStream.Seek(offset, origin, &newPosition);
+            return (long)newPosition;
         }
 
         /// <summary>
-        /// Writes the data contained in the given buffer
+        ///  Writes the data contained in the given buffer
         /// </summary>
         /// <param name="buffer">The buffer containing the data to write</param>
         /// <param name="index">The offset from the beginning of the buffer</param>
@@ -149,7 +128,9 @@ namespace System.Windows.Forms
         public override void Write(byte[] buffer, int index, int count)
         {
             if (count <= 0)
+            {
                 return;
+            }
 
             if (count > 0 && index >= 0 && (count + index) <= buffer.Length)
             {
@@ -161,27 +142,29 @@ namespace System.Windows.Forms
             throw new IOException(SR.DataStreamWrite);
         }
 
-
         /// <summary>
-        /// Writes the data contained in the given buffer
+        ///  Writes the data contained in the given buffer
         /// </summary>
         /// <param name="buffer">The buffer to write</param>
         public unsafe override void Write(ReadOnlySpan<byte> buffer)
         {
             if (buffer.IsEmpty)
+            {
                 return;
+            }
 
-            int bytesWritten = 0;
+            uint bytesWritten = 0;
             try
             {
                 fixed (byte* b = &buffer[0])
                 {
-                    bytesWritten = _Write(b, buffer.Length);
+                    comStream.Write(b, (uint)buffer.Length, &bytesWritten);
                 }
             }
             catch
             {
             }
+
             if (bytesWritten < buffer.Length)
             {
                 throw new IOException(SR.DataStreamWrite);
@@ -196,7 +179,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        comStream.Commit(NativeMethods.STGC_DEFAULT);
+                        comStream.Commit(Ole32.STGC.DEFAULT);
                     }
                     catch (Exception)
                     {

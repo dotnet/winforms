@@ -4,32 +4,29 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies which scroll bars will be visible on a control.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies which scroll bars will be visible on a control.
+    /// </summary>
     public enum ScrollBars
     {
-        /// <devdoc>
-        /// No scroll bars are shown.
-        /// </devdoc>
+        /// <summary>
+        ///  No scroll bars are shown.
+        /// </summary>
         None = 0,
 
-        /// <devdoc>
-        /// Only horizontal scroll bars are shown.
-        /// </devdoc>
+        /// <summary>
+        ///  Only horizontal scroll bars are shown.
+        /// </summary>
         Horizontal = 1,
 
-        /// <devdoc>
-        /// Only vertical scroll bars are shown.
-        /// 
-        /// </devdoc>
-        Vertical   = 2,
+        /// <summary>
+        ///  Only vertical scroll bars are shown.
+        /// </summary>
+        Vertical = 2,
 
-        /// <devdoc>
-        /// Both horizontal and vertical scroll bars are shown.
-        /// 
-        /// </devdoc>
-        Both       = 3,
-
+        /// <summary>
+        ///  Both horizontal and vertical scroll bars are shown.
+        /// </summary>
+        Both = 3,
     }
 }

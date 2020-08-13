@@ -6,12 +6,12 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SplitContainerTests
+    public class SplitContainerTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void SplitContainer_Constructor()
         {
-            var sc = new SplitContainer();
+            using var sc = new SplitContainer();
 
             Assert.NotNull(sc);
             Assert.NotNull(sc.Panel1);

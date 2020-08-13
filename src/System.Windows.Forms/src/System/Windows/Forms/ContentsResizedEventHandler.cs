@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the method that will handle the <see cref='System.Windows.Forms.RichTextBox.ContentsResized'/>
-    /// event of a <see cref='System.Windows.Forms.RichTextBox'/>.
-    /// </devdoc>
-    public delegate void ContentsResizedEventHandler(object sender, ContentsResizedEventArgs e);
+    /// <summary>
+    ///  Represents a method that will handle the <see cref='RichTextBox.ContentsResized'/>
+    ///  event of a <see cref='RichTextBox'/>.
+    /// </summary>
+    public delegate void ContentsResizedEventHandler(object? sender, ContentsResizedEventArgs e);
 }

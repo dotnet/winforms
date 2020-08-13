@@ -6,16 +6,17 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewColumnEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewColumnEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_DataGridViewColumn()
         {
-            var dataGridViewColumn = new DataGridViewColumn();
+            using var dataGridViewColumn = new DataGridViewColumn();
             var e = new DataGridViewColumnEventArgs(dataGridViewColumn);
             Assert.Equal(dataGridViewColumn, e.Column);
         }
-        
+
         [Fact]
         public void Ctor_NullDataGridViewColumn_ThrowsArgumentNullException()
         {

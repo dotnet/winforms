@@ -4,26 +4,26 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the <see cref='System.Windows.Forms.ComboBox'/> style.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the <see cref='ComboBox'/> style.
+    /// </summary>
     public enum ComboBoxStyle
     {
-        /// <devdoc>
-        /// The text portion is editable. The list portion is always visible.
-        /// </devdoc>
+        /// <summary>
+        ///  The text portion is editable. The list portion is always visible.
+        /// </summary>
         Simple = 0,
 
-        /// <devdoc>
-        /// The text portion is editable. The user must click the arrow button to
-        /// display the list portion.
-        /// </devdoc>
+        /// <summary>
+        ///  The text portion is editable. The user must click the arrow button to
+        ///  display the list portion.
+        /// </summary>
         DropDown = 1,
 
-        /// <devdoc>
-        /// The user cannot directly edit the text portion. The user must click
-        /// the arrow button to display the list portion.
-        /// </devdoc>
+        /// <summary>
+        ///  The user cannot directly edit the text portion. The user must click
+        ///  the arrow button to display the list portion.
+        /// </summary>
         DropDownList = 2,
     }
 }

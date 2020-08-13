@@ -8,17 +8,17 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ContextMenuStripTests
+    public class ContextMenuStripTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void ContextMenuStrip_Constructor()
         {
-            var cms = new ContextMenuStrip();
+            using var cms = new ContextMenuStrip();
 
             Assert.NotNull(cms);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void ContextMenuStrip_ConstructorIContainer()
         {
             IContainer nullContainer = null;
@@ -26,10 +26,10 @@ namespace System.Windows.Forms.Tests
             mockContainer.Setup(x => x.Add(It.IsAny<ContextMenuStrip>())).Verifiable();
 
             // act & assert
-            var ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
+            ArgumentNullException ex = Assert.Throws<ArgumentNullException>(() => new ContextMenuStrip(nullContainer));
             Assert.Equal("container", ex.ParamName);
 
-            var cms = new ContextMenuStrip(mockContainer.Object);
+            using var cms = new ContextMenuStrip(mockContainer.Object);
             Assert.NotNull(cms);
             mockContainer.Verify(x => x.Add(cms));
         }

@@ -2,42 +2,41 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the starting position that the system uses to arrange minimized
-    /// windows.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the starting position that the system uses to arrange minimized
+    ///  windows.
+    /// </summary>
     [Flags]
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum ArrangeStartingPosition
     {
-        /// <devdoc>
-        /// Starts at the lower-left corner of the screen, which is the default position.
-        /// </devdoc>
-        BottomLeft = NativeMethods.ARW_BOTTOMLEFT,
+        /// <summary>
+        ///  Starts at the lower-left corner of the screen, which is the default position.
+        /// </summary>
+        BottomLeft = User32.ARW.BOTTOMLEFT,
 
-        /// <devdoc>
-        /// Starts at the lower-right corner of the screen.
-        /// </devdoc>
-        BottomRight = NativeMethods.ARW_BOTTOMRIGHT,
+        /// <summary>
+        ///  Starts at the lower-right corner of the screen.
+        /// </summary>
+        BottomRight = User32.ARW.BOTTOMRIGHT,
 
-        /// <devdoc>
-        /// Hides minimized windows by moving them off the visible area of the
-        /// screen.
-        /// </devdoc>
-        Hide = NativeMethods.ARW_HIDE,
+        /// <summary>
+        ///  Hides minimized windows by moving them off the visible area of the
+        ///  screen.
+        /// </summary>
+        Hide = User32.ARW.HIDE,
 
-        /// <devdoc>
-        /// Starts at the upper-left corner of the screen.
-        /// </devdoc>
-        TopLeft = NativeMethods.ARW_TOPLEFT,
+        /// <summary>
+        ///  Starts at the upper-left corner of the screen.
+        /// </summary>
+        TopLeft = User32.ARW.TOPLEFT,
 
-        /// <devdoc>
-        /// Starts at the upper-right corner of the screen.
-        /// </devdoc>
-        TopRight = NativeMethods.ARW_TOPRIGHT,
+        /// <summary>
+        ///  Starts at the upper-right corner of the screen.
+        /// </summary>
+        TopRight = User32.ARW.TOPRIGHT,
     }
 }

@@ -2,21 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides functionality for a control to parent other controls.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides functionality for a control to parent other controls.
+    /// </summary>
     public interface IContainerControl
     {
-        /// <devdoc>
-        /// Indicates the control that is currently active on the container control.
-        /// </devdoc>
+        /// <summary>
+        ///  Indicates the control that is currently active on the container control.
+        /// </summary>
         Control ActiveControl { get; set; }
 
-        /// <devdoc>
-        /// Activates the specified control.
-        /// </devdoc>
+        /// <summary>
+        ///  Activates the specified control.
+        /// </summary>
         bool ActivateControl(Control active);
     }
 }

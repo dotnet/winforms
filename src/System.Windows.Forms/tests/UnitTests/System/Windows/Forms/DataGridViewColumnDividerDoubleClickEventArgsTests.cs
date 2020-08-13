@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewColumnDividerDoubleClickEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewColumnDividerDoubleClickEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Int_HandledMouseEventArgs_TestData()
         {
@@ -18,7 +19,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(Ctor_Int_HandledMouseEventArgs_TestData))]
-        public void Ctor_Int_HandledMouseEventArgs(int columnIndex, HandledMouseEventArgs mouseE)
+        public void DataGridViewColumnDividerDoubleClickEventArgs_Ctor_Int_HandledMouseEventArgs(int columnIndex, HandledMouseEventArgs mouseE)
         {
             var e = new DataGridViewColumnDividerDoubleClickEventArgs(columnIndex, mouseE);
             Assert.Equal(columnIndex, e.ColumnIndex);
@@ -31,15 +32,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void Ctor_NegativeColumnIndex_ThrowsArgumentOutOfRangeException()
+        public void DataGridViewColumnDividerDoubleClickEventArgs_Ctor_NegativeColumnIndex_ThrowsArgumentOutOfRangeException()
         {
+            Assert.Throws<ArgumentOutOfRangeException>("columnIndex", () => new DataGridViewColumnDividerDoubleClickEventArgs(-2, null));
             Assert.Throws<ArgumentOutOfRangeException>("columnIndex", () => new DataGridViewColumnDividerDoubleClickEventArgs(-2, new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4, true)));
         }
 
         [Fact]
-        public void Ctor_NullE_ThrowsNullReferenceException()
+        public void DataGridViewColumnDividerDoubleClickEventArgs_Ctor_NullE_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => new DataGridViewColumnDividerDoubleClickEventArgs(1, null));
+            Assert.Throws<ArgumentNullException>("e", () => new DataGridViewColumnDividerDoubleClickEventArgs(1, null));
         }
     }
 }

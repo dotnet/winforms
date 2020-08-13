@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class WebBrowserNavigatingEventArgsTests
+    // NB: doesn't require thread affinity
+    public class WebBrowserNavigatingEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(null)]

@@ -1,0 +1,54 @@
+<Project>
+  <!--
+    https://github.com/dotnet/winforms/issues/2107#issuecomment-559289716
+    https://github.com/microsoft/msbuild/issues/4923#issuecomment-554265394
+    -->
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+  
+  <PropertyGroup>
+    <AssemblyName>Microsoft.VisualBasic.Forms</AssemblyName>
+    <Deterministic>true</Deterministic>
+    <RootNamespace></RootNamespace>
+    <LangVersion>15.0</LangVersion>
+    <VBRuntime>None</VBRuntime>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Microsoft\VisualBasic\ProgressDialog.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ProgressDialog.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Microsoft\VisualBasic\CompilerServices\VBInputBox.Designer.vb">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>VBInputBox.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SR.resx">
+      <GenerateSource>true</GenerateSource>
+      <Namespace>System</Namespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Microsoft\VisualBasic\MyServices\Internal\ProgressDialog.resx">
+      <LogicalName>Microsoft.VisualBasic.MyServices.Internal.ProgressDialog.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Microsoft\VisualBasic\CompilerServices\VBInputBox.resx">
+      <LogicalName>Microsoft.VisualBasic.CompilerServices.VBInputBox.resources</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <Import Project="Sdk.Targets" Sdk="Microsoft.NET.Sdk" />
+
+  <PropertyGroup>
+    <GetCopyToOutputDirectoryItemsDependsOn>AssignProjectConfiguration;$(GetCopyToOutputDirectoryItemsDependsOn)</GetCopyToOutputDirectoryItemsDependsOn>
+  </PropertyGroup>
+
+</Project>

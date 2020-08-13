@@ -4,8 +4,8 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents a method that will handle splitter events.
-    /// </devdoc>
-    public delegate void SplitterEventHandler(object sender, SplitterEventArgs e);
+    /// <summary>
+    ///  Represents a method that will handle splitter events.
+    /// </summary>
+    public delegate void SplitterEventHandler(object? sender, SplitterEventArgs e);
 }

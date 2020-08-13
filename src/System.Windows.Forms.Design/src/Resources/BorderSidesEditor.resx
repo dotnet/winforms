@@ -1,0 +1,286 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tableLayoutPanel1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tableLayoutPanel1.ColumnCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="noneCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="noneCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="noneCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>48, 17</value>
+  </data>
+  <data name="noneCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="noneCheckBox.Text">
+    <value xml:space="preserve">&amp;None</value>
+  </data>
+  <data name="&gt;&gt;noneCheckBox.Name">
+    <value xml:space="preserve">noneCheckBox</value>
+  </data>
+  <data name="&gt;&gt;noneCheckBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;noneCheckBox.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;noneCheckBox.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="allCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="allCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 27</value>
+  </data>
+  <data name="allCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>33, 17</value>
+  </data>
+  <data name="allCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="allCheckBox.Text">
+    <value xml:space="preserve">&amp;All</value>
+  </data>
+  <data name="&gt;&gt;allCheckBox.Name">
+    <value xml:space="preserve">allCheckBox</value>
+  </data>
+  <data name="&gt;&gt;allCheckBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;allCheckBox.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;allCheckBox.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="topCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="topCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 50</value>
+  </data>
+  <data name="topCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>41, 17</value>
+  </data>
+  <data name="topCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="topCheckBox.Text">
+    <value xml:space="preserve">&amp;Top</value>
+  </data>
+  <data name="&gt;&gt;topCheckBox.Name">
+    <value xml:space="preserve">topCheckBox</value>
+  </data>
+  <data name="&gt;&gt;topCheckBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;topCheckBox.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;topCheckBox.ZOrder">
+    <value xml:space="preserve">2</value>
+  </data>
+  <data name="bottomCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="bottomCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 73</value>
+  </data>
+  <data name="bottomCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 17</value>
+  </data>
+  <data name="bottomCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="bottomCheckBox.Text">
+    <value xml:space="preserve">&amp;Bottom</value>
+  </data>
+  <data name="&gt;&gt;bottomCheckBox.Name">
+    <value xml:space="preserve">bottomCheckBox</value>
+  </data>
+  <data name="&gt;&gt;bottomCheckBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;bottomCheckBox.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;bottomCheckBox.ZOrder">
+    <value xml:space="preserve">3</value>
+  </data>
+  <data name="rightCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="rightCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 119</value>
+  </data>
+  <data name="rightCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 17</value>
+  </data>
+  <data name="rightCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="rightCheckBox.Text">
+    <value xml:space="preserve">&amp;Right</value>
+  </data>
+  <data name="&gt;&gt;rightCheckBox.Name">
+    <value xml:space="preserve">rightCheckBox</value>
+  </data>
+  <data name="&gt;&gt;rightCheckBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;rightCheckBox.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;rightCheckBox.ZOrder">
+    <value xml:space="preserve">4</value>
+  </data>
+  <data name="leftCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="leftCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>20, 96</value>
+  </data>
+  <data name="leftCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 17</value>
+  </data>
+  <data name="leftCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="leftCheckBox.Text">
+    <value xml:space="preserve">&amp;Left</value>
+  </data>
+  <data name="&gt;&gt;leftCheckBox.Name">
+    <value xml:space="preserve">leftCheckBox</value>
+  </data>
+  <data name="&gt;&gt;leftCheckBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;leftCheckBox.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;leftCheckBox.ZOrder">
+    <value xml:space="preserve">5</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="splitterLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="splitterLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 23</value>
+  </data>
+  <data name="splitterLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 1</value>
+  </data>
+  <data name="splitterLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;splitterLabel.Name">
+    <value xml:space="preserve">splitterLabel</value>
+  </data>
+  <data name="&gt;&gt;splitterLabel.Type">
+    <value xml:space="preserve">System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitterLabel.Parent">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;splitterLabel.ZOrder">
+    <value xml:space="preserve">6</value>
+  </data>
+  <data name="tableLayoutPanel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="tableLayoutPanel1.RowCount" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>106, 139</value>
+  </data>
+  <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Name">
+    <value xml:space="preserve">tableLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.Parent">
+    <value xml:space="preserve">$this</value>
+  </data>
+  <data name="&gt;&gt;tableLayoutPanel1.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="tableLayoutPanel1.LayoutSettings">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="noneCheckBox" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="allCheckBox" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="topCheckBox" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="bottomCheckBox" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="rightCheckBox" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="leftCheckBox" Row="5" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="splitterLabel" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="&gt;&gt;$this.Name">
+    <value xml:space="preserve">BorderSidesEditor</value>
+  </data>
+  <data name="&gt;&gt;$this.Type">
+    <value xml:space="preserve">System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>

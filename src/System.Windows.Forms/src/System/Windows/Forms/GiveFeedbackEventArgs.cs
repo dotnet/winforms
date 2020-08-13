@@ -6,29 +6,28 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Control.GiveFeedback'/> event.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Provides data for the <see cref='Control.GiveFeedback'/> event.
+    /// </summary>
     public class GiveFeedbackEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.GiveFeedbackEventArgs'/> class.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='GiveFeedbackEventArgs'/> class.
+        /// </summary>
         public GiveFeedbackEventArgs(DragDropEffects effect, bool useDefaultCursors)
         {
             Effect = effect;
             UseDefaultCursors = useDefaultCursors;
         }
 
-        /// <devdoc>
-        /// Gets the type of drag-and-drop operation.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the type of drag-and-drop operation.
+        /// </summary>
         public DragDropEffects Effect { get; }
 
-        /// <devdoc>
-        /// Gets or sets a value indicating whether a default pointer is used.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets or sets a value indicating whether a default pointer is used.
+        /// </summary>
         public bool UseDefaultCursors { get; set; }
     }
 }

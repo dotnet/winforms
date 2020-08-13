@@ -6,16 +6,15 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for splitter events.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Provides data for splitter events.
+    /// </summary>
     public class SplitterEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes an instance of the <see cref='System.Windows.Forms.SplitterEventArgs'/> class with the specified coordinates
-        /// of the mouse pointer and the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/>.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes an instance of the <see cref='SplitterEventArgs'/> class with the specified coordinates
+        ///  of the mouse pointer and the upper-left corner of the <see cref='Splitter'/>.
+        /// </summary>
         public SplitterEventArgs(int x, int y, int splitX, int splitY)
         {
             X = x;
@@ -24,24 +23,24 @@ namespace System.Windows.Forms
             SplitY = splitY;
         }
 
-        /// <devdoc>
-        /// Gets the x-coordinate of the mouse pointer (in client coordinates).
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the x-coordinate of the mouse pointer (in client coordinates).
+        /// </summary>
         public int X { get; }
 
-        /// <devdoc>
-        /// Gets the y-coordinate of the mouse pointer (in client coordinates).
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the y-coordinate of the mouse pointer (in client coordinates).
+        /// </summary>
         public int Y { get; }
 
-        /// <devdoc>
-        /// Gets the x-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the x-coordinate of the upper-left corner of the <see cref='Splitter'/> (in client coordinates).
+        /// </summary>
         public int SplitX { get; set; }
 
-        /// <devdoc>
-        /// Gets the y-coordinate of the upper-left corner of the <see cref='System.Windows.Forms.Splitter'/> (in client coordinates).
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the y-coordinate of the upper-left corner of the <see cref='Splitter'/> (in client coordinates).
+        /// </summary>
         public int SplitY { get; set; }
     }
 }

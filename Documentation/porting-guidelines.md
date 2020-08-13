@@ -1,4 +1,4 @@
-# Porting existing applications to .NET Core 3.0
+# Port existing applications to .NET Core 3.1
 
 >We suggest doing migration in a separate branch or, if you're not using version
 >control, creating a copy of your project so you have a clean state to go back
@@ -8,6 +8,14 @@ The migration process includes two steps: **preparing your project for porting**
 .NET Core and **porting** itself.
 
 For additional information and assistance, we recommend checking out [this article on the dotnet blog][dotnet-blog-port-guide] as well as the [accompanying video tutorial][dotnet-blog-port-video].
+
+
+## Breaking changes
+
+Review the following resources that describe breaking changes between Windows Forms on .NET Framework and .NET Core:
+
+* The [Breaking changes in Windows Forms (.NET Framework to .NET Core)](https://docs.microsoft.com/dotnet/core/porting/winforms-breaking-changes) describes breaking changes you need to be aware of when migrating your applications from .NET Framework
+* The [Breaking changes in Windows Forms (.NET Core to .NET Core)](https://docs.microsoft.com/dotnet/core/compatibility/winforms) describes breaking changes you need to be aware of when migrating your applications from one version of .NET Core to another.
 
 ## Prepare your project for porting
 
@@ -53,15 +61,25 @@ For additional information and assistance, we recommend checking out [this artic
 
     Build and run to make sure you did not introduce any issues while preparing your project. Now it is time to port it.
 
+
+
 ## Port your project
 
-1. **Add .NET Core Windows Forms project**. Add a new .NET Core 3.0 Windows Forms project to the solution.
+### Automated porting
 
-1. **Add `<ProjectReference>`**. Copy the `<ProjectReference>` elements from the `.csproj` file of the original project to the new project's `.csproj` file. Note: The new project format does not use the `Name` and `ProjectGuid` elements, so you can safely delete those.
+1. Try porting your project using [`try-convert` tool](https://github.com/dotnet/try-convert), which we built to help migrations. <br />
+NB: The tool may not for all possible projects, in that case please read on.
+
+### Manual porting
+
+1. **Add .NET Core Windows Forms project**. Add a new .NET Core 3.1 Windows Forms project to the solution.
+
+1. **Add `<ProjectReference>`**. Copy the `<ProjectReference>` elements from the `.csproj` file of the original project to the new project's `.csproj` file.<br />
+Note: The new project format does not use the `Name` and `ProjectGuid` elements, so you can safely delete those.
 
 1. **Restore/Build**. At this point, it's a good idea to restore/build to make sure all dependencies are properly configured.
 
-1. **Link files**. Link all files from your existing .NET Framework WinForms project to the .NET Core 3.0 WinForms project by adding following to the `.csproj` file.
+1. **Link files**. Link all files from your existing .NET Framework WinForms project to the .NET Core 3.1 WinForms project by adding following to the `.csproj` file.
 
     ```xml
     <ItemGroup>
@@ -81,9 +99,13 @@ For additional information and assistance, we recommend checking out [this artic
 
 1. **Run new project**. Set your new .NET Core project as StartUp Project and run it. Make sure everything works.
 
-1. **Copy or leave linked**. Now instead of linking the files, you can actually copy them from the old .NET Framework WinForms project to the new .NET Core 3.0 WinForms project. After that you can get rid of the old project. However, if you would like to use the Windows Forms' designer, it is not available in Visual Studio just yet. So you can stop at the step 6 and perform step 7 once designer support is available.
+1. **Copy or leave linked**. Now instead of linking the files, you can actually copy them from the old .NET Framework WinForms project to the new .NET Core 3.1 WinForms project. After that you can get rid of the old project. However, if you would like to use the Windows Forms' designer, it is not available in Visual Studio just yet. So you can stop at the step 6 and perform step 7 once designer support is available.
 
 ## Migration tips
+
+### Include the System.Windows.Forms.Datavisualization Pack
+
+If you wish to use types previously associated with the [Charting control in the .NET Framework][framework-charting], you should add a package reference to the [NuGet package of Data Visualization][nuget-dataviz] ported to .NET Core. For more information about Data Visualization and the Charting control in .NET Core, including a sample application demonstrating its use, see the [winforms-datavisualization repository][dataviz]
 
 ### Include the Windows.Compatibility Pack
 
@@ -108,6 +130,10 @@ differences:
 System.PlatformNotSupportedException: 'Configuration files are not supported.'
 ```
 
+### Additional Types and Namespaces
+
+You can search for additional types which you may need in porting your apps to .NET Core on [APIs of DotNet][apisofnet]. For example, when you search for the type `System.AppDomain`, you will see that the type has been moved to `System.Runtime.Extensions` namespace starting in .NET Core 2.0.
+
 [comment]: <> (URI Links)
 
 [dotnet-blog-port-guide]: https://devblogs.microsoft.com/dotnet/how-to-port-desktop-applications-to-net-core-3-0/
@@ -115,5 +141,9 @@ System.PlatformNotSupportedException: 'Configuration files are not supported.'
 [api-port]: https://blogs.msdn.microsoft.com/dotnet/2018/08/08/are-your-windows-forms-and-wpf-applications-ready-for-net-core-3-0/
 [pkg-config]: https://docs.microsoft.com/en-us/nuget/reference/migrate-packages-config-to-package-reference
 [sdk-tool]:https://github.com/hvanbakel/CsprojToVs2017
+[framework-charting]: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datavisualization.charting
+[nuget-dataviz]: https://www.nuget.org/packages/System.windows.forms.datavisualization
+[dataviz]: https://github.com/dotnet/winforms-datavisualization
 [compat-pack]: https://docs.microsoft.com/en-us/dotnet/core/porting/windows-compat-pack
 [wcf-supported]: https://github.com/dotnet/wcf/blob/master/release-notes/SupportedFeatures-v2.1.0.md
+[apisofnet]: https://apisof.net/

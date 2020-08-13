@@ -5,7 +5,7 @@
 namespace System.Drawing.Design
 {
     /// <summary>
-    /// Represents the method that will handle the <see cref='System.Drawing.Design.ToolboxItem.ComponentsCreating'/> event.
+    ///  Represents a method that will handle the <see cref='System.Drawing.Design.ToolboxItem.ComponentsCreating'/> event.
     /// </summary>
     public delegate void ToolboxComponentsCreatingEventHandler(object sender, ToolboxComponentsCreatingEventArgs e);
 }

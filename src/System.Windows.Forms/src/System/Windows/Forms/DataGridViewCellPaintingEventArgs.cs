@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,14 +12,14 @@ namespace System.Windows.Forms
 {
     public class DataGridViewCellPaintingEventArgs : HandledEventArgs
     {
-        private DataGridView _dataGridView;
+        private readonly DataGridView _dataGridView;
 
         public DataGridViewCellPaintingEventArgs(DataGridView dataGridView,
-                                                 Graphics graphics, 
+                                                 Graphics graphics,
                                                  Rectangle clipBounds,
-                                                 Rectangle cellBounds, 
-                                                 int rowIndex, 
-                                                 int columnIndex, 
+                                                 Rectangle cellBounds,
+                                                 int rowIndex,
+                                                 int columnIndex,
                                                  DataGridViewElementStates cellState,
                                                  object value,
                                                  object formattedValue,
@@ -26,25 +28,13 @@ namespace System.Windows.Forms
                                                  DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                                  DataGridViewPaintParts paintParts)
         {
-            if (dataGridView == null)
-            {
-                throw new ArgumentNullException(nameof(dataGridView));
-            }
-            if (graphics == null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-            if (cellStyle == null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
             if ((paintParts & ~DataGridViewPaintParts.All) != 0)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, nameof(paintParts)), nameof(paintParts));
             }
 
-            _dataGridView = dataGridView;
-            Graphics = graphics;
+            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
+            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
             ClipBounds = clipBounds;
             CellBounds = cellBounds;
             RowIndex = rowIndex;
@@ -53,7 +43,7 @@ namespace System.Windows.Forms
             Value = value;
             FormattedValue = formattedValue;
             ErrorText = errorText;
-            CellStyle = cellStyle;
+            CellStyle = cellStyle ?? throw new ArgumentNullException(nameof(cellStyle));
             AdvancedBorderStyle = advancedBorderStyle;
             PaintParts = paintParts;
         }
@@ -92,11 +82,11 @@ namespace System.Windows.Forms
         {
             if (RowIndex < -1 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
             }
 
             _dataGridView.GetCellInternal(ColumnIndex, RowIndex).PaintInternal(Graphics,
@@ -116,11 +106,11 @@ namespace System.Windows.Forms
         {
             if (RowIndex < -1 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
             }
 
             DataGridViewPaintParts paintParts = DataGridViewPaintParts.Background | DataGridViewPaintParts.Border;
@@ -145,11 +135,11 @@ namespace System.Windows.Forms
         {
             if (RowIndex < -1 || RowIndex >= _dataGridView.Rows.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_RowIndexOutOfRange);
             }
             if (ColumnIndex < -1 || ColumnIndex >= _dataGridView.Columns.Count)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange));
+                throw new InvalidOperationException(SR.DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange);
             }
 
             _dataGridView.GetCellInternal(ColumnIndex, RowIndex).PaintInternal(Graphics,
@@ -167,9 +157,9 @@ namespace System.Windows.Forms
 
         internal void SetProperties(Graphics graphics,
                                     Rectangle clipBounds,
-                                    Rectangle cellBounds, 
-                                    int rowIndex, 
-                                    int columnIndex, 
+                                    Rectangle cellBounds,
+                                    int rowIndex,
+                                    int columnIndex,
                                     DataGridViewElementStates cellState,
                                     object value,
                                     object formattedValue,

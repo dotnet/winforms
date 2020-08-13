@@ -2,12 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.TreeView.OnBeforeLabelEdit'/>
-    /// or <see cref='System.Windows.Forms.TreeView.OnAfterLabelEdit'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='TreeView.OnBeforeLabelEdit'/>
+    ///  or <see cref='TreeView.OnAfterLabelEdit'/> event.
+    /// </summary>
     public class NodeLabelEditEventArgs : EventArgs
     {
         public NodeLabelEditEventArgs(TreeNode node) : this(node, null)

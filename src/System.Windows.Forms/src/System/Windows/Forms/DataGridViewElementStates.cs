@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms
 {
     [Flags]
-    [ComVisible(true)]
     public enum DataGridViewElementStates
     {
         None = 0x0000,

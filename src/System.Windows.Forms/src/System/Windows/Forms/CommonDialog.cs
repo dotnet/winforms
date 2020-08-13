@@ -2,321 +2,249 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
 
-namespace System.Windows.Forms {
-    using System.Threading;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;   
-    using System.Windows.Forms;    
-    using System.Windows.Forms.Design;
-    using Microsoft.Win32;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using static Interop;
 
-    /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       Specifies the base class used for displaying
-    ///       dialog boxes on the screen.
-    ///    </para>
-    /// </devdoc>
-    [
-    ToolboxItemFilter("System.Windows.Forms"),
-    System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors") // Shipped in Everett
-    ]
-    public abstract class CommonDialog : Component {
-        private static readonly object EventHelpRequest = new object();
-        private const int CDM_SETDEFAULTFOCUS = NativeMethods.WM_USER + 0x51;
-        private static int helpMsg;
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Specifies the base class used for displaying dialog boxes on the screen.
+    /// </summary>
+    [ToolboxItemFilter("System.Windows.Forms")]
+    public abstract class CommonDialog : Component
+    {
+        private static readonly object s_helpRequestEvent = new object();
+        private const int CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
+        private static User32.WM s_helpMsg;
 
-        private IntPtr defOwnerWndProc;
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-        private IntPtr hookedWndProc;
+        private IntPtr _defOwnerWndProc;
 
-        private IntPtr  defaultControlHwnd;
+        private IntPtr _hookedWndProc;
 
-        object userData;
+        private IntPtr _defaultControlHwnd;
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.CommonDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.CommonDialog'/> class.
-        ///    </para>
-        /// </devdoc>
-        public CommonDialog() {
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='CommonDialog'/> class.
+        /// </summary>
+        public CommonDialog()
+        {
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.Tag"]/*' />
-        [
-        SRCategory(nameof(SR.CatData)),
-        Localizable(false),
-        Bindable(true),
-        SRDescription(nameof(SR.ControlTagDescr)),
-        DefaultValue(null),
-        TypeConverter(typeof(StringConverter)),
-        ]
-        public object Tag {
-            get {
-                return userData;
-            }
-            set {
-                userData = value;
-            }
-        }
+        [SRCategory(nameof(SR.CatData))]
+        [Localizable(false)]
+        [Bindable(true)]
+        [SRDescription(nameof(SR.ControlTagDescr))]
+        [DefaultValue(null)]
+        [TypeConverter(typeof(StringConverter))]
+        public object Tag { get; set; }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.HelpRequest"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Occurs when the user clicks the Help button on a common
-        ///       dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///  Occurs when the user clicks the Help button on a common
+        ///  dialog box.
+        /// </summary>
         [SRDescription(nameof(SR.CommonDialogHelpRequested))]
-        public event EventHandler HelpRequest {
-            add {
-                Events.AddHandler(EventHelpRequest, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHelpRequest, value);
-            }
+        public event EventHandler HelpRequest
+        {
+            add => Events.AddHandler(s_helpRequestEvent, value);
+            remove => Events.RemoveHandler(s_helpRequestEvent, value);
         }
 
-        // Generate meaningful result from Windows.CommDlgExtendedError()
-
-        /* Only used in PageSetupDialog.cs in a line that is commented out.
-            Commenting out until we need it again.
-        
-        internal static string CommonDialogErrorToString(int error) {
-            switch (error) {
-                case NativeMethods.CDERR_DIALOGFAILURE: return "dialogfailure";
-                case NativeMethods.CDERR_FINDRESFAILURE: return "findresfailure";
-                case NativeMethods.CDERR_INITIALIZATION: return "initialization";
-                case NativeMethods.CDERR_LOADRESFAILURE: return "loadresfailure";
-                case NativeMethods.CDERR_LOADSTRFAILURE: return "loadstrfailure";
-                case NativeMethods.CDERR_LOCKRESFAILURE: return "lockresfailure";
-                case NativeMethods.CDERR_MEMALLOCFAILURE: return "memallocfailure";
-                case NativeMethods.CDERR_MEMLOCKFAILURE: return "memlockfailure";
-                case NativeMethods.CDERR_NOHINSTANCE: return "nohinstance";
-                case NativeMethods.CDERR_NOHOOK: return "nohook";
-                case NativeMethods.CDERR_NOTEMPLATE: return "notemplate";
-                case NativeMethods.CDERR_REGISTERMSGFAIL: return "registermsgfail";
-                case NativeMethods.CDERR_STRUCTSIZE: return "structsize";
-                case NativeMethods.PDERR_CREATEICFAILURE: return "createicfailure";
-                case NativeMethods.PDERR_DEFAULTDIFFERENT: return "defaultdifferent";
-                case NativeMethods.PDERR_DNDMMISMATCH: return "dndmmismatch";
-                case NativeMethods.PDERR_GETDEVMODEFAIL: return "getdevmodefail";
-                case NativeMethods.PDERR_INITFAILURE: return "initfailure";
-                case NativeMethods.PDERR_LOADDRVFAILURE: return "loaddrvfailure";
-                case NativeMethods.PDERR_NODEFAULTPRN: return "nodefaultprn";
-                case NativeMethods.PDERR_NODEVICES: return "nodevices";
-                case NativeMethods.PDERR_PARSEFAILURE: return "parsefailure";
-                case NativeMethods.PDERR_PRINTERNOTFOUND: return "printernotfound";
-                case NativeMethods.PDERR_RETDEFFAILURE: return "retdeffailure";
-                case NativeMethods.PDERR_SETUPFAILURE: return "setupfailure";
-                case NativeMethods.CFERR_MAXLESSTHANMIN: return "maxlessthanmin";
-                case NativeMethods.CFERR_NOFONTS: return "nofonts";
-                case NativeMethods.FNERR_BUFFERTOOSMALL: return "buffertoosmall";
-                case NativeMethods.FNERR_INVALIDFILENAME: return "invalidfilename";
-                case NativeMethods.FNERR_SUBCLASSFAILURE: return "subclassfailure";
-                case NativeMethods.FRERR_BUFFERLENGTHZERO : return "bufferlengthzero";
-                default: return "unknown error";
-            }
-        }
-
-        */
-
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.HookProc"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Defines the common dialog box hook
-        ///       procedure that is overridden to add specific functionality to a common dialog
-        ///       box.
-        ///    </para>
-        /// </devdoc>
-        protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
-            if (msg == NativeMethods.WM_INITDIALOG) {
+        /// <summary>
+        ///  Defines the common dialog box hook procedure that is overridden to add specific
+        ///  functionality to a common dialog box.
+        /// </summary>
+        protected virtual IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
+        {
+            if (msg == (int)User32.WM.INITDIALOG)
+            {
                 MoveToScreenCenter(hWnd);
 
-                // Under some circumstances, the dialog
-                // does not initially focus on any control. We fix that by explicitly
-                // setting focus ourselves.
-                //
-                this.defaultControlHwnd = wparam;
-                UnsafeNativeMethods.SetFocus(new HandleRef(null, wparam));
+                // Under some circumstances, the dialog does not initially focus on any
+                // control. We fix that by explicitly setting focus ourselves.
+                _defaultControlHwnd = wparam;
+                User32.SetFocus(wparam);
             }
-            else if (msg == NativeMethods.WM_SETFOCUS) {
-                UnsafeNativeMethods.PostMessage(new HandleRef(null, hWnd), CDM_SETDEFAULTFOCUS, 0, 0);
+            else if (msg == (int)User32.WM.SETFOCUS)
+            {
+                User32.PostMessageW(hWnd, (User32.WM)CDM_SETDEFAULTFOCUS);
             }
-            else if (msg == CDM_SETDEFAULTFOCUS) {
+            else if (msg == CDM_SETDEFAULTFOCUS)
+            {
                 // If the dialog box gets focus, bounce it to the default control.
-                // so we post a message back to ourselves to wait for the focus change then push it to the default
-                // control.
-                //
-                UnsafeNativeMethods.SetFocus(new HandleRef(this, defaultControlHwnd));
+                // So we post a message back to ourselves to wait for the focus change
+                // then push it to the default control.
+                User32.SetFocus(new HandleRef(this, _defaultControlHwnd));
             }
+
             return IntPtr.Zero;
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.MoveToScreenCenter"]/*' />
-        /// <devdoc>
-        ///     Centers the given window on the screen. This method is used by the default
-        ///     common dialog hook procedure to center the dialog on the screen before it
-        ///     is shown.
-        /// </devdoc>
-        internal static void MoveToScreenCenter(IntPtr hWnd) {
-            NativeMethods.RECT r = new NativeMethods.RECT();
-            UnsafeNativeMethods.GetWindowRect(new HandleRef(null, hWnd), ref r);
+        /// <summary>
+        ///  Centers the given window on the screen. This method is used by the default
+        ///  common dialog hook procedure to center the dialog on the screen before it
+        ///  is shown.
+        /// </summary>
+        private protected static void MoveToScreenCenter(IntPtr hWnd)
+        {
+            var r = new RECT();
+            User32.GetWindowRect(hWnd, ref r);
             Rectangle screen = Screen.GetWorkingArea(Control.MousePosition);
             int x = screen.X + (screen.Width - r.right + r.left) / 2;
             int y = screen.Y + (screen.Height - r.bottom + r.top) / 3;
-            SafeNativeMethods.SetWindowPos(new HandleRef(null, hWnd), NativeMethods.NullHandleRef, x, y, 0, 0, NativeMethods.SWP_NOSIZE |
-                                 NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE);
+            User32.SetWindowPos(
+                hWnd,
+                User32.HWND_TOP,
+                x,
+                y,
+                flags: User32.SWP.NOSIZE | User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.OnHelpRequest"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.CommonDialog.HelpRequest'/>
-        ///       event.
-        ///    </para>
-        /// </devdoc>
-        protected virtual void OnHelpRequest(EventArgs e) {
-            EventHandler handler = (EventHandler)Events[EventHelpRequest];
-            if (handler != null) handler(this, e);
+        /// <summary>
+        ///  Raises the <see cref='HelpRequest'/> event.
+        /// </summary>
+        protected virtual void OnHelpRequest(EventArgs e)
+        {
+            EventHandler handler = (EventHandler)Events[s_helpRequestEvent];
+            handler?.Invoke(this, e);
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.OwnerWndProc"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Defines the owner window procedure that is
-        ///       overridden to add specific functionality to a common dialog box.
-        ///    </para>
-        /// </devdoc>
-        protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
-            if (msg == helpMsg) {
-                if (NativeWindow.WndProcShouldBeDebuggable) {
+        /// <summary>
+        ///  Defines the owner window procedure that is overridden to add specific
+        ///  functionality to a common dialog box.
+        /// </summary>
+        protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
+        {
+            if (msg == (int)s_helpMsg)
+            {
+                if (NativeWindow.WndProcShouldBeDebuggable)
+                {
                     OnHelpRequest(EventArgs.Empty);
                 }
-                else {
-                    try {
+                else
+                {
+                    try
+                    {
                         OnHelpRequest(EventArgs.Empty);
                     }
-                    catch (Exception e) {
+                    catch (Exception e)
+                    {
                         Application.OnThreadException(e);
                     }
                 }
+
                 return IntPtr.Zero;
             }
-            return UnsafeNativeMethods.CallWindowProc(defOwnerWndProc, hWnd, msg, wparam, lparam);         
+
+            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WM)msg, wparam, lparam);
         }
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.Reset"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       When overridden in a derived class,
-        ///       resets the properties of a common dialog to their default
-        ///       values.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///  When overridden in a derived class, resets the properties of a common dialog
+        ///  to their default values.
+        /// </summary>
         public abstract void Reset();
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.RunDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       When overridden in a derived class,
-        ///       specifies a common dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///  When overridden in a derived class, specifies a common dialog box.
+        /// </summary>
         protected abstract bool RunDialog(IntPtr hwndOwner);
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.ShowDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Runs a common dialog box.
-        ///    </para>
-        /// </devdoc>
-        public DialogResult ShowDialog() {
-            return ShowDialog(null);
-        }
+        /// <summary>
+        ///  Runs a common dialog box.
+        /// </summary>
+        public DialogResult ShowDialog() => ShowDialog(owner: null);
 
-        /// <include file='doc\CommonDialog.uex' path='docs/doc[@for="CommonDialog.ShowDialog1"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Runs a common dialog box, parented to the given IWin32Window.
-        ///    </para>
-        /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")]
-        public DialogResult ShowDialog( IWin32Window owner ) {
-
-            if (!SystemInformation.UserInteractive) {
+        /// <summary>
+        ///  Runs a common dialog box, parented to the given IWin32Window.
+        /// </summary>
+        public DialogResult ShowDialog(IWin32Window owner)
+        {
+            if (!SystemInformation.UserInteractive)
+            {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            NativeWindow native = null;//This will be used if there is no owner or active window (declared here so it can be kept alive)
+            // This will be used if there is no owner or active window.
+            // Declared here so it can be kept alive.
+            NativeWindow native = null;
 
             IntPtr hwndOwner = IntPtr.Zero;
             DialogResult result = DialogResult.Cancel;
-            try {
-                if (owner != null) {
+            try
+            {
+                if (owner != null)
+                {
                     hwndOwner = Control.GetSafeHandle(owner);
                 }
-    
-                if (hwndOwner == IntPtr.Zero) {
-                    hwndOwner = UnsafeNativeMethods.GetActiveWindow();
+
+                if (hwndOwner == IntPtr.Zero)
+                {
+                    hwndOwner = User32.GetActiveWindow();
                 }
-    
-                if (hwndOwner == IntPtr.Zero) {
-                    //We will have to create our own Window
+
+                if (hwndOwner == IntPtr.Zero)
+                {
+                    // We will have to create our own Window
                     native = new NativeWindow();
                     native.CreateHandle(new CreateParams());
                     hwndOwner = native.Handle;
                 }
-                
-                if (helpMsg == 0) {
-                    helpMsg = SafeNativeMethods.RegisterWindowMessage("commdlg_help");
+
+                if (s_helpMsg == User32.WM.NULL)
+                {
+                    s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
                 }
-    
-                NativeMethods.WndProc ownerProc = new NativeMethods.WndProc(this.OwnerWndProc);
-                hookedWndProc = System.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate(ownerProc);
-                System.Diagnostics.Debug.Assert(IntPtr.Zero == defOwnerWndProc, "The previous subclass wasn't properly cleaned up");
+
+                User32.WNDPROCINT ownerProc = new User32.WNDPROCINT(OwnerWndProc);
+                _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerProc);
+                Debug.Assert(IntPtr.Zero == _defOwnerWndProc, "The previous subclass wasn't properly cleaned up");
 
                 IntPtr userCookie = IntPtr.Zero;
-                try {
-                    //UnsafeNativeMethods.[Get|Set]WindowLong is smart enough to call SetWindowLongPtr on 64-bit OS
-                    defOwnerWndProc = UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, ownerProc);
+                try
+                {
+                    // UnsafeNativeMethods.[Get|Set]WindowLong is smart enough to call SetWindowLongPtr on 64-bit OS
+                    _defOwnerWndProc = User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, ownerProc);
 
-                    if (Application.UseVisualStyles) {
-                        userCookie = UnsafeNativeMethods.ThemingScope.Activate();
+                    if (Application.UseVisualStyles)
+                    {
+                        userCookie = ThemingScope.Activate(Application.UseVisualStyles);
                     }
-                    
+
                     Application.BeginModalMessageLoop();
-                    try {
+                    try
+                    {
                         result = RunDialog(hwndOwner) ? DialogResult.OK : DialogResult.Cancel;
                     }
-                    finally {
+                    finally
+                    {
                         Application.EndModalMessageLoop();
                     }
                 }
-                finally {
-                    IntPtr currentSubClass = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC);
-                    if ( IntPtr.Zero != defOwnerWndProc || currentSubClass != hookedWndProc) {
-                        UnsafeNativeMethods.SetWindowLong(new HandleRef(this, hwndOwner), NativeMethods.GWL_WNDPROC, new HandleRef(this, defOwnerWndProc));
+                finally
+                {
+                    IntPtr currentSubClass = User32.GetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC);
+                    if (_defOwnerWndProc != IntPtr.Zero || currentSubClass != _hookedWndProc)
+                    {
+                        User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, new HandleRef(this, _defOwnerWndProc));
                     }
-                    UnsafeNativeMethods.ThemingScope.Deactivate(userCookie);
 
-                    defOwnerWndProc = IntPtr.Zero;
-                    hookedWndProc = IntPtr.Zero;
-                    //Ensure that the subclass delegate will not be GC collected until after it has been subclassed
+                    ThemingScope.Deactivate(userCookie);
+
+                    _defOwnerWndProc = IntPtr.Zero;
+                    _hookedWndProc = IntPtr.Zero;
+                    // Ensure that the subclass delegate will not be GC collected until
+                    // after it has been subclassed
                     GC.KeepAlive(ownerProc);
                 }
             }
-            finally {
-                if (null != native) {
-                    native.DestroyHandle();
-                }
+            finally
+            {
+                native?.DestroyHandle();
             }
 
             return result;

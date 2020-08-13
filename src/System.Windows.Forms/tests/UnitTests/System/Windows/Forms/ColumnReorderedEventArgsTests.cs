@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ColumnReorderedEventArgsTests
+    // NB: doesn't require thread affinity
+    public class ColumnReorderedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Int_Int_ColumnHeader_TestData()
         {

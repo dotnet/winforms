@@ -2,16 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// The QueryAccessibilityHelpEventArgs is fired when AccessibleObject is providing help
-    /// to accessibility applications.
-    /// </devdoc>
-    [ComVisible(true)]
-    public class QueryAccessibilityHelpEventArgs  : EventArgs
+    /// <summary>
+    ///  The QueryAccessibilityHelpEventArgs is fired when AccessibleObject is providing help
+    ///  to accessibility applications.
+    /// </summary>
+    public class QueryAccessibilityHelpEventArgs : EventArgs
     {
         public QueryAccessibilityHelpEventArgs()
         {

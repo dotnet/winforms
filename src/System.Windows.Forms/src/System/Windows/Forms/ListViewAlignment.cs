@@ -2,32 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.ComCtl32;
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies how items align in the <see cref='System.Windows.Forms.ListView'/>.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies how items align in the <see cref='ListView'/>.
+    /// </summary>
     public enum ListViewAlignment
     {
-        /// <devdoc>
-        /// When the user moves an item, it remains where it is dropped.
-        /// </devdoc>
-        Default = NativeMethods.LVA_DEFAULT,
+        /// <summary>
+        ///  When the user moves an item, it remains where it is dropped.
+        /// </summary>
+        Default = (int)LVA.DEFAULT,
 
-        /// <devdoc>
-        /// Items are aligned to the top of the <see cref='System.Windows.Forms.ListView'/> control.
-        /// </devdoc>
-        Top = NativeMethods.LVA_ALIGNTOP,
+        /// <summary>
+        ///  Items are aligned to the top of the <see cref='ListView'/> control.
+        /// </summary>
+        Top = (int)LVA.ALIGNTOP,
 
-        /// <devdoc>
-        /// Items are aligned to the left of the <see cref='System.Windows.Forms.ListView'/> control.
-        /// </devdoc>
-        Left = NativeMethods.LVA_ALIGNLEFT,
+        /// <summary>
+        ///  Items are aligned to the left of the <see cref='ListView'/> control.
+        /// </summary>
+        Left = (int)LVA.ALIGNLEFT,
 
-        /// <devdoc>
-        /// Items are aligned to an invisible grid in the control. When the user
-        /// moves an item, it moves to the closest juncture in the grid.
-        /// </devdoc>
-        SnapToGrid = NativeMethods.LVA_SNAPTOGRID,
+        /// <summary>
+        ///  Items are aligned to an invisible grid in the control. When the user
+        ///  moves an item, it moves to the closest juncture in the grid.
+        /// </summary>
+        SnapToGrid = (int)LVA.SNAPTOGRID,
     }
 }

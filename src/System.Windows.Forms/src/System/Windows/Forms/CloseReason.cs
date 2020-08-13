@@ -2,50 +2,47 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the reason for the Form Closing.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the reason for the Form Closing.
+    /// </summary>
     public enum CloseReason
     {
-        /// <devdoc>
-        /// No reason for closure of the Form.
-        /// </devdoc>
+        /// <summary>
+        ///  No reason for closure of the Form.
+        /// </summary>
         None = 0,
-        
-        /// <devdoc>
-        /// In the process of shutting down, Windows has closed the application.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Justification = "Verb: Shut down, not noun Shutdown.")]
+
+        /// <summary>
+        ///  In the process of shutting down, Windows has closed the application.
+        /// </summary>
         WindowsShutDown = 1,
 
-        /// <devdoc>
-        /// The parent form of this MDI form is closing.
-        /// </devdoc>
+        /// <summary>
+        ///  The parent form of this MDI form is closing.
+        /// </summary>
         MdiFormClosing = 2,
 
-        /// <devdoc>
-        /// The user has clicked the close button on the form window, selected
-        /// Close from the window's control menu or hit Alt + F4.
-        /// </devdoc>
+        /// <summary>
+        ///  The user has clicked the close button on the form window, selected
+        ///  Close from the window's control menu or hit Alt + F4.
+        /// </summary>
         UserClosing = 3,
 
-        /// <devdoc>
-        /// The Microsoft Windows Task Manager is closing the application.
-        /// </devdoc>
+        /// <summary>
+        ///  The Microsoft Windows Task Manager is closing the application.
+        /// </summary>
         TaskManagerClosing = 4,
 
-        /// <devdoc>
-        /// A form is closing because its owner is closing.
-        /// </devdoc>
+        /// <summary>
+        ///  A form is closing because its owner is closing.
+        /// </summary>
         FormOwnerClosing = 5,
 
-        /// <devdoc>
-        /// A form is closing because Application.Exit() was called.
-        /// </devdoc>
+        /// <summary>
+        ///  A form is closing because Application.Exit() was called.
+        /// </summary>
         ApplicationExitCall = 6
     }
 }

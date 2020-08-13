@@ -9,7 +9,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class GridItemTests
+    // NB: doesn't require thread affinity
+    public class GridItemTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void GridItem_Expandable_Get_ReturnsFalse()
@@ -41,6 +42,10 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
+            Assert.Same(value, item.Tag);
+
+            // Set same.
+            item.Tag = value;
             Assert.Same(value, item.Tag);
         }
 

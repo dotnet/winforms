@@ -2,37 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.PrintPreviewControl.PhysicalToPixels(System.Drawing.Size,System.Drawing.Point):System.Drawing.Size")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.PrintPreviewControl.PixelsToPhysical(System.Drawing.Size,System.Drawing.Point):System.Drawing.Size")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.PrintPreviewControl.set_VirtualSize(System.Drawing.Size):System.Void")]
+#nullable disable
 
-namespace System.Windows.Forms {
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.ComponentModel;
-    using System.Drawing.Printing;
-    using System.Globalization;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Runtime.InteropServices;
+using static Interop;
 
-    /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       The raw "preview" part of print previewing, without any dialogs or buttons.
-    ///       Most PrintPreviewControl's are found on PrintPreviewDialog's,
-    ///       but they don't have to be.
-    ///    </para>
-    /// </devdoc>
-    [ComVisible(true)]
-    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  The raw "preview" part of print previewing, without any dialogs or buttons.
+    ///  Most PrintPreviewControl's are found on PrintPreviewDialog's,
+    ///  but they don't have to be.
+    /// </summary>
     [DefaultProperty(nameof(Document))]
     [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
-    public class PrintPreviewControl : Control {
-        Size virtualSize = new Size(1,1);
-        Point position = new Point(0,0);
+    public class PrintPreviewControl : Control
+    {
+        Size virtualSize = new Size(1, 1);
+        Point position = new Point(0, 0);
         Point lastOffset;
         bool antiAlias;
 
@@ -57,95 +48,84 @@ namespace System.Windows.Forms {
         bool pageInfoCalcPending;
         bool exceptionPrinting;
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.PrintPreviewControl"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewControl'/> class.
-        ///    </para>
-        /// </devdoc>
-        public PrintPreviewControl() {
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='PrintPreviewControl'/> class.
+        /// </summary>
+        public PrintPreviewControl()
+        {
             ResetBackColor();
             ResetForeColor();
             Size = new Size(100, 100);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
-            
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.UseAntiAlias"]/*' />
-        [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(false),
-        SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
-        ]
-        public bool UseAntiAlias {
-            get {
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))]
+        public bool UseAntiAlias
+        {
+            get
+            {
                 return antiAlias;
             }
-            set {
+            set
+            {
                 antiAlias = value;
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.AutoZoom"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
-        ///       will automatically adjust Zoom to make everything visible.
-        ///    </para>
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))
-        ]
-        public bool AutoZoom {
-            get { return autoZoom;}
-            set {
-                if (autoZoom != value) {
+        /// <summary>
+        ///  Gets or sets a value If true (the default), resizing the control or changing the number of pages shown
+        ///  will automatically adjust Zoom to make everything visible.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))]
+        public bool AutoZoom
+        {
+            get { return autoZoom; }
+            set
+            {
+                if (autoZoom != value)
+                {
                     autoZoom = value;
                     InvalidateLayout();
                 }
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Document"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating the document to preview.
-        ///       
-        ///    </para>
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.PrintPreviewDocumentDescr))
-        ]
-        public PrintDocument Document {
-            get { return document;}
-            set {
+        /// <summary>
+        ///  Gets or sets a value indicating the document to preview.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(null)]
+        [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
+        public PrintDocument Document
+        {
+            get { return document; }
+            set
+            {
                 document = value;
                 InvalidatePreview();
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Columns"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the number of pages
-        ///       displayed horizontally across the screen.
-        ///    </para>
-        /// </devdoc>
-        [
-        DefaultValue(1),
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.PrintPreviewColumnsDescr))
-        ]
-        public int Columns {
-            get { return columns;}
-            set {
-                if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException(nameof(Columns), string.Format(SR.InvalidLowBoundArgumentEx, "Columns", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+        /// <summary>
+        ///  Gets or sets the number of pages
+        ///  displayed horizontally across the screen.
+        /// </summary>
+        [DefaultValue(1)]
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.PrintPreviewColumnsDescr))]
+        public int Columns
+        {
+            get { return columns; }
+            set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
                 }
 
                 columns = value;
@@ -153,60 +133,52 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.CreateParams"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the CreateParams used to create the window.
-        ///       If a subclass overrides this function, it must call the base implementation.
-        ///       
-        ///    </para>
-        /// </devdoc>
-        protected override CreateParams CreateParams {
-            get {
+        /// <summary>
+        ///  Gets the CreateParams used to create the window.
+        ///  If a subclass overrides this function, it must call the base implementation.
+        /// </summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
                 CreateParams cp = base.CreateParams;
-                cp.Style |= NativeMethods.WS_HSCROLL;
-                cp.Style |= NativeMethods.WS_VSCROLL;
+                cp.Style |= (int)User32.WS.HSCROLL;
+                cp.Style |= (int)User32.WS.VSCROLL;
                 return cp;
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Position"]/*' />
-        /// <devdoc>
-        ///     The virtual coordinate of the upper left visible pixel.
-        /// </devdoc>
-
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))
-        ]
-        private Point Position {
-            get { return position;}
-            set {
+        /// <summary>
+        ///  The virtual coordinate of the upper left visible pixel.
+        /// </summary>
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))]
+        private Point Position
+        {
+            get { return position; }
+            set
+            {
                 SetPositionNoInvalidate(value);
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Rows"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the number of pages
-        ///       displayed vertically down the screen.
-        ///    </para>
-        /// </devdoc>
-        [
-        DefaultValue(1),
-        SRDescription(nameof(SR.PrintPreviewRowsDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
-        public int Rows {
-            get { return rows;}
-            set {
-                
-                if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException(nameof(Rows), string.Format(SR.InvalidLowBoundArgumentEx, "Rows", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+        /// <summary>
+        ///  Gets or sets the number of pages
+        ///  displayed vertically down the screen.
+        /// </summary>
+        [DefaultValue(1)]
+        [SRDescription(nameof(SR.PrintPreviewRowsDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        public int Rows
+        {
+            get { return rows; }
+            set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
                 }
 
                 rows = value;
@@ -214,84 +186,72 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.RightToLeft"]/*' />
-        /// <devdoc>
-        ///     This is used for international applications where the language
-        ///     is written from RightToLeft. When this property is true,
-        ///     control placement and text will be from right to left.
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        AmbientValue(RightToLeft.Inherit),
-        SRDescription(nameof(SR.ControlRightToLeftDescr))
-        ]
-        public override RightToLeft RightToLeft {
-            get {
-                return base.RightToLeft;
-            }
-            set {
+        /// <summary>
+        ///  This is used for international applications where the language
+        ///  is written from RightToLeft. When this property is true,
+        ///  control placement and text will be from right to left.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        [AmbientValue(RightToLeft.Inherit)]
+        [SRDescription(nameof(SR.ControlRightToLeftDescr))]
+        public override RightToLeft RightToLeft
+        {
+            get => base.RightToLeft;
+            set
+            {
                 base.RightToLeft = value;
                 InvalidatePreview();
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Text"]/*' />
-        [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
-        Bindable(false), 
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]                
-        public override string Text {
-            get {
-                return base.Text;
-            }
-            set {
-                base.Text = value;
-            }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Bindable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public override string Text
+        {
+            get => base.Text;
+            set => base.Text = value;
         }
-        
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.TextChanged"]/*' />
-        /// <internalonly/>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
-        new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        new public event EventHandler TextChanged
+        {
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
-        
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPage"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the page number of the upper left page.
-        ///       
-        ///    </para>
-        /// </devdoc>
-        [
-        DefaultValue(0),
-        SRDescription(nameof(SR.PrintPreviewStartPageDescr)),
-        SRCategory(nameof(SR.CatBehavior))
-        ]
-        public int StartPage {
-            get { 
+
+        /// <summary>
+        ///  Gets or sets the page number of the upper left page.
+        /// </summary>
+        [DefaultValue(0)]
+        [SRDescription(nameof(SR.PrintPreviewStartPageDescr))]
+        [SRCategory(nameof(SR.CatBehavior))]
+        public int StartPage
+        {
+            get
+            {
                 int value = startPage;
-                if (pageInfo != null) {
+                if (pageInfo != null)
+                {
                     value = Math.Min(value, pageInfo.Length - (rows * columns));
                 }
                 value = Math.Max(value, 0);
 
                 return value;
             }
-            set {
-                if (value < 0 ) {
-                    throw new ArgumentOutOfRangeException(nameof(StartPage), string.Format(SR.InvalidLowBoundArgumentEx, "StartPage", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
                 }
                 int oldValue = StartPage;
                 startPage = value;
-                if (oldValue != startPage) {
+                if (oldValue != startPage)
+                {
                     InvalidateLayout();
                     OnStartPageChanged(EventArgs.Empty);
                 }
@@ -300,103 +260,112 @@ namespace System.Windows.Forms {
 
         private static readonly object EVENT_STARTPAGECHANGED = new object();
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPageChanged"]/*' />
-        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
-        public event EventHandler StartPageChanged {
-            add {
-                Events.AddHandler(EVENT_STARTPAGECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
-            }
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
+        public event EventHandler StartPageChanged
+        {
+            add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.VirtualSize"]/*' />
-        /// <devdoc>
-        ///     How big the control would be if the screen was infinitely large.
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))
-        ]
-        private Size VirtualSize {
-            get { return virtualSize;}
-            set {
+        /// <summary>
+        ///  How big the control would be if the screen was infinitely large.
+        /// </summary>
+        [SRCategory(nameof(SR.CatLayout))]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))]
+        private Size VirtualSize
+        {
+            get { return virtualSize; }
+            set
+            {
                 SetVirtualSizeNoInvalidate(value);
                 Invalidate();
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.Zoom"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating how large the pages will appear.
-        ///    </para>
-        /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.PrintPreviewZoomDescr)),
-        DefaultValue(DefaultZoom)
-        ]
-        public double Zoom {
-            get { return zoom;}
-            set {
+        /// <summary>
+        ///  Gets or sets a value indicating how large the pages will appear.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.PrintPreviewZoomDescr))]
+        [DefaultValue(DefaultZoom)]
+        public double Zoom
+        {
+            get { return zoom; }
+            set
+            {
                 if (value <= 0)
+                {
                     throw new ArgumentException(SR.PrintPreviewControlZoomNegative);
+                }
+
                 autoZoom = false;
                 zoom = value;
                 InvalidateLayout();
             }
         }
 
-        private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal) {
-            switch (NativeMethods.Util.LOWORD(m.WParam)) {
-                case NativeMethods.SB_THUMBPOSITION:
-                case NativeMethods.SB_THUMBTRACK:
-                    NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                    si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
-                    si.fMask = NativeMethods.SIF_TRACKPOS;
-                    int direction = horizontal ? NativeMethods.SB_HORZ : NativeMethods.SB_VERT;
-                    if (SafeNativeMethods.GetScrollInfo(new HandleRef(this, m.HWnd), direction, si))
+        private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
+        {
+            switch ((User32.SBH)PARAM.LOWORD(m.WParam))
+            {
+                case User32.SBH.THUMBPOSITION:
+                case User32.SBH.THUMBTRACK:
+                    var si = new User32.SCROLLINFO
+                    {
+                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        fMask = User32.SIF.TRACKPOS
+                    };
+                    User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
+                    if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
                     {
                         pos = si.nTrackPos;
                     }
                     else
                     {
-                        pos = NativeMethods.Util.HIWORD(m.WParam);
+                        pos = PARAM.HIWORD(m.WParam);
                     }
                     break;
-                case NativeMethods.SB_LINEUP:
-                    if (pos > SCROLL_LINE) {
-                        pos-=SCROLL_LINE;
+                case User32.SBH.LINELEFT:
+                    if (pos > SCROLL_LINE)
+                    {
+                        pos -= SCROLL_LINE;
                     }
-                    else {
+                    else
+                    {
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_LINEDOWN:
-                    if (pos < maxPos-SCROLL_LINE) {
-                        pos+=SCROLL_LINE;
+                case User32.SBH.LINERIGHT:
+                    if (pos < maxPos - SCROLL_LINE)
+                    {
+                        pos += SCROLL_LINE;
                     }
-                    else {
+                    else
+                    {
                         pos = maxPos;
                     }
                     break;
-                case NativeMethods.SB_PAGEUP:
-                    if (pos > SCROLL_PAGE) {
-                        pos-=SCROLL_PAGE;
+                case User32.SBH.PAGELEFT:
+                    if (pos > SCROLL_PAGE)
+                    {
+                        pos -= SCROLL_PAGE;
                     }
-                    else {
+                    else
+                    {
                         pos = 0;
                     }
                     break;
-                case NativeMethods.SB_PAGEDOWN:
-                    if (pos < maxPos-SCROLL_PAGE) {
-                        pos+=SCROLL_PAGE;
+                case User32.SBH.PAGERIGHT:
+                    if (pos < maxPos - SCROLL_PAGE)
+                    {
+                        pos += SCROLL_PAGE;
                     }
-                    else {
+                    else
+                    {
                         pos = maxPos;
                     }
                     break;
@@ -404,54 +373,56 @@ namespace System.Windows.Forms {
             return pos;
         }
 
-
         // This function computes everything in terms of physical size (millimeters), not pixels
-        // 
-        private void ComputeLayout() {
+        private void ComputeLayout()
+        {
             Debug.Assert(pageInfo != null, "Must call ComputePreview first");
             layoutOk = true;
-            if (pageInfo.Length == 0) {
+            if (pageInfo.Length == 0)
+            {
                 ClientSize = Size;
                 return;
             }
 
-            Graphics tempGraphics = CreateGraphicsInternal();
-            IntPtr dc = tempGraphics.GetHdc();
-            screendpi = new Point(UnsafeNativeMethods.GetDeviceCaps(new HandleRef(tempGraphics, dc), NativeMethods.LOGPIXELSX),
-                                  UnsafeNativeMethods.GetDeviceCaps(new HandleRef(tempGraphics, dc), NativeMethods.LOGPIXELSY));
-            tempGraphics.ReleaseHdcInternal(dc);
-            tempGraphics.Dispose();
+            using var hdc = new User32.GetDcScope(Handle);
+            screendpi = new Point(Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSX),
+                                  Gdi32.GetDeviceCaps(hdc, Gdi32.DeviceCapability.LOGPIXELSY));
 
             Size pageSize = pageInfo[StartPage].PhysicalSize;
             Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
 
-            if (autoZoom) {
-                double zoomX = ((double) controlPhysicalSize.Width - border*(columns + 1)) / (columns*pageSize.Width);
-                double zoomY = ((double) controlPhysicalSize.Height - border*(rows + 1)) / (rows*pageSize.Height);
+            if (autoZoom)
+            {
+                double zoomX = ((double)controlPhysicalSize.Width - border * (columns + 1)) / (columns * pageSize.Width);
+                double zoomY = ((double)controlPhysicalSize.Height - border * (rows + 1)) / (rows * pageSize.Height);
                 zoom = Math.Min(zoomX, zoomY);
             }
 
-            imageSize = new Size((int) (zoom*pageSize.Width), (int) (zoom*pageSize.Height));
-            int virtualX = (imageSize.Width * columns) + border * (columns +1);
-            int virtualY = (imageSize.Height * rows) + border * (rows +1);
+            imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
+            int virtualX = (imageSize.Width * columns) + border * (columns + 1);
+            int virtualY = (imageSize.Height * rows) + border * (rows + 1);
             SetVirtualSizeNoInvalidate(new Size(PhysicalToPixels(new Point(virtualX, virtualY), screendpi)));
         }
 
         // "Prints" the document to memory
-        private void ComputePreview() {
+        private void ComputePreview()
+        {
             int oldStart = StartPage;
 
-            if (document == null)
-                pageInfo = new PreviewPageInfo[0];
-            else {
-
+            if (document is null)
+            {
+                pageInfo = Array.Empty<PreviewPageInfo>();
+            }
+            else
+            {
                 PrintController oldController = document.PrintController;
-                PreviewPrintController previewController = new PreviewPrintController();
-                previewController.UseAntiAlias = UseAntiAlias;
-                document.PrintController = new PrintControllerWithStatusDialog(previewController, 
-                                                                               string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
+                PreviewPrintController previewController = new PreviewPrintController
+                {
+                    UseAntiAlias = UseAntiAlias
+                };
+                document.PrintController = new PrintControllerWithStatusDialog(previewController,
+                                                                               SR.PrintControllerWithStatusDialog_DialogTitlePreview);
 
-                // Want to make sure we've reverted any security asserts before we call Print -- that calls into user code
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
                 Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");
@@ -459,260 +430,270 @@ namespace System.Windows.Forms {
                 document.PrintController = oldController;
             }
 
-            if (oldStart != StartPage) {
+            if (oldStart != StartPage)
+            {
                 OnStartPageChanged(EventArgs.Empty);
             }
         }
 
         // Recomputes the sizes and positions of pages without forcing a new "preview print"
-        private void InvalidateLayout() {
-            layoutOk = false;        
+        private void InvalidateLayout()
+        {
+            layoutOk = false;
             Invalidate();
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.InvalidatePreview"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Refreshes the preview of the document.
-        ///    </para>
-        /// </devdoc>
-        public void InvalidatePreview() {
+        /// <summary>
+        ///  Refreshes the preview of the document.
+        /// </summary>
+        public void InvalidatePreview()
+        {
             pageInfo = null;
             InvalidateLayout();
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnResize"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       Invalidate the layout, if necessary.
-        ///    </para>
-        /// </devdoc>
-        protected override void OnResize(EventArgs eventargs) {
+        /// <summary>
+        ///  Invalidate the layout, if necessary.
+        /// </summary>
+        protected override void OnResize(EventArgs eventargs)
+        {
             InvalidateLayout();
             base.OnResize(eventargs);
         }
 
-        void CalculatePageInfo() {
-            if (pageInfoCalcPending) {
+        void CalculatePageInfo()
+        {
+            if (pageInfoCalcPending)
+            {
                 return;
             }
 
             pageInfoCalcPending = true;
-            try {
-                if (pageInfo == null) {
-                    try {
+            try
+            {
+                if (pageInfo is null)
+                {
+                    try
+                    {
                         ComputePreview();
                     }
-                    catch {
+                    catch
+                    {
                         exceptionPrinting = true;
                         throw;
                     }
-                    finally {
+                    finally
+                    {
                         Invalidate();
                     }
                 }
             }
-            finally {
+            finally
+            {
                 pageInfoCalcPending = false;
             }
         }
-            
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnPaint"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       Paints the control.
-        ///    </para>
-        /// </devdoc>
-        protected override void OnPaint(PaintEventArgs pevent) {
-            Brush backBrush = new SolidBrush(BackColor);
+        /// <summary>
+        ///  Paints the control.
+        /// </summary>
+        protected override void OnPaint(PaintEventArgs pevent)
+        {
+            Color backColor = GetBackColor(SystemInformation.HighContrast);
+            using var backBrush = backColor.GetCachedSolidBrushScope();
 
-            try {
-                if (pageInfo == null || pageInfo.Length == 0) {
-                    pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
+            if (pageInfo is null || pageInfo.Length == 0)
+            {
+                pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
 
-                    if (pageInfo != null || exceptionPrinting) {
-                        // Calculate formats
-                        StringFormat format = new StringFormat();
-                        format.Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter);
-                        format.LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter);
+                if (pageInfo != null || exceptionPrinting)
+                {
+                    // Calculate formats
+                    using StringFormat format = new StringFormat
+                    {
+                        Alignment = ControlPaint.TranslateAlignment(ContentAlignment.MiddleCenter),
+                        LineAlignment = ControlPaint.TranslateLineAlignment(ContentAlignment.MiddleCenter)
+                    };
 
-                        // Do actual drawing
-                        SolidBrush brush = new SolidBrush(ForeColor);
-                        try {
-                            if (exceptionPrinting) {
-                                pevent.Graphics.DrawString(SR.PrintPreviewExceptionPrinting, Font, brush, ClientRectangle, format);
-                            }
-                            else {
-                                pevent.Graphics.DrawString(SR.PrintPreviewNoPages, Font, brush, ClientRectangle, format);
-                            }
-                        }
-                        finally {
-                            brush.Dispose();
-                            format.Dispose();
-                        }
-                    }
-                    else {
-                        BeginInvoke(new MethodInvoker(CalculatePageInfo));
-                    }
-                 }
-                else {
-                    if (!layoutOk)
-                        ComputeLayout();
-
-                    Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
-
-                    //Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-                    Point virtualPixels = new Point(VirtualSize);
-
-                    // center pages on screen if small enough
-                    Point offset = new Point(Math.Max(0, (Size.Width - virtualPixels.X) / 2),
-                                             Math.Max(0, (Size.Height - virtualPixels.Y) / 2));
-                    offset.X -= Position.X;
-                    offset.Y -= Position.Y;
-                    lastOffset = offset;
-
-                    int borderPixelsX = PhysicalToPixels(border, screendpi.X);
-                    int borderPixelsY = PhysicalToPixels(border, screendpi.Y);
-
-                    Region originalClip = pevent.Graphics.Clip;
-                    Rectangle[] pageRenderArea = new Rectangle[rows * columns];
-                    Point lastImageSize = Point.Empty;
-                    int maxImageHeight = 0;
-                    
-                    try {
-                        for (int row = 0; row < rows; row++) {
-                            //Initialize our LastImageSize variable...
-                            lastImageSize.X = 0;
-                            lastImageSize.Y = maxImageHeight * row;
-                            
-                            for (int column = 0; column < columns; column++) {
-                                int imageIndex = StartPage + column + row*columns;
-                                if (imageIndex < pageInfo.Length) {
-
-                                    Size pageSize = pageInfo[imageIndex].PhysicalSize;
-                                    if (autoZoom) {
-                                        double zoomX = ((double) controlPhysicalSize.Width - border*(columns + 1)) / (columns*pageSize.Width);
-                                        double zoomY = ((double) controlPhysicalSize.Height - border*(rows + 1)) / (rows*pageSize.Height);
-                                        zoom = Math.Min(zoomX, zoomY);
-                                    }
-
-                                    imageSize = new Size((int) (zoom*pageSize.Width), (int) (zoom*pageSize.Height));
-                                    Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-                                    
-            
-                                    int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
-                                    int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
-
-                                    lastImageSize.X += imagePixels.X;
-                                    //The Height is the Max of any PageHeight..
-                                    maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
-                                    
-                                    pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);
-                                    pevent.Graphics.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
-                                }
-                            }
-                        }
-
-                        pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
-                    }
-                    finally {
-                        pevent.Graphics.Clip = originalClip;
-                    }
-
-                    for (int i=0; i<pageRenderArea.Length; i++) {
-                        if (i + StartPage < pageInfo.Length) {
-                            Rectangle box = pageRenderArea[i];
-                            pevent.Graphics.DrawRectangle(Pens.Black, box);
-                            using (SolidBrush brush = new SolidBrush(ForeColor)) {
-                                pevent.Graphics.FillRectangle(brush, box);
-                            }
-                            box.Inflate(-1, -1);
-                            if (pageInfo[i + StartPage].Image != null) {
-                                pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
-                            }
-                            box.Width --;
-                            box.Height--;
-                            pevent.Graphics.DrawRectangle(Pens.Black, box);
-                        }
-                    }
+                    // Do actual drawing
+                    using var brush = ForeColor.GetCachedSolidBrushScope();
+                    pevent.Graphics.DrawString(
+                        exceptionPrinting ? SR.PrintPreviewExceptionPrinting : SR.PrintPreviewNoPages,
+                        Font,
+                        brush,
+                        ClientRectangle,
+                        format);
+                }
+                else
+                {
+                    BeginInvoke(new MethodInvoker(CalculatePageInfo));
                 }
             }
-            finally {
-                backBrush.Dispose();
+            else
+            {
+                if (!layoutOk)
+                {
+                    ComputeLayout();
+                }
+
+                Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
+
+                //Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
+                Point virtualPixels = new Point(VirtualSize);
+
+                // center pages on screen if small enough
+                Point offset = new Point(
+                    Math.Max(0, (Size.Width - virtualPixels.X) / 2),
+                    Math.Max(0, (Size.Height - virtualPixels.Y) / 2));
+                offset.X -= Position.X;
+                offset.Y -= Position.Y;
+                lastOffset = offset;
+
+                int borderPixelsX = PhysicalToPixels(border, screendpi.X);
+                int borderPixelsY = PhysicalToPixels(border, screendpi.Y);
+
+                Region originalClip = pevent.Graphics.Clip;
+                Rectangle[] pageRenderArea = new Rectangle[rows * columns];
+                Point lastImageSize = Point.Empty;
+                int maxImageHeight = 0;
+
+                using (var clipScope = new GraphicsClipScope(pevent.GraphicsInternal))
+                {
+                    for (int row = 0; row < rows; row++)
+                    {
+                        // Initialize our LastImageSize variable...
+                        lastImageSize.X = 0;
+                        lastImageSize.Y = maxImageHeight * row;
+
+                        for (int column = 0; column < columns; column++)
+                        {
+                            int imageIndex = StartPage + column + row * columns;
+                            if (imageIndex < pageInfo.Length)
+                            {
+                                Size pageSize = pageInfo[imageIndex].PhysicalSize;
+                                if (autoZoom)
+                                {
+                                    double zoomX = ((double)controlPhysicalSize.Width - border * (columns + 1))
+                                        / (columns * pageSize.Width);
+                                    double zoomY = ((double)controlPhysicalSize.Height - border * (rows + 1))
+                                        / (rows * pageSize.Height);
+                                    zoom = Math.Min(zoomX, zoomY);
+                                }
+
+                                imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
+                                Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
+
+                                int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
+                                int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
+
+                                lastImageSize.X += imagePixels.X;
+                                //The Height is the Max of any PageHeight..
+                                maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
+
+                                pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);
+                                pevent.Graphics.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
+                            }
+                        }
+                    }
+
+                    pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
+                }
+
+                for (int i = 0; i < pageRenderArea.Length; i++)
+                {
+                    if (i + StartPage < pageInfo.Length)
+                    {
+                        Rectangle box = pageRenderArea[i];
+                        pevent.Graphics.DrawRectangle(Pens.Black, box);
+                        using (var brush = ForeColor.GetCachedSolidBrushScope())
+                        {
+                            pevent.Graphics.FillRectangle(brush, box);
+                        }
+                        box.Inflate(-1, -1);
+                        if (pageInfo[i + StartPage].Image != null)
+                        {
+                            pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
+                        }
+                        box.Width--;
+                        box.Height--;
+                        pevent.Graphics.DrawRectangle(Pens.Black, box);
+                    }
+                }
             }
 
             base.OnPaint(pevent); // raise paint event
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnStartPageChanged"]/*' />
-        protected virtual void OnStartPageChanged(EventArgs e) {
-            EventHandler eh = Events[EVENT_STARTPAGECHANGED] as EventHandler;
-            if (eh != null) {
+        protected virtual void OnStartPageChanged(EventArgs e)
+        {
+            if (Events[EVENT_STARTPAGECHANGED] is EventHandler eh)
+            {
                 eh(this, e);
             }
         }
-        
-        private static int PhysicalToPixels(int physicalSize, int dpi) {
-            return(int) (physicalSize * dpi / 100.0);
+
+        private static int PhysicalToPixels(int physicalSize, int dpi)
+        {
+            return (int)(physicalSize * dpi / 100.0);
         }
 
-        private static Point PhysicalToPixels(Point physical, Point dpi) {
+        private static Point PhysicalToPixels(Point physical, Point dpi)
+        {
             return new Point(PhysicalToPixels(physical.X, dpi.X),
                              PhysicalToPixels(physical.Y, dpi.Y));
         }
 
-        private static Size PhysicalToPixels(Size physicalSize, Point dpi) {
+        private static Size PhysicalToPixels(Size physicalSize, Point dpi)
+        {
             return new Size(PhysicalToPixels(physicalSize.Width, dpi.X),
                             PhysicalToPixels(physicalSize.Height, dpi.Y));
         }
 
-        private static int PixelsToPhysical(int pixels, int dpi) {
-            return(int) (pixels * 100.0 / dpi);
+        private static int PixelsToPhysical(int pixels, int dpi)
+        {
+            return (int)(pixels * 100.0 / dpi);
         }
 
-        private static Point PixelsToPhysical(Point pixels, Point dpi) {
+        private static Point PixelsToPhysical(Point pixels, Point dpi)
+        {
             return new Point(PixelsToPhysical(pixels.X, dpi.X),
                              PixelsToPhysical(pixels.Y, dpi.Y));
         }
 
-        private static Size PixelsToPhysical(Size pixels, Point dpi) {
+        private static Size PixelsToPhysical(Size pixels, Point dpi)
+        {
             return new Size(PixelsToPhysical(pixels.Width, dpi.X),
                             PixelsToPhysical(pixels.Height, dpi.Y));
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ResetBackColor"]/*' />
-        /// <devdoc>
-        ///     Resets the back color to the defaults for the PrintPreviewControl.
-        /// </devdoc>
+        /// <summary>
+        ///  Resets the back color to the defaults for the PrintPreviewControl.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void ResetBackColor() {
+        public override void ResetBackColor()
+        {
             BackColor = SystemColors.AppWorkspace;
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ResetForeColor"]/*' />
-        /// <devdoc>
-        ///     Resets the back color to the defaults for the PrintPreviewControl.
-        /// </devdoc>
+        /// <summary>
+        ///  Resets the back color to the defaults for the PrintPreviewControl.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public override void ResetForeColor() {
+        public override void ResetForeColor()
+        {
             ForeColor = Color.White;
         }
 
-        /// <devdoc>
-        ///     WM_HSCROLL handler
-        /// </devdoc>
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WmHScroll"]/*' />
-        /// <internalonly/>
-
-        private void WmHScroll(ref Message m) {
-
+        /// <summary>
+        ///  WM_HSCROLL handler
+        /// </summary>
+        private void WmHScroll(ref Message m)
+        {
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar...
             //
-            if (m.LParam != IntPtr.Zero) {
+            if (m.LParam != IntPtr.Zero)
+            {
                 base.WndProc(ref m);
                 return;
             }
@@ -725,57 +706,67 @@ namespace System.Windows.Forms {
             Position = locPos;
         }
 
-        private void SetPositionNoInvalidate(Point value) {
+        private void SetPositionNoInvalidate(Point value)
+        {
             Point current = position;
 
             position = value;
             position.X = Math.Min(position.X, virtualSize.Width - Width);
             position.Y = Math.Min(position.Y, virtualSize.Height - Height);
-            if (position.X < 0) position.X = 0;
-            if (position.Y < 0) position.Y = 0;
+            if (position.X < 0)
+            {
+                position.X = 0;
+            }
 
-            Rectangle rect = ClientRectangle;
-            NativeMethods.RECT scroll = NativeMethods.RECT.FromXYWH(rect.X, rect.Y, rect.Width, rect.Height);
-            SafeNativeMethods.ScrollWindow(new HandleRef(this, Handle),
-                                 current.X - position.X,
-                                 current.Y - position.Y,
-                                 ref scroll,
-                                 ref scroll);
+            if (position.Y < 0)
+            {
+                position.Y = 0;
+            }
 
-            UnsafeNativeMethods.SetScrollPos(new HandleRef(this, Handle), NativeMethods.SB_HORZ, position.X, true);
-            UnsafeNativeMethods.SetScrollPos(new HandleRef(this, Handle), NativeMethods.SB_VERT, position.Y, true);
+            RECT scroll = ClientRectangle;
+            User32.ScrollWindow(
+                this,
+                current.X - position.X,
+                current.Y - position.Y,
+                ref scroll,
+                ref scroll);
+
+            User32.SetScrollPos(this, User32.SB.HORZ, position.X, BOOL.TRUE);
+            User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
         }
 
-        internal void SetVirtualSizeNoInvalidate(Size value) {
+        internal void SetVirtualSizeNoInvalidate(Size value)
+        {
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
-            
-            NativeMethods.SCROLLINFO info = new NativeMethods.SCROLLINFO();
-            info.fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE;
-            info.nMin = 0;
-            info.nMax = Math.Max(Height, virtualSize.Height) - 1;
-            info.nPage = Height;
-            UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_VERT, info, true);
 
-            info.fMask = NativeMethods.SIF_RANGE | NativeMethods.SIF_PAGE;
+            var info = new User32.SCROLLINFO
+            {
+                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                fMask = User32.SIF.RANGE | User32.SIF.PAGE,
+                nMin = 0,
+                nMax = Math.Max(Height, virtualSize.Height) - 1,
+                nPage = (uint)Height
+            };
+            User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
+
+            info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
             info.nMin = 0;
             info.nMax = Math.Max(Width, virtualSize.Width) - 1;
-            info.nPage = Width;
-            UnsafeNativeMethods.SetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ, info, true);
+            info.nPage = (uint)Width;
+            User32.SetScrollInfo(this, User32.SB.HORZ, ref info, BOOL.TRUE);
         }
 
-        /// <devdoc>
-        ///     WM_VSCROLL handler
-        /// </devdoc>
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WmVScroll"]/*' />
-        /// <internalonly/>
-
-        private void WmVScroll(ref Message m) {
-
+        /// <summary>
+        ///  WM_VSCROLL handler
+        /// </summary>
+        private void WmVScroll(ref Message m)
+        {
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar...
             //
-            if (m.LParam != IntPtr.Zero) {
+            if (m.LParam != IntPtr.Zero)
+            {
                 base.WndProc(ref m);
                 return;
             }
@@ -788,29 +779,28 @@ namespace System.Windows.Forms {
             Position = locPos;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WmKeyChar"]/*' />
-        /// <devdoc>
-        ///     Handles the WM_KEYDOWN message.
-        /// </devdoc>
-        /// <internalonly/>
-        //added to handle keyboard events
-        //
-        private void WmKeyDown(ref Message msg) {
-
+        /// <summary>
+        ///  Handles the WM_KEYDOWN message.
+        /// </summary>
+        private void WmKeyDown(ref Message msg)
+        {
             Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);
             Point locPos = Position;
             int pos = 0;
             int maxPos = 0;
-            
-            switch (keyData & Keys.KeyCode) {
+
+            switch (keyData & Keys.KeyCode)
+            {
                 case Keys.PageUp:
-                    if ((keyData & Keys.Modifiers) == Keys.Control) 
+                    if ((keyData & Keys.Modifiers) == Keys.Control)
                     {
                         pos = locPos.X;
-                        if (pos > SCROLL_PAGE) {
-                            pos-=SCROLL_PAGE;
+                        if (pos > SCROLL_PAGE)
+                        {
+                            pos -= SCROLL_PAGE;
                         }
-                        else {
+                        else
+                        {
                             pos = 0;
                         }
                         locPos.X = pos;
@@ -822,14 +812,16 @@ namespace System.Windows.Forms {
                     }
                     break;
                 case Keys.PageDown:
-                    if ((keyData & Keys.Modifiers) == Keys.Control) 
+                    if ((keyData & Keys.Modifiers) == Keys.Control)
                     {
                         pos = locPos.X;
                         maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
-                        if (pos < maxPos-SCROLL_PAGE) {
-                            pos+=SCROLL_PAGE;
+                        if (pos < maxPos - SCROLL_PAGE)
+                        {
+                            pos += SCROLL_PAGE;
                         }
-                        else {
+                        else
+                        {
                             pos = maxPos;
                         }
                         locPos.X = pos;
@@ -841,21 +833,28 @@ namespace System.Windows.Forms {
                     }
                     break;
                 case Keys.Home:
-                    if ((keyData & Keys.Modifiers) == Keys.Control)      
-                         StartPage=0;
+                    if ((keyData & Keys.Modifiers) == Keys.Control)
+                    {
+                        StartPage = 0;
+                    }
+
                     break;
                 case Keys.End:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
-                         StartPage=pageInfo.Length;
+                    {
+                        StartPage = pageInfo.Length;
+                    }
+
                     break;
-                    
+
                 case Keys.Up:
                     pos = locPos.Y;
                     if (pos > SCROLL_LINE)
                     {
-                        pos-=SCROLL_LINE;
+                        pos -= SCROLL_LINE;
                     }
-                    else {
+                    else
+                    {
                         pos = 0;
                     }
                     locPos.Y = pos;
@@ -865,23 +864,27 @@ namespace System.Windows.Forms {
 
                     pos = locPos.Y;
                     maxPos = Math.Max(Height, virtualSize.Height/* - Height*/);
-                    
-                    if (pos < maxPos-SCROLL_LINE) {
-                        pos+=SCROLL_LINE;
+
+                    if (pos < maxPos - SCROLL_LINE)
+                    {
+                        pos += SCROLL_LINE;
                     }
-                    else {
+                    else
+                    {
                         pos = maxPos;
                     }
                     locPos.Y = pos;
                     Position = locPos;
                     break;
                 case Keys.Left:
-                  
+
                     pos = locPos.X;
-                    if (pos > SCROLL_LINE) {
-                        pos-=SCROLL_LINE;
+                    if (pos > SCROLL_LINE)
+                    {
+                        pos -= SCROLL_LINE;
                     }
-                    else {
+                    else
+                    {
                         pos = 0;
                     }
                     locPos.X = pos;
@@ -890,10 +893,12 @@ namespace System.Windows.Forms {
                 case Keys.Right:
                     pos = locPos.X;
                     maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
-                    if (pos < maxPos-SCROLL_LINE) {
-                        pos+=SCROLL_LINE;
+                    if (pos < maxPos - SCROLL_LINE)
+                    {
+                        pos += SCROLL_LINE;
                     }
-                    else {
+                    else
+                    {
                         pos = maxPos;
                     }
                     locPos.X = pos;
@@ -902,19 +907,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WndProc"]/*' />
-        /// <internalonly/>
-        protected override void WndProc(ref Message m) {
-            switch (m.Msg) {
-                case NativeMethods.WM_VSCROLL:
+        protected override void WndProc(ref Message m)
+        {
+            switch ((User32.WM)m.Msg)
+            {
+                case User32.WM.VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case NativeMethods.WM_HSCROLL:
+                case User32.WM.HSCROLL:
                     WmHScroll(ref m);
                     break;
-                //added case to handle keyboard events
-                //
-                case NativeMethods.WM_KEYDOWN:
+                case User32.WM.KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:
@@ -923,27 +926,37 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ShouldSerializeBackColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates whether the <see cref='System.Windows.Forms.Control.BackColor'/> property should be
-        ///       persisted.
-        ///    </para>
-        /// </devdoc>
-        internal override bool ShouldSerializeBackColor() {
+        /// <summary>
+        ///  Indicates whether the <see cref='Control.BackColor'/> property should be
+        ///  persisted.
+        /// </summary>
+        internal override bool ShouldSerializeBackColor()
+        {
             return !BackColor.Equals(SystemColors.AppWorkspace);
         }
 
-        /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.ShouldSerializeForeColor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates whether the <see cref='System.Windows.Forms.Control.ForeColor'/> property should be
-        ///       persisted.
-        ///    </para>
-        /// </devdoc>
-        internal override bool ShouldSerializeForeColor() {
+        /// <summary>
+        ///  Indicates whether the <see cref='Control.ForeColor'/> property should be
+        ///  persisted.
+        /// </summary>
+        internal override bool ShouldSerializeForeColor()
+        {
             return !ForeColor.Equals(Color.White);
+        }
+
+        /// <summary>
+        ///  Gets back color respectively to the High Contrast theme is applied or not
+        ///  and taking into account saved custom back color.
+        /// </summary>
+        /// <param name="isHighContract">Indicates whether High Contrast theme is applied or not.</param>
+        /// <returns>
+        ///  Standard back color for PrintPreview control in standard theme (1),
+        ///  contrasted color if there is High Contrast theme applied (2) and
+        ///  custom color if this is set irrespectively to HC or not HC mode (3).
+        /// </returns>
+        private Color GetBackColor(bool isHighContract)
+        {
+            return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
         }
     }
 }
-

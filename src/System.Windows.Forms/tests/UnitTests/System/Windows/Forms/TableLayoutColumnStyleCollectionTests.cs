@@ -7,12 +7,12 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutColumnStyleCollectionTests
+    public class TableLayoutColumnStyleCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Add_ColumnStyle_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
 
@@ -21,34 +21,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Add_RowStyle_ThrowsInvalidCastException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
 
             var style = new RowStyle();
-            Assert.Throws< InvalidCastException>(() => collection.Add(style));
+            Assert.Throws<InvalidCastException>(() => collection.Add(style));
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Insert_ColumnStyle_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
 
             var style = new ColumnStyle();
             collection.Insert(0, style);
             Assert.Equal(style, Assert.Single(collection));
-    }   
+        }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Item_SetColumnStyle_GetReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
             collection.Add(new ColumnStyle());
@@ -59,20 +59,20 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, collection[0]);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Item_GetNotColumnStyle_ThrowsInvalidCastException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
             Assert.Throws<InvalidCastException>(() => collection.Add(new RowStyle()));
             Assert.Throws<InvalidCastException>(() => collection[0]);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Remove_ColumnStyle_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
             var style = new ColumnStyle();
@@ -84,10 +84,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_Contains_ColumnStyle_ReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
             var style = new ColumnStyle();
@@ -97,10 +97,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(collection.Contains(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutColumnStyleCollection_IndexOf_Invoke_ReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutColumnStyleCollection collection = settings.ColumnStyles;
             var style = new ColumnStyle();

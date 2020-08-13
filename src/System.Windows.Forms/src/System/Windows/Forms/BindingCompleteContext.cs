@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Indicates the direction of a binding operation.
-    /// </devdoc>
+    /// <summary>
+    ///  Indicates the direction of a binding operation.
+    /// </summary>
     public enum BindingCompleteContext
     {
-        /// <devdoc>
-        /// Control value is being updated from data source value.
-        /// </devdoc>
+        /// <summary>
+        ///  Control value is being updated from data source value.
+        /// </summary>
         ControlUpdate = 0,
 
-        /// <devdoc>
-        /// Data source value is being updated from control value.
-        /// </devdoc>
+        /// <summary>
+        ///  Data source value is being updated from control value.
+        /// </summary>
         DataSourceUpdate = 1,
     }
 }

@@ -8,11 +8,11 @@ Once you are ready to debug your changes on an existing Windows Forms applicatio
 
 If you do not want to modify your local SDK, you may with to perform technique 2, while if you do not want to add an additional reference to your project, technique 1 may be better for you.
 
-## (1) Copy your changes into the SDK
+## 1. Copy your changes into the SDK
 
 copy the resulting assembly(-ies) from the base of the repository  
 
-`[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0_`
+`[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0_`
 
 to your dotnet folder at:  
 
@@ -22,17 +22,17 @@ where **[Drive]** is your OS drive (for example, C:)  and **[path-to-repo]** is 
 
 **NOTE** that this will modify your SDK; to revert back, you will have to repair the install or reinstall. See the [dotnet Core repository][dotnet-core-repos] for more information.
 
-## (2) Point your project to your experimental binary(-ies)
+## 2. Point your project to your experimental binary(-ies)
 
 Add references to the binary(-ies) to your project ported to Core. For example, for System.Windows.Forms, you should add the following reference:
 
 ```xml
 <ItemGroup>
-    <Reference Include="[Drive]:[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp3.0\System.Windows.Forms.dll" />
+    <Reference Include="[Drive]:[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0\System.Windows.Forms.dll" />
 </ItemGroup>
 ```
 
-where **[Drive]** is the drive you have our repository in and **[path-to-repo]** is the additional path to our repository from the base drive (this may be nothing). Note netcoreapp3.0 may change.
+where **[Drive]** is the drive you have our repository in and **[path-to-repo]** is the additional path to our repository from the base drive (this may be nothing). Note netcoreapp5.0 may change.
 
 [comment]: <> (URI Links)
 

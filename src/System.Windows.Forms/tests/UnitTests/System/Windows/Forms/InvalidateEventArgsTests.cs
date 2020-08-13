@@ -8,7 +8,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class InvalidateEventArgsTests
+    // NB: doesn't require thread affinity
+    public class InvalidateEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Rectangle_TestData()
         {

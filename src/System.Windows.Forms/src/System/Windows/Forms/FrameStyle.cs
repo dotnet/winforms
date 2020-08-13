@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the frame style of the selected control.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the frame style of the selected control.
+    /// </summary>
     public enum FrameStyle
     {
-        /// <devdoc>
-        /// A thin, dashed border.
-        /// </devdoc>
+        /// <summary>
+        ///  A thin, dashed border.
+        /// </summary>
         Dashed,
 
-        /// <devdoc>
-        /// A thick, solid border.
-        /// </devdoc>
+        /// <summary>
+        ///  A thick, solid border.
+        /// </summary>
         Thick,
     }
 }

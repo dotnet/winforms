@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewAutoSizeModeEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewAutoSizeModeEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(true)]

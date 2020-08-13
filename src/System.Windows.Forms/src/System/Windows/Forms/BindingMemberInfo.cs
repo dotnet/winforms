@@ -2,16 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 namespace System.Windows.Forms
 {
     public struct BindingMemberInfo
     {
-        private string _dataList;
-        private string _dataField;
+        private readonly string _dataList;
+        private readonly string _dataField;
 
         public BindingMemberInfo(string dataMember)
         {
-            if (dataMember == null)
+            if (dataMember is null)
             {
                 dataMember = string.Empty;
             }
@@ -29,9 +31,9 @@ namespace System.Windows.Forms
             }
         }
 
-        public string BindingPath => _dataList != null ? _dataList : string.Empty;
+        public string BindingPath => _dataList ?? string.Empty;
 
-        public string BindingField => _dataField != null ? _dataField : string.Empty;
+        public string BindingField => _dataField ?? string.Empty;
 
         public string BindingMember
         {

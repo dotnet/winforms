@@ -7,11 +7,10 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///     Defines the Priority of a SnapLine.  During the drag operation, when more than
-    ///     one SnapLine is visible at any given time - only the highest priority SnapLines
-    ///     are rendered.
+    ///  Defines the Priority of a SnapLine.  During the drag operation, when more than
+    ///  one SnapLine is visible at any given time - only the highest priority SnapLines
+    ///  are rendered.
     /// </summary>
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
     public enum SnapLinePriority
     {
         Low = 1,

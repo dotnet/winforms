@@ -2,87 +2,88 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides a format-independent mechanism for transferring data.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Provides a format-independent mechanism for transferring data.
+    /// </summary>
     public interface IDataObject
     {
-        /// <devdoc>
-        /// Retrieves the data associated with the specified data format, using
-        /// autoConvert to determine whether to convert the data to the  format.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the data associated with the specified data format, using
+        ///  autoConvert to determine whether to convert the data to the  format.
+        /// </summary>
         object GetData(string format, bool autoConvert);
 
-        /// <devdoc>
+        /// <summary>
         ///  Retrieves the data associated with the specified data format.
-        /// </devdoc>
+        /// </summary>
         object GetData(string format);
 
-        /// <devdoc>
-        /// Retrieves the data associated with the specified class type format.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the data associated with the specified class type format.
+        /// </summary>
         object GetData(Type format);
 
-        /// <devdoc>
-        /// Stores the specified data and its associated format in  this instance,
-        /// using autoConvert to specify whether the data can be converted to
-        /// another format.</para>
-        /// </devdoc>
+        /// <summary>
+        ///  Stores the specified data and its associated format in  this instance,
+        ///  using autoConvert to specify whether the data can be converted to
+        ///  another format.
+        /// </summary>
         void SetData(string format, bool autoConvert, object data);
 
-        /// <devdoc>
-        /// Stores the specified data and its associated format in this instance.
-        /// </devdoc>
+        /// <summary>
+        ///  Stores the specified data and its associated format in this instance.
+        /// </summary>
         void SetData(string format, object data);
 
-        /// <devdoc>
+        /// <summary>
         ///  Stores the specified data and its associated class type in this
-        /// instance.
-        /// </devdoc>
+        ///  instance.
+        /// </summary>
         void SetData(Type format, object data);
 
-        /// <devdoc>
-        /// Stores the specified data in this instance, using the class of the
-        /// data for the format.
-        /// </devdoc>
+        /// <summary>
+        ///  Stores the specified data in this instance, using the class of the
+        ///  data for the format.
+        /// </summary>
         void SetData(object data);
 
-        /// <devdoc>
-        /// Determines whether data stored in this instance is  associated with the
-        /// specified format, using autoConvert to determine whether to convert the
-        /// data to the format.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines whether data stored in this instance is  associated with the
+        ///  specified format, using autoConvert to determine whether to convert the
+        ///  data to the format.
+        /// </summary>
         bool GetDataPresent(string format, bool autoConvert);
 
-        /// <devdoc>
-        /// Determines whether data stored in this instance is associated with, or
-        /// can be converted to, the specified format.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines whether data stored in this instance is associated with, or
+        ///  can be converted to, the specified format.
+        /// </summary>
         bool GetDataPresent(string format);
 
-        /// <devdoc>
-        /// Determines whether data stored in this instance is associated with, or
-        /// can be converted to, the specified format.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines whether data stored in this instance is associated with, or
+        ///  can be converted to, the specified format.
+        /// </summary>
         bool GetDataPresent(Type format);
 
-        /// <devdoc>
-        /// Gets a list of all formats that data stored in this instance is
-        /// associated with or can be converted to, using autoConvert to determine
-        /// whether to retrieve all formats that the data can be converted to or'
-        /// only native data formats.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets a list of all formats that data stored in this instance is
+        ///  associated with or can be converted to, using autoConvert to determine
+        ///  whether to retrieve all formats that the data can be converted to or'
+        ///  only native data formats.
+        /// </summary>
         string[] GetFormats(bool autoConvert);
 
-        /// <devdoc>
-        /// Gets a list of all formats that data stored in this instance is
-        /// associated with or can be converted to.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets a list of all formats that data stored in this instance is
+        ///  associated with or can be converted to.
+        /// </summary>
         string[] GetFormats();
     }
 }

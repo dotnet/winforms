@@ -5,18 +5,17 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Supports the hosting of several 'pane' windows
-    /// separated by splitter bars.
+    ///  Supports the hosting of several 'pane' windows separated by splitter bars.
     /// </summary>
     internal interface ISplitWindowService
     {
         /// <summary>
-        /// Requests the service to add a window 'pane'.
+        ///  Requests the service to add a window 'pane'.
         /// </summary>
         void AddSplitWindow(Control window);
 
         /// <summary>
-        /// Requests the service to remove a window 'pane'.
+        ///  Requests the service to remove a window 'pane'.
         /// </summary>
         void RemoveSplitWindow(Control window);
     }

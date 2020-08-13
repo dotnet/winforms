@@ -3,12 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 
 namespace System.ComponentModel.Design
 {
-    [ComVisible(true)]
     public class DesignerActionListCollection : CollectionBase
     {
         public DesignerActionListCollection()
@@ -26,17 +23,15 @@ namespace System.ComponentModel.Design
             set => List[index] = value;
         }
 
-        public int Add(DesignerActionList value)
-        {
-            return List.Add(value);
-        }
+        public int Add(DesignerActionList value) => List.Add(value);
 
         public void AddRange(DesignerActionList[] value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             for (int i = 0; i < value.Length; i++)
             {
                 Add(value[i]);
@@ -45,10 +40,11 @@ namespace System.ComponentModel.Design
 
         public void AddRange(DesignerActionListCollection value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             int currentCount = value.Count;
             for (int i = 0; i < currentCount; i++)
             {
@@ -59,29 +55,16 @@ namespace System.ComponentModel.Design
         public void Insert(int index, DesignerActionList value) => List.Insert(index, value);
 
         public int IndexOf(DesignerActionList value) => List.IndexOf(value);
-        
+
         public bool Contains(DesignerActionList value) => List.Contains(value);
-        
+
         public void Remove(DesignerActionList value) => List.Remove(value);
-        
+
         public void CopyTo(DesignerActionList[] array, int index) => List.CopyTo(array, index);
-        
-        protected override void OnSet(int index, object oldValue, object newValue)
-        {
-        }
 
-        protected override void OnInsert(int index, object value)
+        protected override void OnValidate(object value)
         {
+            // Don't perform any validation.
         }
-
-        protected override void OnClear()
-        {
-        }
-
-        protected override void OnRemove(int index, object value)
-        {
-        }
-
-        protected override void OnValidate(object value) => Debug.Assert(value != null, "Don't add null actionlist!");
     }
 }

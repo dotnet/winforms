@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>System.Windows.Forms.Tests</AssemblyName>    
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>7.3</LangVersion>
+    <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,11 +11,18 @@
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
   </ItemGroup>
 
-  <ItemGroup>    
+  <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
-    <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
-    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
-    <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
+    <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
+    <ProjectReference Include="..\..\..\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+    <ProjectReference Include="..\IntegrationTests\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
+    <ProjectReference Include="..\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
+    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(TargetFramework)\System.Drawing.dll" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +32,15 @@
     <Content Include="bitmaps\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="bitmaps\10x16_one_entry_32bit.ico">
+      <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="TestResources.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

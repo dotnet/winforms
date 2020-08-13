@@ -4,27 +4,27 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies how the user activates items and the appearance of items as the
-    /// mouse cursor moves over them.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies how the user activates items and the appearance of items as the
+    ///  mouse cursor moves over them.
+    /// </summary>
     public enum ItemActivation
     {
-        /// <devdoc>
-        /// Activate items with a double-click.
-        /// Items do not change appearance.
-        /// </devdoc>
+        /// <summary>
+        ///  Activate items with a double-click.
+        ///  Items do not change appearance.
+        /// </summary>
         Standard = 0,
 
-        /// <devdoc>
-        /// Activate items with a single click. The cursor changes shape and the
-        /// item text changes color.
-        /// </devdoc>
+        /// <summary>
+        ///  Activate items with a single click. The cursor changes shape and the
+        ///  item text changes color.
+        /// </summary>
         OneClick = 1,
 
-        /// <devdoc>
-        /// Activate items with a double click. The item text changes color.
-        /// </devdoc>
+        /// <summary>
+        ///  Activate items with a double click. The item text changes color.
+        /// </summary>
         TwoClick = 2,
     }
 }

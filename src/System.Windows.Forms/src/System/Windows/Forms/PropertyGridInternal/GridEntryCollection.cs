@@ -2,13 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Diagnostics;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
     internal sealed class GridEntryCollection : GridItemCollection
     {
-        private GridEntry _owner;
+        private readonly GridEntry _owner;
 
         public GridEntryCollection(GridEntry owner, GridEntry[] entries) : base(entries)
         {
@@ -17,7 +19,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void AddRange(GridEntry[] value)
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

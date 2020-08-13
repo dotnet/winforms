@@ -7,16 +7,15 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see langword='MouseUp'/>, <see langword='MouseDown'/>, and
-    /// <see langword='MouseMove '/> events.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Provides data for the <see cref='Control.MouseUp'/>, <see cref='Control.MouseDown'/> and
+    /// <see cref='Control.MouseMove'/> events.
+    /// </summary>
     public class MouseEventArgs : EventArgs
     {
-        /// <devdoc>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.MouseEventArgs'/> class.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='MouseEventArgs'/> class.
+        /// </summary>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
         {
             Button = button;
@@ -26,34 +25,34 @@ namespace System.Windows.Forms
             Delta = delta;
         }
 
-        /// <devdoc>
-        /// Gets which mouse button was pressed.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets which mouse button was pressed.
+        /// </summary>
         public MouseButtons Button { get; }
 
-        /// <devdoc>
-        /// Gets the number of times the mouse button was pressed and released.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the number of times the mouse button was pressed and released.
+        /// </summary>
         public int Clicks { get; }
 
-        /// <devdoc>
-        /// Gets the x-coordinate of a mouse click.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the x-coordinate of a mouse click.
+        /// </summary>
         public int X { get; }
 
-        /// <devdoc>
-        /// Gets the y-coordinate of a mouse click.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the y-coordinate of a mouse click.
+        /// </summary>
         public int Y { get; }
 
-        /// <devdoc>
-        /// Gets a signed count of the number of detents the mouse wheel has rotated.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets a signed count of the number of detents the mouse wheel has rotated.
+        /// </summary>
         public int Delta { get; }
 
-        /// <devdoc>
-        /// Gets the location of the mouse during MouseEvent.
-        /// </devdoc>
+        /// <summary>
+        ///  Gets the location of the mouse during MouseEvent.
+        /// </summary>
         public Point Location => new Point(X, Y);
     }
 }

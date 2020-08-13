@@ -7,44 +7,44 @@ using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {
-    public class LayoutEngineTests
+    public class LayoutEngineTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void LayoutEngine_InitLayout_ValidChild_Nop()
         {
             var engine = new SubLayoutEngine();
             engine.InitLayout(new ScrollableControl(), BoundsSpecified.All);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void LayoutEngine_InitLayout_InvalidChild_ThrowsNotSupportedException()
         {
             var engine = new SubLayoutEngine();
             Assert.Throws<NotSupportedException>(() => engine.InitLayout("child", BoundsSpecified.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void LayoutEngine_InitLayout_NullChild_ThrowsArgumentNullException()
         {
             var engine = new SubLayoutEngine();
             Assert.Throws<ArgumentNullException>("child", () => engine.InitLayout(null, BoundsSpecified.All));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void LayoutEngine_Layout_ValidContainer_ReturnsFalse()
         {
             var engine = new SubLayoutEngine();
             Assert.False(engine.Layout(new ScrollableControl(), new LayoutEventArgs(new Component(), "affectedProperty")));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void LayoutEngine_Layout_InvalidContainer_Nop()
         {
             var engine = new SubLayoutEngine();
             Assert.Throws<NotSupportedException>(() => engine.Layout("container", new LayoutEventArgs(new Component(), "affectedProperty")));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void LayoutEngine_Layout_NullContainer_ThrowsArgumentNullException()
         {
             var engine = new SubLayoutEngine();

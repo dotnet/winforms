@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PopupEventArgsTests
+    public class PopupEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_IWin32Window_Control_Bool_Size_TestData()
         {
@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new SubWin32Window(), new Button(), true, new Size(-1, -2) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_IWin32Window_Control_Bool_Size_TestData))]
         public void Ctor_IWin32Window_Control_Bool_Size(IWin32Window associatedWindow, Control associatedControl, bool isBalloon, Size size)
         {
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new Size(-1, -2) };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ToolTipSize_TestData))]
         public void ToolTipSize_Set_GetReturnsExpected(Size value)
         {

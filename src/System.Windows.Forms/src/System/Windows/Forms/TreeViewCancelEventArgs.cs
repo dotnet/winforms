@@ -2,49 +2,42 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
 
+using System.ComponentModel;
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Provides data for the <see cref='TreeView.OnBeforeCheck'/>,
+    ///  <see cref='TreeView.OnBeforeCollapse'/>,
+    ///  <see cref='TreeView.OnBeforeExpand'/>,
+    ///  or <see cref='TreeView.OnBeforeSelect'/> event.
+    /// </summary>
+    public class TreeViewCancelEventArgs : CancelEventArgs
+    {
+        private readonly TreeNode node;
+        private readonly TreeViewAction action;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///       Provides data for the <see cref='System.Windows.Forms.TreeView.OnBeforeCheck'/>,
-    ///    <see cref='System.Windows.Forms.TreeView.OnBeforeCollapse'/>,
-    ///    <see cref='System.Windows.Forms.TreeView.OnBeforeExpand'/>,
-    ///       or <see cref='System.Windows.Forms.TreeView.OnBeforeSelect'/> event.
-    ///
-    ///    </para>
-    /// </devdoc>
-    public class TreeViewCancelEventArgs : CancelEventArgs {
-        private TreeNode node;
-        private TreeViewAction action;
-
-        /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs.TreeViewCancelEventArgs"]/*' />
         public TreeViewCancelEventArgs(TreeNode node, bool cancel, TreeViewAction action)
-        : base(cancel) {
-            this.node = node;                                           
+        : base(cancel)
+        {
+            this.node = node;
             this.action = action;
         }
 
-        /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs.Node"]/*' />
-        public TreeNode Node {
-            get {
+        public TreeNode Node
+        {
+            get
+            {
                 return node;
             }
         }
-        
-        /// <include file='doc\TreeViewCancelEvent.uex' path='docs/doc[@for="TreeViewCancelEventArgs.Action"]/*' />
-        public TreeViewAction Action {
-            get {
+
+        public TreeViewAction Action
+        {
+            get
+            {
                 return action;
             }
         }

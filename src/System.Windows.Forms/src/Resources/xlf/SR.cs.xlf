@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="AXWindowlessControl">
-        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET Framework.</source>
-        <target state="translated">Ovládací prvek ActiveX je ovládací prvek bez oken. Tento ovládací prvek není v této verzi platformy .NET Framework podporován.</target>
+        <source>ActiveX control is a windowless control. The control is not supported in this version of the .NET.</source>
+        <target state="translated">Ovládací prvek ActiveX je ovládací prvek bez oken. Tento ovládací prvek není v této verzi .NET podporován.</target>
         <note />
       </trans-unit>
       <trans-unit id="AboutBoxDesc">
@@ -192,6 +192,11 @@
         <target state="translated">Sbalit</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="new">Double Click</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Rozbalit</target>
@@ -230,11 +235,6 @@
       <trans-unit id="ApplyCaption">
         <source>&amp;Apply</source>
         <target state="translated">&amp;Použít</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ArraysNotSameSize">
-        <source>Arrays '{0}' and '{1}' must be the same size.</source>
-        <target state="translated">Pole {0} a {1} musí mít stejnou velikost.</target>
         <note />
       </trans-unit>
       <trans-unit id="AutoCompleteFailure">
@@ -692,16 +692,6 @@
         <target state="translated">Po vytištění nelze dokument upravovat ani do něj již nelze přidávat položky.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">Nelze převést typ Double na typ Date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">Nelze převést typ Integer na typ Float.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CantNestMessageLoops">
         <source>Starting a second message loop on a single thread is not a valid operation. Use Form.ShowDialog instead.</source>
         <target state="translated">Vytvoření druhé smyčky zpráv v jednom vlákně je neplatná operace. Použijte místo toho funkci Application.RunDialog nebo Form.ShowDialog.</target>
@@ -1017,6 +1007,11 @@
         <target state="translated">Určuje, zda je pole se seznamem nyní otevřeno.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxEditDefaultAccessibleName">
+        <source>ComboBox</source>
+        <target state="translated">Pole se seznamem</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComboBoxFlatStyleDescr">
         <source>Determines the display of the control.</source>
         <target state="translated">Určuje zobrazení ovládacího prvku.</target>
@@ -1177,6 +1172,11 @@
         <target state="translated">Nezpracovaný typ {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ConstructorArgumentInvalidValueType">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">Argument {0} nelze převést na typ {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ContainerControlActiveControlDescr">
         <source>The currently active control.</source>
         <target state="translated">Aktivní ovládací prvek.</target>
@@ -1210,31 +1210,6 @@
       <trans-unit id="ContainerControlParentFormDescr">
         <source>The parent form of this container control.</source>
         <target state="translated">Nadřazený formulář tohoto ovládacího prvku kontejneru.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuCollapseDescr">
-        <source>Raised when the context menu collapses.</source>
-        <target state="translated">Vyvolá se při sbalení místní nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuImageListDescr">
-        <source>Gets or sets the ImageList associated with this context menu.</source>
-        <target state="translated">Získá nebo nastaví ovládací prvek ImageList spojený s touto místní nabídkou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuInvalidParent">
-        <source>ContextMenu cannot be shown on an invisible control.</source>
-        <target state="translated">Nabídku ContextMenu nelze zobrazit v neviditelném ovládacím prvku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuIsImageMarginPresentDescr">
-        <source>Gets or sets a value indicating whether the menu has an image margin.</source>
-        <target state="translated">Získá nebo nastaví hodnotu označující, zda má nabídka okraj pro obrázek.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ContextMenuSourceControlDescr">
-        <source>The last control that caused this context menu to be displayed.</source>
-        <target state="translated">Poslední ovládací prvek, který způsobil zobrazení této kontextové nabídky.</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripSourceControlDescr">
@@ -2102,466 +2077,6 @@
         <target state="translated">Funkce RemoveAt není pro vazby mezi vlastnostmi podporována.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DataGridAllowSortingDescr">
-        <source>Indicates whether the grid can be re-sorted by clicking a column header.</source>
-        <target state="translated">Určuje, zda lze mřížku znovu seřadit kliknutím na záhlaví sloupce.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridAlternatingBackColorDescr">
-        <source>Indicates the background color of alternating rows for a ledger appearance.</source>
-        <target state="translated">Určuje barvu pozadí střídavých řádků pro vzhled účetní knihy.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBackButtonClickDescr">
-        <source>Occurs when the user clicks the Back button on a child table to return to the parent table.</source>
-        <target state="translated">Vyvolá se v případě, že uživatel klikne na tlačítko Zpět v podřízené tabulce, aby se vrátil do nadřazené tabulky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBackgroundColorDescr">
-        <source>Indicates the color of the DataGrid background.</source>
-        <target state="translated">Určuje barvu pozadí ovládacího prvku DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBeginInit">
-        <source>BeginInit() has already been called without an EndInit().</source>
-        <target state="translated">Funkce BeginInit() již byla volána bez funkce EndInit().</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBoolColumnAllowNullValue">
-        <source>Specifies whether the DataGridBoolColumn allows null values.</source>
-        <target state="translated">Určuje, zda funkce DataGridBoolColumn umožňuje použití hodnot NULL.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridBorderStyleDescr">
-        <source>Indicates the border style for the DataGrid.</source>
-        <target state="translated">Určuje styl ohraničení ovládacího prvku DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionBackButtonToolTip">
-        <source>Navigates back to the parent rows.</source>
-        <target state="translated">Přejde zpět na nadřazené řádky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionBackColorDescr">
-        <source>Indicates the background color of the top caption.</source>
-        <target state="translated">Určuje barvu pozadí titulku nejvyšší úrovně.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionDetailsButtonToolTip">
-        <source>Shows/Hides the parent rows for the current set of child rows.</source>
-        <target state="translated">Zobrazí nebo skryje nadřazené řádky pro aktuální sadu podřízených řádků.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionFontDescr">
-        <source>Indicates the font of the top caption.</source>
-        <target state="translated">Určuje písmo titulku nejvyšší úrovně.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionForeColorDescr">
-        <source>Indicates the color of text that appears in the top caption.</source>
-        <target state="translated">Určuje barvu textu, který je zobrazen v titulku nejvyšší úrovně.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionTextDescr">
-        <source>Indicates the text displayed in the top caption.</source>
-        <target state="translated">Určuje text zobrazený v titulku nejvyšší úrovně.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCaptionVisibleDescr">
-        <source>Indicates whether the top caption is visible.</source>
-        <target state="translated">Určuje, zda je titulek nejvyšší úrovně viditelný.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnCollectionMissing">
-        <source>DataGridColumn instance does not exist in the collection.</source>
-        <target state="translated">Instance DataGridColumn v kolekci neexistuje.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnHeadersVisibleDescr">
-        <source>Indicates whether the column headers are visible.</source>
-        <target state="translated">Určuje, zda jsou záhlaví sloupců viditelná.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnListManagerPosition">
-        <source>Position of ListManager must be equal to 'rowNum'.</source>
-        <target state="translated">Pozice správce ListManager musí být rovna hodnotě rowNum.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnNoPropertyDescriptor">
-        <source>PropertyDescriptor has not been set on this DataGridColumn.</source>
-        <target state="translated">V tomto objektu DataGridColumn nebyl nastaven popisovač PropertyDescriptor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnStyleDuplicateMappingName">
-        <source>Data grid column styles collection already contains a column style with the same mapping name.</source>
-        <target state="translated">Kolekce stylů sloupců datové mřížky již obsahuje styl sloupce se stejným názvem mapování.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnUnbound">
-        <source>DataGridColumnStyle of '{0}' cannot be used because it is not associated with a Property or Column in the DataSource.</source>
-        <target state="translated">Styl DataGridColumnStyle {0} nelze použít, protože není přidružen k objektu Property nebo Column v objektu DataSource.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridColumnWidth">
-        <source>ColumnWidth must be greater than or equal to 0.</source>
-        <target state="translated">Hodnota ColumnWidth musí být větší nebo rovna 0.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridCurrentCellDescr">
-        <source>The currently selected cell in the DataGrid.</source>
-        <target state="translated">Aktuálně vybraná buňka v objektu DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDataMemberDescr">
-        <source>Indicates a sub-list of the DataSource to show in the DataGrid.</source>
-        <target state="translated">Určuje podseznam objektu DataSource, který bude zobrazen v objektu DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDataSourceDescr">
-        <source>Indicates the source of data for the DataGrid.</source>
-        <target state="translated">Určuje zdroj dat pro objekt DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDefaultColumnCollectionChanged">
-        <source>User cannot change the contents of the default GridColumnStylesCollection.</source>
-        <target state="translated">Uživatel nemůže změnit obsah výchozí kolekce GridColumnStylesCollection.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDefaultTableSet">
-        <source>Value of this property cannot be changed on the default DataGridTableStyle.</source>
-        <target state="translated">Hodnotu této vlastnosti nelze ve výchozím objektu DataGridTableStyle změnit.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridDownButtonClickDescr">
-        <source>Occurs when the user clicks the "show/hide parent rows" icon. </source>
-        <target state="translated">Vyvolá se v případě, že uživatel klikne na ikonu pro zobrazení nebo skrytí nadřazených řádků. </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridEmptyColor">
-        <source>Value '{0}' cannot be set to an empty value.</source>
-        <target state="translated">Hodnotu {0} nelze nastavit na prázdnou hodnotu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridErrorMessageBoxCaption">
-        <source>Committing the row to the original data store has caused an error.</source>
-        <target state="translated">Při potvrzování řádku původnímu úložišti dat došlo k chybě.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridExceptionInPaint">
-        <source>DataGrid received an exception at design time. Reset the DataSource and DataMember property on the grid.</source>
-        <target state="translated">Objekt DataGrid obdržel výjimku v době návrhu. Obnovte nastavení vlastností DataSource a DataMember mřížky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFailedToGetRegionInfo">
-        <source>Program cannot get information about the painting and scrolling region.</source>
-        <target state="translated">Program nemohl získat informace týkajících se oblasti pro překreslování a posouvání.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFirstVisibleColumnDescr">
-        <source>Indicates the index of the column that is first shown.</source>
-        <target state="translated">Určuje index sloupce, který je zobrazen jako první.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridFlatModeDescr">
-        <source>Indicates whether the grid has a flat appearance.</source>
-        <target state="translated">Určuje, zda je mřížka zobrazena jako plochá.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridLineColorDescr">
-        <source>Indicates the color of the grid lines.</source>
-        <target state="translated">Určuje barvu čar mřížky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridLineStyleDescr">
-        <source>Indicates the style of the grid lines.</source>
-        <target state="translated">Určuje styl čar mřížky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridGridTablesDescr">
-        <source>The collection of DataGridTableStyle objects that the DataGrid can render its data with.</source>
-        <target state="translated">Kolekce objektů DataGridTableStyle, pomocí kterých může prvek DataGrid zobrazit data.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderBackColorDescr">
-        <source>Indicates the background color of the column and row headers.</source>
-        <target state="translated">Určuje barvu pozadí záhlaví řádků a sloupců.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderFontDescr">
-        <source>Indicates the font of the text in the column and row headers.</source>
-        <target state="translated">Určuje písmo textu v záhlaví řádků a sloupců.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHeaderForeColorDescr">
-        <source>Indicates the color of the text in the column and row headers.</source>
-        <target state="translated">Určuje barvu textu v záhlaví řádků a sloupců.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridHorizScrollBarDescr">
-        <source>Returns the horizontal scroll bar used by the grid.</source>
-        <target state="translated">Vrátí vodorovný posuvník používaný mřížkou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridLinkColorDescr">
-        <source>Indicates the color of the text that appears inside the child links.</source>
-        <target state="translated">Určuje barvu textu, který se zobrazí uvnitř podřízených odkazů.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridLinkHoverColorDescr">
-        <source>Indicates the color of the text that appears inside a child link when the mouse pointer moves over it.</source>
-        <target state="translated">Určuje barvu textu, který se zobrazí uvnitř podřízeného odkazu při umístění ukazatele myši nad odkaz.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridListManagerDescr">
-        <source>The CurrencyManager that the DataGrid uses to get data from the data source.</source>
-        <target state="translated">Správce CurrencyManager, který ovládací prvek DataGrid používá k získání dat ze zdroje dat</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNavigateEventDescr">
-        <source>Occurs when the user navigates to the child rows or when the user navigates back to the parent rows.</source>
-        <target state="translated">Vyvolá se v případě, že uživatel přejde k podřízeným řádkům nebo pokud uživatel přejde zpět k nadřazeným řádkům.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNavigationModeDescr">
-        <source>Indicates whether links to child tables are shown.</source>
-        <target state="translated">Určuje, zda jsou zobrazeny odkazy na podřízené tabulky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNodeClickEventDescr">
-        <source>Occurs when the user clicks on the expansion glyph on the row header.</source>
-        <target state="translated">Vyvolá se v případě, že uživatel klikne na piktogram rozbalení v záhlaví řádku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridNullText">
-        <source>(null)</source>
-        <target state="translated">(null)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnBackgroundColorChangedDescr">
-        <source>Event raised when the value of the BackgroundColor property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti BackgroundColor ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnBorderStyleChangedDescr">
-        <source>Event raised when the value of the BorderStyle property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti BorderStyle ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnCaptionVisibleChangedDescr">
-        <source>Event raised when the value of the CaptionVisible property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti CaptionVisible ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnCurrentCellChangedDescr">
-        <source>Event raised when the value of the CurrentCell property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti CurrentCell ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnDataSourceChangedDescr">
-        <source>Event raised when the value of the DataSource property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti DataSource ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnFlatModeChangedDescr">
-        <source>Event raised when the value of the FlatMode property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti FlatMode ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnNavigationModeChangedDescr">
-        <source>Event raised when the value of the NavigationMode property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti NavigationMode ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnParentRowsLabelStyleChangedDescr">
-        <source>Event raised when the value of the ParentRowsLabelStyle property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti ParentRowsLabelStyle ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnParentRowsVisibleChangedDescr">
-        <source>Event raised when the value of the ParentRowsVisible property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti ParentRowsVisible ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridOnReadOnlyChangedDescr">
-        <source>Event raised when the value of the ReadOnly property is changed on DataGrid.</source>
-        <target state="translated">Událost aktivovaná při změně hodnoty vlastnosti ReadOnly ovládacího prvku DataGrid</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsBackColorDescr">
-        <source>Indicates the background color of the parent rows.</source>
-        <target state="translated">Určuje barvu pozadí nadřazených řádků.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsForeColorDescr">
-        <source>Indicates the color of the text in the parent rows.</source>
-        <target state="translated">Určuje barvu textu nadřazených řádků.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsLabelStyleDescr">
-        <source>Indicates whether the parent rows show labels for the table and for the columns.</source>
-        <target state="translated">Určuje, zda nadřazené řádky zobrazují popisky pro tabulku a pro sloupce.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridParentRowsVisibleDescr">
-        <source>Indicates whether the parent rows area is visible.</source>
-        <target state="translated">Určuje, zda je oblast nadřazených řádků viditelná.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPreferredColumnWidthDescr">
-        <source>Specifies what the default pixel widths of the grid columns are. The default value for PreferredColumnWidth is 75.</source>
-        <target state="translated">Určuje výchozí šířku sloupců mřížky v pixelech. Výchozí hodnotou vlastnosti PreferredColumnWidth je 75.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPreferredRowHeightDescr">
-        <source>Indicates the preferred height of the rows.</source>
-        <target state="translated">Určuje upřednostňovanou výšku řádků.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridPushedIncorrectValueIntoColumn">
-        <source>Value {0} Do you want to correct this value?</source>
-        <target state="translated">Hodnota {0} Chcete tuto hodnotu opravit?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridReadOnlyDescr">
-        <source>Indicates whether rows in the grid can be edited, added, or deleted.</source>
-        <target state="translated">Určuje, zda lze upravit, přidat nebo odstranit řádky mřížky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowHeaderWidthDescr">
-        <source>Indicates the width of the row headers.</source>
-        <target state="translated">Určuje šířku záhlaví sloupců.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowHeadersVisibleDescr">
-        <source>Indicates whether the row headers are visible.</source>
-        <target state="translated">Určuje, zda jsou záhlaví řádků viditelná.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowRowHeight">
-        <source>DataGridRow.Height cannot be negative.</source>
-        <target state="translated">Hodnota DataGridRow.Height nemůže být záporná.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridRowRowNumber">
-        <source>DataGridRow cannot have a negative row number.</source>
-        <target state="translated">Vlastnost DataGridRow nemůže obsahovat záporné číslo řádku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridScrollEventDescr">
-        <source>Occurs when the user scrolls either the horizontal or vertical scroll bar.</source>
-        <target state="translated">Vyvolá se v případě, že uživatel posune svislým nebo vodorovným posuvníkem</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectedIndexDescr">
-        <source>Indicates the index of the current row.</source>
-        <target state="translated">Určuje index aktuálního řádku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectionBackColorDescr">
-        <source>Indicates the background color of any selected cells or rows.</source>
-        <target state="translated">Určuje barvu pozadí libovolných vybraných buněk nebo řádků.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSelectionForeColorDescr">
-        <source>Indicates the color of the text in any selected cells or rows.</source>
-        <target state="translated">Určuje barvu textu v libovolných vybraných buňkách nebo řádcích.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSetListManager">
-        <source>ListManager can be set using the DataSource and DataMember properties.</source>
-        <target state="translated">Správce ListManager lze nastavit pomocí vlastností DataSource a DataMember.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSetSelectIndex">
-        <source>Position on a null ListManager cannot be set.</source>
-        <target state="translated">Nelze nastavit pozici v prázdném správci ListManager.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridSettingCurrentCellNotGood">
-        <source>CurrentCell cannot be set at this time. Moving your code to the Form.Load event should solve this problem.</source>
-        <target state="translated">Vlastnost CurrentCell nelze nyní nastavit. Potíže by mělo vyřešit přesunutí kódu do procedury události Form.Load.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableCollectionMissingTable">
-        <source>DataGridTable instance does not exist in the collection.</source>
-        <target state="translated">Instance DataGridTable v této kolekci neexistuje.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleCollectionAddedParentedTableStyle">
-        <source>DataGridTableStyle that is already parented to another DataGrid cannot be added.</source>
-        <target state="translated">Nelze přidat styl DataGridTableStyle, který je již nastaven jako nadřízený pro jiný objekt DataGrid.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleDuplicateMappingName">
-        <source>Data grid table styles collection already contains a table style with the same mapping name.</source>
-        <target state="translated">Kolekce stylů tabulek datové mřížky již obsahuje styl tabulky se stejným názvem mapování.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentAlternatingBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent AlternatingBackColor.</source>
-        <target state="translated">Styl DataGridTableStyle nepodporuje průhlednou barvu AlternatingBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent BackColor.</source>
-        <target state="translated">Styl DataGridTableStyle nepodporuje průhlednou barvu BackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentHeaderBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent HeaderBackColor.</source>
-        <target state="translated">Styl DataGridTableStyle nepodporuje průhlednou barvu HeaderBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTableStyleTransparentSelectionBackColorNotAllowed">
-        <source>DataGridTableStyle does not support transparent SelectionBackColor.</source>
-        <target state="translated">Styl DataGridTableStyle nepodporuje průhlednou barvu SelectionBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridToolTipEmptyIcon">
-        <source>null rectangle for icon bounds when adding tool tip.</source>
-        <target state="translated">Při přidání popisu tlačítka jsou hranice ikony tvořeny prázdným obdélníkem.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentAlternatingBackColorNotAllowed">
-        <source>DataGrid control does not support transparent AlternatingBackColor.</source>
-        <target state="translated">Ovládací prvek DataGrid nepodporuje průhlednou barvu AlternatingBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentBackColorNotAllowed">
-        <source>DataGrid control does not support transparent BackColor.</source>
-        <target state="translated">Ovládací prvek DataGrid nepodporuje průhlednou barvu BackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentCaptionBackColorNotAllowed">
-        <source>DataGrid control does not support transparent CaptionBackColor.</source>
-        <target state="translated">Ovládací prvek DataGrid nepodporuje průhlednou barvu CaptionBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentHeaderBackColorNotAllowed">
-        <source>DataGrid control does not support transparent HeaderBackColor.</source>
-        <target state="translated">Ovládací prvek DataGrid nepodporuje průhlednou barvu HeaderBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentParentRowsBackColorNotAllowed">
-        <source>DataGrid control does not support transparent ParentRowsBackColor.</source>
-        <target state="translated">Ovládací prvek DataGrid nepodporuje průhlednou barvu ParentRowsBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridTransparentSelectionBackColorNotAllowed">
-        <source>DataGrid control does not support transparent SelectionBackColor.</source>
-        <target state="translated">Ovládací prvek DataGrid nepodporuje průhlednou barvu SelectionBackColor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridUnbound">
-        <source>Data cannot be read from a DataGrid which is not bound to a DataTable.</source>
-        <target state="translated">Nelze načíst data z ovládacího prvku DataGrid, který není vázán k objektu DataTable.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DataGridVertScrollBarDescr">
-        <source>Returns the vertical scroll bar used by the grid.</source>
-        <target state="translated">Vrátí svislý posuvník používaný mřížkou.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DataGridViewAlternatingRowsDefaultCellStyleChangedDescr">
         <source>Occurs when the value of the AlternatingRowsDefaultCellStyle property changes.</source>
         <target state="translated">Vyvolá se při změně hodnoty vlastnosti AlternatingRowsDefaultCellStyle.</target>
@@ -3133,8 +2648,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
-        <source>Horizontal Scroll Bar</source>
-        <target state="translated">Vodorovný posuvník</target>
+        <source>Horizontal</source>
+        <target state="translated">Vodorovně</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3188,8 +2703,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
-        <source>Vertical Scroll Bar</source>
-        <target state="translated">Svislý posuvník</target>
+        <source>Vertical</source>
+        <target state="translated">Svisle</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -4544,6 +4059,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Objekt Bitmap přímo nepodporuje formát DIB. Zadejte automatický převod nebo proveďte příkaz SetData s datovým formátem Bitmap.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataObjectWhitespaceEmptyFormatNotAllowed">
+        <source>Whitespace or empty string is not a valid value for parameter 'format'.</source>
+        <target state="translated">Prázdný znak nebo řetězec není platnou hodnotou parametru format.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataSourceDataMemberPropNotFound">
         <source>DataMember property '{0}' cannot be found on the DataSource.</source>
         <target state="translated">Vlastnost DataMember {0} nebyla nalezena u vlastnosti DataSource.</target>
@@ -4672,6 +4192,46 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       <trans-unit id="DefManifestNotFound">
         <source>Default manifest file required to enable visual styles cannot be found.</source>
         <target state="translated">Výchozí soubor manifestu požadovaný k povolení vizuálních stylů nebyl nalezen.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewButtonCellTollTipText">
+        <source>Button</source>
+        <target state="translated">Tlačítko</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewComboBoxCellTollTipText">
+        <source>ComboBox</source>
+        <target state="translated">Pole se seznamem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewImageCellToolTipText">
+        <source>Image</source>
+        <target state="translated">Obrázek</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewLinkCellTollTipText">
+        <source>Link</source>
+        <target state="translated">Propojení</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDataGridViewTextBoxCellTollTipText">
+        <source>Edit</source>
+        <target state="translated">Upravit</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultDomainUpDownAccessibleName">
+        <source>DomainUpDown</source>
+        <target state="translated">DomainUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultNumericUpDownAccessibleName">
+        <source>NumericUpDown</source>
+        <target state="translated">NumericUpDown</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DefaultUpDownButtonsAccessibleName">
+        <source>UpDown</source>
+        <target state="translated">UpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="DescriptionBindingNavigator">
@@ -5029,6 +4589,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Určuje zdroj dat, k nimž mají být vázány chyby.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ErrorProviderDefaultAccessibleName">
+        <source>Error provider</source>
+        <target state="translated">Zprostředkovatel chyb</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ErrorProviderErrorDescr">
         <source>The error description for a control.</source>
         <target state="translated">Popis chyby pro ovládací prvek.</target>
@@ -5061,12 +4626,12 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="ExDlgCancel">
         <source>Cancel</source>
-        <target state="translated">Zrušit</target>
+        <target state="translated">Storno</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption">
-        <source>Microsoft .NET Framework</source>
-        <target state="translated">Microsoft .NET Framework</target>
+        <source>Microsoft .NET</source>
+        <target state="translated">Microsoft .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgCaption2">
@@ -5191,27 +4756,27 @@ nikoli v tomto dialogovém okně.
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Pokud chcete této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj Microsoft .NET.
 
-Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
+Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat.
 
 {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Configuration tool.
 
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Chcete-li této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj rozhraní Microsoft .NET Framework.
+        <target state="translated">Aplikace se pokusila provést operaci, která není povolena zásadami zabezpečení. Pokud chcete této aplikaci udělit požadované oprávnění, obraťte se na správce systému nebo použijte konfigurační nástroj Microsoft .NET.
 
-Pokud kliknete na tlačítko Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na tlačítko Konec, bude aplikace okamžitě ukončena.
+Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se pokračovat. Pokud kliknete na Konec, aplikace se okamžitě zavře.
 
 {1}.</target>
         <note />
@@ -5622,19 +5187,9 @@ Chcete jej nahradit?</target>
         <target state="translated">Maximální velikost, na niž lze nastavit tento formulář.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMenuDescr">
-        <source>The main menu of the form. This must be set to a component of type MainMenu.</source>
-        <target state="translated">Hlavní nabídka formuláře. Musí být nastavena na součást typu MainMenu.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Určuje primární hodnotu MenuStrip pro formulář. Tato vlastnost se používá k aktivování klávesnice a automatickému sloučení v MDI.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FormMergedMenuDescr">
-        <source>The merged menu of this form, which is used when displaying a single merged MDI menu.</source>
-        <target state="translated">Sloučená nabídka tohoto formuláře, která je použita při zobrazení jedné sloučené nabídky MDI.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMinimizeBoxDescr">
@@ -5877,6 +5432,11 @@ Chcete jej nahradit?</target>
         <target state="translated">Počet řádků v tabulce</target>
         <note />
       </trans-unit>
+      <trans-unit id="HScrollBarDefaultAccessibleName">
+        <source>Horizontal</source>
+        <target state="translated">Vodorovně</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HandleAlreadyExists">
         <source>Window handle already exists.</source>
         <target state="translated">Popisovač okna již existuje.</target>
@@ -5986,11 +5546,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Obrázek musí být rastrová mapa.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ImageListCantRecreate">
-        <source>Unless the list is empty, '{0}' cannot be changed once the ImageList has been used.</source>
-        <target state="translated">Pokud seznam není prázdný, {0} nelze změnit poté, co byl použit seznam ImageList.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ImageListColorDepthDescr">
         <source>The number of colors to use to render images.</source>
         <target state="translated">Počet barev použitých k vykreslování obrázků.</target>
@@ -5999,6 +5554,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ImageListCreateFailed">
         <source>Creation of the ImageList handle did not succeed.</source>
         <target state="translated">Vytvoření popisovače ImageList se nezdařilo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListDuplicateFailed">
+        <source>Duplication of the ImageList handle did not succeed.</source>
+        <target state="translated">Popisovač ImageList se nepovedlo duplikovat.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListEntryType">
@@ -6084,6 +5644,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="IndexOutOfRange">
         <source>Index {0} is out of range.</source>
         <target state="translated">Index {0} je mimo rozsah.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InputLanguageCultureNotFound">
+        <source>Could not find an InputLanguage for culture '{0}'.</source>
+        <target state="translated">Nepovedlo se najít InputLanguage pro jazykovou verzi {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -6801,6 +6366,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Zobrazí čáry mřížky kolem položek a podpoložek (SubItems). Projeví se pouze v zobrazení Details.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateChangedDescr">
+        <source>Event raised when the CollapsedState property of a ListViewGroup changes.</source>
+        <target state="translated">Událost aktivovaná v případě změny vlastnosti CollapsedState položky ListViewGroup</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametr musí být typu ListViewGroup.</target>
@@ -6816,9 +6386,19 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">ListViewGroup</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupImageListDescr">
+        <source>The ImageList control used by the ListView for ListViewGroup images in all views.</source>
+        <target state="translated">Ovládací prvek ImageList používaný v zobrazení ListView pro ListViewGroup pro obrázky ve všech zobrazeních</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupNameDescr">
         <source>The name of this group.</source>
         <target state="translated">Název této skupiny</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupTaskLinkClickDescr">
+        <source>Event raised when the TaskLink property of a ListViewGroup is clicked.</source>
+        <target state="translated">Událost aktivovaná ve chvíli, kdy se klikne na vlastnost TaskLink položky ListViewGroup</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupsDescr">
@@ -7136,26 +6716,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Formulář, který byl určen jako nadřazený objekt MdiParent pro tento formulář, není typu MdiContainer.</target>
         <note />
       </trans-unit>
-      <trans-unit id="MainMenuCollapseDescr">
-        <source>Occurs when the main menu collapses.</source>
-        <target state="translated">Vyvolá se při sbalení hlavní nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuImageListDescr">
-        <source>Gets or sets the ImageList associated with this main menu.</source>
-        <target state="translated">Získá nebo nastaví ovládací prvek ImageList spojený s touto hlavní nabídkou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuIsImageMarginPresentDescr">
-        <source>Gets or sets a value indicating whether the menu has an image margin.</source>
-        <target state="translated">Získá nebo nastaví hodnotu označující, zda má nabídka okraj pro obrázek.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MainMenuToStringNoForm">
-        <source>&lt;No Form&gt;</source>
-        <target state="translated">&lt;Žádný formulář&gt;</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MaskedTextBoxAllowPromptAsInputDescr">
         <source>Indicates whether the prompt character is valid as input.</source>
         <target state="translated">Označuje, zda je znak příkazového řádku platný jako vstup.</target>
@@ -7291,101 +6851,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje typ objektu, který se má použít k analýze vstupního textu v případě, že ovládací prvek ztratí fokus.</target>
         <note />
       </trans-unit>
-      <trans-unit id="MenuBadMenuItem">
-        <source>Parameter must be of type MenuItem.</source>
-        <target state="translated">Parametr musí být typu MenuItem.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuImageMarginColorDescr">
-        <source>Gets or sets the background color of this menu's image margin.</source>
-        <target state="translated">Získá nebo nastaví barvu pozadí okraje pro obrázek v této nabídce.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuIsParentDescr">
-        <source>Indicates if this menu contains any child items.</source>
-        <target state="translated">Určuje, zda tato nabídka obsahuje podřízené položky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemAlreadyExists">
-        <source>Cannot add MenuItem '{0}'. It already exists as a parent of the current menu item.</source>
-        <target state="translated">Položku MenuItem {0} nelze přidat. Již existuje jako nadřazená položka aktuální položky nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemCheckedDescr">
-        <source>Indicates whether the item is checked.</source>
-        <target state="translated">Určuje, zda je položka zaškrtnuta.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemDefaultDescr">
-        <source>Indicates whether the item is the default item.</source>
-        <target state="translated">Určuje, zda je položka výchozí položkou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemEnabledDescr">
-        <source>Indicates whether the item is enabled.</source>
-        <target state="translated">Určuje, zda je položka povolena.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageDescr">
-        <source>Gets or sets the image to be displayed on this menu item.</source>
-        <target state="translated">Získá nebo nastaví obrázek, který se má zobrazit u této položky nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageListDescr">
-        <source>Gets or sets the ImageList associated with this menu item.</source>
-        <target state="translated">Získá nebo nastaví ovládací prvek ImageList spojený s touto hlavní nabídkou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemImageMarginColorDescr">
-        <source>Gets or sets the background color of this menu item's image margin.</source>
-        <target state="translated">Získá nebo nastaví barvu pozadí okraje pro obrázek k této položce nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemInvalidCheckProperty">
-        <source>True is not a valid value for the Checked property.  This is only valid for MenuItems that have no children and are not top-level.</source>
-        <target state="translated">Hodnota True není platnou hodnotou vlastnosti Checked. Je platná pouze pro položky MenuItems, které nemají žádné podřízené položky a nejsou na nejvyšší úrovni.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMDIListDescr">
-        <source>Determines whether the MDI child window list is appended to this item.</source>
-        <target state="translated">Určuje, zda je k této položce připojen seznam podřízených oken MDI.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMergeOrderDescr">
-        <source>Determines the merge order of the item.</source>
-        <target state="translated">Určuje pořadí sloučení položky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemMergeTypeDescr">
-        <source>Determines how the item is handled when menus are merged.</source>
-        <target state="translated">Určuje, jakým způsobem je položka zpracována při slučování nabídek.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnClickDescr">
-        <source>Occurs when the menu item is selected.</source>
-        <target state="translated">Vyvolá se v případě, že je vybrána položka nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnInitDescr">
-        <source>Occurs before the containing menu is displayed.</source>
-        <target state="translated">Vyvolá se před zobrazením příslušné nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOnSelectDescr">
-        <source>Occurs when the menu item is selected.</source>
-        <target state="translated">Vyvolá se v případě, že je vybrána položka nabídky.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemOwnerDrawDescr">
-        <source>Indicates if Windows will draw the menu item or if the user will handle the painting.</source>
-        <target state="translated">Určuje, zda položku nabídky nakreslí systém Windows nebo zda bude vykreslení zpracováno uživatelem.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemRadioCheckDescr">
-        <source>If the item is checked, this value will determine whether the check style is a radio button.</source>
-        <target state="translated">Pokud je položka zaškrtnuta, bude tato hodnota určovat, zda je stylem zaškrtnutí přepínač.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MenuItemShortCutDescr">
         <source>The shortcut key associated with the menu item. </source>
         <target state="translated">Klávesová zkratka přiřazená položce nabídky</target>
@@ -7394,36 +6859,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="MenuItemShowShortCutDescr">
         <source>Indicates whether the shorcut key for the menu item is displayed on the item. </source>
         <target state="translated">Určuje, zda bude v položce nabídky zobrazena klávesová zkratka pro tuto položku. </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemTextDescr">
-        <source>The caption displayed by the item.</source>
-        <target state="translated">Titulek zobrazený položkou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuItemVisibleDescr">
-        <source>Indicates whether the item is visible.</source>
-        <target state="translated">Určuje, zda je položka viditelná.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMDIListItemDescr">
-        <source>Retrieves the menu item that contains a list of MDI child windows.</source>
-        <target state="translated">Načte položku nabídky obsahující seznam podřízených oken MDI.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMenuItemsDescr">
-        <source>The menu items for the menu.</source>
-        <target state="translated">Příkazy této nabídky</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuMergeWithSelf">
-        <source>Cannot merge a menu with itself.</source>
-        <target state="translated">Nabídku nelze sloučit se sebou samou.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MenuRightToLeftDescr">
-        <source>Indicates if this menu should display right to left</source>
-        <target state="translated">Určuje, zda se tato nabídka má zobrazovat zprava doleva.</target>
         <note />
       </trans-unit>
       <trans-unit id="MenuStripMdiWindowListItem">
@@ -7444,6 +6879,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="MonthCalendarAnnuallyBoldedDatesDescr">
         <source>Indicates which annual dates should be boldface.</source>
         <target state="translated">Určuje, která data v rámci roku mají být zobrazena tučně.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarBodyAccessibleName">
+        <source>Calendar body</source>
+        <target state="translated">Text kalendáře</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarDimensionsDescr">
@@ -7496,6 +6936,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje, která data v rámci měsíce mají být zobrazena tučně.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarNextButtonAccessibleName">
+        <source>Next</source>
+        <target state="translated">Další</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarOnDateChangedDescr">
         <source>Occurs when the range of dates changes due to user selection, or through next/previous month navigation.</source>
         <target state="translated">Vyvolá se v případě, že se rozsah dat změní z důvodu výběru uživatele nebo prostřednictvím přechodu na další nebo předchozí měsíc.</target>
@@ -7504,6 +6949,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="MonthCalendarOnDateSelectedDescr">
         <source>Occurs when the user selects a date or a range of dates.</source>
         <target state="translated">Vyvolá se v případě, že uživatel vybere datum nebo rozsah dat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarPreviousButtonAccessibleName">
+        <source>Previous</source>
+        <target state="translated">Předchozí</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarRange">
@@ -7579,6 +7029,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="MonthCalendarTitleForeColorDescr">
         <source>The color used to display text within the calendar's title.</source>
         <target state="translated">Barva pozadí použitá k zobrazení textu v nadpisu kalendáře.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarTodayButtonAccessibleName">
+        <source>Today: {0}</source>
+        <target state="translated">Dnes: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarTodayDateDescr">
@@ -7832,8 +7287,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description Pane</source>
-        <target state="translated">Podokno popisu</target>
+        <source>Description</source>
+        <target state="translated">Popis</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7858,7 +7313,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PBRSToolTipCategorized">
         <source>Categorized</source>
-        <target state="translated">Zařazené do kategorie</target>
+        <target state="translated">Zařazené do kategorií</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSToolTipEvents">
@@ -8481,6 +7936,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Koncová barva přechodu použitá v ovládacím prvku ToolStripPanel</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProgressBarDefaultAccessibleName">
+        <source>ProgressBar</source>
+        <target state="translated">Ukazatel průběhu</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProgressBarIncrementMarqueeException">
         <source>Increment should not be called if the style is Marquee.</source>
         <target state="translated">Pokud je nastaven styl Marquee, neměla by být volána metoda Increment.</target>
@@ -8641,9 +8101,19 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Okno vlastností</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDefaultAccessibleNameTemplate">
+        <source>{0} Properties Window</source>
+        <target state="translated">Okno vlastností pro {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDisabledItemForeColorDesc">
         <source>The foreground color of disabled text in the grid area.</source>
         <target state="translated">Barva popředí neaktivního textu v oblasti mřížky</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="translated">Popis pro {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
@@ -8654,6 +8124,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="PropertyGridDropDownButtonComboBoxAccessibleName">
         <source>Open</source>
         <target state="translated">Otevřít</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridEntryValuesListDefaultAccessibleName">
+        <source>Available values</source>
+        <target state="translated">Dostupné hodnoty</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridExceptionInfo">
@@ -8741,11 +8216,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Vybráno: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridRemotedObject">
-        <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">Objekt {0} je vzdáleně ovládán proxy serverem, který nepodporuje zjišťování rozhraní. Tento typ vzdáleného objektu není podporován.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
         <target state="translated">Statické karty nelze z mřížky PropertyGrid odebrat.</target>
@@ -8812,8 +8282,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarAccessibleName">
-        <source>ToolBar</source>
-        <target state="translated">Panel nástrojů (ToolBar)</target>
+        <source>PropertyGrid</source>
+        <target state="translated">PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridToolbarVisibleDesc">
@@ -9201,50 +8671,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Získá svislý posuvník pro tento ovládací prvek ScrollableControl.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMixedZone">
-        <source>Mixed Zone</source>
-        <target state="translated">Smíšená zóna</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMultipleSites">
-        <source>Multiple Sites</source>
-        <target state="translated">Několik serverů</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownSite">
-        <source>Unknown Site</source>
-        <target state="translated">Neznámý server</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
-        <source>Unknown Zone</source>
-        <target state="translated">Neznámá zóna</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipCaption">
-        <source>Microsoft .NET Security Warning</source>
-        <target state="translated">Upozornění zabezpečení Microsoft .NET</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipMainText">
-        <source>Never enter personal information or passwords into a window unless you can verify and trust the source of the request.</source>
-        <target state="translated">Nikdy do okna nezadávejte osobní informace nebo hesla, pokud nelze ověřit zdroj požadavku a považovat ho za důvěryhodný.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipSourceInformation">
-        <source>Source: {0}</source>
-        <target state="translated">Zdroj: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}
-
-{1}</source>
-        <target state="translated">{0}
-
-{1}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SelTabCountRange">
         <source>SelTabCount out of range.</source>
         <target state="translated">Hodnota SelTabCount je mimo rozsah.</target>
@@ -9445,91 +8871,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Získání zařazovacího modulu pro IID {0} se nezdařilo.</target>
         <note />
       </trans-unit>
-      <trans-unit id="StatusBarAddFailed">
-        <source>Adding the panel to the native status bar control has not succeeded.</source>
-        <target state="translated">Přidání panelu do ovládacího prvku nativního stavového řádku se nezdařilo.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarBadStatusBarPanel">
-        <source>Parameter must be of type StatusBarPanel.</source>
-        <target state="translated">Parametr musí být typu StatusBarPanel.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarDrawItem">
-        <source>Occurs whenever a panel in the StatusBar needs to be painted.</source>
-        <target state="translated">Vyvolá se vždy, když je nutné překreslit panel ve stavovém řádku (StatusBar).</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarOnPanelClickDescr">
-        <source>Occurs when a panel within the status bar is clicked.</source>
-        <target state="translated">Vyvolá se při každém kliknutí na panel ve stavovém řádku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAlignmentDescr">
-        <source>The alignment of the panel's text.</source>
-        <target state="translated">Zarovnání textu panelu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelAutoSizeDescr">
-        <source>Determines how a panel will resize when the parent changes size.</source>
-        <target state="translated">Určuje změnu velikosti panelu, pokud dojde ke změně velikosti nadřazeného objektu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelBorderStyleDescr">
-        <source>Determines what type of border a panel has.</source>
-        <target state="translated">Určuje typ ohraničení panelu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelIconDescr">
-        <source>Determines what icon is displayed in the panel.</source>
-        <target state="translated">Určuje, jaká ikona je zobrazena na panelu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelMinWidthDescr">
-        <source>The minimum width of the panel.</source>
-        <target state="translated">Minimální šířka panelu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelNameDescr">
-        <source>The name of the panel.</source>
-        <target state="translated">Název panelu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelStyleDescr">
-        <source>The style of the panel.</source>
-        <target state="translated">Styl panelu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelTextDescr">
-        <source>The text displayed in the panel.</source>
-        <target state="translated">Text zobrazený na panelu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelToolTipTextDescr">
-        <source>The panel's ToolTip text.</source>
-        <target state="translated">Text popisu panelu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelWidthDescr">
-        <source>The width of the panel.</source>
-        <target state="translated">Šířka panelu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarPanelsDescr">
-        <source>The panels in the status bar.</source>
-        <target state="translated">Panely ve stavovém řádku</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarShowPanelsDescr">
-        <source>Determines if a status bar displays panels, or if it displays a single line of text.</source>
-        <target state="translated">Určuje, zda se ve stavovém řádku zobrazí panely nebo pouze jeden řádek textu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="StatusBarSizingGripDescr">
-        <source>Determines whether a status bar has a sizing grip.</source>
-        <target state="translated">Určuje, zda stavový řádek obsahuje úchyt pro změnu velikosti.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="StatusStripPanelBorderSidesDescr">
         <source>Specifies the sides of the panel that should display borders.</source>
         <target state="translated">Určuje strany panelu, na kterých by se měla zobrazovat ohraničení.</target>
@@ -9550,12 +8891,17 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Funkce není v tomto operačním systému podporována.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageNotOnTabControl">
+      <trans-unit id="TabControlBadControl">
+        <source>Parameter must be of type TabPage.</source>
+        <target state="translated">Parametr musí být typu TabPage.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlTabPageNotOnTabControl">
         <source>TabPage cannot be added to a '{0}'.  TabPages can only be added to TabControls.</source>
         <target state="translated">Objekt TabPage nelze přidat k objektu {0}. Objekt TabPages lze přidat pouze k ovládacímu prvku TabControls.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TABCONTROLTabPageOnTabPage">
+      <trans-unit id="TabControlTabPageOnTabPage">
         <source>TabPage cannot be added to another TabPage.  TabPages can only be added to TabControls.</source>
         <target state="translated">Objekt TabPage nelze přidat k jinému ovládacímu prvku TabPage. Objekt TabPages lze přidat pouze k ovládacímu prvku TabControls.</target>
         <note />
@@ -9725,6 +9071,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Přímé nastavování vlastnosti TableLayoutSettings není podporováno. Místo toho použijte individuální vlastnosti.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TableLayoutSettingsConverterNoName">
+        <source>Cannot convert TableLayoutSettings to string: could not find a 'Name' string property on a control.</source>
+        <target state="translated">Nejde převést TableLayoutSettings na řetězec: Nenašla se řetězcová vlastnost Name v ovládacím prvku.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TableLayoutSettingsGetCellPositionDescr">
         <source>Indicates the row and column of the cell.</source>
         <target state="translated">Označuje řádek a sloupec buňky.</target>
@@ -9738,6 +9089,151 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="TablePrintLayoutFromDifferentDocument">
         <source>TablePrintLayout instance specified was constructed for a different document.</source>
         <target state="translated">Zadaná instance TablePrintLayout byla vytvořena pro jiný dokument.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogButtonTextMustNotBeNull">
+        <source>The text of a custom button must not be null or an empty string.</source>
+        <target state="translated">Text vlastního tlačítka nesmí být null ani prázdný řetězec.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCanUpdateStateOnlyWhenShown">
+        <source>Can only update the state of a task dialog while it is shown.</source>
+        <target state="translated">Stav dialogu úlohy se dá aktualizovat jen v případě, že je dialog zobrazený.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateClosedDialog">
+        <source>Cannot navigate the dialog when it has already closed.</source>
+        <target state="translated">Dialog, který se už zavřel, se nedá procházet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
+        <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
+        <target state="translated">Dialogem z obslužné rutiny události, která se zavolala z navigace, se nedá procházet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
+        <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
+        <target state="translated">Dialogem z události {0} jednoho z přepínačů aktuálního dialogu úlohy se nedá procházet.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
+        <source>Cannot navigate from a page not bound to a dialog.</source>
+        <target state="translated">Ze stránky, která není svázaná s dialogem, se nedá odejít.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
+        <source>Cannot remove the progress bar while the task dialog is shown.</source>
+        <target state="translated">Když je dialog úlohy zobrazený, nedá se indikátor průběhu odebrat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetPropertyOfBoundPage">
+        <source>Cannot set this property or call this method while the page is bound to a task dialog.</source>
+        <target state="translated">Když je stránka svázaná s dialogem úlohy, nedá se nastavit tato vlastnost nebo zavolat tato metoda.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetPropertyOfShownDialog">
+        <source>Cannot set this property while the task dialog is shown.</source>
+        <target state="translated">Když je dialog úlohy zobrazený, nedá se tato vlastnost nastavit.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetRadioButtonCheckedWithinCheckedChangedEvent">
+        <source>Cannot set the {0} property from within the {1} event of one of the radio buttons of the current task dialog.</source>
+        <target state="translated">Vlastnost {0} se nedá nastavit z události {1} jednoho z přepínačů aktuálního dialogu úlohy.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotSetTextForStandardButton">
+        <source>Cannot set the text for a standard button.</source>
+        <target state="translated">Text standardního tlačítka se nedá nastavit.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotShowCustomButtonsAndCommandLinks">
+        <source>Cannot show both custom buttons and command links at the same time.</source>
+        <target state="translated">V jednu chvíli není možné zobrazit vlastní tlačítka a odkazy na příkazy najednou.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUncheckRadioButtonWhileBound">
+        <source>Cannot uncheck a radio button while it is bound to a task dialog.</source>
+        <target state="translated">Když je přepínač svázaný s dialogem úlohy, nedá se jeho zaškrtnutí zrušit.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
+        <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
+        <target state="translated">Hned po navigaci v dialogu úlohy není možné s dialogem manipulovat. Počkejte prosím, než dojde k události {0} na další stránce.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCannotUpdateIconType">
+        <source>Cannot update the icon from a handle icon type to a non-handle icon type, and vice versa.</source>
+        <target state="translated">Ikona se nedá aktualizovat z typu ikony popisovače na typ ikony bez popisovače a naopak.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogCollectionAlreadyBound">
+        <source>One of the collections of this {0} is already bound to a {1} instance.</source>
+        <target state="translated">Jedna z kolekcí tohoto {0} je už svázaná s instancí {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlAlreadyAddedToCollection">
+        <source>This control has already been added to the collection.</source>
+        <target state="translated">Tento ovládací prvek se už do kolekce přidal.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlAlreadyBound">
+        <source>One of the controls of this {0} is already bound to a {1} instance.</source>
+        <target state="translated">Jeden z ovládacích prvků tohoto {0} je už svázaný s instancí {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlIsPartOfOtherCollection">
+        <source>This control is already part of a different collection.</source>
+        <target state="translated">Tento ovládací prvek je už součástí jiné kolekce.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlNotBound">
+        <source>This control is not currently bound to a task dialog.</source>
+        <target state="translated">Tento ovládací prvek není momentálně svázaný s dialogem úlohy.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogControlNotCreated">
+        <source>The control has not been created.</source>
+        <target state="translated">Ovládací prvek se nevytvořil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogDefaultButtonMustExistInCollection">
+        <source>The default button must exist in the buttons collection.</source>
+        <target state="translated">V kolekci tlačítek musí existovat výchozí tlačítko.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogInstanceAlreadyShown">
+        <source>This {0} instance is already being shown.</source>
+        <target state="translated">Tato instance {0} se už zobrazuje.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogNavigationNotCompleted">
+        <source>Navigation of the task dialog did not complete yet. Please wait for the {0} event to occur.</source>
+        <target state="translated">Navigace v dialogu úlohy ještě neskončila. Počkejte prosím, než dojde k události {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogOnlySingleRadioButtonCanBeChecked">
+        <source>Only a single radio button can be set as checked.</source>
+        <target state="translated">Jako zaškrtnutý může být nastavený jen jeden přepínač.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogPageIsAlreadyBound">
+        <source>This {0} instance is already bound to a {1} instance.</source>
+        <target state="translated">Tato instance {0} je už svázaná s instancí {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogRadioButtonTextMustNotBeNull">
+        <source>The text of a radio button must not be null or an empty string.</source>
+        <target state="translated">Text přepínače nesmí být null ani prázdný řetězec.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogTooManyButtonsAdded">
+        <source>Too many custom buttons or radio buttons have been added.</source>
+        <target state="translated">Přidalo se příliš mnoho vlastních tlačítek nebo přepínačů.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TaskDialogVisualStylesNotEnabled">
+        <source>Visual styles are not enabled. Please call {0} before showing the task dialog.</source>
+        <target state="translated">Vizuální styly nejsou povolené. Než zobrazíte dialog úlohy, zavolejte prosím {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxAcceptsReturnDescr">
@@ -9910,6 +9406,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Určuje, zda jsou pro víceřádková textová pole automaticky zalamována slova.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
         <target state="translated">Analýza textu ({0}) se nezdařila. Byl očekáván text ve formátu {1}.</target>
@@ -9953,136 +9454,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="TooManyResumeUpdateMenuHandles">
         <source>Too many calls to ResumeUpdateMenuHandles.</source>
         <target state="translated">Příliš mnoho volání ResumeUpdateMenuHandles.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarAppearanceDescr">
-        <source>Controls the appearance of the ToolBar control, using values from the ToolBarAppearance enumeration.</source>
-        <target state="translated">Určuje vzhled ovládacího prvku ToolBar a využívá hodnoty výčtu ToolBarAppearance.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarAutoSizeDescr">
-        <source>Controls whether the ToolBar will automatically size itself based on Button size.</source>
-        <target state="translated">Určuje, zda ovládací prvek ToolBar automaticky změní velikost na základě velikosti prvku Button.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarBadToolBarButton">
-        <source>Parameter must be of type ToolBarButton.</source>
-        <target state="translated">Parametr musí být typu ToolBarButton.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarBorderStyleDescr">
-        <source>Controls what type of border the ToolBar control will have.</source>
-        <target state="translated">Určuje typ ohraničení ovládacího prvku ToolBar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonClickDescr">
-        <source>Occurs whenever a button in the ToolBar is clicked by the user.</source>
-        <target state="translated">Vyvolá se vždy, když uživatel klikne na tlačítko na panelu nástrojů (ToolBar).</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonDropDownDescr">
-        <source>Occurs whenever a button with the DropDownButton style is pressed.</source>
-        <target state="translated">Vyvolá se při každém stisknutí tlačítka se stylem DropDownButton.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonEnabledDescr">
-        <source>Controls whether this button responds to user input.</source>
-        <target state="translated">Určuje, zda toto tlačítko bude reagovat na vstup uživatele.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonImageIndexDescr">
-        <source>Identifies the image displayed on the button.</source>
-        <target state="translated">Určuje obrázek zobrazovaný na tlačítku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonInvalidDropDownMenuType">
-        <source>The drop-down menu for a ToolBarButton must be of type ContextMenu.</source>
-        <target state="translated">Rozevírací nabídka pro ovládací prvek ToolBarButton musí být typu ContextMenu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonMenuDescr">
-        <source>The shortcut menu that will appear if this button's style is set to DropDownButton.</source>
-        <target state="translated">Místní nabídka, která bude zobrazena, pokud bude styl tohoto tlačítka nastaven na hodnotu DropDownButton.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonNotFound">
-        <source>References that a non-existent ToolBarButton has been received.</source>
-        <target state="translated">Označuje, že byl přijat neexistující objekt ToolBarButton.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonPartialPushDescr">
-        <source>Controls whether the button should be displayed as partially pushed or not, but only if the style of the button is ToggleButton.</source>
-        <target state="translated">Určuje, zda by tlačítko mělo být zobrazeno jako částečně stisknuté, ale pouze v případě, že je styl tlačítka nastaven na hodnotu ToggleButton.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonPushedDescr">
-        <source>Indicates whether the button is pushed or not. This is most commonly seen for buttons with the TOGGLEBUTTON style.</source>
-        <target state="translated">Určuje, zda tlačítko je nebo není stisknuto. Nejčastěji se používá pro tlačítka se stylem TOGGLEBUTTON.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonSizeDescr">
-        <source>The size of the buttons on the control if the button contents do not require a larger size.</source>
-        <target state="translated">Velikost tlačítek v ovládacím prvku, pokud obsah tlačítek nevyžaduje větší velikost</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonStyleDescr">
-        <source>Indicates what style of ToolBarButton this will be.</source>
-        <target state="translated">Určuje styl ovládacího prvku ToolBarButton.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonTextDescr">
-        <source>The caption to be displayed for this button.</source>
-        <target state="translated">Titulek, který bude zobrazen pro toto tlačítko.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonToolTipTextDescr">
-        <source>The ToolTip text to be displayed for this button.</source>
-        <target state="translated">Text popisu tlačítka, který bude zobrazen pro toto tlačítko.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonVisibleDescr">
-        <source>Indicates whether this button should be visible.</source>
-        <target state="translated">Určuje, zda toto tlačítko bude viditelné.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarButtonsDescr">
-        <source>The collection of ToolBarButtons that make up this ToolBar.</source>
-        <target state="translated">Kolekce objektů ToolBarButtons, které vytvářejí tento ovládací prvek ToolBar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarDividerDescr">
-        <source>Controls whether the ToolBar will display a 3-D line at the top of its client area.</source>
-        <target state="translated">Určuje, zda ovládací prvek ToolBar zobrazí v horní části klientské oblasti prostorovou čáru.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarDropDownArrowsDescr">
-        <source>Controls whether the ToolBar will display an arrow on the side of drop-down buttons.</source>
-        <target state="translated">Určuje, zda ovládací prvek ToolBar zobrazí vedle rozevíracích tlačítek šipku.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarImageListDescr">
-        <source>The ImageList from which this ToolBar will get all of the button images.</source>
-        <target state="translated">Seznam ImageList, z něhož tento ovládací prvek ToolBar získá všechny obrázky tlačítek.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarImageSizeDescr">
-        <source>The size of the images within the ToolBar's ImageList.</source>
-        <target state="translated">Velikost obrázků v rámci seznamu ImageList tohoto ovládacího prvku ToolBar.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarShowToolTipsDescr">
-        <source>Indicates whether ToolTips will be shown for each of the buttons, if available.</source>
-        <target state="translated">Určuje, zda budou pro jednotlivá tlačítka zobrazeny popisy tlačítek, jsou-li k dispozici.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarTextAlignDescr">
-        <source>Controls how the text is positioned relative to the Image in each button.</source>
-        <target state="translated">Určuje pozici textu vzhledem k obrázku v jednotlivých tlačítkách.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ToolBarWrappableDescr">
-        <source>Indicates if more than one row of buttons is allowed.</source>
-        <target state="translated">Určuje, zda je povolen více než jeden řádek tlačítek.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
@@ -11435,6 +10806,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Vyvolá se při každém načtení uživatelského ovládacího prvku.</target>
         <note />
       </trans-unit>
+      <trans-unit id="VScrollBarDefaultAccessibleName">
+        <source>Vertical</source>
+        <target state="translated">Svisle</target>
+        <note />
+      </trans-unit>
       <trans-unit id="VisualStyleHandleCreationFailed">
         <source>Visual Style handle creation operation did not succeed.</source>
         <target state="translated">Operace vytvoření popisovače vizuálního stylu se nezdařila.</target>
@@ -11518,11 +10894,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="WebBrowserFileDownloadDescr">
         <source>Occurs when a file download occurs.</source>
         <target state="translated">Vyvolá se při stahování souboru.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="WebBrowserInIENotSupported">
-        <source>Adding a WebBrowser control in Internet Explorer is not supported.</source>
-        <target state="translated">Přidání ovládacího prvku WebBrowser v aplikaci Internet Explorer není podporováno.</target>
         <note />
       </trans-unit>
       <trans-unit id="WebBrowserIsOfflineDescr">
@@ -11620,9 +10991,19 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Šířka musí být větší než hodnota MinWidth.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32SetParentFailed">
+        <source>Failed to set Win32 parent window of the Control.</source>
+        <target state="translated">Nepovedlo se nastavit nadřazené okno Win32 ovládacího prvku.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
         <target state="translated">Před vytvořením prvního objektu IWin32Window v aplikaci je nutné volat metodu SetCompatibleTextRenderingDefault.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
+        <source>The current window procedure is not the expected one.</source>
+        <target state="translated">Aktuální procedura okna není ta, která se očekávala.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsSetEvent">
@@ -11692,7 +11073,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Odstranit</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -11712,7 +11093,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Vložit</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11722,12 +11103,12 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

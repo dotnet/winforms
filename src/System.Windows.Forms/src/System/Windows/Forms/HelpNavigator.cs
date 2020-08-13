@@ -4,47 +4,47 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Represents the HTML 1.0 Help engine.
-    /// </devdoc>
+    /// <summary>
+    ///  Represents the HTML 1.0 Help engine.
+    /// </summary>
     public enum HelpNavigator
     {
-        /// <devdoc>
-        /// Displays the topic referenced by the topic referenced by the specified
-        /// Url. This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the topic referenced by the topic referenced by the specified
+        ///  Url. This field is constant.
+        /// </summary>
         Topic = unchecked((int)0x80000001),
 
-        /// <devdoc>
-        /// Displays the contents of the HTML 1.0 Help file. This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the contents of the HTML 1.0 Help file. This field is constant.
+        /// </summary>
         TableOfContents = unchecked((int)0x80000002),
 
-        /// <devdoc>
-        /// Displays the index of a specified Url. This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the index of a specified Url. This field is constant.
+        /// </summary>
         Index = unchecked((int)0x80000003),
 
-        /// <devdoc>
-        /// Displays the search page of a specified Url. This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the search page of a specified Url. This field is constant.
+        /// </summary>
         Find = unchecked((int)0x80000004),
 
-        /// <devdoc>
-        /// Displays the topic referenced by the topic referenced by the specified
-        /// Url. This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the topic referenced by the topic referenced by the specified
+        ///  Url. This field is constant.
+        /// </summary>
         AssociateIndex = unchecked((int)0x80000005),
 
-        /// <devdoc>
-        /// Displays the topic referenced by the topic referenced by the specified
-        /// Url. This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the topic referenced by the topic referenced by the specified
+        ///  Url. This field is constant.
+        /// </summary>
         KeywordIndex = unchecked((int)0x80000006),
 
-        /// <devdoc>
-        /// Displays the topic referenced by the topic ID This field is constant.
-        /// </devdoc>
+        /// <summary>
+        ///  Displays the topic referenced by the topic ID This field is constant.
+        /// </summary>
         TopicId = unchecked((int)0x80000007)
     }
 }

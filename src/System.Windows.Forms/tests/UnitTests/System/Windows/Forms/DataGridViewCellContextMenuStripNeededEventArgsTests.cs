@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellContextMenuStripNeededEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewCellContextMenuStripNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(-1, -1)]
@@ -39,7 +40,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ContextMenuStrip() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(ContextMenuStrip_TestData))]
         public void ContextMenuStrip_Set_GetReturnsExpected(ContextMenuStrip value)
         {

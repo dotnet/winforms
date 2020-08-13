@@ -8,7 +8,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripPanelRenderEventArgsTests
+    public class ToolStripPanelRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripPanel_TestData()
         {
@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { graphics, new ToolStripPanel() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_Graphics_ToolStripPanel_TestData))]
         public void Ctor_Graphics_ToolStripPanel(Graphics g, ToolStripPanel panel)
         {
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(e.Handled);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void Handled_Set_GetReturnsExpected(bool value)
@@ -37,7 +37,8 @@ namespace System.Windows.Forms.Tests
             using (var image = new Bitmap(10, 10))
             using (Graphics graphics = Graphics.FromImage(image))
             {
-                var e = new ToolStripPanelRenderEventArgs(graphics, new ToolStripPanel())
+                using var panel = new ToolStripPanel();
+                var e = new ToolStripPanelRenderEventArgs(graphics, panel)
                 {
                     Handled = value
                 };

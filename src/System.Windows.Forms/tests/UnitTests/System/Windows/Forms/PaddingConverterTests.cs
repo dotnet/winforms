@@ -6,20 +6,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PaddingConverterTests
+    // NB: doesn't require thread affinity
+    public class PaddingConverterTests : IClassFixture<ThreadExceptionFixture>
     {
-
-        public static TheoryData<Type,bool> CanConvertFromData =>
-            CommonTestHelper.GetConvertFromTheoryData();
-
         [Theory]
-        [MemberData(nameof(CanConvertFromData))]
+        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(Padding), false)]
         [InlineData(typeof(string), true)]
         public void PaddingConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
@@ -43,6 +41,7 @@ namespace System.Windows.Forms.Tests
             var converter = new PaddingConverter();
             Assert.Equal(expected, converter.ConvertFrom(value));
             Assert.Equal(expected, converter.ConvertFrom(null, null, value));
+            Assert.Equal(expected, converter.ConvertFrom(null, CultureInfo.InvariantCulture, value));
         }
 
         [Theory]
@@ -60,7 +59,7 @@ namespace System.Windows.Forms.Tests
         public void PaddingConverter_ConvertFrom_InvalidString_ThrowsArgumentException(string value)
         {
             var converter = new PaddingConverter();
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertFrom(value));
+            Assert.Throws<ArgumentException>("value", () => converter.ConvertFrom(value));
         }
 
         [Theory]
@@ -81,6 +80,7 @@ namespace System.Windows.Forms.Tests
             var converter = new PaddingConverter();
             Assert.Equal("1, 2, 3, 4", converter.ConvertTo(new Padding(1, 2, 3, 4), typeof(string)));
             Assert.Equal("1, 2, 3, 4", converter.ConvertTo(null, null, new Padding(1, 2, 3, 4), typeof(string)));
+            Assert.Equal("1, 2, 3, 4", converter.ConvertTo(null, CultureInfo.InvariantCulture, new Padding(1, 2, 3, 4), typeof(string)));
         }
 
         [Fact]
@@ -158,10 +158,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_CreateInstance_NullContext_ThrowsArgumentNullException()
+        public void PaddingConverter_CreateInstance_ValidPropertyValuesNullContext_ReturnsExpected()
         {
             var converter = new PaddingConverter();
-            Assert.Throws<ArgumentNullException>("context", () => converter.CreateInstance(null, new Dictionary<string, object>()));
+            Padding expected = new Padding(1, 2, 3, 4);
+            Padding padding = Assert.IsType<Padding>(converter.CreateInstance(
+                null, new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), expected.All},
+                    {nameof(Padding.Left), expected.Left},
+                    {nameof(Padding.Top), expected.Top},
+                    {nameof(Padding.Right), expected.Right},
+                    {nameof(Padding.Bottom), expected.Bottom}
+                })
+            );
+            Assert.Equal(expected, padding);
         }
 
         [Fact]
@@ -304,7 +315,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Bottom), 4}
                 }
             };
-    
+
             yield return new object[]
             {
                 new Dictionary<string, object>
@@ -356,7 +367,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_CreateInstance_InvalidInstanceType_ThrowsInvalidCastException()
+        public void PaddingConverter_CreateInstance_UnknownInstanceType_ReturnsExpected()
         {
             var converter = new PaddingConverter();
             var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
@@ -375,7 +386,10 @@ namespace System.Windows.Forms.Tests
                 {nameof(Padding.Right), 3},
                 {nameof(Padding.Bottom), 4},
             };
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(mockContext.Object, propertyValues));
+
+            Padding expected = new Padding(2, 2, 3, 4);
+            Padding padding = Assert.IsType<Padding>(converter.CreateInstance(mockContext.Object, propertyValues));
+            Assert.Equal(expected, padding);
         }
 
         [Fact]

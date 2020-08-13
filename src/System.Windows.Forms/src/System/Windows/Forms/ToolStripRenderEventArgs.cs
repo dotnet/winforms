@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -9,20 +11,20 @@ namespace System.Windows.Forms
     public class ToolStripRenderEventArgs : EventArgs
     {
         private Color _backColor = Color.Empty;
-        
-        /// <devdoc>
-        /// This class represents all the information to render the toolStrip
-        /// </devdoc>        
+
+        /// <summary>
+        ///  This class represents all the information to render the toolStrip
+        /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
         {
             Graphics = g;
             ToolStrip = toolStrip;
-            AffectedBounds = new Rectangle(Point.Empty, toolStrip.Size);
+            AffectedBounds = new Rectangle(Point.Empty, toolStrip?.Size ?? Size.Empty);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///  This class represents all the information to render the toolStrip
-        /// </devdoc>        
+        /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
         {
             Graphics = g;
@@ -31,46 +33,57 @@ namespace System.Windows.Forms
             _backColor = backColor;
         }
 
-        /// <devdoc>
-        /// The graphics object to draw with
-        /// </devdoc>
+        /// <summary>
+        ///  The graphics object to draw with
+        /// </summary>
         public Graphics Graphics { get; }
 
-        /// <devdoc>
-        /// The bounds to draw in
-        /// </devdoc>
+        /// <summary>
+        ///  The bounds to draw in
+        /// </summary>
         public Rectangle AffectedBounds { get; }
 
-        /// <devdoc>
-        /// Represents which toolStrip was affected by the click
-        /// </devdoc>
+        /// <summary>
+        ///  Represents which toolStrip was affected by the click
+        /// </summary>
         public ToolStrip ToolStrip { get; }
 
-        /// <devdoc>
-        /// The back color to draw with.
-        /// </devdoc>
+        /// <summary>
+        ///  The back color to draw with.
+        /// </summary>
         public Color BackColor
         {
             get
             {
-                if (_backColor == Color.Empty)
+                if (_backColor != Color.Empty)
                 {
-                    // get the user specified color
-                    _backColor = ToolStrip.RawBackColor;
-                    if (_backColor == Color.Empty) {
-                        if (ToolStrip is ToolStripDropDown)
-                        {
-                            _backColor = SystemColors.Menu;
-                        }
-                        else if (ToolStrip is MenuStrip)
-                        {
-                            _backColor = SystemColors.MenuBar;
-                        }
-                        else
-                        {
-                            _backColor = SystemColors.Control;
-                        }
-                    }
+                    return _backColor;
+                }
+
+                // get the user specified color
+                if (ToolStrip is null)
+                {
+                    _backColor = SystemColors.Control;
+                    return _backColor;
+                }
+
+                _backColor = ToolStrip.RawBackColor;
+                if (_backColor != Color.Empty)
+                {
+                    return _backColor;
+                }
+
+                if (ToolStrip is ToolStripDropDown)
+                {
+                    _backColor = SystemColors.Menu;
+                }
+                else if (ToolStrip is MenuStrip)
+                {
+                    _backColor = SystemColors.MenuBar;
+                }
+                else
+                {
+                    _backColor = SystemColors.Control;
                 }
 
                 return _backColor;
@@ -97,31 +110,31 @@ namespace System.Windows.Forms
                         Rectangle bounds = ToolStrip.Bounds;
 
                         Rectangle overlap = ToolStrip.ClientRectangle;
-                        overlap.Inflate(1,1);
+                        overlap.Inflate(1, 1);
                         if (overlap.IntersectsWith(itemBounds))
                         {
                             switch (ownerItem.DropDownDirection)
                             {
                                 case ToolStripDropDownDirection.AboveLeft:
-                                case ToolStripDropDownDirection.AboveRight:                        
+                                case ToolStripDropDownDirection.AboveRight:
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.BelowRight:
                                 case ToolStripDropDownDirection.BelowLeft:
                                     overlap.Intersect(itemBounds);
                                     if (overlap.Height == 2)
                                     {
-                                        return new Rectangle(itemBounds.X+1, 0, itemBounds.Width -2, 2);                                   
+                                        return new Rectangle(itemBounds.X + 1, 0, itemBounds.Width - 2, 2);
                                     }
- 
-                                    // If its overlapping more than one pixel, this means we've pushed it to obscure 
+
+                                    // If its overlapping more than one pixel, this means we've pushed it to obscure
                                     // the menu item. In this case pretend it's not connected.
                                     return Rectangle.Empty;
                                 case ToolStripDropDownDirection.Right:
                                 case ToolStripDropDownDirection.Left:
                                     return Rectangle.Empty;
-                               }
-                           }
-                     }
+                            }
+                        }
+                    }
                 }
 
                 return Rectangle.Empty;

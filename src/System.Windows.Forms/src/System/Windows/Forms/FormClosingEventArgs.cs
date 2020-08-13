@@ -6,19 +6,19 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Form.OnClosing'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='Form.OnClosing'/> event.
+    /// </summary>
     public class FormClosingEventArgs : CancelEventArgs
     {
         public FormClosingEventArgs(CloseReason closeReason, bool cancel) : base(cancel)
         {
-            CloseReason = closeReason;                                           
+            CloseReason = closeReason;
         }
 
-        /// <devdoc>
-        /// Provides the reason for the Form close.
-        /// </devdoc>
+        /// <summary>
+        ///  Provides the reason for the Form close.
+        /// </summary>
         public CloseReason CloseReason { get; }
     }
 }

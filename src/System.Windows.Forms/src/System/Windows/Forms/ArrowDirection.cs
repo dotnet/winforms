@@ -2,15 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    // This enum is tightly coupled to Orientation so you can determine quickly
-    // an orientation from a direction. (direction & Orientation.Vertical == Orientation.Vertical)
-    /// </devdoc>
-    [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
+    /// <summary>
+    ///  This enum is tightly coupled to Orientation so you can determine quickly an orientation
+    ///  from a direction. (direction &amp; Orientation.Vertical == Orientation.Vertical)
+    /// </summary>
     public enum ArrowDirection
     {
         Up = 0x00 | (int)Orientation.Vertical,

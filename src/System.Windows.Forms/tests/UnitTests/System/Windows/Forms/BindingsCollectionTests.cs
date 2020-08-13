@@ -9,7 +9,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class BindingsCollectionTests
+    // NB: doesn't require thread affinity
+    public class BindingsCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [Fact]
         public void Ctor_Default()
@@ -83,7 +84,7 @@ namespace System.Windows.Forms.Tests
         public void Add_NullDataBinding_ThrowsArgumentNullException()
         {
             var collection = new BindingsCollection();
-            Assert.Throws<ArgumentNullException>("dataBinding", () => collection.Add(null));   
+            Assert.Throws<ArgumentNullException>("dataBinding", () => collection.Add(null));
         }
 
         [Fact]
@@ -149,7 +150,7 @@ namespace System.Windows.Forms.Tests
         public void AddCore_NullDataBinding_ThrowsArgumentNullException()
         {
             var collection = new SubBindingsCollection();
-            Assert.Throws<ArgumentNullException>("dataBinding", () => collection.AddCore(null));   
+            Assert.Throws<ArgumentNullException>("dataBinding", () => collection.AddCore(null));
         }
 
         [Fact]

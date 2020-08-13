@@ -7,7 +7,7 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripItemClickedEventArgsTests
+    public class ToolStripItemClickedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_ToolStripItem_TestData()
         {
@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new ToolStripButton() };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Ctor_ToolStripItem_TestData))]
         public void Ctor_ToolStripItem(ToolStripItem clickedItem)
         {

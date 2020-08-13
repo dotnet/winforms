@@ -2,94 +2,113 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.ButtonInternal {
-    using System;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Drawing.Imaging;
-    using System.Drawing.Text;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
-    using System.Diagnostics.CodeAnalysis;
-        
+#nullable disable
 
-    internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter {
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
 
-        internal CheckBoxPopupAdapter(ButtonBase control) : base(control) {}
+namespace System.Windows.Forms.ButtonInternal
+{
+    internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
+    {
+        internal CheckBoxPopupAdapter(ButtonBase control) : base(control) { }
 
-        internal override void PaintUp(PaintEventArgs e, CheckState state) {
-            if (Control.Appearance == Appearance.Button) {
+        internal override void PaintUp(PaintEventArgs e, CheckState state)
+        {
+            if (Control.Appearance == Appearance.Button)
+            {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
                 adapter.PaintUp(e, Control.CheckState);
             }
-            else {
-                System.Drawing.Graphics g = e.Graphics;
-                ColorData colors = PaintPopupRender(e.Graphics).Calculate();
-                LayoutData layout = PaintPopupLayout(e, false).Layout();
+            else
+            {
+                ColorData colors = PaintPopupRender(e).Calculate();
+                LayoutData layout = PaintPopupLayout(show3D: false).Layout();
 
-                Region original = e.Graphics.Clip;
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
-                
-                DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.options.highContrast ? colors.buttonFace : colors.highlight, true, colors);
-                DrawFlatBorder(e.Graphics, layout.checkBounds, 
-                    (colors.options.highContrast && !Control.Enabled && AccessibilityImprovements.Level1) ? colors.windowFrame : colors.buttonShadow);
-                DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
+
+                DrawCheckBackground(
+                    e,
+                    layout.checkBounds,
+                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                    disabledColors: true,
+                    colors);
+                ControlPaint.DrawBorderSimple(
+                    e,
+                    layout.checkBounds,
+                    (colors.options.HighContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
+                DrawCheckOnly(e, layout, colors, colors.windowText);
 
                 AdjustFocusRectangle(layout);
                 PaintField(e, layout, colors, colors.windowText, true);
             }
         }
-        
-        internal override void PaintOver(PaintEventArgs e, CheckState state) {
-            System.Drawing.Graphics g = e.Graphics;
-            if (Control.Appearance == Appearance.Button) {
+
+        internal override void PaintOver(PaintEventArgs e, CheckState state)
+        {
+            if (Control.Appearance == Appearance.Button)
+            {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
                 adapter.PaintOver(e, Control.CheckState);
             }
-            else {
-                ColorData colors = PaintPopupRender(e.Graphics).Calculate();
-                LayoutData layout = PaintPopupLayout(e, true).Layout();
+            else
+            {
+                ColorData colors = PaintPopupRender(e).Calculate();
+                LayoutData layout = PaintPopupLayout(show3D: true).Layout();
 
-                Region original = e.Graphics.Clip;
-                PaintButtonBackground(e, Control.ClientRectangle, null);
+                Control.PaintBackground(e, Control.ClientRectangle);
 
                 PaintImage(e, layout);
-                
-                DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.options.highContrast ? colors.buttonFace : colors.highlight, true, colors);
-                DrawPopupBorder(g, layout.checkBounds, colors);
-                DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
 
-                if (!AccessibilityImprovements.Level2 || !string.IsNullOrEmpty(Control.Text)) {
-                    e.Graphics.Clip = original;
-                    e.Graphics.ExcludeClip(layout.checkArea);
+                DrawCheckBackground(
+                    e,
+                    layout.checkBounds,
+                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                    disabledColors: true,
+                    colors);
+
+                DrawPopupBorder(e, layout.checkBounds, colors);
+                DrawCheckOnly(e, layout, colors, colors.windowText);
+
+                Region originalClip = null;
+                if (!string.IsNullOrEmpty(Control.Text))
+                {
+                    originalClip = e.GraphicsInternal.Clip;
+                    e.GraphicsInternal.ExcludeClip(layout.checkArea);
                 }
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.windowText, drawFocus: true);
+
+                if (originalClip != null)
+                {
+                    e.GraphicsInternal.Clip = originalClip;
+                }
             }
         }
-        
-        internal override void PaintDown(PaintEventArgs e, CheckState state) {
-            if (Control.Appearance == Appearance.Button) {
+
+        internal override void PaintDown(PaintEventArgs e, CheckState state)
+        {
+            if (Control.Appearance == Appearance.Button)
+            {
                 ButtonPopupAdapter adapter = new ButtonPopupAdapter(Control);
                 adapter.PaintDown(e, Control.CheckState);
             }
-            else {
-                System.Drawing.Graphics g = e.Graphics;
-                ColorData colors = PaintPopupRender(e.Graphics).Calculate();
-                LayoutData layout = PaintPopupLayout(e, true).Layout();
+            else
+            {
+                ColorData colors = PaintPopupRender(e).Calculate();
+                LayoutData layout = PaintPopupLayout(show3D: true).Layout();
 
-                Region original = e.Graphics.Clip;
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
                 PaintImage(e, layout);
-                
-                DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.buttonFace, true, colors);
-                DrawPopupBorder(g, layout.checkBounds, colors);
-                DrawCheckOnly(e, layout, colors, colors.windowText, colors.buttonFace);
+
+                DrawCheckBackground(e, layout.checkBounds, colors.buttonFace, true, colors);
+                DrawPopupBorder(e, layout.checkBounds, colors);
+                DrawCheckOnly(e, layout, colors, colors.windowText);
 
                 AdjustFocusRectangle(layout);
                 PaintField(e, layout, colors, colors.windowText, true);
@@ -98,45 +117,58 @@ namespace System.Windows.Forms.ButtonInternal {
 
         #region Layout
 
-        protected override ButtonBaseAdapter CreateButtonAdapter() {
+        protected override ButtonBaseAdapter CreateButtonAdapter()
+        {
             return new ButtonPopupAdapter(Control);
         }
 
-        protected override LayoutOptions Layout(PaintEventArgs e) {
-            LayoutOptions layout = PaintPopupLayout(e, /* up = */ true);
+        protected override LayoutOptions Layout(PaintEventArgs e)
+        {
+            LayoutOptions layout = PaintPopupLayout(show3D: true);
             Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.MaxSize)
-                == PaintPopupLayout(e, /* up = */ false).GetPreferredSizeCore(LayoutUtils.MaxSize),
+                == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.MaxSize),
                 "The state of show3D should not effect PreferredSize");
             return layout;
         }
 
-
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
-        internal static LayoutOptions PaintPopupLayout(Graphics g, bool show3D, int checkSize, Rectangle clientRectangle, Padding padding,
-                                                       bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl,
-                                                       Control control = null)
+        internal static LayoutOptions PaintPopupLayout(
+            bool show3D,
+            int checkSize,
+            Rectangle clientRectangle,
+            Padding padding,
+            bool isDefault,
+            Font font,
+            string text,
+            bool enabled,
+            ContentAlignment textAlign,
+            RightToLeft rtl,
+            Control control = null)
         {
             LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
             layout.shadowedText = false;
-            if (show3D) {
-                layout.checkSize = (int)(checkSize * GetDpiScaleRatio(g, control) + 1);
+            if (show3D)
+            {
+                layout.checkSize = (int)(checkSize * GetDpiScaleRatio(control) + 1);
             }
-            else {
-                layout.checkSize = (int)(checkSize * GetDpiScaleRatio(g, control));
+            else
+            {
+                layout.checkSize = (int)(checkSize * GetDpiScaleRatio(control));
                 layout.checkPaddingSize = 1;
             }
             return layout;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")]  // removed graphics, may have to put it back
-        private LayoutOptions PaintPopupLayout(PaintEventArgs e, bool show3D) {
+        private LayoutOptions PaintPopupLayout(bool show3D)
+        {
             LayoutOptions layout = CommonLayout();
             layout.shadowedText = false;
-            if (show3D) {
-                layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio(e.Graphics) + 1);
+            if (show3D)
+            {
+                layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio() + 1);
             }
-            else {
-                layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio(e.Graphics));
+            else
+            {
+                layout.checkSize = (int)(flatCheckSize * GetDpiScaleRatio());
                 layout.checkPaddingSize = 1;
             }
             return layout;

@@ -4,9 +4,9 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Describes a delegate for an event that has a QuestionEventArgs as
-    /// a parameter.
-    /// </devdoc>
-    public delegate void QuestionEventHandler(object sender, QuestionEventArgs e);
+    /// <summary>
+    ///  Describes a delegate for an event that has a QuestionEventArgs as
+    ///  a parameter.
+    /// </summary>
+    public delegate void QuestionEventHandler(object? sender, QuestionEventArgs e);
 }

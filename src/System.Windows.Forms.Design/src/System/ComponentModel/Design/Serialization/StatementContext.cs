@@ -9,31 +9,32 @@ using System.Collections.Generic;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This object can be placed on the context stack to provide a place for statements  to be serialized into.  Normally, statements are serialized into whatever statement  collection that is on the context stack.  You can modify this behavior by creating a statement context and calling Populate with a collection of objects whose statements you would like stored in the statement table.  As each object is serialized in SerializeToExpression it will have its contents placed in the statement table. saved in a table within the context.  If you push this object on the stack it is your  responsibility to integrate the statements added to it into your own collection of statements.
+    ///  This object can be placed on the context stack to provide a place for
+    ///  statements to be serialized into. Normally, statements are serialized
+    ///  into whatever statement collection that is on the context stack. You
+    ///  can modify this behavior by creating a statement context and calling
+    ///  Populate with a collection of objects whose statements you would like
+    ///  stored in the statement table. As each object is serialized in
+    ///  SerializeToExpression it will have its contents placed in the statement
+    ///  table. saved in a table within the context. If you push this object on
+    ///  the stack it is your responsibility to integrate the statements added
+    ///  to it into your own collection of statements.
     /// </summary>
     public sealed class StatementContext
     {
         private ObjectStatementCollection _statements;
 
         /// <summary>
-        /// This is a table of statements that is offered by the statement context.
+        ///  This is a table of statements that is offered by the statement context.
         /// </summary>
         public ObjectStatementCollection StatementCollection
         {
-            get
-            {
-                if (_statements == null)
-                {
-                    _statements = new ObjectStatementCollection();
-                }
-
-                return _statements;
-            }
+            get => _statements ?? (_statements = new ObjectStatementCollection());
         }
     }
 
     /// <summary>
-    /// This is a table of statements that is offered by the statement context.
+    ///  This is a table of statements that is offered by the statement context.
     /// </summary>
     public sealed class ObjectStatementCollection : IEnumerable
     {
@@ -41,18 +42,18 @@ namespace System.ComponentModel.Design.Serialization
         private int _version;
 
         /// <summary>
-        /// Only creatable by the StatementContext.
+        ///  Only creatable by the StatementContext.
         /// </summary>
         internal ObjectStatementCollection()
         {
         }
 
         /// <summary>
-        /// Adds an owner to the table. Statements can be null, in which case it will be demand created when fished out of the table.  This will throw if there is already a valid collection for the owner.
+        ///  Adds an owner to the table. Statements can be null, in which case it will be demand created when fished out of the table.  This will throw if there is already a valid collection for the owner.
         /// </summary>
         private void AddOwner(object statementOwner, CodeStatementCollection statements)
         {
-            if (_table == null)
+            if (_table is null)
             {
                 _table = new List<TableEntry>();
             }
@@ -82,14 +83,14 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Indexer.  This will return the statement collection for the given owner.
-        /// It will return null only if the owner is not in the table.  
+        ///  Indexer.  This will return the statement collection for the given owner.
+        ///  It will return null only if the owner is not in the table.
         /// </summary>
         public CodeStatementCollection this[object statementOwner]
         {
             get
             {
-                if (statementOwner == null)
+                if (statementOwner is null)
                 {
                     throw new ArgumentNullException(nameof(statementOwner));
                 }
@@ -100,7 +101,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         if (object.ReferenceEquals(_table[idx].Owner, statementOwner))
                         {
-                            if (_table[idx].Statements == null)
+                            if (_table[idx].Statements is null)
                             {
                                 _table[idx] = new TableEntry(statementOwner, new CodeStatementCollection());
                             }
@@ -120,11 +121,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Returns true if the given statement owner is in the table.
+        ///  Returns true if the given statement owner is in the table.
         /// </summary>
         public bool ContainsKey(object statementOwner)
         {
-            if (statementOwner == null)
+            if (statementOwner is null)
             {
                 throw new ArgumentNullException(nameof(statementOwner));
             }
@@ -137,7 +138,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Returns an enumerator for this table.  The keys of the enumerator are statement owner objects and the values are instances of CodeStatementCollection.
+        ///  Returns an enumerator for this table.  The keys of the enumerator are statement owner objects and the values are instances of CodeStatementCollection.
         /// </summary>
         public IDictionaryEnumerator GetEnumerator()
         {
@@ -145,11 +146,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method populates the statement table with a collection of statement owners. The creator of the statement context should do this if it wishes statement tables to be used to store values for certain objects.
+        ///  This method populates the statement table with a collection of statement owners. The creator of the statement context should do this if it wishes statement tables to be used to store values for certain objects.
         /// </summary>
         public void Populate(ICollection statementOwners)
         {
-            if (statementOwners == null)
+            if (statementOwners is null)
             {
                 throw new ArgumentNullException(nameof(statementOwners));
             }
@@ -160,11 +161,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method populates the statement table with a collection of statement owners. The creator of the statement context should do this if it wishes statement tables to be used to store values for certain objects.
+        ///  This method populates the statement table with a collection of statement owners. The creator of the statement context should do this if it wishes statement tables to be used to store values for certain objects.
         /// </summary>
         public void Populate(object owner)
         {
-            if (owner == null)
+            if (owner is null)
             {
                 throw new ArgumentNullException(nameof(owner));
             }
@@ -172,7 +173,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Returns an enumerator for this table.  The value is a DictionaryEntry containing the statement owner and the statement collection.
+        ///  Returns an enumerator for this table.  The value is a DictionaryEntry containing the statement owner and the statement collection.
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -216,12 +217,12 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         throw new InvalidOperationException();
                     }
-                    if (_position < 0 || _table._table == null || _position >= _table._table.Count)
+                    if (_position < 0 || _table._table is null || _position >= _table._table.Count)
                     {
                         throw new InvalidOperationException();
                     }
 
-                    if (_table._table[_position].Statements == null)
+                    if (_table._table[_position].Statements is null)
                     {
                         _table._table[_position] = new TableEntry(_table._table[_position].Owner, new CodeStatementCollection());
                     }

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="zh-HANS" original="../MaskDesignerDialog.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Input Mask</source>
+        <target state="translated">输入掩码</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnCancel.Text">
+        <source>Cancel</source>
+        <target state="translated">取消</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="btnOK.Text">
+        <source>OK</source>
+        <target state="translated">确定</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="checkBoxUseValidatingType.Text">
+        <source>&amp;Use ValidatingType</source>
+        <target state="translated">使用 ValidatingType(&amp;U)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblHeader.Text">
+        <source>&amp;Select a predefined mask description from the list below or select Custom to define a custom mask.</source>
+        <target state="translated">从下面的列表中选择预定义的掩码说明，或者选择“自定义”定义一个自定义掩码(&amp;S)。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblMask.Text">
+        <source>&amp;Mask:</source>
+        <target state="translated">掩码(&amp;M):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lblTryIt.Text">
+        <source>&amp;Preview:</source>
+        <target state="translated">预览(&amp;P):</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

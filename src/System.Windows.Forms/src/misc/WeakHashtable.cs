@@ -2,67 +2,67 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel {
+#nullable disable
 
+namespace System.ComponentModel
+{
     using System;
     using System.Collections;
-    using System.Security.Permissions;
 
-    /// <devdoc>
-    ///     This is a hashtable that stores object keys as weak references.  
-    ///     It monitors memory usage and will periodically scavenge the
-    ///     hash table to clean out dead references.
-    /// </devdoc>
-    [HostProtection(SharedState = true)]
+    /// <summary>
+    ///  This is a hashtable that stores object keys as weak references.
+    ///  It monitors memory usage and will periodically scavenge the
+    ///  hash table to clean out dead references.
+    /// </summary>
     internal sealed class WeakHashtable : Hashtable
     {
-        private static IEqualityComparer _comparer = new WeakKeyComparer();
+        private static readonly IEqualityComparer _comparer = new WeakKeyComparer();
 
-        private long     _lastGlobalMem;
-        private int      _lastHashCount;
+        private long _lastGlobalMem;
+        private int _lastHashCount;
 
         internal WeakHashtable() : base(_comparer)
         {
         }
 
-        /// <devdoc>
-        ///     Override of clear that performs a scavenge.
-        /// </devdoc>
+        /// <summary>
+        ///  Override of clear that performs a scavenge.
+        /// </summary>
         public override void Clear()
         {
             base.Clear();
         }
 
-        /// <devdoc>
-        ///     Override of remove that performs a scavenge.
-        /// </devdoc>
+        /// <summary>
+        ///  Override of remove that performs a scavenge.
+        /// </summary>
         public override void Remove(object key)
         {
             base.Remove(key);
         }
 
-        /// <devdoc>
-        ///     Override of Item that wraps a weak reference around the
-        ///     key and performs a scavenge.
-        /// </devdoc>
+        /// <summary>
+        ///  Override of Item that wraps a weak reference around the
+        ///  key and performs a scavenge.
+        /// </summary>
         public void SetWeak(object key, object value)
         {
             ScavengeKeys();
             this[new EqualityWeakReference(key)] = value;
         }
 
-        /// <devdoc>
-        ///     This method checks to see if it is necessary to
-        ///     scavenge keys, and if it is it performs a scan
-        ///     of all keys to see which ones are no longer valid.
-        ///     To determine if we need to scavenge keys we need to
-        ///     try to track the current GC memory.  Our rule of
-        ///     thumb is that if GC memory is decreasing and our
-        ///     key count is constant we need to scavenge.  We
-        ///     will need to see if this is too often for extreme
-        ///     use cases like the CompactFramework (they add
-        ///     custom type data for every object at design time).
-        /// </devdoc>
+        /// <summary>
+        ///  This method checks to see if it is necessary to
+        ///  scavenge keys, and if it is it performs a scan
+        ///  of all keys to see which ones are no longer valid.
+        ///  To determine if we need to scavenge keys we need to
+        ///  try to track the current GC memory.  Our rule of
+        ///  thumb is that if GC memory is decreasing and our
+        ///  key count is constant we need to scavenge.  We
+        ///  will need to see if this is too often for extreme
+        ///  use cases like the CompactFramework (they add
+        ///  custom type data for every object at design time).
+        /// </summary>
         private void ScavengeKeys()
         {
             int hashCount = Count;
@@ -95,12 +95,11 @@ namespace System.ComponentModel {
                 // for dead references.
                 //
                 ArrayList cleanupList = null;
-                foreach(object o in Keys)
+                foreach (object o in Keys)
                 {
-                    WeakReference wr = o as WeakReference;
-                    if (wr != null && !wr.IsAlive)
+                    if (o is WeakReference wr && !wr.IsAlive)
                     {
-                        if (cleanupList == null)
+                        if (cleanupList is null)
                         {
                             cleanupList = new ArrayList();
                         }
@@ -111,13 +110,13 @@ namespace System.ComponentModel {
 
                 if (cleanupList != null)
                 {
-                    foreach(object o in cleanupList)
+                    foreach (object o in cleanupList)
                     {
                         Remove(o);
                     }
                 }
             }
-        
+
             _lastGlobalMem = globalMem;
             _lastHashCount = hashCount;
         }
@@ -126,16 +125,13 @@ namespace System.ComponentModel {
         {
             bool IEqualityComparer.Equals(object x, object y)
             {
-                if (x == null)
+                if (x is null)
                 {
-                    return y == null;
+                    return y is null;
                 }
                 if (y != null && x.GetHashCode() == y.GetHashCode())
                 {
-                    WeakReference wX = x as WeakReference;
-                    WeakReference wY = y as WeakReference;
-
-                    if (wX != null)
+                    if (x is WeakReference wX)
                     {
                         if (!wX.IsAlive)
                         {
@@ -144,7 +140,7 @@ namespace System.ComponentModel {
                         x = wX.Target;
                     }
 
-                    if (wY != null)
+                    if (y is WeakReference wY)
                     {
                         if (!wY.IsAlive)
                         {
@@ -159,23 +155,23 @@ namespace System.ComponentModel {
                 return false;
             }
 
-            int IEqualityComparer.GetHashCode (object obj)
+            int IEqualityComparer.GetHashCode(object obj)
             {
                 return obj.GetHashCode();
             }
         }
 
-        /// <devdoc>
-        ///     A subclass of WeakReference that overrides GetHashCode and
-        ///     Equals so that the weak reference returns the same equality
-        ///     semantics as the object it wraps.  This will always return
-        ///     the object's hash code and will return True for a Equals
-        ///     comparison of the object it is wrapping.  If the object
-        ///     it is wrapping has finalized, Equals always returns false.
-        /// </devdoc>
+        /// <summary>
+        ///  A subclass of WeakReference that overrides GetHashCode and
+        ///  Equals so that the weak reference returns the same equality
+        ///  semantics as the object it wraps.  This will always return
+        ///  the object's hash code and will return True for a Equals
+        ///  comparison of the object it is wrapping.  If the object
+        ///  it is wrapping has finalized, Equals always returns false.
+        /// </summary>
         private sealed class EqualityWeakReference : WeakReference
         {
-            private int _hashCode;
+            private readonly int _hashCode;
             internal EqualityWeakReference(object o) : base(o)
             {
                 _hashCode = o.GetHashCode();
@@ -183,7 +179,7 @@ namespace System.ComponentModel {
 
             public override bool Equals(object o)
             {
-                if (o == null)
+                if (o is null)
                 {
                     return false;
                 }
@@ -201,25 +197,7 @@ namespace System.ComponentModel {
                 return false;
             }
 
-            public override int GetHashCode()
-            {
-                return _hashCode;
-            }
+            public override int GetHashCode() => _hashCode;
         }
-
-
-        /* The folowing code has been removed to prevent FXCOP violation
-           It is left here incase it needs to be resurected
-        /// <devdoc>
-        ///     Override of add that wraps a weak reference around the
-        ///     key and performs a scavenge.
-        /// </devdoc>
-        public void AddWeak(object key, object value)
-        {
-            ScavengeKeys();
-            base.Add(new EqualityWeakReference(key), value);
-        }
-        */
     }
 }
-

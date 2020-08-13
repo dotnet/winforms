@@ -7,11 +7,12 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TreeViewCancelEventArgsTests
+    // NB: doesn't require thread affinity
+    public class TreeViewCancelEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_TreeNode_Bool_TreeViewAction_TestData()
         {
-            yield return new object[] { null, false, (TreeViewAction)(TreeViewAction.Unknown -1) };
+            yield return new object[] { null, false, (TreeViewAction)(TreeViewAction.Unknown - 1) };
             yield return new object[] { new TreeNode(), true, TreeViewAction.ByKeyboard };
         }
 

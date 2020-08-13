@@ -4,19 +4,19 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides data for the <see cref='System.Windows.Forms.Form.OnClosed'/> event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides data for the <see cref='Form.OnClosed'/> event.
+    /// </summary>
     public class FormClosedEventArgs : EventArgs
     {
         public FormClosedEventArgs(CloseReason closeReason)
         {
-            CloseReason = closeReason;                                           
+            CloseReason = closeReason;
         }
 
-        /// <devdoc>
-        /// Provides the reason for the Form Close.
-        /// </devdoc>
+        /// <summary>
+        ///  Provides the reason for the Form Close.
+        /// </summary>
         public CloseReason CloseReason { get; }
     }
 }

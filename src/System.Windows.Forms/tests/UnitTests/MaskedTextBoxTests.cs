@@ -7,28 +7,28 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class MaskedTextBoxTests
+    public class MaskedTextBoxTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void MaskedTextBox_Constructor()
         {
-            var mtb = new MaskedTextBox();
+            using var mtb = new MaskedTextBox();
 
             Assert.NotNull(mtb);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MaskedTextBox_ConstructorString()
         {
-            var mtb = new MaskedTextBox("Hello World!");
+            using var mtb = new MaskedTextBox("Hello World!");
 
             Assert.NotNull(mtb);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void MaskedTextBox_ConstructorMaskedTextProvider()
         {
-            var mtb = new MaskedTextBox(new MaskedTextProvider("Hello World!"));
+            using var mtb = new MaskedTextBox(new MaskedTextProvider("Hello World!"));
 
             Assert.NotNull(mtb);
         }

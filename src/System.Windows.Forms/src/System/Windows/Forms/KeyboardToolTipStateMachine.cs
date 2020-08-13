@@ -2,273 +2,314 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
 
-/*
- * KeyboardToolTipStateMachine implements keyboard ToolTips for controls with ToolTip set on them. 
- * 
- * A keyboard ToolTip is shown when a user focuses a control using keyboard keys such as Tab, arrow keys etc.
- * This state machine attempts to simulate the mouse ToolTip behavior.
- * The control should be focused with keyboard for an amount of time specified with TTDT_INITIAL flag to make the keyboard ToolTip appear.
- * Once visible, the keyboard ToolTip will be demonstrated for an amount of time specified with TTDT_AUTOPOP flag. The ToolTip will disappear afterwards.
- * If the keyboard ToolTip is visible and the focus moves from one ToolTip-enabled control to another, the keyboard ToolTip will be shown after a time interval specified with TTDT_RESHOW flag has passed.
- * 
- * This behavior is disabled by default and can be enabled by adding the "Switch.System.Windows.Forms.UseLegacyToolTipDisplay=false" line to an application's App.config file:
- 
-<?xml version="1.0" encoding="utf-8"?>
-<configuration>
-  <runtime>
-    <!-- AppContextSwitchOverrides values are in the form of 'key1=true|false;key2=true|false  -->
-    <!-- Enabling newer accessibility features (e.g. UseLegacyAccessibilityFeatures.2=false) requires all older accessibility features to be enabled (e.g. UseLegacyAccessibilityFeatures=false) -->
-    <AppContextSwitchOverrides value="Switch.UseLegacyAccessibilityFeatures=false;Switch.UseLegacyAccessibilityFeatures.2=false;Switch.UseLegacyAccessibilityFeatures.3=false;Switch.System.Windows.Forms.UseLegacyToolTipDisplay=false"/>
-  </runtime>
-</configuration>
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using static Interop;
 
- * Please note that disabling Switch.UseLegacyAccessibilityFeatures, Switch.UseLegacyAccessibilityFeatures.2 and Switch.UseLegacyAccessibilityFeatures.3 is required to disable Switch.System.Windows.Forms.UseLegacyToolTipDisplay
- */
-namespace System.Windows.Forms {
-    using Runtime.CompilerServices;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Threading;
-
-    internal sealed class KeyboardToolTipStateMachine {
-
-        public static KeyboardToolTipStateMachine Instance {
-            get {
-                if (KeyboardToolTipStateMachine.instance == null) {
-                    KeyboardToolTipStateMachine.instance = new KeyboardToolTipStateMachine();
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Implements keyboard ToolTips for controls with a <see cref="ToolTip"/> set on them.
+    ///
+    ///  A keyboard ToolTip is shown when a user focuses a control using keyboard keys such as Tab, arrow keys etc.
+    ///  This state machine attempts to simulate the mouse ToolTip behavior.
+    /// </summary>
+    /// <remarks>
+    ///  The control should be focused with keyboard for an amount of time specified with TTDT_INITIAL flag to make
+    ///  the keyboard ToolTip appear. <see href="https://docs.microsoft.com/windows/win32/controls/ttm-getdelaytime">TTM_GETDELAYTIME message (Microsoft Docs)</see>
+    ///
+    ///  Once visible, the keyboard ToolTip will be demonstrated for an amount of time specified with TTDT_AUTOPOP
+    ///  flag. The ToolTip will disappear afterwards. If the keyboard ToolTip is visible and the focus moves from
+    ///  one ToolTip-enabled control to another, the keyboard ToolTip will be shown after a time interval specified
+    ///  with TTDT_RESHOW flag has passed.
+    /// </remarks>
+    internal sealed class KeyboardToolTipStateMachine
+    {
+        public static KeyboardToolTipStateMachine Instance
+        {
+            get
+            {
+                if (s_instance is null)
+                {
+                    s_instance = new KeyboardToolTipStateMachine();
                 }
-                return KeyboardToolTipStateMachine.instance;
+                return s_instance;
             }
         }
 
         [ThreadStatic]
-        private static KeyboardToolTipStateMachine instance;
+        private static KeyboardToolTipStateMachine s_instance;
 
-        private readonly Dictionary<SmTransition, Func<IKeyboardToolTip, ToolTip, SmState>> transitions;
-        private readonly ToolToTipDictionary toolToTip = new ToolToTipDictionary();
+        private readonly ToolToTipDictionary _toolToTip = new ToolToTipDictionary();
 
-        private SmState currentState = SmState.Hidden;
-        private IKeyboardToolTip currentTool;
-        private readonly InternalStateMachineTimer timer = new InternalStateMachineTimer();
-        private SendOrPostCallback refocusDelayExpirationCallback;
+        private SmState _currentState = SmState.Hidden;
+        private IKeyboardToolTip _currentTool;
+        private readonly InternalStateMachineTimer _timer = new InternalStateMachineTimer();
+        private SendOrPostCallback _refocusDelayExpirationCallback;
 
-        private readonly WeakReference<IKeyboardToolTip> lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
+        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
 
-        private KeyboardToolTipStateMachine() {
-            this.transitions = new Dictionary<SmTransition, Func<IKeyboardToolTip, ToolTip, SmState>> {
-                [new SmTransition(SmState.Hidden, SmEvent.FocusedTool)] = this.SetupInitShowTimer,
-                [new SmTransition(SmState.Hidden, SmEvent.LeftTool)] = this.DoNothing, // OK
+        private KeyboardToolTipStateMachine()
+        {
+        }
 
-                [new SmTransition(SmState.ReadyForInitShow, SmEvent.FocusedTool)] = this.DoNothing, // unlikely: focus without leave
-                [new SmTransition(SmState.ReadyForInitShow, SmEvent.LeftTool)] = this.ResetFsmToHidden,
-                [new SmTransition(SmState.ReadyForInitShow, SmEvent.InitialDelayTimerExpired)] = this.ShowToolTip,
+        private SmState Transition(IKeyboardToolTip tool, ToolTip tooltip, SmEvent @event)
+            => (_currentState, @event) switch
+            {
+                (SmState.Hidden, SmEvent.FocusedTool) => SetupInitShowTimer(tool, tooltip),
+                (SmState.Hidden, SmEvent.LeftTool) => _currentState, // OK
+                (SmState.ReadyForInitShow, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
+                (SmState.ReadyForInitShow, SmEvent.LeftTool) => FullFsmReset(),
+                (SmState.ReadyForInitShow, SmEvent.InitialDelayTimerExpired) => ShowToolTip(tool, tooltip),
 
-                [new SmTransition(SmState.Shown, SmEvent.FocusedTool)] = this.DoNothing, // unlikely: focus without leave
-                [new SmTransition(SmState.Shown, SmEvent.LeftTool)] = this.HideAndStartWaitingForRefocus,
-                [new SmTransition(SmState.Shown, SmEvent.AutoPopupDelayTimerExpired)] = this.ResetFsmToHidden,
+                (SmState.Shown, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
+                (SmState.Shown, SmEvent.LeftTool) => HideAndStartWaitingForRefocus(tool, tooltip),
+                (SmState.Shown, SmEvent.AutoPopupDelayTimerExpired) => FullFsmReset(),
 
-                [new SmTransition(SmState.WaitForRefocus, SmEvent.FocusedTool)] = this.SetupReshowTimer,
-                [new SmTransition(SmState.WaitForRefocus, SmEvent.LeftTool)] = this.DoNothing, // OK
-                [new SmTransition(SmState.WaitForRefocus, SmEvent.RefocusWaitDelayExpired)] = this.ResetFsmToHidden,
+                (SmState.WaitForRefocus, SmEvent.FocusedTool) => SetupReshowTimer(tool, tooltip),
+                (SmState.WaitForRefocus, SmEvent.LeftTool) => _currentState, // OK
+                (SmState.WaitForRefocus, SmEvent.RefocusWaitDelayExpired) => FullFsmReset(),
 
-                [new SmTransition(SmState.ReadyForReshow, SmEvent.FocusedTool)] = this.DoNothing, // unlikely: focus without leave
-                [new SmTransition(SmState.ReadyForReshow, SmEvent.LeftTool)] = this.StartWaitingForRefocus,
-                [new SmTransition(SmState.ReadyForReshow, SmEvent.ReshowDelayTimerExpired)] = this.ShowToolTip
+                (SmState.ReadyForReshow, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
+                (SmState.ReadyForReshow, SmEvent.LeftTool) => StartWaitingForRefocus(tool),
+                (SmState.ReadyForReshow, SmEvent.ReshowDelayTimerExpired) => ShowToolTip(tool, tooltip),
+
+                // This is what we would have thrown historically
+                (_, _) => throw new KeyNotFoundException()
             };
+
+        public void ResetStateMachine(ToolTip toolTip)
+        {
+            Reset(toolTip);
         }
 
-        public void ResetStateMachine(ToolTip toolTip) {
-            this.Reset(toolTip);
-        }
-
-        public void Hook(IKeyboardToolTip tool, ToolTip toolTip) {
-            if (tool.AllowsToolTip()) {
-                this.StartTracking(tool, toolTip);
+        public void Hook(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            if (tool.AllowsToolTip())
+            {
+                StartTracking(tool, toolTip);
                 tool.OnHooked(toolTip);
             }
         }
 
-        public void NotifyAboutMouseEnter(IKeyboardToolTip sender) {
-            if (this.IsToolTracked(sender) && sender.ShowsOwnToolTip()) {
-                this.Reset(null);
+        public void NotifyAboutMouseEnter(IKeyboardToolTip sender)
+        {
+            if (IsToolTracked(sender) && sender.ShowsOwnToolTip())
+            {
+                Reset(null);
             }
         }
 
-        private bool IsToolTracked(IKeyboardToolTip sender) {
-            return this.toolToTip[sender] != null;
+        private bool IsToolTracked(IKeyboardToolTip sender)
+        {
+            return _toolToTip[sender] != null;
         }
 
-        public void NotifyAboutLostFocus(IKeyboardToolTip sender) {
-            if (this.IsToolTracked(sender) && sender.ShowsOwnToolTip()) {
-                this.Transit(SmEvent.LeftTool, sender);
-                if (this.currentTool == null) {
-                    this.lastFocusedTool.SetTarget(null);
+        public void NotifyAboutLostFocus(IKeyboardToolTip sender)
+        {
+            if (IsToolTracked(sender) && sender.ShowsOwnToolTip())
+            {
+                Transit(SmEvent.LeftTool, sender);
+                if (_currentTool is null)
+                {
+                    _lastFocusedTool.SetTarget(null);
                 }
             }
         }
 
-        public void NotifyAboutGotFocus(IKeyboardToolTip sender) {
-            if (this.IsToolTracked(sender) && sender.ShowsOwnToolTip() && sender.IsBeingTabbedTo()) {
-                this.Transit(SmEvent.FocusedTool, sender);
-                if (this.currentTool == sender) {
-                    this.lastFocusedTool.SetTarget(sender);
+        public void NotifyAboutGotFocus(IKeyboardToolTip sender)
+        {
+            if (IsToolTracked(sender) && sender.ShowsOwnToolTip() && sender.IsBeingTabbedTo())
+            {
+                Transit(SmEvent.FocusedTool, sender);
+                if (_currentTool == sender)
+                {
+                    _lastFocusedTool.SetTarget(sender);
                 }
             }
         }
 
-        public void Unhook(IKeyboardToolTip tool, ToolTip toolTip) {
-            if (tool.AllowsToolTip()) {
-                this.StopTracking(tool, toolTip);
+        public void Unhook(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            if (tool.AllowsToolTip())
+            {
+                StopTracking(tool, toolTip);
                 tool.OnUnhooked(toolTip);
             }
         }
 
-        public void NotifyAboutFormDeactivation(ToolTip sender) {
-            this.OnFormDeactivation(sender);
+        public void NotifyAboutFormDeactivation(ToolTip sender)
+        {
+            OnFormDeactivation(sender);
         }
 
-
-        internal IKeyboardToolTip LastFocusedTool {
-            get {
-                IKeyboardToolTip tool;
-                if(this.lastFocusedTool.TryGetTarget(out tool)) {
+        internal IKeyboardToolTip LastFocusedTool
+        {
+            get
+            {
+                if (_lastFocusedTool.TryGetTarget(out IKeyboardToolTip tool))
+                {
                     return tool;
                 }
 
-                return Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                return Control.FromHandle(User32.GetFocus());
             }
         }
 
-        private SmState HideAndStartWaitingForRefocus(IKeyboardToolTip tool, ToolTip toolTip) {
-            toolTip.HideToolTip(this.currentTool);
-            return StartWaitingForRefocus(tool, toolTip);
+        private SmState HideAndStartWaitingForRefocus(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            toolTip.HideToolTip(_currentTool);
+            return StartWaitingForRefocus(tool);
         }
 
-        private SmState StartWaitingForRefocus(IKeyboardToolTip tool, ToolTip toolTip) {
-            this.ResetTimer();
-            this.currentTool = null;
+        private SmState StartWaitingForRefocus(IKeyboardToolTip tool)
+        {
+            ResetTimer();
+            _currentTool = null;
             SendOrPostCallback expirationCallback = null;
-            this.refocusDelayExpirationCallback = expirationCallback = (object toolObject) => {
-                if (this.currentState == SmState.WaitForRefocus && this.refocusDelayExpirationCallback == expirationCallback) {
-                    this.Transit(SmEvent.RefocusWaitDelayExpired, (IKeyboardToolTip)toolObject);
+            _refocusDelayExpirationCallback = expirationCallback = (object toolObject) =>
+            {
+                if (_currentState == SmState.WaitForRefocus && _refocusDelayExpirationCallback == expirationCallback)
+                {
+                    Transit(SmEvent.RefocusWaitDelayExpired, (IKeyboardToolTip)toolObject);
                 }
             };
-            WindowsFormsSynchronizationContext.Current.Post(expirationCallback, tool);
+            SynchronizationContext.Current.Post(expirationCallback, tool);
             return SmState.WaitForRefocus;
         }
 
-        private SmState SetupReshowTimer(IKeyboardToolTip tool, ToolTip toolTip) {
-            this.currentTool = tool;
-            this.ResetTimer();
-            this.StartTimer(toolTip.GetDelayTime(NativeMethods.TTDT_RESHOW), this.GetOneRunTickHandler((Timer sender) => this.Transit(SmEvent.ReshowDelayTimerExpired, tool)));
+        private SmState SetupReshowTimer(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            _currentTool = tool;
+            ResetTimer();
+            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.RESHOW),
+                GetOneRunTickHandler((Timer sender) => Transit(SmEvent.ReshowDelayTimerExpired, tool)));
             return SmState.ReadyForReshow;
         }
 
-        private SmState ShowToolTip(IKeyboardToolTip tool, ToolTip toolTip) {
+        private SmState ShowToolTip(IKeyboardToolTip tool, ToolTip toolTip)
+        {
             string toolTipText = tool.GetCaptionForTool(toolTip);
-            int autoPopDelay = toolTip.GetDelayTime(NativeMethods.TTDT_AUTOPOP);
-            if (!this.currentTool.IsHoveredWithMouse()) {
-                toolTip.ShowKeyboardToolTip(toolTipText, this.currentTool, autoPopDelay);
+            int autoPopDelay = toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
+            if (!_currentTool.IsHoveredWithMouse())
+            {
+                toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
             }
-            this.StartTimer(autoPopDelay, this.GetOneRunTickHandler((Timer sender) => this.Transit(SmEvent.AutoPopupDelayTimerExpired, this.currentTool)));
+            StartTimer(autoPopDelay,
+                GetOneRunTickHandler((Timer sender) => Transit(SmEvent.AutoPopupDelayTimerExpired, _currentTool)));
             return SmState.Shown;
         }
 
-        private SmState ResetFsmToHidden(IKeyboardToolTip tool, ToolTip toolTip) {
-            return this.FullFsmReset();
-        }
-
-        private SmState DoNothing(IKeyboardToolTip tool, ToolTip toolTip) {
-            return this.currentState;
-        }
-
-        private SmState SetupInitShowTimer(IKeyboardToolTip tool, ToolTip toolTip) {
-            this.currentTool = tool;
-            this.ResetTimer();
-            this.StartTimer(toolTip.GetDelayTime(NativeMethods.TTDT_INITIAL), this.GetOneRunTickHandler((Timer sender) => this.Transit(SmEvent.InitialDelayTimerExpired, this.currentTool)));
+        private SmState SetupInitShowTimer(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            _currentTool = tool;
+            ResetTimer();
+            StartTimer(toolTip.GetDelayTime(ComCtl32.TTDT.INITIAL),
+                GetOneRunTickHandler((Timer sender) => Transit(SmEvent.InitialDelayTimerExpired, _currentTool)));
 
             return SmState.ReadyForInitShow;
         }
 
-        private void StartTimer(int interval, EventHandler eventHandler) {
-            this.timer.Interval = interval;
-            this.timer.Tick += eventHandler;
-            this.timer.Start();
+        private void StartTimer(int interval, EventHandler eventHandler)
+        {
+            _timer.Interval = interval;
+            _timer.Tick += eventHandler;
+            _timer.Start();
         }
 
-        private EventHandler GetOneRunTickHandler(Action<Timer> handler) {
-            EventHandler wrapper = null;
-            wrapper = (object sender, EventArgs eventArgs) => {
-                this.timer.Stop();
-                this.timer.Tick -= wrapper;
-                handler(this.timer);
-            };
+        private EventHandler GetOneRunTickHandler(Action<Timer> handler)
+        {
+            void wrapper(object sender, EventArgs eventArgs)
+            {
+                _timer.Stop();
+                _timer.Tick -= wrapper;
+                handler(_timer);
+            }
+
             return wrapper;
         }
 
-        private void Transit(SmEvent @event, IKeyboardToolTip source) {
-            Debug.Assert(transitions.ContainsKey(new SmTransition(this.currentState, @event)), "Unsupported KeyboardToolTipFsmTransition!");
+        private void Transit(SmEvent @event, IKeyboardToolTip source)
+        {
             bool fullFsmResetRequired = false;
-            try {
-                ToolTip toolTip = this.toolToTip[source];
-                if ((this.currentTool == null || this.currentTool.CanShowToolTipsNow()) && toolTip != null) {
-                    Func<IKeyboardToolTip, ToolTip, SmState> transitionFunction = transitions[new SmTransition(this.currentState, @event)];
-                    this.currentState = transitionFunction(source, toolTip);
+            try
+            {
+                ToolTip toolTip = _toolToTip[source];
+                if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip != null)
+                {
+                    _currentState = Transition(source, toolTip, @event);
                 }
-                else {
+                else
+                {
                     fullFsmResetRequired = true;
                 }
             }
-            catch {
+            catch
+            {
                 fullFsmResetRequired = true;
                 throw;
             }
-            finally {
-                if (fullFsmResetRequired) {
-                    this.FullFsmReset();
+            finally
+            {
+                if (fullFsmResetRequired)
+                {
+                    FullFsmReset();
                 }
             }
         }
 
-        private SmState FullFsmReset() {
-            if (this.currentState == SmState.Shown && this.currentTool != null) {
-                ToolTip currentToolTip = this.toolToTip[this.currentTool];
-                if (currentToolTip != null) {
-                    currentToolTip.HideToolTip(this.currentTool);
+        private SmState FullFsmReset()
+        {
+            if (_currentState == SmState.Shown && _currentTool != null)
+            {
+                ToolTip currentToolTip = _toolToTip[_currentTool];
+                if (currentToolTip != null)
+                {
+                    currentToolTip.HideToolTip(_currentTool);
                 }
             }
-            this.ResetTimer();
-            this.currentTool = null;
-            return this.currentState = SmState.Hidden;
+            ResetTimer();
+            _currentTool = null;
+            return _currentState = SmState.Hidden;
         }
 
-        private void ResetTimer() {
-            this.timer.ClearTimerTickHandlers();
-            this.timer.Stop();
+        private void ResetTimer()
+        {
+            _timer.ClearTimerTickHandlers();
+            _timer.Stop();
         }
 
-        private void Reset(ToolTip toolTipToReset) {
-            if (toolTipToReset == null || (this.currentTool != null && this.toolToTip[this.currentTool] == toolTipToReset)) {
-                this.FullFsmReset();
+        private void Reset(ToolTip toolTipToReset)
+        {
+            if (toolTipToReset is null || (_currentTool != null && _toolToTip[_currentTool] == toolTipToReset))
+            {
+                FullFsmReset();
             }
         }
 
-        private void StartTracking(IKeyboardToolTip tool, ToolTip toolTip) {
-            this.toolToTip[tool] = toolTip;
+        private void StartTracking(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            _toolToTip[tool] = toolTip;
         }
 
-        private void StopTracking(IKeyboardToolTip tool, ToolTip toolTip) {
-            this.toolToTip.Remove(tool, toolTip);
+        private void StopTracking(IKeyboardToolTip tool, ToolTip toolTip)
+        {
+            _toolToTip.Remove(tool, toolTip);
         }
 
-        private void OnFormDeactivation(ToolTip sender) {
-            if (this.currentTool != null && this.toolToTip[this.currentTool] == sender) {
-                this.FullFsmReset();
+        private void OnFormDeactivation(ToolTip sender)
+        {
+            if (_currentTool != null && _toolToTip[_currentTool] == sender)
+            {
+                FullFsmReset();
             }
         }
 
-        private enum SmEvent : byte {
+        private enum SmEvent : byte
+        {
             FocusedTool,
             LeftTool,
             InitialDelayTimerExpired, // internal
@@ -277,7 +318,8 @@ namespace System.Windows.Forms {
             RefocusWaitDelayExpired // internal
         }
 
-        private enum SmState : byte {
+        private enum SmState : byte
+        {
             Hidden,
             ReadyForInitShow,
             Shown,
@@ -285,73 +327,58 @@ namespace System.Windows.Forms {
             WaitForRefocus
         }
 
-        private struct SmTransition : IEquatable<SmTransition> {
-            private readonly SmState currentState;
-            private readonly SmEvent @event;
-
-            public SmTransition(SmState currentState, SmEvent @event) {
-                this.currentState = currentState;
-                this.@event = @event;
-            }
-
-            public bool Equals(SmTransition other) {
-                return this.currentState == other.currentState && this.@event == other.@event;
-            }
-
-            public override bool Equals(object obj) {
-                return obj is SmTransition && this.Equals((SmTransition)obj);
-            }
-
-            public override int GetHashCode() {
-                return (byte)this.currentState << 16 | (byte)this.@event;
-            }
+        private sealed class InternalStateMachineTimer : Timer
+        {
+            public void ClearTimerTickHandlers() => _onTimer = null;
         }
 
-        private sealed class InternalStateMachineTimer : Timer {
-            public void ClearTimerTickHandlers() {
-                this.onTimer = null;
-            }
-        }
+        private sealed class ToolToTipDictionary
+        {
+            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
 
-        private sealed class ToolToTipDictionary {
-            private ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
-
-            public ToolTip this[IKeyboardToolTip tool] {
-                get {
-                    WeakReference<ToolTip> toolTipReference;
+            public ToolTip this[IKeyboardToolTip tool]
+            {
+                get
+                {
                     ToolTip toolTip = null;
-                    if (this.table.TryGetValue(tool, out toolTipReference)) {
-                        if (!toolTipReference.TryGetTarget(out toolTip)) {
+                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                    {
+                        if (!toolTipReference.TryGetTarget(out toolTip))
+                        {
                             // removing dead reference
-                            this.table.Remove(tool);
+                            table.Remove(tool);
                         }
                     }
                     return toolTip;
                 }
-
-                set {
-                    WeakReference<ToolTip> toolTipReference;
-                    if (this.table.TryGetValue(tool, out toolTipReference)) {
+                set
+                {
+                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                    {
                         toolTipReference.SetTarget(value);
                     }
-                    else {
-                        this.table.Add(tool, new WeakReference<ToolTip>(value));
+                    else
+                    {
+                        table.Add(tool, new WeakReference<ToolTip>(value));
                     }
                 }
             }
 
-            public void Remove(IKeyboardToolTip tool, ToolTip toolTip) {
-                WeakReference<ToolTip> toolTipReference;
-                ToolTip existingToolTip;
-                if (this.table.TryGetValue(tool, out toolTipReference)) {
-                    if (toolTipReference.TryGetTarget(out existingToolTip)) {
-                        if (existingToolTip == toolTip) {
-                            this.table.Remove(tool);
+            public void Remove(IKeyboardToolTip tool, ToolTip toolTip)
+            {
+                if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                {
+                    if (toolTipReference.TryGetTarget(out ToolTip existingToolTip))
+                    {
+                        if (existingToolTip == toolTip)
+                        {
+                            table.Remove(tool);
                         }
                     }
-                    else {
+                    else
+                    {
                         // removing dead reference
-                        this.table.Remove(tool);
+                        table.Remove(tool);
                     }
                 }
             }

@@ -6,22 +6,21 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies whether an object or text is aligned to
-    /// the left or
-    /// right of a reference point.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Specifies whether an object or text is aligned to
+    ///  the left or
+    ///  right of a reference point.
+    /// </summary>
     public enum LeftRightAlignment
     {
-        /// <devdoc>
-        /// The object or text is aligned to the left of the reference point.
-        /// </devdoc>
+        /// <summary>
+        ///  The object or text is aligned to the left of the reference point.
+        /// </summary>
         Left = 0,
 
-        /// <devdoc>
-        /// The object or text is aligned to the right of the reference point.
-        /// </devdoc>
+        /// <summary>
+        ///  The object or text is aligned to the right of the reference point.
+        /// </summary>
         Right = 1,
     }
 }

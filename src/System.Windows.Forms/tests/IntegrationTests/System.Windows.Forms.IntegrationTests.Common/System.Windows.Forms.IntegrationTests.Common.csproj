@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
+    <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
+    <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

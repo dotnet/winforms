@@ -6,7 +6,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewRowsRemovedEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewRowsRemovedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
         [InlineData(0, 1)]

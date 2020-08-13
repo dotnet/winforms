@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
+#nullable disable
 
 namespace System.Windows.Forms
 {
@@ -25,9 +25,9 @@ namespace System.Windows.Forms
             get => _throwException;
             set
             {
-                if (value && Exception == null)
+                if (value && Exception is null)
                 {
-                    throw new ArgumentException(string.Format(SR.DataGridView_CannotThrowNullException));
+                    throw new ArgumentException(SR.DataGridView_CannotThrowNullException);
                 }
 
                 _throwException = value;

@@ -4,34 +4,34 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// For a given container control, determines whether the data in child controls
-    /// will automatically be validated when the user attempts to change the focus.
-    /// </devdoc>
+    /// <summary>
+    ///  For a given container control, determines whether the data in child controls
+    ///  will automatically be validated when the user attempts to change the focus.
+    /// </summary>
     public enum AutoValidate
     {
-        /// <devdoc>
-        /// Controls in this container will not be validated when the focus changes.
-        /// </devdoc>
+        /// <summary>
+        ///  Controls in this container will not be validated when the focus changes.
+        /// </summary>
         Disable = 0,
 
-        /// <devdoc>
-        /// Controls in this container will be validated when the focus changes.
-        /// If a validation error occurs, the focus is forced to stay in the
-        /// current control.
-        /// </devdoc>
+        /// <summary>
+        ///  Controls in this container will be validated when the focus changes.
+        ///  If a validation error occurs, the focus is forced to stay in the
+        ///  current control.
+        /// </summary>
         EnablePreventFocusChange = 1,
 
-        /// <devdoc>
-        /// Controls in this container will be validated when the focus changes.
-        /// If a validation error occurs, the focus is allowed to move to the other
-        /// control.
-        /// </devdoc>
+        /// <summary>
+        ///  Controls in this container will be validated when the focus changes.
+        ///  If a validation error occurs, the focus is allowed to move to the other
+        ///  control.
+        /// </summary>
         EnableAllowFocusChange = 2,
 
-        /// <devdoc>
-        /// AutoValidate setting for this container is determined by its parent container.
-        /// </devdoc>
+        /// <summary>
+        ///  AutoValidate setting for this container is determined by its parent container.
+        /// </summary>
         Inherit = -1,
     }
 }

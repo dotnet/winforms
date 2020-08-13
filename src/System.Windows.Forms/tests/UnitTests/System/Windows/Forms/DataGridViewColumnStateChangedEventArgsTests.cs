@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewColumnStateChangedEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewColumnStateChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_DataGridViewColumn_DataGridViewElementStates_TestData()
         {

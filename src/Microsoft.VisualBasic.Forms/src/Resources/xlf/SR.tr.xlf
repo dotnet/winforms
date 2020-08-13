@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
+    <body>
+      <trans-unit id="AppModel_NoStartupForm">
+        <source>A startup form has not been specified.</source>
+        <target state="translated">Başlangıç formu belirtilmedi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AppModel_SingleInstanceCantConnect">
+        <source>This single-instance application could not connect to the original instance.</source>
+        <target state="translated">Bu tek örnekli uygulama özgün örneğe bağlanamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AppModel_SplashAndMainFormTheSame">
+        <source>Splash screen and main form cannot be the same form.</source>
+        <target state="translated">Giriş ekranı ve ana form aynı form olamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLogBaseNameNull">
+        <source>BaseFileName cannot be Nothing or an empty String.</source>
+        <target state="translated">BaseFileName Nothing veya boş Dize olamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLogNumberTooSmall">
+        <source>The value of {0} must be greater than or equal to 1000.</source>
+        <target state="translated">{0} değeri 1000'den büyük veya eşit olmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_ExhaustedPossibleStreamNames">
+        <source>Unable to obtain a stream for the log.  Potential file names based on {0} are already in use.</source>
+        <target state="translated">Günlük için akış alınamıyor. {0} öğesini temel alan olası dosya adları zaten kullanılıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_FileExceedsMaximumSize">
+        <source>Unable to write to log file because writing to it would cause it to exceed the MaxFileSize value.</source>
+        <target state="translated">Günlük dosyalarına yazılması MaxFileSize değerinin aşmasına neden olacağından günlük dosyasına yazılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_FreeSpaceError">
+        <source>Cannot determine the amount of available disk space.</source>
+        <target state="translated">Kullanılabilir disk alanı miktarı belirlenemiyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_NegativeNumber">
+        <source>The value of {0} must be a positive number.</source>
+        <target state="translated">{0} değeri artı sayı olmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ApplicationLog_ReservedSpaceEncroached">
+        <source>Unable to write to log file because writing to it would reduce free disk space below ReservedSpace value.</source>
+        <target state="translated">Günlük dosyasına yazmak boş dik alanını ReservedSpace değerinin altına düşüreceğinden günlük dosyasına yazılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidNullValue1">
+        <source>Argument '{0}' is Nothing.</source>
+        <target state="translated">'{0}' bağımsız değişkeni Nothing olarak belirlenmiş.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidValue1">
+        <source>Argument '{0}' is not a valid value.</source>
+        <target state="translated">'{0}' bağımsız değişkeninin değeri geçerli değil.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_InvalidValueType2">
+        <source>Argument '{0}' cannot be converted to type '{1}'.</source>
+        <target state="translated">'{0}' bağımsız değişkeni '{1}' türüne dönüştürülemez.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DiagnosticInfo_FullOSName">
+        <source>Could not obtain full operation system name due to internal error. This might be caused by WMI not existing on the current machine.</source>
+        <target state="translated">İç hata nedeniyle işletim sistemi tam adı alınamadı. Geçerli bilgisayarda WMI'nın olmaması buna neden olabilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DiagnosticInfo_Memory">
+        <source>Could not obtain memory information due to internal error.</source>
+        <target state="translated">İç hata nedeniyle bellek bilgileri alınamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EnvVarNotFound_Name">
+        <source>Environment variable is not defined: '{0}'.</source>
+        <target state="translated">Ortam değişkeni tanımlanmamış: '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="General_ArgumentNullException">
+        <source>Argument cannot be Nothing.</source>
+        <target state="translated">Bağımsız değişken Nothing olamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="General_PropertyNothing">
+        <source>Property {0} cannot be set to Nothing.</source>
+        <target state="translated">{0} özelliği Nothing olarak ayarlanamaz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ID53">
+        <source>File not found.</source>
+        <target state="translated">Dosya bulunamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ID70">
+        <source>Permission denied.</source>
+        <target state="translated">İzin reddedildi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FileExists_Path">
+        <source>Could not complete operation since a file already exists in this path '{0}'.</source>
+        <target state="translated">Bu '{0}' yolunda zaten bir dosya olduğundan işlem tamamlanamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FileNotFound_Path">
+        <source>Could not find file '{0}'.</source>
+        <target state="translated">'{0}' adlı dosya bulunamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="IO_FilePathException">
+        <source>The given file path ends with a directory separator character.</source>
+        <target state="translated">Verilen dosya yolu bir dizinle veya ayırıcı karakterle sona eriyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Mouse_NoMouseIsPresent">
+        <source>No mouse is present.</source>
+        <target state="translated">Fare yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Mouse_NoWheelIsPresent">
+        <source>No mouse wheel is present.</source>
+        <target state="translated">Fare tekerleği yok.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_BadConnectionTimeout">
+        <source>The ConnectionTimeout must be greater than 0.</source>
+        <target state="translated">ConnectionTimeout sıfırdan büyük olmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_DownloadNeedsFilename">
+        <source>destinationFileName needs to include a file name.</source>
+        <target state="translated">destinationFileName öğesinin bir dosya adı içermesi gerekir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_InvalidUriString">
+        <source>'{0}' is not a valid remote file address. A valid address should include a protocol, a path and a file name.</source>
+        <target state="translated">'{0}' geçerli bir uzak dosya adresi değil. Geçerli adres bir protokol, yol ve dosya adı içermelidir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_NetworkNotAvailable">
+        <source>Unable to ping because a network connection is not available.</source>
+        <target state="translated">Kullanılabilir ağ bağlantısı olmadığından ping işlemi yapılamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Network_UploadAddressNeedsFilename">
+        <source>The address for UploadFile needs to include a file name.</source>
+        <target state="translated">UploadFile adresinin bir dosya adı içermesi gerekir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProcessNotFound">
+        <source>Process '{0}' was not found.</source>
+        <target state="translated">'{0}' işlemi bulunamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogDownloadingLabel">
+        <source>Downloading {0} to {1}</source>
+        <target state="translated">{0}, {1} konumuna indiriliyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogDownloadingTitle">
+        <source>Downloading {0}</source>
+        <target state="translated">{0} indiriliyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogUploadingLabel">
+        <source>Uploading {0} to {1}</source>
+        <target state="translated">{0}, {1} konumuna yükleniyor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProgressDialogUploadingTitle">
+        <source>Uploading {0}</source>
+        <target state="translated">{0} karşıya yükleniyor</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

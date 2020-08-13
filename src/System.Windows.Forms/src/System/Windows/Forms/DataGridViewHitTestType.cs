@@ -4,10 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the part of the <see cref='System.Windows.Forms.DataGridView'/>
-    /// control where the mouse is.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the part of the <see cref='DataGridView'/>
+    ///  control where the mouse is.
+    /// </summary>
     public enum DataGridViewHitTestType
     {
         None = 0,

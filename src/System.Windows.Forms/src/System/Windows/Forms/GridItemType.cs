@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     {
         Property,
         Category,
-        ArrayValue, 
+        ArrayValue,
         Root
     }
 }

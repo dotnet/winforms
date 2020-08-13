@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="fr" original="../FormatControl.resx">
+    <body>
+      <trans-unit id="dateTimeFormatsListBox.AccessibleDescription">
+        <source>Type:</source>
+        <target state="translated">Type :</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="decimalPlacesUpDown.AccessibleDescription">
+        <source>Decimal places</source>
+        <target state="translated">Nombre de décimales</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatGroupBox.Text">
+        <source>Format</source>
+        <target state="translated">Format</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatTypeLabel.Text">
+        <source>&amp;Format type:</source>
+        <target state="translated">&amp;Type de format :</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="formatTypeListBox.AccessibleDescription">
+        <source>Format type:</source>
+        <target state="translated">Type de format :</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nullValueLabel.Text">
+        <source>&amp;Null value</source>
+        <target state="translated">&amp;Valeur null</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nullValueTextBox.AccessibleDescription">
+        <source>Null value</source>
+        <target state="translated">Valeur null</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleGroupBox.Text">
+        <source>Sample</source>
+        <target state="translated">Aperçu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="sampleLabel.Text">
+        <source>sample</source>
+        <target state="translated">exemple</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="secondRowLabel.Text">
+        <source>&amp;Decimal places</source>
+        <target state="translated">Nb de &amp;décimales</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="thirdRowLabel.Text">
+        <source>Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</source>
+        <target state="translated">Remarque : il n'est pas garanti que les chaînes de format personnalisées effectuent correctement un aller-retour entre la source de données et le contrôle dépendant. Pour vous assurer qu'une valeur de format personnalisé s'affiche dans le contrôle et est enregistrée dans la base de données, gérez l'analyse ou formatez l'événement pour la liaison.</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

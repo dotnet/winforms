@@ -2,32 +2,34 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
+#nullable disable
+
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
-    /// as well as an All array property, enumeration, etc.
-    /// </devdoc>
+    /// <summary>
+    ///  BindingsCollection is a collection of bindings for a Control. It has Add/Remove capabilities,
+    ///  as well as an All array property, enumeration, etc.
+    /// </summary>
     [DefaultEvent(nameof(CollectionChanged))]
     internal class ListManagerBindingsCollection : BindingsCollection
     {
-        private BindingManagerBase _bindingManagerBase;
+        private readonly BindingManagerBase _bindingManagerBase;
 
-        /// <devdoc>
-        /// ColumnsCollection constructor.  Used only by DataSource.
-        /// </devdoc>
+        /// <summary>
+        ///  ColumnsCollection constructor.  Used only by DataSource.
+        /// </summary>
         internal ListManagerBindingsCollection(BindingManagerBase bindingManagerBase) : base()
         {
             Debug.Assert(bindingManagerBase != null, "How could a listmanagerbindingscollection not have a bindingManagerBase associated with it!");
-            this._bindingManagerBase = bindingManagerBase;
+            _bindingManagerBase = bindingManagerBase;
         }
 
         protected override void AddCore(Binding dataBinding)
         {
-            if (dataBinding == null)
+            if (dataBinding is null)
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
@@ -40,9 +42,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
             }
 
-            // important to set prop first for error checking.
-            dataBinding.SetListManager(_bindingManagerBase);
-
+            dataBinding.BindingManagerBase = _bindingManagerBase;
             base.AddCore(dataBinding);
         }
 
@@ -51,14 +51,15 @@ namespace System.Windows.Forms
             int numLinks = Count;
             for (int i = 0; i < numLinks; i++)
             {
-                this[i].SetListManager(null);
+                this[i].BindingManagerBase = null;
             }
+
             base.ClearCore();
         }
 
         protected override void RemoveCore(Binding dataBinding)
         {
-            if (dataBinding == null)
+            if (dataBinding is null)
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
@@ -67,7 +68,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
             }
 
-            dataBinding.SetListManager(null);
+            dataBinding.BindingManagerBase = null;
             base.RemoveCore(dataBinding);
         }
     }

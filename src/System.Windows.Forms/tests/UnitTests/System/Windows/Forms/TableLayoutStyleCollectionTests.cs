@@ -7,12 +7,12 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class TableLayoutStyleCollectionTests
+    public class TableLayoutStyleCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Properties_GetDefault_ReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             Assert.Equal(0, collection.Count);
@@ -22,10 +22,10 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(collection.SyncRoot);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Add_TableLayoutStyle_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
 
@@ -34,10 +34,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Add_Object_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
 
@@ -46,29 +46,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Add_Null_ThrowsArgumentNullException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             Assert.Throws<ArgumentNullException>("style", () => collection.Add(null));
             Assert.Throws<ArgumentNullException>("style", () => ((IList)collection).Add(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Add_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             Assert.Throws<InvalidCastException>(() => collection.Add(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Add_StyleAlreadyAdded_ThrowsArgumentException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             var style = new RowStyle();
@@ -77,10 +77,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("style", () => ((IList)collection).Add(style));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Insert_Object_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
 
@@ -89,30 +89,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         public void TableLayoutStyleCollection_Insert_Null_ThrowsArgumentNullException(int index)
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             Assert.Throws<ArgumentNullException>("style", () => ((IList)collection).Insert(index, null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Insert_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             Assert.Throws<InvalidCastException>(() => collection.Insert(0, new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Insert_StyleAlreadyAdded_ThrowsArgumentException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             var style = new RowStyle();
@@ -120,10 +120,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("style", () => ((IList)collection).Insert(0, style));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Item_SetTableLayoutStyle_GetReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             collection.Add(new RowStyle());
@@ -134,10 +134,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, collection[0]);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Item_SetObject_GetReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             collection.Add(new RowStyle());
@@ -148,12 +148,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, collection[0]);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-1)]
         [InlineData(0)]
         public void TableLayoutStyleCollection_Item_SetNull_ThrowsArgumentNullException(int index)
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             collection.Add(new RowStyle());
@@ -161,20 +161,20 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("value", () => ((IList)collection)[index] = null);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Item_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             collection.Add(new RowStyle());
             Assert.Throws<InvalidCastException>(() => collection[0] = new object());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Item_StyleAlreadyAdded_ThrowsArgumentException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             var style = new RowStyle();
@@ -183,10 +183,10 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("style", () => ((IList)collection)[0] = style);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Remove_Object_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             var style = new RowStyle();
@@ -197,11 +197,11 @@ namespace System.Windows.Forms.Tests
             collection.Add(style);
             Assert.Equal(style, Assert.Single(collection));
         }
-        
-        [Fact]
+
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Remove_Null_Nop()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             var style = new RowStyle();
@@ -210,19 +210,19 @@ namespace System.Windows.Forms.Tests
             Assert.Same(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Remove_ObjectNotTableLayoutStyle_ThrowsInvalidCastException()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             Assert.Throws<InvalidCastException>(() => collection.Remove(new object()));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_RemoveAt_Invoke_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             var style = new RowStyle();
@@ -234,10 +234,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Clear_Invoke_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             var style = new RowStyle();
@@ -252,10 +252,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_Contains_Object_ReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             var style = new RowStyle();
@@ -266,10 +266,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(collection.Contains(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_IndexOf_Object_ReturnsExpected()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             var style = new RowStyle();
@@ -280,16 +280,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, collection.IndexOf(null));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void TableLayoutStyleCollection_CopyTo_Invoke_Success()
         {
-            var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
+            using var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
             var style = new RowStyle();
             collection.Add(style);
 
-            var array = new object[] { 1, 2, 3};
+            var array = new object[] { 1, 2, 3 };
             collection.CopyTo(array, 1);
             Assert.Equal(new object[] { 1, style, 3 }, array);
         }

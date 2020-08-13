@@ -8,21 +8,19 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     <para>
-    ///         This is an abstract base class that encapsulates a lot of
-    ///         the details of handling selection drags. Just about everyone
-    ///         that implements a selection UI handler will extend this.
-    ///     </para>
+    ///  This is an abstract base class that encapsulates a lot of
+    ///  the details of handling selection drags. Just about everyone
+    ///  that implements a selection UI handler will extend this.
     /// </summary>
     internal abstract class SelectionUIHandler
     {
         /// <summary>
-        ///     Begins a drag operation.  A designer should examine the list of components
-        ///     to see if it wants to support the drag.  If it does, it should return
-        ///     true.  If it returns true, the designer should provide
-        ///     UI feedback about the drag at this time.  Typically, this feedback consists
-        ///     of an inverted rectangle for each component, or a caret if the component
-        ///     is text.
+        ///  Begins a drag operation.  A designer should examine the list of components
+        ///  to see if it wants to support the drag.  If it does, it should return
+        ///  true.  If it returns true, the designer should provide
+        ///  UI feedback about the drag at this time.  Typically, this feedback consists
+        ///  of an inverted rectangle for each component, or a caret if the component
+        ///  is text.
         /// </summary>
         public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
@@ -30,9 +28,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Called when the user has moved the mouse.  This will only be called on
-        ///     the designer that returned true from beginDrag.  The designer
-        ///     should update its UI feedback here.
+        ///  Called when the user has moved the mouse.  This will only be called on
+        ///  the designer that returned true from beginDrag.  The designer
+        ///  should update its UI feedback here.
         /// </summary>
         public virtual void DragMoved(object[] components, Rectangle offset)
         {
@@ -40,8 +38,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Called when the user has completed the drag.  The designer should
-        ///     remove any UI feedback it may be providing.
+        ///  Called when the user has completed the drag.  The designer should
+        ///  remove any UI feedback it may be providing.
         /// </summary>
         public virtual void EndDrag(object[] components, bool cancel)
         {
@@ -49,49 +47,49 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Retrieves the base component for the selection handler.
+        ///  Retrieves the base component for the selection handler.
         /// </summary>
         protected abstract IComponent GetComponent();
 
         /// <summary>
-        ///     Retrieves the base component's UI control for the selection handler.
+        ///  Retrieves the base component's UI control for the selection handler.
         /// </summary>
         protected abstract Control GetControl();
 
         /// <summary>
-        ///     Retrieves the UI control for the given component.
+        ///  Retrieves the UI control for the given component.
         /// </summary>
         protected abstract Control GetControl(IComponent component);
 
         /// <summary>
-        ///     Retrieves the current grid snap size we should snap objects
-        ///     to.
+        ///  Retrieves the current grid snap size we should snap objects
+        ///  to.
         /// </summary>
         protected abstract Size GetCurrentSnapSize();
 
         /// <summary>
-        ///     We use this to request often-used services.
+        ///  We use this to request often-used services.
         /// </summary>
         protected abstract object GetService(Type serviceType);
 
         /// <summary>
-        ///     Determines if the selection UI handler should attempt to snap
-        ///     objects to a grid.
+        ///  Determines if the selection UI handler should attempt to snap
+        ///  objects to a grid.
         /// </summary>
         protected abstract bool GetShouldSnapToGrid();
 
         /// <summary>
-        ///     Given a rectangle, this updates the dimensions of it
-        ///     with any grid snaps and returns a new rectangle.  If
-        ///     no changes to the rectangle's size were needed, this
-        ///     may return the same rectangle.
+        ///  Given a rectangle, this updates the dimensions of it
+        ///  with any grid snaps and returns a new rectangle.  If
+        ///  no changes to the rectangle's size were needed, this
+        ///  may return the same rectangle.
         /// </summary>
         public abstract Rectangle GetUpdatedRect(Rectangle orignalRect, Rectangle dragRect, bool updateSize);
 
         /// <summary>
-        ///     Queries to see if a drag operation
-        ///     is valid on this handler for the given set of components.
-        ///     If it returns true, BeginDrag will be called immediately after.
+        ///  Queries to see if a drag operation
+        ///  is valid on this handler for the given set of components.
+        ///  If it returns true, BeginDrag will be called immediately after.
         /// </summary>
         public bool QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
         {
@@ -99,7 +97,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Asks the handler to set the appropriate cursor
+        ///  Asks the handler to set the appropriate cursor
         /// </summary>
         public abstract void SetCursor();
 

@@ -2,19 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Threading;
-using System.Windows.Forms;
-using System.Diagnostics;
+#nullable disable
+
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext"]/*' />
     /// <summary>
-    ///     SynchronizationContext subclass used by the Windows Forms package.
+    ///  SynchronizationContext subclass used by the Windows Forms package.
     /// </summary>
-    public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable {
+    public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable
+    {
         private Control controlToSendTo;
         private WeakReference destinationThreadRef;
 
@@ -28,143 +28,157 @@ namespace System.Windows.Forms
         [ThreadStatic]
         private static SynchronizationContext previousSyncContext;
 
-
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.WindowsFormsSynchronizationContext"]/*' />
-        public WindowsFormsSynchronizationContext() {
+        public WindowsFormsSynchronizationContext()
+        {
             DestinationThread = Thread.CurrentThread;   //store the current thread to ensure its still alive during an invoke.
-            Application.ThreadContext context = Application.ThreadContext.FromCurrent();
-            Debug.Assert(context != null);
-            if (context != null) {
-              controlToSendTo = context.MarshalingControl;
-            }
+            controlToSendTo = Application.ThreadContext.FromCurrent().MarshalingControl;
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
-        private WindowsFormsSynchronizationContext(Control marshalingControl, Thread destinationThread) {
+        private WindowsFormsSynchronizationContext(Control marshalingControl, Thread destinationThread)
+        {
             controlToSendTo = marshalingControl;
-            this.DestinationThread = destinationThread;
+            DestinationThread = destinationThread;
             Debug.Assert(controlToSendTo.IsHandleCreated, "Marshaling control should have created its handle in its ctor.");
         }
 
         // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
-        private Thread DestinationThread {
-            get { 
-                if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive)) {
+        private Thread DestinationThread
+        {
+            get
+            {
+                if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive))
+                {
                     return destinationThreadRef.Target as Thread;
                 }
                 return null;
             }
-            set {
-                if (value != null) {
+            set
+            {
+                if (value != null)
+                {
                     destinationThreadRef = new WeakReference(value);
                 }
             }
         }
-        public void Dispose() {
-            if (controlToSendTo != null) {
-                if (!controlToSendTo.IsDisposed) {
+        public void Dispose()
+        {
+            if (controlToSendTo != null)
+            {
+                if (!controlToSendTo.IsDisposed)
+                {
                     controlToSendTo.Dispose();
                 }
                 controlToSendTo = null;
             }
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Send"]/*' />
         // This is never called because we decide whether to Send or Post and we always post
-        public override void Send(SendOrPostCallback d, object state) {
+        public override void Send(SendOrPostCallback d, object state)
+        {
             Thread destinationThread = DestinationThread;
-            if (destinationThread == null || !destinationThread.IsAlive) {
+            if (destinationThread is null || !destinationThread.IsAlive)
+            {
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
             }
 
-            Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
-
-            if (controlToSendTo != null) {
-                controlToSendTo.Invoke(d, new object[] { state });
-            }
+            controlToSendTo?.Invoke(d, new object[] { state });
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Post"]/*' />
-        public override void Post(SendOrPostCallback d, object state) {
-            Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
-
-            if (controlToSendTo != null) {
-                controlToSendTo.BeginInvoke(d, new object[] { state });
-            }
+        public override void Post(SendOrPostCallback d, object state)
+        {
+            controlToSendTo?.BeginInvoke(d, new object[] { state });
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.CreateCopy"]/*' />
-        public override SynchronizationContext CreateCopy() {
+        public override SynchronizationContext CreateCopy()
+        {
             return new WindowsFormsSynchronizationContext(controlToSendTo, DestinationThread);
         }
 
-        /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.CreateCopy"]/*' />
         // Determines whether we install the WindowsFormsSynchronizationContext when we create a control, or
         // when we start a message loop.  Default: true.
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static bool AutoInstall {
-            get {
+        public static bool AutoInstall
+        {
+            get
+            {
                 return !dontAutoInstall;
             }
-            set {
+            set
+            {
                 dontAutoInstall = !value;
             }
         }
 
         // Instantiate and install a WF op sync context, and save off the old one.
-        internal static void InstallIfNeeded() {
-            // Exit if we shouldn't auto-install, if we've already installed and we haven't uninstalled, 
+        internal static void InstallIfNeeded()
+        {
+            // Exit if we shouldn't auto-install, if we've already installed and we haven't uninstalled,
             // or if we're being called recursively (creating the WF
             // async op sync context can create a parking window control).
-            if (!AutoInstall || inSyncContextInstallation) {
+            if (!AutoInstall || inSyncContextInstallation)
+            {
                 return;
             }
 
-            if (SynchronizationContext.Current == null) {
+            if (SynchronizationContext.Current is null)
+            {
                 previousSyncContext = null;
             }
 
-            if (previousSyncContext != null) {
+            if (previousSyncContext != null)
+            {
                 return;
             }
 
             inSyncContextInstallation = true;
-            try {
+            try
+            {
                 SynchronizationContext currentContext = AsyncOperationManager.SynchronizationContext;
                 //Make sure we either have no sync context or that we have one of type SynchronizationContext
-                if (currentContext == null || currentContext.GetType() == typeof(SynchronizationContext)) {
+                if (currentContext is null || currentContext.GetType() == typeof(SynchronizationContext))
+                {
                     previousSyncContext = currentContext;
 
                     AsyncOperationManager.SynchronizationContext = new WindowsFormsSynchronizationContext();
                 }
             }
-            finally {
+            finally
+            {
                 inSyncContextInstallation = false;
             }
         }
 
-        public static void Uninstall() {
+        public static void Uninstall()
+        {
             Uninstall(true);
         }
 
-        internal static void Uninstall(bool turnOffAutoInstall) {
-            if (AutoInstall) {
-                WindowsFormsSynchronizationContext winFormsSyncContext = AsyncOperationManager.SynchronizationContext as WindowsFormsSynchronizationContext;
-                if (winFormsSyncContext != null) {
-                    try {
-                        if (previousSyncContext == null) {
+        internal static void Uninstall(bool turnOffAutoInstall)
+        {
+            if (AutoInstall)
+            {
+                if (AsyncOperationManager.SynchronizationContext is WindowsFormsSynchronizationContext winFormsSyncContext)
+                {
+                    try
+                    {
+                        if (previousSyncContext is null)
+                        {
                             AsyncOperationManager.SynchronizationContext = new SynchronizationContext();
                         }
-                        else {
+                        else
+                        {
                             AsyncOperationManager.SynchronizationContext = previousSyncContext;
                         }
                     }
-                    finally {
+                    finally
+                    {
                         previousSyncContext = null;
                     }
                 }
             }
-            if (turnOffAutoInstall) {
+            if (turnOffAutoInstall)
+            {
                 AutoInstall = false;
             }
         }

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>System.Windows.Forms.Interop.Tests</AssemblyName>
+    <Platforms>x86;x64</Platforms>
+  </PropertyGroup>
+
+  <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" />
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <NativeProjectReference Include="NativeTests\CMakeLists.txt" CMakeProject="NativeTests\NativeTests.proj" BuildNative="true" />
+  </ItemGroup>
+
+</Project>

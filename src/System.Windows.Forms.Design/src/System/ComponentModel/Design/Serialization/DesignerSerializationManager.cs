@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -11,11 +10,11 @@ using System.Text;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This object is a complete implementation of IDesignerSerializationManager.  It can be used to  begin the serialization / deserialization process for any serialization scheme that utilizes  IDesignerSerializationManager.
+    ///  This object is a complete implementation of IDesignerSerializationManager.  It can be used to  begin the serialization / deserialization process for any serialization scheme that utilizes  IDesignerSerializationManager.
     /// </summary>
     public class DesignerSerializationManager : IDesignerSerializationManager
     {
-        private IServiceProvider provider;
+        private readonly IServiceProvider provider;
         private ITypeResolutionService typeResolver;
         private bool searchedTypeResolver;
         private bool recycleInstances;
@@ -38,7 +37,7 @@ namespace System.ComponentModel.Design.Serialization
         private object propertyProvider;
 
         /// <summary>
-        /// Creates a new serialization manager.
+        ///  Creates a new serialization manager.
         /// </summary>
         public DesignerSerializationManager()
         {
@@ -47,7 +46,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Creates a new serialization manager.
+        ///  Creates a new serialization manager.
         /// </summary>
         public DesignerSerializationManager(IServiceProvider provider)
         {
@@ -57,13 +56,13 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Provides access to the container that components will be added to.  The default implementation searches for IDesignerHost in the service provider and uses its container if it exists.
+        ///  Provides access to the container that components will be added to.  The default implementation searches for IDesignerHost in the service provider and uses its container if it exists.
         /// </summary>
         public IContainer Container
         {
             get
             {
-                if (container == null)
+                if (container is null)
                 {
                     if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                     {
@@ -80,14 +79,14 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This retrieves the collection of errors that have been reported to the serialization manager.  Additionaly, new errors can be added to the list by accessing this property.
+        ///  This retrieves the collection of errors that have been reported to the serialization manager.  Additionaly, new errors can be added to the list by accessing this property.
         /// </summary>
         public IList Errors
         {
             get
             {
                 CheckSession();
-                if (errorList == null)
+                if (errorList is null)
                 {
                     errorList = new ArrayList();
                 }
@@ -96,7 +95,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This property determines the behavior of the CreateInstance method.  If true, CreateInstance will  pass the given component name.  If false, CreateInstance will check for the presence of the given name in the container.  If it does not exist, it will use the given name. If it does exist, it will pass a null value as the name of a component when adding  it to the container, thereby giving it a new name. This second variation is useful for implementing a serializer that always duplicates objects, rather than assuming those objects do not exist.  Paste commands often use this type of serializer. The default value of this property is true.
+        ///  This property determines the behavior of the CreateInstance method.  If true, CreateInstance will  pass the given component name.  If false, CreateInstance will check for the presence of the given name in the container.  If it does not exist, it will use the given name. If it does exist, it will pass a null value as the name of a component when adding  it to the container, thereby giving it a new name. This second variation is useful for implementing a serializer that always duplicates objects, rather than assuming those objects do not exist.  Paste commands often use this type of serializer. The default value of this property is true.
         /// </summary>
         public bool PreserveNames
         {
@@ -109,7 +108,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This property returns the object that should be used to provide properties to the serialization manager's Propeties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
+        ///  This property returns the object that should be used to provide properties to the serialization manager's Propeties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
         /// </summary>
         public object PropertyProvider
         {
@@ -125,7 +124,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implemeting a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
+        ///  This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implemeting a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
         /// </summary>
         public bool RecycleInstances
         {
@@ -138,7 +137,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This property determines the behavior of the CreateInstance method and only applies if RecyleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
+        ///  This property determines the behavior of the CreateInstance method and only applies if RecyleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
         /// </summary>
         public bool ValidateRecycledTypes
         {
@@ -151,59 +150,47 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Event that is raised when a session is created.
+        ///  Event that is raised when a session is created.
         /// </summary>
         public event EventHandler SessionCreated
         {
-            add
-            {
-                sessionCreatedEventHandler += value;
-            }
-            remove
-            {
-                sessionCreatedEventHandler -= value;
-            }
+            add => sessionCreatedEventHandler += value;
+            remove => sessionCreatedEventHandler -= value;
         }
 
         /// <summary>
-        /// Event that is raised when a session is disposed.
+        ///  Event that is raised when a session is disposed.
         /// </summary>
         public event EventHandler SessionDisposed
         {
-            add
-            {
-                sessionDisposedEventHandler += value;
-            }
-            remove
-            {
-                sessionDisposedEventHandler -= value;
-            }
+            add => sessionDisposedEventHandler += value;
+            remove => sessionDisposedEventHandler -= value;
         }
 
         /// <summary>
-        /// Used to verify that no session is active.  If there is, this method throws.
+        ///  Used to verify that no session is active.  If there is, this method throws.
         /// </summary>
         private void CheckNoSession()
         {
             if (session != null)
             {
-                throw new InvalidOperationException(string.Format(SR.SerializationManagerWithinSession));
+                throw new InvalidOperationException(SR.SerializationManagerWithinSession);
             }
         }
 
         /// <summary>
-        /// Used to verify that there is an open session.  If there isn't, this method throws.
+        ///  Used to verify that there is an open session.  If there isn't, this method throws.
         /// </summary>
         private void CheckSession()
         {
-            if (session == null)
+            if (session is null)
             {
-                throw new InvalidOperationException(string.Format(SR.SerializationManagerNoSession));
+                throw new InvalidOperationException(SR.SerializationManagerNoSession);
             }
         }
 
         /// <summary>
-        /// Creates an instance of the specified type.  The default implementation will create the object.  If the object implements IComponent and only requires an empty or IContainer style constructor, this will search for IDesignerHost and create through the host.  Otherwise it will use reflection.  If addToContainer is true, this will add to the container using this class's Conainer property, using the name provided if it is not null.
+        ///  Creates an instance of the specified type.  The default implementation will create the object.  If the object implements IComponent and only requires an empty or IContainer style constructor, this will search for IDesignerHost and create through the host.  Otherwise it will use reflection.  If addToContainer is true, this will add to the container using this class's Conainer property, using the name provided if it is not null.
         /// </summary>
         protected virtual object CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)
         {
@@ -218,13 +205,12 @@ namespace System.ComponentModel.Design.Serialization
             // If we have been asked to recycle instances, look in our nametable and container first for an object matching this name and type.  If we find it, we will use it.
             if (RecycleInstances && name != null)
             {
-
                 if (instancesByName != null)
                 {
                     instance = instancesByName[name];
                 }
 
-                if (instance == null && addToContainer && Container != null)
+                if (instance is null && addToContainer && Container != null)
                 {
                     instance = Container.Components[name];
                 }
@@ -242,7 +228,7 @@ namespace System.ComponentModel.Design.Serialization
             // 3.  The type has a null ctor or an IContainer ctor.
             // 4.  The host is available and its container matches our container.
             // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host.  This is the correct thing to do, but it has the side effect of adding the compnent to the designer host twice -- once with a default name, and a second time with the name we provide.  This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
-            if (instance == null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray == null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
+            if (instance is null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray is null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
             {
                 if (GetService(typeof(IDesignerHost)) is IDesignerHost host && host.Container == Container)
                 {
@@ -256,7 +242,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    if (name == null || ignoreName)
+                    if (name is null || ignoreName)
                     {
                         instance = host.CreateComponent(type);
                     }
@@ -268,7 +254,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Default case, just create the component through reflection.
-            if (instance == null)
+            if (instance is null)
             {
                 try
                 {
@@ -277,7 +263,7 @@ namespace System.ComponentModel.Design.Serialization
                         // First, just try to create the object directly with the arguments.  generaly this should work.
                         instance = TypeDescriptor.CreateInstance(provider, type, null, argArray);
                     }
-                    catch (MissingMethodException mmex)
+                    catch (MissingMethodException)
                     {
                         // okay, the create failed because the argArray didn't match the types of ctors that are available.  don't panic, we're tough.  we'll try to coerce the types to match the ctor.
                         Type[] types = new Type[argArray.Length];
@@ -302,7 +288,7 @@ namespace System.ComponentModel.Design.Serialization
                                 // now walk every type of argument and compare it to the corresponding argument.  if it matches up exactly or is a derived type, great. otherwise, we'll try to use IConvertible to make it into the right thing.
                                 for (int t = 0; t < types.Length; t++)
                                 {
-                                    if (types[t] == null || pi[t].ParameterType.IsAssignableFrom(types[t]))
+                                    if (types[t] is null || pi[t].ParameterType.IsAssignableFrom(types[t]))
                                     {
                                         tempArgs[t] = argArray[t];
                                         continue;
@@ -323,7 +309,7 @@ namespace System.ComponentModel.Design.Serialization
                                     match = false;
                                     break;
                                 }
-                                // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money. 
+                                // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money.
                                 if (match)
                                 {
                                     instance = TypeDescriptor.CreateInstance(provider, type, null, tempArgs);
@@ -333,9 +319,9 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         // we still failed...rethrow the original exception.
-                        if (instance == null)
+                        if (instance is null)
                         {
-                            throw mmex;
+                            throw;
                         }
                     }
                 }
@@ -357,10 +343,11 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             argTypes.Append("null");
                         }
-
                     }
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()));
-                    ex.HelpLink = SR.SerializationManagerNoMatchingCtor;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
+                    {
+                        HelpLink = SR.SerializationManagerNoMatchingCtor
+                    };
                     throw ex;
                 }
 
@@ -377,7 +364,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    if (name == null || ignoreName)
+                    if (name is null || ignoreName)
                     {
                         Container.Add((IComponent)instance);
                     }
@@ -391,13 +378,13 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.	
+        ///  Creates a new serialization session.  Most data within the serialization manager is transient and only lives for the life of a serialization session.  When a session is disposed, serialization is considered to be complete and this transient state is cleared.  This allows a single instance of a serialization manager to be used to serialize multiple object trees.  Some state, including the service provider and any custom serialization providers that were added to the serialization manager, span sessions.
         /// </summary>
         public IDisposable CreateSession()
         {
             if (session != null)
             {
-                throw new InvalidOperationException(string.Format(SR.SerializationManagerAreadyInSession));
+                throw new InvalidOperationException(SR.SerializationManagerAreadyInSession);
             }
 
             session = new SerializationSession(this);
@@ -406,11 +393,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This retrieves the serializer for the given object type. You can request what type of serializer you would like. It is possible for this method to return null if there is no serializer of the requested type.
+        ///  This retrieves the serializer for the given object type. You can request what type of serializer you would like. It is possible for this method to return null if there is no serializer of the requested type.
         /// </summary>
         public object GetSerializer(Type objectType, Type serializerType)
         {
-            if (serializerType == null)
+            if (serializerType is null)
             {
                 throw new ArgumentNullException(nameof(serializerType));
             }
@@ -429,14 +416,13 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 // Now actually look in the type's metadata.
-                if (serializer == null)
+                if (serializer is null)
                 {
                     AttributeCollection attributes = TypeDescriptor.GetAttributes(objectType);
                     foreach (Attribute attr in attributes)
                     {
-                        if (attr is DesignerSerializerAttribute)
+                        if (attr is DesignerSerializerAttribute da)
                         {
-                            DesignerSerializerAttribute da = (DesignerSerializerAttribute)attr;
                             string typeName = da.SerializerBaseTypeName;
 
                             // This serializer must support the correct base type or we're not interested.
@@ -446,7 +432,6 @@ namespace System.ComponentModel.Design.Serialization
                                 if (baseType == serializerType && da.SerializerTypeName != null && da.SerializerTypeName.Length > 0)
                                 {
                                     Type type = GetRuntimeType(da.SerializerTypeName);
-                                    Debug.Assert(type != null, "Type " + objectType.FullName + " has a serializer that we couldn't bind to: " + da.SerializerTypeName);
                                     if (type != null)
                                     {
                                         serializer = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
@@ -459,7 +444,7 @@ namespace System.ComponentModel.Design.Serialization
                     // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
                     if (serializer != null && session != null)
                     {
-                        if (serializers == null)
+                        if (serializers is null)
                         {
                             serializers = new Hashtable();
                         }
@@ -469,7 +454,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Check for a default serialization provider
-            if (defaultProviderTable == null || !defaultProviderTable.ContainsKey(serializerType))
+            if (defaultProviderTable is null || !defaultProviderTable.ContainsKey(serializerType))
             {
                 Type defaultSerializerType = null;
                 DefaultSerializationProviderAttribute a = (DefaultSerializationProviderAttribute)TypeDescriptor.GetAttributes(serializerType)[typeof(DefaultSerializationProviderAttribute)];
@@ -484,7 +469,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (defaultProviderTable == null)
+                if (defaultProviderTable is null)
                 {
                     defaultProviderTable = new Hashtable();
                 }
@@ -513,7 +498,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Provides access to the underlying IServiceProvider
+        ///  Provides access to the underlying IServiceProvider
         /// </summary>
         protected virtual object GetService(Type serviceType)
         {
@@ -530,7 +515,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Retrieves the type for the given name using the type resolution service, if available.
+        ///  Retrieves the type for the given name using the type resolution service, if available.
         /// </summary>
         protected virtual Type GetType(string typeName)
         {
@@ -540,7 +525,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService typeProviderService)
                 {
                     TypeDescriptionProvider typeProvider = typeProviderService.GetProvider(type);
-                    if (!typeProvider.IsSupportedType(type))
+                    if (typeProvider != null && !typeProvider.IsSupportedType(type))
                     {
                         type = null;
                     }
@@ -550,18 +535,18 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Use this one for Serializer, converter, designer and editor types, types which  are only used by the IDE internally
+        ///  Use this one for Serializer, converter, designer and editor types, types which  are only used by the IDE internally
         /// </summary>
         public Type GetRuntimeType(string typeName)
         {
-            if (typeResolver == null && !searchedTypeResolver)
+            if (typeResolver is null && !searchedTypeResolver)
             {
                 typeResolver = GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
                 searchedTypeResolver = true;
             }
 
             Type type;
-            if (typeResolver == null)
+            if (typeResolver is null)
             {
                 type = Type.GetType(typeName);
             }
@@ -573,7 +558,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Event that is raised when a name needs to be resolved to an object instance..
+        ///  Event that is raised when a name needs to be resolved to an object instance..
         /// </summary>
         protected virtual void OnResolveName(ResolveNameEventArgs e)
         {
@@ -581,7 +566,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Event that is raised when a session is created.
+        ///  Event that is raised when a session is created.
         /// </summary>
         protected virtual void OnSessionCreated(EventArgs e)
         {
@@ -589,7 +574,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Event that is raised when a session is disposed.
+        ///  Event that is raised when a session is disposed.
         /// </summary>
         protected virtual void OnSessionDisposed(EventArgs e)
         {
@@ -601,7 +586,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    serializationCompleteEventHandler?.Invoke(this, EventArgs.Empty);
+                    serializationCompleteEventHandler?.Invoke(this, e);
                 }
             }
             finally
@@ -618,11 +603,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// This method takes a property that is owned by the given owner, and it wraps them in new property that is owned by the serialization manager.
+        ///  This method takes a property that is owned by the given owner, and it wraps them in new property that is owned by the serialization manager.
         /// </summary>
         private PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
-            if (property == null)
+            if (property is null)
             {
                 throw new ArgumentNullException(nameof(property));
             }
@@ -631,13 +616,13 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// The Context property provides a user-defined storage area implemented as a stack.  This storage area is a useful way to provide communication across serializers, as serialization is a generally hierarchial process.
+        ///  The Context property provides a user-defined storage area implemented as a stack.  This storage area is a useful way to provide communication across serializers, as serialization is a generally hierarchial process.
         /// </summary>
         ContextStack IDesignerSerializationManager.Context
         {
             get
             {
-                if (contextStack == null)
+                if (contextStack is null)
                 {
                     CheckSession();
                     contextStack = new ContextStack();
@@ -647,19 +632,19 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// The Properties property provides a set of custom properties the serialization manager may surface.  The set of properties exposed here is defined by the implementor of  IDesignerSerializationManager.  
+        ///  The Properties property provides a set of custom properties the serialization manager may surface.  The set of properties exposed here is defined by the implementor of  IDesignerSerializationManager.
         /// </summary>
         PropertyDescriptorCollection IDesignerSerializationManager.Properties
         {
             get
             {
-                if (properties == null)
+                if (properties is null)
                 {
                     object propObject = PropertyProvider;
                     PropertyDescriptor[] propArray;
-                    if (propObject == null)
+                    if (propObject is null)
                     {
-                        propArray = new PropertyDescriptor[0];
+                        propArray = Array.Empty<PropertyDescriptor>();
                     }
                     else
                     {
@@ -669,7 +654,6 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             propArray[i] = WrapProperty(props[i], propObject);
                         }
-
                     }
                     properties = new PropertyDescriptorCollection(propArray);
                 }
@@ -678,7 +662,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// ResolveName event.  This event is raised when GetName is called, but the name is not found in the serialization manager's name table.  It provides a  way for a serializer to demand-create an object so the serializer does not have to order object creation by dependency.  This delegate is cleared immediately after serialization or deserialization is complete.
+        ///  ResolveName event.  This event is raised when GetName is called, but the name is not found in the serialization manager's name table.  It provides a  way for a serializer to demand-create an object so the serializer does not have to order object creation by dependency.  This delegate is cleared immediately after serialization or deserialization is complete.
         /// </summary>
         event ResolveNameEventHandler IDesignerSerializationManager.ResolveName
         {
@@ -687,14 +671,11 @@ namespace System.ComponentModel.Design.Serialization
                 CheckSession();
                 resolveNameEventHandler += value;
             }
-            remove
-            {
-                resolveNameEventHandler -= value;
-            }
+            remove => resolveNameEventHandler -= value;
         }
 
         /// <summary>
-        /// This event is raised when serialization or deserialization has been completed.  Generally, serialization code should be written to be stateless.  Should some sort of state be necessary to maintain, a serializer can listen to this event to know when that state should be cleared. An example of this is if a serializer needs to write to another file, such as a resource file.  In this case it would be inefficient to design the serializer to close the file when finished because serialization of an object graph generally requires several serializers. The resource file would be opened and closed many times. Instead, the resource file could be accessed through an object that listened to the SerializationComplete event, and that object could close the resource file at the end of serialization.
+        ///  This event is raised when serialization or deserialization has been completed.  Generally, serialization code should be written to be stateless.  Should some sort of state be necessary to maintain, a serializer can listen to this event to know when that state should be cleared. An example of this is if a serializer needs to write to another file, such as a resource file.  In this case it would be inefficient to design the serializer to close the file when finished because serialization of an object graph generally requires several serializers. The resource file would be opened and closed many times. Instead, the resource file could be accessed through an object that listened to the SerializationComplete event, and that object could close the resource file at the end of serialization.
         /// </summary>
         event EventHandler IDesignerSerializationManager.SerializationComplete
         {
@@ -703,18 +684,15 @@ namespace System.ComponentModel.Design.Serialization
                 CheckSession();
                 serializationCompleteEventHandler += value;
             }
-            remove
-            {
-                serializationCompleteEventHandler -= value;
-            }
+            remove => serializationCompleteEventHandler -= value;
         }
 
         /// <summary>
-        /// This method adds a custom serialization provider to the serialization manager. A custom serialization provider will get the opportunity to return a serializer for a data type before the serialization manager looks in the type's metadata.  
+        ///  This method adds a custom serialization provider to the serialization manager. A custom serialization provider will get the opportunity to return a serializer for a data type before the serialization manager looks in the type's metadata.
         /// </summary>
         void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)
         {
-            if (designerSerializationProviders == null)
+            if (designerSerializationProviders is null)
             {
                 designerSerializationProviders = new ArrayList();
             }
@@ -724,8 +702,8 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        /// <summary>                
-        /// Creates an instance of the given type and adds it to a collection of named instances.  Objects that implement IComponent will be added to the design time container if addToContainer is true.
+        /// <summary>
+        ///  Creates an instance of the given type and adds it to a collection of named instances.  Objects that implement IComponent will be added to the design time container if addToContainer is true.
         /// </summary>
         object IDesignerSerializationManager.CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)
         {
@@ -735,8 +713,10 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (instancesByName != null && instancesByName.ContainsKey(name))
                 {
-                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name));
-                    ex.HelpLink = SR.SerializationManagerDuplicateComponentDecl;
+                    Exception ex = new SerializationException(string.Format(SR.SerializationManagerDuplicateComponentDecl, name))
+                    {
+                        HelpLink = SR.SerializationManagerDuplicateComponentDecl
+                    };
                     throw ex;
                 }
             }
@@ -747,7 +727,7 @@ namespace System.ComponentModel.Design.Serialization
                 && (!(instance is IComponent) // And it's not an icomponent
                     || !RecycleInstances))
             { // Or it is an icomponent but recycle instances is turned off
-                if (instancesByName == null)
+                if (instancesByName is null)
                 {
                     instancesByName = new Hashtable();
                     namesByInstance = new Hashtable(new ReferenceComparer());
@@ -759,12 +739,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Retrieves an instance of a created object of the given name, or null if that object does not exist.
+        ///  Retrieves an instance of a created object of the given name, or null if that object does not exist.
         /// </summary>
         object IDesignerSerializationManager.GetInstance(string name)
         {
             object instance = null;
-            if (name == null)
+            if (name is null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
@@ -776,12 +756,12 @@ namespace System.ComponentModel.Design.Serialization
                 instance = instancesByName[name];
             }
 
-            if (instance == null && PreserveNames && Container != null)
+            if (instance is null && PreserveNames && Container != null)
             {
                 instance = Container.Components[name];
             }
 
-            if (instance == null)
+            if (instance is null)
             {
                 ResolveNameEventArgs e = new ResolveNameEventArgs(name);
                 OnResolveName(e);
@@ -791,12 +771,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Retrieves a name for the specified object, or null if the object has no name.
+        ///  Retrieves a name for the specified object, or null if the object has no name.
         /// </summary>
         string IDesignerSerializationManager.GetName(object value)
         {
             string name = null;
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -808,7 +788,7 @@ namespace System.ComponentModel.Design.Serialization
                 name = (string)namesByInstance[value];
             }
 
-            if (name == null && value is IComponent)
+            if (name is null && value is IComponent)
             {
                 ISite site = ((IComponent)value).Site;
                 if (site != null)
@@ -827,7 +807,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Retrieves a serializer of the requested type for the given object type.
+        ///  Retrieves a serializer of the requested type for the given object type.
         /// </summary>
         object IDesignerSerializationManager.GetSerializer(Type objectType, Type serializerType)
         {
@@ -835,17 +815,22 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Retrieves a type of the given name.
+        ///  Retrieves a type of the given name.
         /// </summary>
         Type IDesignerSerializationManager.GetType(string typeName)
         {
             CheckSession();
             Type t = null;
-            while (t == null)
+            while (t is null)
             {
                 t = GetType(typeName);
-                if (t == null && typeName != null && typeName.Length > 0)
+                if (t is null)
                 {
+                    if (string.IsNullOrEmpty(typeName))
+                    {
+                        break;
+                    }
+
                     int dotIndex = typeName.LastIndexOf('.');
                     if (dotIndex == -1 || dotIndex == typeName.Length - 1)
                     {
@@ -858,7 +843,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Removes a previously added serialization provider.
+        ///  Removes a previously added serialization provider.
         /// </summary>
         void IDesignerSerializationManager.RemoveSerializationProvider(IDesignerSerializationProvider provider)
         {
@@ -869,7 +854,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Reports a non-fatal error in serialization.  The serialization manager may implement a logging scheme to alert the caller to all non-fatal errors at once.  If it doesn't, it should immediately throw in this method, which should abort serialization.   Serialization may continue after calling this function.
+        ///  Reports a non-fatal error in serialization.  The serialization manager may implement a logging scheme to alert the caller to all non-fatal errors at once.  If it doesn't, it should immediately throw in this method, which should abort serialization.   Serialization may continue after calling this function.
         /// </summary>
         void IDesignerSerializationManager.ReportError(object errorInformation)
         {
@@ -886,15 +871,22 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Provides a way to set the name of an existing object. This is useful when it is necessary to create an  instance of an object without going through CreateInstance. An exception will be thrown if you try to rename an existing object or if you try to give a new object a name that is already taken.
+        ///  Provides a way to set the name of an existing object. This is useful when it is necessary to create an  instance of an object without going through CreateInstance. An exception will be thrown if you try to rename an existing object or if you try to give a new object a name that is already taken.
         /// </summary>
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (instance is null)
+            {
+                throw new ArgumentNullException(nameof(instance));
+            }
 
-            if (instancesByName == null)
+            if (name is null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (instancesByName is null)
             {
                 instancesByName = new Hashtable();
                 namesByInstance = new Hashtable(new ReferenceComparer());
@@ -902,19 +894,19 @@ namespace System.ComponentModel.Design.Serialization
 
             if (instancesByName[name] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name));
+                throw new ArgumentException(string.Format(SR.SerializationManagerNameInUse, name), nameof(name));
             }
 
             if (namesByInstance[instance] != null)
             {
-                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]));
+                throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
             instancesByName[name] = instance;
             namesByInstance[instance] = name;
         }
 
         /// <summary>
-        /// IServiceProvider implementation.
+        ///  IServiceProvider implementation.
         /// </summary>
         object IServiceProvider.GetService(Type serviceType)
         {
@@ -922,11 +914,11 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Session object that implements IDisposable.
+        ///  Session object that implements IDisposable.
         /// </summary>
         private sealed class SerializationSession : IDisposable
         {
-            private DesignerSerializationManager _serializationManager;
+            private readonly DesignerSerializationManager _serializationManager;
 
             internal SerializationSession(DesignerSerializationManager serializationManager)
             {
@@ -940,7 +932,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// A key comparer that can be passed to a hash table to use object reference identity as the key comparision.
+        ///  A key comparer that can be passed to a hash table to use object reference identity as the key comparision.
         /// </summary>
         private sealed class ReferenceComparer : IEqualityComparer
         {
@@ -960,12 +952,12 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        /// Wrapped property descriptor.  Takes the given property  and wraps it in a new one that can take the designer serialization manager as a target.
+        ///  Wrapped property descriptor.  Takes the given property  and wraps it in a new one that can take the designer serialization manager as a target.
         /// </summary>
         private sealed class WrappedPropertyDescriptor : PropertyDescriptor
         {
-            private object target;
-            private PropertyDescriptor property;
+            private readonly object target;
+            private readonly PropertyDescriptor property;
 
             internal WrappedPropertyDescriptor(PropertyDescriptor property, object target) : base(property.Name, null)
             {

@@ -2,1961 +2,1004 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
 
-namespace System.Windows.Forms {
-    using System.Text;
-    using System.Configuration.Assemblies;
-    using System.Threading;
-    using System.Runtime.Remoting;
-    using System.Runtime.InteropServices;
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Text;
+using Microsoft.Win32;
+using static Interop;
+using static Interop.User32;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Provides information about the operating system.
+    /// </summary>
+    public static class SystemInformation
+    {
+        private static bool s_checkMultiMonitorSupport;
+        private static bool s_multiMonitorSupport;
+        private static bool s_highContrast;
+        private static bool s_systemEventsAttached;
+        private static bool s_systemEventsDirty = true;
 
-    using System;
-    using Microsoft.Win32;
-    using System.IO;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Runtime.Versioning;
+        private static IntPtr s_processWinStation = IntPtr.Zero;
+        private static bool s_isUserInteractive;
 
-    /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation"]/*' />
-    /// <devdoc>
-    ///    <para>Provides information about the operating system.</para>
-    /// </devdoc>
-    public class SystemInformation {
+        private static PowerStatus s_powerStatus;
 
-        // private constructor to prevent creation
-        //
-        private SystemInformation() {
-        }
+        /// <summary>
+        ///  Gets a value indicating whether the user has enabled full window drag.
+        /// </summary>
+        public static bool DragFullWindows
+            => User32.SystemParametersInfoBool(User32.SPI.GETDRAGFULLWINDOWS);
 
-        // Figure out if all the multimon stuff is supported on the OS
-        //
-        private static bool checkMultiMonitorSupport = false;
-        private static bool multiMonitorSupport = false;
-        private static bool checkNativeMouseWheelSupport = false;
-        private static bool nativeMouseWheelSupport = true;
-        private static bool highContrast = false;
-        private static bool systemEventsAttached = false;
-        private static bool systemEventsDirty = true;
-
-        private static IntPtr processWinStation = IntPtr.Zero;
-        private static bool isUserInteractive = false;
-
-        private static PowerStatus powerStatus = null;
-
-        private const int  DefaultMouseWheelScrollLines = 3;
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // SystemParametersInfo
-        //
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DragFullWindows"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user has enabled full window drag.
-        ///    </para>
-        /// </devdoc>
-        public static bool DragFullWindows {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDRAGFULLWINDOWS, 0, ref data, 0);
-                return data != 0;
-            }
-        }
-        
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HighContrast"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user has selected to run in high contrast
-        ///       mode.
-        ///    </para>
-        /// </devdoc>
-        public static bool HighContrast {
-            get {
-                EnsureSystemEvents();
-                if (systemEventsDirty) {
-                    NativeMethods.HIGHCONTRAST_I data = new NativeMethods.HIGHCONTRAST_I();
-                    data.cbSize = Marshal.SizeOf(data);
-                    data.dwFlags = 0;
-                    data.lpszDefaultScheme = IntPtr.Zero;
-                    
-                    bool b = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0);
-    
-                    // NT4 does not support this parameter, so we always force
-                    // it to false if we fail to get the parameter.
-                    //
-                    if (b) {
-                        highContrast = (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
-                    }
-                    else {
-                        highContrast = false;
-                    }
-                    systemEventsDirty = false;
-                }
-                
-                return highContrast;
-            }
-        }
-        
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelScrollLines"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the number of lines to scroll when the mouse wheel is rotated.
-        ///    </para>
-        /// </devdoc>
-        public static int MouseWheelScrollLines {
-            get {
-                if (NativeMouseWheelSupport) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETWHEELSCROLLLINES, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    IntPtr hWndMouseWheel = IntPtr.Zero;
-
-                    // Check for the MouseZ "service". This is a little app that generated the
-                    // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                    // found, then there is no support for MouseWheels on the system.
-                    //
-                    hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-
-                    if (hWndMouseWheel != IntPtr.Zero) {
-
-                        // Register the MSH_SCROLL_LINES message...
-                        //
-                        int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_SCROLL_LINES);
-
-                        
-                        int lines = (int)UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndMouseWheel), message, 0, 0);
-                        
-                        // this fails under terminal server, so we default to 3, which is the windows
-                        // default.  Nobody seems to pay attention to this value anyways...
-                        if (lines != 0) {
-                            return lines;
-                        }
-                    }
-                }
-
-                return DefaultMouseWheelScrollLines;
-            }
-        }
-        
-        ////////////////////////////////////////////////////////////////////////////
-        // SystemMetrics
-        //
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PrimaryMonitorSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions of the primary display monitor in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size PrimaryMonitorSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width of the vertical scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int VerticalScrollBarWidth {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVSCROLL);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width of the vertical scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int GetVerticalScrollBarWidthForDpi(int dpi) {
-            if (DpiHelper.IsPerMonitorV2Awareness) {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXVSCROLL, (uint)dpi);
-            }
-            else {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVSCROLL);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the horizontal scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int HorizontalScrollBarHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the horizontal scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int GetHorizontalScrollBarHeightForDpi(int dpi) {
-            if (DpiHelper.IsPerMonitorV2Awareness) {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYHSCROLL, (uint)dpi);
-            }
-            else {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the normal caption area of a window in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int CaptionHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCAPTION);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.BorderSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width and
-        ///       height of a window border in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size BorderSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXBORDER),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYBORDER));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.GetBorderSizeForDpi"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width and
-        ///       height of a window border in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size GetBorderSizeForDpi(int dpi) {
-            if (DpiHelper.IsPerMonitorV2Awareness) {
-                return new Size(UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXBORDER, (uint)dpi),
-                                UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYBORDER, (uint)dpi));
-            }
-            else {
-                return BorderSize;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FixedFrameBorderSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the thickness in pixels, of the border for a window that has a caption
-        ///       and is not resizable.
-        ///    </para>
-        /// </devdoc>
-        public static Size FixedFrameBorderSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFIXEDFRAME),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFIXEDFRAME));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarThumbHeight"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the height of the scroll box in a vertical scroll bar in pixels.</para>
-        /// </devdoc>
-        public static int VerticalScrollBarThumbHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVTHUMB);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarThumbWidth"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the width of the scroll box in a horizontal scroll bar in pixels.</para>
-        /// </devdoc>
-        public static int HorizontalScrollBarThumbWidth {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHTHUMB);
-            }
-        }
-/*
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconFont"]/*' />
-        public static Font IconFont {
-            get {
-                Font iconFont = IconFontInternal;
-                return iconFont != null ? iconFont : Control.DefaultFont;
-            }
-        }
-
-        // IconFontInternal is the same as IconFont, only it does not fall back to Control.DefaultFont
-        // if the icon font can not be retrieved.  It returns null instead.
-        internal static Font IconFontInternal {
-            get {
-                Font iconFont = null;
-
-                NativeMethods.ICONMETRICS data = new NativeMethods.ICONMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETICONMETRICS, data.cbSize, data, 0);
-
-                Debug.Assert(!result || data.iHorzSpacing == IconHorizontalSpacing, "Spacing in ICONMETRICS does not match IconHorizontalSpacing.");
-                Debug.Assert(!result || data.iVertSpacing == IconVerticalSpacing, "Spacing in ICONMETRICS does not match IconVerticalSpacing.");
-
-                if (result && data.lfFont != null) {
-                    try {
-                        iconFont = Font.FromLogFont(data.lfFont);
-                    }
-                    catch {}
-                }
-                return iconFont;
-            }
-        }
-*/
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the default dimensions of an icon in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size IconSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICON),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICON));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CursorSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions of a cursor in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size CursorSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXCURSOR),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCURSOR));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuFont"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the system's font for menus.
-        ///    </para>
-        /// </devdoc>
-        public static Font MenuFont {
-            
-            
-            get {
-                return GetMenuFontHelper(0, false);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.GetMenuFontForDpi"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
-        ///    </para>
-        /// </devdoc>
-        public static Font GetMenuFontForDpi(int dpi) {
-            return GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
-        }
-
-        private static Font GetMenuFontHelper(uint dpi, bool useDpi) {
-            Font menuFont = null;
-
-            //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-            //
-            NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-            bool result;
-            if (useDpi) {
-                result = UnsafeNativeMethods.TrySystemParametersInfoForDpi(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0, dpi);
-            } else {
-                result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-            }
-
-            if (result && data.lfMenuFont != null) {
-                try {
-                    menuFont = Font.FromLogFont(data.lfMenuFont);
-                }
-                catch {
-                    // menu font is not true type.  Default to standard control font.
-                    //
-                    menuFont = Control.DefaultFont;
-                }
-            }
-            return menuFont;
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of a one line of a menu in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int MenuHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENU);
-            }
-        }
-
-        
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PowerStatus"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Returns the current system power status.        
-        ///    </para>
-        /// </devdoc>
-        public static PowerStatus PowerStatus
+        /// <summary>
+        ///  Gets a value indicating whether the user has selected to run in high contrast.
+        /// </summary>
+        public static bool HighContrast
         {
             get
             {
-                if (powerStatus == null) {
-                    powerStatus = new PowerStatus();
+                EnsureSystemEvents();
+                if (s_systemEventsDirty)
+                {
+                    User32.HIGHCONTRASTW data = default;
+
+                    s_highContrast = User32.SystemParametersInfoW(ref data)
+                        && (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
+
+                    s_systemEventsDirty = false;
                 }
-                return powerStatus;
-            }
-        }
-        
-        
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.WorkingArea"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the size of the working area in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Rectangle WorkingArea {
-            get {
-                NativeMethods.RECT rc = new NativeMethods.RECT();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETWORKAREA, 0, ref rc, 0);
-                return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
-            }
-        }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.KanjiWindowHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the height, in pixels, of the Kanji window at the bottom
-        ///       of the screen for double-byte (DBCS) character set versions of Windows.
-        ///    </para>
-        /// </devdoc>
-        public static int KanjiWindowHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYKANJIWINDOW);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MousePresent"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the system has a mouse installed.
-        ///    </para>
-        /// </devdoc>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static bool MousePresent {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEPRESENT) != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarArrowHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
-        ///    </para>
-        /// </devdoc>
-        public static int VerticalScrollBarArrowHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVSCROLL);
+                return s_highContrast;
             }
         }
 
         /// <summary>
-        /// Gets the height of the vertical scroll bar arrow bitmap in pixels.
+        ///  Gets the number of lines to scroll when the mouse wheel is rotated.
         /// </summary>
-        /// <param name="dpi"></param>
-        /// <returns></returns>
-        public static int VerticalScrollBarArrowHeightForDpi(int dpi) {
-            return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYVSCROLL, (uint)dpi);
+        public static int MouseWheelScrollLines
+            => User32.SystemParametersInfoInt(User32.SPI.GETWHEELSCROLLLINES);
+
+        /// <summary>
+        ///  Gets the dimensions of the primary display monitor in pixels.
+        /// </summary>
+        public static Size PrimaryMonitorSize
+            => new Size(GetSystemMetrics(SystemMetric.SM_CXSCREEN),
+                        GetSystemMetrics(SystemMetric.SM_CYSCREEN));
+
+        /// <summary>
+        ///  Gets the width of the vertical scroll bar in pixels.
+        /// </summary>
+        public static int VerticalScrollBarWidth
+        {
+            get => GetSystemMetrics(SystemMetric.SM_CXVSCROLL);
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarArrowWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
-        ///    </para>
-        /// </devdoc>
-        public static int HorizontalScrollBarArrowWidth {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHSCROLL);
+        /// <summary>
+        ///  Gets the width of the vertical scroll bar in pixels.
+        /// </summary>
+        public static int GetVerticalScrollBarWidthForDpi(int dpi)
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                return GetCurrentSystemMetrics(SystemMetric.SM_CXVSCROLL, (uint)dpi);
+            }
+
+            return GetSystemMetrics(SystemMetric.SM_CXVSCROLL);
+        }
+
+        /// <summary>
+        ///  Gets the height of the horizontal scroll bar in pixels.
+        /// </summary>
+        public static int HorizontalScrollBarHeight => GetSystemMetrics(SystemMetric.SM_CYHSCROLL);
+
+        /// <summary>
+        ///  Gets the height of the horizontal scroll bar in pixels.
+        /// </summary>
+        public static int GetHorizontalScrollBarHeightForDpi(int dpi)
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                return GetCurrentSystemMetrics(SystemMetric.SM_CYHSCROLL, (uint)dpi);
+            }
+
+            return GetSystemMetrics(SystemMetric.SM_CYHSCROLL);
+        }
+
+        /// <summary>
+        ///  Gets the height of the normal caption area of a window in pixels.
+        /// </summary>
+        public static int CaptionHeight
+        {
+            get => GetSystemMetrics(SystemMetric.SM_CYCAPTION);
+        }
+
+        /// <summary>
+        ///  Gets the width and height of a window border in pixels.
+        /// </summary>
+        public static Size BorderSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXBORDER),
+                            GetSystemMetrics(SystemMetric.SM_CYBORDER));
+        }
+
+        /// <summary>
+        ///  Gets the width andheight of a window border in pixels.
+        /// </summary>
+        public static Size GetBorderSizeForDpi(int dpi)
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                return new Size(GetCurrentSystemMetrics(SystemMetric.SM_CXBORDER, (uint)dpi),
+                                GetCurrentSystemMetrics(SystemMetric.SM_CYBORDER, (uint)dpi));
+            }
+
+            return BorderSize;
+        }
+
+        /// <summary>
+        ///  Gets the thickness in pixels, of the border for a window that has a caption and is not resizable.
+        /// </summary>
+        public static Size FixedFrameBorderSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXFIXEDFRAME),
+                            GetSystemMetrics(SystemMetric.SM_CYFIXEDFRAME));
+        }
+
+        /// <summary>
+        ///  Gets the height of the scroll box in a vertical scroll bar in pixels.
+        /// </summary>
+        public static int VerticalScrollBarThumbHeight => GetSystemMetrics(SystemMetric.SM_CYVTHUMB);
+
+        /// <summary>
+        ///  Gets the width of the scroll box in a horizontal scroll bar in pixels.
+        /// </summary>
+        public static int HorizontalScrollBarThumbWidth => GetSystemMetrics(SystemMetric.SM_CXHTHUMB);
+
+        /// <summary>
+        ///  Gets the default dimensions of an icon in pixels.
+        /// </summary>
+        public static Size IconSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXICON),
+                            GetSystemMetrics(SystemMetric.SM_CYICON));
+        }
+
+        /// <summary>
+        ///  Gets the dimensions of a cursor in pixels.
+        /// </summary>
+        public static Size CursorSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXCURSOR),
+                            GetSystemMetrics(SystemMetric.SM_CYCURSOR));
+        }
+
+        /// <summary>
+        ///  Gets the system's font for menus.
+        /// </summary>
+        public static Font MenuFont => GetMenuFontHelper(0, useDpi: false);
+
+        /// <summary>
+        ///  Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
+        /// </summary>
+        public static Font GetMenuFontForDpi(int dpi)
+        {
+            return GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
+        }
+
+        private unsafe static Font GetMenuFontHelper(uint dpi, bool useDpi)
+        {
+            // We can get the system's menu font through the NONCLIENTMETRICS structure
+            // via SystemParametersInfo
+            User32.NONCLIENTMETRICSW data = default;
+
+            bool result = useDpi
+                ? User32.TrySystemParametersInfoForDpi(ref data, dpi)
+                : User32.SystemParametersInfoW(ref data);
+
+            if (result)
+            {
+                try
+                {
+                    return Font.FromLogFont(data.lfMenuFont);
+                }
+#pragma warning disable CA1031 // Do not catch general exception types
+                catch (ArgumentException)
+                {
+                    // Font.FromLogFont throws ArgumentException when it finds
+                    // a font that is not TrueType. Default to standard control font.
+                }
+#pragma warning restore CA1031
+            }
+
+            return Control.DefaultFont;
+        }
+
+        /// <summary>
+        ///  Gets the height of a one line of a menu in pixels.
+        /// </summary>
+        public static int MenuHeight => GetSystemMetrics(SystemMetric.SM_CYMENU);
+
+        /// <summary>
+        ///  Returns the current system power status.
+        /// </summary>
+        public static PowerStatus PowerStatus => s_powerStatus ??= new PowerStatus();
+
+        /// <summary>
+        ///  Gets the size of the working area in pixels.
+        /// </summary>
+        public static Rectangle WorkingArea
+        {
+            get
+            {
+                var rect = new RECT();
+                User32.SystemParametersInfoW(User32.SPI.GETWORKAREA, ref rect);
+                return rect;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width of the horizontal scroll bar arrow bitmap in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int GetHorizontalScrollBarArrowWidthForDpi(int dpi) {
-            if (DpiHelper.IsPerMonitorV2Awareness) {
-                return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CXHSCROLL, (uint)dpi);
-            }
-            else {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHSCROLL);
-            }
+        /// <summary>
+        ///  Gets the height, in pixels, of the Kanji window at the bottom of the screen
+        ///  for double-byte (DBCS) character set versions of Windows.
+        /// </summary>
+        public static int KanjiWindowHeight => GetSystemMetrics(SystemMetric.SM_CYKANJIWINDOW);
+
+        /// <summary>
+        ///  Gets a value indicating whether the system has a mouse installed.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static bool MousePresent => GetSystemMetrics(SystemMetric.SM_MOUSEPRESENT) != 0;
+
+        /// <summary>
+        ///  Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
+        /// </summary>
+        public static int VerticalScrollBarArrowHeight => GetSystemMetrics(SystemMetric.SM_CYVSCROLL);
+
+        /// <summary>
+        ///  Gets the height of the vertical scroll bar arrow bitmap in pixels.
+        /// </summary>
+        public static int VerticalScrollBarArrowHeightForDpi(int dpi)
+        {
+            return GetCurrentSystemMetrics(SystemMetric.SM_CYVSCROLL, (uint)dpi);
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DebugOS"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether this is a debug version of the operating
-        ///       system.
-        ///    </para>
-        /// </devdoc>
-        public static bool DebugOS {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DEBUG) != 0;
+        /// <summary>
+        ///  Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
+        /// </summary>
+        public static int HorizontalScrollBarArrowWidth =>GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
+
+        /// <summary>
+        ///  Gets the width of the horizontal scroll bar arrow bitmap in pixels.
+        /// </summary>
+        public static int GetHorizontalScrollBarArrowWidthForDpi(int dpi)
+        {
+            if (DpiHelper.IsPerMonitorV2Awareness)
+            {
+                return GetCurrentSystemMetrics(SystemMetric.SM_CXHSCROLL, (uint)dpi);
             }
+
+            return GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseButtonsSwapped"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the functions of the left and right mouse
-        ///       buttons have been swapped.
-        ///    </para>
-        /// </devdoc>
-        public static bool MouseButtonsSwapped {
-            get {
-                return(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SWAPBUTTON) != 0);
-            }
+        /// <summary>
+        ///  Gets a value indicating whether this is a debug version of the operating system.
+        /// </summary>
+        public static bool DebugOS => GetSystemMetrics(SystemMetric.SM_DEBUG) != 0;
+
+        /// <summary>
+        ///  Gets a value indicating whether the functions of the left and right mouse
+        ///  buttons have been swapped.
+        /// </summary>
+        public static bool MouseButtonsSwapped => (GetSystemMetrics(SystemMetric.SM_SWAPBUTTON) != 0);
+
+        /// <summary>
+        ///  Gets the minimum allowable dimensions of a window in pixels.
+        /// </summary>
+        public static Size MinimumWindowSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMIN),
+                            GetSystemMetrics(SystemMetric.SM_CYMIN));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinimumWindowSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the minimum allowable dimensions of a window in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size MinimumWindowSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMIN),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMIN));
-            }
+        /// <summary>
+        ///  Gets the dimensions in pixels, of a caption bar or title bar button.
+        /// </summary>
+        public static Size CaptionButtonSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXSIZE),
+                            GetSystemMetrics(SystemMetric.SM_CYSIZE));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of a caption bar or title bar
-        ///       button.
-        ///    </para>
-        /// </devdoc>
-        public static Size CaptionButtonSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZE));
-            }
+        /// <summary>
+        ///  Gets the thickness in pixels, of the border for a window that can be resized.
+        /// </summary>
+        public static Size FrameBorderSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXFRAME),
+                            GetSystemMetrics(SystemMetric.SM_CYFRAME));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FrameBorderSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the thickness in pixels, of the border for a window that can be resized.
-        ///    </para>
-        /// </devdoc>
-        public static Size FrameBorderSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFRAME),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFRAME));
-            }
+        /// <summary>
+        ///  Gets the system's default minimum tracking dimensions of a window in pixels.
+        /// </summary>
+        public static Size MinWindowTrackSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMINTRACK),
+                            GetSystemMetrics(SystemMetric.SM_CYMINTRACK));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinWindowTrackSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the system's default
-        ///       minimum tracking dimensions of a window in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size MinWindowTrackSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINTRACK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINTRACK));
-            }
+        /// <summary>
+        ///  Gets the dimensions in pixels, of the area that the user must click within
+        ///  for the system to consider the two clicks a double-click. The rectangle is
+        ///  centered around the first click.
+        /// </summary>
+        public static Size DoubleClickSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXDOUBLECLK),
+                            GetSystemMetrics(SystemMetric.SM_CYDOUBLECLK));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DoubleClickSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of the area that the user must click within
-        ///       for the system to consider the two clicks a double-click. The rectangle is
-        ///       centered around the first click.
-        ///    </para>
-        /// </devdoc>
-        public static Size DoubleClickSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDOUBLECLK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDOUBLECLK));
-            }
+        /// <summary>
+        ///  Gets the maximum number of milliseconds allowed between mouse clicks for a
+        ///  double-click.
+        /// </summary>
+        public static int DoubleClickTime => unchecked((int)User32.GetDoubleClickTime());
+
+        /// <summary>
+        ///  Gets the dimensions in pixels, of the grid used to arrange icons in a large
+        ///  icon view.
+        /// </summary>
+        public static Size IconSpacingSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXICONSPACING),
+                            GetSystemMetrics(SystemMetric.SM_CYICONSPACING));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DoubleClickTime"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the maximum number of milliseconds allowed between mouse clicks for a
-        ///       double-click.
-        ///    </para>
-        /// </devdoc>
-        public static int DoubleClickTime {
-            get {
-                return SafeNativeMethods.GetDoubleClickTime();
-            }
+        /// <summary>
+        ///  Gets a value indicating whether drop down menus should be right-aligned with the corresponding menu
+        ///  bar item.
+        /// </summary>
+        public static bool RightAlignedMenus => GetSystemMetrics(SystemMetric.SM_MENUDROPALIGNMENT) != 0;
+
+        /// <summary>
+        ///  Gets a value indicating whether the Microsoft Windows for Pen computing extensions are installed.
+        /// </summary>
+        public static bool PenWindows => GetSystemMetrics(SystemMetric.SM_PENWINDOWS) != 0;
+
+        /// <summary>
+        ///  Gets a value indicating whether the operating system is capable of handling
+        ///  double-byte (DBCS) characters.
+        /// </summary>
+        public static bool DbcsEnabled => GetSystemMetrics(SystemMetric.SM_DBCSENABLED) != 0;
+
+        /// <summary>
+        ///  Gets the number of buttons on mouse.
+        /// </summary>
+        public static int MouseButtons => GetSystemMetrics(SystemMetric.SM_CMOUSEBUTTONS);
+
+        /// <summary>
+        ///  Gets a value indicating whether security is present on this operating system.
+        /// </summary>
+        public static bool Secure => GetSystemMetrics(SystemMetric.SM_SECURE) != 0;
+
+        /// <summary>
+        ///  Gets the dimensions in pixels, of a 3-D border.
+        /// </summary>
+        public static Size Border3DSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXEDGE),
+                            GetSystemMetrics(SystemMetric.SM_CYEDGE));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconSpacingSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the dimensions in pixels, of the grid used
-        ///       to arrange icons in a large icon view.
-        ///    </para>
-        /// </devdoc>
-        public static Size IconSpacingSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICONSPACING),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICONSPACING));
-            }
+        /// <summary>
+        ///  Gets the dimensions in pixels, of the grid into which minimized windows will
+        ///  be placed.
+        /// </summary>
+        public static Size MinimizedWindowSpacingSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMINSPACING),
+                            GetSystemMetrics(SystemMetric.SM_CYMINSPACING));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.RightAlignedMenus"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether drop down menus should be right-aligned with
-        ///       the corresponding menu bar item.
-        ///    </para>
-        /// </devdoc>
-        public static bool RightAlignedMenus {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MENUDROPALIGNMENT) != 0;
-            }
+        /// <summary>
+        ///  Gets the recommended dimensions of a small icon in pixels.
+        /// </summary>
+        public static Size SmallIconSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXSMICON),
+                            GetSystemMetrics(SystemMetric.SM_CYSMICON));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PenWindows"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the Microsoft Windows for Pen computing
-        ///       extensions are installed.
-        ///    </para>
-        /// </devdoc>
-        public static bool PenWindows {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_PENWINDOWS) != 0;
-            }
+        /// <summary>
+        ///  Gets the height of a small caption in pixels.
+        /// </summary>
+        public static int ToolWindowCaptionHeight => GetSystemMetrics(SystemMetric.SM_CYSMCAPTION);
+
+        /// <summary>
+        ///  Gets the dimensions of small caption buttons in pixels.
+        /// </summary>
+        public static Size ToolWindowCaptionButtonSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXSMSIZE),
+                            GetSystemMetrics(SystemMetric.SM_CYSMSIZE));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DbcsEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the operating system is capable of handling
-        ///       double-byte (DBCS) characters.
-        ///    </para>
-        /// </devdoc>
-        public static bool DbcsEnabled {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DBCSENABLED) != 0;
-            }
+        /// <summary>
+        ///  Gets the dimensions in pixels, of menu bar buttons.
+        /// </summary>
+        public static Size MenuButtonSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMENUSIZE),
+                            GetSystemMetrics(SystemMetric.SM_CYMENUSIZE));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseButtons"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the number of buttons on mouse.
-        ///    </para>
-        /// </devdoc>
-        public static int MouseButtons {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMOUSEBUTTONS);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.Secure"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether security is present on this operating system.
-        ///    </para>
-        /// </devdoc>
-        public static bool Secure {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SECURE) != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.Border3DSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of a 3-D
-        ///       border.
-        ///    </para>
-        /// </devdoc>
-        public static Size Border3DSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXEDGE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYEDGE));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinimizedWindowSpacingSize"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the dimensions
-        ///       in pixels, of
-        ///       the grid into which minimized windows will be placed.</para>
-        /// </devdoc>
-        public static Size MinimizedWindowSpacingSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINSPACING),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINSPACING));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SmallIconSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the recommended dimensions of a small icon in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size SmallIconSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMICON),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMICON));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ToolWindowCaptionHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of
-        ///       a small caption in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static int ToolWindowCaptionHeight {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMCAPTION);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ToolWindowCaptionButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       dimensions of small caption buttons in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size ToolWindowCaptionButtonSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMSIZE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMSIZE));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the dimensions in pixels, of menu bar buttons.
-        ///    </para>
-        /// </devdoc>
-        public static Size MenuButtonSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUSIZE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUSIZE));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ArrangeStartingPosition"]/*' />
-        /// <devdoc>
-        ///    <para>Gets flags specifying how the system arranges minimized windows.</para>
-        /// </devdoc>
-        public static ArrangeStartingPosition ArrangeStartingPosition {
-            get {
+        /// <summary>
+        ///  Gets flags specifying how the system arranges minimized windows.
+        /// </summary>
+        public static ArrangeStartingPosition ArrangeStartingPosition
+        {
+            get
+            {
                 ArrangeStartingPosition mask = ArrangeStartingPosition.BottomLeft | ArrangeStartingPosition.BottomRight | ArrangeStartingPosition.Hide | ArrangeStartingPosition.TopLeft | ArrangeStartingPosition.TopRight;
-                int compoundValue = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_ARRANGE);
-                return mask & (ArrangeStartingPosition) compoundValue;
+                int compoundValue = GetSystemMetrics(SystemMetric.SM_ARRANGE);
+                return mask & (ArrangeStartingPosition)compoundValue;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ArrangeDirection"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets flags specifying how the system arranges minimized windows.
-        ///    </para>
-        /// </devdoc>
-        public static ArrangeDirection ArrangeDirection {
-            get {
+        /// <summary>
+        ///  Gets flags specifying how the system arranges minimized windows.
+        /// </summary>
+        public static ArrangeDirection ArrangeDirection
+        {
+            get
+            {
                 ArrangeDirection mask = ArrangeDirection.Down | ArrangeDirection.Left | ArrangeDirection.Right | ArrangeDirection.Up;
-                int compoundValue = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_ARRANGE);
-                return mask & (ArrangeDirection) compoundValue;
+                int compoundValue = GetSystemMetrics(SystemMetric.SM_ARRANGE);
+                return mask & (ArrangeDirection)compoundValue;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MinimizedWindowSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of a normal minimized window.
-        ///    </para>
-        /// </devdoc>
-        public static Size MinimizedWindowSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINIMIZED),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINIMIZED));
-            }
+        /// <summary>
+        ///  Gets the dimensions in pixels, of a normal minimized window.
+        /// </summary>
+        public static Size MinimizedWindowSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMINIMIZED),
+                            GetSystemMetrics(SystemMetric.SM_CYMINIMIZED));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MaxWindowTrackSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the default maximum dimensions in pixels, of a
-        ///       window that has a caption and sizing borders.
-        ///    </para>
-        /// </devdoc>
-        public static Size MaxWindowTrackSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXTRACK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXTRACK));
-            }
+        /// <summary>
+        ///  Gets the default maximum dimensions in pixels, of a window that has a
+        ///  caption and sizing borders.
+        /// </summary>
+        public static Size MaxWindowTrackSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMAXTRACK),
+                            GetSystemMetrics(SystemMetric.SM_CYMAXTRACK));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PrimaryMonitorMaximizedWindowSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the default dimensions, in pixels, of a maximized top-left window on the
-        ///       primary monitor.
-        ///    </para>
-        /// </devdoc>
-        public static Size PrimaryMonitorMaximizedWindowSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXIMIZED),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXIMIZED));
-            }
+        /// <summary>
+        ///  Gets the default dimensions, in pixels, of a maximized top-left window on the
+        ///  primary monitor.
+        /// </summary>
+        public static Size PrimaryMonitorMaximizedWindowSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMAXIMIZED),
+                            GetSystemMetrics(SystemMetric.SM_CYMAXIMIZED));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.Network"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether this computer is connected to a network.
-        ///    </para>
-        /// </devdoc>
-        public static bool Network {
-            get {
-                return(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_NETWORK) & 0x00000001) != 0;
-            }
+        /// <summary>
+        ///  Gets a value indicating whether this computer is connected to a network.
+        /// </summary>
+        public static bool Network => (GetSystemMetrics(SystemMetric.SM_NETWORK) & 0x00000001) != 0;
+
+        public static bool TerminalServerSession => (GetSystemMetrics(SystemMetric.SM_REMOTESESSION) & 0x00000001) != 0;
+
+        /// <summary>
+        ///  Gets a value that specifies how the system was started.
+        /// </summary>
+        public static BootMode BootMode => (BootMode)GetSystemMetrics(SystemMetric.SM_CLEANBOOT);
+
+        /// <summary>
+        ///  Gets the dimensions in pixels, of the rectangle that a drag operation must
+        ///  extend to be considered a drag. The rectangle is centered on a drag point.
+        /// </summary>
+        public static Size DragSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXDRAG),
+                            GetSystemMetrics(SystemMetric.SM_CYDRAG));
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.TerminalServerSession"]/*' />
-        public static bool TerminalServerSession {
-            get {
-                return(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0;
-            }
+        /// <summary>
+        ///  Gets a value indicating whether the user requires an application to present
+        ///  information visually in situations where it would otherwise present the
+        ///  information in audible form.
+        /// </summary>
+        public static bool ShowSounds => GetSystemMetrics(SystemMetric.SM_SHOWSOUNDS) != 0;
+
+        /// <summary>
+        ///  Gets the dimensions of the default size of a menu checkmark in pixels.
+        /// </summary>
+        public static Size MenuCheckSize
+        {
+            get => new Size(GetSystemMetrics(SystemMetric.SM_CXMENUCHECK),
+                            GetSystemMetrics(SystemMetric.SM_CYMENUCHECK));
         }
 
+        /// <summary>
+        ///  Gets a value indicating whether the system is enabled for Hebrew and Arabic languages.
+        /// </summary>
+        public static bool MidEastEnabled => GetSystemMetrics(SystemMetric.SM_MIDEASTENABLED) != 0;
 
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.BootMode"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value that specifies how the system was started.
-        ///    </para>
-        /// </devdoc>
-        public static BootMode BootMode {
-            get {
-                return(BootMode) UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CLEANBOOT);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.DragSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of the rectangle that a drag operation
-        ///       must extend to be considered a drag. The rectangle is centered on a drag
-        ///       point.
-        ///    </para>
-        /// </devdoc>
-        public static Size DragSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDRAG),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDRAG));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ShowSounds"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user requires an application to present
-        ///       information visually in situations where it would otherwise present the
-        ///       information in audible form.
-        ///    </para>
-        /// </devdoc>
-        public static bool ShowSounds {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SHOWSOUNDS) != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuCheckSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       dimensions of the default size of a menu checkmark in pixels.
-        ///    </para>
-        /// </devdoc>
-        public static Size MenuCheckSize {
-            get {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUCHECK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUCHECK));
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MidEastEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value
-        ///       indicating whether the system is enabled for Hebrew and Arabic languages.
-        ///    </para>
-        /// </devdoc>
-        public static bool MidEastEnabled {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MIDEASTENABLED) != 0;
-            }
-        }
-
-        private static bool MultiMonitorSupport {
-            get {
-                if (!checkMultiMonitorSupport) {
-                    multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
-                    checkMultiMonitorSupport = true;
+        private static bool MultiMonitorSupport
+        {
+            get
+            {
+                if (!s_checkMultiMonitorSupport)
+                {
+                    s_multiMonitorSupport = (GetSystemMetrics(SystemMetric.SM_CMONITORS) != 0);
+                    s_checkMultiMonitorSupport = true;
                 }
-                return multiMonitorSupport;
-            }
-        }
-        
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.NativeMouseWheelSupport"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the system natively supports the mouse wheel
-        ///       in newer mice.
-        ///    </para>
-        /// </devdoc>
-        public static bool NativeMouseWheelSupport {
-            get {
-                if (!checkNativeMouseWheelSupport) {
-                    nativeMouseWheelSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
-                    checkNativeMouseWheelSupport = true;
-                }
-                return nativeMouseWheelSupport;
+
+                return s_multiMonitorSupport;
             }
         }
 
+        /// <summary>
+        ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
+        /// </summary>
+        /// <remarks>
+        ///  This was never really correct. All versions of Windows NT from 4.0 onward supported the mouse wheel
+        ///  directly. This should have been a version check. Rather than change it and risk breaking apps we'll
+        ///  keep it equivalent to <see cref="MouseWheelPresent" />
+        /// </remarks>
+        public static bool NativeMouseWheelSupport => GetSystemMetrics(SystemMetric.SM_MOUSEWHEELPRESENT) != 0;
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelPresent"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether there is a mouse with a mouse wheel
-        ///       installed on this machine.
-        ///    </para>
-        /// </devdoc>
-        public static bool MouseWheelPresent {
-            get {
+        /// <summary>
+        ///  Gets a value indicating whether a mouse with a mouse wheel is installed.
+        /// </summary>
+        public static bool MouseWheelPresent => NativeMouseWheelSupport;
 
-                bool mouseWheelPresent = false;
-
-                if (!NativeMouseWheelSupport) {
-                    IntPtr hWndMouseWheel = IntPtr.Zero;
-
-                    // Check for the MouseZ "service". This is a little app that generated the
-                    // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                    // found, then there is no support for MouseWheels on the system.
-                    //
-                    hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-
-                    if (hWndMouseWheel != IntPtr.Zero) {
-                        mouseWheelPresent = true;
-                    }
+        /// <summary>
+        ///  Gets the bounds of the virtual screen.
+        /// </summary>
+        public static Rectangle VirtualScreen
+        {
+            get
+            {
+                if (MultiMonitorSupport)
+                {
+                    return new Rectangle(GetSystemMetrics(SystemMetric.SM_XVIRTUALSCREEN),
+                                         GetSystemMetrics(SystemMetric.SM_YVIRTUALSCREEN),
+                                         GetSystemMetrics(SystemMetric.SM_CXVIRTUALSCREEN),
+                                         GetSystemMetrics(SystemMetric.SM_CYVIRTUALSCREEN));
                 }
-                else {
-                    mouseWheelPresent = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
-                }
-                return mouseWheelPresent;
+
+                Size size = PrimaryMonitorSize;
+                return new Rectangle(0, 0, size.Width, size.Height);
             }
         }
 
+        /// <summary>
+        ///  Gets the number of display monitors on the desktop.
+        /// </summary>
+        public static int MonitorCount
+        {
+            get
+            {
+                if (MultiMonitorSupport)
+                {
+                    return GetSystemMetrics(SystemMetric.SM_CMONITORS);
+                }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VirtualScreen"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       bounds of the virtual screen.
-        ///    </para>
-        /// </devdoc>
-        public static Rectangle VirtualScreen {
-            get {
-                if (MultiMonitorSupport) {
-                    return new Rectangle(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_XVIRTUALSCREEN),
-                                         UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_YVIRTUALSCREEN),
-                                         UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVIRTUALSCREEN),
-                                         UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVIRTUALSCREEN));
-                }
-                else {
-                    Size size = PrimaryMonitorSize;
-                    return new Rectangle(0, 0, size.Width, size.Height);
-                }
+                return 1;
             }
         }
 
+        /// <summary>
+        ///  Gets a value indicating whether all the display monitors have the same color format.
+        /// </summary>
+        public static bool MonitorsSameDisplayFormat
+        {
+            get
+            {
+                if (MultiMonitorSupport)
+                {
+                    return GetSystemMetrics(SystemMetric.SM_SAMEDISPLAYFORMAT) != 0;
+                }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MonitorCount"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the number of display monitors on the desktop.
-        ///    </para>
-        /// </devdoc>
-        public static int MonitorCount {
-            get {
-                if (MultiMonitorSupport) {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS);
-                }
-                else {
-                    return 1;
-                }
+                return true;
             }
         }
 
+        /// <summary>
+        ///  Gets the computer name of the current system.
+        /// </summary>
+        public static string ComputerName => Environment.MachineName;
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MonitorsSameDisplayFormat"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether all the display monitors have the
-        ///       same color format.
-        ///    </para>
-        /// </devdoc>
-        public static bool MonitorsSameDisplayFormat {
-            get {
-                if (MultiMonitorSupport) {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SAMEDISPLAYFORMAT) != 0;
-                }
-                else {
-                    return true;
-                }
-            }
-        }
+        /// <summary>
+        ///  Gets the user's domain name.
+        /// </summary>
+        public static string UserDomainName => Environment.UserDomainName;
 
-        ////////////////////////////////////////////////////////////////////////////
-        // Misc
-        //
+        /// <summary>
+        ///  Gets a value indicating whether the current process is running in user
+        ///  interactive mode.
+        /// </summary>
+        public unsafe static bool UserInteractive
+        {
+            get
+            {
+                IntPtr hwinsta = User32.GetProcessWindowStation();
+                if (hwinsta != IntPtr.Zero && s_processWinStation != hwinsta)
+                {
+                    s_isUserInteractive = true;
 
+                    int lengthNeeded = 0;
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ComputerName"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the computer name of the current system.
-        ///    </para>
-        /// </devdoc>
-        public static string ComputerName {
-            get {
-                StringBuilder sb = new StringBuilder(256);
-                UnsafeNativeMethods.GetComputerName(sb, new int[] {sb.Capacity});
-                return sb.ToString();
-            }
-        }
-
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserDomainName"]/*' />
-        /// <devdoc>
-        ///    Gets the user's domain name.
-        /// </devdoc>
-        public static string UserDomainName {
-            get {
-                return Environment.UserDomainName;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserInteractive"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the current process is running in user
-        ///       interactive mode.
-        ///    </para>
-        /// </devdoc>
-        public static bool UserInteractive {
-            get {
-                if (Environment.OSVersion.Platform == System.PlatformID.Win32NT) {
-                    IntPtr hwinsta = IntPtr.Zero;
-
-                    hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
-                    if (hwinsta != IntPtr.Zero && processWinStation != hwinsta) {
-                        isUserInteractive = true;
-
-                        int lengthNeeded = 0;
-                        NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
-
-                        if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, flags, Marshal.SizeOf(flags), ref lengthNeeded)) {
-                            if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0) {
-                                isUserInteractive = false;
-                            }
+                    USEROBJECTFLAGS flags = default;
+                    if (GetUserObjectInformationW(hwinsta, UOI.FLAGS, ref flags, sizeof(USEROBJECTFLAGS), ref lengthNeeded).IsTrue())
+                    {
+                        if ((flags.dwFlags & (int)WSF.VISIBLE) == 0)
+                        {
+                            s_isUserInteractive = false;
                         }
-                        processWinStation = hwinsta;
                     }
-                }
-                else {
-                    isUserInteractive = true;
-                }
-                return isUserInteractive;
-            }
-        }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserName"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the user name for the current thread, that is, the name of the
-        ///       user currently logged onto the system.
-        ///    </para>
-        /// </devdoc>
-        public static string UserName {
-            get {
-                StringBuilder sb = new StringBuilder(256);
-                UnsafeNativeMethods.GetUserName(sb, new int[] {sb.Capacity});
-                return sb.ToString();
-            }
-        }
-        
-        private static void EnsureSystemEvents() {
-            if (!systemEventsAttached) {
-                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(SystemInformation.OnUserPreferenceChanged);
-                systemEventsAttached = true;
-            }
-        }
-        
-        private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref) {
-            systemEventsDirty = true;
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // NEW ADDITIONS FOR WHIDBEY                                                                            //
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsDropShadowEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the drop shadow effect in enabled. Defaults to false 
-        ///       downlevel.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsDropShadowEnabled {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDROPSHADOW, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
-           }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsFlatMenuEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the native user menus have a flat menu appearance. Defaults to false 
-        ///       downlevel.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsFlatMenuEnabled {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFLATMENU, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsFontSmoothingEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled. 
-        ///    </para>
-        /// </devdoc>
-        public static bool IsFontSmoothingEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FontSmoothingContrast"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Returns a contrast value that is ClearType smoothing.
-        ///    </para>
-        /// </devdoc>
-        public static int FontSmoothingContrast {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGCONTRAST, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FontSmoothingType"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Returns a type of Font smoothing.
-        ///    </para>
-        /// </devdoc>
-        public static int FontSmoothingType {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGTYPE, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconHorizontalSpacing"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the width in pixels of an icon cell.
-        ///    </para>
-        /// </devdoc>
-        public static int IconHorizontalSpacing {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_ICONHORIZONTALSPACING, 0, ref data, 0);
-                return data;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconVerticalSpacing"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the height in pixels of an icon cell.
-        ///    </para>
-        /// </devdoc>
-        public static int IconVerticalSpacing {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_ICONVERTICALSPACING, 0, ref data, 0);
-                return data;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsIconTitleWrappingEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Gets a value indicating whether the Icon title wrapping is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsIconTitleWrappingEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETICONTITLEWRAP, 0, ref data, 0);
-                return data != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuAccessKeysUnderlined"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Gets a value indicating whether the menu access keys are always underlined.
-        ///    </para>
-        /// </devdoc>
-        public static bool MenuAccessKeysUnderlined {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDCUES, 0, ref data, 0);
-                return data != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.KeyboardDelay"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the Keyboard repeat delay setting, which is a value in the 
-        ///       range from 0 through 3. The Actual Delay Associated with each value may vary depending on the 
-        ///       hardware.
-        ///    </para>
-        /// </devdoc>
-        public static int KeyboardDelay {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDDELAY, 0, ref data, 0);
-                return data;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsKeyboardPreferred"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Gets a value indicating whether the user relies on Keyboard instead of mouse and wants 
-        ///      applications to display keyboard interfaces that would be otherwise hidden.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsKeyboardPreferred {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDPREF, 0, ref data, 0);
-                return data != 0;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.KeyboardSpeed"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the Keyboard repeat speed setting, which is a value in the 
-        ///       range from 0 through 31. The actual rate may vary depending on the 
-        ///       hardware.
-        ///    </para>
-        /// </devdoc>
-        public static int KeyboardSpeed {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETKEYBOARDSPEED, 0, ref data, 0);
-                return data;
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseHoverSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the Size in pixels of the rectangle within which the mouse pointer has to stay.
-        ///    </para>
-        /// </devdoc>
-        public static Size MouseHoverSize {
-            get {
-                int height = 0;
-                int width = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERHEIGHT, 0, ref height, 0);
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERWIDTH, 0, ref width, 0);
-                return new Size(width, height);
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseHoverTime"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the time, in milliseconds, that the mouse pointer has to stay in the hover rectangle.
-        ///    </para>
-        /// </devdoc>
-        public static int MouseHoverTime {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERTIME, 0, ref data, 0);
-                return data;
-            }
-
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseSpeed"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the current mouse speed.
-        ///    </para>
-        /// </devdoc>
-        public static int MouseSpeed {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSESPEED, 0, ref data, 0);
-                return data;
-            }
-
-        }
-
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsSnapToDefaultEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Determines whether the snap-to-default-button feature is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsSnapToDefaultEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSNAPTODEFBUTTON, 0, ref data, 0);
-                return data != 0;
-            }
-        }
-
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.PopupMenuAlignment"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Determines whether the Popup Menus are left Aligned or Right Aligned.
-        ///    </para>
-        /// </devdoc>
-        public static LeftRightAlignment PopupMenuAlignment {
-            get {
-                bool data = false;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUDROPALIGNMENT, 0, ref data, 0);
-                if (data) {
-                    return LeftRightAlignment.Left;
-                }
-                else {
-                    return LeftRightAlignment.Right;
+                    s_processWinStation = hwinsta;
                 }
 
+                return s_isUserInteractive;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMenuFadeEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Determines whether the maenu fade animation feature is enabled. Defaults to false 
-        ///       downlevel.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsMenuFadeEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUFADE, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
+        /// <summary>
+        ///  Gets the user name for the current thread, that is, the name of the user currently logged onto
+        ///  the system.
+        /// </summary>
+        public static string UserName => Environment.UserName;
+
+        private static void EnsureSystemEvents()
+        {
+            if (!s_systemEventsAttached)
+            {
+                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
+                s_systemEventsAttached = true;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuShowDelay"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates the time, in milliseconds, that the system waits before displaying a shortcut menu.
-        ///    </para>
-        /// </devdoc>
-        public static int MenuShowDelay {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUSHOWDELAY, 0, ref data, 0);
-                return data;
-            }
-
+        private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
+        {
+            s_systemEventsDirty = true;
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsComboBoxAnimationEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the slide open effect for combo boxes is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsComboBoxAnimationEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETCOMBOBOXANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Gets whether the drop shadow effect in enabled.
+        /// </summary>
+        public static bool IsDropShadowEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETDROPSHADOW);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsTitleBarGradientEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the gradient effect for windows title bars is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsTitleBarGradientEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETGRADIENTCAPTIONS, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Gets whether the native user menus have a flat menu appearance.
+        /// </summary>
+        public static bool IsFlatMenuEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETFLATMENU);
 
+        /// <summary>
+        ///  Gets whether font smoothing is enabled.
+        /// </summary>
+        public static bool IsFontSmoothingEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETFONTSMOOTHING);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsHotTrackingEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the hot tracking of user interface elements is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsHotTrackingEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHOTTRACKING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Returns the ClearType smoothing contrast value.
+        /// </summary>
+        public static int FontSmoothingContrast
+            => User32.SystemParametersInfoInt(User32.SPI.GETFONTSMOOTHINGCONTRAST);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsListBoxSmoothScrollingEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the smooth scrolling effect for listbox is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsListBoxSmoothScrollingEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETLISTBOXSMOOTHSCROLLING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Returns a type of Font smoothing.
+        /// </summary>
+        public static int FontSmoothingType
+            => User32.SystemParametersInfoInt(User32.SPI.GETFONTSMOOTHINGTYPE);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMenuAnimationEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the menu animation feature is enabled.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsMenuAnimationEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Retrieves the width in pixels of an icon cell.
+        /// </summary>
+        public static int IconHorizontalSpacing
+            => User32.SystemParametersInfoInt(User32.SPI.ICONHORIZONTALSPACING);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsSelectionFadeEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the selection fade effect is enabled. Defaults to false 
-        ///       downlevel.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsSelectionFadeEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSELECTIONFADE, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
-            }
-        }
+        /// <summary>
+        ///  Retrieves the height in pixels of an icon cell.
+        /// </summary>
+        public static int IconVerticalSpacing
+            => User32.SystemParametersInfoInt(User32.SPI.ICONVERTICALSPACING);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsToolTipAnimationEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the tool tip animation is enabled. Defaults to false 
-        ///      downlevel.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsToolTipAnimationEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETTOOLTIPANIMATION, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
+        /// <summary>
+        ///  Gets whether icon title wrapping is enabled.
+        /// </summary>
+        public static bool IsIconTitleWrappingEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETICONTITLEWRAP);
 
-            }
-        }
+        /// <summary>
+        ///  Gets whether menu access keys are underlined.
+        /// </summary>
+        public static bool MenuAccessKeysUnderlined
+            => User32.SystemParametersInfoBool(User32.SPI.GETKEYBOARDCUES);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UIEffectsEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether all the UI Effects are enabled. Defaults to false 
-        ///      downlevel.
-        ///    </para>
-        /// </devdoc>
-        public static bool UIEffectsEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETUIEFFECTS, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
-            }
-        }
+        /// <summary>
+        ///  Retrieves the Keyboard repeat delay setting, which is a value in the range
+        ///  from 0 through 3. The actual delay associated with each value may vary
+        ///  depending on the hardware.
+        /// </summary>
+        public static int KeyboardDelay
+            => User32.SystemParametersInfoInt(User32.SPI.GETKEYBOARDDELAY);
 
+        /// <summary>
+        ///  Gets whether the user relies on keyboard instead of mouse and wants
+        ///  applications to display keyboard interfaces that would be otherwise hidden.
+        /// </summary>
+        public static bool IsKeyboardPreferred
+            => User32.SystemParametersInfoBool(User32.SPI.GETKEYBOARDPREF);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsActiveWindowTrackingEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsActiveWindowTrackingEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETACTIVEWINDOWTRACKING, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Retrieves the Keyboard repeat speed setting, which is a value in the range
+        ///  from 0 through 31. The actual rate may vary depending on the hardware.
+        /// </summary>
+        public static int KeyboardSpeed
+            => User32.SystemParametersInfoInt(User32.SPI.GETKEYBOARDSPEED);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ActiveWindowTrackingDelay"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the active window tracking delay, in milliseconds.
-        ///    </para>
-        /// </devdoc>
-        public static int ActiveWindowTrackingDelay {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETACTIVEWNDTRKTIMEOUT, 0, ref data, 0);
-                return data;
-            }
+        /// <summary>
+        ///  Gets the <see cref="Size"/> in pixels of the rectangle within which the mouse
+        ///  pointer has to stay to be considered hovering.
+        /// </summary>
+        public static Size MouseHoverSize
+            => new Size(
+                User32.SystemParametersInfoInt(User32.SPI.GETMOUSEHOVERWIDTH),
+                User32.SystemParametersInfoInt(User32.SPI.GETMOUSEHOVERHEIGHT));
 
-        }
+        /// <summary>
+        ///  Gets the time, in milliseconds, that the mouse pointer has to stay in the hover
+        ///  rectangle to be considered hovering.
+        /// </summary>
+        public static int MouseHoverTime
+            => User32.SystemParametersInfoInt(User32.SPI.GETMOUSEHOVERTIME);
 
+        /// <summary>
+        ///  Gets the current mouse speed.
+        /// </summary>
+        public static int MouseSpeed
+            => User32.SystemParametersInfoInt(User32.SPI.GETMOUSESPEED);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMinimizeRestoreAnimationEnabled"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
-        ///    </para>
-        /// </devdoc>
-        public static bool IsMinimizeRestoreAnimationEnabled {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETANIMATION, 0, ref data, 0);
-                return data != 0;
-            }
-        }
+        /// <summary>
+        ///  Determines whether the snap-to-default-button feature is enabled.
+        /// </summary>
+        public static bool IsSnapToDefaultEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETSNAPTODEFBUTTON);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.BorderMultiplierFactor"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the border multiplier factor that determines the width of a windo's sizing border.
-        ///    </para>
-        /// </devdoc>
-        public static int BorderMultiplierFactor {
-            get {
-                int data = 0;
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETBORDER, 0, ref data, 0);
-                return data;
-            }
+        /// <summary>
+        ///  Determines whether the popup menus are left aligned or right aligned.
+        /// </summary>
+        public static LeftRightAlignment PopupMenuAlignment
+            => User32.SystemParametersInfoBool(User32.SPI.GETMENUDROPALIGNMENT)
+                ? LeftRightAlignment.Left : LeftRightAlignment.Right;
 
-        }
+        /// <summary>
+        ///  Determines whether the menu fade animation feature is enabled.
+        /// </summary>
+        public static bool IsMenuFadeEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETMENUFADE);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaretBlinkTime"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates the caret blink time.
-        ///    </para>
-        /// </devdoc>
-        public static int CaretBlinkTime {
-            get {
-                return unchecked((int)SafeNativeMethods.GetCaretBlinkTime());
-            }
+        /// <summary>
+        ///  Indicates the time, in milliseconds, that the system waits before displaying
+        ///  a shortcut menu.
+        /// </summary>
+        public static int MenuShowDelay
+            => User32.SystemParametersInfoInt(User32.SPI.GETMENUSHOWDELAY);
 
-        }
+        /// <summary>
+        ///  Indicates whether the slide open effect for combo boxes is enabled.
+        /// </summary>
+        public static bool IsComboBoxAnimationEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETCOMBOBOXANIMATION);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaretWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates the caret width in edit controls.
-        ///    </para>
-        /// </devdoc>
-        public static int CaretWidth {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETCARETWIDTH, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
+        /// <summary>
+        ///  Indicates whether the gradient effect for windows title bars is enabled.
+        /// </summary>
+        public static bool IsTitleBarGradientEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETGRADIENTCAPTIONS);
 
-        }
+        /// <summary>
+        ///  Indicates whether the hot tracking of user interface elements is enabled.
+        /// </summary>
+        public static bool IsHotTrackingEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETHOTTRACKING);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelScrollDelta"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       None.
-        ///    </para>
-        /// </devdoc>
-        public static int MouseWheelScrollDelta {
-            get {
-                return NativeMethods.WHEEL_DELTA;
-            }
+        /// <summary>
+        ///  Indicates whether the smooth scrolling effect for listbox is enabled.
+        /// </summary>
+        public static bool IsListBoxSmoothScrollingEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETLISTBOXSMOOTHSCROLLING);
 
-        }
+        /// <summary>
+        ///  Indicates whether the menu animation feature is enabled.
+        /// </summary>
+        public static bool IsMenuAnimationEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETMENUANIMATION);
 
+        /// <summary>
+        ///  Indicates whether the selection fade effect is enabled.
+        /// </summary>
+        public static bool IsSelectionFadeEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETSELECTIONFADE);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalFocusThickness"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The width of the left and right edges of the focus rectangle.
-        ///    </para>
-        /// </devdoc>
-        public static int VerticalFocusThickness {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFOCUSBORDER);
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
+        /// <summary>
+        ///  Indicates whether tool tip animation is enabled.
+        /// </summary>
+        public static bool IsToolTipAnimationEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETTOOLTIPANIMATION);
 
-        }
+        /// <summary>
+        ///  Indicates whether UI effects are enabled.
+        /// </summary>
+        public static bool UIEffectsEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETUIEFFECTS);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalFocusThickness"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The width of the top and bottom edges of the focus rectangle.
-        ///    </para>
-        /// </devdoc>
-        public static int HorizontalFocusThickness {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFOCUSBORDER);
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
+        /// <summary>
+        ///  Indicates whether the windows tracking (activating the window the mouse in on) is ON or OFF.
+        /// </summary>
+        public static bool IsActiveWindowTrackingEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETACTIVEWINDOWTRACKING);
 
-        }
+        /// <summary>
+        ///  Retrieves the active window tracking delay in milliseconds.
+        /// </summary>
+        public static int ActiveWindowTrackingDelay
+            => User32.SystemParametersInfoInt(User32.SPI.GETACTIVEWNDTRKTIMEOUT);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalResizeBorderThickness"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The height of the vertical sizing border around the perimeter of the window that can be resized.
-        ///    </para>
-        /// </devdoc>
-        public static int VerticalResizeBorderThickness {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZEFRAME);
-            }
+        /// <summary>
+        ///  Indicates whether windows minimize/restore animation is enabled.
+        /// </summary>
+        public static bool IsMinimizeRestoreAnimationEnabled
+            => User32.SystemParametersInfoBool(User32.SPI.GETANIMATION);
 
-        }
+        /// <summary>
+        ///  Retrieves the border multiplier factor that determines the width of a window's sizing border.
+        /// </summary>
+        public static int BorderMultiplierFactor
+            => User32.SystemParametersInfoInt(User32.SPI.GETBORDER);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalResizeBorderThickness"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The width of the horizontal sizing border around the perimeter of the window that can be resized.
-        ///    </para>
-        /// </devdoc>
-        public static int HorizontalResizeBorderThickness {
-            get {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZEFRAME);
-            }
+        /// <summary>
+        ///  Indicates the caret blink time.
+        /// </summary>
+        public static int CaretBlinkTime => unchecked((int)User32.GetCaretBlinkTime());
 
-        }
+        /// <summary>
+        ///  Indicates the caret width in edit controls.
+        /// </summary>
+        public static int CaretWidth
+            => User32.SystemParametersInfoInt(User32.SPI.GETCARETWIDTH);
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.ScreenOrientation"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The orientation of the screen in degrees.
-        ///    </para>
-        /// </devdoc>
-        public static ScreenOrientation ScreenOrientation {
-            get {
+        public static int MouseWheelScrollDelta => NativeMethods.WHEEL_DELTA;
+
+        /// <summary>
+        ///  The width of the left and right edges of the focus rectangle.
+        /// </summary>
+        public static int VerticalFocusThickness => GetSystemMetrics(SystemMetric.SM_CYFOCUSBORDER);
+
+        /// <summary>
+        ///  The width of the top and bottom edges of the focus rectangle.
+        /// </summary>
+        public static int HorizontalFocusThickness => GetSystemMetrics(SystemMetric.SM_CXFOCUSBORDER);
+
+        /// <summary>
+        ///  The height of the vertical sizing border around the perimeter of the window that can be resized.
+        /// </summary>
+        public static int VerticalResizeBorderThickness => GetSystemMetrics(SystemMetric.SM_CYSIZEFRAME);
+
+        /// <summary>
+        ///  The width of the horizontal sizing border around the perimeter of the window that can be resized.
+        /// </summary>
+        public static int HorizontalResizeBorderThickness => GetSystemMetrics(SystemMetric.SM_CXSIZEFRAME);
+
+        /// <summary>
+        ///  The orientation of the screen in degrees.
+        /// </summary>
+        public static ScreenOrientation ScreenOrientation
+        {
+            get
+            {
                 ScreenOrientation so = ScreenOrientation.Angle0;
-                NativeMethods.DEVMODE dm = new NativeMethods.DEVMODE();
-                dm.dmSize = (short) Marshal.SizeOf(typeof(NativeMethods.DEVMODE));
-                dm.dmDriverExtra = 0;
-                try {
-                    SafeNativeMethods.EnumDisplaySettings(null, -1 /*ENUM_CURRENT_SETTINGS*/, ref dm);
-                    if ( (dm.dmFields & NativeMethods.DM_DISPLAYORIENTATION) > 0) {
+                var dm = new User32.DEVMODEW
+                {
+                    dmSize = (ushort)Marshal.SizeOf<User32.DEVMODEW>(),
+                };
+                try
+                {
+                    User32.EnumDisplaySettingsW(null, User32.ENUM.CURRENT_SETTINGS, ref dm);
+                    if ((dm.dmFields & User32.DM.DISPLAYORIENTATION) > 0)
+                    {
                         so = dm.dmDisplayOrientation;
                     }
                 }
-                catch {
+                catch
+                {
                     // empty catch, we'll just return the default if the call to EnumDisplaySettings fails.
                 }
 
                 return so;
             }
         }
-        
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SizingBorderWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specifies the thikness, in pixels, of the Sizing Border.
-        ///    </para>
-        /// </devdoc>
-        public static int SizingBorderWidth {
-            get {
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iBorderWidth > 0) {
-                    return data.iBorderWidth;
-                }
-                else {
-                    return 0;
-                }
+
+        /// <summary>
+        ///  The thickness, in pixels, of the sizing border.
+        /// </summary>
+        public static int SizingBorderWidth
+        {
+            get
+            {
+                User32.NONCLIENTMETRICSW data = default;
+                return User32.SystemParametersInfoW(ref data)
+                    && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
             }
         }
 
-        /*
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the width, in pixels, of a standard vertical scrollbar.
-        ///    </para>
-        /// </devdoc>
-        public static int VerticalScrollBarWidth {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iScrollWidth > 0) {
-                    return data.iScrollWidth;
-                }
-                else {
-                    return 0;
-                }
-                
-
+        /// <summary>
+        ///  The <see cref="Size"/>, in pixels, of the small caption buttons.
+        /// </summary>
+        public unsafe static Size SmallCaptionButtonSize
+        {
+            get
+            {
+                User32.NONCLIENTMETRICSW data = default;
+                return User32.SystemParametersInfoW(ref data)
+                    && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0
+                        ? new Size(data.iSmCaptionWidth, data.iSmCaptionHeight)
+                        : Size.Empty;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the height, in pixels, of a standard horizontal scrollbar.
-        ///    </para>
-        /// </devdoc>
-        public static int HorizontalScrollBarWidth {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iScrollHeight > 0) {
-                    return data.iScrollHeight;
-                }
-                else {
-                    return 0;
-                }
-            }
-        }
-        
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the Size, in pixels, of the caption buttons.
-        ///    </para>
-        /// </devdoc>
-        public static Size CaptionButtonSize {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iCaptionHeight > 0 && data.iCaptionWidth > 0) {
-                    return new Size(data.iCaptionWidth, data.iCaptionHeight);
-                }
-                else {
-                    return return new Size(0, 0);
-                }
-                
-
-            }
-        }
-        */
-        
-         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SmallCaptionButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the Size, in pixels, of the small caption buttons.
-        ///    </para>
-        /// </devdoc>
-        public static Size SmallCaptionButtonSize {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0) {
-                    return new Size(data.iSmCaptionWidth, data.iSmCaptionHeight);
-                }
-                else {
-                    return Size.Empty;
-                }
-                
-
+        /// <summary>
+        ///  The <see cref="Size"/>, in pixels, of the menu bar buttons.
+        /// </summary>
+        public unsafe static Size MenuBarButtonSize
+        {
+            get
+            {
+                User32.NONCLIENTMETRICSW data = default;
+                return User32.SystemParametersInfoW(ref data)
+                    && data.iMenuHeight > 0 && data.iMenuWidth > 0
+                        ? new Size(data.iMenuWidth, data.iMenuHeight)
+                        : Size.Empty;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MenuBarButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the Size, in pixels, of the menu bar buttons.
-        ///    </para>
-        /// </devdoc>
-        public static Size MenuBarButtonSize {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iMenuHeight > 0 && data.iMenuWidth > 0) {
-                    return new Size(data.iMenuWidth, data.iMenuHeight);
-                }
-                else {
-                    return Size.Empty;
-                }
-                
-
-            }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // End ADDITIONS FOR WHIDBEY                                                                            //
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-        /// <devdoc>
-        ///     Checks whether the current Winforms app is running on a secure desktop under a terminal
-        ///     server session.  This is the case when the TS session has been locked.
-        ///     This method is useful when calling into GDI+ Graphics methods that modify the object's
-        ///     state, these methods fail under a locked terminal session.
-        /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
-        internal static bool InLockedTerminalSession() {
-            bool retVal = false;
-
-            if (SystemInformation.TerminalServerSession) {
-                // Let's try to open the input desktop, it it fails with access denied assume
+        /// <summary>
+        ///  Checks whether the current Winforms app is running on a secure desktop under a terminal
+        ///  server session. This is the case when the TS session has been locked.
+        ///  This method is useful when calling into GDI+ Graphics methods that modify the object's
+        ///  state, these methods fail under a locked terminal session.
+        /// </summary>
+        internal static bool InLockedTerminalSession()
+        {
+            if (TerminalServerSession)
+            {
+                // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
-                IntPtr hDsk = SafeNativeMethods.OpenInputDesktop(0, false, NativeMethods.DESKTOP_SWITCHDESKTOP);
-
-                if (hDsk == IntPtr.Zero) {
-                    int error = Marshal.GetLastWin32Error();
-                    retVal = error == NativeMethods.ERROR_ACCESS_DENIED;
+                IntPtr hDsk = User32.OpenInputDesktop(0, BOOL.FALSE, User32.DESKTOP.SWITCHDESKTOP);
+                if (hDsk == IntPtr.Zero)
+                {
+                    return Marshal.GetLastWin32Error() == ERROR.ACCESS_DENIED;
                 }
 
-                if (hDsk != IntPtr.Zero) {
-                    SafeNativeMethods.CloseDesktop(hDsk);                
-                }
+                User32.CloseDesktop(hDsk);
             }
 
-            return retVal;
+            return false;
         }
-   }
+    }
 }
-

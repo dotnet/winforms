@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Provides information about a Binding Completed event.
-    /// </devdoc>
+    /// <summary>
+    ///  Provides information about a Binding Completed event.
+    /// </summary>
     public class BindingCompleteEventArgs : CancelEventArgs
     {
-        /// <devdoc>
-        /// Constructor for BindingCompleteEventArgs.
-        /// </devdoc>
+        /// <summary>
+        ///  Constructor for BindingCompleteEventArgs.
+        /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
                                         BindingCompleteContext context,
@@ -28,9 +30,9 @@ namespace System.Windows.Forms
             Exception = exception;
         }
 
-        /// <devdoc>
-        /// Constructor for BindingCompleteEventArgs.
-        /// </devdoc>
+        /// <summary>
+        ///  Constructor for BindingCompleteEventArgs.
+        /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
                                         BindingCompleteContext context,
@@ -39,9 +41,9 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
-        /// Constructor for BindingCompleteEventArgs.
-        /// </devdoc>
+        /// <summary>
+        ///  Constructor for BindingCompleteEventArgs.
+        /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
                                         BindingCompleteContext context,
@@ -49,9 +51,9 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <devdoc>
-        /// Constructor for BindingCompleteEventArgs.
-        /// </devdoc>
+        /// <summary>
+        ///  Constructor for BindingCompleteEventArgs.
+        /// </summary>
         public BindingCompleteEventArgs(Binding binding,
                                         BindingCompleteState state,
                                         BindingCompleteContext context) : this(binding, state, context, string.Empty, null, false)

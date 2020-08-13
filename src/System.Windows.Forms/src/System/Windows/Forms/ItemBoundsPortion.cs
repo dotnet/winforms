@@ -2,31 +2,33 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static Interop.ComCtl32;
+
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the display bounds of a ListItem.
-    /// </devdoc>
+    /// <summary>
+    ///  Specifies the display bounds of a ListItem.
+    /// </summary>
     public enum ItemBoundsPortion
     {
-        /// <devdoc>
-        /// Both the icon and label portions. In Report View, this includes subitems.
-        /// </devdoc>
-        Entire = NativeMethods.LVIR_BOUNDS,
+        /// <summary>
+        ///  Both the icon and label portions. In Report View, this includes subitems.
+        /// </summary>
+        Entire = (int)LVIR.BOUNDS,
 
-        /// <devdoc>
-        /// Only the icon portion.
-        /// </devdoc>
-        Icon = NativeMethods.LVIR_ICON,
+        /// <summary>
+        ///  Only the icon portion.
+        /// </summary>
+        Icon = (int)LVIR.ICON,
 
-        /// <devdoc>
-        /// Only the label portion.
-        /// </devdoc>
-        Label = NativeMethods.LVIR_LABEL,
+        /// <summary>
+        ///  Only the label portion.
+        /// </summary>
+        Label = (int)LVIR.LABEL,
 
-        /// <devdoc>
-        /// Both the icon and label portions. In Report view, this <see langword='Entire'/>.
-        /// </devdoc>
-        ItemOnly = NativeMethods.LVIR_SELECTBOUNDS,
+        /// <summary>
+        ///  Both the icon and label portions. In Report view, this <see cref='Entire'/>.
+        /// </summary>
+        ItemOnly = (int)LVIR.SELECTBOUNDS,
     }
 }

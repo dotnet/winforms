@@ -3,64 +3,64 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
-    /// Specifies the style of a three-dimensional border.
-    /// </devdoc>
-    [ComVisible(true)]
+    /// <summary>
+    ///  Specifies the style of a three-dimensional border.
+    /// </summary>
     public enum Border3DStyle
     {
-        /// <devdoc>
-        /// The border is drawn outside the specified rectangle, preserving the
-        /// dimensions of the rectangle for drawing.
-        /// </devdoc>
-        Adjust = NativeMethods.BF_ADJUST,
+        /// <summary>
+        ///  The border is drawn outside the specified rectangle, preserving the
+        ///  dimensions of the rectangle for drawing.
+        /// </summary>
+        Adjust = (int)User32.BF.ADJUST,
 
-        /// <devdoc>
-        /// The border has a raised outer edge and a sunken inner edge.
-        /// </devdoc>
-        Bump = NativeMethods.EDGE_BUMP,
+        /// <summary>
+        ///  The border has a raised outer edge and a sunken inner edge.
+        /// </summary>
+        Bump = (int)User32.EDGE.BUMP,
 
-        /// <devdoc>
-        /// The border has a with a sunken inner edge and a raised outer edge.
-        /// </devdoc>
-        Etched = NativeMethods.EDGE_ETCHED,
+        /// <summary>
+        ///  The border has a with a sunken inner edge and a raised outer edge.
+        /// </summary>
+        Etched = (int)User32.EDGE.ETCHED,
 
-        /// <devdoc>
-        /// The border has a with no three-dimensional effects.
-        /// </devdoc>
-        Flat = NativeMethods.BF_FLAT | NativeMethods.EDGE_SUNKEN,
+        /// <summary>
+        ///  The border has a with no three-dimensional effects.
+        /// </summary>
+        Flat = (int)User32.BF.FLAT | (int)User32.EDGE.SUNKEN,
 
-        /// <devdoc>
-        /// The border has a with raised inner and outer edges.
-        /// </devdoc>
-        Raised = NativeMethods.EDGE_RAISED,
+        /// <summary>
+        ///  The border has a with raised inner and outer edges.
+        /// </summary>
+        Raised = (int)User32.EDGE.RAISED,
 
-        /// <devdoc>
-        /// The border has a with a raised inner edge and no outer edge.
-        /// </devdoc>
-        RaisedInner = NativeMethods.BDR_RAISEDINNER,
+        /// <summary>
+        ///  The border has a with a raised inner edge and no outer edge.
+        /// </summary>
+        RaisedInner = (int)User32.EDGE.RAISEDINNER,
 
-        /// <devdoc>
-        /// The border has a with a raised outer edge and no inner edge.
-        /// </devdoc>
-        RaisedOuter = NativeMethods.BDR_RAISEDOUTER,
+        /// <summary>
+        ///  The border has a with a raised outer edge and no inner edge.
+        /// </summary>
+        RaisedOuter = (int)User32.EDGE.RAISEDOUTER,
 
-        /// <devdoc>
-        /// The border has a with sunken inner and outer edges.
-        /// </devdoc>
-        Sunken = NativeMethods.EDGE_SUNKEN,
+        /// <summary>
+        ///  The border has a with sunken inner and outer edges.
+        /// </summary>
+        Sunken = (int)User32.EDGE.SUNKEN,
 
-        /// <devdoc>
-        /// The border has a with a sunken inner edge and no outer edge.
-        /// </devdoc>
-        SunkenInner = NativeMethods.BDR_SUNKENINNER,
+        /// <summary>
+        ///  The border has a with a sunken inner edge and no outer edge.
+        /// </summary>
+        SunkenInner = (int)User32.EDGE.SUNKENINNER,
 
-        /// <devdoc>
-        /// The border has a with a sunken outer edge and no inner edge.
-        /// </devdoc>
-        SunkenOuter = NativeMethods.BDR_SUNKENOUTER,
+        /// <summary>
+        ///  The border has a with a sunken outer edge and no inner edge.
+        /// </summary>
+        SunkenOuter = (int)User32.EDGE.SUNKENOUTER,
     }
 }

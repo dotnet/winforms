@@ -7,7 +7,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DataGridViewCellMouseEventArgsTests
+    // NB: doesn't require thread affinity
+    public class DataGridViewCellMouseEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> Ctor_Int_Int_Int_Int_MouseEventArgs_TestData()
         {
@@ -33,19 +34,21 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void Ctor_NegativeColumnIndex_ThrowsArgumentOutOfRangeException()
         {
+            Assert.Throws<ArgumentOutOfRangeException>("columnIndex", () => new DataGridViewCellMouseEventArgs(-2, 0, 1, 2, null));
             Assert.Throws<ArgumentOutOfRangeException>("columnIndex", () => new DataGridViewCellMouseEventArgs(-2, 0, 1, 2, new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)));
         }
 
         [Fact]
         public void Ctor_NegativeRowIndex_ThrowsArgumentOutOfRangeException()
         {
+            Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewCellMouseEventArgs(0, -2, 1, 2, null));
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewCellMouseEventArgs(0, -2, 1, 2, new MouseEventArgs(MouseButtons.Left, 1, 2, 3, 4)));
         }
 
         [Fact]
-        public void Ctor_NullE_ThrowsNullReferenceException()
+        public void Ctor_NullE_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => new DataGridViewCellMouseEventArgs(1, 2, 1, 2, null));
+            Assert.Throws<ArgumentNullException>("e", () => new DataGridViewCellMouseEventArgs(1, 2, 1, 2, null));
         }
     }
 }

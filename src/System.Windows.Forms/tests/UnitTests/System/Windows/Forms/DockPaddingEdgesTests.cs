@@ -10,9 +10,9 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class DockPaddingEdgesTests
+    public class DockPaddingEdgesTests : IClassFixture<ThreadExceptionFixture>
     {
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2, -2, -2, -2, 0, 0, 0, 0, 0)]
         [InlineData(-1, -1, -1, -1, 0, 0, 0, 0, 0)]
         [InlineData(0, -1, -1, -1, 0, 0, 0, 0, 0)]
@@ -21,10 +21,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(-1, -1, -1, 0, 0, 0, 0, 0, 0)]
         [InlineData(0, 0, 0, 0, 0, 0, 0, 0, 0)]
         [InlineData(1, 1, 1, 1, 1, 1, 1, 1, 1)]
-        [InlineData(1, 2, 3, 4, 0, 1, 2, 3, 4)] 
+        [InlineData(1, 2, 3, 4, 0, 1, 2, 3, 4)]
         public void DockPaddingEdges_Properties_Get_ReturnsExpected(int left, int top, int right, int bottom, int expectedAll, int expectedLeft, int expectedTop, int expectedRight, int expectedBottom)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(left, top, right, bottom)
             };
@@ -36,14 +36,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedBottom, padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2, 0, -1)]
         [InlineData(-1, 0, -1)]
         [InlineData(0, 0, 0)]
         [InlineData(1, 1, 1)]
         public void DockPaddingEdges_All_SetWithOwner_GetReturnsExpected(int value, int expectedValue, int expectedPaddingAll)
         {
-            var owner = new ScrollableControl();
+            using var owner = new ScrollableControl();
             ScrollableControl.DockPaddingEdges padding = owner.DockPadding;
             padding.All = value;
             Assert.Equal(expectedValue, padding.All);
@@ -58,11 +58,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedValue, owner.Padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_All_SetWithoutOwner_GetReturnsExpected(int value)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -76,14 +76,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
         public void DockPaddingEdges_Left_SetWithOwner_GetReturnsExpected(int value, int expectedLeft)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -101,11 +101,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, owner.Padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Left_SetWithoutOwner_GetReturnsExpected(int value)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -119,14 +119,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
         public void DockPaddingEdges_Top_SetWithOwner_GetReturnsExpected(int value, int expectedTop)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -144,11 +144,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, owner.Padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Top_SetWithoutOwner_GetReturnsExpected(int value)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -162,14 +162,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
         public void DockPaddingEdges_Right_SetWithOwner_GetReturnsExpected(int value, int expectedRight)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -187,11 +187,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, owner.Padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Right_SetWithoutOwner_GetReturnsExpected(int value)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -205,14 +205,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
         public void DockPaddingEdges_Bottom_SetWithOwner_GetReturnsExpected(int value, int expectedBottom)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -230,11 +230,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedBottom, owner.Padding.Bottom);
         }
 
-        [Theory]
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Bottom_SetWithoutOwner_GetReturnsExpected(int value)
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { CreateClonedPadding(1, 2, 3, 4), null, false };
         }
 
-        [Theory]
+        [WinFormsTheory]
         [MemberData(nameof(Equals_TestData))]
         public void DockPaddingEdges_Equals_Invoke_ReturnsExpected(ScrollableControl.DockPaddingEdges padding, object other, bool expected)
         {
@@ -299,10 +299,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, padding.Equals(other));
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_GetHashCode_InvokeWithOwner_ReturnsExpected()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -311,10 +311,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(padding.GetHashCode(), padding.GetHashCode());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_GetHashCode_InvokeWithoutOwner_ReturnsExpected()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -324,10 +324,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(padding.GetHashCode(), padding.GetHashCode());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_Clone_InvokeWithOwner_ReturnsExpected()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -340,10 +340,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_Clone_InvokeWithoutOwner_ReturnsExpected()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -357,10 +357,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_ToString_InvokeWithOwner_ReturnsExpected()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -368,10 +368,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("{Left=1,Top=2,Right=3,Bottom=4}", padding.ToString());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_ToString_InvokeWithoutOwner_ReturnsExpected()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -380,10 +380,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("{Left=1,Top=2,Right=3,Bottom=4}", padding.ToString());
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_AllPropertyDescriptor_ResetValue_SetsToZero()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -401,10 +401,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_LeftPropertyDescriptor_ResetValue_SetsToZero()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -422,10 +422,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_TopPropertyDescriptor_ResetValue_SetsToZero()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -443,10 +443,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_RightPropertyDescriptor_ResetValue_SetsToZero()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -464,10 +464,10 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_BottomPropertyDescriptor_ResetValue_SetsToZero()
         {
-            var owner = new ScrollableControl
+            using var owner = new ScrollableControl
             {
                 Padding = new Padding(1, 2, 3, 4)
             };
@@ -485,7 +485,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, padding.Bottom);
         }
 
-        [Fact]
+        [WinFormsFact]
         public void DockPaddingEdges_GetTypeConverter_ReturnsDockPaddingEdgesConverter()
         {
             Assert.IsType<ScrollableControl.DockPaddingEdgesConverter>(TypeDescriptor.GetConverter(typeof(ScrollableControl.DockPaddingEdges)));

@@ -2,141 +2,148 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable disable
+
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
+using static Interop;
+using static Interop.ComCtl32;
 
-namespace System.Windows.Forms {
-
-    /// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///         Encapsulates insertion-mark information    
-    ///    </para>
-    /// </devdoc>
+namespace System.Windows.Forms
+{
+    /// <summary>
+    ///  Encapsulates insertion-mark information
+    /// </summary>
     public sealed class ListViewInsertionMark
-    {	
-        private ListView listView;
-        
-        private int index = 0;
-        private Color color = Color.Empty;
-        private bool appearsAfterItem = false;
+    {
+        private readonly ListView listView;
 
-        internal ListViewInsertionMark(ListView listView) {
+        private int index;
+        private Color color = Color.Empty;
+        private bool appearsAfterItem;
+
+        internal ListViewInsertionMark(ListView listView)
+        {
             this.listView = listView;
         }
 
-        /// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.AppearsAfterItem"]/*' />
-        /// <devdoc>
-        ///     Specifies whether the insertion mark appears
-    	///     after the item - otherwise it appears
-    	///     before the item (the default).
-        /// </devdoc>
-        ///
-    	public bool AppearsAfterItem { 
+        /// <summary>
+        ///  Specifies whether the insertion mark appears
+        ///  after the item - otherwise it appears
+        ///  before the item (the default).
+        /// </summary>
+        public bool AppearsAfterItem
+        {
             get
             {
                 return appearsAfterItem;
             }
             set
             {
-                if (appearsAfterItem != value) {
+                if (appearsAfterItem != value)
+                {
                     appearsAfterItem = value;
 
-                    if (listView.IsHandleCreated) {
+                    if (listView.IsHandleCreated)
+                    {
                         UpdateListView();
                     }
                 }
             }
         }
-    
-    	/// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Bounds"]/*' />
-        /// <devdoc>
-        ///     Returns bounds of the insertion-mark.
-        /// </devdoc>
-        ///
-    	public Rectangle Bounds {
+
+        /// <summary>
+        ///  Returns bounds of the insertion-mark.
+        /// </summary>
+        public Rectangle Bounds
+        {
             get
             {
-                NativeMethods.RECT rect = new NativeMethods.RECT();
-                listView.SendMessage(NativeMethods.LVM_GETINSERTMARKRECT, 0, ref rect);
+                var rect = new RECT();
+                User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKRECT, IntPtr.Zero, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }
-    
-    	/// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Color"]/*' />
-        /// <devdoc>
-        ///     The color of the insertion-mark.
-        /// </devdoc>
-        ///
-    	public Color Color { 
-            get 
+
+        /// <summary>
+        ///  The color of the insertion-mark.
+        /// </summary>
+        public Color Color
+        {
+            get
             {
-                if (color.IsEmpty) {
-                    color = SafeNativeMethods.ColorFromCOLORREF((int)listView.SendMessage(NativeMethods.LVM_GETINSERTMARKCOLOR, 0, 0));
+                if (color.IsEmpty)
+                {
+                    color = new COLORREF((uint)User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKCOLOR));
                 }
                 return color;
-            }             
+            }
             set
             {
-                if (color != value) {
+                if (color != value)
+                {
                     color = value;
-                    if (listView.IsHandleCreated) {
-                        listView.SendMessage(NativeMethods.LVM_SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
+                    if (listView.IsHandleCreated)
+                    {
+                        User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, PARAM.FromColor(color));
                     }
                 }
             }
         }
-    
-    	/// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Index"]/*' />
-        /// <devdoc>
-        ///     Item next to which the insertion-mark appears.
-        /// </devdoc>
-        ///
-    	public int Index {
+
+        /// <summary>
+        ///  Item next to which the insertion-mark appears.
+        /// </summary>
+        public int Index
+        {
             get
             {
                 return index;
             }
             set
             {
-                if (index != value) {
+                if (index != value)
+                {
                     index = value;
-                    if (listView.IsHandleCreated) {
+                    if (listView.IsHandleCreated)
+                    {
                         UpdateListView();
                     }
                 }
             }
-        }        
-  
-        /// <include file='doc\ListViewInsertionMark.uex' path='docs/doc[@for="ListViewInsertionMark.Index"]/*' />
-        /// <devdoc>
-        ///     Performs a hit-test at the specified insertion point
-    	///     and returns the closest item.
-        /// </devdoc>
-        ///
-    	public int NearestIndex(Point pt)
-        {
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            point.x = pt.X;
-            point.y = pt.Y;
+        }
 
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_INSERTMARKHITTEST, point, lvInsertMark);
+        /// <summary>
+        ///  Performs a hit-test at the specified insertion point
+        ///  and returns the closest item.
+        /// </summary>
+        public unsafe int NearestIndex(Point pt)
+        {
+            var lvInsertMark = new LVINSERTMARK
+            {
+                cbSize = (uint)sizeof(LVINSERTMARK)
+            };
+            User32.SendMessageW(listView, (User32.WM)LVM.INSERTMARKHITTEST, (IntPtr)(&pt), ref lvInsertMark);
 
             return lvInsertMark.iItem;
-        }       
+        }
 
-        internal void UpdateListView() {
+        internal unsafe void UpdateListView()
+        {
             Debug.Assert(listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-            NativeMethods.LVINSERTMARK lvInsertMark = new NativeMethods.LVINSERTMARK();                 
-            lvInsertMark.dwFlags = appearsAfterItem ? NativeMethods.LVIM_AFTER : 0;
-            lvInsertMark.iItem = index;
-            UnsafeNativeMethods.SendMessage(new HandleRef(listView, listView.Handle), NativeMethods.LVM_SETINSERTMARK, 0, lvInsertMark);
+            var lvInsertMark = new LVINSERTMARK
+            {
+                cbSize = (uint)sizeof(LVINSERTMARK),
+                dwFlags = appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
+                iItem = index
+            };
+            User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARK, IntPtr.Zero, ref lvInsertMark);
 
-            if (!color.IsEmpty) {
-                listView.SendMessage(NativeMethods.LVM_SETINSERTMARKCOLOR, 0, SafeNativeMethods.ColorToCOLORREF(color));
-            }            
+            if (!color.IsEmpty)
+            {
+                User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARKCOLOR, IntPtr.Zero, PARAM.FromColor(color));
+            }
         }
     }
 }

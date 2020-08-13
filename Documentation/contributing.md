@@ -2,6 +2,8 @@
 
 The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parity with .NET Framework. Priority will be given to changes that align with that goal. See the [roadmap](../roadmap.md) to understand project goals.
 
+In .NET 5.0 and beyond we are aiming to optimize our implementations, reduce our memory footprints, increase performance, and update implementations to deliver all aspects of modern Windows UI, including missings properties or actions, and new UI controls.
+
 We need the most help with the following types of changes:
 
 * Test fixes, test improvements, and new tests increasing code coverage.
@@ -11,7 +13,7 @@ Please [file an issue][issues] for any larger change you would like to propose. 
 
 See [Developer Guide](developer-guide.md) to learn how to develop changes for this repository.
 
-This project follows the general [.NET Core Contribution Guidelines][corefx-contribution-guidelines]. Please read it before submitting PRs.
+This project follows the general [.NET Core Contribution Guidelines][runtime-contribution-guidelines]. Please read it before submitting PRs.
 
 The contribution bar from the general contribution guidelines is copied below.
 
@@ -28,4 +30,4 @@ Contributions must also satisfy the other published guidelines defined in this d
 [comment]: <> (URI Links)
 
 [issues]: https://github.com/dotnet/winforms/issues
-[corefx-contribution-guidelines]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
+[runtime-contribution-guidelines]: https://github.com/dotnet/runtime/blob/master/CONTRIBUTING.md
