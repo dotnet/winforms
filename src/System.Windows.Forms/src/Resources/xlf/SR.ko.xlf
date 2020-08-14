@@ -5686,6 +5686,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{0}에 전달한 Win32 핸들이 잘못되었거나 핸들 종류가 올바르지 않습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">'{1}'의 값은 '{0}'에 사용할 수 없습니다. '{0}'은(는) {2}보다 작아야 합니다.</target>

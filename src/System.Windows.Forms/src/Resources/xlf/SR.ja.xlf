@@ -5686,6 +5686,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{0} に渡された Win32 ハンドルが有効でないか、または型が正しくありません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">'{1}' の値は '{0}' に対して有効ではありません。'{0}' は {2} 未満でなければなりません。</target>

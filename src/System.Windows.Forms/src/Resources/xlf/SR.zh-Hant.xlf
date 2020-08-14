@@ -5686,6 +5686,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">傳送到 {0} 的 Win32 控制代碼無效或是錯誤的類型。</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 必須小於 {2}。</target>

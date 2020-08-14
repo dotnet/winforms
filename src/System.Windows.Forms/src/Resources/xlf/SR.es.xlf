@@ -5686,6 +5686,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">El identificador Win32 que ha pasado a {0} no es válido o no es de tipo correcto.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">El valor de '{1}' no es válido para '{0}'. '{0}' debe ser menor que {2}.</target>

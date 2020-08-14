@@ -5686,6 +5686,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Uchwyt Win32 przekazany do {0} jest nieprawidłowy lub nieprawidłowego typu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">Wartość '{1}' nie jest prawidłową wartością dla '{0}'. Wartość '{0}' musi być mniejsza od {2}.</target>
