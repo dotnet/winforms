@@ -14,10 +14,9 @@ namespace System.Windows.Forms.Metafiles
         private readonly Gdi32.EMR[] _skipTypes;
 
         public SkipTypesValidator(params Gdi32.EMR[] skipTypes) => _skipTypes = skipTypes;
+
         public bool ShouldValidate(Gdi32.EMR recordType) => _skipTypes.Contains(recordType);
-        public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
-        {
-            complete = true;
-        }
+
+        public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete) => complete = true;
     }
 }

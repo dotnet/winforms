@@ -42,31 +42,30 @@ namespace System.Windows.Forms.Metafiles
             if (validate != default)
             {
                 _validate = validate;
+                return;
             }
-            else
+
+            // Default values for all of these are valid expectations so we always turn them on.
+            _validate = Flags.From | Flags.To | Flags.PenStyle;
+
+            if (penWidth != 0)
             {
-                // Default values for all of these are valid expectations so we always turn them on
-                _validate = Flags.From | Flags.To | Flags.PenStyle;
+                _validate |= Flags.PenWidth;
+            }
 
-                if (penWidth != 0)
-                {
-                    _validate |= Flags.PenWidth;
-                }
+            if (!penColor.IsEmpty)
+            {
+                _validate |= Flags.PenColor;
+            }
 
-                if (!penColor.IsEmpty)
-                {
-                    _validate |= Flags.PenColor;
-                }
+            if (backgroundMode != default)
+            {
+                _validate |= Flags.BackgroundMode;
+            }
 
-                if (backgroundMode != default)
-                {
-                    _validate |= Flags.BackgroundMode;
-                }
-
-                if (_rop2 != default)
-                {
-                    _validate |= Flags.RopMode;
-                }
+            if (_rop2 != default)
+            {
+                _validate |= Flags.RopMode;
             }
         }
 

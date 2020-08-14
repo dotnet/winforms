@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -14,7 +16,7 @@ namespace System.Windows.Forms.Metafiles
         private Gdi32.HENHMETAFILE _hmf;
 
         public unsafe EmfScope()
-            : this (Gdi32.CreateEnhMetaFileW(default, null, null, null))
+            : this (Gdi32.CreateEnhMetaFileW(hdc: default, lpFilename: null, lprc: null, lpDesc: null))
         {
         }
 
@@ -24,8 +26,7 @@ namespace System.Windows.Forms.Metafiles
             _hmf = default;
         }
 
-        public unsafe static EmfScope Create()
-            => new EmfScope();
+        public unsafe static EmfScope Create() => new EmfScope();
 
         public Gdi32.HENHMETAFILE HENHMETAFILE
         {
@@ -68,7 +69,7 @@ namespace System.Windows.Forms.Metafiles
         /// </summary>
         /// <remarks>
         ///  State is whatever is current *before* the current record is "applied" as it is necessary to understand
-        ///  what delta the acutal record makes.
+        ///  what delta the actual record makes.
         /// </remarks>
         public unsafe void EnumerateWithState(ProcessRecordWithStateDelegate enumerator, DeviceContextState state)
         {
@@ -160,9 +161,9 @@ namespace System.Windows.Forms.Metafiles
             int nHandles,
             IntPtr data)
         {
-            // Note that the record pointer is *only* valid during the callback
+            // Note that the record pointer is *only* valid during the callback.
             GCHandle enumeratorHandle = GCHandle.FromIntPtr(data);
-            ProcessRecordDelegate enumerator = enumeratorHandle.Target as ProcessRecordDelegate;
+            ProcessRecordDelegate enumerator = (ProcessRecordDelegate)enumeratorHandle.Target!;
             var record = new EmfRecord(hdc, lpht, lpmr, nHandles, data);
             return enumerator(ref record).ToBOOL();
         }

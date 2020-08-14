@@ -16,6 +16,11 @@ namespace System.Windows.Forms.Metafiles
             DeviceContextState state,
             params IEmfValidator[] validationSteps)
         {
+            if (state is null)
+                throw new ArgumentNullException(nameof(state));
+            if (validationSteps is null)
+                throw new ArgumentNullException(nameof(validationSteps));
+
             int currentIndex = 0;
             IEmfValidator? currentValidator = validationSteps[currentIndex];
 
@@ -26,6 +31,7 @@ namespace System.Windows.Forms.Metafiles
                         currentValidator.Validate(ref record, state, out bool complete);
                         if (complete)
                         {
+                            // Current validator doesn't want to look at any more records.
                             currentIndex++;
                             currentValidator = currentIndex < validationSteps.Length
                                 ? validationSteps[currentIndex]

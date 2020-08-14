@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Metafiles
             string? fontFace = null,
             TextOutValidator.Flags validate = default) => new TextOutValidator(
                 text,
-                Color.Empty,
+                textColor: Color.Empty,
                 mapMode,
                 backgroundMode,
                 fontFace,
