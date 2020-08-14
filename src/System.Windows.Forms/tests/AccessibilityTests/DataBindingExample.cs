@@ -28,7 +28,7 @@ namespace AccessibilityTests
         {
             for (int i = 0; i < 6; i++)
             {
-                _studentA.Add(new Student(i, "Name 1" + i, "Male"));
+                _studentA.Add(new Student(i,  "Name 1" + i, "Male"));
                 _studentB.Add(new Student(i * 2, "Name 11" + i * 2, "Female"));
             }
 
