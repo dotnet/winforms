@@ -287,8 +287,8 @@ namespace System.Windows.Forms
 
         int[]? IAccessibleEx.GetRuntimeId() => publicIAccessibleEx.GetRuntimeId();
 
-        HRESULT IAccessibleEx.ConvertReturnedElement(IRawElementProviderSimple pIn, out IAccessibleEx? ppRetValOut)
-            => publicIAccessibleEx.ConvertReturnedElement(pIn, out ppRetValOut);
+        unsafe HRESULT IAccessibleEx.ConvertReturnedElement(IRawElementProviderSimple pIn, IntPtr* ppRetValOut)
+            => publicIAccessibleEx.ConvertReturnedElement(pIn, ppRetValOut);
 
         ProviderOptions IRawElementProviderSimple.ProviderOptions
             => publicIRawElementProviderSimple.ProviderOptions;

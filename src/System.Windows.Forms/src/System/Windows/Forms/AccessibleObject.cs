@@ -605,7 +605,7 @@ namespace System.Windows.Forms
             if (pidChild is null)
             {
                 ppAcc = null;
-                return HRESULT.E_INVALIDARG;
+                return HRESULT.E_POINTER;
             }
 
             // No need to implement this for patterns and properties
@@ -616,10 +616,15 @@ namespace System.Windows.Forms
 
         int[]? UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
 
-        HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, out UiaCore.IAccessibleEx? ppRetValOut)
+        unsafe HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, IntPtr* ppRetValOut)
         {
+            if (ppRetValOut == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             // No need to implement this for patterns and properties
-            ppRetValOut = null;
+            *ppRetValOut = IntPtr.Zero;
             return HRESULT.E_NOTIMPL;
         }
 
@@ -1989,7 +1994,6 @@ namespace System.Windows.Forms
 
         internal virtual void ScrollIntoView()
         {
-            Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
         }
     }
 }

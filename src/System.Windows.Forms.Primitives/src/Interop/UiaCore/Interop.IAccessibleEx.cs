@@ -58,7 +58,7 @@ internal static partial class Interop
             [PreserveSig]
             HRESULT ConvertReturnedElement(
                 IRawElementProviderSimple pIn,
-                out IAccessibleEx? ppRetValOut);
+                IntPtr* ppRetValOut);
         }
     }
 }
