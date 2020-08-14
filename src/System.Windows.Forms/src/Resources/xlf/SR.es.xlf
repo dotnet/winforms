@@ -4219,11 +4219,6 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">Editar</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8749,11 +8744,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Orden descendente.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Indicador giratorio</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">

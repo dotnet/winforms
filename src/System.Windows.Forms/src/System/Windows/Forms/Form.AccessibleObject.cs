@@ -29,6 +29,13 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => _owner.Bounds;
 
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                return propertyID == UiaCore.UIA.NamePropertyId
+                    ? Name
+                    : base.GetPropertyValue(propertyID);
+            }
+
             internal override bool IsIAccessibleExSupported()
             {
                 if (_owner != null)
@@ -38,13 +45,6 @@ namespace System.Windows.Forms
 
                 return base.IsIAccessibleExSupported();
             }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                    UiaCore.UIA.LegacyIAccessiblePatternId => true,
-                    _ => base.IsPatternSupported(patternId),
-                };
 
             internal override void SetValue(string newValue)
             {

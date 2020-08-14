@@ -4219,11 +4219,6 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">Editar</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8749,11 +8744,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Classificado em ordem decrescente.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Controle giratório</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">

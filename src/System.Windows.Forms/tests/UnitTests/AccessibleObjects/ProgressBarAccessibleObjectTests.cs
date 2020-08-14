@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ownerControl.Handle, accessibilityObject.Handle);
             Assert.Null(accessibilityObject.Help);
             Assert.Null(accessibilityObject.KeyboardShortcut);
-            Assert.Equal(SR.ProgressBarDefaultAccessibleName, accessibilityObject.Name);
+            Assert.Null(accessibilityObject.Name);
             Assert.Equal(AccessibleRole.ProgressBar, accessibilityObject.Role);
             Assert.Same(ownerControl, accessibilityObject.Owner);
             Assert.NotNull(accessibilityObject.Parent);

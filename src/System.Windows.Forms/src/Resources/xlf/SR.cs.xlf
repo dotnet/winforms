@@ -4219,11 +4219,6 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Upravit</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8749,11 +8744,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">Seřazeno sestupně</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Číselník</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">

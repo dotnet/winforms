@@ -15,20 +15,5 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
             Assert.NotNull(accessibleObject);
         }
-
-        [WinFormsFact]
-        public void DomainUpDownAccessibleObject_NameIsNotEqualControlType()
-        {
-            using DomainUpDown numericUpDown = new DomainUpDown();
-            string accessibleName = numericUpDown.AccessibilityObject.Name;
-            string controlType = SR.SpinnerAccessibleName;
-
-            // Mas requires us to have no same AccessibleName and LocalizedControlType,
-            // please see the requirement (Section 508 502.3.1).
-            // So we need to check if these properties are not equal.
-            // In this specific case, we can't have some positive Assert.
-            // ToLower method used to be case insensitive.
-            Assert.NotEqual(accessibleName.ToLower(), controlType.ToLower());
-        }
     }
 }

@@ -225,15 +225,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return objValue.GetType().Name;
                     }
-                    else
-                    {
-                        return site.Name;
-                    }
+
+                    return site.Name;
                 }
-                else if (objValue != null)
+
+                if (objValue != null)
                 {
                     return objValue.ToString();
                 }
+
                 return null;
             }
         }

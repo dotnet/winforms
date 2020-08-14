@@ -27,23 +27,6 @@ namespace System.Windows.Forms
 
             internal override bool IsReadOnly => owner.ReadOnly;
 
-            public override string Name
-            {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        return name;
-                    }
-                    else
-                    {
-                        // The default name should not be localized.
-                        return "DataGridView";
-                    }
-                }
-            }
-
             public override AccessibleRole Role
             {
                 get

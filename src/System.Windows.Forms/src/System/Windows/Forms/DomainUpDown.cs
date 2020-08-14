@@ -702,15 +702,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <summary>
-            ///  Gets or sets the accessible name.
-            /// </summary>
-            public override string Name
-            {
-                get => base.Name ?? SR.DefaultDomainUpDownAccessibleName;
-                set => base.Name = value;
-            }
-
             private DomainItemListAccessibleObject ItemList
             {
                 get

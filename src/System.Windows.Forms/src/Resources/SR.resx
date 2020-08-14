@@ -6530,9 +6530,6 @@ Stack trace where the illegal operation occurred was:
   <data name="DateTimePickerLocalizedControlType" xml:space="preserve">
     <value>date and time picker</value>
   </data>
-  <data name="SpinnerAccessibleName" xml:space="preserve">
-    <value>Spinner</value>
-  </data>
   <data name="LiveRegionAutomationLiveSettingDescr" xml:space="preserve">
     <value>The politeness level that a client should use to notify the user of changes to this live region.</value>
   </data>
@@ -6592,9 +6589,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="DefaultNumericUpDownAccessibleName" xml:space="preserve">
     <value>NumericUpDown</value>
-  </data>
-  <data name="DefaultDomainUpDownAccessibleName" xml:space="preserve">
-    <value>DomainUpDown</value>
   </data>
   <data name="DefaultUpDownButtonsAccessibleName" xml:space="preserve">
     <value>UpDown</value>

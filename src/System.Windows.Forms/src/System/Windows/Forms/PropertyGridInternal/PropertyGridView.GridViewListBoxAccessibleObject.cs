@@ -45,7 +45,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                 }
-                else if (direction == UiaCore.NavigateDirection.NextSibling)
+
+                if (direction == UiaCore.NavigateDirection.NextSibling)
                 {
                     return _owningPropertyGridView.Edit.AccessibilityObject;
                 }
@@ -56,7 +57,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             public override string? Name
             {
                 get => base.Name ?? SR.PropertyGridEntryValuesListDefaultAccessibleName;
-                set => base.Name = value;
             }
 
             /// <summary>

@@ -4219,11 +4219,6 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">編輯</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -8749,11 +8744,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="SortedDescendingAccessibleStatus">
         <source>Sorted descending.</source>
         <target state="translated">已遞減排序。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">進度環</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
