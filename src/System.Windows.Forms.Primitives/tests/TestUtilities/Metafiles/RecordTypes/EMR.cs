@@ -2,14 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Runtime.InteropServices;
+#nullable enable
 
-internal static partial class Interop
+using System.Runtime.InteropServices;
+using static Interop;
+
+namespace System.Windows.Forms.Metafiles
 {
-    internal static partial class Gdi32
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct EMR
     {
-        [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public static extern HGDIOBJ GetStockObject(StockObject nIndex);
+        public Gdi32.EMR iType;
+        public uint nSize;
     }
 }

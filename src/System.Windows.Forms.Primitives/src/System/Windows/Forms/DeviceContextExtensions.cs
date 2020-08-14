@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         {
             using var penScope = new Gdi32.SelectObjectScope(hdc, hpen);
             using var ropScope = new Gdi32.SetRop2Scope(hdc, Gdi32.R2.COPYPEN);
-            using var brushScope = new Gdi32.SelectObjectScope(hdc, Gdi32.GetStockObject(Gdi32.StockObject.HOLLOW_BRUSH));
+            using var brushScope = new Gdi32.SelectObjectScope(hdc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
 
             Gdi32.Rectangle(hdc, left, top, right, bottom);
         }

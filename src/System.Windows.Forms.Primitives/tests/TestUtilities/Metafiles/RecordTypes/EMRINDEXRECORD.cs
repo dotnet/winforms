@@ -2,29 +2,35 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     /// <summary>
-    ///  Record that represents a 16 bit Poly record.
+    ///  Record that represents an index.
     /// </summary>
     /// <remarks>
     ///   Not an actual Win32 define, encapsulates:
     ///
-    ///   - EMRSETTEXTCOLOR
-    ///   - EMRSETBKCOLOR
+    ///   - EMRSELECTOBJECT
+    ///   - EMRDELETEOBJECT
+    ///   - EMRSELECTPALETTE
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRSETCOLOR
+    internal struct EMRINDEXRECORD
     {
         public EMR emr;
-        public COLORREF crColor;
+        public uint index;
+
+        public bool IsStockObject => (index & 0x80000000) != 0;
+        public Gdi32.StockObject StockObject => (Gdi32.StockObject)index;
 
         public override string ToString()
-        {
-            return $"[EMR{emr.iType}] Color: {crColor.ToSystemColorString()}";
-        }
+            => IsStockObject
+                ? $"[EMR{emr.iType}] StockObject: {StockObject}"
+                : $"[EMR{emr.iType}] Index: {index}";
     }
 }

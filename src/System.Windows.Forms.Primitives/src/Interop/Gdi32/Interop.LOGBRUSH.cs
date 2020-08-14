@@ -11,7 +11,7 @@ internal static partial class Interop
         public struct LOGBRUSH
         {
             public BS lbStyle;
-            public int lbColor;
+            public COLORREF lbColor;
             public IntPtr lbHatch;
         }
     }

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -13,23 +15,18 @@ namespace System.Windows.Forms.Metafiles
     /// <remarks>
     ///   Not an actual Win32 define, encapsulates:
     ///
-    ///  - EMRPOLYLINE16
-    ///  - EMRPOLYBEZIER16
-    ///  - EMRPOLYGON16
-    ///  - EMRPOLYBEZIERTO16
-    ///  - EMRPOLYLINETO16
+    ///   - EMRSETTEXTCOLOR
+    ///   - EMRSETBKCOLOR
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRPOLY16
+    internal struct EMRSETCOLOR
     {
         public EMR emr;
-        public RECT rclBounds;          // Inclusive-inclusive bounds in device units
-        public uint cpts;
-        public POINTS apts;
+        public COLORREF crColor;
 
         public override string ToString()
         {
-            return $"[EMR{emr.iType}] Bounds: {rclBounds} Points: {cpts}";
+            return $"[EMR{emr.iType}] Color: {crColor.ToSystemColorString()}";
         }
     }
 }
