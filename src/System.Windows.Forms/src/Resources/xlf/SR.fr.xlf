@@ -5686,6 +5686,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Le handle Win32 passé à {0} n'est pas valide ou d'un type incorrect.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">La valeur '{1}' n'est pas valide pour '{0}'. '{0}' doit être inférieur à {2}.</target>

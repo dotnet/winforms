@@ -5686,6 +5686,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{0} öğesine geçirilen Win32 işleyicisi geçerli değil veya yanlış türde.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">'{1}' değeri '{0}' için geçerli değil. '{0}' değerinin {2} değerinden küçük olması gerekir.</target>

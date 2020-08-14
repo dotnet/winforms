@@ -5686,6 +5686,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der an {0} übergebene Win32-Handle ist ungültig oder hat den falschen Typ.</target>
         <note />
       </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="new">Invalid HDC type: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
         <source>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</source>
         <target state="translated">Der Wert {1} ist für {0} ungültig. {0} muss kleiner als {2} sein.</target>

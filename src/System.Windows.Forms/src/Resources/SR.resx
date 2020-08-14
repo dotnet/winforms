@@ -6725,4 +6725,7 @@ Stack trace where the illegal operation occurred was:
   <data name="AccessibleActionDoubleClick" xml:space="preserve">
     <value>Double Click</value>
   </data>
+  <data name="InvalidHdcType" xml:space="preserve">
+    <value>Invalid HDC type: {0}</value>
+  </data>
 </root>
