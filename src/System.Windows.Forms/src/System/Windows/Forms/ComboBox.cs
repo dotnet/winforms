@@ -3022,17 +3022,17 @@ namespace System.Windows.Forms
             {
                 if (SelectionLength != 0)
                 {
-                    SelectedText = "";
+                    SelectedText = string.Empty;
                 }
                 else if (SelectionStart != 0)
                 {
-                    int boundaryStart = ClientUtils.GetWordBoundaryStart(Text.ToCharArray(), SelectionStart);
+                    int boundaryStart = ClientUtils.GetWordBoundaryStart(Text, SelectionStart);
                     int length = SelectionStart - boundaryStart;
                     BeginUpdateInternal();
                     SelectionStart = boundaryStart;
                     SelectionLength = length;
                     EndUpdateInternal();
-                    SelectedText = "";
+                    SelectedText = string.Empty;
                 }
                 return true;
             }

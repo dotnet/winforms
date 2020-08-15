@@ -210,17 +210,17 @@ namespace System.Windows.Forms
             {
                 if (SelectionLength != 0)
                 {
-                    SetSelectedTextInternal("", clearUndo: false);
+                    SetSelectedTextInternal(string.Empty, clearUndo: false);
                 }
                 else if (SelectionStart != 0)
                 {
-                    int boundaryStart = ClientUtils.GetWordBoundaryStart(Text.ToCharArray(), SelectionStart);
+                    int boundaryStart = ClientUtils.GetWordBoundaryStart(Text, SelectionStart);
                     int length = SelectionStart - boundaryStart;
                     BeginUpdateInternal();
                     SelectionStart = boundaryStart;
                     SelectionLength = length;
                     EndUpdateInternal();
-                    SetSelectedTextInternal("", clearUndo: false);
+                    SetSelectedTextInternal(string.Empty, clearUndo: false);
                 }
                 return true;
             }
