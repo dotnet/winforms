@@ -274,6 +274,7 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 258);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(844, 100);
+            this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 2;
             // 
             // Column1
@@ -336,6 +337,7 @@
             this.dataGridView2.Location = new System.Drawing.Point(0, 28);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(350, 224);
+            this.dataGridView2.StandardTab = true;
             this.dataGridView2.TabIndex = 1;
             // 
             // DataControls

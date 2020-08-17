@@ -267,7 +267,7 @@
             // 
             // toolStripComboBox1
             // 
-            this.toolStripComboBox1.AccessibleName = "ComboBox";
+            this.toolStripComboBox1.AccessibleName = "TSCB";
             this.toolStripComboBox1.Items.AddRange(new object[] {
             "1",
             "2",
