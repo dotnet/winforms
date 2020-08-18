@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Buffers;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -1343,9 +1344,7 @@ namespace System.Windows.Forms
             get
             {
                 ForceHandleCreate();
-
-                string text = StreamOut(SF.F_SELECTION | SF.TEXT | SF.UNICODE);
-                return text;
+                return GetTextEx(GT.SELECTION);
             }
             set
             {
@@ -1443,7 +1442,7 @@ namespace System.Windows.Forms
                     //
                     ForceHandleCreate();
 
-                    return StreamOut(SF.TEXT | SF.UNICODE);
+                    return GetTextEx();
                 }
             }
             set
@@ -3135,6 +3134,50 @@ namespace System.Windows.Forms
                 // release any storage space held.
                 editStream = null;
             }
+        }
+
+        private unsafe string GetTextEx(GT flags = GT.DEFAULT)
+        {
+            Debug.Assert(IsHandleCreated);
+
+            // Unicode UTF-16, little endian byte order (BMP of ISO 10646); available only to managed applications
+            // https://docs.microsoft.com/windows/win32/intl/code-page-identifiers
+            const int UNICODE = 1200;
+
+            GETTEXTLENGTHEX gtl = new GETTEXTLENGTHEX
+            {
+                codepage = UNICODE,
+                flags = GTL.DEFAULT
+            };
+
+            GETTEXTLENGTHEX* pGtl = &gtl;
+            int expectedLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, (IntPtr)pGtl));
+            if (expectedLength == (int)HRESULT.E_INVALIDARG)
+                throw new Win32Exception(expectedLength);
+
+            // buffer has to have enough space for final \0. Without this, the last character is missing!
+            // in case flags contains GT_SELECTION we'll allocate too much memory (for the whole text and not just the selection),
+            // but there's no appropriate flag for EM_GETTEXTLENGTHEX
+            int maxLength = (expectedLength + 1) * sizeof(char);
+
+            GETTEXTEX gt = new GETTEXTEX
+            {
+                cb = (uint)maxLength,
+                flags = flags,
+                codepage = UNICODE,
+            };
+
+            char[] text = ArrayPool<char>.Shared.Rent(maxLength);
+            string result;
+            GETTEXTEX* pGt = &gt;
+            fixed (char* pText = text)
+            {
+                int actualLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTEX, (IntPtr)pGt, (IntPtr)pText));
+                result = new string(pText, 0, actualLength);
+            }
+
+            ArrayPool<char>.Shared.Return(text);
+            return result;
         }
 
         private void UpdateOleCallback()

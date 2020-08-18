@@ -2568,7 +2568,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(64000, 0)]
         [InlineData(0x7FFFFFFE, 0)]
         [InlineData(int.MaxValue, 0)]
-        public void RichTextBox_RightMargin_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value,  int expectedCreatedCallCount)
+        public void RichTextBox_RightMargin_SetWithCustomOldValueWithHandle_GetReturnsExpected(int value, int expectedCreatedCallCount)
         {
             using var control = new RichTextBox
             {
@@ -2727,6 +2727,23 @@ namespace System.Windows.Forms.Tests
             rtf = control.Rtf;
             Assert.StartsWith("{\\rtf", rtf);
             Assert.Empty(control.Text);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("{\\rtf1Hello World}", "Hello World")]
+        [InlineData(@"{\rtf1\ansi{Sample for {\v HIDDEN }text}}", "Sample for HIDDEN text")]
+        public void RichTextBox_Rtf_Set_GetTextExpected(string rtf, string plainText)
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = rtf
+            };
+
+            string readRtf = control.Rtf;
+            Assert.StartsWith("{\\rtf", readRtf);
+            Assert.NotSame(readRtf, control.Rtf);
+            Assert.Equal(plainText, control.Text);
             Assert.True(control.IsHandleCreated);
         }
 
@@ -3491,14 +3508,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_SelectedText_GetCantCreateHandle_GetReturnsExpected()
-        {
-            using var control = new CantCreateHandleRichTextBox();
-            Assert.Empty(control.SelectedText);
-            Assert.False(control.IsHandleCreated);
-        }
-
-        [WinFormsFact]
         public void RichTextBox_SelectedText_GetDisposed_ThrowsObjectDisposedException()
         {
             using var control = new RichTextBox();
@@ -3618,21 +3627,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
-        }
-
-        [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void RichTextBox_SelectedText_SetCantCreateHandle_GetReturnsExpected(string value)
-        {
-            using var control = new CantCreateHandleRichTextBox();
-            control.SelectedText = value;
-            Assert.Empty(control.SelectedText);
-            Assert.False(control.IsHandleCreated);
-
-            // Set same.
-            control.SelectedText = value;
-            Assert.Empty(control.SelectedText);
-            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -6815,14 +6809,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_Text_GetCantCreateHandleWithRtf_ReturnsExpected()
+        public void RichTextBox_Text_GetWithRtf_ReturnsExpected()
         {
-            using var control = new CantCreateHandleRichTextBox
+            using var control = new RichTextBox
             {
                 Rtf = "{\\rtf Hello World}"
             };
-            Assert.Empty(control.Text);
-            Assert.False(control.IsHandleCreated);
+            Assert.Equal("Hello World", control.Text);
+            Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -8077,13 +8071,13 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, -1 };
 
             yield return new object[] { "abc", Array.Empty<char>(), 0, -1 };
-            yield return new object[] { "abc", new char[] { 'a' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0,  0 };
-            yield return new object[] { "abc", new char[] { 'c', 'b' },0,  1 };
-            yield return new object[] { "abc", new char[] { 'b' },0,  1 };
+            yield return new object[] { "abc", new char[] { 'a' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0, 0 };
+            yield return new object[] { "abc", new char[] { 'c', 'b' }, 0, 1 };
+            yield return new object[] { "abc", new char[] { 'b' }, 0, 1 };
             yield return new object[] { "abc", new char[] { 'd' }, 0, -1 };
             yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, -1 };
 
@@ -8121,13 +8115,13 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { string.Empty, new char[] { 'a', 'b', 'c' }, 0, end, -1 };
 
                 yield return new object[] { "abc", Array.Empty<char>(), 0, end, -1 };
-                yield return new object[] { "abc", new char[] { 'a' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' },0, end,  0 };
-                yield return new object[] { "abc", new char[] { 'c', 'b' },0, end,  1 };
-                yield return new object[] { "abc", new char[] { 'b' },0, end,  1 };
+                yield return new object[] { "abc", new char[] { 'a' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'a', 'b', 'c', 'd' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b', 'a' }, 0, end, 0 };
+                yield return new object[] { "abc", new char[] { 'c', 'b' }, 0, end, 1 };
+                yield return new object[] { "abc", new char[] { 'b' }, 0, end, 1 };
                 yield return new object[] { "abc", new char[] { 'd' }, 0, end, -1 };
                 yield return new object[] { "abc", new char[] { 'A', 'B', 'C' }, 0, end, -1 };
 
@@ -10332,6 +10326,50 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void RichTextBox_CheckDefaultNativeControlVersions()
+        {
+            using var control = new RichTextBox();
+            control.CreateControl();
+
+            Assert.Contains("RICHEDIT50W", GetClassName(control.Handle), StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_CheckRichEditWithVersionCanCreateOldVersions()
+        {
+            using (var riched32 = new RichEditWithVersion("riched32.dll", "RichEdit"))
+            {
+                riched32.CreateControl();
+                Assert.Contains(".RichEdit.", GetClassName(riched32.Handle), StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+            {
+                riched20.CreateControl();
+                Assert.Contains(".RichEdit20W.", GetClassName(riched20.Handle), StringComparison.InvariantCultureIgnoreCase);
+
+                string rtfString = @"{\rtf1\ansi{" +
+                    @"The next line\par " +
+                    @"is {\v ###NOT### }hidden\par in plain text!}}";
+
+                riched20.Rtf = rtfString;
+
+                using var richTextBox = new RichTextBox();
+                richTextBox.CreateControl();
+                richTextBox.Rtf = rtfString;
+
+                Assert.Equal(riched20.TextLength, richTextBox.TextLength);
+                Assert.Equal(riched20.Text, richTextBox.Text);
+                Assert.Equal(richTextBox.Text.Length, richTextBox.TextLength);
+
+                int startOfIs = riched20.Text.IndexOf("is");
+                int endOfHidden = riched20.Text.IndexOf("hidden") + "hidden".Length;
+                richTextBox.Select(startOfIs, endOfHidden - startOfIs);
+                Assert.Equal("is ###NOT### hidden", richTextBox.SelectedText);
+            }
+        }
+
         private class CustomGetParaFormatRichTextBox : RichTextBox
         {
             public bool MakeCustom { get; set; }
@@ -10382,7 +10420,7 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        public class SubRichTextBox : RichTextBox
+        private class SubRichTextBox : RichTextBox
         {
             public new bool CanEnableIme => base.CanEnableIme;
 
@@ -10461,6 +10499,59 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private static string GetClassName(IntPtr hWnd)
+        {
+            const int MaxClassName = 256;
+            StringBuilder sb = new StringBuilder(MaxClassName);
+            UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), sb, MaxClassName);
+            return sb.ToString();
+        }
+
+        private class RichEditWithVersion : RichTextBox
+        {
+            public RichEditWithVersion(string nativeDll, string windowClassName)
+            {
+                this.nativeDll = nativeDll;
+                this.windowClassName = windowClassName;
+            }
+
+            private IntPtr _nativeDllHandle = IntPtr.Zero;
+            protected string nativeDll;
+            protected string windowClassName;
+
+            protected override CreateParams CreateParams
+            {
+                get
+                {
+                    CreateParams cp = base.CreateParams;
+
+                    if (_nativeDllHandle == IntPtr.Zero &&
+                        !string.IsNullOrEmpty(nativeDll)) // CreateParams is called in the base class constructor, before nativeDll is assigned.
+                    {
+                        _nativeDllHandle = NativeLibrary.Load(nativeDll);
+                    }
+
+                    if (!string.IsNullOrEmpty(windowClassName))
+                    {
+                        cp.ClassName = windowClassName;
+                    }
+
+                    return cp;
+                }
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                base.Dispose(disposing);
+
+                if (_nativeDllHandle != IntPtr.Zero)
+                {
+                    NativeLibrary.Free(_nativeDllHandle);
+                    _nativeDllHandle = IntPtr.Zero;
+                }
+            }
         }
     }
 }
