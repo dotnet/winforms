@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project for creating a controls that targets .NET Core Windows Forms (WinForms)",
   "groupIdentity": "Microsoft.Common.WinForms.ControlLibrary",
-  "precedence": "5000",
-  "identity": "Microsoft.Common.WinForms.ControlLibrary.CSharp.5.0",
+  "precedence": "6000",
+  "identity": "Microsoft.Common.WinForms.ControlLibrary.CSharp.6.0",
   "shortName": "winformscontrollib",
   "tags": {
     "language": "C#",
@@ -35,10 +35,14 @@
         {
           "choice": "net5.0",
           "description": "Target net5.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": "Target net6.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net5.0"
+      "defaultValue": "net6.0"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",
