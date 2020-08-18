@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project for creating a .NET Core Windows Forms (WinForms) Application",
   "groupIdentity": "Microsoft.Common.WinForms",
-  "precedence": "5000",
-  "identity": "Microsoft.Common.WinForms.VisualBasic.5.0",
+  "precedence": "6000",
+  "identity": "Microsoft.Common.WinForms.VisualBasic.6.0",
   "shortName": "winforms",
   "tags": {
     "language": "VB",
@@ -35,10 +35,14 @@
         {
           "choice": "net5.0",
           "description": "Target net5.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": "Target net6.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net5.0"
+      "defaultValue": "net6.0"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",
