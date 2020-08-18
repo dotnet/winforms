@@ -2731,6 +2731,23 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData("{\\rtf1Hello World}", "Hello World")]
+        [InlineData(@"{\rtf1\ansi{Sample for {\v HIDDEN }text}}", "Sample for HIDDEN text")]
+        public void RichTextBox_Rtf_Set_GetTextExpected(string rtf, string plainText)
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = rtf
+            };
+
+            string readRtf = control.Rtf;
+            Assert.StartsWith("{\\rtf", readRtf);
+            Assert.NotSame(readRtf, control.Rtf);
+            Assert.Equal(plainText, control.Text);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_Rtf_SetWithHandle_GetReturnsExpected(string nullOrEmpty)
         {
@@ -3520,6 +3537,24 @@ namespace System.Windows.Forms.Tests
             // Set same.
             control.SelectedText = value;
             Assert.Empty(control.SelectedText);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("{\\rtf1Hello World}", 6, 5, "World")]
+        [InlineData(@"{\rtf1\ansi{Sample for {\v HIDDEN }text}}", 11, 6, "HIDDEN")]
+        public void RichTextBox_SelectedText_GetReturnsExpected(string rtf, int selStart, int selLen, string plainText)
+        {
+            using var control = new RichTextBox
+            {
+                Rtf = rtf
+            };
+
+            string readRtf = control.Rtf;
+            control.Select(selStart, selLen);
+            Assert.StartsWith("{\\rtf", readRtf);
+            Assert.NotSame(readRtf, control.Rtf);
+            Assert.Equal(plainText, control.SelectedText);
             Assert.True(control.IsHandleCreated);
         }
 
@@ -6841,6 +6876,18 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { autoSize, string.Empty, string.Empty };
                 yield return new object[] { autoSize, "text", "text" };
             }
+        }
+
+        [WinFormsFact]
+        public void RichTextBox_Text_GetTextHiddenInRtf()
+        {
+            string rtfString = @"{\rtf1\ansi{Text {\v with hidden parts }must be returned}}";
+
+            var rtb = new RichTextBox();
+            rtb.CreateControl();
+            rtb.Rtf = rtfString;
+
+            Assert.Equal("Text with hidden parts must be returned", rtb.Text);
         }
 
         [WinFormsTheory]
@@ -10461,104 +10508,6 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
-        }
-
-        private class RichEditWithVersion : RichTextBox
-        {
-            public RichEditWithVersion(string nativeDll, string windowClassName)
-            {
-                this.nativeDll = nativeDll;
-                this.windowClassName = windowClassName;
-            }
-
-            private IntPtr _nativeDllHandle = IntPtr.Zero;
-            protected string nativeDll;
-            protected string windowClassName;
-
-            protected override CreateParams CreateParams
-            {
-                get
-                {
-                    CreateParams cp = base.CreateParams;
-
-                    if (_nativeDllHandle == IntPtr.Zero &&
-                        !string.IsNullOrEmpty(nativeDll)) // CreateParams is called in the base class constructor, before nativeDll is assigned.
-                    {
-                        _nativeDllHandle = NativeLibrary.Load(nativeDll);
-                    }
-
-                    if (!string.IsNullOrEmpty(windowClassName))
-                    {
-                        cp.ClassName = windowClassName;
-                    }
-
-                    return cp;
-                }
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                base.Dispose(disposing);
-                if (_nativeDllHandle != IntPtr.Zero)
-                {
-                    NativeLibrary.Free(_nativeDllHandle);
-                }
-            }
-        }
-
-        private static string GetClassName(IntPtr hWnd)
-        {
-            StringBuilder sb = new StringBuilder(256);
-            UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), sb, sb.Capacity);
-            return sb.ToString();
-        }
-
-        [WinFormsFact]
-        public void RichTextBox_CheckDefaultNativeControlVersions()
-        {
-            var rtb = new RichTextBox();
-            rtb.CreateControl();
-            Assert.Contains("RichEdit50W", GetClassName(rtb.Handle), StringComparison.InvariantCultureIgnoreCase);
-            rtb.Dispose();
-        }
-
-        [WinFormsFact]
-        public void RichTextBox_CheckRichEditWithVersionCanCreateOldVersions()
-        {
-            var rtb1 = new RichEditWithVersion("riched32.dll", "RichEdit");
-            rtb1.CreateControl();
-            Assert.Contains(".RichEdit.", GetClassName(rtb1.Handle), StringComparison.InvariantCultureIgnoreCase);
-            rtb1.Dispose();
-
-            var rtb2 = new RichEditWithVersion("riched20.dll", "RichEdit20W");
-            rtb2.CreateControl();
-            Assert.Contains(".RichEdit20W.", GetClassName(rtb2.Handle), StringComparison.InvariantCultureIgnoreCase);
-            rtb2.Dispose();
-        }
-
-        [WinFormsFact]
-        public void RichTextBox_HiddenTextOnlyAffectsRtf()
-        {
-            string rtfString = @"{\rtf1\ansi{" +
-                @"The next line\par " +
-                @"is {\v ###NOT### }hidden\par in plain text!}}";
-
-            var rtb = new RichTextBox();
-            rtb.CreateControl();
-            rtb.Rtf = rtfString;
-
-            var rtb2 = new RichEditWithVersion("RichEd20.dll", "RichEdit20W"); // RichEdit 2/3 performed correctly
-            rtb2.CreateControl();
-            rtb2.Rtf = rtfString;
-
-            Assert.Equal(rtb2.TextLength, rtb.TextLength);
-            Assert.Equal(rtb2.Text, rtb.Text);
-            Assert.Equal(rtb.Text.Length, rtb.TextLength);
-
-            int startOfIs = rtb2.Text.IndexOf("is");
-            int endOfHidden = rtb2.Text.IndexOf("hidden")+"hidden".Length;
-            rtb.Select(startOfIs, endOfHidden-startOfIs);
-            Assert.Equal("is ###NOT### hidden", rtb.SelectedText);
         }
     }
 }
