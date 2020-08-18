@@ -2079,6 +2079,7 @@ System.Windows.Forms.DragEventHandler
 System.Windows.Forms.DrawItemEventArgs
 System.Windows.Forms.DrawItemEventArgs.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.DrawItemEventArgs.Bounds.get -> System.Drawing.Rectangle
+System.Windows.Forms.DrawItemEventArgs.Dispose() -> void
 System.Windows.Forms.DrawItemEventArgs.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.DrawItemEventArgs.Index.get -> int
 System.Windows.Forms.DrawItemEventArgs.State.get -> System.Windows.Forms.DrawItemState
@@ -8170,6 +8171,14 @@ static System.Windows.Forms.TaskDialogButton.operator ==(System.Windows.Forms.Ta
 static System.Windows.Forms.TaskDialogFootnote.implicit operator System.Windows.Forms.TaskDialogFootnote!(string! footnoteText) -> System.Windows.Forms.TaskDialogFootnote!
 static System.Windows.Forms.TaskDialogVerificationCheckBox.implicit operator System.Windows.Forms.TaskDialogVerificationCheckBox!(string! verificationText) -> System.Windows.Forms.TaskDialogVerificationCheckBox!
 static System.Windows.Forms.TextBoxRenderer.IsSupported.get -> bool
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font! font, System.Drawing.Point pt, System.Drawing.Color foreColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font! font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Windows.Forms.TextFormatFlags flags) -> void
 static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor) -> void
 static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
 static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Point pt, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Windows.Forms.TextFormatFlags flags) -> void
@@ -8178,9 +8187,15 @@ static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext!
 static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
 static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Windows.Forms.TextFormatFlags flags) -> void
 static System.Windows.Forms.TextRenderer.DrawText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Rectangle bounds, System.Drawing.Color foreColor, System.Windows.Forms.TextFormatFlags flags) -> void
+static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(System.Drawing.IDeviceContext! dc, string? text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
+static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(string? text, System.Drawing.Font? font) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(string? text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(string? text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
@@ -8933,6 +8948,7 @@ virtual System.Windows.Forms.Design.ComponentEditorPage.SupportsHelp() -> bool
 virtual System.Windows.Forms.Design.PropertyTab.Dispose() -> void
 virtual System.Windows.Forms.Design.PropertyTab.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetInitialComponentEditorPageIndex() -> int
+virtual System.Windows.Forms.DrawItemEventArgs.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.DrawItemEventArgs.DrawBackground() -> void
 virtual System.Windows.Forms.DrawItemEventArgs.DrawFocusRectangle() -> void
 virtual System.Windows.Forms.ErrorProvider.RightToLeft.get -> bool
