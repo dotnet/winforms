@@ -26,7 +26,7 @@ namespace System.Windows.Forms
                 new int[4]
                 {
                     RuntimeIDFirstItem,
-                    _calendarAccessibleObject.Owner.Handle.ToInt32(),
+                    (int)(long)_calendarAccessibleObject.Owner.InternalHandle,
                     Parent.GetChildId(),
                     GetChildId()
                 };

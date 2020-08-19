@@ -12,30 +12,33 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBoxItemAccessibleObject_Get_Not_ThrowsException()
         {
-            using var control = new ComboBox();
-
-            var item1 = new HashNotImplementedObject();
-            var item2 = new HashNotImplementedObject();
-            var item3 = new HashNotImplementedObject();
-
-            control.Items.AddRange(new[] { item1, item2, item3 });
-
-            var comboBoxAccessibleObject = (ComboBox.ComboBoxAccessibleObject)control.AccessibilityObject;
-
-            var exceptionThrown = false;
-
-            try
+            using (new NoAssertContext())
             {
-                var item1AccessibleObject= comboBoxAccessibleObject.ItemAccessibleObjects[item1];
-                var item2AccessibleObject = comboBoxAccessibleObject.ItemAccessibleObjects[item2];
-                var item3AccessibleObject = comboBoxAccessibleObject.ItemAccessibleObjects[item3];
-            }
-            catch
-            {
-                exceptionThrown = true;
-            }
+                using var control = new ComboBox();
 
-            Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
+                var item1 = new HashNotImplementedObject();
+                var item2 = new HashNotImplementedObject();
+                var item3 = new HashNotImplementedObject();
+
+                control.Items.AddRange(new[] { item1, item2, item3 });
+
+                var comboBoxAccessibleObject = (ComboBox.ComboBoxAccessibleObject)control.AccessibilityObject;
+
+                var exceptionThrown = false;
+
+                try
+                {
+                    var item1AccessibleObject = comboBoxAccessibleObject.ItemAccessibleObjects[item1];
+                    var item2AccessibleObject = comboBoxAccessibleObject.ItemAccessibleObjects[item2];
+                    var item3AccessibleObject = comboBoxAccessibleObject.ItemAccessibleObjects[item3];
+                }
+                catch
+                {
+                    exceptionThrown = true;
+                }
+
+                Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
+            }
         }
 
         public class HashNotImplementedObject
@@ -49,21 +52,23 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ComboBoxItemAccessibleObject_DataBoundAccessibleName()
         {
-            // Regression test for https://github.com/dotnet/winforms/issues/3549
-
-            using var control = new ComboBox()
+            using (new NoAssertContext())
             {
-                DataSource = TestDataSources.GetPersons(),
-                DisplayMember = TestDataSources.PersonDisplayMember
-            };
+                // Regression test for https://github.com/dotnet/winforms/issues/3549
+                using var control = new ComboBox()
+                {
+                    DataSource = TestDataSources.GetPersons(),
+                    DisplayMember = TestDataSources.PersonDisplayMember
+                };
 
-            ComboBox.ComboBoxAccessibleObject accessibleObject = Assert.IsType<ComboBox.ComboBoxAccessibleObject>(control.AccessibilityObject);
+                ComboBox.ComboBoxAccessibleObject accessibleObject = Assert.IsType<ComboBox.ComboBoxAccessibleObject>(control.AccessibilityObject);
 
-            foreach (Person person in TestDataSources.GetPersons())
-            {
-                var item = accessibleObject.ItemAccessibleObjects[person];
-                AccessibleObject itemAccessibleObject = Assert.IsType<ComboBox.ComboBoxItemAccessibleObject>(item);
-                Assert.Equal(person.Name, itemAccessibleObject.Name);
+                foreach (Person person in TestDataSources.GetPersons())
+                {
+                    var item = accessibleObject.ItemAccessibleObjects[person];
+                    AccessibleObject itemAccessibleObject = Assert.IsType<ComboBox.ComboBoxItemAccessibleObject>(item);
+                    Assert.Equal(person.Name, itemAccessibleObject.Name);
+                }
             }
         }
     }

@@ -2944,15 +2944,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override Rectangle Bounds
             {
-                get
-                {
-                    if (PropertyGridView != null && PropertyGridView.IsHandleCreated)
-                    {
-                        return PropertyGridView.AccessibilityGetGridEntryBounds(owner);
-                    }
-
-                    return Rectangle.Empty;
-                }
+                get => PropertyGridView != null && PropertyGridView.IsHandleCreated
+                    ? PropertyGridView.AccessibilityGetGridEntryBounds(owner)
+                    : Rectangle.Empty;
             }
 
             public override string DefaultAction
@@ -3068,7 +3062,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         runtimeId = new int[3];
                         runtimeId[0] = 0x2a;
-                        runtimeId[1] = (int)(long)owner.GridEntryHost.Handle;
+                        runtimeId[1] = (int)(long)owner.GridEntryHost.InternalHandle;
                         runtimeId[2] = GetHashCode();
                     }
 
@@ -3192,7 +3186,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override void DoDefaultAction()
             {
-                owner.OnOutlineClick(EventArgs.Empty);
+                if (PropertyGridView.IsHandleCreated)
+                {
+                    owner.OnOutlineClick(EventArgs.Empty);
+                }
             }
 
             public override string Name
@@ -3237,6 +3234,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
+                    if (!PropertyGridView.IsHandleCreated)
+                    {
+                        return AccessibleStates.None;
+                    }
+
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
 
                     // Determine focus
@@ -3356,6 +3358,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override void Select(AccessibleSelection flags)
             {
+                if (!PropertyGridView.IsHandleCreated)
+                {
+                    return;
+                }
+
                 // make sure we're on the right thread.
                 //
                 if (PropertyGridView.InvokeRequired)
@@ -3381,6 +3388,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void SetFocus()
             {
+                if (!PropertyGridView.IsHandleCreated)
+                {
+                    return;
+                }
+
                 base.SetFocus();
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

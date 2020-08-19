@@ -4508,10 +4508,14 @@ namespace System.Windows.Forms
 
             public ChildAccessibleObject(ComboBox owner, IntPtr handle)
             {
-                Debug.Assert(owner != null && owner.Handle != IntPtr.Zero, "ComboBox's handle hasn't been created");
+                Debug.Assert(owner?.IsHandleCreated is true, "ComboBox's handle hasn't been created");
 
                 _owner = owner;
-                UseStdAccessibleObjects(handle);
+
+                if (owner?.IsHandleCreated is true)
+                {
+                    UseStdAccessibleObjects(handle);
+                }
             }
 
             public override string Name
@@ -4734,7 +4738,7 @@ namespace System.Windows.Forms
 
                     var runtimeId = new int[4];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owningComboBox.Handle;
+                    runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
                     runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
 
                     var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
@@ -4767,12 +4771,22 @@ namespace System.Windows.Forms
 
             internal unsafe override void SelectItem()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 _owningComboBox.SelectedIndex = GetCurrentIndex();
                 InvalidateRect(new HandleRef(this, _owningComboBox.GetListHandle()), null, BOOL.FALSE);
             }
 
             internal override void AddToSelection()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 SelectItem();
             }
 
@@ -4859,7 +4873,7 @@ namespace System.Windows.Forms
 
             private void ComboBoxDefaultAction(bool expand)
             {
-                if (_owningComboBox.DroppedDown != expand)
+                if (_owningComboBox.IsHandleCreated && _owningComboBox.DroppedDown != expand)
                 {
                     _owningComboBox.DroppedDown = expand;
                 }
@@ -4908,7 +4922,7 @@ namespace System.Windows.Forms
 
                         var runtimeId = new int[3];
                         runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)_owningComboBox.Handle;
+                        runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
                         runtimeId[2] = _owningComboBox.GetHashCode();
 
                         return runtimeId;
@@ -4932,7 +4946,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _owningComboBox.DroppedDown == true ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                    return _owningComboBox.IsHandleCreated && _owningComboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
 
@@ -4973,7 +4987,7 @@ namespace System.Windows.Forms
                 {
                     if (_dropDownButtonUiaProvider is null)
                     {
-                        _dropDownButtonUiaProvider = new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox, _owningComboBox.Handle);
+                        _dropDownButtonUiaProvider = new ComboBoxChildDropDownButtonUiaProvider(_owningComboBox, _owningComboBox.InternalHandle);
                     }
 
                     return _dropDownButtonUiaProvider;
@@ -5095,7 +5109,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return _owningComboBox.Handle;
+                        return _owningComboBox.InternalHandle;
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
                         return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
                     case UiaCore.UIA.IsValuePatternAvailablePropertyId:
@@ -5113,6 +5127,11 @@ namespace System.Windows.Forms
 
             internal void SetComboBoxItemFocus()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 var selectedItem = _owningComboBox.SelectedItem;
                 if (selectedItem is null)
                 {
@@ -5127,6 +5146,11 @@ namespace System.Windows.Forms
 
             internal void SetComboBoxItemSelection()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 var selectedItem = _owningComboBox.SelectedItem;
                 if (selectedItem is null)
                 {
@@ -5141,6 +5165,11 @@ namespace System.Windows.Forms
 
             internal override void SetFocus()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 base.SetFocus();
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
@@ -5439,15 +5468,26 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 int selectedIndex = _owningComboBox.SelectedIndex;
                 return GetChildFragment(selectedIndex);
             }
 
             internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return Array.Empty<UiaCore.IRawElementProviderSimple>();
+                }
+
                 int selectedIndex = _owningComboBox.SelectedIndex;
 
                 AccessibleObject itemAccessibleObject = GetChildFragment(selectedIndex);
+
                 if (itemAccessibleObject != null)
                 {
                     return new UiaCore.IRawElementProviderSimple[] {
@@ -5508,7 +5548,7 @@ namespace System.Windows.Forms
                 {
                     var runtimeId = new int[3];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owningComboBox.Handle;
+                    runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
                     runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
 
                     return runtimeId;
@@ -5680,7 +5720,7 @@ namespace System.Windows.Forms
                 {
                     var runtimeId = new int[5];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.Handle;
+                    runtimeId[1] = (int)(long)_owner.InternalHandle;
                     runtimeId[2] = _owner.GetHashCode();
                     runtimeId[3] = GetHashCode();
                     runtimeId[4] = GetChildId();
@@ -5919,7 +5959,7 @@ namespace System.Windows.Forms
                 {
                     var runtimeId = new int[5];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.Handle;
+                    runtimeId[1] = (int)(long)_owner.InternalHandle;
                     runtimeId[2] = _owner.GetHashCode();
 
                     // Made up constant from MSAA proxy. When MSAA proxy is used as an accessibility provider,

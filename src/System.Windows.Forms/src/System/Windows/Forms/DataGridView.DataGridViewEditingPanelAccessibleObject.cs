@@ -69,7 +69,7 @@ namespace System.Windows.Forms
 
             internal override void SetFocus()
             {
-                if (_panel.CanFocus)
+                if (_panel.IsHandleCreated && _panel.CanFocus)
                 {
                     _panel.Focus();
                 }

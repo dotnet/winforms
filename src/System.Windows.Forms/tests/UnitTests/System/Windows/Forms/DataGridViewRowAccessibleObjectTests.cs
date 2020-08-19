@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Parent_TestData()
         {
-            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), null  };
+            yield return new object[] { new DataGridViewRowAccessibleObject(new DataGridViewRow()), null };
         }
 
         [Theory]

@@ -48,7 +48,13 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
                 (patternId == UiaCore.UIA.InvokePatternId) || base.IsPatternSupported(patternId);
 
-            internal override void Invoke() => RaiseMouseClick();
+            internal override void Invoke()
+            {
+                if (_calendarAccessibleObject.Owner.IsHandleCreated)
+                {
+                    RaiseMouseClick();
+                }
+            }
         }
     }
 }
