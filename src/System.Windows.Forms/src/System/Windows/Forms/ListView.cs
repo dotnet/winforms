@@ -2669,7 +2669,7 @@ namespace System.Windows.Forms
                         if (OwnerDraw)
                         {
                             using Graphics g = nmcd->nmcd.hdc.CreateGraphics();
-                            DrawListViewItemEventArgs e =  new DrawListViewItemEventArgs(
+                            DrawListViewItemEventArgs e = new DrawListViewItemEventArgs(
                                 g,
                                 Items[(int)nmcd->nmcd.dwItemSpec],
                                 itemBounds,
@@ -5911,6 +5911,50 @@ namespace System.Windows.Forms
         private unsafe bool WmNotify(ref Message m)
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+
+            if (nmhdr->code == (int)NM.CUSTOMDRAW)
+            {
+                NMCUSTOMDRAW* nmcd = (NMCUSTOMDRAW*)m.LParam;
+                if (true)
+                {
+                    var point = Cursor.Position;
+                    var clientPoint = PointToClient(point);
+
+                    IntPtr hwnd = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+                    if (hwnd != null)
+                    {
+                        RECT lvhRect = new RECT();
+                        User32.GetWindowRect(hwnd, ref lvhRect);
+                        Rectangle rectangle = lvhRect;
+
+                        if (rectangle.Contains(point))
+                        {
+                            int pointX = nmcd->rc.X;
+                            int startColumnPosition = 0;
+                            int indexColumn = -1;
+                            foreach (ColumnHeader column in Columns)
+                            {
+                                int endColumnPosition = startColumnPosition + column.Width;
+                                if (pointX >= startColumnPosition - 1 && pointX < endColumnPosition -1)
+                                {
+                                    indexColumn = column.Index;
+                                    break;
+                                }
+
+                                startColumnPosition = endColumnPosition;
+                            }
+
+                            if (indexColumn > -1)
+                            {
+                                AccessibilityObject?.RaiseAutomationNotification(
+                                    Automation.AutomationNotificationKind.Other,
+                                    Automation.AutomationNotificationProcessing.MostRecent,
+                                    Columns[indexColumn].Text);
+                            }
+                        }
+                    }
+                }
+            }
 
             // column header custom draw message handling
             if (nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
