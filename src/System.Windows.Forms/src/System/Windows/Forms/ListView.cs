@@ -2202,6 +2202,44 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
         }
 
+        internal unsafe void AnnounceColumnHeader(Point point)
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            IntPtr hwnd = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+            if (hwnd == IntPtr.Zero)
+            {
+                return;
+            }
+
+            LVHITTESTINFO lvhi = new()
+            {
+                pt = PointToClient(point)
+            };
+
+            User32.SCROLLINFO si = new()
+            {
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
+                fMask = User32.SIF.POS
+            };
+
+            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
+            {
+                lvhi.pt.X += si.nPos;
+            }
+
+            if (User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, IntPtr.Zero, ref lvhi) != (IntPtr)(-1) && lvhi.iItem > -1)
+            {
+                AccessibilityObject?.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.MostRecent,
+                    Columns[lvhi.iItem].Text);
+            }
+        }
+
         /// <summary>
         ///  Called to add any delayed update items we have to the list view.  We do this because
         ///  we have optimnized the case where a user is only adding items within a beginupdate/endupdate
@@ -5916,6 +5954,16 @@ namespace System.Windows.Forms
         private unsafe bool WmNotify(ref Message m)
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+
+            if (nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening().IsTrue())
+            {
+                // Checking that mouse buttons are not pressed is necessary to avoid
+                // multiple annotation of the column header when resizing the column with the mouse
+                if (m.LParam != IntPtr.Zero && Control.MouseButtons == MouseButtons.None)
+                {
+                    AnnounceColumnHeader(Cursor.Position);
+                }
+            }
 
             // column header custom draw message handling
             if (nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)

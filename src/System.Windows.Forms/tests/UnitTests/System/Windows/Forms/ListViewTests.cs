@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
 using Xunit;
@@ -5095,6 +5096,130 @@ namespace System.Windows.Forms.Tests
             actual = listViewDynamic.toolTipCaption;
 
             Assert.Equal(text, actual);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListView_AnnounceColumnHeader_DoesNotWork_WithoutHandle(View view)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = view
+            };
+
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 2", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 3", Width = 100 });
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(15, 40));
+            Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListView_AnnounceColumnHeader_DoesNotWork_WithoutHeader(View view)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = view
+            };
+
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(15, 40));
+            Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListView_AnnounceColumnHeader_DoesNotWork_InvalidPoint(View view)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = view
+            };
+
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(10, 20));
+            Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(15, 40, "Column 1")]
+        [InlineData(150, 40, "Column 2")]
+        [InlineData(250, 40, "Column 3")]
+        public void ListView_AnnounceColumnHeader_WorksCorrectly(int x, int y, string expectedColumnName)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = View.Details
+            };
+
+            listView.CreateControl();
+
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 2", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 3", Width = 100 });
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(x, y));
+
+            Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(expectedColumnName, accessibleObject.AnnouncedColumn);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        private class SubListViewAccessibleObject : ListView.ListViewAccessibleObject
+        {
+            internal string AnnouncedColumn { get; private set; }
+
+            internal int RaiseAutomationNotificationCallCount { get; private set; }
+
+            internal SubListViewAccessibleObject(ListView listView) : base(listView)
+            {
+            }
+
+            internal override bool InternalRaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
+            {
+                AnnouncedColumn = notificationText;
+                RaiseAutomationNotificationCallCount++;
+                return true;
+            }
         }
 
         private class SubListViewItem : ListViewItem
