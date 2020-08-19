@@ -24,21 +24,21 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData(FlatStyle.Flat, true, true, AccessibleStates.Focusable | AccessibleStates.Pressed)]
-        [InlineData(FlatStyle.Flat, false, true, AccessibleStates.Focusable | AccessibleStates.Pressed)]
+        [InlineData(FlatStyle.Flat, false, true, AccessibleStates.None)]
         [InlineData(FlatStyle.Flat, true, false, AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.Flat, false, false, AccessibleStates.Focusable)]
+        [InlineData(FlatStyle.Flat, false, false, AccessibleStates.None)]
         [InlineData(FlatStyle.Popup, true, true, AccessibleStates.Focusable | AccessibleStates.Pressed)]
-        [InlineData(FlatStyle.Popup, false, true, AccessibleStates.Focusable | AccessibleStates.Pressed)]
+        [InlineData(FlatStyle.Popup, false, true, AccessibleStates.None)]
         [InlineData(FlatStyle.Popup, true, false, AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.Popup, false, false, AccessibleStates.Focusable)]
+        [InlineData(FlatStyle.Popup, false, false, AccessibleStates.None)]
         [InlineData(FlatStyle.Standard, true, true, AccessibleStates.Focusable | AccessibleStates.Pressed)]
-        [InlineData(FlatStyle.Standard, false, true, AccessibleStates.Focusable | AccessibleStates.Pressed)]
+        [InlineData(FlatStyle.Standard, false, true, AccessibleStates.None)]
         [InlineData(FlatStyle.Standard, true, false, AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.Standard, false, false, AccessibleStates.Focusable)]
+        [InlineData(FlatStyle.Standard, false, false, AccessibleStates.None)]
         [InlineData(FlatStyle.System, true, true, AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.System, false, true, AccessibleStates.Focusable)]
+        [InlineData(FlatStyle.System, false, true, AccessibleStates.None)]
         [InlineData(FlatStyle.System, true, false, AccessibleStates.Focusable)]
-        [InlineData(FlatStyle.System, false, false, AccessibleStates.Focusable)]
+        [InlineData(FlatStyle.System, false, false, AccessibleStates.None)]
         public void ButtonBaseAccessibleObject_State_is_correct(FlatStyle flatStyle, bool createControl, bool mouseIsDown, AccessibleStates expectedAccessibleState)
         {
             using var button = new SubButtonBase()
@@ -61,14 +61,13 @@ namespace System.Windows.Forms.Tests
             var buttonBaseAccessibleObject = new ButtonBase.ButtonBaseAccessibleObject(button);
 
             Assert.Equal(expectedAccessibleState, buttonBaseAccessibleObject.State);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.Equal(createControl, button.IsHandleCreated);
         }
 
         [WinFormsTheory]
         [InlineData(true, true, AccessibleRole.Client)]
         [InlineData(true, false, AccessibleRole.HelpBalloon)]
-        [InlineData(false, true, AccessibleRole.Client)]
+        [InlineData(false, true, AccessibleRole.None)]
         [InlineData(false, false, AccessibleRole.HelpBalloon)]
         public void ButtonBase_CreateAccessibilityInstance_InvokeWithRole_ReturnsExpected(bool createControl, bool defaultRole, AccessibleRole expectedAccessibleRole)
         {
@@ -93,13 +92,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedAccessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
+            Assert.Equal(createControl, control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        public void ButtonBase_CreateAccessibilityInstance_InvokeWithDefaultRole_ReturnsExpected_ForAllFlatStyles_IfControlIsCreated(FlatStyle flatStyle)
+        {
+            using var control = new SubButtonBase()
+            {
+                FlatStyle = flatStyle
+            };
+            control.CreateControl();
+            ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsType<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.Equal(AccessibleRole.Client, instance.Role);
             Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
-        public void ButtonBase_CreateAccessibilityInstance_InvokeWithDefaultRole_ReturnsExpected_ForAllFlatStyles(FlatStyle flatStyle)
+        public void ButtonBase_CreateAccessibilityInstance_InvokeWithDefaultRole_ReturnsNone_ForAllFlatStyles_IfControlIsNotCreated(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase()
             {
@@ -109,9 +121,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
 
             ButtonBase.ButtonBaseAccessibleObject instance = Assert.IsType<ButtonBase.ButtonBaseAccessibleObject>(control.CreateAccessibilityInstance());
-            Assert.Equal(AccessibleRole.Client, instance.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.Equal(AccessibleRole.None, instance.Role);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -139,15 +150,14 @@ namespace System.Windows.Forms.Tests
             var buttonBaseAccessibleObject = new ButtonBase.ButtonBaseAccessibleObject(control);
             buttonBaseAccessibleObject.DoDefaultAction();
 
-            Assert.Equal(1, callCount);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.Equal(createControl ? 1 : 0, callCount);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void ButtonBase_CreateAccessibilityInstance_InvokeIButtonControlDoDefaultAction_CallsOnClick(bool createControl)
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ButtonBase_CreateAccessibilityInstance_InvokeIButtonControlDoDefaultAction_CallsOnClick(bool createControl, int expectedCallCount)
         {
             using var control = new SubButtonBase();
 
@@ -155,8 +165,6 @@ namespace System.Windows.Forms.Tests
             {
                 control.CreateControl();
             }
-
-            Assert.Equal(createControl, control.IsHandleCreated);
 
             int callCount = 0;
             control.Click += (sender, e) =>
@@ -171,10 +179,9 @@ namespace System.Windows.Forms.Tests
 
             buttonBaseAccessibleObject.DoDefaultAction();
 
-            Assert.Equal(1, callCount);
+            Assert.Equal(expectedCallCount, callCount);
             Assert.Equal(0, performClickCallCount);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         private class SubButtonBase : ButtonBase

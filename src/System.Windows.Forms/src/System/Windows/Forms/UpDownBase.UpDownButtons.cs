@@ -437,6 +437,7 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
                 {
                     AccessibleObject element = HitTest((int)x, (int)y);
+
                     if (element != null)
                     {
                         return element;
@@ -447,11 +448,11 @@ namespace System.Windows.Forms
 
                 internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
                     UiaCore.NavigateDirection direction) => direction switch
-                {
-                    UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                    UiaCore.NavigateDirection.LastChild => GetChild(1),
-                    _ => base.FragmentNavigate(direction),
-                };
+                    {
+                        UiaCore.NavigateDirection.FirstChild => GetChild(0),
+                        UiaCore.NavigateDirection.LastChild => GetChild(1),
+                        _ => base.FragmentNavigate(direction),
+                    };
 
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
@@ -500,7 +501,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UiaCore.IRawElementProviderSimple provider);
+                        if (HandleInternal == IntPtr.Zero)
+                        {
+                            return null;
+                        }
+
+                        UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, HandleInternal), out UiaCore.IRawElementProviderSimple provider);
                         return provider;
                     }
                 }
@@ -553,7 +559,7 @@ namespace System.Windows.Forms
 
                         var runtimeId = new int[3];
                         runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)_owner.Handle;
+                        runtimeId[1] = (int)(long)_owner.InternalHandle;
                         runtimeId[2] = _owner.GetHashCode();
 
                         return runtimeId;
@@ -595,12 +601,12 @@ namespace System.Windows.Forms
 
                     internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
                         UiaCore.NavigateDirection direction) => direction switch
-                    {
-                        UiaCore.NavigateDirection.Parent => Parent,
-                        UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
-                        UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
-                        _ => base.FragmentNavigate(direction),
-                    };
+                        {
+                            UiaCore.NavigateDirection.Parent => Parent,
+                            UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
+                            UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
+                            _ => base.FragmentNavigate(direction),
+                        };
 
                     internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
@@ -608,6 +614,11 @@ namespace System.Windows.Forms
                     {
                         get
                         {
+                            if (!_parent.Owner.IsHandleCreated)
+                            {
+                                return Rectangle.Empty;
+                            }
+
                             // Get button bounds
                             Rectangle bounds = ((UpDownButtons)_parent.Owner).Bounds;
                             bounds.Height /= 2;

@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
@@ -409,7 +410,7 @@ namespace System.Windows.Forms.Tests
                 PlaceholderText = "Enter your name"
             };
 
-            System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
+            HandleRef refHandle = new HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path
             User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
@@ -430,7 +431,7 @@ namespace System.Windows.Forms.Tests
                 RightToLeft = RightToLeft.Yes
             };
 
-            System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
+            HandleRef refHandle = new HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path in RightToLeft scenario
             User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
@@ -442,14 +443,23 @@ namespace System.Windows.Forms.Tests
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
 
-        [WinFormsFact]
-        public void TextBox_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text)]
+        [InlineData(false, AccessibleRole.None)]
+        public void TextBox_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
         {
             using var control = new SubTextBox();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             Control.ControlAccessibleObject instance = Assert.IsType<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
-            Assert.Equal(AccessibleRole.Text, instance.Role);
+            Assert.Equal(expectedAccessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
         }
@@ -706,6 +716,8 @@ namespace System.Windows.Forms.Tests
                 set => base.ImeModeBase = value;
             }
 
+            public new bool IsHandleCreated => base.IsHandleCreated;
+
             public new bool ResizeRedraw
             {
                 get => base.ResizeRedraw;
@@ -744,6 +756,8 @@ namespace System.Windows.Forms.Tests
                 get => GetStyle(ControlStyles.UserPaint);
                 set => SetStyle(ControlStyles.UserPaint, value);
             }
+
+            public new void CreateControl() => base.CreateControl();
 
             public new void OnHandleCreated(EventArgs e) => base.OnHandleCreated(e);
 

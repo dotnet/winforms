@@ -35,15 +35,13 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                     }
-                    if (owner.ColumnHeadersVisible)
+
+                    if (owner.IsHandleCreated && owner.ColumnHeadersVisible)
                     {
                         Rectangle rect = Rectangle.Union(owner._layout.ColumnHeaders, owner._layout.TopLeftHeader);
                         return owner.RectangleToScreen(rect);
                     }
-                    else
-                    {
-                        return Rectangle.Empty;
-                    }
+                    return Rectangle.Empty;
                 }
             }
 

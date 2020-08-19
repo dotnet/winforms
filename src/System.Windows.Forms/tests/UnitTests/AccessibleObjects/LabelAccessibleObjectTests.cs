@@ -18,9 +18,7 @@ namespace System.Windows.Forms.Tests
             label.AccessibleName = testAccName;
             AccessibleObject labelAccessibleObject = label.AccessibilityObject;
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(label.IsHandleCreated);
+            Assert.False(label.IsHandleCreated);
 
             var accessibleName = labelAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId);
             Assert.Equal(testAccName, accessibleName);
@@ -34,9 +32,7 @@ namespace System.Windows.Forms.Tests
             label.Text = "Some test label text";
             var labelAccessibleObject = new Label.LabelAccessibleObject(label);
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(label.IsHandleCreated);
+            Assert.False(label.IsHandleCreated);
 
             bool supportsLegacyIAccessiblePatternId = labelAccessibleObject.IsPatternSupported(Interop.UiaCore.UIA.LegacyIAccessiblePatternId);
             Assert.True(supportsLegacyIAccessiblePatternId);
@@ -51,10 +47,7 @@ namespace System.Windows.Forms.Tests
             label.AccessibleRole = AccessibleRole.Link;
             var labelAccessibleObject = new Label.LabelAccessibleObject(label);
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(label.IsHandleCreated);
-
+            Assert.False(label.IsHandleCreated);
             Assert.Equal(AccessibleRole.Link, labelAccessibleObject.Role);
         }
 
@@ -68,10 +61,7 @@ namespace System.Windows.Forms.Tests
             label.AccessibleDescription = testAccDescription;
             var labelAccessibleObject = new Label.LabelAccessibleObject(label);
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(label.IsHandleCreated);
-
+            Assert.False(label.IsHandleCreated);
             Assert.Equal(testAccDescription, labelAccessibleObject.Description);
         }
     }

@@ -4,6 +4,9 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
+using Moq;
+using Moq.Protected;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -202,14 +205,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => accessibleObject.DoDefaultAction());
         }
 
-        [Fact]
-        public void DataGridViewCellAccessibleObject_DoDefaultAction_NoDataGridView_ThrowsInvalidOperationException()
-        {
-            using var owner = new SubDataGridViewCell();
-            var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<InvalidOperationException>(() => accessibleObject.DoDefaultAction());
-        }
-
         [Theory]
         [MemberData(nameof(NoOwner_TestData))]
         public void DataGridViewCellAccessibleObject_GetChild_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
@@ -295,29 +290,177 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(AccessibleSelection.None));
         }
 
-        [Theory]
-        [InlineData(AccessibleSelection.TakeSelection)]
-        [InlineData(AccessibleSelection.AddSelection)]
-        [InlineData(AccessibleSelection.AddSelection | AccessibleSelection.RemoveSelection)]
-        [InlineData(AccessibleSelection.TakeSelection | AccessibleSelection.RemoveSelection)]
-        public void DataGridViewCellAccessibleObject_Select_HasSelectionFlagsWithoutDataGridView_ThrowsInvalidOperationException(AccessibleSelection flags)
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_Select_HasSelectionFlagsWithoutValidDataGridView_DoesNothing()
         {
-            using var owner = new SubDataGridViewCell();
-            var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(flags));
+            var mockCell = new Mock<DataGridViewCell>(MockBehavior.Strict);
+            mockCell
+                .SetupSet(s => s.State = DataGridViewElementStates.Visible)
+                .Verifiable();
+            mockCell
+                .Protected()
+                .Setup("Dispose", ItExpr.IsAny<bool>());
+
+            var mockObj = mockCell.Object;
+            var accessibleObject = new DataGridViewCellAccessibleObject(mockObj);
+            accessibleObject.Select(AccessibleSelection.None);
+            // NB: asserts are implicit - check that nothing was called on the mock that we didn't anticipate
+
+            using DataGridView dataGridView = new DataGridView();
+            mockCell
+                .Protected()
+                .Setup("OnDataGridViewChanged");
+            mockObj.DataGridView = dataGridView;
+
+            accessibleObject.Select(AccessibleSelection.None);
+            // NB: asserts are implicit - check that nothing was called on the mock that we didn't anticipate
         }
 
-        [Theory]
-        [InlineData(AccessibleSelection.TakeFocus)]
-        public void DataGridViewCellAccessibleObject_Select_HasFocusFlagsWithoutDataGridView_ThrowsInvalidOperationException(AccessibleSelection flags)
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_Select_TakeFocus()
         {
-            using var owner = new SubDataGridViewCell();
-            var accessibleObject = new DataGridViewCellAccessibleObject(owner);
-            accessibleObject.Select(flags);
+            using var dataGridView = new SubDataGridView();
+            dataGridView.CreateControl();
+            Assert.True(dataGridView.IsHandleCreated);
+
+            var mockCell = new Mock<DataGridViewCell>(MockBehavior.Strict);
+            mockCell
+                .SetupSet(s => s.State = DataGridViewElementStates.Visible)
+                .Verifiable();
+            mockCell
+                .Protected()
+                .Setup("Dispose", ItExpr.IsAny<bool>());
+            mockCell
+                .Protected()
+                .Setup("OnDataGridViewChanged");
+
+            var mockObj = mockCell.Object;
+            mockObj.DataGridView = dataGridView;
+
+            var accessibleObject = new DataGridViewCellAccessibleObject(mockObj);
+            // verify that we check for a flag, not direct comparison. 128 is an arbitrary large flag.
+            accessibleObject.Select((AccessibleSelection)128 | AccessibleSelection.TakeFocus);
+
+            // NB: some asserts are implicit - check that nothing was called on the mock that we didn't anticipate
+            Assert.True(dataGridView.FocusCalled);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_Select_TakeSelection()
+        {
+            using var dataGridView = new DataGridView();
+            dataGridView.CreateControl();
+            Assert.True(dataGridView.IsHandleCreated);
+
+            var mockCell = new Mock<DataGridViewCell>(MockBehavior.Strict);
+            mockCell
+                .SetupSet(s => s.State = DataGridViewElementStates.Visible)
+                .Verifiable();
+            mockCell
+                .SetupSet(s => s.Selected = true)
+                .Verifiable();
+            mockCell
+                .Protected()
+                .Setup("Dispose", ItExpr.IsAny<bool>());
+            mockCell
+                .Protected()
+                .Setup("OnDataGridViewChanged");
+
+            var mockObj = mockCell.Object;
+            mockObj.DataGridView = dataGridView;
+
+            var accessibleObject = new DataGridViewCellAccessibleObject(mockObj);
+            // verify that we check for a flag, not direct comparison. 128 is an arbitrary large flag.
+            accessibleObject.Select((AccessibleSelection)128 | AccessibleSelection.TakeSelection);
+
+            // NB: some asserts are implicit - check that nothing was called on the mock that we didn't anticipate
+
+            // Can't test whether CurrentCell was set unless we add the whole layer of Rows, Columns, etc.
+            // Assert.Equal(mockObj, dataGridView.CurrentCell);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_Select_AddSelection()
+        {
+            using var dataGridView = new DataGridView();
+            dataGridView.CreateControl();
+            Assert.True(dataGridView.IsHandleCreated);
+
+            var mockCell = new Mock<DataGridViewCell>(MockBehavior.Strict);
+            mockCell
+                .SetupSet(s => s.State = DataGridViewElementStates.Visible)
+                .Verifiable();
+            mockCell
+                .SetupSet(s => s.Selected = true)
+                .Verifiable();
+            mockCell
+                .Protected()
+                .Setup("Dispose", ItExpr.IsAny<bool>());
+            mockCell
+                .Protected()
+                .Setup("OnDataGridViewChanged");
+
+            mockCell.Object.DataGridView = dataGridView;
+
+            var accessibleObject = new DataGridViewCellAccessibleObject(mockCell.Object);
+            // verify that we check for a flag, not direct comparison. 128 is an arbitrary large flag.
+            accessibleObject.Select((AccessibleSelection)128 | AccessibleSelection.AddSelection);
+
+            // NB: asserts are implicit - check that nothing was called on the mock that we didn't anticipate
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellAccessibleObject_Select_RemoveSelection()
+        {
+            using var dataGridView = new DataGridView();
+            dataGridView.CreateControl();
+            Assert.True(dataGridView.IsHandleCreated);
+
+            var mockCell = new Mock<DataGridViewCell>(MockBehavior.Strict);
+            mockCell
+                .SetupSet(s => s.State = DataGridViewElementStates.Visible)
+                .Verifiable();
+            mockCell
+                .SetupSet(s => s.Selected = It.IsAny<bool>())
+                .Verifiable();
+            mockCell
+                .Protected()
+                .Setup("Dispose", ItExpr.IsAny<bool>());
+            mockCell
+                .Protected()
+                .Setup("OnDataGridViewChanged");
+
+            mockCell.Object.DataGridView = dataGridView;
+
+            var accessibleObject = new DataGridViewCellAccessibleObject(mockCell.Object);
+
+            // set selection, RemoveSelection is ignored
+            accessibleObject.Select(AccessibleSelection.AddSelection | AccessibleSelection.RemoveSelection);
+            // set selection, RemoveSelection is ignored
+            accessibleObject.Select(AccessibleSelection.TakeSelection | AccessibleSelection.RemoveSelection);
+            // now remove the selection
+            accessibleObject.Select(AccessibleSelection.RemoveSelection);
+
+            // NB: asserts are implicit - check that nothing was called on the mock that we didn't anticipate
+            mockCell.VerifySet(s => s.Selected = true, Times.Exactly(2));
+            mockCell.VerifySet(s => s.Selected = false, Times.Once());
         }
 
         private class SubDataGridViewCell : DataGridViewCell
         {
+        }
+
+        private class SubDataGridView : DataGridView
+        {
+            public bool FocusCalled { get; private set; }
+
+            public new DataGridViewCell CurrentCell { get; set; }
+
+            private protected override bool FocusInternal()
+            {
+                FocusCalled = true;
+                return false;
+            }
         }
     }
 }

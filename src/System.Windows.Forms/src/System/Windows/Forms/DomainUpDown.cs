@@ -770,7 +770,7 @@ namespace System.Windows.Forms
 
                     var runtimeId = new int[3];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.Handle;
+                    runtimeId[1] = (int)(long)_owner.InternalHandle;
                     runtimeId[2] = _owner.GetHashCode();
 
                     return runtimeId;

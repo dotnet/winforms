@@ -25,9 +25,9 @@ namespace System.Windows.Forms
                 _owner = owner;
             }
 
-            public override Rectangle Bounds => _owner.RectangleToScreen(_owner.ClientRectangle);
+            public override Rectangle Bounds => _owner.IsHandleCreated ? _owner.RectangleToScreen(_owner.ClientRectangle) : Rectangle.Empty;
 
-            internal override Rectangle BoundingRectangle => _owner.Bounds;
+            internal override Rectangle BoundingRectangle => _owner.IsHandleCreated ? _owner.Bounds : Rectangle.Empty;
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {

@@ -4915,20 +4915,23 @@ namespace System.Windows.Forms
             }
 
             internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-            {
-                return HitTest((int)x, (int)y);
-            }
+                => owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.
             /// </summary>
             public override AccessibleObject HitTest(int x, int y)
             {
+                if (!owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 Point clientHit = owner.PointToClient(new Point(x, y));
                 ToolStripItem item = owner.GetItemAt(clientHit);
-                return ((item != null) && (item.AccessibilityObject != null)) ?
-                    item.AccessibilityObject :
-                    base.HitTest(x, y);
+                return ((item != null) && (item.AccessibilityObject != null))
+                    ? item.AccessibilityObject
+                    : base.HitTest(x, y);
             }
 
             /// <summary>

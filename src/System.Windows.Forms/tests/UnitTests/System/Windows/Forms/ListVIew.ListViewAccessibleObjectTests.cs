@@ -17,9 +17,8 @@ namespace System.Windows.Forms.Tests
             using ListView listView = new ListView();
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
             Assert.NotNull(accessibleObject);
-            Assert.Equal(AccessibleRole.List, accessibleObject.Role);
+            Assert.False(listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -27,8 +26,24 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
             Assert.Equal(0, accessibleObject.GetChildCount()); // listView doesn't have items
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.List)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ListViewAccessibleObject_DefaultRole_ReturnsCorrectValue(bool createControl, AccessibleRole expectedAccessibleRole)
+        {
+            using ListView listView = new ListView();
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+            Assert.Equal(expectedAccessibleRole, accessibleObject.Role);
+            Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -36,8 +51,8 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
             Assert.Equal((int)listView.View, accessibleObject.GetMultiViewProviderCurrentView());
+            Assert.False(listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -45,8 +60,8 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
             Assert.Equal(new int[] { (int)View.Details }, accessibleObject.GetMultiViewProviderSupportedViews());
+            Assert.False(listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -55,43 +70,38 @@ namespace System.Windows.Forms.Tests
             using ListView listView = new ListView();
             listView.View = View.Details;
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
             Assert.Equal(((int)(listView.View)).ToString(), accessibleObject.GetMultiViewProviderViewName((int)View.Details));
+            Assert.False(listView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ListViewAccessibleObject_ListWithOneItem_GetChildCount_ReturnsCorrectValue()
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ListViewAccessibleObject_ListWithOneItem_GetChildCount_ReturnsCorrectValue(bool createdControl, int expectedChildCount)
         {
             using ListView listView = new ListView();
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
-            listView.Items.Add(new ListViewItem());
-            Assert.Equal(1, accessibleObject.GetChildCount()); // One item
-        }
-
-        [WinFormsFact]
-        public void ListViewAccessibleObject_ListWithTwoGroups_GetChildCount_ReturnsCorrectValue()
-        {
-            using ListView listView = new ListView();
-            listView.Items.Add(new ListViewItem());
-            ListViewItem item = new ListViewItem();
-            ListViewItem item2 = new ListViewItem();
-            ListViewGroup group = new ListViewGroup();
-            item2.Group = group;
-            item.Group = group;
-            listView.Groups.Add(group);
-            listView.Items.Add(item);
-            listView.Items.Add(item2);
+            if (createdControl)
+            {
+                listView.CreateControl();
+            }
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
-            Assert.Equal(2, accessibleObject.GetChildCount()); // Default group and one specified group
+            listView.Items.Add(new ListViewItem());
+            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // One item
+            Assert.Equal(createdControl, listView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ListViewAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly()
+        [WinFormsTheory]
+        [InlineData(true, 2)]
+        [InlineData(false, 0)]
+        public void ListViewAccessibleObject_ListWithTwoGroups_GetChildCount_ReturnsCorrectValue(bool createdControl, int expectedChildCount)
         {
             using ListView listView = new ListView();
+            if (createdControl)
+            {
+                listView.CreateControl();
+            }
+
             listView.Items.Add(new ListViewItem());
             ListViewItem item = new ListViewItem();
             ListViewItem item2 = new ListViewItem();
@@ -103,42 +113,109 @@ namespace System.Windows.Forms.Tests
             listView.Items.Add(item2);
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
+            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // Default group and one specified group
+            Assert.Equal(createdControl, listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsCreated()
+        {
+            using ListView listView = new ListView();
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem());
+            ListViewItem item = new ListViewItem();
+            ListViewItem item2 = new ListViewItem();
+            ListViewGroup group = new ListViewGroup();
+            item2.Group = group;
+            item.Group = group;
+            listView.Groups.Add(group);
+            listView.Items.Add(item);
+            listView.Items.Add(item2);
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
 
             AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
             Assert.IsType<ListViewGroupAccessibleObject>(firstChild);
             Assert.IsType<ListViewGroupAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
+            Assert.True(listView.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void ListViewAccessibleObject_ListWithTwoItems_GetChildCount_ReturnsCorrectValue()
+        public void ListViewAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsNotCreated()
         {
             using ListView listView = new ListView();
+            listView.Items.Add(new ListViewItem());
+            ListViewItem item = new ListViewItem();
+            ListViewItem item2 = new ListViewItem();
+            ListViewGroup group = new ListViewGroup();
+            item2.Group = group;
+            item.Group = group;
+            listView.Groups.Add(group);
+            listView.Items.Add(item);
+            listView.Items.Add(item2);
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+
+            AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+            AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+            Assert.Null(firstChild);
+            Assert.Null(lastChild);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 2)]
+        [InlineData(false, 0)]
+        public void ListViewAccessibleObject_ListWithTwoItems_GetChildCount_ReturnsCorrectValue(bool createdControl, int expectedChildCount)
+        {
+            using ListView listView = new ListView();
+            if (createdControl)
+            {
+                listView.CreateControl();
+            }
+
             listView.Items.Add(new ListViewItem());
             listView.Items.Add(new ListViewItem());
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
-            Assert.Equal(2, accessibleObject.GetChildCount()); // Two child items
+            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // Two child items
+            Assert.Equal(createdControl, listView.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void ListViewAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly()
+        public void ListViewAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly_IfHandleIsCreated()
         {
             using ListView listView = new ListView();
+            listView.CreateControl();
             listView.Items.Add(new ListViewItem());
             listView.Items.Add(new ListViewItem());
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
 
             AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
             Assert.IsType<ListViewItemAccessibleObject>(firstChild);
             Assert.IsType<ListViewItemAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly_IfHandleIsNotCreated()
+        {
+            using ListView listView = new ListView();
+            listView.Items.Add(new ListViewItem());
+            listView.Items.Add(new ListViewItem());
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+
+            AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+            AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+            Assert.Null(firstChild);
+            Assert.Null(lastChild);
+            Assert.False(listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -146,9 +223,9 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
             Assert.Equal(0, accessibleObject.GetChildCount()); // listView doesn't have items
             Assert.Null(accessibleObject.GetChild(0)); // GetChild method should not throw an exception
+            Assert.False(listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -158,7 +235,6 @@ namespace System.Windows.Forms.Tests
             list.Name = "List";
             list.AccessibleName = "ListView";
             AccessibleObject listAccessibleObject = list.AccessibilityObject;
-            Assert.True(list.IsHandleCreated);
 
             object accessibleName = listAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
             Assert.Equal("ListView", accessibleName);
@@ -174,6 +250,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, controlType);
 
             Assert.True((bool)listAccessibleObject.GetPropertyValue(UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId));
+            Assert.False(list.IsHandleCreated);
         }
     }
 }

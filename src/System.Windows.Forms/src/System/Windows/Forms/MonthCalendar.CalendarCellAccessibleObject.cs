@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                 new int[5]
                 {
                     RuntimeIDFirstItem,
-                    _calendarAccessibleObject.Owner.Handle.ToInt32(),
+                    (int)(long)_calendarAccessibleObject.Owner.InternalHandle,
                     Parent.Parent.GetChildId(),
                     Parent.GetChildId(),
                     GetChildId()
@@ -88,14 +88,17 @@ namespace System.Windows.Forms
 
             internal override void Invoke()
             {
-                RaiseMouseClick();
+                if (_calendarAccessibleObject.Owner.IsHandleCreated)
+                {
+                    RaiseMouseClick();
+                }
             }
 
             internal override UiaCore.IRawElementProviderSimple[] GetRowHeaderItems() => null;
 
             internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
             {
-                if (!_calendarAccessibleObject.HasHeaderRow)
+                if (!_calendarAccessibleObject.Owner.IsHandleCreated || !_calendarAccessibleObject.HasHeaderRow)
                 {
                     return null;
                 }

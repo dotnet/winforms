@@ -1268,6 +1268,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void ExpandOrCollapse()
             {
+                if (!GetPropertyGridView().IsHandleCreated)
+                {
+                    return;
+                }
+
                 var propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
@@ -1275,6 +1280,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
+
                 if (row != -1)
                 {
                     propertyGridView.PopupDialog(row);

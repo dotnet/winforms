@@ -20,16 +20,22 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>(() => new HScrollBar.HScrollBarAccessibleObject(null));
         }
 
-        [WinFormsFact]
-        public void HScrollBarAccessibleObject_Ctor_Default()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.ScrollBar)]
+        [InlineData(false, AccessibleRole.None)]
+        public void HScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)
         {
             using var horScrollBar = new HScrollBar();
-            AccessibleObject accessibleObject = horScrollBar.AccessibilityObject;
 
+            if (createControl)
+            {
+                horScrollBar.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = horScrollBar.AccessibilityObject;
             Assert.NotNull(accessibleObject);
-            Assert.Equal(AccessibleRole.ScrollBar, accessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(horScrollBar.IsHandleCreated);
+            Assert.Equal(accessibleRole, accessibleObject.Role);
+            Assert.Equal(createControl, horScrollBar.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -39,8 +45,7 @@ namespace System.Windows.Forms.Tests
             HScrollBar.HScrollBarAccessibleObject accessibleObject =
                 Assert.IsType<HScrollBar.HScrollBarAccessibleObject>(horScrollBar.AccessibilityObject);
             Assert.Equal("Horizontal", accessibleObject.Name);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(horScrollBar.IsHandleCreated);
+            Assert.False(horScrollBar.IsHandleCreated);
         }
     }
 }

@@ -46,7 +46,13 @@ namespace System.Windows.Forms
                     _ => base.FragmentNavigate(direction)
                 };
 
-            internal override void Invoke() => RaiseMouseClick();
+            internal override void Invoke()
+            {
+                if (_calendarAccessibleObject.Owner.IsHandleCreated)
+                {
+                    RaiseMouseClick();
+                }
+            }
         }
     }
 }
