@@ -663,11 +663,17 @@ namespace System.Windows.Forms
             {
                 if ((keyData & Keys.Alt) == Keys.Alt)
                 {
-                    if ((keyData & Keys.Down) == Keys.Down || (keyData & Keys.Up) == Keys.Up)
+                    // This condition is required because (keyData & Keys.Up) == Keys.Up returns true for Keys.Right
+                    if ((keyData & Keys.Right) == Keys.Right)
+                    {
+                        return false;
+                    }
+                    else if ((keyData & Keys.Down) == Keys.Down || (keyData & Keys.Up) == Keys.Up)
                     {
                         return true;
                     }
                 }
+
                 return base.IsInputKey(keyData);
             }
 
