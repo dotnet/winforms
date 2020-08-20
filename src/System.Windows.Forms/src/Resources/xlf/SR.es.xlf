@@ -2212,6 +2212,11 @@
         <target state="translated">La propiedad ValueType de la celda de una cuadrícula no puede ser nula.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCell_Checked">
+        <source>Checked</source>
+        <target state="new">Checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">Seleccionado</target>
@@ -2240,6 +2245,11 @@
       <trans-unit id="DataGridViewCheckBoxCell_InvalidValueType">
         <source>The value provided for the DataGridViewCheckBoxCell has the wrong type.</source>
         <target state="translated">El valor proporcionado para DataGridViewCheckBoxCell tiene el tipo erróneo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCell_Unchecked">
+        <source>Unchecked</source>
+        <target state="new">Unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnCollection_ColumnNotFound">

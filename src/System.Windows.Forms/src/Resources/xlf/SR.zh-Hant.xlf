@@ -2212,6 +2212,11 @@
         <target state="translated">方格中儲存格的 ValueType 屬性不可為 null。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCell_Checked">
+        <source>Checked</source>
+        <target state="new">Checked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">已選取</target>
@@ -2240,6 +2245,11 @@
       <trans-unit id="DataGridViewCheckBoxCell_InvalidValueType">
         <source>The value provided for the DataGridViewCheckBoxCell has the wrong type.</source>
         <target state="translated">提供給 DataGridViewCheckBoxCell 的值類型錯誤。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCell_Unchecked">
+        <source>Unchecked</source>
+        <target state="new">Unchecked</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnCollection_ColumnNotFound">

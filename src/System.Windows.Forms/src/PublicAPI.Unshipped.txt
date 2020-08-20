@@ -1,0 +1,1 @@
+virtual System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool

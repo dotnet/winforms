@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Windows.Forms.Automation;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -6470,6 +6471,46 @@ namespace System.Windows.Forms.Tests
             control.Columns.Add(column);
             DataGridViewCell cell = control.Rows[0].Cells[0];
             Assert.Equal("DataGridViewCell { ColumnIndex=0, RowIndex=0 }", cell.ToString());
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_OnContentClick_InvokeRaiseAutomationNotification()
+        {
+            using var cellTemplate = new SubDataGridViewCheckBoxCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+
+            using var dataGridView = new DataGridView();
+            dataGridView.Columns.Add(column);
+            SubDataGridViewCheckBoxCell cell = (SubDataGridViewCheckBoxCell)dataGridView.Rows[0].Cells[0];
+            cell.Value = false;
+            dataGridView.CurrentCell = cell;
+            var cellAccessibilityObject = (SubDataGridViewCheckBoxCellAccessibleObject)cell.AccessibilityObject;
+
+            dataGridView.BeginEdit(false);
+            cell.OnContentClick();
+
+            Assert.Equal(1, cellAccessibilityObject.RaiseAutomationNotificationCallCount);
+        }
+
+        private class SubDataGridViewCheckBoxCell: DataGridViewCheckBoxCell
+        {
+            protected override AccessibleObject CreateAccessibilityInstance() => new SubDataGridViewCheckBoxCellAccessibleObject();
+
+            public void OnContentClick() => base.OnContentClick(new DataGridViewCellEventArgs(this));
+        }
+
+        private class SubDataGridViewCheckBoxCellAccessibleObject : AccessibleObject
+        {
+            public int RaiseAutomationNotificationCallCount;
+
+            public override bool RaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
+            {
+                RaiseAutomationNotificationCallCount++;
+                return true;
+            }
         }
 
         private class SubDataGridViewColumnHeaderCell : DataGridViewColumnHeaderCell

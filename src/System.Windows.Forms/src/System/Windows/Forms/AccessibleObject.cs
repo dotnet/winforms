@@ -1843,7 +1843,7 @@ namespace System.Windows.Forms
         ///  False if the underlying windows infrastructure is not available or the operation had failed.
         ///  Use Marshal.GetLastWin32Error for details.
         /// </returns>
-        public bool RaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
+        public virtual bool RaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
         {
             if (!notificationEventAvailable)
             {

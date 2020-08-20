@@ -84,7 +84,6 @@ System.Windows.Forms.AccessibleNavigation.Right = 4 -> System.Windows.Forms.Acce
 System.Windows.Forms.AccessibleNavigation.Up = 1 -> System.Windows.Forms.AccessibleNavigation
 System.Windows.Forms.AccessibleObject
 System.Windows.Forms.AccessibleObject.AccessibleObject() -> void
-System.Windows.Forms.AccessibleObject.RaiseAutomationNotification(System.Windows.Forms.Automation.AutomationNotificationKind notificationKind, System.Windows.Forms.Automation.AutomationNotificationProcessing notificationProcessing, string! notificationText) -> bool
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle) -> void
 System.Windows.Forms.AccessibleObject.UseStdAccessibleObjects(System.IntPtr handle, int objid) -> void
 System.Windows.Forms.AccessibleRole

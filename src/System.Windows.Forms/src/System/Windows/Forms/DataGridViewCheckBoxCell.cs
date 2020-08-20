@@ -832,6 +832,26 @@ namespace System.Windows.Forms
         {
             flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_valueChanged;
             DataGridView.NotifyCurrentCellDirty(true);
+            bool ret = false;
+
+            // UIA events:
+            switch (EditingCellFormattedValue)
+            {
+                case string stringValue:
+                    ret = stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked;
+                    break;
+                case CheckState checkStateValue:
+                    ret = checkStateValue == CheckState.Checked;
+                    break;
+                case bool boolValue:
+                    ret = boolValue;
+                    break;
+            }
+
+            AccessibilityObject?.RaiseAutomationNotification(
+                                    Automation.AutomationNotificationKind.Other,
+                                    Automation.AutomationNotificationProcessing.MostRecent,
+                                    ret ? SR.DataGridViewCheckBoxCell_Checked : SR.DataGridViewCheckBoxCell_Unchecked);
         }
 
         private void OnCommonContentClick(DataGridViewCellEventArgs e)
@@ -886,7 +906,7 @@ namespace System.Windows.Forms
                 UpdateButtonState(ButtonState & ~ButtonState.Checked, rowIndex);
                 if (!e.Alt && !e.Control && !e.Shift)
                 {
-                    RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
+                    //RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
                     if (DataGridView != null &&
                         ColumnIndex < DataGridView.Columns.Count &&
                         rowIndex < DataGridView.Rows.Count)
