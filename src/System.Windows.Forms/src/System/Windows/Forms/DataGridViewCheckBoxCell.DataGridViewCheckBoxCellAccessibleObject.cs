@@ -117,10 +117,10 @@ namespace System.Windows.Forms
                             dataGridViewCell.NotifyDataGridViewOfValueChange();
                             dataGridView.InvalidateCell(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
 
-                            // notify MSAA clients that the default action changed
                             if (Owner is DataGridViewCheckBoxCell checkBoxCell)
                             {
-                                checkBoxCell.NotifyMASSClient(new Point(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
+                                checkBoxCell.NotifyMSAAClient(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex);
+                                checkBoxCell.NotifyUiaClient();
                             }
                         }
                         if (endEditMode)

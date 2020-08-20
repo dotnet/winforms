@@ -1901,6 +1901,16 @@ namespace System.Windows.Forms
             return false;
         }
 
+        internal virtual bool InternalRaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
+        {
+            if (UiaCore.UiaClientsAreListening().IsTrue())
+            {
+                return RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
+            }
+
+            return notificationEventAvailable;
+        }
+
         internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
         {
             if (UiaCore.UiaClientsAreListening().IsTrue())
