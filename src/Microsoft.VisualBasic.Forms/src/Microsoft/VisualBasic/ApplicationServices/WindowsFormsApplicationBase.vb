@@ -636,7 +636,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Property
 
         ''' <summary>
-        ''' Sets the HighDpiMode for the Application.
+        ''' Gets or sets the HighDpiMode for the Application.
         ''' </summary>
         Protected Property HighDpiMode() As HighDpiMode
             Get
