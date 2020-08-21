@@ -5912,46 +5912,30 @@ namespace System.Windows.Forms
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
-            if (nmhdr->code == (int)NM.CUSTOMDRAW)
+            if (nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening().IsTrue())
             {
                 NMCUSTOMDRAW* nmcd = (NMCUSTOMDRAW*)m.LParam;
-                if (true)
+
+                if (m.LParam == IntPtr.Zero)
                 {
-                    var point = Cursor.Position;
-                    var clientPoint = PointToClient(point);
+                    return false;
+                }
 
-                    IntPtr hwnd = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
-                    if (hwnd != null)
+                IntPtr hwnd = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+                if (hwnd != IntPtr.Zero)
+                {
+                    var lvhi = new LVHITTESTINFO
                     {
-                        RECT lvhRect = new RECT();
-                        User32.GetWindowRect(hwnd, ref lvhRect);
-                        Rectangle rectangle = lvhRect;
+                        pt = PointToClient(Cursor.Position)
+                    };
 
-                        if (rectangle.Contains(point))
-                        {
-                            int pointX = nmcd->rc.X;
-                            int startColumnPosition = 0;
-                            int indexColumn = -1;
-                            foreach (ColumnHeader column in Columns)
-                            {
-                                int endColumnPosition = startColumnPosition + column.Width;
-                                if (pointX >= startColumnPosition - 1 && pointX < endColumnPosition -1)
-                                {
-                                    indexColumn = column.Index;
-                                    break;
-                                }
-
-                                startColumnPosition = endColumnPosition;
-                            }
-
-                            if (indexColumn > -1)
-                            {
-                                AccessibilityObject?.RaiseAutomationNotification(
-                                    Automation.AutomationNotificationKind.Other,
-                                    Automation.AutomationNotificationProcessing.MostRecent,
-                                    Columns[indexColumn].Text);
-                            }
-                        }
+                    User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, IntPtr.Zero, ref lvhi);
+                    if (lvhi.iItem > -1)
+                    {
+                        AccessibilityObject?.RaiseAutomationNotification(
+                            Automation.AutomationNotificationKind.Other,
+                            Automation.AutomationNotificationProcessing.MostRecent,
+                            Columns[lvhi.iItem].Text);
                     }
                 }
             }
