@@ -353,7 +353,7 @@ namespace System.Windows.Forms
                 {
                     if (value < _minimum || value > _maximum)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", "'{nameof(Maximum)}'"));
+                        throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
 
                     _value = value;
