@@ -66,7 +66,7 @@ namespace System
 
             lock (s_lock)
             {
-                if (s_hooked && s_suppressedThreads.Count == 0)
+                if (s_hooked && s_suppressedThreads.IsEmpty)
                 {
                     // We're the first to hit the need to unhook. Add the default listener back first to
                     // ensure we don't lose any asserts from other threads.

@@ -234,7 +234,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(LinkArea), value, SR.LinkLabelAreaLength);
                     }
 
-                    if (value.Start != 0 || value.Length != 0)
+                    if (value.Start != 0 || !value.IsEmpty)
                     {
                         Links.Add(new Link(this));
 
@@ -567,7 +567,7 @@ namespace System.Windows.Forms
                 // If no link or the LinkArea is one and covers the entire text, we can support UseCompatibleTextRendering = false.
                 // Observe that LinkArea refers to the first link always.
                 StringInfo stringInfo = new StringInfo(Text);
-                return LinkArea.Start == 0 && (LinkArea.Length == 0 || LinkArea.Length == stringInfo.LengthInTextElements);
+                return LinkArea.Start == 0 && (LinkArea.IsEmpty || LinkArea.Length == stringInfo.LengthInTextElements);
             }
         }
 
