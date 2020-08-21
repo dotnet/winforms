@@ -1,8 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Drawing;
 using static Interop;
@@ -13,9 +11,9 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewCheckBoxCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-            private int[] runtimeId; // Used by UIAutomation
+            private int[] runtimeId = null!; // Used by UIAutomation
 
-            public DataGridViewCheckBoxCellAccessibleObject(DataGridViewCell owner) : base(owner)
+            public DataGridViewCheckBoxCellAccessibleObject(DataGridViewCell? owner) : base(owner)
             {
             }
 
@@ -23,24 +21,30 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if ((Owner as DataGridViewCheckBoxCell).EditedFormattedValue is CheckState state)
+                    if (Owner is null)
                     {
-                        switch (state)
-                        {
-                            case CheckState.Checked:
-                                return AccessibleStates.Checked | base.State;
-                            case CheckState.Indeterminate:
-                                return AccessibleStates.Indeterminate | base.State;
-                        }
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    else if ((Owner as DataGridViewCheckBoxCell).EditedFormattedValue is bool stateAsBool)
+
+                    if (!(Owner is DataGridViewButtonCell dataGridViewCheckBoxCell))
                     {
-                        if (stateAsBool)
-                        {
-                            return AccessibleStates.Checked | base.State;
-                        }
+                        return base.State;
                     }
-                    return base.State;
+
+                    switch (dataGridViewCheckBoxCell.EditedFormattedValue)
+                    {
+                        case CheckState state:
+                            return state switch
+                            {
+                                CheckState.Checked => AccessibleStates.Checked | base.State,
+                                CheckState.Indeterminate => AccessibleStates.Indeterminate | base.State,
+                                _ => base.State
+                            };
+                        case bool stateAsBool:
+                            return stateAsBool ? AccessibleStates.Checked | base.State : base.State;
+                        default:
+                            return base.State;
+                    }
                 }
             }
 
@@ -48,46 +52,53 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!Owner.ReadOnly)
+                    if (Owner is null)
                     {
-                        // determine if we switch to Checked/Unchecked value
-                        bool switchToCheckedState = true;
-
-                        object formattedValue = Owner.FormattedValue;
-
-                        if (formattedValue is CheckState)
-                        {
-                            switchToCheckedState = ((CheckState)formattedValue) == CheckState.Unchecked;
-                        }
-                        else if (formattedValue is bool)
-                        {
-                            switchToCheckedState = !((bool)formattedValue);
-                        }
-
-                        if (switchToCheckedState)
-                        {
-                            return SR.DataGridView_AccCheckBoxCellDefaultActionCheck;
-                        }
-                        else
-                        {
-                            return SR.DataGridView_AccCheckBoxCellDefaultActionUncheck;
-                        }
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
-                    else
+
+                    if (Owner.ReadOnly)
                     {
                         return string.Empty;
                     }
+
+                    bool switchToCheckedState = true;
+
+                    switch (Owner.FormattedValue)
+                    {
+                        case CheckState checkState:
+                            switchToCheckedState = checkState == CheckState.Unchecked;
+                            break;
+                        case bool boolState:
+                            switchToCheckedState = !boolState;
+                            break;
+                    }
+
+                    return switchToCheckedState ? SR.DataGridView_AccCheckBoxCellDefaultActionCheck : SR.DataGridView_AccCheckBoxCellDefaultActionUncheck;
                 }
             }
 
             public override void DoDefaultAction()
             {
-                DataGridViewCheckBoxCell dataGridViewCell = (DataGridViewCheckBoxCell)Owner;
-                DataGridView dataGridView = dataGridViewCell.DataGridView;
+                if (Owner is null)
+                {
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
 
-                if (dataGridView != null && dataGridViewCell.RowIndex == -1)
+                if (!(Owner is DataGridViewCheckBoxCell dataGridViewCell))
+                {
+                    return;
+                }
+
+                if (dataGridViewCell.RowIndex == -1)
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
+                }
+
+                DataGridView? dataGridView = dataGridViewCell.DataGridView;
+                if (dataGridView?.IsHandleCreated != true)
+                {
+                    return;
                 }
 
                 if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
@@ -97,7 +108,7 @@ namespace System.Windows.Forms
                     if (!dataGridView.IsCurrentCellInEditMode)
                     {
                         endEditMode = true;
-                        dataGridView.BeginEdit(false /*selectAll*/);
+                        dataGridView.BeginEdit(selectAll: false);
                     }
                     if (dataGridView.IsCurrentCellInEditMode)
                     {
@@ -120,10 +131,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override int GetChildCount()
-            {
-                return 0;
-            }
+            public override int GetChildCount() => 0;
 
             internal override bool IsIAccessibleExSupported() => true;
 
@@ -142,53 +150,38 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsTogglePatternAvailablePropertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
                 {
-                    return (object)IsPatternSupported(UiaCore.UIA.TogglePatternId);
-                }
-                else if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.CheckBoxControlTypeId;
-                }
+                    UiaCore.UIA.IsTogglePatternAvailablePropertyId => (object)IsPatternSupported(UiaCore.UIA.TogglePatternId),
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.CheckBoxControlTypeId,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
-                return base.GetPropertyValue(propertyID);
-            }
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId == UiaCore.UIA.TogglePatternId ? true : base.IsPatternSupported(patternId);
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.TogglePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override void Toggle()
-            {
-                DoDefaultAction();
-            }
+            internal override void Toggle() => DoDefaultAction();
 
             internal override UiaCore.ToggleState ToggleState
             {
                 get
                 {
-                    bool toggledState = true;
-                    object formattedValue = Owner.FormattedValue;
+                    if (Owner is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                    }
 
-                    if (formattedValue is CheckState)
+                    bool toggledState;
+                    switch (Owner.FormattedValue)
                     {
-                        toggledState = ((CheckState)formattedValue) == CheckState.Checked;
-                    }
-                    else if (formattedValue is bool)
-                    {
-                        toggledState = ((bool)formattedValue);
-                    }
-                    else
-                    {
-                        return UiaCore.ToggleState.Indeterminate;
+                        case CheckState checkState:
+                            toggledState = checkState == CheckState.Unchecked;
+                            break;
+                        case bool boolState:
+                            toggledState = !boolState;
+                            break;
+                        default:
+                            return UiaCore.ToggleState.Indeterminate;
                     }
 
                     return toggledState ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
