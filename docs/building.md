@@ -22,8 +22,8 @@ Note that this does **not** build using your machine-wide installed version of t
 ### Building from Visual Studio Code
 
 1. (Optional) Run `.\restore.cmd` from the repository root.
-1. Run `.\start-code.cmd` from the repository root. This will prepend the repo-local .NET SDK to the path, and open `Winforms.sln` in Visual Studio.
-1. You should now be able to build and test as you normally would from command line.
+1. Run `.\start-code.cmd` from the repository root. This will prepend the repo-local .NET SDK to the path, and open `Winforms.sln` in Visual Studio Code.
+1. You should now be able to build and test as you normally would from command line (or VS Code, if you have set it).
 
 ## Build outputs
 
@@ -43,19 +43,19 @@ Note that this does **not** build using your machine-wide installed version of t
 1. Build the solution: `.\build.cmd`
 2. Navigate to the project you wish to run, e.g. to run AccessibilityTests test app:
     ```
-    winforms> pushd .\src\System.Windows.Forms\tests\AccessibilityTests>
+    winforms> pushd .\src\System.Windows.Forms\tests\AccessibilityTests
     winforms\src\System.Windows.Forms\tests\AccessibilityTests> dotnet run
     ```
-3. (Alternatively) Navigate to .\artifacts\bin\AccessibilityTests\Debug\netcoreapp5.0 and run the app manually.
+3. (Alternatively) Navigate to `.\artifacts\bin\AccessibilityTests\Debug\netcoreapp5.0` and run the app manually.
 
 ## Troubleshooting build errors
 
 * Most build errors are compile errors and can be dealt with accordingly.
 * Other error may be from MSBuild tasks. You need to examine the build logs to investigate.
-  * The logs are generated at `artifacts\log\Debug\Build.binlog`
+  * The logs are generated at `.\artifacts\log\Debug\Build.binlog`
   * The file format is an MSBuild Binary Log. Install the [MSBuild Structured Log Viewer][msbuild-log-viewer] to view them.
-* WinForms uses Visual Studio MSBuild but sometimes with a preview .NET Core SDK; so if you have a non-preview version of [Visual Studio][VS-download] (i.e. a release version), then you may need to enable `use preview` for .NET Core SDKs in VS.
-  * you can do this in VS at Tools :arrow_right: options :arrow_right: Projects and Solutions :arrow_right: .net core :arrow_right: use previews
+* Windows Forms uses Visual Studio MSBuild but for certain features we require the latest MSBuild from .NET Core/.NET SDK. If you are on an official version of [Visual Studio][VS-download] (i.e. not a Preview version), then you may need to enable previews for .NET Core/.NET SDKs in VS.
+  * you can do this in VS under Tools->Options->Environment->Preview Features->Use previews of the .Net Core SDK (Requires restart)
 
 ## Creating a package
 
