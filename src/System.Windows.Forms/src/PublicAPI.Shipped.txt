@@ -9571,13 +9571,13 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewAutoSizeColumnMode previousMode) -> void
 ~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[] previousModes) -> void
 ~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]
-~System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DataGridViewButtonCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
+System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DataGridViewButtonCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DataGridViewCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
-~System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.set -> void
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DataGridViewCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.get -> System.Windows.Forms.DataGridViewCell?
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.set -> void
 ~System.Windows.Forms.DataGridViewCell.EditedFormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCell.ErrorText.get -> string
 ~System.Windows.Forms.DataGridViewCell.ErrorText.set -> void
@@ -9641,7 +9641,7 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCellValueEventArgs.Value.get -> object
 ~System.Windows.Forms.DataGridViewCellValueEventArgs.Value.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DataGridViewCheckBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
+System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DataGridViewCheckBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object
@@ -9684,10 +9684,10 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewColumnDividerDoubleClickEventArgs.DataGridViewColumnDividerDoubleClickEventArgs(int columnIndex, System.Windows.Forms.HandledMouseEventArgs e) -> void
 ~System.Windows.Forms.DataGridViewColumnEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewColumnEventArgs.DataGridViewColumnEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
-~System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DataGridViewColumnHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewColumnHeaderCell owner) -> void
+System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DataGridViewColumnHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewColumnHeaderCell? owner) -> void
 ~System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.DataGridViewColumnStateChangedEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
-~System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellAccessibleObject.DataGridViewComboBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellAccessibleObject.DataGridViewComboBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Add(object item) -> int
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection value) -> void
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(params object[] items) -> void
@@ -9711,7 +9711,7 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.CellStyle.set -> void
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.DataGridViewEditingControlShowingEventArgs(System.Windows.Forms.Control control, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
-~System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DataGridViewImageCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
+System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DataGridViewImageCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
 ~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Description.get -> string
@@ -9720,7 +9720,7 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewImageColumn.Icon.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Image.get -> System.Drawing.Image
 ~System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
-~System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DataGridViewLinkCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
+System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DataGridViewLinkCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
@@ -9755,7 +9755,7 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.set -> void
 ~System.Windows.Forms.DataGridViewRowEventArgs.DataGridViewRowEventArgs(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
 ~System.Windows.Forms.DataGridViewRowEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DataGridViewRowHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewRowHeaderCell owner) -> void
+System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DataGridViewRowHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewRowHeaderCell? owner) -> void
 ~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.DataGridViewRowPostPaintEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, string errorText, System.Windows.Forms.DataGridViewCellStyle inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
 ~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.ErrorText.get -> string
 ~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.Graphics.get -> System.Drawing.Graphics
@@ -9782,7 +9782,7 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-~System.Windows.Forms.DataGridViewTextBoxCell.DataGridViewTextBoxCellAccessibleObject.DataGridViewTextBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell owner) -> void
+System.Windows.Forms.DataGridViewTextBoxCell.DataGridViewTextBoxCellAccessibleObject.DataGridViewTextBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DataGridViewTopLeftHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewTopLeftHeaderCell owner) -> void
 ~System.Windows.Forms.DataObject.DataObject(object data) -> void
 ~System.Windows.Forms.DataObject.DataObject(string format, object data) -> void
@@ -11218,7 +11218,7 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string
 ~override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DefaultAction.get -> string
+override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.DataGridViewButtonCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewButtonCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewButtonCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11243,15 +11243,15 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.get -> string
-~override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.set -> void
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Name.get -> string?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.get -> string?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.set -> void
 ~override System.Windows.Forms.DataGridViewCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList
 ~override System.Windows.Forms.DataGridViewCellStyle.Equals(object o) -> bool
@@ -11262,7 +11262,7 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DefaultAction.get -> string
+override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11301,11 +11301,11 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Value.get -> string
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Name.get -> string!
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
@@ -11352,10 +11352,10 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewHeaderCell.ValueType.set -> void
 ~override System.Windows.Forms.DataGridViewImageCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewImageCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Description.get -> string
-~override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.get -> string
-~override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.set -> void
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Description.get -> string?
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.get -> string?
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.set -> void
 ~override System.Windows.Forms.DataGridViewImageCell.DefaultNewRowValue.get -> object
 ~override System.Windows.Forms.DataGridViewImageCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewImageCell.FormattedValueType.get -> System.Type
@@ -11376,7 +11376,7 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewImageColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewLinkCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewLinkCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DefaultAction.get -> string
+override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.DataGridViewLinkCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewLinkCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewLinkCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11414,11 +11414,11 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridViewRow.ToString() -> string
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Value.get -> string
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Name.get -> string?
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
