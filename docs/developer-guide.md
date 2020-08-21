@@ -14,8 +14,14 @@ Windows Forms requires the following workloads and components be selected when i
   * .NET Desktop Development
   * Desktop development with C++
 * Required Individual Components:
-  * C++/CLI support
   * Windows 10 SDK
+  * C++/CLI support
+
+
+  :warning: CMake 3.15.5 or later is required. CMake shipped with VS 2019 (3.17.20032601-MSVC_2) does not meet requirements. Install CMake from the [official website][cmake-download] or via [Chocolatey][chocolatey]:
+  ```
+  choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+  ```
 
 ## Workflow
 
@@ -31,8 +37,8 @@ You first need to [fork][fork] and [clone][clone] this Windows Forms repository.
 
 * [Git commands and workflow][git-commands]
 * [Coding guidelines][corefx-coding-guidelines]
-* [up-for-grabs Windows Forms issues][up-for-grabs]
-* [easy WinForms issues][easy]
+* ["up-for-grabs" issues][up-for-grabs]
+* ["easy" issues][easy]
 
 [comment]: <> (URI Links)
 
@@ -43,3 +49,5 @@ You first need to [fork][fork] and [clone][clone] this Windows Forms repository.
 [corefx-coding-guidelines]: https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines
 [up-for-grabs]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs
 [easy]: https://github.com/dotnet/winforms/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Aeasy
+[chocolatey]: https://chocolatey.org/
+[cmake-download]: https://cmake.org/download/
