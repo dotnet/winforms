@@ -5929,7 +5929,19 @@ namespace System.Windows.Forms
                         pt = PointToClient(Cursor.Position)
                     };
 
+                    var si = new User32.SCROLLINFO
+                    {
+                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        fMask = User32.SIF.POS
+                    };
+
+                    if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
+                    {
+                        lvhi.pt.X += si.nPos;
+                    }
+
                     User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, IntPtr.Zero, ref lvhi);
+
                     if (lvhi.iItem > -1)
                     {
                         AccessibilityObject?.RaiseAutomationNotification(
