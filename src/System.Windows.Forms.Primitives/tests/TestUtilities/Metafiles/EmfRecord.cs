@@ -91,6 +91,20 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.EXTTEXTOUTW ? (EMREXTTEXTOUTW*)_lpmr : null;
         public EMRENUMRECORD<Gdi32.MM>* SetMapModeRecord
             => Type == Gdi32.EMR.SETMAPMODE ? (EMRENUMRECORD<Gdi32.MM>*)_lpmr : null;
+        public EMRRECTRECORD* FillPathRecord
+            => Type == Gdi32.EMR.FILLPATH ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRECTRECORD* StrokeAndFillPathRecord
+            => Type == Gdi32.EMR.STROKEANDFILLPATH ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRECTRECORD* StrokePathRecord
+            => Type == Gdi32.EMR.STROKEPATH ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRECTRECORD* ExcludeClipRectRecord
+            => Type == Gdi32.EMR.EXCLUDECLIPRECT ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRECTRECORD* IntersetClipRectRecord
+            => Type == Gdi32.EMR.INTERSECTCLIPRECT ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRECTRECORD* EllipseRecord
+            => Type == Gdi32.EMR.ELLIPSE ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRECTRECORD* RectangleRecord
+            => Type == Gdi32.EMR.RECTANGLE ? (EMRRECTRECORD*)_lpmr : null;
 
         public override string ToString() => Type switch
         {
@@ -119,6 +133,13 @@ namespace System.Windows.Forms.Metafiles
             Gdi32.EMR.EXTCREATEFONTINDIRECTW => ExtCreateFontIndirectWRecord->ToString(),
             Gdi32.EMR.EXTTEXTOUTW => ExtTextOutWRecord->ToString(),
             Gdi32.EMR.SETMAPMODE => SetMapModeRecord->ToString(),
+            Gdi32.EMR.FILLPATH => FillPathRecord->ToString(),
+            Gdi32.EMR.STROKEANDFILLPATH => StrokeAndFillPathRecord->ToString(),
+            Gdi32.EMR.STROKEPATH => StrokePathRecord->ToString(),
+            Gdi32.EMR.EXCLUDECLIPRECT => ExcludeClipRectRecord->ToString(),
+            Gdi32.EMR.INTERSECTCLIPRECT => IntersetClipRectRecord->ToString(),
+            Gdi32.EMR.ELLIPSE => EllipseRecord->ToString(),
+            Gdi32.EMR.RECTANGLE => RectangleRecord->ToString(),
             _ => $"[EMR{Type}]"
         };
     }
