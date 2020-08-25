@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Doble clic</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -5683,7 +5683,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
-        <target state="new">Invalid HDC type: {0}</target>
+        <target state="translated">Tipo HDC no válido: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -9403,7 +9403,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">No se permite TextFormatFlags.ModifyString.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

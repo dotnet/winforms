@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Двойной щелчок</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -5684,7 +5684,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
-        <target state="new">Invalid HDC type: {0}</target>
+        <target state="translated">Недопустимый тип HDC: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -9404,7 +9404,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">TextFormatFlags.ModifyString не допускается.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
