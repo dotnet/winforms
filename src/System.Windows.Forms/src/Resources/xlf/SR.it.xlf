@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Doppio clic</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -5454,7 +5454,7 @@ Sostituirlo?</target>
       </trans-unit>
       <trans-unit id="HelpProviderHelpNamespaceDescr">
         <source>The Help namespace (for example HTML 1.0 Help file) that will be used. It is only used for controls that have the HelpKeyword set.</source>
-        <target state="translated">Lo spazio dei nomi della Guida (ad esempio, file della Guida HTML 1.0) che verrà utilizzato. Viene utilizzato solo per i controlli per i quali si è impostato HelpKeyword.</target>
+        <target state="translated">Spazio dei nomi della Guida (ad esempio, file della Guida HTML 1.0) che verrà usato. Viene usato solo per i controlli per i quali è stato impostato HelpKeyword.</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpProviderHelpStringDescr">
@@ -5683,7 +5683,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
-        <target state="new">Invalid HDC type: {0}</target>
+        <target state="translated">Tipo HDC non valido: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -9403,7 +9403,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">TextFormatFlags.ModifyString non è consentito.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

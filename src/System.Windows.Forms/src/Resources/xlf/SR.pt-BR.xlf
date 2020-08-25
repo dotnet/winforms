@@ -194,7 +194,7 @@
       </trans-unit>
       <trans-unit id="AccessibleActionDoubleClick">
         <source>Double Click</source>
-        <target state="new">Double Click</target>
+        <target state="translated">Clicar Duas Vezes</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
@@ -5683,7 +5683,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="InvalidHdcType">
         <source>Invalid HDC type: {0}</source>
-        <target state="new">Invalid HDC type: {0}</target>
+        <target state="translated">Tipo de HDC inválido: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -9098,22 +9098,22 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="translated">Não será possível navegar na caixa de diálogo quando ela já estiver fechada.</target>
+        <target state="translated">Não será possível navegar pela caixa de diálogo quando ela já estiver fechada.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="translated">Não é possível navegar na caixa de diálogo de um manipulador de eventos chamado de dentro da navegação.</target>
+        <target state="translated">Não é possível navegar pela caixa de diálogo de um manipulador de eventos chamado de dentro da navegação.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="translated">Não é possível navegar na caixa de diálogo de dentro do evento {0} de um dos botões de opção da caixa de diálogo da tarefa atual.</target>
+        <target state="translated">Não é possível navegar pela caixa de diálogo de dentro do evento {0} de um dos botões de opção da caixa de diálogo da tarefa atual.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="translated">Não é possível navegar de uma página não associada para uma caixa de diálogo.</target>
+        <target state="translated">Não é possível navegar por uma página não associada para uma caixa de diálogo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
@@ -9153,7 +9153,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="translated">Não é possível manipular a caixa de diálogo de tarefa imediatamente após navegar nela. Aguarde o evento {0} da próxima página ocorrer.</target>
+        <target state="translated">Não é possível manipular a caixa de diálogo de tarefa imediatamente após navegar por ela. Aguarde o evento {0} da próxima página ocorrer.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
@@ -9403,7 +9403,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
         <source>TextFormatFlags.ModifyString is not allowed.</source>
-        <target state="new">TextFormatFlags.ModifyString is not allowed.</target>
+        <target state="translated">TextFormatFlags.ModifyString não é permitido.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
