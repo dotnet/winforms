@@ -91,5 +91,34 @@ namespace System.Windows.Forms.Tests
 
             var details = emf.RecordsToString();
         }
+
+        [WinFormsFact]
+        public unsafe void Button_FlatStyle_WithText_Rectangle()
+        {
+            using Button button = new Button
+            {
+                Text = "Flat Style",
+                FlatStyle = FlatStyle.Flat,
+            };
+
+            using var emf = new EmfScope();
+            DeviceContextState state = new DeviceContextState(emf);
+
+            Rectangle bounds = button.Bounds;
+
+            button.PrintToMetafile(emf);
+
+            emf.Validate(
+                state,
+                Validate.SkipType(Gdi32.EMR.BITBLT),
+                Validate.TextOut("Flat Style"),
+                Validate.Rectangle(
+                    new Rectangle(0, 0, button.Width - 2, button.Height - 2),
+                    penColor: Color.Black,
+                    penStyle: Gdi32.PS.ENDCAP_ROUND,
+                    brushColor: Color.Empty,        // Color doesn't really matter as we're using a null brush
+                    brushStyle: Gdi32.BS.NULL,      // Regressed in https://github.com/dotnet/winforms/pull/3667
+                    rop2: Gdi32.R2.COPYPEN));
+        }
     }
 }

@@ -4,33 +4,32 @@
 
 #nullable enable
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     /// <summary>
-    ///  Record that represents an index.
+    ///  Record that just has a single <see cref="RECT"/> value.
     /// </summary>
     /// <remarks>
     ///   Not an actual Win32 define, encapsulates:
     ///
-    ///   - EMRSELECTOBJECT
-    ///   - EMRDELETEOBJECT
-    ///   - EMRSELECTPALETTE
+    ///    - EMRFILLPATH
+    ///    - EMRSTROKEANDFILLPATH
+    ///    - EMRSTROKEPATH
+    ///    - EMREXCLUDECLIPRECT
+    ///    - EMRINTERSECTCLIPRECT
+    ///    - EMRELLIPSE
+    ///    - EMRRECTANGLE
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRINDEXRECORD
+    internal struct EMRRECTRECORD
     {
         public EMR emr;
-        public uint index;
+        public RECT rect;
 
-        public bool IsStockObject => (index & 0x80000000) != 0;
-        public Gdi32.StockObject StockObject => (Gdi32.StockObject)(index & ~0x80000000);
-
-        public override string ToString()
-            => IsStockObject
-                ? $"[EMR{emr.iType}] StockObject: {StockObject}"
-                : $"[EMR{emr.iType}] Index: {index}";
+        public override string ToString() => $"[EMR{emr.iType}] RECT: {rect}";
     }
 }
