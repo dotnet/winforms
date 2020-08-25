@@ -663,11 +663,14 @@ namespace System.Windows.Forms
             {
                 if ((keyData & Keys.Alt) == Keys.Alt)
                 {
-                    if ((keyData & Keys.Down) == Keys.Down || (keyData & Keys.Up) == Keys.Up)
+                    switch (keyData & Keys.KeyCode)
                     {
-                        return true;
+                        case Keys.Down:
+                        case Keys.Up:
+                            return true;
                     }
                 }
+
                 return base.IsInputKey(keyData);
             }
 
