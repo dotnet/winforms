@@ -6,27 +6,33 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        internal enum StockObject : uint
+        /// <summary>
+        ///  Stock GDI object identifiers.
+        /// </summary>
+        /// <remarks>
+        ///  Note that in metafile records these values are OR'ed with 0x80000000.
+        /// </remarks>
+        internal enum StockObject : int
         {
-            WHITE_BRUSH             = 0x80000000,   // 0x00FFFFFF
-            LTGRAY_BRUSH            = 0x80000001,   // 0x00C0C0C0
-            GRAY_BRUSH              = 0x80000002,   // 0x00808080
-            DKGRAY_BRUSH            = 0x80000003,   // 0x00404040
-            BLACK_BRUSH             = 0x80000004,   // 0x00404040
-            NULL_BRUSH              = 0x80000005,   // Same as HOLLOW_BRUSH
-            WHITE_PEN               = 0x80000006,   // 0x00FFFFFF
-            BLACK_PEN               = 0x80000007,   // 0x00000000
-            NULL_PEN                = 0x80000008,
-            OEM_FIXED_FONT          = 0x8000000A,
-            ANSI_FIXED_FONT         = 0x8000000B,
-            ANSI_VAR_FONT           = 0x8000000C,
-            SYSTEM_FONT             = 0x8000000D,
-            DEVICE_DEFAULT_FONT     = 0x8000000E,
-            DEFAULT_PALETTE         = 0x8000000F,
-            SYSTEM_FIXED_FONT       = 0x80000010,
-            DEFAULT_GUI_FONT        = 0x80000011,
-            DC_BRUSH                = 0x80000012,
-            DC_PEN                  = 0x80000013
+            WHITE_BRUSH             = 0x00000000,   // 0x00FFFFFF
+            LTGRAY_BRUSH            = 0x00000001,   // 0x00C0C0C0
+            GRAY_BRUSH              = 0x00000002,   // 0x00808080
+            DKGRAY_BRUSH            = 0x00000003,   // 0x00404040
+            BLACK_BRUSH             = 0x00000004,   // 0x00000000
+            NULL_BRUSH              = 0x00000005,   // Same as HOLLOW_BRUSH
+            WHITE_PEN               = 0x00000006,   // 0x00FFFFFF
+            BLACK_PEN               = 0x00000007,   // 0x00000000
+            NULL_PEN                = 0x00000008,
+            OEM_FIXED_FONT          = 0x0000000A,
+            ANSI_FIXED_FONT         = 0x0000000B,
+            ANSI_VAR_FONT           = 0x0000000C,
+            SYSTEM_FONT             = 0x0000000D,
+            DEVICE_DEFAULT_FONT     = 0x0000000E,
+            DEFAULT_PALETTE         = 0x0000000F,
+            SYSTEM_FIXED_FONT       = 0x00000010,
+            DEFAULT_GUI_FONT        = 0x00000011,
+            DC_BRUSH                = 0x00000012,
+            DC_PEN                  = 0x00000013
         }
     }
 }
