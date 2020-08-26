@@ -9,8 +9,8 @@ Namespace My
     ' StartupNextInstance (!!Not yet implemented!!): Raised when launching a single-instance application and the application is already active. 
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
     Partial Friend Class MyApplication
-        Private Sub MyApplication_Startup(sender As Object, e As StartupEventArgs) Handles Me.Startup
-            System.Windows.Forms.Application.SetHighDpiMode(HighDpiMode.SystemAware)
+        Private Sub MyApplication_ApplyHighDpiMode(sender As Object, e As ApplyHighDpiModeEventArgs) Handles Me.ApplyHighDpiMode
+            e.HighDpiMode = HighDpiMode.SystemAware
         End Sub
     End Class
 End Namespace
