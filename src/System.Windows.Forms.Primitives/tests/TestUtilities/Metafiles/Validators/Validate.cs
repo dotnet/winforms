@@ -5,6 +5,7 @@
 #nullable enable
 
 using System.Drawing;
+using System.Net;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -54,6 +55,26 @@ namespace System.Windows.Forms.Metafiles
                 penStyle,
                 rop2Mode,
                 backgroundMode,
+                validate);
+
+        internal static IEmfValidator Rectangle(
+            RECT bounds,
+            Color penColor,
+            Color brushColor,
+            int penWidth = 1,
+            Gdi32.PS penStyle = default,
+            Gdi32.R2 rop2 = Gdi32.R2.COPYPEN,
+            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
+            Gdi32.BS brushStyle = default,
+            RectangleValidator.Flags validate = default) => new RectangleValidator(
+                bounds,
+                penColor,
+                brushColor,
+                penWidth,
+                penStyle,
+                rop2,
+                backgroundMode,
+                brushStyle,
                 validate);
 
         /// <summary>
