@@ -9,7 +9,7 @@ namespace System.Windows.Forms
         internal class PrintPreviewDialogToolStripButton : ToolStripButton
         {
             /// <summary>
-            ///  See Control.ProcessDialogKey for more info.
+            ///  See <see cref="Control.ProcessDialogKey"/> for more info.
             /// </summary>
             protected internal override bool ProcessDialogKey(Keys keyData)
             {
