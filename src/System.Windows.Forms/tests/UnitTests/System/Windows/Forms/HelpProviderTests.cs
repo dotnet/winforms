@@ -173,22 +173,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, 0, null)]
-        [InlineData("", 0, null)]
-        [InlineData("helpKeyword", 0, "HelpNamespace")]
-        [InlineData("1", 1, "HelpNamespace")]
-        public void HelpProvider_SetHelpKeyword_GetHelpKeyword_ReturnsExpected(string keyword, int expectedHelpTopic, string expectedFileName)
+        [InlineData(null, 0, null, true)]
+        [InlineData("", 0, null, true)]
+        [InlineData("helpKeyword", 0, "HelpNamespace", true)]
+        [InlineData("1", 1, "HelpNamespace", true)]
+        [InlineData(null, -1, null, false)]
+        [InlineData("", -1, null, false)]
+        [InlineData("helpKeyword", 0, "HelpNamespace", false)]
+        [InlineData("1", 1, "HelpNamespace", false)]
+        public void HelpProvider_SetHelpKeyword_GetHelpKeyword_ReturnsExpected(string keyword, int expectedHelpTopic, string expectedFileName, bool createControl)
         {
             using var provider = new HelpProvider
             {
                 HelpNamespace = "HelpNamespace"
             };
+
             using var control = new Control();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
 
             provider.SetHelpKeyword(control, keyword);
             Assert.Same(keyword, provider.GetHelpKeyword(control));
             Assert.Equal(!string.IsNullOrEmpty(keyword), provider.GetShowHelp(control));
             Assert.Equal(expectedHelpTopic, control.AccessibilityObject.GetHelpTopic(out string fileName));
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.Equal(expectedFileName, fileName);
 
             // Set same.
@@ -228,23 +240,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, 0, null)]
-        [InlineData("", 0, null)]
-        [InlineData("helpKeyword", 0, "HelpNamespace")]
-        [InlineData("1", 1, "HelpNamespace")]
-        public void HelpProvider_SetHelpKeyword_WithShowHelpFalse_ReturnsExpected(string keyword, int expectedHelpTopic, string expectedFileName)
+        [InlineData(null, 0, null, true)]
+        [InlineData("", 0, null, true)]
+        [InlineData("helpKeyword", 0, "HelpNamespace", true)]
+        [InlineData("1", 1, "HelpNamespace", true)]
+        [InlineData(null, -1, null, false)]
+        [InlineData("", -1, null, false)]
+        [InlineData("helpKeyword", 0, "HelpNamespace", false)]
+        [InlineData("1", 1, "HelpNamespace", false)]
+        public void HelpProvider_SetHelpKeyword_WithShowHelpFalse_ReturnsExpected(string keyword, int expectedHelpTopic, string expectedFileName, bool createControl)
         {
             using var provider = new HelpProvider
             {
                 HelpNamespace = "HelpNamespace"
             };
             using var control = new Control();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             provider.SetShowHelp(control, false);
 
             provider.SetHelpKeyword(control, keyword);
             Assert.Same(keyword, provider.GetHelpKeyword(control));
             Assert.Equal(!string.IsNullOrEmpty(keyword), provider.GetShowHelp(control));
             Assert.Equal(expectedHelpTopic, control.AccessibilityObject.GetHelpTopic(out string fileName));
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.Equal(expectedFileName, fileName);
 
             // Set same.
@@ -419,25 +442,34 @@ namespace System.Windows.Forms.Tests
             Assert.True(provider.ShouldSerializeShowHelp(control));
         }
 
-        [WinFormsFact]
-        public void HelpProvider_SetShowHelp_SetFalseThenTrue_UnbindsAndBindsControl()
+        [WinFormsTheory]
+        [InlineData(true, 0)]
+        [InlineData(false, -1)]
+        public void HelpProvider_SetShowHelp_SetFalseThenTrue_UnbindsAndBindsControl(bool createControl, int expectedHelpTopic)
         {
             using var provider = new HelpProvider
             {
                 HelpNamespace = "HelpNamespace"
             };
             using var control = new Control();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             provider.SetShowHelp(control, true);
             provider.SetHelpKeyword(control, "1");
             provider.SetHelpString(control, "HelpString");
 
             Assert.Equal(1, control.AccessibilityObject.GetHelpTopic(out string fileName));
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.Equal("HelpNamespace", fileName);
             Assert.Equal("HelpString", control.AccessibilityObject.Help);
 
             // Set false.
             provider.SetShowHelp(control, false);
-            Assert.Equal(0, control.AccessibilityObject.GetHelpTopic(out fileName));
+            Assert.Equal(expectedHelpTopic, control.AccessibilityObject.GetHelpTopic(out fileName));
             Assert.Null(fileName);
             Assert.Null(control.AccessibilityObject.Help);
 

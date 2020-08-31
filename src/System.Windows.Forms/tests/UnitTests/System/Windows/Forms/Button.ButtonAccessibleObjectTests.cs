@@ -23,24 +23,28 @@ namespace System.Windows.Forms.Tests
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
             Assert.Same(button, buttonAccessibleObject.Owner);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ButtonAccessibleObject_AccessibleRole_Default_ReturnsPushButton()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.PushButton)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ButtonAccessibleObject_AccessibleRole_Default_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
         {
             using var button = new Button
             {
                 AccessibleRole = AccessibleRole.Default
             };
 
-            Assert.False(button.IsHandleCreated);
+            if (createControl)
+            {
+                button.CreateControl();
+            }
+
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
-            Assert.Equal(AccessibleRole.PushButton, buttonAccessibleObject.Role);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.Equal(accessibleRole, buttonAccessibleObject.Role);
+            Assert.Equal(createControl, button.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -55,8 +59,7 @@ namespace System.Windows.Forms.Tests
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
             Assert.Equal(AccessibleRole.Link, buttonAccessibleObject.Role);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -77,8 +80,7 @@ namespace System.Windows.Forms.Tests
             object value = buttonAccessibleObject.GetPropertyValue((UIA)propertyID);
 
             Assert.Equal(expected, value);
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -90,8 +92,7 @@ namespace System.Windows.Forms.Tests
             var buttonAccessibleObject = new Button.ButtonAccessibleObject(button);
 
             Assert.True(buttonAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
-            // TODO: ControlAccessibleObject should not force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(button.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
         }
     }
 }

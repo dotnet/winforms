@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
-using System.Threading;
 using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.ListViewGroup;
@@ -74,7 +72,58 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly()
+        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsCreated()
+        {
+            using ListView list = new ListView();
+            list.CreateControl();
+            ListViewGroup listGroup = new ListViewGroup("Group1");
+            ListViewItem listItem1 = new ListViewItem();
+            ListViewItem listItem2 = new ListViewItem();
+            ListViewItem listItem3 = new ListViewItem();
+            list.Groups.Add(listGroup);
+            listItem1.Group = listGroup;
+            listItem2.Group = listGroup;
+            list.Items.Add(listItem1);
+            list.Items.Add(listItem2);
+            list.Items.Add(listItem3);
+            AccessibleObject group1AccObj = listGroup.AccessibilityObject;
+            AccessibleObject defaultGroupAccObj = list.DefaultGroup.AccessibilityObject;
+            Assert.True(list.IsHandleCreated);
+
+            // Next/Previous siblings test
+            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            UiaCore.IRawElementProviderFragment defaultGroupNextSibling = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            Assert.IsType<ListViewGroupAccessibleObject>(group1AccObj);
+            Assert.Equal(group1AccObj, defaultGroupNextSibling);
+
+            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            UiaCore.IRawElementProviderFragment group1PreviousSibling = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            Assert.IsType<ListViewGroupAccessibleObject>(group1PreviousSibling);
+            Assert.Equal(defaultGroupAccObj, group1PreviousSibling);
+
+            // Parent
+            Assert.Equal(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent), list.AccessibilityObject);
+            Assert.Equal(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent), list.AccessibilityObject);
+
+            // Childs
+            AccessibleObject firstChild = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+            AccessibleObject lastChild = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+            Assert.IsType<ListViewItemAccessibleObject>(firstChild);
+            Assert.IsType<ListViewItemAccessibleObject>(lastChild);
+            Assert.NotEqual(firstChild, lastChild);
+            Assert.Equal(firstChild, listItem1.AccessibilityObject);
+            Assert.Equal(lastChild, listItem2.AccessibilityObject);
+
+            firstChild = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+            lastChild = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+            Assert.IsType<ListViewItemAccessibleObject>(firstChild);
+            Assert.IsType<ListViewItemAccessibleObject>(lastChild);
+            Assert.Equal(firstChild, lastChild);
+            Assert.Equal(firstChild, listItem3.AccessibilityObject);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsNotCreated()
         {
             using ListView list = new ListView();
             ListViewGroup listGroup = new ListViewGroup("Group1");
@@ -93,14 +142,9 @@ namespace System.Windows.Forms.Tests
 
             // Next/Previous siblings test
             Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            UiaCore.IRawElementProviderFragment defaultGroupNextSibling = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-            Assert.IsType<ListViewGroupAccessibleObject>(group1AccObj);
-            Assert.Equal(group1AccObj, defaultGroupNextSibling);
-
+            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
             Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            UiaCore.IRawElementProviderFragment group1PreviousSibling = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-            Assert.IsType<ListViewGroupAccessibleObject>(group1PreviousSibling);
-            Assert.Equal(defaultGroupAccObj, group1PreviousSibling);
+            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
 
             // Parent
             Assert.Equal(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent), list.AccessibilityObject);

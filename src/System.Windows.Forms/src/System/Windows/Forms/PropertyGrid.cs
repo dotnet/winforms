@@ -5464,6 +5464,11 @@ namespace System.Windows.Forms
         /// </returns>
         internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
         {
+            if (!_owningPropertyGrid.IsHandleCreated)
+            {
+                return null;
+            }
+
             Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
             Control element = _owningPropertyGrid.GetElementFromPoint(clientPoint);

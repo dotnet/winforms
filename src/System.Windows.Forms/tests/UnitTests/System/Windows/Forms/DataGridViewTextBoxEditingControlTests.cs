@@ -973,14 +973,23 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("dataGridViewCellStyle", () => control.ApplyCellStyleToEditingControl(null));
         }
 
-        [WinFormsFact]
-        public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text)]
+        [InlineData(false, AccessibleRole.None)]
+        public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
-            Assert.Equal(AccessibleRole.Text, instance.Role);
+            Assert.Equal(expectedAccessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.Text, instance);
         }
@@ -1144,16 +1153,14 @@ namespace System.Windows.Forms.Tests
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
 
             // Remove handler.
             control.GotFocus -= handler;
             control.OnGotFocus(eventArgs);
             Assert.Equal(1, callCount);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -2136,6 +2143,8 @@ namespace System.Windows.Forms.Tests
                 set => base.ImeModeBase = value;
             }
 
+            public new bool IsHandleCreated => base.IsHandleCreated;
+
             public new bool ResizeRedraw
             {
                 get => base.ResizeRedraw;
@@ -2149,6 +2158,8 @@ namespace System.Windows.Forms.Tests
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
             public new AutoSizeMode GetAutoSizeMode() => base.GetAutoSizeMode();
+
+            public new void CreateControl() => base.CreateControl();
 
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 

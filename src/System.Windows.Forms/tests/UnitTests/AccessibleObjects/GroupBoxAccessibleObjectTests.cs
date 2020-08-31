@@ -18,9 +18,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             groupBox.AccessibleName = testAccName;
             AccessibleObject groupBoxAccessibleObject = groupBox.AccessibilityObject;
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(groupBox.IsHandleCreated);
+            Assert.False(groupBox.IsHandleCreated);
 
             var accessibleName = groupBoxAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId);
             Assert.Equal(testAccName, accessibleName);
@@ -34,9 +32,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             groupBox.Text = "Some test groupBox text";
             var groupBoxAccessibleObject = new GroupBox.GroupBoxAccessibleObject(groupBox);
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(groupBox.IsHandleCreated);
+            Assert.False(groupBox.IsHandleCreated);
 
             bool supportsLegacyIAccessiblePatternId = groupBoxAccessibleObject.IsPatternSupported(Interop.UiaCore.UIA.LegacyIAccessiblePatternId);
             Assert.True(supportsLegacyIAccessiblePatternId);
@@ -51,10 +47,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             groupBox.AccessibleRole = AccessibleRole.Link;
             var groupBoxAccessibleObject = new GroupBox.GroupBoxAccessibleObject(groupBox);
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(groupBox.IsHandleCreated);
-
+            Assert.False(groupBox.IsHandleCreated);
             Assert.Equal(AccessibleRole.Link, groupBoxAccessibleObject.Role);
         }
 
@@ -68,10 +61,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             groupBox.AccessibleDescription = testAccDescription;
             var groupBoxAccessibleObject = new GroupBox.GroupBoxAccessibleObject(groupBox);
 
-            // Will fail when https://github.com/dotnet/winforms/pull/3432 is merged.
-            // Assert.False is expected here
-            Assert.True(groupBox.IsHandleCreated);
-
+            Assert.False(groupBox.IsHandleCreated);
             Assert.Equal(testAccDescription, groupBoxAccessibleObject.Description);
         }
     }

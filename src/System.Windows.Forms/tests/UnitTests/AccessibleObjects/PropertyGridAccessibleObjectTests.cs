@@ -39,6 +39,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void PropertyGridAccessibleObject_SupportsPattern(int pattern)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
+            propertyGrid.CreateControl();
             using ComboBox comboBox = new ComboBox();
             propertyGrid.SelectedObject = comboBox;
             PropertyGridAccessibleObject propertyGridAccessibleObject = new PropertyGridAccessibleObject(propertyGrid);

@@ -4439,7 +4439,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ControlOnResizeDescr))]
-         [EditorBrowsable(EditorBrowsableState.Advanced)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Resize
         {
             add => Events.AddHandler(s_resizeEvent, value);
@@ -5320,11 +5320,11 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(asyncResult));
             }
 
-                if (!(asyncResult is ThreadMethodEntry entry))
-                {
-                    throw new ArgumentException(SR.ControlBadAsyncResult, nameof(asyncResult));
-                }
-                Debug.Assert(this == entry._caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
+            if (!(asyncResult is ThreadMethodEntry entry))
+            {
+                throw new ArgumentException(SR.ControlBadAsyncResult, nameof(asyncResult));
+            }
+            Debug.Assert(this == entry._caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
 
             if (!asyncResult.IsCompleted)
             {
@@ -7658,10 +7658,14 @@ namespace System.Windows.Forms
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
 
+                // The Accessibility Object for this Control
                 if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
                 {
                     accObj.Handle = handle;
                 }
+
+                // Private accessibility object for control, used to wrap the object that
+                // OLEACC.DLL creates to represent the control's non-client (NC) region.
                 if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject ncAccObj)
                 {
                     ncAccObj.Handle = handle;
@@ -7745,6 +7749,19 @@ namespace System.Windows.Forms
         protected virtual void OnHandleDestroyed(EventArgs e)
         {
             ((EventHandler)Events[s_handleDestroyedEvent])?.Invoke(this, e);
+
+            // The Accessibility Object for this Control
+            if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
+            {
+                accObj.Handle = IntPtr.Zero;
+            }
+
+            // Private accessibility object for control, used to wrap the object that
+            // OLEACC.DLL creates to represent the control's non-client (NC) region.
+            if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject ncAccObj)
+            {
+                ncAccObj.Handle = IntPtr.Zero;
+            }
 
             UpdateReflectParent(false);
 
@@ -9741,11 +9758,14 @@ namespace System.Windows.Forms
         /// <param name="handle">The window handle.</param>
         internal virtual void ReleaseUiaProvider(IntPtr handle)
         {
-            // When a window that previously returned providers has been destroyed,
-            // you should notify UI Automation by calling the UiaReturnRawElementProvider
-            // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
-            // UI Automation that it can safely remove all map entries that refer to the specified window.
-            UiaCore.UiaReturnRawElementProvider(new HandleRef(this, handle), IntPtr.Zero, IntPtr.Zero, null);
+            if (handle != IntPtr.Zero)
+            {
+                // When a window that previously returned providers has been destroyed,
+                // you should notify UI Automation by calling the UiaReturnRawElementProvider
+                // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
+                // UI Automation that it can safely remove all map entries that refer to the specified window.
+                UiaCore.UiaReturnRawElementProvider(new HandleRef(this, handle), IntPtr.Zero, IntPtr.Zero, null);
+            }
 
             if (OsVersion.IsWindows8OrGreater && Properties.GetObject(s_accessibilityProperty) is object)
             {
@@ -11840,7 +11860,7 @@ namespace System.Windows.Forms
 
             if (SupportsUiaProviders)
             {
-                ReleaseUiaProvider(Handle);
+                ReleaseUiaProvider(HandleInternal);
             }
 
             OnHandleDestroyed(EventArgs.Empty);

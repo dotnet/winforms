@@ -19,13 +19,21 @@ namespace System.Windows.Forms.Tests
 {
     public partial class ControlTests
     {
-        [WinFormsFact]
-        public void Control_AccessibilityObject_Get_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Control_AccessibilityObject_Get_ReturnsExpected(bool createControl)
         {
             using var control = new Control();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             Control.ControlAccessibleObject accessibleObject = Assert.IsType<Control.ControlAccessibleObject>(control.AccessibilityObject);
             Assert.Same(accessibleObject, control.AccessibilityObject);
-            Assert.True(control.IsHandleCreated);
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.Same(control, accessibleObject.Owner);
         }
 

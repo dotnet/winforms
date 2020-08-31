@@ -584,8 +584,14 @@ namespace System.Drawing.Design
 
                 public override AccessibleObject HitTest(int x, int y)
                 {
+                    if (!ColorPalette.IsHandleCreated)
+                    {
+                        return base.HitTest(x, y);
+                    }
+
                     // Convert from screen to client coordinates
                     var pt = new Point(x, y);
+
                     ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
 
                     int cell = ColorPalette.GetCellFromLocationMouse(pt.X, pt.Y);
@@ -620,7 +626,12 @@ namespace System.Drawing.Design
 
                             // Translate rect to screen coordinates
                             var pt = new Point(rect.X, rect.Y);
-                            ClientToScreen(new HandleRef(parent.ColorPalette, parent.ColorPalette.Handle), ref pt);
+                            var palette = parent.ColorPalette;
+
+                            if (palette.IsHandleCreated)
+                            {
+                                ClientToScreen(new HandleRef(palette, palette.Handle), ref pt);
+                            }
 
                             return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);
                         }

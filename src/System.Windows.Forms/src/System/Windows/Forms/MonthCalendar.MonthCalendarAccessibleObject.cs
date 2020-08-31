@@ -40,6 +40,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (!_owner.IsHandleCreated)
+                    {
+                        return false;
+                    }
+
                     bool result = GetCalendarGridInfoText(MCGIP.CALENDARCELL, _calendarIndex, -1, 0, out string text);
                     if (!result || string.IsNullOrEmpty(text))
                     {
@@ -167,6 +172,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (!_owner.IsHandleCreated)
+                    {
+                        return 0;
+                    }
+
                     GetCalendarGridInfo(
                         MCGIF.RECT,
                         MCGIP.CALENDARBODY,
@@ -209,6 +219,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (!_owner.IsHandleCreated)
+                    {
+                        return 0;
+                    }
+
                     GetCalendarGridInfo(
                         MCGIF.RECT,
                         MCGIP.CALENDARBODY,
@@ -255,6 +270,11 @@ namespace System.Windows.Forms
             {
                 int innerX = (int)x;
                 int innerY = (int)y;
+
+                if (!_owner.IsHandleCreated)
+                {
+                    return base.ElementProviderFromPoint(x, y);
+                }
 
                 MCHITTESTINFO hitTestInfo = GetHitTestInfo(innerX, innerY);
 
@@ -306,8 +326,13 @@ namespace System.Windows.Forms
 
             public unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
             {
+                if (!_owner.IsHandleCreated || HandleInternal == IntPtr.Zero)
+                {
+                    return new MCHITTESTINFO();
+                }
+
                 Point point = new Point(xScreen, yScreen);
-                User32.MapWindowPoints(IntPtr.Zero, Handle, ref point, 1);
+                User32.MapWindowPoints(IntPtr.Zero, HandleInternal, ref point, 1);
                 var hitTestInfo = new MCHITTESTINFO
                 {
                     cbSize = (uint)sizeof(MCHITTESTINFO),
@@ -349,6 +374,7 @@ namespace System.Windows.Forms
             private CalendarCellAccessibleObject GetCalendarCell(int calendarIndex, AccessibleObject parentAccessibleObject, int columnIndex)
             {
                 if (parentAccessibleObject is null ||
+                    !_owner.IsHandleCreated ||
                     columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
                     columnIndex >= ColumnCount)
@@ -407,6 +433,7 @@ namespace System.Windows.Forms
             private CalendarRowAccessibleObject GetCalendarRow(int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex)
             {
                 if (parentAccessibleObject is null ||
+                    !_owner.IsHandleCreated ||
                     (HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
                     rowIndex >= RowCount)
                 {
@@ -456,6 +483,14 @@ namespace System.Windows.Forms
                     "GetCalendarGridInfo() should be used only to obtain Date and Rect,"
                     + "dwFlags has flag bits other that MCGIF_DATE and MCGIF_RECT");
 
+                if (!_owner.IsHandleCreated)
+                {
+                    rectangle = default;
+                    endDate = default;
+                    startDate = default;
+                    return false;
+                }
+
                 var gridInfo = new MCGRIDINFO
                 {
                     cbSize = (uint)sizeof(MCGRIDINFO),
@@ -485,6 +520,11 @@ namespace System.Windows.Forms
 
             private bool GetCalendarGridInfo(ref MCGRIDINFO gridInfo)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    return false;
+                }
+
                 // Do not use this if gridInfo.dwFlags contains MCGIF_NAME;
                 // use GetCalendarGridInfoText() instead.
                 Debug.Assert(
@@ -498,6 +538,12 @@ namespace System.Windows.Forms
 
             private unsafe bool GetCalendarGridInfoText(MCGIP dwPart, int calendarIndex, int row, int column, out string text)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    text = string.Empty;
+                    return false;
+                }
+
                 const int nameLength = 128;
                 Span<char> name = stackalloc char[nameLength + 2];
 
@@ -525,6 +571,12 @@ namespace System.Windows.Forms
 
             public bool GetCalendarPartRectangle(int calendarIndex, MCGIP dwPart, int row, int column, out RECT calendarPartRectangle)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    calendarPartRectangle = default;
+                    return false;
+                }
+
                 bool success = GetCalendarGridInfo(
                     MCGIF.RECT,
                     dwPart,
@@ -639,6 +691,11 @@ namespace System.Windows.Forms
 
             public void RaiseAutomationEventForChild(UiaCore.UIA automationEventId, DateTime selectionStart, DateTime selectionEnd)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    return;
+                }
+
                 AccessibleObject calendarChildAccessibleObject = GetCalendarChildAccessibleObject(selectionStart, selectionEnd);
 
                 if (calendarChildAccessibleObject != null)
@@ -654,6 +711,11 @@ namespace System.Windows.Forms
 
             private AccessibleObject GetCalendarChildAccessibleObject(DateTime selectionStart, DateTime selectionEnd)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
 
                 if (bodyAccessibleObject is null)
@@ -712,7 +774,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
             {
-                if (!HasHeaderRow)
+                if (!_owner.IsHandleCreated || !HasHeaderRow)
                 {
                     return null;
                 }

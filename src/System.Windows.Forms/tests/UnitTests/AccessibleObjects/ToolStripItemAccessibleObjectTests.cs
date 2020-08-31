@@ -51,13 +51,16 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
         public void ToolStripItemAccessibleObject_LegacyIAccessible_Custom_Role_ReturnsExpected(Type type)
         {
-            using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
-            item.AccessibleRole = AccessibleRole.Link;
-            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
+            using (new NoAssertContext())
+            {
+                using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
+                item.AccessibleRole = AccessibleRole.Link;
+                AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
-            var accessibleObjectRole = toolStripItemAccessibleObject.Role;
+                var accessibleObjectRole = toolStripItemAccessibleObject.Role;
 
-            Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+                Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+            }
         }
 
         [WinFormsTheory]

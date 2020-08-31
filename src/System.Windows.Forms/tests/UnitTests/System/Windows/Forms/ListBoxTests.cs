@@ -4752,16 +4752,25 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
-        [WinFormsFact]
-        public void ListBox_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.List)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ListBox_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
         {
             using var control = new SubListBox();
+
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
             Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
-            Assert.Equal(AccessibleRole.List, instance.Role);
+            Assert.Equal(accessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsFact]

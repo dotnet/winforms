@@ -83,9 +83,10 @@ namespace System.Windows.Forms
                         return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
-                    if (_systemIAccessible != null)
+                    object? systemIAccessibleState = _systemIAccessible?.get_accState(GetChildId());
+                    if (systemIAccessibleState != null)
                     {
-                        return state |= (AccessibleStates)(_systemIAccessible.get_accState(GetChildId()));
+                        return state |= (AccessibleStates)systemIAccessibleState;
                     }
 
                     return state;

@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Tests
             list.Items.Add(listItem);
 
             AccessibleObject accessibleObject = listItem.AccessibilityObject;
-            Assert.True(list.IsHandleCreated);
+            Assert.False(list.IsHandleCreated);
             Assert.NotNull(accessibleObject);
             Assert.Equal(AccessibleRole.ListItem, accessibleObject.Role);
         }
@@ -49,7 +49,6 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem = new ListViewItem("ListItem");
             list.Items.Add(listItem);
             AccessibleObject listItemAccessibleObject = listItem.AccessibilityObject;
-            Assert.True(list.IsHandleCreated);
 
             object accessibleName = listItemAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
             Assert.Equal("ListItem", accessibleName);
@@ -64,12 +63,14 @@ namespace System.Windows.Forms.Tests
             Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId));
             Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsScrollItemPatternAvailablePropertyId));
             Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsInvokePatternAvailablePropertyId));
+            Assert.False(list.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void ListViewItemAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly()
+        public void ListViewItemAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly_IfHandleIsCreated()
         {
             using ListView listView = new ListView();
+            listView.CreateControl();
             ListViewItem listItem1 = new ListViewItem(new string[] {
                 "Test A",
                 "Alpha"}, -1);
@@ -85,7 +86,6 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject1 = listItem1.AccessibilityObject;
             AccessibleObject accessibleObject2 = listItem2.AccessibilityObject;
             AccessibleObject accessibleObject3 = listItem3.AccessibilityObject;
-            Assert.True(listView.IsHandleCreated);
 
             // First list view item
             Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
@@ -118,6 +118,50 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<ListViewSubItemAccessibleObject>(firstChild);
             Assert.IsType<ListViewSubItemAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly_IfHandleIsNotCreated()
+        {
+            using ListView listView = new ListView();
+            ListViewItem listItem1 = new ListViewItem(new string[] {
+                "Test A",
+                "Alpha"}, -1);
+            ListViewItem listItem2 = new ListViewItem(new string[] {
+                "Test B",
+                "Beta"}, -1);
+            ListViewItem listItem3 = new ListViewItem(new string[] {
+                "Test C",
+                "Gamma"}, -1);
+            listView.Items.Add(listItem1);
+            listView.Items.Add(listItem2);
+            listView.Items.Add(listItem3);
+            AccessibleObject accessibleObject1 = listItem1.AccessibilityObject;
+            AccessibleObject accessibleObject2 = listItem2.AccessibilityObject;
+            AccessibleObject accessibleObject3 = listItem3.AccessibilityObject;
+
+            // List view items
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+
+            // Childs
+            AccessibleObject firstChild = accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+            AccessibleObject lastChild = accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+            Assert.IsType<ListViewSubItemAccessibleObject>(firstChild);
+            Assert.IsType<ListViewSubItemAccessibleObject>(lastChild);
+            Assert.NotEqual(firstChild, lastChild);
+
+            // Parent
+            Assert.Equal(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
+            Assert.Equal(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
+            Assert.Equal(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
+
+            Assert.False(listView.IsHandleCreated);
         }
     }
 }

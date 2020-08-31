@@ -67,8 +67,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets the color used to display active links.
-            /// </summary>
+        ///  Gets or sets the color used to display active links.
+        /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.LinkLabelActiveLinkColorDescr))]
         public Color ActiveLinkColor
@@ -258,8 +258,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets ir sets a value that represents how the link will be underlined.
-            /// </summary>
+        ///  Gets ir sets a value that represents how the link will be underlined.
+        /// </summary>
         [DefaultValue(LinkBehavior.SystemDefault)]
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.LinkLabelLinkBehaviorDescr))]
@@ -286,8 +286,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets the color used to display links in normal cases.
-            /// </summary>
+        ///  Gets or sets the color used to display links in normal cases.
+        /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.LinkLabelLinkColorDescr))]
         public Color LinkColor
@@ -335,8 +335,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets a value indicating whether the link should be displayed as if it was visited.
-            /// </summary>
+        ///  Gets or sets a value indicating whether the link should be displayed as if it was visited.
+        /// </summary>
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.LinkLabelLinkVisitedDescr))]
@@ -882,10 +882,10 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets a value that is returned to the
+        ///  Gets or sets a value that is returned to the
         ///  parent form when the link label.
         ///  is clicked.
-            /// </summary>
+        /// </summary>
         DialogResult IButtonControl.DialogResult
         {
             get
@@ -2608,16 +2608,24 @@ namespace System.Windows.Forms
 
             public override AccessibleObject HitTest(int x, int y)
             {
+                if (!Owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 Point p = Owner.PointToClient(new Point(x, y));
                 Link hit = ((LinkLabel)Owner).PointInLink(p.X, p.Y);
+
                 if (hit != null)
                 {
                     return new LinkAccessibleObject(hit);
                 }
+
                 if (Bounds.Contains(x, y))
                 {
                     return this;
                 }
+
                 return null;
             }
 
@@ -2642,6 +2650,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (!_link.Owner.IsHandleCreated)
+                    {
+                        return Rectangle.Empty;
+                    }
+
                     Region region = _link.VisualRegion;
                     Graphics g = Graphics.FromHwnd(_link.Owner.Handle);
 

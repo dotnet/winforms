@@ -28,7 +28,8 @@ namespace System.Windows.Forms
 
             internal override Rectangle BoundingRectangle => Bounds;
 
-            public override Rectangle Bounds => _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size));
+            public override Rectangle Bounds => _control.IsHandleCreated ?
+                                                _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size)) : Rectangle.Empty;
 
             private int ControlItemsCount => _window.ControlItems.Count;
 

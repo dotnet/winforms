@@ -20,24 +20,36 @@ namespace System.Windows.Forms
         {
             private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;
 
-            private IntPtr _handle = IntPtr.Zero; // Associated window handle (if any)
-            private int[]? _runtimeId;     // Used by UIAutomation
+            private IntPtr _handle = IntPtr.Zero;   // Associated window handle (if any)
+            private int[]? _runtimeId;              // Used by UIAutomation
+            private bool _getOwnerControlHandle;
 
             public ControlAccessibleObject(Control ownerControl)
             {
                 Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
-                IntPtr handle = ownerControl.Handle;
-                Handle = handle;
+                InitHandle(ownerControl);
             }
 
             internal ControlAccessibleObject(Control ownerControl, int accObjId)
             {
-                Debug.Assert(ownerControl != null, "Cannot construct a ControlAccessibleObject with a null ownerControl");
-
                 AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
                 Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
-                IntPtr handle = ownerControl.Handle;
-                Handle = handle;
+                InitHandle(ownerControl);
+            }
+
+            private void InitHandle(Control ownerControl)
+            {
+                if (ownerControl.IsHandleCreated)
+                {
+                    Handle = ownerControl.Handle;
+                }
+                else
+                {
+                    // If the owner control doesn't have a valid handle, wait until there is either
+                    // a request to create it, or the owner control creates a handle, which will
+                    // be set via Handle property.
+                    _getOwnerControlHandle = true;
+                }
             }
 
             /// <summary>
@@ -162,7 +174,7 @@ namespace System.Windows.Forms
                 {
                     if (_runtimeId is null)
                     {
-                        _runtimeId = new int[] { 0x2a, (int)(long)Handle };
+                        _runtimeId = new int[] { 0x2a, (int)(long)HandleInternal };
                     }
 
                     return _runtimeId;
@@ -173,7 +185,16 @@ namespace System.Windows.Forms
 
             public IntPtr Handle
             {
-                get => _handle;
+                get
+                {
+                    if (_getOwnerControlHandle)
+                    {
+                        _getOwnerControlHandle = false;
+                        _handle = Owner.Handle;
+                    }
+
+                    return _handle;
+                }
                 set
                 {
                     if (_handle == value)
@@ -182,8 +203,9 @@ namespace System.Windows.Forms
                     }
 
                     _handle = value;
+                    _getOwnerControlHandle = false;
 
-                    if (s_oleAccAvailable == IntPtr.Zero)
+                    if (s_oleAccAvailable == IntPtr.Zero || _handle == IntPtr.Zero)
                     {
                         return;
                     }
@@ -201,7 +223,7 @@ namespace System.Windows.Forms
                     // We need to store internally the system provided
                     // IAccessible, because some windows forms controls use it
                     // as the default IAccessible implementation.
-                    if (_handle != IntPtr.Zero && s_oleAccAvailable != IntPtr.Zero)
+                    if (s_oleAccAvailable != IntPtr.Zero)
                     {
                         UseStdAccessibleObjects(_handle);
                     }
@@ -212,6 +234,8 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
+            internal IntPtr HandleInternal => _handle;
 
             public override string? Help
             {
@@ -388,26 +412,41 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent)
             {
+                if (HandleInternal == IntPtr.Zero)
+                {
+                    return;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = self");
 
-                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), User32.OBJID.CLIENT, 0);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, HandleInternal), User32.OBJID.CLIENT, 0);
             }
 
             public void NotifyClients(AccessibleEvents accEvent, int childID)
             {
+                if (HandleInternal == IntPtr.Zero)
+                {
+                    return;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
-                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), User32.OBJID.CLIENT, childID + 1);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, HandleInternal), User32.OBJID.CLIENT, childID + 1);
             }
 
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
             {
+                if (HandleInternal == IntPtr.Zero)
+                {
+                    return;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
-                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, Handle), objectID, childID + 1);
+                User32.NotifyWinEvent((uint)accEvent, new HandleRef(this, HandleInternal), objectID, childID + 1);
             }
 
             /// <summary>
@@ -489,13 +528,18 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out UiaCore.IRawElementProviderSimple provider);
+                    if (HandleInternal == IntPtr.Zero)
+                    {
+                        return null;
+                    }
+
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, HandleInternal), out UiaCore.IRawElementProviderSimple provider);
                     return provider;
                 }
             }
 
             public override string ToString()
-                => $"ControlAccessibleObject: Owner = {Owner?.ToString() ?? "null"}";
+                => $"{nameof(ControlAccessibleObject)}: Owner = {Owner?.ToString() ?? "null"}";
         }
     }
 }

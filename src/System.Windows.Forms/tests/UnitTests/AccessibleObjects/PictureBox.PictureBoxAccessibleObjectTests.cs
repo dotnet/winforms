@@ -23,8 +23,7 @@ namespace System.Windows.Forms.Tests
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
             Assert.NotNull(pictureBoxAccessibleObject.Owner);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            Assert.False(pictureBox.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -39,8 +38,7 @@ namespace System.Windows.Forms.Tests
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
             Assert.Equal("TestDescription", pictureBoxAccessibleObject.Description);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            Assert.False(pictureBox.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -55,8 +53,7 @@ namespace System.Windows.Forms.Tests
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
             Assert.Equal("TestName", pictureBoxAccessibleObject.Name);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            Assert.False(pictureBox.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -71,20 +68,24 @@ namespace System.Windows.Forms.Tests
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
             Assert.Equal(AccessibleRole.PushButton, pictureBoxAccessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            Assert.False(pictureBox.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void PictureBoxAccessibleObject_DefaultRole_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Client)]
+        [InlineData(false, AccessibleRole.None)]
+        public void PictureBoxAccessibleObject_DefaultRole_ReturnsExpected(bool createControl, AccessibleRole accessibleRole)
         {
             using var pictureBox = new PictureBox();
-            Assert.False(pictureBox.IsHandleCreated);
-            var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
-            Assert.Equal(AccessibleRole.Client, pictureBoxAccessibleObject.Role);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            if (createControl)
+            {
+                pictureBox.CreateControl();
+            }
+
+            var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
+            Assert.Equal(accessibleRole, pictureBoxAccessibleObject.Role);
+            Assert.Equal(createControl, pictureBox.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -105,8 +106,7 @@ namespace System.Windows.Forms.Tests
             object value = pictureBoxAccessibleObject.GetPropertyValue((UIA)propertyID);
 
             Assert.Equal(expected, value);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            Assert.False(pictureBox.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -117,8 +117,7 @@ namespace System.Windows.Forms.Tests
             var pictureBoxAccessibleObject = new PictureBox.PictureBoxAccessibleObject(pictureBox);
 
             Assert.True(pictureBoxAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(pictureBox.IsHandleCreated);
+            Assert.False(pictureBox.IsHandleCreated);
         }
     }
 }
