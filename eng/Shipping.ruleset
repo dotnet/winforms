@@ -382,7 +382,7 @@
     <Rule Id="CA5351" Action="Warning" />          <!-- Do Not Use Broken Cryptographic Algorithms -->
     <Rule Id="CA5358" Action="None" />             <!-- Review cipher mode usage with cryptography experts -->
     <Rule Id="CA5359" Action="Warning" />          <!-- Do Not Disable Certificate Validation -->
-    <Rule Id="CA5360" Action="Warning" />          <!-- Do Not Call Dangerous Methods In Deserialization -->
+    <Rule Id="CA5360" Action="None" />             <!-- Do Not Call Dangerous Methods In Deserialization -->
     <Rule Id="CA5361" Action="Warning" />          <!-- Do Not Disable SChannel Use of Strong Crypto -->
     <Rule Id="CA5362" Action="None" />             <!-- Potential reference cycle in deserialized object graph -->
     <Rule Id="CA5363" Action="Warning" />          <!-- Do Not Disable Request Validation -->
