@@ -2212,6 +2212,16 @@
         <target state="translated">모눈에 있는 셀의 ValueType 속성은 null일 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="new">{0} check box checked</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="new">{0} check box unchecked</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">선택한 상태</target>

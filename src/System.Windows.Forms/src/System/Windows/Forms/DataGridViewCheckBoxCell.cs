@@ -848,6 +848,7 @@ namespace System.Windows.Forms
                 if (SwitchFormattedValue())
                 {
                     NotifyDataGridViewOfValueChange();
+                    NotifyUiaClient();
                 }
             }
         }
@@ -895,7 +896,8 @@ namespace System.Windows.Forms
                     }
                     e.Handled = true;
                 }
-                NotifyMASSClient(new Point(ColumnIndex, rowIndex));
+
+                NotifyMSAAClient(ColumnIndex, rowIndex);
             }
         }
 
@@ -996,17 +998,42 @@ namespace System.Windows.Forms
             if (e.Button == MouseButtons.Left)
             {
                 UpdateButtonState(ButtonState & ~ButtonState.Pushed, e.RowIndex);
-                NotifyMASSClient(new Point(e.ColumnIndex, e.RowIndex));
+                NotifyMSAAClient(e.ColumnIndex, e.RowIndex);
             }
         }
 
-        private void NotifyMASSClient(Point position)
+        private void NotifyUiaClient()
         {
-            Debug.Assert((position.X >= 0) && (position.X < DataGridView.Columns.Count));
-            Debug.Assert((position.Y >= 0) && (position.Y < DataGridView.Rows.Count));
+            bool isCheckboxChecked = false;
+            switch (EditingCellFormattedValue)
+            {
+                case string stringValue:
+                    isCheckboxChecked = stringValue == SR.DataGridViewCheckBoxCell_ClipboardChecked;
+                    break;
+                case CheckState checkStateValue:
+                    isCheckboxChecked = checkStateValue == CheckState.Checked;
+                    break;
+                case bool boolValue:
+                    isCheckboxChecked = boolValue;
+                    break;
+            }
 
-            int visibleRowIndex = DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, position.Y);
-            int visibleColumnIndex = DataGridView.Columns.ColumnIndexToActualDisplayIndex(position.X, DataGridViewElementStates.Visible);
+            var cellName = AccessibilityObject.Name ?? string.Empty;
+            AccessibilityObject.InternalRaiseAutomationNotification(
+                Automation.AutomationNotificationKind.Other,
+                Automation.AutomationNotificationProcessing.MostRecent,
+                isCheckboxChecked
+                    ? string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName)
+                    : string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName));
+        }
+
+        private void NotifyMSAAClient(int columnIndex, int rowIndex)
+        {
+            Debug.Assert((columnIndex >= 0) && (columnIndex < DataGridView.Columns.Count));
+            Debug.Assert((rowIndex >= 0) && (rowIndex < DataGridView.Rows.Count));
+
+            int visibleRowIndex = DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, rowIndex);
+            int visibleColumnIndex = DataGridView.Columns.ColumnIndexToActualDisplayIndex(columnIndex, DataGridViewElementStates.Visible);
 
             int topHeaderRowIncrement = DataGridView.ColumnHeadersVisible ? 1 : 0;
             int rowHeaderIncrement = DataGridView.RowHeadersVisible ? 1 : 0;
@@ -1017,7 +1044,10 @@ namespace System.Windows.Forms
             int childID = visibleColumnIndex + rowHeaderIncrement;  // + 1 because the column header cell is at index 0 in top header row acc obj
                                                                     //     same thing for the row header cell in the data grid view row acc obj
 
-            (DataGridView.AccessibilityObject as Control.ControlAccessibleObject).NotifyClients(AccessibleEvents.StateChange, objectID, childID);
+            if (DataGridView.AccessibilityObject is Control.ControlAccessibleObject accessibleObject)
+            {
+                accessibleObject.NotifyClients(AccessibleEvents.StateChange, objectID, childID);
+            }
         }
 
         protected override void Paint(Graphics graphics,
