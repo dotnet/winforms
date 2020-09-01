@@ -1,6 +1,8 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using static Interop;
 
@@ -10,7 +12,7 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewImageCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-            public DataGridViewImageCellAccessibleObject(DataGridViewCell? owner) : base(owner)
+            public DataGridViewImageCellAccessibleObject(DataGridViewCell owner) : base(owner)
             {
             }
 
@@ -22,11 +24,25 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string? Description => Owner is DataGridViewImageCell imageCell ? imageCell.Description : null;
+            public override string Description
+            {
+                get
+                {
+                    if (Owner is DataGridViewImageCell imageCell)
+                    {
+                        return imageCell.Description;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
 
-            public override string? Value
+            public override string Value
             {
                 get => base.Value;
+
                 set
                 {
                     // do nothing.
@@ -35,41 +51,47 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (Owner is null)
-                {
-                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
-                }
+                DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)Owner;
+                DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (!(Owner is DataGridViewImageCell dataGridViewCell))
-                {
-                    return;
-                }
-
-                DataGridView? dataGridView = dataGridViewCell.DataGridView;
-                if (dataGridView != null &&
-                    dataGridView.IsHandleCreated &&
-                    dataGridViewCell.RowIndex != -1 &&
-                    dataGridViewCell.OwningColumn != null &&
-                    dataGridViewCell.OwningRow != null)
+                if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
+                    dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
                 {
                     dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                 }
             }
 
-            public override int GetChildCount() => 0;
+            public override int GetChildCount()
+            {
+                return 0;
+            }
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ImageControlTypeId,
-                    UiaCore.UIA.IsInvokePatternAvailablePropertyId => true,
-                    _ => base.GetPropertyValue(propertyID)
-                };
+                    return UiaCore.UIA.ImageControlTypeId;
+                }
+
+                if (propertyID == UiaCore.UIA.IsInvokePatternAvailablePropertyId)
+                {
+                    return true;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId == UiaCore.UIA.InvokePatternId ? true : base.IsPatternSupported(patternId);
+            {
+                if (patternId == UiaCore.UIA.InvokePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
         }
     }
 }
