@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Tests
                 Validate.SkipType(Gdi32.EMR.BITBLT),
                 Validate.TextOut("Flat Style"),
                 Validate.Rectangle(
-                    new Rectangle(0, 0, button.Width - 2, button.Height - 2),
+                    new Rectangle(0, 0, button.Width - 1, button.Height - 1),
                     penColor: Color.Black,
                     penStyle: Gdi32.PS.ENDCAP_ROUND,
                     brushColor: Color.Empty,        // Color doesn't really matter as we're using a null brush
