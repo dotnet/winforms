@@ -251,12 +251,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             _owningDropDownButton = owningDropDownButton;
             _owningPropertyGrid = owningDropDownButton.Parent as PropertyGridView;
 
-            UseStdAccessibleObjects(owningDropDownButton.Handle);
+            if (owningDropDownButton.IsHandleCreated)
+            {
+                UseStdAccessibleObjects(owningDropDownButton.Handle);
+            }
         }
 
         public override void DoDefaultAction()
         {
-            _owningDropDownButton.PerformButtonClick();
+            if (_owningDropDownButton.IsHandleCreated)
+            {
+                _owningDropDownButton.PerformButtonClick();
+            }
         }
 
         /// <summary>
@@ -318,6 +324,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         internal override void SetFocus()
         {
+            if (!_owningDropDownButton.IsHandleCreated)
+            {
+                return;
+            }
+
             RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
 
             base.SetFocus();

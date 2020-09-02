@@ -1806,7 +1806,10 @@ namespace System.Windows.Forms
 
             internal override void Toggle()
             {
-                ((DateTimePicker)Owner).Checked = !((DateTimePicker)Owner).Checked;
+                if (Owner.IsHandleCreated)
+                {
+                    ((DateTimePicker)Owner).Checked = !((DateTimePicker)Owner).Checked;
+                }
             }
 
             #endregion

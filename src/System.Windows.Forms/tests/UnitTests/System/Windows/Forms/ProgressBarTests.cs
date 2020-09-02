@@ -1758,14 +1758,23 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
         }
 
-        [WinFormsFact]
-        public void ProgressBar_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.ProgressBar)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ProgressBar_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
         {
             using var control = new SubProgressBar();
+            if (createControl)
+            {
+                control.CreateControl();
+            }
+
+            Assert.Equal(createControl, control.IsHandleCreated);
             Control.ControlAccessibleObject instance = Assert.IsAssignableFrom<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
-            Assert.Equal(AccessibleRole.ProgressBar, instance.Role);
+            Assert.Equal(expectedAccessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
         }
@@ -2616,6 +2625,8 @@ namespace System.Windows.Forms.Tests
                 get => base.ImeModeBase;
                 set => base.ImeModeBase = value;
             }
+
+            public new bool IsHandleCreated => base.IsHandleCreated;
 
             public new bool ResizeRedraw
             {

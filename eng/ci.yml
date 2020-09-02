@@ -2,7 +2,7 @@ parameters:
   # parameters should default to values for running in the External / Public
   # be read from a user-defined variable (Azure DevOps limitation)
   agentPoolName: NetCorePublic-Pool
-  agentPool: 'BuildPool.Windows.10.Amd64.VS2019.Pre.Open'
+  agentPool: 'BuildPool.Windows.10.Amd64.VS2019.Open'
   repoName: dotnet/winforms
 
 stages:
@@ -24,7 +24,7 @@ stages:
         pool:
           ${{ if eq(variables['System.TeamProject'], 'public') }}:
             name: NetCorePublic-Pool
-            queue: BuildPool.Windows.10.Amd64.VS2019.Pre.Open
+            queue: BuildPool.Windows.10.Amd64.VS2019.Open
           ${{ if ne(variables['System.TeamProject'], 'public') }}:
             name: NetCoreInternal-Pool
             queue: BuildPool.Windows.10.Amd64.VS2019.Pre

@@ -23,8 +23,7 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.NotNull(radioButtonAccessibleObject.Owner);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -39,8 +38,7 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.Equal("TestActionDescription", radioButtonAccessibleObject.DefaultAction);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -55,8 +53,7 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.Equal("TestDescription", radioButtonAccessibleObject.Description);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -71,8 +68,7 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.Equal("TestName", radioButtonAccessibleObject.Name);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -87,8 +83,7 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.Equal(AccessibleRole.PushButton, radioButtonAccessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -99,38 +94,49 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.Equal(AccessibleRole.RadioButton, radioButtonAccessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void RadioButtonAccessibleObject_State_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleStates.Focusable, AccessibleStates.Focusable | AccessibleStates.Checked)]
+        [InlineData(false, AccessibleStates.None, AccessibleStates.None)]
+        public void RadioButtonAccessibleObject_State_ReturnsExpected(bool createControl, AccessibleStates accessibleStatesFirstStage, AccessibleStates accessibleStatesSecondStage)
         {
             using var radioButton = new RadioButton();
-            Assert.False(radioButton.IsHandleCreated);
+
+            if (createControl)
+            {
+                radioButton.CreateControl();
+            }
+
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
-            Assert.Equal(AccessibleStates.Focusable, radioButtonAccessibleObject.State);
+            Assert.Equal(accessibleStatesFirstStage, radioButtonAccessibleObject.State);
 
             radioButtonAccessibleObject.DoDefaultAction();
 
-            Assert.Equal(AccessibleStates.Focusable | AccessibleStates.Checked, radioButtonAccessibleObject.State);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.Equal(accessibleStatesSecondStage, radioButtonAccessibleObject.State);
+            Assert.Equal(createControl, radioButton.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void RadioButtonAccessibleObject_IsItemSelected_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void RadioButtonAccessibleObject_IsItemSelected_ReturnsExpected(bool createControl)
         {
             using var radioButton = new RadioButton();
-            Assert.False(radioButton.IsHandleCreated);
+
+            if (createControl)
+            {
+                radioButton.CreateControl();
+            }
+
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
             Assert.False(radioButtonAccessibleObject.IsItemSelected);
 
             radioButtonAccessibleObject.DoDefaultAction();
 
-            Assert.True(radioButtonAccessibleObject.IsItemSelected);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.Equal(createControl, radioButtonAccessibleObject.IsItemSelected);
+            Assert.Equal(createControl, radioButton.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -151,8 +157,7 @@ namespace System.Windows.Forms.Tests
             object value = radioButtonAccessibleObject.GetPropertyValue((UIA)propertyID);
 
             Assert.Equal(expected, value);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -169,8 +174,7 @@ namespace System.Windows.Forms.Tests
             var radioButtonAccessibleObject = new RadioButton.RadioButtonAccessibleObject(radioButton);
 
             Assert.True(radioButtonAccessibleObject.IsPatternSupported((UIA)patternId));
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(radioButton.IsHandleCreated);
+            Assert.False(radioButton.IsHandleCreated);
         }
     }
 }

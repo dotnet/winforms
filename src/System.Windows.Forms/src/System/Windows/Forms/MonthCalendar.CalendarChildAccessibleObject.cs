@@ -53,14 +53,14 @@ namespace System.Windows.Forms
                 new int[]
                 {
                     RuntimeIDFirstItem,
-                    _calendarAccessibleObject.Owner.Handle.ToInt32(),
+                    (int)(long)_calendarAccessibleObject.Owner.InternalHandle,
                     GetChildId()
                 };
 
             public void RaiseMouseClick()
             {
                 // Make sure that the control is enabled.
-                if (User32.IsWindowEnabled(_calendarAccessibleObject.Owner.Handle).IsFalse())
+                if (!_calendarAccessibleObject.Owner.IsHandleCreated || User32.IsWindowEnabled(_calendarAccessibleObject.Owner.Handle).IsFalse())
                 {
                     return;
                 }

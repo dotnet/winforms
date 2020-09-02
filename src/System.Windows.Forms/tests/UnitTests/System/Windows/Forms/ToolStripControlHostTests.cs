@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2506,14 +2506,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        [WinFormsFact]
-        public void ToolStripControlHost_CreateAccessibilityInstance_Invoke_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Client)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ToolStripControlHost_CreateAccessibilityInstance_Invoke_ReturnsExpected(bool createControl, AccessibleRole expectedAccessibleRole)
         {
             using var c = new Control();
+            if (createControl)
+            {
+                c.CreateControl();
+            }
+
+            Assert.Equal(createControl, c.IsHandleCreated);
             using var item = new SubToolStripControlHost(c);
             ToolStripItem.ToolStripItemAccessibleObject accessibleObject = Assert.IsAssignableFrom<ToolStripItem.ToolStripItemAccessibleObject>(item.CreateAccessibilityInstance());
+            Assert.Equal(createControl, c.IsHandleCreated);
             Assert.Empty(accessibleObject.DefaultAction);
-            Assert.Equal(AccessibleRole.Client, accessibleObject.Role);
+            Assert.Equal(expectedAccessibleRole, accessibleObject.Role);
             Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
             Assert.NotSame(accessibleObject, item.CreateAccessibilityInstance());
             Assert.NotSame(accessibleObject, item.AccessibilityObject);
@@ -3951,10 +3960,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, callCount);
         }
 
-        [WinFormsFact]
-        public void ToolStripControlHost_OnUnsubscribeControlEvents_Invoke_Success()
+        [WinFormsTheory]
+        [InlineData(true, 0)]
+        [InlineData(false, -1)]
+        public void ToolStripControlHost_OnUnsubscribeControlEvents_Invoke_Success(bool createControl, int expectedResult)
         {
             using var c = new SubControl();
+
+            if (createControl)
+            {
+                c.CreateControl();
+            }
+
             using var item = new SubToolStripControlHost(c);
             item.OnUnsubscribeControlEvents(c);
 
@@ -4081,7 +4098,7 @@ namespace System.Windows.Forms.Tests
             c.OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
             Assert.Equal(0, mouseUpCallCount);
 
-            Assert.Equal(0, c.AccessibilityObject.GetHelpTopic(out string fileName));
+            Assert.Equal(expectedResult, c.AccessibilityObject.GetHelpTopic(out string fileName));
             Assert.Null(fileName);
             Assert.Equal(0, queryAccessibilityHelpCallCount);
 
@@ -4536,6 +4553,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubControl : Control
         {
+            public new void CreateControl() => base.CreateControl();
+
             public new void OnBackColorChanged(EventArgs e) => base.OnBackColorChanged(e);
 
             public new void OnClick(EventArgs e) => base.OnClick(e);

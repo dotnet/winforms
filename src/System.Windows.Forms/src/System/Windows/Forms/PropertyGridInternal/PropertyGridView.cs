@@ -6309,9 +6309,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  otherwise return null.
             /// </returns>
             internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-            {
-                return HitTest((int)x, (int)y);
-            }
+                => Owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
             /// <summary>
             ///  Request to return the element in the specified direction.
@@ -6754,6 +6752,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override AccessibleObject HitTest(int x, int y)
             {
+                if (!Owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 // Convert to client coordinates
                 var pt = new Point(x, y);
                 User32.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);

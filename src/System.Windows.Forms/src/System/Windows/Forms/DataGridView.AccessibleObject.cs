@@ -164,6 +164,11 @@ namespace System.Windows.Forms
 
             public override AccessibleObject HitTest(int x, int y)
             {
+                if (!owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 Point pt = owner.PointToClient(new Point(x, y));
                 HitTestInfo hti = owner.HitTest(pt.X, pt.Y);
 
@@ -407,7 +412,7 @@ namespace System.Windows.Forms
 
             internal override void SetFocus()
             {
-                if (owner.CanFocus)
+                if (owner.IsHandleCreated && owner.CanFocus)
                 {
                     owner.Focus();
                 }
@@ -418,14 +423,9 @@ namespace System.Windows.Forms
             #region IRawElementProviderFragmentRoot Implementation
 
             internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-            {
-                return HitTest((int)x, (int)y);
-            }
+                => owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
-            internal override UiaCore.IRawElementProviderFragment GetFocus()
-            {
-                return GetFocused();
-            }
+            internal override UiaCore.IRawElementProviderFragment GetFocus() => GetFocused();
 
             #endregion
         }

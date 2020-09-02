@@ -20,23 +20,23 @@ namespace System.Windows.Forms.Tests
         {
             using var ownerControl = new Control();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
-            Assert.True(ownerControl.IsHandleCreated);
+            Assert.False(ownerControl.IsHandleCreated);
 
             Assert.True(accessibleObject.Bounds.X >= 0);
             Assert.True(accessibleObject.Bounds.Y >= 0);
             Assert.Equal(0, accessibleObject.Bounds.Width);
             Assert.Equal(0, accessibleObject.Bounds.Height);
+            Assert.Equal(IntPtr.Zero, accessibleObject.HandleInternal);
             Assert.Null(accessibleObject.DefaultAction);
             Assert.Null(accessibleObject.Description);
-            Assert.Equal(ownerControl.Handle, accessibleObject.Handle);
             Assert.Null(accessibleObject.Help);
             Assert.Null(accessibleObject.KeyboardShortcut);
             Assert.Null(accessibleObject.Name);
             Assert.Same(ownerControl, accessibleObject.Owner);
-            Assert.NotNull(accessibleObject.Parent);
-            Assert.Equal(AccessibleRole.Client, accessibleObject.Role);
-            Assert.Equal(AccessibleStates.Focusable, accessibleObject.State);
-            Assert.Null(accessibleObject.Value);
+            Assert.Null(accessibleObject.Parent);
+            Assert.Equal(AccessibleRole.None, accessibleObject.Role);
+            Assert.Equal(AccessibleStates.None, accessibleObject.State);
+            Assert.Equal(string.Empty, accessibleObject.Value);
         }
 
         [WinFormsFact]
@@ -80,6 +80,77 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("ownerControl", () => new Control.ControlAccessibleObject(null));
         }
 
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_via_owner_ensure_handle_set_when_owner_created()
+        {
+            using var ownerControl = new Control();
+
+            AccessibleObject accessibleObject = ownerControl.AccessibilityObject;
+            Assert.IsType<Control.ControlAccessibleObject>(accessibleObject);
+
+            Control.ControlAccessibleObject controlAccessibleObject = (Control.ControlAccessibleObject)accessibleObject;
+            Assert.False(ownerControl.IsHandleCreated);
+            Assert.Equal(IntPtr.Zero, controlAccessibleObject.HandleInternal);
+
+            // force the owner contrl to create its handle
+            ownerControl.CreateControl();
+
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, controlAccessibleObject.Handle);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_via_owner_ensure_handle_reset_when_owner_destroyed()
+        {
+            using var ownerControl = new Control();
+            ownerControl.CreateControl();
+
+            AccessibleObject accessibleObject = ownerControl.AccessibilityObject;
+            Assert.IsType<Control.ControlAccessibleObject>(accessibleObject);
+
+            Control.ControlAccessibleObject controlAccessibleObject = (Control.ControlAccessibleObject)accessibleObject;
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, controlAccessibleObject.Handle);
+
+            ownerControl.Dispose();
+
+            Assert.False(ownerControl.IsHandleCreated);
+            Assert.Equal(IntPtr.Zero, controlAccessibleObject.Handle);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_detached_owner_ensure_handle_set_when_owner_created()
+        {
+            using var ownerControl = new Control();
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.False(ownerControl.IsHandleCreated);
+            Assert.Equal(IntPtr.Zero, accessibleObject.HandleInternal);
+
+            // force the owner contrl to create its handle
+            ownerControl.CreateControl();
+
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, accessibleObject.Handle);
+        }
+
+        [WinFormsFact]
+        public void ControlAccessibleObject_created_detached_owner_ensure_handle_reset_when_owner_destroyed()
+        {
+            using var ownerControl = new Control();
+            var controlAccessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            ownerControl.CreateControl();
+
+            Assert.True(ownerControl.IsHandleCreated);
+            Assert.Equal(ownerControl.Handle, controlAccessibleObject.Handle);
+
+            ownerControl.Dispose();
+
+            Assert.False(ownerControl.IsHandleCreated);
+
+            // NB: Detached object, so we don't get notifications
+            Assert.NotEqual(IntPtr.Zero, controlAccessibleObject.Handle);
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_DefaultAction_GetWithAccessibleDefaultActionDescription_ReturnsExpected(string accessibleDefaultActionDescription)
@@ -118,6 +189,8 @@ namespace System.Windows.Forms.Tests
         public void ControlAccessibleObject_Handle_Set_Success(IntPtr value)
         {
             using var ownerControl = new Control();
+            ownerControl.CreateControl();
+            Assert.True(ownerControl.IsHandleCreated);
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
             Assert.True(ownerControl.IsHandleCreated);
 
@@ -693,9 +766,10 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void ControlAccessibleObject_Value_Set_GetReturnsNull(string value)
+        public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsCreated(string value)
         {
             using var ownerControl = new Control();
+            ownerControl.CreateControl();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
 
             accessibleObject.Value = value;
@@ -704,6 +778,23 @@ namespace System.Windows.Forms.Tests
             // Set same.
             accessibleObject.Value = value;
             Assert.Null(accessibleObject.Value);
+            Assert.True(ownerControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsNotCreated(string value)
+        {
+            using var ownerControl = new Control();
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+
+            accessibleObject.Value = value;
+            Assert.Equal(string.Empty, accessibleObject.Value);
+
+            // Set same.
+            accessibleObject.Value = value;
+            Assert.Equal(string.Empty, accessibleObject.Value);
+            Assert.False(ownerControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -760,14 +851,30 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(null, null, 0)]
-        [InlineData("", "", 0)]
-        [InlineData("HelpNamespace", "invalid", 0)]
-        [InlineData("HelpNamespace", "1", 1)]
-        public void ControlAccessibleObject_GetHelpTopic_InvokeWithQueryAccessibilityHelpEvent_ReturnsExpected(string helpNamespace, string helpKeyword, int expectedResult)
+        [InlineData(null, null, 0, true, 0)]
+        [InlineData("", "", 0, true, 0)]
+        [InlineData("HelpNamespace", "invalid", 0, true, 0)]
+        [InlineData("HelpNamespace", "1", 1, true, 0)]
+        [InlineData(null, null, 0, false, -1)]
+        [InlineData("", "", 0, false, -1)]
+        [InlineData("HelpNamespace", "invalid", 0, false, -1)]
+        [InlineData("HelpNamespace", "1", 1, false, -1)]
+        public void ControlAccessibleObject_GetHelpTopic_InvokeWithQueryAccessibilityHelpEvent_ReturnsExpected(
+            string helpNamespace,
+            string helpKeyword,
+            int expectedResult,
+            bool createControl,
+            int exectedResultWithoutHandler)
         {
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
 
             int callCount = 0;
             void handler(object sender, QueryAccessibilityHelpEventArgs e)
@@ -795,7 +902,7 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             ownerControl.QueryAccessibilityHelp -= handler;
-            Assert.Equal(0, accessibleObject.GetHelpTopic(out fileName));
+            Assert.Equal(exectedResultWithoutHandler, accessibleObject.GetHelpTopic(out fileName));
             Assert.Null(fileName);
             Assert.Equal(2, callCount);
         }
@@ -883,17 +990,15 @@ namespace System.Windows.Forms.Tests
             using var ownerControl = new Control();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(ownerControl.IsHandleCreated);
+            Assert.False(ownerControl.IsHandleCreated);
 
             if (isHandleCreated)
             {
                 Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
             }
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            // Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId));
-            // Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
+            Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId));
+            Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -904,17 +1009,15 @@ namespace System.Windows.Forms.Tests
             using var ownerControl = new Control();
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(ownerControl.IsHandleCreated);
+            Assert.False(ownerControl.IsHandleCreated);
 
             if (isHandleCreated)
             {
                 Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
             }
 
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            // Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, ownerControl.Name, ownerControl.Name));
-            // Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
+            Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, ownerControl.Name, ownerControl.Name));
+            Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -942,24 +1045,45 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -2)]
-        [InlineData(0, 0)]
-        [InlineData(1, 2)]
-        public void AccessibleObject_IAccessibleaccHitTest_InvokeDefault_ReturnsNull(int x, int y)
+        [InlineData(true, -1, -2, 0)]
+        [InlineData(true, 0, 0, 0)]
+        [InlineData(true, 1, 2, 0)]
+        [InlineData(false, -1, -2, null)]
+        [InlineData(false, 0, 0, null)]
+        [InlineData(false, 1, 2, null)]
+        public void AccessibleObject_IAccessibleaccHitTest_InvokeDefault_ReturnsExpectedValue(bool createControl, int x, int y, int? expectedValue)
         {
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
+
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.Equal(0, iAccessible.accHitTest(x, y));
+            Assert.Equal(expectedValue, iAccessible.accHitTest(x, y));
         }
 
-        [WinFormsFact]
-        public void ControlAccessibleObject_IAccessibleaccParent_InvokeDefault_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ControlAccessibleObject_IAccessibleaccParent_InvokeDefault_ReturnsExpectedValue(bool createControl)
         {
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
+
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.NotNull(iAccessible.accParent);
+            Assert.Equal(createControl, iAccessible.accParent != null);
         }
 
         [WinFormsFact]
@@ -991,15 +1115,24 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, iAccessible.accChildCount);
         }
 
-        [WinFormsFact]
-        public void ControlAccessibleObject_IAccessibleget_accChildCount_InvokeWithChildren_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, 1)]
+        [InlineData(false, 0)]
+        public void ControlAccessibleObject_IAccessibleget_accChildCount_InvokeWithChildren_ReturnsExpected(bool createControl, int expectedCount)
         {
             using var child = new Control();
             using var ownerControl = new Control();
+            if (createControl)
+            {
+                ownerControl.CreateControl();
+            }
+
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             ownerControl.Controls.Add(child);
             var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(createControl, ownerControl.IsHandleCreated);
             IAccessible iAccessible = accessibleObject;
-            Assert.Equal(1, iAccessible.accChildCount);
+            Assert.Equal(expectedCount, iAccessible.accChildCount);
         }
 
         [WinFormsTheory]
