@@ -6808,6 +6808,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+
+            // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
+            string textOldWay = control.TestAccessor().Dynamic.StreamOut(SF.TEXT | SF.UNICODE);
+            Assert.Equal(expected, textOldWay);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]
