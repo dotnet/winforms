@@ -1152,10 +1152,11 @@ namespace System.Windows.Forms
             if (context is null)
                 throw new ArgumentNullException(nameof(context));
 
-            bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-
             if (color.HasTransparency() || style != ButtonBorderStyle.Solid)
             {
+                // Gdi+ right and bottom DrawRectangle border are 1 greater than Gdi
+                bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+
                 Graphics graphics = context.TryGetGraphics(create: true);
                 if (graphics != null)
                 {
