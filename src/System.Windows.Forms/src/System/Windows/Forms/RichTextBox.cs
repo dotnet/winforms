@@ -3173,6 +3173,24 @@ namespace System.Windows.Forms
             fixed (char* pText = text)
             {
                 int actualLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTEX, (IntPtr)pGt, (IntPtr)pText));
+
+                // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
+                // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
+                // whereas previously we would normalise to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
+                // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behaviour.
+                if (!flags.HasFlag(GT.USECRLF))
+                {
+                    int index = 0;
+                    while (index < actualLength)
+                    {
+                        if (pText[index] == '\r')
+                        {
+                            pText[index] = '\n';
+                        }
+                        index++;
+                    }
+                }
+
                 result = new string(pText, 0, actualLength);
             }
 

@@ -6774,11 +6774,21 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsFact]
-        public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("abc", "abc")]
+        [InlineData("a\0b", "a")]
+        [InlineData("\ud83c\udf09", "\ud83c\udf09")]
+        [InlineData("\n\n", "\n\n")]
+        [InlineData("\r\r", "\n\n")]
+        [InlineData("\r\n\r\n", "\n\n")]
+        [InlineData("a\r\nb\r\nc\r\nd\r\n", "a\nb\nc\nd\n")]
+        [InlineData("a\nb\rc\r\n\n\rd\r\r\n", "a\nb\nc\n\n\nd")]
+        public void RichTextBox_Text_GetWithHandle_ReturnsExpected(string text, string expected)
         {
             using var control = new RichTextBox();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.CreateControl();
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -6792,12 +6802,49 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
-            // Get again.
-            Assert.Empty(control.Text);
-            Assert.True(control.IsHandleCreated);
+            control.Text = text;
+
+            Assert.Equal(expected, control.Text);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("abc", "abc")]
+        [InlineData("a\0b", "a\0b")]
+        [InlineData("\ud83c\udf09", "\ud83c\udf09")]
+        [InlineData("\n\n", "\n\n")]
+        [InlineData("\r\r", "\r\r")]
+        [InlineData("\r\n\r\n", "\r\n\r\n")]
+        [InlineData("a\r\nb\r\nc\r\nd\r\n", "a\r\nb\r\nc\r\nd\r\n")]
+        [InlineData("a\nb\rc\r\n\n\rd\r\r\n", "a\nb\rc\r\n\n\rd\r\r\n")]
+        public void RichTextBox_Text_GetWithoutHandle_ReturnsExpected(string text, string expected)
+        {
+            using var control = new RichTextBox();
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Empty(control.Text);
+            Assert.False(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            control.Text = text;
+
+            Assert.Equal(expected, control.Text);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
