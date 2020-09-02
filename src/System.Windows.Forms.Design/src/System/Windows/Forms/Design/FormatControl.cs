@@ -315,7 +315,7 @@ namespace System.Windows.Forms.Design
                 dateTimeFormatsListBox.Visible = false;
             }
 
-            if (secondRowLabel.Text == "")
+            if (secondRowLabel.Text.Length == 0)
             {
                 secondRowLabel.Visible = false;
             }

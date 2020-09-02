@@ -611,7 +611,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.ToString() == "")
+                if (value != null && value.ToString().Length == 0)
                 {
                     value = null;
                 }
