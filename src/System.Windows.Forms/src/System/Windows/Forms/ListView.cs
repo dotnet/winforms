@@ -2399,7 +2399,7 @@ namespace System.Windows.Forms
             // if this is the first BeginUpdate call, push an ArrayList into the PropertyStore so
             // we can cache up any items that have been added while this is active.
             //
-            if (updateCounter++ == 0 && null == Properties.GetObject(PropDelayedUpdateItems))
+            if (updateCounter++ == 0 && Properties.GetObject(PropDelayedUpdateItems) is null)
             {
                 Properties.SetObject(PropDelayedUpdateItems, new ArrayList());
             }

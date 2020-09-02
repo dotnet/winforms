@@ -377,7 +377,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         /// <seealso cref="System.Threading.Thread.Sleep(int)"/>
         internal static bool SendKeysToProcess(Process process, string keys, bool switchToMainWindow = true)
         {
-            if (null == process)
+            if (process is null)
             {
                 throw new ArgumentException(nameof(process) + " must not be null.");
             }
