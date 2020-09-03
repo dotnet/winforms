@@ -4461,7 +4461,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (null == Columns.GetFirstColumn(DataGridViewElementStates.Visible))
+                if (Columns.GetFirstColumn(DataGridViewElementStates.Visible) is null)
                 {
                     return false;
                 }

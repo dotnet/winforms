@@ -640,7 +640,7 @@ namespace System.Windows.Forms
         {
             lock (s_internalSyncObject)
             {
-                if (null == s_eventHandlers)
+                if (s_eventHandlers is null)
                 {
                     s_eventHandlers = new EventHandlerList();
                 }
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
         {
             lock (s_internalSyncObject)
             {
-                if (null == s_eventHandlers)
+                if (s_eventHandlers is null)
                 {
                     return;
                 }
