@@ -27,6 +27,11 @@ internal static partial class Interop
             public const int SCROLL = 0x0091;
             public const int INSERT = 0x002D;
             public const int DELETE = 0x002E;
+            public const int LWIN = 0x5B;
+            public const int RWIN = 0x5C;
+            public const int APPS = 0x5D;
+            public const int RCONTROL = 0xA3;
+            public const int RMENU = 0xA5;
         }
     }
 }

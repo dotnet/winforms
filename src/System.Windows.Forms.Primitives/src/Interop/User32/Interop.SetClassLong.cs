@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 internal static partial class Interop
 {
@@ -23,12 +22,8 @@ internal static partial class Interop
             {
                 return SetClassLongW(hWnd, nIndex, dwNewLong);
             }
-            return SetClassLongPtrW(hWnd, nIndex, dwNewLong);
-        }
 
-        public enum GCL : int
-        {
-            WNDPROC = -24
+            return SetClassLongPtrW(hWnd, nIndex, dwNewLong);
         }
     }
 }
