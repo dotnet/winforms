@@ -2214,12 +2214,12 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
         <source>{0} check box checked</source>
-        <target state="new">{0} check box checked</target>
+        <target state="translated">Casilla seleccionada: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
         <source>{0} check box unchecked</source>
-        <target state="new">{0} check box unchecked</target>
+        <target state="translated">Casilla no seleccionada: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
