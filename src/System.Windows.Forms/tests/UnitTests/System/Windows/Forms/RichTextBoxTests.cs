@@ -6853,28 +6853,15 @@ namespace System.Windows.Forms.Tests
 
         private const string SAME = "SAME";
 
-        [WinFormsTheory]
-        [MemberData(nameof(RichTextBox_Text_GetWithHandle_TestData))]
-        public void RichTextBox_Text_GetWithHandle_ReturnsExpected(string text, string expectedText, string oldWayExpectedText = SAME, string oldControlExpectedText = SAME)
+        //[WinFormsTheory]
+        //[MemberData(nameof(RichTextBox_Text_GetWithHandle_TestData))]
+        [WinFormsFact]
+        public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
         {
-            // NB: in certain scenarios the old way (using StreamOut() method) returned a different
-            // text value to the new way (via GetTextEx() method).
-            // If oldWayExpectedText is SAME, assume StreamOut() returned the same expectedText.
-            if (oldWayExpectedText is SAME)
-            {
-                oldWayExpectedText = expectedText;
-            }
-
-            // NB: in certain scenarios the old control returns a different text value to the new control.
-            // If oldControlExpectedText is SAME, assume the old control returns the same expectedText.
-            if (oldControlExpectedText is SAME)
-            {
-                oldControlExpectedText = expectedText;
-            }
-
             using (var control = new RichTextBox())
             {
                 control.CreateControl();
+
                 int invalidatedCallCount = 0;
                 control.Invalidated += (sender, e) => invalidatedCallCount++;
                 int styleChangedCallCount = 0;
@@ -6882,38 +6869,49 @@ namespace System.Windows.Forms.Tests
                 int createdCallCount = 0;
                 control.HandleCreated += (sender, e) => createdCallCount++;
 
-                Assert.True(control.IsHandleCreated);
-                Assert.Empty(control.Text);
+                // verify against RichEdit20W
+                using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+                {
+                    riched20.CreateControl();
+
+                    foreach (object[] testCaseData in RichTextBox_Text_GetWithHandle_TestData())
+                    {
+                        string text = (string)testCaseData[0];
+                        string expectedText = (string)testCaseData[1];
+                        string oldWayExpectedText = testCaseData.Length > 2 ? (string)testCaseData[2] : SAME;
+                        string oldControlExpectedText = testCaseData.Length > 3 ? (string)testCaseData[3] : SAME;
+
+                        // NB: in certain scenarios the old way (using StreamOut() method) returned a different
+                        // text value to the new way (via GetTextEx() method).
+                        // If oldWayExpectedText is SAME, assume StreamOut() returned the same expectedText.
+                        if (oldWayExpectedText is SAME)
+                        {
+                            oldWayExpectedText = expectedText;
+                        }
+
+                        // NB: in certain scenarios the old control returns a different text value to the new control.
+                        // If oldControlExpectedText is SAME, assume the old control returns the same expectedText.
+                        if (oldControlExpectedText is SAME)
+                        {
+                            oldControlExpectedText = expectedText;
+                        }
+
+                        control.Text = text;
+                        Assert.Equal(expectedText, control.Text);
+
+                        // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
+                        string textOldWay = control.TestAccessor().Dynamic.StreamOut(SF.TEXT | SF.UNICODE);
+                        Assert.Equal(oldWayExpectedText, textOldWay);
+
+                        // verify against RichEdit20W
+                        riched20.Text = text;
+                        Assert.Equal(oldControlExpectedText, riched20.Text);
+                    }
+                }
+
                 Assert.Equal(0, invalidatedCallCount);
                 Assert.Equal(0, styleChangedCallCount);
                 Assert.Equal(0, createdCallCount);
-
-                control.Text = text;
-
-                Assert.Equal(expectedText, control.Text);
-                Assert.Equal(0, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(0, createdCallCount);
-
-                // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
-                string textOldWay = control.TestAccessor().Dynamic.StreamOut(SF.TEXT | SF.UNICODE);
-                Assert.Equal(oldWayExpectedText, textOldWay);
-                Assert.Equal(0, invalidatedCallCount);
-                Assert.Equal(0, styleChangedCallCount);
-                Assert.Equal(0, createdCallCount);
-            }
-
-            // verify against RichEdit20W
-            using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
-            {
-                riched20.CreateControl();
-
-                Assert.True(riched20.IsHandleCreated);
-                Assert.Empty(riched20.Text);
-
-                riched20.Text = text;
-
-                Assert.Equal(oldControlExpectedText, riched20.Text);
             }
         }
 
