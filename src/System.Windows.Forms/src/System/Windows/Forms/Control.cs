@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Description(nameof(SR.ControlCompanyNameDescr))]
+        [SRDescription(nameof(SR.ControlCompanyNameDescr))]
         public string CompanyName => VersionInfo.CompanyName;
 
         /// <summary>
