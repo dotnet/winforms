@@ -765,8 +765,8 @@ namespace System.Windows.Forms
                     {
                         if (itemsCollection != null)
                         {
-                            int cnt = itemsCollection.Count;
-                            for (int i = 0; i < cnt; i++)
+                            int count = itemsCollection.Count;
+                            for (int i = 0; i < count; i++)
                             {
                                 height += GetItemHeight(i);
                             }
@@ -775,9 +775,16 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    //When the list is empty, we don't want to multiply by 0 here.
-                    int cnt = (itemsCollection is null || itemsCollection.Count == 0) ? 1 : itemsCollection.Count;
-                    height = GetItemHeight(0) * cnt;
+                    height = GetItemHeight(0);
+
+                    if (itemsCollection != null)
+                    {
+                        int count = itemsCollection.Count;
+                        if (count != 0)
+                        {
+                            height *= count;
+                        }
+                    }
                 }
 
                 if (borderStyle != BorderStyle.None)
@@ -807,6 +814,7 @@ namespace System.Windows.Forms
             {
                 return DefaultSize;
             }
+
             return new Size(width, height) + Padding.Size;
         }
 
@@ -2056,7 +2064,7 @@ namespace System.Windows.Forms
 
             object[] newItems = null;
 
-            // if we have a dataSource and a DisplayMember, then use it
+            // If we have a DataSource and a DisplayMember, then use it
             // to populate the Items collection
             //
             if (DataManager != null && DataManager.Count != -1)
@@ -2086,7 +2094,7 @@ namespace System.Windows.Forms
             {
                 if (DataManager != null)
                 {
-                    // put the selectedIndex in sync w/ the position in the dataManager
+                    // Put the selectedIndex in sync with the position in the dataManager
                     SelectedIndex = DataManager.Position;
                 }
                 else
