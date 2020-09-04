@@ -2257,7 +2257,7 @@ namespace System.Windows.Forms
             return charFormat;
         }
 
-        Font GetCharFormatFont(bool selectionOnly)
+        private Font GetCharFormatFont(bool selectionOnly)
         {
             ForceHandleCreate();
 
@@ -3236,6 +3236,8 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObject(this);
 
         /// <summary>
         ///  Creates the IRichEditOleCallback compatible object for handling RichEdit callbacks. For more

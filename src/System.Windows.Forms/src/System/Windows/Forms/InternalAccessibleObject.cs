@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -40,7 +41,9 @@ namespace System.Windows.Forms
         ISelectionItemProvider,
         IScrollItemProvider,
         IRawElementProviderHwndOverride,
-        IMultipleViewProvider
+        IMultipleViewProvider,
+        ITextProvider,
+        ITextProvider2
     {
         private IAccessible publicIAccessible;                      // AccessibleObject as IAccessible
         private readonly Oleaut32.IEnumVariant publicIEnumVariant;  // AccessibleObject as Oleaut32.IEnumVariant
@@ -69,6 +72,8 @@ namespace System.Windows.Forms
         private readonly IScrollItemProvider publicIScrollItemProvider;                            // AccessibleObject as IScrollItemProvider
         private readonly IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride;    // AccessibleObject as IRawElementProviderHwndOverride
         private readonly IMultipleViewProvider publicIMultiViewProvider;                           // AccessibleObject as IMultipleViewProvider
+        private readonly ITextProvider publicITextProvider;                                        // AccessibleObject as ITextProvider
+        private readonly ITextProvider2 publicITextProvider2;                                      // AccessibleObject as ITextProvider2
 
         /// <summary>
         ///  Create a new wrapper.
@@ -100,6 +105,8 @@ namespace System.Windows.Forms
             publicIScrollItemProvider = (IScrollItemProvider)accessibleImplemention;
             publicIRawElementProviderHwndOverride = (IRawElementProviderHwndOverride)accessibleImplemention;
             publicIMultiViewProvider = (IMultipleViewProvider)accessibleImplemention;
+            publicITextProvider = (ITextProvider)accessibleImplemention;
+            publicITextProvider2 = (ITextProvider2)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
 
@@ -314,6 +321,8 @@ namespace System.Windows.Forms
                 UIA.SelectionItemPatternId => (ISelectionItemProvider)this,
                 UIA.ScrollItemPatternId => (IScrollItemProvider)this,
                 UIA.MultipleViewPatternId => (IMultipleViewProvider)this,
+                UIA.TextPatternId => (ITextProvider)this,
+                UIA.TextPattern2Id => (ITextProvider2)this,
                 _ => null
             };
         }
@@ -365,8 +374,7 @@ namespace System.Windows.Forms
 
         void ILegacyIAccessibleProvider.DoDefaultAction() => publicILegacyIAccessibleProvider.DoDefaultAction();
 
-        IAccessible? ILegacyIAccessibleProvider.GetIAccessible()
-            => publicILegacyIAccessibleProvider.GetIAccessible();
+        IAccessible? ILegacyIAccessibleProvider.GetIAccessible() => publicILegacyIAccessibleProvider.GetIAccessible();
 
         IRawElementProviderSimple[] ILegacyIAccessibleProvider.GetSelection() => publicILegacyIAccessibleProvider.GetSelection();
 
@@ -375,6 +383,40 @@ namespace System.Windows.Forms
         void ILegacyIAccessibleProvider.SetValue(string szValue) => publicILegacyIAccessibleProvider.SetValue(szValue);
 
         void IInvokeProvider.Invoke() => publicIInvokeProvider.Invoke();
+
+        ITextRangeProvider[]? ITextProvider.GetSelection() => publicITextProvider.GetSelection();
+
+        ITextRangeProvider[]? ITextProvider.GetVisibleRanges() => publicITextProvider.GetVisibleRanges();
+
+        ITextRangeProvider? ITextProvider.RangeFromChild(IRawElementProviderSimple childElement)
+            => publicITextProvider.RangeFromChild(childElement);
+
+        ITextRangeProvider? ITextProvider.RangeFromPoint(Point screenLocation)
+            => publicITextProvider.RangeFromPoint(screenLocation);
+
+        SupportedTextSelection ITextProvider.SupportedTextSelection => publicITextProvider.SupportedTextSelection;
+
+        ITextRangeProvider? ITextProvider.DocumentRange => publicITextProvider.DocumentRange;
+
+        ITextRangeProvider[]? ITextProvider2.GetSelection() => publicITextProvider2.GetSelection();
+
+        ITextRangeProvider[]? ITextProvider2.GetVisibleRanges() => publicITextProvider2.GetVisibleRanges();
+
+        ITextRangeProvider? ITextProvider2.RangeFromChild(IRawElementProviderSimple childElement)
+            => publicITextProvider2.RangeFromChild(childElement);
+
+        ITextRangeProvider? ITextProvider2.RangeFromPoint(Point screenLocation)
+            => publicITextProvider2.RangeFromPoint(screenLocation);
+
+        SupportedTextSelection ITextProvider2.SupportedTextSelection => publicITextProvider2.SupportedTextSelection;
+
+        ITextRangeProvider? ITextProvider2.DocumentRange => publicITextProvider2.DocumentRange;
+
+        ITextRangeProvider? ITextProvider2.GetCaretRange(out BOOL isActive)
+            => publicITextProvider2.GetCaretRange(out isActive);
+
+        ITextRangeProvider? ITextProvider2.RangeFromAnnotation(IRawElementProviderSimple annotationElement)
+            => publicITextProvider2.RangeFromAnnotation(annotationElement);
 
         BOOL IValueProvider.IsReadOnly => publicIValueProvider.IsReadOnly;
 
