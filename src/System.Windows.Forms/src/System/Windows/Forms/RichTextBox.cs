@@ -3150,6 +3150,11 @@ namespace System.Windows.Forms
                 flags = GTL.DEFAULT
             };
 
+            if (flags.HasFlag(GT.USECRLF))
+            {
+                gtl.flags |= GTL.USECRLF;
+            }
+
             GETTEXTLENGTHEX* pGtl = &gtl;
             int expectedLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, (IntPtr)pGtl));
             if (expectedLength == (int)HRESULT.E_INVALIDARG)
