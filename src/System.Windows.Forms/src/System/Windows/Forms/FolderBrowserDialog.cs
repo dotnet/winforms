@@ -131,7 +131,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         [Localizable(true)]
         [SRCategory(nameof(SR.CatFolderBrowsing))]
-        [Description(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))]
+        [SRDescription(nameof(SR.FolderBrowserDialogUseDescriptionForTitle))]
         public bool UseDescriptionForTitle { get; set; }
 
         private bool UseVistaDialogInternal

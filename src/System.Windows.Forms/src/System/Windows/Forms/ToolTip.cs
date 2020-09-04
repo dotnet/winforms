@@ -327,7 +327,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the initial delay for the <see cref="ToolTip"/> control.
         /// </summary>
         [RefreshProperties(RefreshProperties.All)]
-        [Description(nameof(SR.ToolTipInitialDelayDescr))]
+        [SRDescription(nameof(SR.ToolTipInitialDelayDescr))]
         public int InitialDelay
         {
             get => _delayTimes[(int)TTDT.INITIAL];
@@ -347,7 +347,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [Description(nameof(SR.ToolTipOwnerDrawDescr))]
+        [SRDescription(nameof(SR.ToolTipOwnerDrawDescr))]
         public bool OwnerDraw { get; set; }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace System.Windows.Forms
         ///  instances to appear as the mouse pointer moves from one ToolTip region to another.
         /// </summary>
         [RefreshProperties(RefreshProperties.All)]
-        [Description(nameof(SR.ToolTipReshowDelayDescr))]
+        [SRDescription(nameof(SR.ToolTipReshowDelayDescr))]
         public int ReshowDelay
         {
             get => _delayTimes[(int)TTDT.RESHOW];
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
         ///  parent control is not active.
         /// </summary>
         [DefaultValue(false)]
-        [Description(nameof(SR.ToolTipShowAlwaysDescr))]
+        [SRDescription(nameof(SR.ToolTipShowAlwaysDescr))]
         public bool ShowAlways
         {
             get => _showAlways;
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
         [Bindable(true)]
-        [Description(nameof(SR.ControlTagDescr))]
+        [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
         public object Tag { get; set; }
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
         ///  Gets or sets an Icon on the ToolTip.
         /// </summary>
         [DefaultValue(ToolTipIcon.None)]
-        [Description(nameof(SR.ToolTipToolTipIconDescr))]
+        [SRDescription(nameof(SR.ToolTipToolTipIconDescr))]
         public ToolTipIcon ToolTipIcon
         {
             get => _toolTipIcon;
@@ -458,7 +458,7 @@ namespace System.Windows.Forms
         ///  Gets or sets the title of the ToolTip.
         /// </summary>
         [DefaultValue("")]
-        [Description(nameof(SR.ToolTipTitleDescr))]
+        [SRDescription(nameof(SR.ToolTipTitleDescr))]
         public string ToolTipTitle
         {
             get => _toolTipTitle;
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue("")]
         [Localizable(true)]
-        [Description(nameof(SR.ToolTipToolTipDescr))]
+        [SRDescription(nameof(SR.ToolTipToolTipDescr))]
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         public string GetToolTip(Control control)
         {
