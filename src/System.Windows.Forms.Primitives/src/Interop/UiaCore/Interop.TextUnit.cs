@@ -6,9 +6,17 @@ using System.Runtime.InteropServices;
 
 internal static partial class Interop
 {
-    internal static partial class User32
+    internal static partial class UiaCore
     {
-        [DllImport(Libraries.User32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        public static extern Atom RegisterClassW(ref WNDCLASS lpWndClass);
+        public enum TextUnit
+        {
+            Character = 0,
+            Format = 1,
+            Word = 2,
+            Line = 3,
+            Paragraph = 4,
+            Page = 5,
+            Document = 6
+        }
     }
 }
