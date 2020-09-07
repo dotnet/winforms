@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using Xunit;
 using static Interop;
 
@@ -53,7 +54,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             AccessibleObject selectedGridEntryAccessibleObject = null;
             Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
 
-            PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, false);
+            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
+            PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, property, false);
             propertyGridView.TestAccessor().Dynamic.selectedGridEntry = gridEntry;
 
             ownerControl.Visible = true;
