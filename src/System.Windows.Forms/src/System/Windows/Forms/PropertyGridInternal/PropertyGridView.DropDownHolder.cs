@@ -15,7 +15,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
     {
-        internal class DropDownHolder : Form, IMouseHookClient
+        internal partial class DropDownHolder : Form, IMouseHookClient
         {
             private Control currentControl; // the control that is hosted in the holder
             private readonly PropertyGridView gridView; // the owner gridview
@@ -25,7 +25,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // all the resizing goo...
             //
-            private bool resizable = true;  // true if we're showing the resize widget.
+            private bool resizable = true; // true if we're showing the resize widget.
             private bool resizing; // true if we're in the middle of a resize operation.
             private bool resizeUp; // true if the dropdown is above the grid row, which means the resize widget is at the top.
             private Point dragStart = Point.Empty; // the point at which the drag started to compute the delta
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly static int ResizeBorderSize = ResizeBarSize / 2; // the thickness of the 2-way resize area along the outer edge of the resize bar
             private readonly static int ResizeGripSize = SystemInformation.HorizontalScrollBarHeight; // the size of the 4-way resize grip at outermost corner of the resize bar
             private readonly static Size MinDropDownSize =
-                new Size(SystemInformation.VerticalScrollBarWidth* 4, SystemInformation.HorizontalScrollBarHeight* 4); // the minimum size for the control.
+                new Size(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4); // the minimum size for the control.
             private Bitmap sizeGripGlyph; // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
 
             private const int DropDownHolderBorder = 1;
@@ -134,6 +134,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
+            internal override bool SupportsUiaProviders => true;
+
+            protected override AccessibleObject CreateAccessibilityInstance()
+                => new DropDownHolderAccessibleObject(this);
 
             protected override void DestroyHandle()
             {
