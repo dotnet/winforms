@@ -74,7 +74,7 @@ To test from Visual Studio, start Visual Studio via `.\start-vs.cmd`, and test h
 
 * When testing from Visual Studio, test errors show up as normal in the Test Explorer.
 * To troubleshoot, debug the selected test and set breakpoints as you normally would.
-* For common issues when running tests through Visual Studio, see [Testing in Visual Studio](https://github.com/dotnet/winforms/blob/master/Documentation/testing-in-vs.md)
+* For common issues when running tests through Visual Studio, see [Testing in Visual Studio](https://github.com/dotnet/winforms/blob/master/docs/testing-in-vs.md)
 
 ## Adding new unit tests
 

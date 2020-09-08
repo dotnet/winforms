@@ -9,4 +9,4 @@ See [Contributing Guide][contributing] for information about:
 
 [comment]: <> (Links)
 
-[contributing]: ../Documentation/contributing.md
+[contributing]: ../docs/contributing.md

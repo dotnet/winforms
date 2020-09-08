@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-<!-- Read https://github.com/dotnet/winforms/blob/master/Documentation/issue-guide.md -->
+<!-- Read https://github.com/dotnet/winforms/blob/master/docs/issue-guide.md -->
 
 **Is your feature request related to a problem? Please describe.**
 <!--
@@ -23,7 +23,7 @@ assignees: ''
     - Details showing the usage/consumption of the proposed new API, and alternatives (e.g. not having this API).
     - Any other context or screenshots about the feature request here.
 
-    :exclamation: Read https://github.com/dotnet/winforms/blob/master/Documentation/issue-guide.md for more details
+    :exclamation: Read https://github.com/dotnet/winforms/blob/master/docs/issue-guide.md for more details
 
   -->
 

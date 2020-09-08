@@ -80,20 +80,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{462AD69A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "documentation", "documentation", "{C029199F-7D5C-417C-AA52-913A214E3285}"
 	ProjectSection(SolutionItems) = preProject
-		Documentation\building.md = Documentation\building.md
+		docs\building.md = docs\building.md
 		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
-		Documentation\contributing.md = Documentation\contributing.md
-		Documentation\debugging.md = Documentation\debugging.md
-		Documentation\developer-guide.md = Documentation\developer-guide.md
-		Documentation\getting-started.md = Documentation\getting-started.md
-		Documentation\intellisense.md = Documentation\intellisense.md
-		Documentation\issue-guide.md = Documentation\issue-guide.md
-		Documentation\porting-guidelines.md = Documentation\porting-guidelines.md
+		docs\contributing.md = docs\contributing.md
+		docs\debugging.md = docs\debugging.md
+		docs\developer-guide.md = docs\developer-guide.md
+		docs\getting-started.md = docs\getting-started.md
+		docs\intellisense.md = docs\intellisense.md
+		docs\issue-guide.md = docs\issue-guide.md
+		docs\porting-guidelines.md = docs\porting-guidelines.md
 		README.md = README.md
 		roadmap.md = roadmap.md
-		Documentation\testing.md = Documentation\testing.md
+		docs\testing.md = docs\testing.md
 		THIRD-PARTY-NOTICES.TXT = THIRD-PARTY-NOTICES.TXT
-		Documentation\winforms-designer.md = Documentation\winforms-designer.md
+		docs\winforms-designer.md = docs\winforms-designer.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "accessibility", "accessibility", "{D390F7D2-1E11-4DEE-B7F1-4FD0681A81F0}"
