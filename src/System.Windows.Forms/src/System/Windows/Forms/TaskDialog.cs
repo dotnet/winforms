@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         /// </para>
         /// <para>
         ///   See documentation/repro in
-        ///   /Documentation/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
+        ///   /docs/src/System/Windows/Forms/TaskDialog/Issue_ButtonClickHandlerCalledTwice.md
         /// </para>
         /// <para>
         ///   Note: We use a WM_APP message with a high value (WM_USER is not
@@ -996,7 +996,7 @@ namespace System.Windows.Forms
                             // the native TaskDialog.
                             //
                             // See documentation/repro in
-                            // /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInButtonClicked.md
+                            // /docs/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInButtonClicked.md
                             //
                             // To fix the memory access problems, we simply always return
                             // S_FALSE when the callback received a TDN_NAVIGATED
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms
             // until we receive the TDN_NAVIGATED notification).
             // See:
             // https://github.com/dotnet/winforms/issues/146#issuecomment-466784079
-            // and /Documentation/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInRadioButtonClicked.md
+            // and /docs/src/System/Windows/Forms/TaskDialog/Issue_AccessViolation_NavigationInRadioButtonClicked.md
             if (RadioButtonClickedStackCount > 0)
             {
                 throw new InvalidOperationException(string.Format(
