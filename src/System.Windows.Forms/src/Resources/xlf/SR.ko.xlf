@@ -8311,6 +8311,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">표 영역 주위의 테두리 색입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">편집기에서 잘못된 개체를 만들었습니다. 만들어진 개체는 '{0}' 형식이어야 합니다.</target>

@@ -1183,10 +1183,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (selectedGridEntry.Enumerable &&
                         propertyGridView.DropDownVisible &&
-                        propertyGridView.DropDownControlHolder != null &&
-                        propertyGridView.DropDownControlHolder.Component == propertyGridView.DropDownListBox)
+                        propertyGridView.DropDownControlHolder?.Component == propertyGridView.DropDownListBox)
                     {
                         return propertyGridView.DropDownListBoxAccessibleObject;
+                    }
+
+                    if (propertyGridView.DropDownVisible && propertyGridView.DropDownControlHolder != null)
+                    {
+                        return propertyGridView.DropDownControlHolder.AccessibilityObject;
                     }
 
                     return propertyGridView.EditAccessibleObject;
