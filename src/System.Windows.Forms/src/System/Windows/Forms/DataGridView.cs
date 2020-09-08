@@ -2359,7 +2359,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return EditingControl.AccessibilityObject;
+                return EditingControl?.AccessibilityObject;
             }
         }
 
