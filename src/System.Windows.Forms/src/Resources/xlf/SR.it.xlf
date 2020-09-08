@@ -8311,6 +8311,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Colore del bordo che delimita l'area della griglia.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">Oggetto non valido creato dall'editor. L'oggetto creato deve essere di tipo '{0}'.</target>

@@ -8311,6 +8311,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Barva ohraničení oblasti mřížky</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">Editor vytvořil objekt, který není platný. Vytvořený objekt musí být typu {0}.</target>

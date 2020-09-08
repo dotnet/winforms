@@ -8311,6 +8311,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">网格区域周围的边框的颜色。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
         <source>Editor created an object that is not valid.  The created object must be of type '{0}'.</source>
         <target state="translated">编辑器创建了一个无效对象。  创建的对象必须是“{0}”类型。</target>
