@@ -2775,6 +2775,7 @@ namespace System.Windows.Forms
 
                 if (!value.Equals(GridPenColor))
                 {
+                    GridPenColor = value;
                     OnGridColorChanged(EventArgs.Empty);
                 }
             }
