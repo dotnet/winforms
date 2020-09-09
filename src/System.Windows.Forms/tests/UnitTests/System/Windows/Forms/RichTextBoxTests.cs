@@ -6701,7 +6701,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("", 0)]
         [InlineData("a\0b", 1)]
         [InlineData("a", 1)]
-        [InlineData("\ud83c\udf09", 2)]
+        [InlineData("\ud83c\udf09", 2)] // emoji, surrogate pair https://charbase.com/1f309-unicode-bridge-at-night
         public void RichTextBox_TextLength_GetSetWithHandle_Success(string text, int expected)
         {
             using var control = new RichTextBox
@@ -6716,7 +6716,7 @@ namespace System.Windows.Forms.Tests
         [InlineData("", 0)]
         [InlineData("a\0b", 1)]
         [InlineData("a", 1)]
-        [InlineData("\ud83c\udf09", 2)]
+        [InlineData("\ud83c\udf09", 2)] // emoji, surrogate pair https://charbase.com/1f309-unicode-bridge-at-night
         public void RichTextBox_TextLength_GetWithHandle_ReturnsExpected(string text, int expected)
         {
             using var control = new RichTextBox();
@@ -6774,30 +6774,219 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        public static IEnumerable<object[]> RichTextBox_Text_GetWithHandle_TestData()
+        {
+            yield return new object[] { null, string.Empty };
+            yield return new object[] { string.Empty, string.Empty };
+            yield return new object[] { " ", " " };
+            yield return new object[] { "abc", "abc" };
+            yield return new object[] { "a\0b", "a" };
+            yield return new object[] { "\ud83c\udf09", "\ud83c\udf09" }; // emoji, surrogate pair https://charbase.com/1f309-unicode-bridge-at-night
+            yield return new object[] { "\n\n", "\n\n" };
+            yield return new object[] { "\r\r", "\n\n" };
+            yield return new object[] { "\n\r", "\n\n" };
+            yield return new object[] { "\r\n\r\n", "\n\n" };
+            yield return new object[] { "a6\r\nb\r\nc\r\nd\r\n", "a6\nb\nc\nd\n" };
+            yield return new object[] { "a7\nb\rc\r\n\n\rd\r\r\n", "a7\nb\nc\n\n\nd", SAME, "a7\nb\nc\n\n\nd " }; // RichEdit20W has a trailing space
+
+            // 0x0008 to 0x007F: https://www.unicode.org/charts/PDF/U0000.pdf
+            // 0x2000 to 0x2069: https://www.unicode.org/charts/PDF/U2000.pdf
+
+            var chars = Enumerable.Range(0x0008, /* 0x0008 to 0x007F */ 0x007F - 0x0008 + 1).Union(
+                        Enumerable.Range(0x2000, /* 0x2000 to 0x2069 */ 0x2069 - 0x2000 + 1));
+
+            foreach (int i in chars)
+            {
+                if (i == 0x000B) // Vertical Tabulation
+                {
+                    // NB: The old control works the same, but StreamOut() substituted 0x000B with \n
+                    yield return new object[] { $"{(char)i}ab", "ab", "\nab" };
+                    yield return new object[] { $"a{(char)i}b", "ab", "a\nb" };
+                    yield return new object[] { $"ab\r\n{(char)i}\r\n", "ab\n\n", "ab\n\n\n" };
+                    yield return new object[] { $"ab{(char)i}", $"ab", "ab\n" };
+                    yield return new object[] { $"ab\r\n{(char)i}", "ab\n", "ab\n\n" };
+
+                    continue;
+                }
+
+                if (i == 0x000D) // Carriage Return (\r) gets replaced with Line Feed (\n)
+                {
+                    yield return new object[] { $"{(char)i}ab", "\nab" };
+                    yield return new object[] { $"a{(char)i}b", "a\nb" };
+                    yield return new object[] { $"ab\r\n{(char)i}\r\n", "ab\n", SAME, "ab\n " }; // RichEdit20W has a trailing space
+                    yield return new object[] { $"ab{(char)i}", "ab\n" };
+                    yield return new object[] { $"ab\r\n{(char)i}", "ab\n\n" };
+
+                    continue;
+                }
+
+                if (i == 0x2028) // Line Separator (\v)
+                {
+                    // NB: The old control works the same, but StreamOut() substituted 0x2028 with \n
+                    yield return new object[] { $"{(char)i}ab", "ab", "\nab" };
+                    yield return new object[] { $"a{(char)i}b", "ab", "a\nb" };
+                    yield return new object[] { $"ab\r\n{(char)i}\r\n", "ab\n\n", "ab\n\n\n" };
+                    yield return new object[] { $"ab{(char)i}", $"ab", "ab\n" };
+                    yield return new object[] { $"ab\r\n{(char)i}", "ab\n", "ab\n\n" };
+
+                    continue;
+                }
+
+                if (i == 0x2029) // Paragraph Separator
+                {
+                    yield return new object[] { $"{(char)i}ab", "\nab" };
+                    yield return new object[] { $"a{(char)i}b", "a\nb" };
+                    yield return new object[] { $"ab\r\n{(char)i}\r\n", "ab\n", SAME, "ab\n\n\n" }; // RichEdit20W has extra line feeds
+                    yield return new object[] { $"ab{(char)i}", $"ab\n" };
+                    yield return new object[] { $"ab\r\n{(char)i}", "ab\n\n" };
+
+                    continue;
+                }
+
+                yield return new object[] { $"{(char)i}ab", $"{(char)i}ab" };
+                yield return new object[] { $"a{(char)i}b", $"a{(char)i}b" };
+                yield return new object[] { $"ab\r\n{(char)i}\r\n", $"ab\n{(char)i}\n" };
+                yield return new object[] { $"ab{(char)i}", $"ab{(char)i}" };
+                yield return new object[] { $"ab\r\n{(char)i}", $"ab\n{(char)i}" };
+            }
+        }
+
+        private const string SAME = "SAME";
+
+        //[WinFormsTheory]
+        //[MemberData(nameof(RichTextBox_Text_GetWithHandle_TestData))]
         [WinFormsFact]
         public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
         {
+            using (var control = new RichTextBox())
+            {
+                control.CreateControl();
+
+                int invalidatedCallCount = 0;
+                control.Invalidated += (sender, e) => invalidatedCallCount++;
+                int styleChangedCallCount = 0;
+                control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                int createdCallCount = 0;
+                control.HandleCreated += (sender, e) => createdCallCount++;
+
+                // verify against RichEdit20W
+                using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+                {
+                    riched20.CreateControl();
+
+                    foreach (object[] testCaseData in RichTextBox_Text_GetWithHandle_TestData())
+                    {
+                        string text = (string)testCaseData[0];
+                        string expectedText = (string)testCaseData[1];
+                        string oldWayExpectedText = testCaseData.Length > 2 ? (string)testCaseData[2] : SAME;
+                        string oldControlExpectedText = testCaseData.Length > 3 ? (string)testCaseData[3] : SAME;
+
+                        // NB: in certain scenarios the old way (using StreamOut() method) returned a different
+                        // text value to the new way (via GetTextEx() method).
+                        // If oldWayExpectedText is SAME, assume StreamOut() returned the same expectedText.
+                        if (oldWayExpectedText is SAME)
+                        {
+                            oldWayExpectedText = expectedText;
+                        }
+
+                        // NB: in certain scenarios the old control returns a different text value to the new control.
+                        // If oldControlExpectedText is SAME, assume the old control returns the same expectedText.
+                        if (oldControlExpectedText is SAME)
+                        {
+                            oldControlExpectedText = expectedText;
+                        }
+
+                        control.Text = text;
+                        Assert.Equal(expectedText, control.Text);
+
+                        // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
+                        string textOldWay = control.TestAccessor().Dynamic.StreamOut(SF.TEXT | SF.UNICODE);
+                        Assert.Equal(oldWayExpectedText, textOldWay);
+
+                        // verify against RichEdit20W
+                        riched20.Text = text;
+                        Assert.Equal(oldControlExpectedText, riched20.Text);
+                    }
+                }
+
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("abc", "abc")]
+        [InlineData("a\0b", "a\0b")]
+        [InlineData("\ud83c\udf09", "\ud83c\udf09")] // emoji, surrogate pair https://charbase.com/1f309-unicode-bridge-at-night
+        [InlineData("\n\n", "\n\n")]
+        [InlineData("\r\r", "\r\r")]
+        [InlineData("\r\n\r\n", "\r\n\r\n")]
+        [InlineData("a\r\nb\r\nc\r\nd\r\n", "a\r\nb\r\nc\r\nd\r\n")]
+        [InlineData("a\nb\rc\r\n\n\rd\r\r\n", "a\nb\rc\r\n\n\rd\r\r\n")]
+        public void RichTextBox_Text_GetWithoutHandle_ReturnsExpected(string text, string expected)
+        {
+            using (var control = new RichTextBox())
+            {
+                int invalidatedCallCount = 0;
+                control.Invalidated += (sender, e) => invalidatedCallCount++;
+                int styleChangedCallCount = 0;
+                control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                int createdCallCount = 0;
+                control.HandleCreated += (sender, e) => createdCallCount++;
+
+                Assert.Empty(control.Text);
+                Assert.False(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+
+                control.Text = text;
+
+                Assert.Equal(expected, control.Text);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
+                Assert.False(control.IsHandleCreated);
+            }
+
+            // verify against RichEdit20W
+            using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+            {
+                Assert.Empty(riched20.Text);
+                Assert.False(riched20.IsHandleCreated);
+
+                riched20.Text = text;
+
+                Assert.Equal(expected, riched20.Text);
+                Assert.False(riched20.IsHandleCreated);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(null, "")]
+        [InlineData("", "")]
+        [InlineData("abc", "abc")]
+        [InlineData("a\0b", "a")]
+        [InlineData("\ud83c\udf09", "\ud83c\udf09")] // emoji, surrogate pair https://charbase.com/1f309-unicode-bridge-at-night
+        [InlineData("\n\n", "\r\n\r\n")]
+        [InlineData("\r\r", "\r\n\r\n")]
+        [InlineData("\r\n\r\n", "\r\n\r\n")]
+        [InlineData("a\r\nb\r\nc\r\nd\r\n", "a\r\nb\r\nc\r\nd\r\n")]
+        [InlineData("a1\nb\rc\n\r\n\rd\r\r\n", "a1\r\nb\r\nc\r\n\r\n\r\nd")]
+        public void RichTextBox_Text_GetTextEx_USECRLF_ReturnsExpected(string text, string expected)
+        {
             using var control = new RichTextBox();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
+            control.CreateControl();
 
             Assert.Empty(control.Text);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
 
-            // Get again.
-            Assert.Empty(control.Text);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            control.Text = text;
+
+            string textOldWay = control.TestAccessor().Dynamic.GetTextEx(GT.USECRLF);
+            Assert.Equal(expected, textOldWay);
         }
 
         [WinFormsFact]
