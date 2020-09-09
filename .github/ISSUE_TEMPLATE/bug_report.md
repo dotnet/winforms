@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-<!-- Read https://github.com/dotnet/winforms/blob/master/Documentation/issue-guide.md -->
+<!-- Read https://github.com/dotnet/winforms/blob/master/docs/issue-guide.md -->
 
 * .NET Core Version: 
 <!-- e.g. 3.0 Preview1, or daily build number, use `dotnet --info` -->
