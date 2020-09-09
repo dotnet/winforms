@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using static Interop;
 
@@ -17,7 +15,7 @@ namespace System.Windows.Forms
         /// </summary>
         public class ToolStripHostedControlAccessibleObject : Control.ControlAccessibleObject
         {
-            private ToolStripControlHost _toolStripControlHost;
+            private ToolStripControlHost? _toolStripControlHost;
             private Control _toolStripHostedControl;
 
             /// <summary>
@@ -25,13 +23,13 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="toolStripHostedControl">The ToolStrip control hosted in the ToolStripControlHost container.</param>
             /// <param name="toolStripControlHost">The ToolStripControlHost container which hosts the control.</param>
-            public ToolStripHostedControlAccessibleObject(Control toolStripHostedControl, ToolStripControlHost toolStripControlHost) : base(toolStripHostedControl)
+            public ToolStripHostedControlAccessibleObject(Control toolStripHostedControl, ToolStripControlHost? toolStripControlHost) : base(toolStripHostedControl)
             {
                 _toolStripControlHost = toolStripControlHost;
                 _toolStripHostedControl = toolStripHostedControl;
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {
@@ -46,7 +44,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_toolStripHostedControl != null &&
                     _toolStripControlHost != null)
@@ -63,7 +61,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {

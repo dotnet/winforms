@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public ToolStripTextBox Owner { get; set; }
+            public ToolStripTextBox? Owner { get; set; }
 
             internal override bool SupportsUiaProviders => true;
 
