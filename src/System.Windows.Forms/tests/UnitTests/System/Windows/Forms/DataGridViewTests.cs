@@ -779,6 +779,33 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.ColumnHeadersHeightSizeMode = value);
         }
 
+        public static IEnumerable<object[]> DefaultCellStyle_TestData()
+        {
+            // If any of the following properties are not initialised or set to the following values
+            // accessing DefaultCellStyle property will return a copy of cell styles, instead of the existing object
+
+            yield return new object[] { new DataGridViewCellStyle() };
+            yield return new object[] { new DataGridViewCellStyle { BackColor = Color.Empty } };
+            yield return new object[] { new DataGridViewCellStyle { ForeColor = Color.Empty } };
+            yield return new object[] { new DataGridViewCellStyle { SelectionBackColor = Color.Empty } };
+            yield return new object[] { new DataGridViewCellStyle { SelectionForeColor = Color.Empty } };
+            yield return new object[] { new DataGridViewCellStyle { Font = null } };
+            yield return new object[] { new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.NotSet } };
+            yield return new object[] { new DataGridViewCellStyle { WrapMode = DataGridViewTriState.NotSet } };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DefaultCellStyle_TestData))]
+        public void DataGridView_DefaultCellStyle_returns_copy_if_not_all_fields_initialised(DataGridViewCellStyle cellStyle)
+        {
+            using DataGridView dataGridView = new DataGridView
+            {
+                DefaultCellStyle = cellStyle,
+            };
+
+            Assert.NotSame(cellStyle, dataGridView.DefaultCellStyle);
+        }
+
         public static IEnumerable<object[]> Parent_Set_TestData()
         {
             yield return new object[] { null };
@@ -2287,6 +2314,77 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubDataGridView();
             Assert.Throws<NullReferenceException>(() => control.OnColumnHeadersHeightSizeModeChanged(null));
+        }
+
+        [WinFormsFact]
+        [Trait("Issue", "https://github.com/dotnet/winforms/issues/3033")]
+        public void DataGridView_OnFontChanged_does_not_change_user_fonts()
+        {
+            using Font formFont1 = new Font("Times New Roman", 12F, FontStyle.Regular);
+            using Form form = new Form
+            {
+                Font = formFont1
+            };
+
+            using Font customFont1 = new Font("Tahoma", 8.25F, FontStyle.Regular);
+            using Font customFont2 = new Font("Consolas", 14F, FontStyle.Italic);
+            using Font customFont3 = new Font("Arial", 9F, FontStyle.Bold);
+
+            var defaultCellStyle = new DataGridViewCellStyle
+            {
+                Font = customFont1,
+
+                // We must supply a completely initialised instance, else we'd be receiving a copy
+                // refer to DefaultCellStyle implementation
+
+                Alignment = DataGridViewContentAlignment.MiddleLeft,
+                BackColor = SystemColors.Info,
+                ForeColor = Color.Maroon,
+                SelectionBackColor = SystemColors.Highlight,
+                SelectionForeColor = SystemColors.HighlightText,
+                WrapMode = DataGridViewTriState.False
+            };
+
+            using DataGridView dataGridView = new DataGridView
+            {
+                DefaultCellStyle = defaultCellStyle,
+                ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle { Font = customFont2 },
+                RowHeadersDefaultCellStyle = new DataGridViewCellStyle { Font = customFont3 }
+            };
+            dataGridView.Columns.AddRange(new[] { new DataGridViewTextBoxColumn(), new DataGridViewTextBoxColumn() });
+            dataGridView.Rows.Add("DefaultCellStyle", customFont1.ToString());
+            dataGridView.Rows.Add("ColumnHeadersDefaultCellStyle", customFont2.ToString());
+            dataGridView.Rows.Add("RowHeadersDefaultCellStyle", customFont3.ToString());
+
+            Assert.Same(customFont1, dataGridView.DefaultCellStyle.Font);
+            Assert.Same(customFont2, dataGridView.ColumnHeadersDefaultCellStyle.Font);
+            Assert.Same(customFont3, dataGridView.RowHeadersDefaultCellStyle.Font);
+
+            // Add the datagridview to the form, this will trigger Font change via OnFontChanged
+            form.Controls.Add(dataGridView);
+
+            // Ensure custom fonts are preserved
+            Assert.Same(customFont1, dataGridView.DefaultCellStyle.Font);
+            Assert.Same(customFont2, dataGridView.ColumnHeadersDefaultCellStyle.Font);
+            Assert.Same(customFont3, dataGridView.RowHeadersDefaultCellStyle.Font);
+
+            // Force another global font change
+            using Font formFont2 = new Font("Arial Black", 10F, FontStyle.Italic);
+            form.Font = formFont2;
+
+            // Ensure custom fonts are preserved
+            Assert.Same(customFont1, dataGridView.DefaultCellStyle.Font);
+            Assert.Same(customFont2, dataGridView.ColumnHeadersDefaultCellStyle.Font);
+            Assert.Same(customFont3, dataGridView.RowHeadersDefaultCellStyle.Font);
+
+            // Ensure a user is still able to change datagridview fonts
+            dataGridView.DefaultCellStyle.Font = customFont2;
+            dataGridView.ColumnHeadersDefaultCellStyle.Font = customFont3;
+            dataGridView.RowHeadersDefaultCellStyle.Font = customFont1;
+
+            Assert.Same(customFont2, dataGridView.DefaultCellStyle.Font);
+            Assert.Same(customFont3, dataGridView.ColumnHeadersDefaultCellStyle.Font);
+            Assert.Same(customFont1, dataGridView.RowHeadersDefaultCellStyle.Font);
         }
 
         public static IEnumerable<object[]> OnRowHeadersWidthChanged_TestData()
