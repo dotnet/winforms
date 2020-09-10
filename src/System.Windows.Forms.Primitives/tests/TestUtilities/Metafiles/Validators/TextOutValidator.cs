@@ -18,10 +18,12 @@ namespace System.Windows.Forms.Metafiles
         private readonly Gdi32.MM _mapMode;
         private readonly Gdi32.BKMODE _backgroundMode;
         private readonly string? _fontFace;
+        private readonly Rectangle _bounds;
 
         public TextOutValidator(
             string text,
             Color textColor,
+            Rectangle? bounds,
             Gdi32.MM mapMode = default,
             Gdi32.BKMODE backgroundMode = default,
             string? fontFace = null,
@@ -32,6 +34,7 @@ namespace System.Windows.Forms.Metafiles
             _mapMode = mapMode;
             _backgroundMode = backgroundMode;
             _fontFace = fontFace;
+            _bounds = bounds.HasValue ? bounds.Value : default;
 
             if (validate != default)
             {
@@ -40,6 +43,11 @@ namespace System.Windows.Forms.Metafiles
             else
             {
                 _validate = Flags.Text;
+
+                if (bounds.HasValue)
+                {
+                    _validate |= Flags.Bounds;
+                }
 
                 if (!textColor.IsEmpty)
                 {
@@ -77,6 +85,11 @@ namespace System.Windows.Forms.Metafiles
                 Assert.Equal(_text, textOut->emrtext.GetString().ToString());
             }
 
+            if (_validate.HasFlag(Flags.Bounds))
+            {
+                Assert.Equal(_bounds, (Rectangle)textOut->rclBounds);
+            }
+
             if (_validate.HasFlag(Flags.MapMode))
             {
                 Assert.Equal(_mapMode, state.MapMode);
@@ -106,6 +119,7 @@ namespace System.Windows.Forms.Metafiles
             MapMode         = 0b00000000_00000000_00000000_00000100,
             BackgroundMode  = 0b00000000_00000000_00000000_00001000,
             FontFace        = 0b00000000_00000000_00000000_00010000,
+            Bounds          = 0b00000000_00000000_00000000_00100000,
         }
     }
 }

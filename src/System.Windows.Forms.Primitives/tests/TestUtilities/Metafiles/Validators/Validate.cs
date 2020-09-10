@@ -20,6 +20,23 @@ namespace System.Windows.Forms.Metafiles
             TextOutValidator.Flags validate = default) => new TextOutValidator(
                 text,
                 textColor: Color.Empty,
+                bounds: null,
+                mapMode,
+                backgroundMode,
+                fontFace,
+                validate);
+
+        internal static IEmfValidator TextOut(
+            string text,
+            Color textColor,
+            Rectangle bounds,
+            Gdi32.MM mapMode = Gdi32.MM.TEXT,
+            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
+            string? fontFace = null,
+            TextOutValidator.Flags validate = default) => new TextOutValidator(
+                text,
+                textColor,
+                bounds,
                 mapMode,
                 backgroundMode,
                 fontFace,
@@ -34,6 +51,7 @@ namespace System.Windows.Forms.Metafiles
             TextOutValidator.Flags validate = default) => new TextOutValidator(
                 text,
                 textColor,
+                bounds: null,
                 mapMode,
                 backgroundMode,
                 fontFace,
