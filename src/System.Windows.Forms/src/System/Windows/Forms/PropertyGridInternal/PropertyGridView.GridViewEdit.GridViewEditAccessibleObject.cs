@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -14,11 +12,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             protected class GridViewEditAccessibleObject : ControlAccessibleObject
             {
-                private readonly PropertyGridView propertyGridView;
+                private readonly PropertyGridView _owningPropertyGridView;
+                private readonly TextBoxBaseUiaTextProvider _textProvider;
+                private readonly GridViewEdit _owningGridViewEdit;
 
                 public GridViewEditAccessibleObject(GridViewEdit owner) : base(owner)
                 {
-                    propertyGridView = owner.psheet;
+                    _owningPropertyGridView = owner.psheet;
+                    _owningGridViewEdit = owner;
+                    _textProvider = new TextBoxBaseUiaTextProvider(owner);
+                    UseTextProviders(_textProvider, _textProvider);
                 }
 
                 public override AccessibleStates State
@@ -45,28 +48,28 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// </summary>
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
-                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
-                    if (direction == UiaCore.NavigateDirection.Parent && propertyGridView.SelectedGridEntry != null)
+                    if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
                     {
-                        return propertyGridView.SelectedGridEntry.AccessibilityObject;
+                        return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                     }
                     else if (direction == UiaCore.NavigateDirection.NextSibling)
                     {
-                        if (propertyGridView.DropDownButton.Visible)
+                        if (_owningPropertyGridView.DropDownButton.Visible)
                         {
-                            return propertyGridView.DropDownButton.AccessibilityObject;
+                            return _owningPropertyGridView.DropDownButton.AccessibilityObject;
                         }
-                        else if (propertyGridView.DialogButton.Visible)
+                        else if (_owningPropertyGridView.DialogButton.Visible)
                         {
-                            return propertyGridView.DialogButton.AccessibilityObject;
+                            return _owningPropertyGridView.DialogButton.AccessibilityObject;
                         }
                     }
                     else if (direction == UiaCore.NavigateDirection.PreviousSibling)
                     {
-                        if (propertyGridView.DropDownVisible)
+                        if (_owningPropertyGridView.DropDownVisible)
                         {
-                            return propertyGridView.DropDownControlHolder.AccessibilityObject;
+                            return _owningPropertyGridView.DropDownControlHolder.AccessibilityObject;
                         }
                     }
 
@@ -77,9 +80,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ///  Gets the top level element.
                 /// </summary>
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-                    => propertyGridView.AccessibilityObject;
+                    => _owningPropertyGridView.AccessibilityObject;
 
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
@@ -99,22 +102,25 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return NativeMethods.WinFormFrameworkId;
                         case UiaCore.UIA.IsValuePatternAvailablePropertyId:
                             return IsPatternSupported(UiaCore.UIA.ValuePatternId);
+                        case UiaCore.UIA.IsTextPatternAvailablePropertyId:
+                            return IsPatternSupported(UiaCore.UIA.TextPatternId);
+                        case UiaCore.UIA.IsTextPattern2AvailablePropertyId:
+                            return IsPatternSupported(UiaCore.UIA.TextPattern2Id);
                     }
 
                     return base.GetPropertyValue(propertyID);
                 }
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                {
-                    if (patternId == UiaCore.UIA.ValuePatternId)
+                    => patternId switch
                     {
-                        return true;
-                    }
+                        UiaCore.UIA.ValuePatternId => true,
+                        UiaCore.UIA.TextPatternId => true,
+                        UiaCore.UIA.TextPattern2Id => true,
+                        _ => base.IsPatternSupported(patternId)
+                    };
 
-                    return base.IsPatternSupported(patternId);
-                }
-
-                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+                internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
                 {
                     get
                     {
@@ -126,7 +132,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                public override string Name
+                public override string? Name
                 {
                     get
                     {
@@ -137,7 +143,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         else
                         {
-                            GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
+                            GridEntry selectedGridEntry = _owningPropertyGridView.SelectedGridEntry;
                             if (selectedGridEntry != null)
                             {
                                 return selectedGridEntry.AccessibilityObject.Name;
@@ -149,12 +155,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     set => base.Name = value;
                 }
 
-                internal override int[] RuntimeId
+                internal override int[]? RuntimeId
                 {
                     get
                     {
                         var selectedGridEntryAccessibleRuntimeId =
-                            propertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
+                            _owningPropertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
 
                         if (selectedGridEntryAccessibleRuntimeId is null)
                         {
@@ -179,7 +185,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     get
                     {
-                        return !(propertyGridView.SelectedGridEntry is PropertyDescriptorGridEntry propertyDescriptorGridEntry) || propertyDescriptorGridEntry.IsPropertyReadOnly;
+                        return !(_owningPropertyGridView.SelectedGridEntry is PropertyDescriptorGridEntry propertyDescriptorGridEntry) || propertyDescriptorGridEntry.IsPropertyReadOnly;
                     }
                 }
 
