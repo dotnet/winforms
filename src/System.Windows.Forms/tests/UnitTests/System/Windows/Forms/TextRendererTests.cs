@@ -751,5 +751,83 @@ namespace System.Windows.Forms.Tests
             public IntPtr GetHdc() => IntPtr.Zero;
             public void ReleaseHdc() { }
         }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextRenderer_DrawText_Padding_TestData))]
+        public unsafe void TextRenderer_DrawText_Padding_Point(TextFormatFlags flags, Rectangle expectedBounds)
+        {
+            using var emf = new EmfScope();
+            DeviceContextState state = new DeviceContextState(emf);
+            TextRenderer.DrawText(
+                new HdcDeviceContextAdapter(emf),
+                "Sparkling Cider",
+                SystemFonts.DefaultFont,
+                (Point) default,
+                Color.Red,
+                flags);
+
+            emf.Validate(
+                state,
+                Validate.TextOut(
+                    "Sparkling Cider",
+                    Color.Red,
+                    expectedBounds,
+                    fontFace: SystemFonts.DefaultFont.Name));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextRenderer_DrawText_Padding_TestData))]
+        public unsafe void TextRenderer_DrawText_Padding_Rectangle(TextFormatFlags flags, Rectangle expectedBounds)
+        {
+            using var emf = new EmfScope();
+            DeviceContextState state = new DeviceContextState(emf);
+            TextRenderer.DrawText(
+                new HdcDeviceContextAdapter(emf),
+                "Sparkling Cider",
+                SystemFonts.DefaultFont,
+                new Rectangle(0, 0, int.MaxValue, int.MaxValue),
+                Color.Red,
+                flags);
+
+            emf.Validate(
+                state,
+                Validate.TextOut(
+                    "Sparkling Cider",
+                    Color.Red,
+                    expectedBounds,
+                    fontFace: SystemFonts.DefaultFont.Name));
+        }
+
+        public static TheoryData<TextFormatFlags, Rectangle> TextRenderer_DrawText_Padding_TestData
+            => new TheoryData<TextFormatFlags, Rectangle>
+            {
+                { TextFormatFlags.GlyphOverhangPadding, new Rectangle(3, 0, 70, 12) },
+                { TextFormatFlags.LeftAndRightPadding, new Rectangle(5, 0, 70, 12) },
+                { TextFormatFlags.NoPadding, new Rectangle(0, 0, 70, 12) }
+            };
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextRenderer_MeasureText_Padding_TestData))]
+        public void TextRenderer_MeasureText_Padding(TextFormatFlags flags, Size expectedSize)
+        {
+            using var image = new Bitmap(200, 50);
+            using Graphics graphics = Graphics.FromImage(image);
+            Size size = TextRenderer.MeasureText(
+                graphics,
+                "Sparkling Cider",
+                SystemFonts.DefaultFont,
+                new Size(int.MaxValue, int.MaxValue),
+                flags);
+
+            Assert.Equal(expectedSize, size);
+        }
+
+        public static TheoryData<TextFormatFlags, Size> TextRenderer_MeasureText_Padding_TestData
+            => new TheoryData<TextFormatFlags, Size>
+            {
+                { TextFormatFlags.GlyphOverhangPadding, new Size(78, 13) },
+                { TextFormatFlags.LeftAndRightPadding, new Size(82, 13) },
+                { TextFormatFlags.NoPadding, new Size(71, 13) }
+            };
     }
 }

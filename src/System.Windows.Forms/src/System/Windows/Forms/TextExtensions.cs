@@ -15,23 +15,34 @@ namespace System.Windows.Forms
         // flags and some benchmarking with GDI+.
         private const float ItalicPaddingFactor = 1 / 2f;
 
+        // Used to clear TextRenderer specific flags from TextFormatFlags
+        internal const int GdiUnsupportedFlagMask = (unchecked((int)0xFF000000));
+
         [Conditional("DEBUG")]
         private static void ValidateFlags(User32.DT flags)
         {
-            Debug.Assert(((uint)flags & TextRenderer.GdiUnsupportedFlagMask) == 0,
+            Debug.Assert(((uint)flags & GdiUnsupportedFlagMask) == 0,
                 "Some custom flags were left over and are not GDI compliant!");
         }
 
-        public static void DrawText(
-            this DeviceContextHdcScope hdc,
-            string? text,
-            FontCache.Scope font,
-            Rectangle bounds,
-            Color foreColor,
-            User32.DT flags,
-            Color backColor = default,
-            TextPaddingOptions padding = default)
-            => DrawText(hdc.HDC, text, font, bounds, foreColor, flags, backColor, padding);
+        private static (User32.DT Flags, TextPaddingOptions Padding) SplitTextFormatFlags(TextFormatFlags flags)
+        {
+            if (((uint)flags & GdiUnsupportedFlagMask) == 0)
+            {
+                return ((User32.DT)flags, TextPaddingOptions.GlyphOverhangPadding);
+            }
+
+            // Clear TextRenderer custom flags.
+            User32.DT windowsGraphicsSupportedFlags = (User32.DT)((uint)flags & ~GdiUnsupportedFlagMask);
+
+            TextPaddingOptions padding = flags.HasFlag(TextFormatFlags.LeftAndRightPadding)
+                ? TextPaddingOptions.LeftAndRightPadding
+                : flags.HasFlag(TextFormatFlags.NoPadding)
+                    ? TextPaddingOptions.NoPadding
+                    : TextPaddingOptions.GlyphOverhangPadding;
+
+            return (windowsGraphicsSupportedFlags, padding);
+        }
 
         /// <summary>
         ///  Draws the text in the given bounds, using the given Font, foreColor and backColor, and according to the specified
@@ -47,14 +58,13 @@ namespace System.Windows.Forms
             FontCache.Scope font,
             Rectangle bounds,
             Color foreColor,
-            User32.DT flags,
-            Color backColor = default,
-            TextPaddingOptions padding = default)
+            TextFormatFlags flags,
+            Color backColor = default)
         {
             if (text.IsEmpty || foreColor == Color.Transparent)
                 return;
 
-            ValidateFlags(flags);
+            (User32.DT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
             // DrawText requires default text alignment.
             using var alignment = new Gdi32.SetTextAlignmentScope(hdc, default);
@@ -74,7 +84,7 @@ namespace System.Windows.Forms
 
             User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
 
-            bounds = AdjustForVerticalAlignment(hdc, text, bounds, flags, ref dtparams);
+            bounds = AdjustForVerticalAlignment(hdc, text, bounds, dt, ref dtparams);
 
             // Adjust unbounded rect to avoid overflow since Rectangle ctr does not do param validation.
             if (bounds.Width == TextRenderer.MaxSize.Width)
@@ -88,7 +98,7 @@ namespace System.Windows.Forms
             }
 
             RECT rect = bounds;
-            User32.DrawTextExW(hdc, text, ref rect, flags, ref dtparams);
+            User32.DrawTextExW(hdc, text, ref rect, dt, ref dtparams);
         }
 
         /// <summary>
@@ -188,14 +198,6 @@ namespace System.Windows.Forms
             return adjustedBounds;
         }
 
-        public static Size MeasureText(
-            this DeviceContextHdcScope hdc,
-            ReadOnlySpan<char> text,
-            FontCache.Scope font,
-            Size proposedSize,
-            User32.DT flags)
-            => MeasureText(hdc.HDC, text, font, proposedSize, flags);
-
         /// <summary>
         ///  Returns the Size in logical units of the given text using the given Font, and according to the formatting flags.
         ///  The proposed size is used to create a bounding rectangle as follows:
@@ -217,9 +219,9 @@ namespace System.Windows.Forms
             ReadOnlySpan<char> text,
             FontCache.Scope font,
             Size proposedSize,
-            User32.DT flags)
+            TextFormatFlags flags)
         {
-            ValidateFlags(flags);
+            (User32.DT dt, TextPaddingOptions padding) = SplitTextFormatFlags(flags);
 
             if (text.IsEmpty)
             {
@@ -230,7 +232,7 @@ namespace System.Windows.Forms
             // pixels (its not a FitBlackBox, if the text is italicized, it will overhang on the right.)
             // So we need to account for this.
 
-            User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font);
+            User32.DRAWTEXTPARAMS dtparams = GetTextMargins(font, padding);
 
             // If Width / Height are < 0, we need to make them larger or DrawText will return
             // an unbounded measurement when we actually trying to make it very narrow.
@@ -254,21 +256,21 @@ namespace System.Windows.Forms
             // VCENTER or BOTTOM options, DrawTextEx does not bind the rectangle to the actual text height since
             // it assumes the text is to be vertically aligned; we need to clear the VCENTER and BOTTOM flags to
             // get the actual text bounds.
-            if (proposedSize.Height >= TextRenderer.MaxSize.Height && (flags & User32.DT.SINGLELINE) != 0)
+            if (proposedSize.Height >= TextRenderer.MaxSize.Height && (dt & User32.DT.SINGLELINE) != 0)
             {
                 // Clear vertical-alignment flags.
-                flags &= ~(User32.DT.BOTTOM | User32.DT.VCENTER);
+                dt &= ~(User32.DT.BOTTOM | User32.DT.VCENTER);
             }
 
             if (proposedSize.Width == TextRenderer.MaxSize.Width)
             {
                 // PERF: No constraining width means no word break.
                 // in this case, we dont care about word wrapping - there should be enough room to fit it all
-                flags &= ~(User32.DT.WORDBREAK);
+                dt &= ~(User32.DT.WORDBREAK);
             }
 
-            flags |= User32.DT.CALCRECT;
-            User32.DrawTextExW(hdc, text, ref rect, flags, ref dtparams);
+            dt |= User32.DT.CALCRECT;
+            User32.DrawTextExW(hdc, text, ref rect, dt, ref dtparams);
 
             return rect.Size;
         }
