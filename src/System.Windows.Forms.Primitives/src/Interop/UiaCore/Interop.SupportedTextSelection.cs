@@ -2,13 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
+using System;
 
 internal static partial class Interop
 {
-    internal static partial class User32
+    internal static partial class UiaCore
     {
-        [DllImport(Libraries.User32, CharSet = CharSet.Unicode, SetLastError = true, ExactSpelling = true)]
-        public static extern Atom RegisterClassW(ref WNDCLASS lpWndClass);
+        [Flags]
+        public enum SupportedTextSelection
+        {
+            None = 0,
+            Single = 1,
+            Multiple = 2
+        }
     }
 }

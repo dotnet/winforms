@@ -276,9 +276,6 @@ System.Windows.Forms.AutoValidate.Disable = 0 -> System.Windows.Forms.AutoValida
 System.Windows.Forms.AutoValidate.EnableAllowFocusChange = 2 -> System.Windows.Forms.AutoValidate
 System.Windows.Forms.AutoValidate.EnablePreventFocusChange = 1 -> System.Windows.Forms.AutoValidate
 System.Windows.Forms.AutoValidate.Inherit = -1 -> System.Windows.Forms.AutoValidate
-System.Windows.Forms.Automation.IAutomationLiveRegion
-System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.get -> System.Windows.Forms.Automation.AutomationLiveSetting
-System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.set -> void
 System.Windows.Forms.AxHost
 System.Windows.Forms.AxHost.AboutBoxDelegate
 System.Windows.Forms.AxHost.ActiveXInvokeKind

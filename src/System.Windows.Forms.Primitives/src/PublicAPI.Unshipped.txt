@@ -1,0 +1,3 @@
+System.Windows.Forms.Automation.IAutomationLiveRegion
+System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.get -> System.Windows.Forms.Automation.AutomationLiveSetting
+System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.set -> void

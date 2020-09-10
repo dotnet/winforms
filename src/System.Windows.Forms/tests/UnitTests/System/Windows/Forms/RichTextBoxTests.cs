@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using WinForms.Common.Tests;
 using Xunit;
+using Xunit.Abstractions;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;
@@ -1604,40 +1605,56 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Font_GetCharFormat_TestData()
         {
-            yield return new object[] { new Font("Arial", 8.25f), 165, 0 };
-            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold), 165, CFE.BOLD };
-            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Italic), 165, CFE.ITALIC };
-            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Strikeout), 165, CFE.STRIKEOUT };
-            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Underline), 165, CFE.UNDERLINE };
-            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 165, CFE.BOLD | CFE.ITALIC | CFE.UNDERLINE | CFE.STRIKEOUT };
+            yield return new object[] { "Arial", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 1, 165, 0 };
+            yield return new object[] { "Arial", 8.25f, FontStyle.Bold, GraphicsUnit.Point, 1, 165, CFE.BOLD };
+            yield return new object[] { "Arial", 8.25f, FontStyle.Italic, GraphicsUnit.Point, 1, 165, CFE.ITALIC };
+            yield return new object[] { "Arial", 8.25f, FontStyle.Strikeout, GraphicsUnit.Point, 1, 165, CFE.STRIKEOUT };
+            yield return new object[] { "Arial", 8.25f, FontStyle.Underline, GraphicsUnit.Point, 1, 165, CFE.UNDERLINE };
+            yield return new object[] { "Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10, 165, CFE.BOLD | CFE.ITALIC | CFE.UNDERLINE | CFE.STRIKEOUT };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Font_GetCharFormat_TestData))]
-        public unsafe void RichTextBox_Font_GetCharFormat_Success(Font value, int expectedYHeight, int expectedEffects)
+        public unsafe void RichTextBox_Font_GetCharFormat_Success(string familyName, float emSize, FontStyle style, GraphicsUnit unit, byte gdiCharSet, int expectedYHeight, int expectedEffects)
         {
             using var control = new RichTextBox();
-
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            control.Font = value;
+
             var format = new CHARFORMAT2W
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = (CFM)int.MaxValue
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
-            Assert.Equal("Arial", format.FaceName.ToString());
-            Assert.Equal(expectedYHeight, (int)format.yHeight);
-            Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
-            Assert.Equal(0, format.bPitchAndFamily);
 
-            // Set null.
-            control.Font = null;
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
-            Assert.Equal(Control.DefaultFont.Name, format.FaceName.ToString());
-            Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format.yHeight);
-            Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR, format.dwEffects);
-            Assert.Equal(0, format.bPitchAndFamily);
+            IntPtr result;
+
+            using (var font = new Font(familyName, emSize, style, unit, gdiCharSet))
+            {
+                control.Font = font;
+                result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format);
+                Assert.NotEqual(IntPtr.Zero, result);
+                Assert.Equal(familyName, format.FaceName.ToString());
+                Assert.Equal(expectedYHeight, format.yHeight);
+                Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
+                Assert.Equal(0, format.bPitchAndFamily);
+
+                // Set null.
+                control.Font = null;
+            }
+
+            var format1 = new CHARFORMAT2W
+            {
+                cbSize = (uint)sizeof(CHARFORMAT2W),
+                dwMask = (CFM)int.MaxValue
+            };
+
+            result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format1);
+            Assert.NotEqual(IntPtr.Zero, result);
+            Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
+            Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
+            Assert.True(format1.dwEffects.HasFlag(CFE.AUTOBACKCOLOR));
+            Assert.True(format1.dwEffects.HasFlag(CFE.AUTOCOLOR));
+            Assert.Equal(0, format1.bPitchAndFamily);
         }
 
         [WinFormsFact]
@@ -4818,14 +4835,15 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> SelectionFont_Set_TestData()
         {
-            yield return new object[] { new Font("Arial", 8.25f), 1 };
-            yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 1 };
+            yield return new object[] { "Arial", 8.25f, false, FontStyle.Regular, 0, 0, 1 };
+            yield return new object[] { "Arial", 8.25f, true, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10, 1 };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(SelectionFont_Set_TestData))]
-        public void RichTextBox_SelectionFont_Set_GetReturnsExpected(Font value, byte expectedGdiCharset)
+        public void RichTextBox_SelectionFont_Set_GetReturnsExpected(string fontName, float fontSize, bool hasStyle, FontStyle fontStyle, GraphicsUnit units, byte gdiCharSet, byte expectedGdiCharset)
         {
+            using Font value = hasStyle ? new Font(fontName, fontSize, fontStyle, units, gdiCharSet) : new Font(fontName, fontSize);
             using var control = new RichTextBox
             {
                 SelectionFont = value
@@ -4850,8 +4868,9 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(SelectionFont_Set_TestData))]
-        public void RichTextBox_SelectionFont_SetWithHandle_GetReturnsExpected(Font value, byte expectedGdiCharset)
+        public void RichTextBox_SelectionFont_SetWithHandle_GetReturnsExpected(string fontName, float fontSize, bool hasStyle, FontStyle fontStyle, GraphicsUnit units, byte gdiCharSet, byte expectedGdiCharset)
         {
+            using Font value = hasStyle ? new Font(fontName, fontSize, fontStyle, units, gdiCharSet) : new Font(fontName, fontSize);
             using var control = new RichTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
