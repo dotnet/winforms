@@ -518,11 +518,11 @@ namespace System.Windows.Forms
                 }
 
                 using var hfont = GdiCache.GetHFONT(Font);
-                textSize = hdc.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), flags);
+                textSize = hdc.HDC.MeasureText(Text, hfont, new Size(textRectangle.Width, int.MaxValue), (TextFormatFlags)flags);
 
                 if (Enabled)
                 {
-                    hdc.DrawText(Text, hfont, textRectangle, ForeColor, flags);
+                    hdc.HDC.DrawText(Text, hfont, textRectangle, ForeColor, (TextFormatFlags)flags);
                 }
                 else
                 {
