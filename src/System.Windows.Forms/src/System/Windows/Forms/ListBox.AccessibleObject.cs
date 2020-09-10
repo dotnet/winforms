@@ -13,8 +13,6 @@ namespace System.Windows.Forms
     {
         /// <summary>
         ///  ListBox control accessible object with UI Automation provider functionality.
-        ///  This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
-        ///  to have all base functionality.
         /// </summary>
         internal class ListBoxAccessibleObject : ControlAccessibleObject
         {
