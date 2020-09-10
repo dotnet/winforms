@@ -6535,7 +6535,6 @@ namespace System.Windows.Forms
                     }
                     break;
                 case User32.WM.GETDPISCALEDSIZE:
-                    Debug.Assert(PARAM.SignedLOWORD(m.WParam) == PARAM.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
                 case User32.WM.DPICHANGED:
