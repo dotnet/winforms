@@ -10801,6 +10801,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Acima</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Especifica se o texto renderizado deve ser compatível com versões anteriores do Windows Forms.</target>

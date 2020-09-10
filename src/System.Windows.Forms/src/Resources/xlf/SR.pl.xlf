@@ -10801,6 +10801,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">W górę</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Określa, czy renderowanie tekstu powinno być zgodne z poprzednimi wydaniami formantów systemu Windows.</target>

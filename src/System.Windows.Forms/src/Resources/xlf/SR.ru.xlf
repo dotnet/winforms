@@ -10802,6 +10802,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Вверх</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Определяет, должен ли отображаемый текст быть совместимым с предыдущими версиями Windows Forms.</target>

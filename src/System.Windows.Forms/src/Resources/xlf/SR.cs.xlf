@@ -10801,6 +10801,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Určuje, zda má být vykreslování textu kompatibilní s předchozími verzemi knihovny Windows Forms.</target>

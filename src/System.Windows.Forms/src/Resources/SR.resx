@@ -6731,4 +6731,7 @@ Stack trace where the illegal operation occurred was:
   <data name="PropertyGridViewDropDownControlHolderAccessibleName" xml:space="preserve">
     <value>Drop down control holder</value>
   </data>
+  <data name="UpDownEditLocalizedControlTypeName" xml:space="preserve">
+    <value>Edit</value>
+  </data>
 </root>

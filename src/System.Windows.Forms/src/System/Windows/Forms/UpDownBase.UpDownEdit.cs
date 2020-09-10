@@ -30,11 +30,13 @@ namespace System.Windows.Forms
                 set
                 {
                     bool valueChanged = (value != base.Text);
-                    base.Text = value;
                     if (valueChanged)
                     {
-                        AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+                        AccessibilityObject.RaiseAutomationNotification(Automation.AutomationNotificationKind.ActionCompleted,
+                            Automation.AutomationNotificationProcessing.CurrentThenMostRecent, SR.UpDownEditLocalizedControlTypeName);
+                        AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
                     }
+                    base.Text = value;
                 }
             }
 

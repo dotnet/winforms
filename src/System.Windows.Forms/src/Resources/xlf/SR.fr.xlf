@@ -10801,6 +10801,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Haut</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Spécifie si le rendu de texte doit être compatible avec les versions antérieures de Windows Forms.</target>
