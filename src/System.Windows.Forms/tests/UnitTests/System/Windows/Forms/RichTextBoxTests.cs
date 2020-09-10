@@ -6855,7 +6855,8 @@ namespace System.Windows.Forms.Tests
 
         //[WinFormsTheory]
         //[MemberData(nameof(RichTextBox_Text_GetWithHandle_TestData))]
-        [WinFormsFact]
+        [WinFormsFact(Skip = "Causes buffer overruns, see: https://github.com/dotnet/winforms/issues/3867")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3867")]
         public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
         {
             using (var control = new RichTextBox())
