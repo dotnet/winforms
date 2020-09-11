@@ -10,43 +10,43 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreAppPackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>5.0.0-rc.2.20461.4</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>5.0.0-rc.2.20461.4</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>5.0.0-rc.2.20461.4</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityAccessControlPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityAccessControlPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemSecurityPrincipalWindowsPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityPrincipalWindowsPackageVersion>
-    <SystemIOPackagingPackageVersion>5.0.0-rc.2.20461.4</SystemIOPackagingPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreAppPackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>5.0.0-rc.2.20461.14</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>5.0.0-rc.2.20461.14</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>5.0.0-rc.2.20461.14</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityAccessControlPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityAccessControlPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemSecurityPrincipalWindowsPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityPrincipalWindowsPackageVersion>
+    <SystemIOPackagingPackageVersion>5.0.0-rc.2.20461.14</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreILDAsmPackageVersion>
-    <MicrosoftNETCoreAppInternalPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreAppInternalPackageVersion>
-    <MicrosoftNETCoreTargetsPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreTargetsPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>5.0.0-rc.2.20461.4</SystemDiagnosticsPerformanceCounterPackageVersion>
-    <SystemIOFileSystemAccessControlPackageVersion>5.0.0-rc.2.20461.4</SystemIOFileSystemAccessControlPackageVersion>
-    <SystemIOPipesAccessControlPackageVersion>5.0.0-rc.2.20461.4</SystemIOPipesAccessControlPackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>5.0.0-rc.2.20461.4</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>5.0.0-rc.2.20461.4</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>5.0.0-rc.2.20461.4</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>5.0.0-rc.2.20461.4</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32RegistryPackageVersion>5.0.0-rc.2.20461.4</MicrosoftWin32RegistryPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-rc.2.20461.4</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>5.0.0-rc.2.20461.4</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-rc.2.20461.4</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>5.0.0-rc.2.20461.4</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>5.0.0-rc.2.20461.4</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>5.0.0-rc.2.20461.4</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>5.0.0-rc.2.20461.4</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreILDAsmPackageVersion>
+    <MicrosoftNETCoreAppInternalPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreAppInternalPackageVersion>
+    <MicrosoftNETCoreTargetsPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreTargetsPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>5.0.0-rc.2.20461.14</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <SystemIOFileSystemAccessControlPackageVersion>5.0.0-rc.2.20461.14</SystemIOFileSystemAccessControlPackageVersion>
+    <SystemIOPipesAccessControlPackageVersion>5.0.0-rc.2.20461.14</SystemIOPipesAccessControlPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>5.0.0-rc.2.20461.14</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>5.0.0-rc.2.20461.14</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>5.0.0-rc.2.20461.14</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>5.0.0-rc.2.20461.14</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>5.0.0-rc.2.20461.14</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>5.0.0-rc.2.20461.14</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>5.0.0-rc.2.20461.14</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>5.0.0-rc.2.20461.14</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>5.0.0-rc.2.20461.14</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>5.0.0-rc.2.20461.14</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>5.0.0-rc.2.20461.14</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>5.0.0-rc.2.20461.14</SystemWindowsExtensionsPackageVersion>
     <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.2.20461.4</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.2.20461.4</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.2.20461.4</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.2.20461.14</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.2.20461.14</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>5.0.0-rc.2.20461.14</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
