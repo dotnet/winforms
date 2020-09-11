@@ -192,6 +192,11 @@
         <target state="translated">Zuklappen</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Doppelklick</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Aufklappen</target>
@@ -4214,11 +4219,6 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Bearbeiten</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">Der an {0} übergebene Win32-Handle ist ungültig oder hat den falschen Typ.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Ungültiger HDC-Typ: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Absteigend sortiert.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Wartekreisel</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Zeigt an, dass die Größe des Bereichs eines bestimmten SplitContainers nach Größenänderungsereignissen beibehalten wird.</target>
@@ -9399,6 +9399,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Zeigt an, ob Zeilen automatisch für mehrzeilige Bearbeitungssteuerelemente umbrochen werden.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">"TextFormatFlags.ModifyString" ist unzulässig.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

@@ -192,6 +192,11 @@
         <target state="translated">Zwiń</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Dwukrotne kliknięcie</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Rozwiń</target>
@@ -4214,11 +4219,6 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
         <target state="translated">Edytuj</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">Uchwyt Win32 przekazany do {0} jest nieprawidłowy lub nieprawidłowego typu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Nieprawidłowy typ HDC: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Posortowano malejąco.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Pokrętło</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Wskazuje, że określony panel elementu SplitContainer powinien mieć nadal ustalony rozmiar w czasie zdarzeń zamiany rozmiaru.</target>
@@ -9399,6 +9399,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Wskazuje, czy wiersze w wielowierszowych formantach edycyjnych są automatycznie zawijane.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString jest niedozwolone.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

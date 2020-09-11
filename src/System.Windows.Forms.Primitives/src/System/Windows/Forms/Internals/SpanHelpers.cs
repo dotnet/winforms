@@ -15,7 +15,7 @@ namespace System
         /// </summary>
         public static void CopyAndTerminate(ReadOnlySpan<char> source, Span<char> destination)
         {
-            Debug.Assert(destination.Length > 0);
+            Debug.Assert(!destination.IsEmpty);
 
             if (source.Length >= destination.Length)
             {

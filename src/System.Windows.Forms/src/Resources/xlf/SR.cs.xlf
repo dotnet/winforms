@@ -192,6 +192,11 @@
         <target state="translated">Sbalit</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Dvakrát kliknout</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Rozbalit</target>
@@ -4214,11 +4219,6 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Upravit</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">Popisovač Win32 předaný {0} je neplatný nebo je chybného typu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Neplatný typ HDC: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Seřazeno sestupně</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Číselník</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Označuje, zda se má pro panel konkrétního ovládacího prvku SplitContainer zachovat pevná velikost při událostech změny velikosti.</target>
@@ -9399,6 +9399,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Určuje, zda jsou pro víceřádková textová pole automaticky zalamována slova.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString se nepovoluje.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

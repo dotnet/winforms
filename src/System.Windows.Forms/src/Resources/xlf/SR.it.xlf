@@ -192,6 +192,11 @@
         <target state="translated">Comprimi</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Doppio clic</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Espandi</target>
@@ -4214,11 +4219,6 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
         <target state="translated">Modifica</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5454,7 +5454,7 @@ Sostituirlo?</target>
       </trans-unit>
       <trans-unit id="HelpProviderHelpNamespaceDescr">
         <source>The Help namespace (for example HTML 1.0 Help file) that will be used. It is only used for controls that have the HelpKeyword set.</source>
-        <target state="translated">Lo spazio dei nomi della Guida (ad esempio, file della Guida HTML 1.0) che verrà utilizzato. Viene utilizzato solo per i controlli per i quali si è impostato HelpKeyword.</target>
+        <target state="translated">Spazio dei nomi della Guida (ad esempio, file della Guida HTML 1.0) che verrà usato. Viene usato solo per i controlli per i quali è stato impostato HelpKeyword.</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpProviderHelpStringDescr">
@@ -5679,6 +5679,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">L'handle Win32 passato a {0} non è valido o è di un tipo non corretto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Tipo HDC non valido: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Ordinamento decrescente.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Casella di selezione</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Indica che le dimensioni di un determinato riquadro del controllo SplitContainer devono restare fisse durante gli eventi di ridimensionamento.</target>
@@ -9399,6 +9399,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Indica se le righe verranno portate automaticamente a capo in un controllo di modifica su più righe.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString non è consentito.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

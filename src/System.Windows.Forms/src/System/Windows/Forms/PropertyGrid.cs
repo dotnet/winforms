@@ -163,6 +163,8 @@ namespace System.Windows.Forms
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
 
+            SetStyle(ControlStyles.UseTextForAccessibility, false);
+
             // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue.
             // So, recalculate static variables everytime property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness)
@@ -247,7 +249,6 @@ namespace System.Windows.Forms
                 _toolStrip.ResumeLayout(false);  // SetupToolbar should perform the layout
                 SetupToolbar();
                 PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
-                Text = "PropertyGrid";
                 SetSelectState(0);
             }
             catch (Exception ex)
@@ -2902,8 +2903,7 @@ namespace System.Windows.Forms
                     Array.Copy(_currentObjects, 0, newObjects, 0, i);
                     if (i < newObjects.Length)
                     {
-                        // Dev10
-
+                        // Fixed for .NET Framework 4.0
                         Array.Copy(_currentObjects, i + 1, newObjects, i, newObjects.Length - i);
                     }
 
@@ -5667,25 +5667,6 @@ namespace System.Windows.Forms
                 UiaCore.UIA.NamePropertyId => Name,
                 _ => base.GetPropertyValue(propertyID),
             };
-
-        public override string Name
-        {
-            get
-            {
-                string name = Owner?.AccessibleName;
-                if (name != null)
-                {
-                    return name;
-                }
-
-                return Owner.Name;
-            }
-
-            set
-            {
-                Owner.AccessibleName = value;
-            }
-        }
     }
 
     /// <summary>
@@ -5781,7 +5762,7 @@ namespace System.Windows.Forms
                     return name;
                 }
 
-                return _parentPropertyGrid?.Name;
+                return _parentPropertyGrid?.AccessibilityObject.Name;
             }
         }
     }

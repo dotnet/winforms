@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
     [TypeConverter(typeof(ColumnHeaderConverter))]
-    public class ColumnHeader : Component, ICloneable
+    public partial class ColumnHeader : Component, ICloneable
     {
         // disable csharp compiler warning #0414: field assigned unused value
 #pragma warning disable 0414
@@ -32,6 +32,7 @@ namespace System.Windows.Forms
         // Use TextAlign property instead of this member variable, always
         private HorizontalAlignment _textAlign = HorizontalAlignment.Left;
         private bool _textAlignInitialized;
+        private AccessibleObject _accessibilityObject;
         private readonly ColumnHeaderImageListIndexer _imageIndexer;
 
         // We need to send some messages to ListView when it gets initialized.
@@ -74,6 +75,19 @@ namespace System.Windows.Forms
         public ColumnHeader(string imageKey) : this()
         {
             ImageKey = imageKey;
+        }
+
+        internal AccessibleObject AccessibilityObject
+        {
+            get
+            {
+                if (_accessibilityObject is null)
+                {
+                    _accessibilityObject = new ListViewColumnHeaderAccessibleObject(this);
+                }
+
+                return _accessibilityObject;
+            }
         }
 
         internal int ActualImageIndex_Internal

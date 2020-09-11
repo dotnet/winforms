@@ -590,7 +590,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <SecuritySafeCritical()>
         Protected Sub HideSplashScreen()
             SyncLock _splashLock 'This ultimately wasn't necessary.  I suppose we better keep it for backwards compatibility
-                'Dev10 590587 - we now activate the main form before calling Dispose on the Splash screen. (we're just
+                '.NET Framework 4.0 (Dev10 #590587) - we now activate the main form before calling Dispose on the Splash screen. (we're just
                 '       swapping the order of the two If blocks). This is to fix the issue where the main form
                 '       doesn't come to the front after the Splash screen disappears
 

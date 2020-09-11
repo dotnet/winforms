@@ -192,6 +192,11 @@
         <target state="translated">축소</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">두 번 클릭</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">확장</target>
@@ -4214,11 +4219,6 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">편집</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">{0}에 전달한 Win32 핸들이 잘못되었거나 핸들 종류가 올바르지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">잘못된 HDC 형식: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">내림차순으로 정렬했습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">회전자</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">크기 조정 이벤트 중에 특정 SplitContainer의 패널의 크기를 그대로 유지하도록 지정합니다.</target>
@@ -9399,6 +9399,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">다중 행 편집 컨트롤의 자동 래핑 여부를 나타냅니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString은 허용되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

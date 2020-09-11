@@ -274,66 +274,61 @@
             this.dataGridView1.Location = new System.Drawing.Point(0, 258);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(844, 100);
+            this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 2;
             // 
             // Column1
             // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
+            this.Column1.HeaderText = "Name";
+            this.Column1.Name = "A";
             // 
             // Column2
             // 
-            this.Column2.HeaderText = "Column2";
+            this.Column2.HeaderText = "City";
             this.Column2.Items.AddRange(new object[] {
-            "Item1",
-            "Item2",
-            "Item3",
-            "1234!@#$%^&*()_{}}_"});
-            this.Column2.Name = "Column2";
+            "City1",
+            "City2"});
+            this.Column2.Name = "B";
             // 
             // Column3
             // 
             this.Column3.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.ComboBox;
-            this.Column3.HeaderText = "Column3";
+            this.Column3.HeaderText = "Country";
             this.Column3.Items.AddRange(new object[] {
-            "Item1",
-            "Item2",
-            "Item3",
-            "I<>?:\"{}+_))(^%$#*@~!tyty"});
-            this.Column3.Name = "Column3";
+            "Country1",
+            "Country2"});
+            this.Column3.Name = "C";
             // 
             // Column4
             // 
-            this.Column4.HeaderText = "Column4";
-            this.Column4.Name = "Column4";
+            this.Column4.HeaderText = "IsHealthy";
+            this.Column4.Name = "D";
             // 
             // Column5
             // 
             this.Column5.DisplayStyle = System.Windows.Forms.DataGridViewComboBoxDisplayStyle.Nothing;
-            this.Column5.HeaderText = "Column5";
+            this.Column5.HeaderText = "Gender";
             this.Column5.Items.AddRange(new object[] {
-            "Item1",
-            "Item2",
-            "Item3",
-            "kksdlf<>?:\"{}*^%$!!K:{hgf"});
-            this.Column5.Name = "Column5";
+            "Male",
+            "Female"});
+            this.Column5.Name = "E";
             // 
             // Column6
             // 
-            this.Column6.HeaderText = "Column6";
-            this.Column6.Name = "Column6";
+            this.Column6.HeaderText = "Photo";
+            this.Column6.Name = "F";
             // 
             // Column7
             // 
-            this.Column7.HeaderText = "Column7";
-            this.Column7.Name = "Column7";
-            this.Column7.Text = "Core";
+            this.Column7.HeaderText = "Address";
+            this.Column7.Name = "G";
+            this.Column7.Text = "Address1";
             this.Column7.UseColumnTextForLinkValue = true;
             // 
             // Column8
             // 
-            this.Column8.HeaderText = "Column8";
-            this.Column8.Name = "Column8";
+            this.Column8.HeaderText = "Comment";
+            this.Column8.Name = "H";
             // 
             // dataGridView2
             // 
@@ -342,6 +337,7 @@
             this.dataGridView2.Location = new System.Drawing.Point(0, 28);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.Size = new System.Drawing.Size(350, 224);
+            this.dataGridView2.StandardTab = true;
             this.dataGridView2.TabIndex = 1;
             // 
             // DataControls

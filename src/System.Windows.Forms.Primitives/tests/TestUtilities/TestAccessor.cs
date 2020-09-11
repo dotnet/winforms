@@ -178,7 +178,7 @@ namespace System
                     }
 
                     // Walk up the type heirarchy
-                    type = s_type.BaseType;
+                    type = type.BaseType;
                 } while (true);
 
                 return info;

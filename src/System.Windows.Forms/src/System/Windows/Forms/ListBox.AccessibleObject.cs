@@ -177,8 +177,7 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
                 if (patternId == UiaCore.UIA.ScrollPatternId ||
-                    patternId == UiaCore.UIA.SelectionPatternId ||
-                    patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
+                    patternId == UiaCore.UIA.SelectionPatternId)
                 {
                     return true;
                 }

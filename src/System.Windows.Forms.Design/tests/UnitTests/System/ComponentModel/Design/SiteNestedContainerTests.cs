@@ -114,6 +114,12 @@ namespace System.ComponentModel.Design.Tests
             nullMockServiceProvider
                 .Setup(p => p.GetService(typeof(ITypeResolutionService)))
                 .Returns(null);
+            nullMockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(null);
+            nullMockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
+                .Returns(null);
             yield return new object[] { nullMockServiceProvider.Object };
 
             var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
@@ -123,6 +129,12 @@ namespace System.ComponentModel.Design.Tests
             invalidMockServiceProvider
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(new object());
+            invalidMockServiceProvider
+               .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+               .Returns(null);
+            invalidMockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
+                .Returns(null);
             yield return new object[] { invalidMockServiceProvider.Object };
         }
 
@@ -142,6 +154,12 @@ namespace System.ComponentModel.Design.Tests
                 var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
                 mockServiceProvider
                     .Setup(p => p.GetService(typeof(ITypeResolutionService)))
+                    .Returns(null);
+                mockServiceProvider
+                   .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                   .Returns(null);
+                mockServiceProvider
+                    .Setup(p => p.GetService(typeof(IInheritanceService)))
                     .Returns(null);
                 mockServiceProvider
                     .Setup(p => p.GetService(typeof(INameCreationService)))
@@ -300,6 +318,15 @@ namespace System.ComponentModel.Design.Tests
                 .Setup(p => p.GetService(typeof(INameCreationService)))
                 .Returns(null);
             mockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IExtenderListService)))
+                .Returns(null);
+            mockServiceProvider
                 .Setup(p => p.GetService(typeof(IExtenderProviderService)))
                 .Returns(mockExtenderProviderService.Object)
                 .Verifiable();
@@ -320,14 +347,14 @@ namespace System.ComponentModel.Design.Tests
             container.Add(component);
             Assert.Same(component, Assert.Single(container.Components));
             Assert.Null(component.Site.Name);
-            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Exactly(expectedCallCount * 2));
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Exactly(expectedCallCount * 2 + 1));
             mockExtenderProviderService.Verify(s => s.AddExtenderProvider(component as IExtenderProvider), Times.Exactly(expectedCallCount * 2));
 
             // Add again with name.
             container.Add(component, "name");
             Assert.Same(component, Assert.Single(container.Components));
             Assert.Null(component.Site.Name);
-            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Exactly(expectedCallCount * 3));
+            mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Exactly(expectedCallCount * 3 + 1));
             mockExtenderProviderService.Verify(s => s.AddExtenderProvider(component as IExtenderProvider), Times.Exactly(expectedCallCount * 3));
         }
 
@@ -365,6 +392,12 @@ namespace System.ComponentModel.Design.Tests
                 .Returns(null);
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(INameCreationService)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(DesignerCommandSet)))
+                .Returns(null);
+            mockServiceProvider
+                .Setup(p => p.GetService(typeof(IInheritanceService)))
                 .Returns(null);
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(IExtenderProviderService)))

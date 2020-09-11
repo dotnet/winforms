@@ -6530,9 +6530,6 @@ Stack trace where the illegal operation occurred was:
   <data name="DateTimePickerLocalizedControlType" xml:space="preserve">
     <value>date and time picker</value>
   </data>
-  <data name="SpinnerAccessibleName" xml:space="preserve">
-    <value>Spinner</value>
-  </data>
   <data name="LiveRegionAutomationLiveSettingDescr" xml:space="preserve">
     <value>The politeness level that a client should use to notify the user of changes to this live region.</value>
   </data>
@@ -6592,9 +6589,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="DefaultNumericUpDownAccessibleName" xml:space="preserve">
     <value>NumericUpDown</value>
-  </data>
-  <data name="DefaultDomainUpDownAccessibleName" xml:space="preserve">
-    <value>DomainUpDown</value>
   </data>
   <data name="DefaultUpDownButtonsAccessibleName" xml:space="preserve">
     <value>UpDown</value>
@@ -6717,6 +6711,15 @@ Stack trace where the illegal operation occurred was:
     <value>The ImageList control used by the ListView for ListViewGroup images in all views.</value>
   </data>
   <data name="ConstructorArgumentInvalidValueType" xml:space="preserve">
-    <value>Argument '{0}' cannot be converted to type '{1}'.</value> 
+    <value>Argument '{0}' cannot be converted to type '{1}'.</value>
+  </data>
+  <data name="TextFormatFlagsModifyStringNotAllowed" xml:space="preserve">
+    <value>TextFormatFlags.ModifyString is not allowed.</value>
+  </data>
+  <data name="AccessibleActionDoubleClick" xml:space="preserve">
+    <value>Double Click</value>
+  </data>
+  <data name="InvalidHdcType" xml:space="preserve">
+    <value>Invalid HDC type: {0}</value>
   </data>
 </root>

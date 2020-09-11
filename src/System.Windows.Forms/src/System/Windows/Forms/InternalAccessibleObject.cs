@@ -39,7 +39,8 @@ namespace System.Windows.Forms
         ISelectionProvider,
         ISelectionItemProvider,
         IScrollItemProvider,
-        IRawElementProviderHwndOverride
+        IRawElementProviderHwndOverride,
+        IMultipleViewProvider
     {
         private IAccessible publicIAccessible;                      // AccessibleObject as IAccessible
         private readonly Oleaut32.IEnumVariant publicIEnumVariant;  // AccessibleObject as Oleaut32.IEnumVariant
@@ -67,6 +68,7 @@ namespace System.Windows.Forms
         private readonly ISelectionItemProvider publicISelectionItemProvider;                      // AccessibleObject as ISelectionItemProvider
         private readonly IScrollItemProvider publicIScrollItemProvider;                            // AccessibleObject as IScrollItemProvider
         private readonly IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride;    // AccessibleObject as IRawElementProviderHwndOverride
+        private readonly IMultipleViewProvider publicIMultiViewProvider;                           // AccessibleObject as IMultipleViewProvider
 
         /// <summary>
         ///  Create a new wrapper.
@@ -97,6 +99,7 @@ namespace System.Windows.Forms
             publicISelectionItemProvider = (ISelectionItemProvider)accessibleImplemention;
             publicIScrollItemProvider = (IScrollItemProvider)accessibleImplemention;
             publicIRawElementProviderHwndOverride = (IRawElementProviderHwndOverride)accessibleImplemention;
+            publicIMultiViewProvider = (IMultipleViewProvider)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
 
@@ -289,70 +292,30 @@ namespace System.Windows.Forms
         object? IRawElementProviderSimple.GetPatternProvider(UIA patternId)
         {
             object? obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
-            if (obj != null)
-            {
-                // we always want to return the internal accessible object
-                if (patternId == UIA.ExpandCollapsePatternId)
-                {
-                    return (IExpandCollapseProvider)this;
-                }
-                else if (patternId == UIA.ValuePatternId)
-                {
-                    return (IValueProvider)this;
-                }
-                else if (patternId == UIA.RangeValuePatternId)
-                {
-                    return (IRangeValueProvider)this;
-                }
-                else if (patternId == UIA.TogglePatternId)
-                {
-                    return (IToggleProvider)this;
-                }
-                else if (patternId == UIA.TablePatternId)
-                {
-                    return (ITableProvider)this;
-                }
-                else if (patternId == UIA.TableItemPatternId)
-                {
-                    return (ITableItemProvider)this;
-                }
-                else if (patternId == UIA.GridPatternId)
-                {
-                    return (IGridProvider)this;
-                }
-                else if (patternId == UIA.GridItemPatternId)
-                {
-                    return (IGridItemProvider)this;
-                }
-                else if (patternId == UIA.InvokePatternId)
-                {
-                    return (IInvokeProvider)this;
-                }
-                else if (patternId == UIA.LegacyIAccessiblePatternId)
-                {
-                    return (ILegacyIAccessibleProvider)this;
-                }
-                else if (patternId == UIA.SelectionPatternId)
-                {
-                    return (ISelectionProvider)this;
-                }
-                else if (patternId == UIA.SelectionItemPatternId)
-                {
-                    return (ISelectionItemProvider)this;
-                }
-                else if (patternId == UIA.ScrollItemPatternId)
-                {
-                    return (IScrollItemProvider)this;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
+            if (obj is null)
             {
                 return null;
             }
+
+            // we always want to return the internal accessible object
+            return patternId switch
+            {
+                UIA.ExpandCollapsePatternId => (IExpandCollapseProvider)this,
+                UIA.ValuePatternId => (IValueProvider)this,
+                UIA.RangeValuePatternId => (IRangeValueProvider)this,
+                UIA.TogglePatternId => (IToggleProvider)this,
+                UIA.TablePatternId => (ITableProvider)this,
+                UIA.TableItemPatternId => (ITableItemProvider)this,
+                UIA.GridPatternId => (IGridProvider)this,
+                UIA.GridItemPatternId => (IGridItemProvider)this,
+                UIA.InvokePatternId => (IInvokeProvider)this,
+                UIA.LegacyIAccessiblePatternId => (ILegacyIAccessibleProvider)this,
+                UIA.SelectionPatternId => (ISelectionProvider)this,
+                UIA.SelectionItemPatternId => (ISelectionItemProvider)this,
+                UIA.ScrollItemPatternId => (IScrollItemProvider)this,
+                UIA.MultipleViewPatternId => (IMultipleViewProvider)this,
+                _ => null
+            };
         }
 
         object? IRawElementProviderSimple.GetPropertyValue(UIA propertyID)
@@ -537,5 +500,17 @@ namespace System.Windows.Forms
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
         IRawElementProviderSimple? IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
+
+        int IMultipleViewProvider.CurrentView
+            => publicIMultiViewProvider.CurrentView;
+
+        int[]? IMultipleViewProvider.GetSupportedViews()
+            => publicIMultiViewProvider.GetSupportedViews();
+
+        string? IMultipleViewProvider.GetViewName(int viewId)
+            => publicIMultiViewProvider.GetViewName(viewId);
+
+        void IMultipleViewProvider.SetCurrentView(int viewId)
+            => publicIMultiViewProvider.SetCurrentView(viewId);
     }
 }

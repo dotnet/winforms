@@ -192,6 +192,11 @@
         <target state="translated">Daralt</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Çift Tıklama</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Genişlet</target>
@@ -4214,11 +4219,6 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Düzenle</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">{0} öğesine geçirilen Win32 işleyicisi geçerli değil veya yanlış türde.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Geçersiz HDC türü: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Azalan düzende sıralı.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Değer Değiştirici</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Yeniden boyutlandırma olayları sırasında belirli bir SplitContainer'ın Bölmesinin boyutunun sabit kalması gerektiğini gösterir.</target>
@@ -9399,6 +9399,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Çok satırlı düzenleme denetimlerinde satırlarda otomatik olarak sözcük kaydırılıp kaydırılmayacağını gösterir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString öğesine izin verilmez.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

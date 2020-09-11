@@ -192,6 +192,11 @@
         <target state="translated">Réduire</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Double-clic</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Développer</target>
@@ -4214,11 +4219,6 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
         <target state="translated">Modifier</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">Le handle Win32 passé à {0} n'est pas valide ou d'un type incorrect.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Type HDC non valide : {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Trié en ordre décroissant.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Compteur</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Indique que la taille d'un panneau spécifique de SplitContainer doit rester la même lors d'événements de redimensionnement.</target>
@@ -9399,6 +9399,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Indique si les lignes sont automatiquement enveloppées pour les contrôles d'édition multiligne.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString n'est pas autorisé.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

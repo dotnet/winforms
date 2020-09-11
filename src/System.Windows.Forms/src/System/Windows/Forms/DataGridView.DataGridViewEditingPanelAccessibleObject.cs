@@ -79,11 +79,6 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId);
-            }
-
             internal override object GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)

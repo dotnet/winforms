@@ -564,8 +564,7 @@ namespace System.Windows.Forms
                     var p when
                         p == UiaCore.UIA.ValuePatternId ||
                         p == UiaCore.UIA.GridPatternId ||
-                        p == UiaCore.UIA.TablePatternId ||
-                        p == UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                        p == UiaCore.UIA.TablePatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
 

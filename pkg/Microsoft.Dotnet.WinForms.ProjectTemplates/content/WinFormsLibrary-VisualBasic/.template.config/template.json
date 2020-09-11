@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project for creating a class library that targets .NET Core Windows Forms (WinForms)",
   "groupIdentity": "Microsoft.Common.WinForms.Library",
-  "precedence": "5000",
-  "identity": "Microsoft.Common.WinForms.Library.VisualBasic.5.0",
+  "precedence": "6000",
+  "identity": "Microsoft.Common.WinForms.Library.VisualBasic.6.0",
   "shortName": "winformslib",
   "tags": {
     "language": "VB",
@@ -29,20 +29,24 @@
       "datatype": "choice",
       "choices": [
         {
-          "choice": "netcoreapp3.0",
-          "description": "Target netcoreapp3.0"
-        },
-        {
           "choice": "netcoreapp3.1",
           "description": "Target netcoreapp3.1"
         },
         {
           "choice": "net5.0",
           "description": "Target net5.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": "Target net6.0"
         }
       ],
-      "replaces": "net5.0",
-      "defaultValue": "net5.0"
+      "replaces": "FrameworkParameter",
+      "defaultValue": "net6.0"
+    },
+    "UseWindowsDesktopSdk": {
+      "type": "computed",
+      "value": "(Framework == \"netcoreapp3.1\")"
     },
     "langVersion": {
       "type": "parameter",
@@ -67,6 +71,27 @@
     {
       "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
       "path": "Class1.vb"
+    }
+  ],
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "condition": "(UseWindowsDesktopSdk)",
+          "exclude": [
+            "Company.ClassLibrary1.vbproj"
+          ],
+          "rename": {
+            "Company.ClassLibrary3x1.vbproj": "Company.ClassLibrary1.vbproj"
+          }
+        },
+        {
+          "condition": "(!UseWindowsDesktopSdk)",
+          "exclude": [
+            "Company.ClassLibrary3x1.vbproj"
+          ]
+        }
+      ]
     }
   ],
   "defaultName": "WinFormsLibrary1",

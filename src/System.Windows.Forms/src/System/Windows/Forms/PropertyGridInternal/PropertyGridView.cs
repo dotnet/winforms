@@ -6413,7 +6413,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return name;
                     }
 
-                    return string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.Name);
+                    return string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.AccessibilityObject.Name);
                 }
             }
 

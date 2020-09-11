@@ -192,6 +192,11 @@
         <target state="translated">Recolher</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Clicar Duas Vezes</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Expandir</target>
@@ -4214,11 +4219,6 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
         <target state="translated">Editar</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">O identificador Win32 transmitido para {0} é inválido ou tem tipo errado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Tipo de HDC inválido: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Classificado em ordem decrescente.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Controle giratório</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Indica se um determinado Painel de SplitContainer deve permanecer com o tamanho fixo durante eventos de redimensioamento.</target>
@@ -9098,22 +9098,22 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateClosedDialog">
         <source>Cannot navigate the dialog when it has already closed.</source>
-        <target state="translated">Não será possível navegar na caixa de diálogo quando ela já estiver fechada.</target>
+        <target state="translated">Não será possível navegar pela caixa de diálogo quando ela já estiver fechada.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinNavigationEventHandler">
         <source>Cannot navigate the dialog from an event handler that is called from within navigation.</source>
-        <target state="translated">Não é possível navegar na caixa de diálogo de um manipulador de eventos chamado de dentro da navegação.</target>
+        <target state="translated">Não é possível navegar pela caixa de diálogo de um manipulador de eventos chamado de dentro da navegação.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithinRadioButtonCheckedChanged">
         <source>Cannot navigate the dialog from within the {0} event of one of the radio buttons of the current task dialog.</source>
-        <target state="translated">Não é possível navegar na caixa de diálogo de dentro do evento {0} de um dos botões de opção da caixa de diálogo da tarefa atual.</target>
+        <target state="translated">Não é possível navegar pela caixa de diálogo de dentro do evento {0} de um dos botões de opção da caixa de diálogo da tarefa atual.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotNavigateWithoutDialog">
         <source>Cannot navigate from a page not bound to a dialog.</source>
-        <target state="translated">Não é possível navegar de uma página não associada para uma caixa de diálogo.</target>
+        <target state="translated">Não é possível navegar por uma página não associada para uma caixa de diálogo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotRemoveProgressBarWhileDialogIsShown">
@@ -9153,7 +9153,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateAfterNavigation">
         <source>Cannot manipulate the task dialog immediately after navigating it. Please wait for the {0} event of the next page to occur.</source>
-        <target state="translated">Não é possível manipular a caixa de diálogo de tarefa imediatamente após navegar nela. Aguarde o evento {0} da próxima página ocorrer.</target>
+        <target state="translated">Não é possível manipular a caixa de diálogo de tarefa imediatamente após navegar por ela. Aguarde o evento {0} da próxima página ocorrer.</target>
         <note />
       </trans-unit>
       <trans-unit id="TaskDialogCannotUpdateIconType">
@@ -9399,6 +9399,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Indica se há quebra automática de linha para controles de edição de várias linhas.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">TextFormatFlags.ModifyString não é permitido.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

@@ -28,6 +28,8 @@ namespace System.Windows.Forms
         ///  This is the default.
         /// </remarks>
         Left = (int)User32.DT.LEFT,
+
+        [Obsolete("ModifyString mutates strings and should be avoided. It will be blocked in a future release.")]
         ModifyString = (int)User32.DT.MODIFYSTRING,
         NoClipping = (int)User32.DT.NOCLIP,
         NoPrefix = (int)User32.DT.NOPREFIX,

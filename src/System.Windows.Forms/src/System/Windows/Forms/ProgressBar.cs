@@ -713,12 +713,6 @@ namespace System.Windows.Forms
             {
             }
 
-            public override string Name
-            {
-                get => base.Name ?? SR.ProgressBarDefaultAccessibleName;
-                set => base.Name = value;
-            }
-
             private ProgressBar OwningProgressBar => Owner as ProgressBar;
 
             internal override bool IsIAccessibleExSupported() => true;

@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(130, 130), control.Size);
             Assert.Equal(0, control.TabIndex);
             Assert.True(control.TabStop);
-            Assert.Equal("PropertyGrid", control.Text);
+            Assert.Empty(control.Text);
             Assert.True(control.ToolbarVisible);
             Assert.NotNull(control.ToolStripRenderer);
             Assert.Same(control.ToolStripRenderer, control.ToolStripRenderer);
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             CreateParams createParams = control.CreateParams;
-            Assert.Equal("PropertyGrid", createParams.Caption);
+            Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
             Assert.Equal(0x8, createParams.ClassStyle);
             Assert.Equal(0x10000, createParams.ExStyle);
@@ -3369,7 +3369,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(ControlStyles.EnableNotifyMessage, false)]
         [InlineData(ControlStyles.DoubleBuffer, false)]
         [InlineData(ControlStyles.OptimizedDoubleBuffer, false)]
-        [InlineData(ControlStyles.UseTextForAccessibility, true)]
+        [InlineData(ControlStyles.UseTextForAccessibility, false)]
         [InlineData((ControlStyles)0, true)]
         [InlineData((ControlStyles)int.MaxValue, false)]
         [InlineData((ControlStyles)(-1), false)]

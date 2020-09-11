@@ -974,13 +974,14 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.BeginLoad(mockLoader.Object));
         }
 
-        [WinFormsFact]
-        public void DesignSurface_CreateDesigner_InvokeNoDesigner_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void DesignSurface_CreateDesigner_InvokeNoDesigner_ReturnsExpected(bool rootDesigner)
         {
             using var surface = new SubDesignSurface();
             using var component = new Component();
-            Assert.Null(surface.CreateDesigner(component, rootDesigner: true));
-            Assert.Null(surface.CreateDesigner(component, rootDesigner: false));
+            Assert.Equal(rootDesigner, surface.CreateDesigner(component, rootDesigner) is null);
         }
 
         [WinFormsFact]
@@ -998,7 +999,7 @@ namespace System.ComponentModel.Design.Tests
             using var surface = new SubDesignSurface();
             using var component = new RootDesignerComponent();
             Assert.IsType<RootComponentDesigner>(surface.CreateDesigner(component, rootDesigner: true));
-            Assert.Null(surface.CreateDesigner(component, rootDesigner: false));
+            Assert.IsType<ComponentDesigner>(surface.CreateDesigner(component, rootDesigner: false));
         }
 
         [WinFormsFact]

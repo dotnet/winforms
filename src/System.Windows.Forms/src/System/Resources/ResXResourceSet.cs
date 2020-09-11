@@ -18,7 +18,6 @@ namespace System.Resources
         /// </summary>
         public ResXResourceSet(string fileName) : base(new ResXResourceReader(fileName))
         {
-            ReadResources();
         }
 
         /// <summary>
@@ -26,7 +25,6 @@ namespace System.Resources
         /// </summary>
         public ResXResourceSet(Stream stream) : base(new ResXResourceReader(stream))
         {
-            ReadResources();
         }
 
         /// <summary>

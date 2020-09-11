@@ -9,11 +9,6 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
-        public enum StockObject : int
-        {
-            HOLLOW_BRUSH = 5
-        }
-
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
         public static extern HGDIOBJ GetStockObject(StockObject nIndex);
     }

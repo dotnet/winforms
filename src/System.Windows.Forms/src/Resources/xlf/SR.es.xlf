@@ -192,6 +192,11 @@
         <target state="translated">Contraer</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionDoubleClick">
+        <source>Double Click</source>
+        <target state="translated">Doble clic</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
         <target state="translated">Expandir</target>
@@ -4214,11 +4219,6 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
         <target state="translated">Editar</target>
         <note />
       </trans-unit>
-      <trans-unit id="DefaultDomainUpDownAccessibleName">
-        <source>DomainUpDown</source>
-        <target state="translated">DomainUpDown</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DefaultNumericUpDownAccessibleName">
         <source>NumericUpDown</source>
         <target state="translated">NumericUpDown</target>
@@ -5679,6 +5679,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="InvalidGDIHandle">
         <source>Win32 handle passed to {0} is not valid or is the wrong type.</source>
         <target state="translated">El identificador Win32 que ha pasado a {0} no es válido o no es de tipo correcto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidHdcType">
+        <source>Invalid HDC type: {0}</source>
+        <target state="translated">Tipo HDC no válido: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidHighBoundArgument">
@@ -8741,11 +8746,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Orden descendente.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SpinnerAccessibleName">
-        <source>Spinner</source>
-        <target state="translated">Indicador giratorio</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SplitContainerFixedPanelDescr">
         <source>Indicates that a particular SplitContainer's Panel should remain fixed in size during resize events.</source>
         <target state="translated">Indica si un determinado panel de SplitContainer debería permanecer con un tamaño fijo durante los eventos de cambo de tamaño.</target>
@@ -9399,6 +9399,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="TextBoxWordWrapDescr">
         <source>Indicates if lines are automatically word-wrapped for multiline edit controls.</source>
         <target state="translated">Indica si se realiza automáticamente el salto de líneas en controles de edición de varias líneas.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextFormatFlagsModifyStringNotAllowed">
+        <source>TextFormatFlags.ModifyString is not allowed.</source>
+        <target state="translated">No se permite TextFormatFlags.ModifyString.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">

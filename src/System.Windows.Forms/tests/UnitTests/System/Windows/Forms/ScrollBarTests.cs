@@ -1752,7 +1752,10 @@ namespace System.Windows.Forms.Tests
         public void ScrollBar_Value_SetOutOfRange_ThrowsArgumentOutOfRangeException(int value)
         {
             using var control = new SubScrollBar();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.Value = value);
+            var paramName = "value";
+            ArgumentOutOfRangeException ex = Assert.Throws<ArgumentOutOfRangeException>(paramName, () => control.Value = value);
+            string expectedMessage = new ArgumentOutOfRangeException(paramName, string.Format(SR.InvalidBoundArgument, nameof(control.Value), value, $"'{nameof(control.Minimum)}'", $"'{nameof(control.Maximum)}'")).Message;
+            Assert.Equal(expectedMessage, ex.Message);
             Assert.Equal(0, control.Value);
         }
 

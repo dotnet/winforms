@@ -13,7 +13,9 @@ namespace System.Windows.Forms
     /// </summary>
     internal static partial class GdiCache
     {
-        private static readonly ScreenDcCache s_dcCache = new ScreenDcCache();
+        [ThreadStatic]
+        private static ScreenDcCache? s_dcCache;
+
         private static readonly FontCache s_fontCache = new FontCache();
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace System.Windows.Forms
         ///  another method it must be passed by reference or you risk accidentally returning extra copies to the
         ///  cache.
         /// </remarks>
-        public static ScreenDcCache.ScreenDcScope GetScreenHdc() => s_dcCache.Acquire();
+        public static ScreenDcCache.ScreenDcScope GetScreenHdc() => (s_dcCache ??= new ScreenDcCache()).Acquire();
 
         /// <summary>
         ///  Gets an <see cref="Graphics"/> based off of the primary display.
@@ -43,7 +45,32 @@ namespace System.Windows.Forms
         public static ScreenGraphicsScope GetScreenDCGraphics()
         {
             ScreenDcCache.ScreenDcScope scope = GetScreenHdc();
-            return new ScreenGraphicsScope(ref scope);
+
+            try
+            {
+                return new ScreenGraphicsScope(ref scope);
+            }
+            catch (OutOfMemoryException)
+            {
+                // GDI+ throws OOM if it can't confirm a valid HDC. We'll throw a more meaningful error here
+                // for easier diagnosis.
+                if (scope.HDC.IsNull)
+                {
+                    throw new ArgumentNullException("hdc");
+                }
+
+                Gdi32.OBJ type = Gdi32.GetObjectType(scope.HDC);
+                if (type == Gdi32.OBJ.DC
+                    || type == Gdi32.OBJ.ENHMETADC
+                    || type == Gdi32.OBJ.MEMDC
+                    || type == Gdi32.OBJ.METADC)
+                {
+                    // Not sure what is wrong in this case, throw the original.
+                    throw;
+                }
+
+                throw new InvalidOperationException(string.Format(SR.InvalidHdcType, type));
+            }
         }
 
         /// <summary>

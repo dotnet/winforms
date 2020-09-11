@@ -4,64 +4,38 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Numerics;
 using System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Thread safe collection of screen device contexts.
+    ///  Collection of screen device contexts.
     /// </summary>
     /// <remarks>
     ///  This caching counts on consumers not leaving the HDC in a dirty state. There is a signficant overhead to
     ///  saving and restoring the state which would make this cache much less impactful. If we can't have confidence
     ///  the DC state is being restored the best option may be to simply create a brand new screen DC every time we
-    ///  need one. That said, these DCs are safe to use across threads, as the creating thread is left running.
+    ///  need one.
     ///
     ///  Creating a screen DC from scratch and deleting it takes about 11us. Saving and restoring takes about half
-    ///  that time. Jumping to the other thread to get a safe DC when we've run out of cached items is roughly a 10us
-    ///  extra cost. Renting an existing DC from the cache and returning it is on the order of 20_ns_. If we were
+    ///  that time. Renting an existing DC from the cache and returning it is on the order of 20_ns_. If we were
     ///  forced to save state we'd be taking about 9us renting and returning cached DCs- which would take around
     ///  20 rentals to break even with simply creating and tossing away a brand new DC.
     /// </remarks>
     internal sealed partial class ScreenDcCache : IDisposable
     {
         private readonly IntPtr[] _itemsCache;
-        private readonly Thread _thread;
-        private readonly ThreadWorker _worker;
-        private readonly CancellationTokenSource _tokenSource = new CancellationTokenSource();
 
         /// <summary>
         ///  Create a cache with space for the specified number of HDCs.
         /// </summary>
-        public ScreenDcCache(int cacheSpace = 10)
+        public ScreenDcCache(int cacheSpace = 5)
         {
-            _worker = new ThreadWorker(_tokenSource.Token);
-
-            // We need a thread that doesn't ever finish to create HDCs on so they'll stay valid for all threads
-            // in the process for the life of the process.
-
-            _thread = new Thread(_worker.Start)
-            {
-                Name = "WinForms Background Worker",
-                IsBackground = true
-            };
-            _thread.Start();
-
             Debug.Assert(cacheSpace >= 0);
 
             _itemsCache = new IntPtr[cacheSpace];
-
-            // Create an initial stash of screen dc's
-            _worker.QueueAndWaitForCompletion(() =>
-            {
-                int max = Math.Min(cacheSpace, 5);
-                for (int i = 0; i < max; i++)
-                {
-                    Gdi32.HDC hdc = Gdi32.CreateCompatibleDC(default);
-                    _itemsCache[i] = (IntPtr)hdc;
-                }
-            });
         }
 
         /// <summary>
@@ -84,12 +58,7 @@ namespace System.Windows.Forms
             return CreateNew();
         }
 
-        private ScreenDcScope CreateNew()
-        {
-            Gdi32.HDC newDc = default;
-            _worker.QueueAndWaitForCompletion(() => newDc = Gdi32.CreateCompatibleDC(default));
-            return new ScreenDcScope(this, newDc);
-        }
+        private ScreenDcScope CreateNew() => new ScreenDcScope(this, Gdi32.CreateCompatibleDC(default));
 
         /// <summary>
         ///  Release an item back to the cache, disposing if no room is available.
@@ -117,6 +86,8 @@ namespace System.Windows.Forms
             Gdi32.DeleteDC((Gdi32.HDC)temp);
         }
 
+        ~ScreenDcCache() => Dispose();
+
         public void Dispose()
         {
             for (int i = 0; i < _itemsCache.Length; i++)
@@ -127,9 +98,6 @@ namespace System.Windows.Forms
                     Gdi32.DeleteDC((Gdi32.HDC)hdc);
                 }
             }
-
-            _tokenSource.Cancel();
-            _tokenSource.Dispose();
         }
 
         [Conditional("DEBUG")]
@@ -146,6 +114,10 @@ namespace System.Windows.Forms
             Debug.Assert(Gdi32.GetMapMode(hdc) == Gdi32.MM.TEXT);
             Debug.Assert(Gdi32.GetROP2(hdc) == Gdi32.R2.COPYPEN);
             Debug.Assert(Gdi32.GetBkMode(hdc) == Gdi32.BKMODE.OPAQUE);
+
+            Matrix3x2 matrix = default;
+            Debug.Assert(Gdi32.GetWorldTransform(hdc, ref matrix).IsTrue());
+            Debug.Assert(matrix.IsIdentity);
         }
     }
 }
