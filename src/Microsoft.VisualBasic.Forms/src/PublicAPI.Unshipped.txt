@@ -1,2 +1,9 @@
+Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs
+Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs.HighDpiMode() -> System.Windows.Forms.HighDpiMode
+Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs.HighDpiMode(value As System.Windows.Forms.HighDpiMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs.New(highDpiMode As System.Windows.Forms.HighDpiMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplyHighDpiMode -> Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventHandler
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode() -> System.Windows.Forms.HighDpiMode
 Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode(value As System.Windows.Forms.HighDpiMode) -> Void
+Overridable Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.OnApplyHgihDpiMode(e As Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs) -> Void

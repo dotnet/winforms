@@ -14,7 +14,6 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Security.Permissions
 Imports System.Threading
-Imports System.Windows.Forms
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
@@ -57,6 +56,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Delegate Sub UnhandledExceptionEventHandler(sender As Object, e As UnhandledExceptionEventArgs)
 
     ''' <summary>
+    ''' Signature for the ApplyHighDpiMode event handler
+    ''' </summary>
+    <EditorBrowsable(EditorBrowsableState.Advanced)>
+    Public Delegate Sub ApplyHighDpiModeEventHandler(sender As Object, e As ApplyHighDpiModeEventArgs)
+
+    ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
@@ -65,6 +70,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Event Startup As StartupEventHandler
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
         Public Event Shutdown As ShutdownEventHandler
+        Public Event ApplyHighDpiMode As ApplyHighDpiModeEventHandler
 
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
 
@@ -85,14 +91,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _isSingleInstance As Boolean 'whether this app runs using Word like instancing behavior
         Private _shutdownStyle As ShutdownMode 'defines when the application decides to close
         Private _enableVisualStyles As Boolean 'whether to use Windows XP styles
-        Private _highDpiMode As HighDpiMode ' The HighDpiMode the User picked from the AppDesigner
         Private _didSplashScreen As Boolean 'we only need to show the splash screen once.  Protect the user from himself if they are overriding our app model.
         Private _ok2CloseSplashScreen As Boolean 'For splash screens with a minimum display time, this let's us know when that time has expired and it is OK to close the splash screen.
-        Private _splashScreen As Form
+        Private _splashScreen As Windows.Forms.Form
         Private _minimumSplashExposure As Integer = 2000 'Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
         Private _saveMySettingsOnExit As Boolean 'Informs My.Settings whether to save the settings on exit or not
+
+        ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyHighDpiMode's Event.
+        Private _highDpiMode As Windows.Forms.HighDpiMode = Windows.Forms.HighDpiMode.SystemAware
+
 #Enable Warning IDE0032 ' Use auto property
 
         Public Custom Event NetworkAvailabilityChanged As Devices.NetworkAvailableEventHandler
@@ -283,20 +292,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' affinity meaning that this is the WinForms collection that contains Forms that may
         ''' have been opened on another thread then the one we are calling in on right now.
         ''' </summary>
-        Public ReadOnly Property OpenForms() As FormCollection
+        Public ReadOnly Property OpenForms() As Windows.Forms.FormCollection
             Get
-                Return Application.OpenForms
+                Return Windows.Forms.Application.OpenForms
             End Get
         End Property
 
         ''' <summary>
         ''' Provides access to the main form for this application
         ''' </summary>
-        Protected Property MainForm() As Form
+        Protected Property MainForm() As Windows.Forms.Form
             Get
                 Return _appContext?.MainForm
             End Get
-            Set(value As Form)
+            Set(value As Windows.Forms.Form)
                 If value Is Nothing Then
                     Throw ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
@@ -310,11 +319,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Provides access to the splash screen for this application
         ''' </summary>
-        Public Property SplashScreen() As Form
+        Public Property SplashScreen() As Windows.Forms.Form
             Get
                 Return _splashScreen
             End Get
-            Set(value As Form)
+            Set(value As Windows.Forms.Form)
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then 'allow for the case where they set splash screen = nothing and mainForm is currently nothing
                     Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
@@ -356,7 +365,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Provides the WinForms application context that we are running on
         ''' </summary>
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Public ReadOnly Property ApplicationContext() As ApplicationContext
+        Public ReadOnly Property ApplicationContext() As Windows.Forms.ApplicationContext
             Get
                 Return _appContext
             End Get
@@ -395,16 +404,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
+            Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(HighDpiMode)
+            RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
+
             ' Apply HighDpiMode
-            Dim dpiSetResult = Application.SetHighDpiMode(_highDpiMode)
+            Dim dpiSetResult = Windows.Forms.Application.SetHighDpiMode(_highDpiMode)
             If dpiSetResult Then
-                _highDpiMode = Application.HighDpiMode
+                _highDpiMode = Windows.Forms.Application.HighDpiMode
             End If
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
             ' EnableVisualStyles
             If _enableVisualStyles Then
-                Application.EnableVisualStyles()
+                Windows.Forms.Application.EnableVisualStyles()
             End If
 
             'We'll handle /nosplash for you
@@ -549,6 +561,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Function
 
         ''' <summary>
+        ''' Raises the ApplyHighDpiMode Event.
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Advanced)>
+        Protected Overridable Sub OnApplyHgihDpiMode(e As ApplyHighDpiModeEventArgs)
+            RaiseEvent ApplyHighDpiMode(Me, e)
+        End Sub
+
+        ''' <summary>
         ''' Uses the extensibility model to see if there is a splash screen provided for this app and if there is,
         ''' displays it.
         ''' </summary>
@@ -638,11 +658,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Gets or sets the HighDpiMode for the Application.
         ''' </summary>
-        Protected Property HighDpiMode() As HighDpiMode
+        Protected Property HighDpiMode() As Windows.Forms.HighDpiMode
             Get
                 Return _highDpiMode
             End Get
-            Set(value As HighDpiMode)
+            Set(value As Windows.Forms.HighDpiMode)
                 _highDpiMode = value
             End Set
         End Property
