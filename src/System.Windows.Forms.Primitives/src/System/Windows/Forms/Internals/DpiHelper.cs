@@ -16,13 +16,21 @@ namespace System.Windows.Forms
     internal static partial class DpiHelper
     {
         internal const double LogicalDpi = 96.0;
-        private static InterpolationMode s_interpolationMode = InterpolationMode.Invalid;
-        private static int s_deviceDpi = GetDeviceDPI();
+        private static InterpolationMode s_interpolationMode;
 
         // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
-        private static readonly bool s_perMonitorAware = GetPerMonitorAware();
+        private static bool s_perMonitorAware;
 
-        internal static int DeviceDpi => s_deviceDpi;
+        internal static int DeviceDpi { get; private set; }
+
+        static DpiHelper() => Initialize();
+
+        private static void Initialize()
+        {
+            s_interpolationMode = InterpolationMode.Invalid;
+            s_perMonitorAware = GetPerMonitorAware();
+            DeviceDpi = GetDeviceDPI();
+        }
 
         private static int GetDeviceDPI()
         {
@@ -434,9 +442,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Need to reset the DeviceDpi as it will have potentially changed if this was the first call to set
-            // the DPI context for the process.
-            s_deviceDpi = GetDeviceDPI();
+            // Need to reset as our DPI will change if this was the first call to set the DPI context for the process.
+            Initialize();
 
             return success;
         }
