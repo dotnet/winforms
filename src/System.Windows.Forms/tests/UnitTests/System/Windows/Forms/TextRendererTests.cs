@@ -668,8 +668,9 @@ namespace System.Windows.Forms.Tests
                 state,
                 Validate.TextOut(
                     "Acrylic",
-                    Color.Blue,
-                    fontFace: SystemFonts.DefaultFont.Name));
+                    bounds: null,                                   // Don't care about the bounds for this test
+                    fontFace: SystemFonts.DefaultFont.Name,
+                    State.TextColor(Color.Blue)));
         }
 
         public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData
@@ -770,9 +771,9 @@ namespace System.Windows.Forms.Tests
                 state,
                 Validate.TextOut(
                     "Sparkling Cider",
-                    Color.Red,
                     expectedBounds,
-                    fontFace: SystemFonts.DefaultFont.Name));
+                    SystemFonts.DefaultFont.Name,
+                    State.TextColor(Color.Red)));
         }
 
         [WinFormsTheory]
@@ -793,9 +794,9 @@ namespace System.Windows.Forms.Tests
                 state,
                 Validate.TextOut(
                     "Sparkling Cider",
-                    Color.Red,
                     expectedBounds,
-                    fontFace: SystemFonts.DefaultFont.Name));
+                    SystemFonts.DefaultFont.Name,
+                    State.TextColor(Color.Red)));
         }
 
         public static TheoryData<TextFormatFlags, Rectangle> TextRenderer_DrawText_Padding_TestData

@@ -5,6 +5,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -136,6 +137,29 @@ namespace System.Windows.Forms.Metafiles
                     case Gdi32.EMR.DELETEOBJECT:
                         state.GdiObjects[(int)record.DeleteObjectRecord->index] = default;
                         break;
+                    case Gdi32.EMR.SETWORLDTRANSFORM:
+                        state.Transform = record.SetWorldTransformRecord->xform;
+                        break;
+                    case Gdi32.EMR.MODIFYWORLDTRANSFORM:
+                        var transform = record.ModifyWorldTransformRecord;
+                        switch (transform->iMode)
+                        {
+                            case Gdi32.MWT.IDENTITY:
+                                state.Transform = Matrix3x2.Identity;
+                                break;
+                            case Gdi32.MWT.LEFTMULTIPLY:
+                                state.Transform = transform->xform * state.Transform;
+                                break;
+                            case Gdi32.MWT.RIGHTMULTIPLY:
+                                state.Transform = state.Transform * transform->xform;
+                                break;
+                        }
+                        break;
+                    case Gdi32.EMR.SAVEDC:
+                        state.SaveDC();
+                        break;
+                    case Gdi32.EMR.RESTOREDC:
+                        break;
                 }
 
                 return result;
@@ -150,6 +174,19 @@ namespace System.Windows.Forms.Metafiles
                 strings.Add(record.ToString());
                 return true;
             });
+
+            return strings;
+        }
+
+        public List<string> RecordsToStringWithState(DeviceContextState state)
+        {
+            var strings = new List<string>();
+            EnumerateWithState((ref EmfRecord record, DeviceContextState state) =>
+            {
+                strings.Add(record.ToString(state));
+                return true;
+            },
+            state);
 
             return strings;
         }

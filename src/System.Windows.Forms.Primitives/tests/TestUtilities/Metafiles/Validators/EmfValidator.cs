@@ -5,6 +5,7 @@
 #nullable enable
 
 using Xunit;
+using Xunit.Sdk;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -28,14 +29,24 @@ namespace System.Windows.Forms.Metafiles
                 {
                     if (currentValidator?.ShouldValidate(record.Type) ?? false)
                     {
-                        currentValidator.Validate(ref record, state, out bool complete);
-                        if (complete)
+                        try
                         {
-                            // Current validator doesn't want to look at any more records.
-                            currentIndex++;
-                            currentValidator = currentIndex < validationSteps.Length
-                                ? validationSteps[currentIndex]
-                                : null;
+                            currentValidator.Validate(ref record, state, out bool complete);
+
+                            if (complete)
+                            {
+                                // Current validator doesn't want to look at any more records.
+                                currentIndex++;
+                                currentValidator = currentIndex < validationSteps.Length
+                                    ? validationSteps[currentIndex]
+                                    : null;
+                            }
+                        }
+                        catch (XunitException e)
+                        {
+                            throw new WrappedXunitException(
+                                $"\nValidator index {currentIndex}: {currentValidator!.GetType().Name} failed",
+                                e);
                         }
                     }
                     else
@@ -50,8 +61,16 @@ namespace System.Windows.Forms.Metafiles
             if (currentValidator != null)
             {
                 Assert.True(
-                    currentValidator.ValidationSatisfied,
+                    currentValidator.NeedsMoreRecords,
                     $"{currentValidator.GetType().Name} did not receive expected records");
+            }
+        }
+
+        private class WrappedXunitException : XunitException
+        {
+            public WrappedXunitException(string userMessage, XunitException innerException)
+                : base (userMessage, innerException)
+            {
             }
         }
 

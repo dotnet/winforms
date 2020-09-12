@@ -10,116 +10,48 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal sealed class TextOutValidator : IEmfValidator
+    internal sealed class TextOutValidator : Validator
     {
-        private readonly Flags _validate;
-        private readonly string _text;
-        private readonly Color _textColor;
-        private readonly Gdi32.MM _mapMode;
-        private readonly Gdi32.BKMODE _backgroundMode;
+        private readonly string? _text;
         private readonly string? _fontFace;
-        private readonly Rectangle _bounds;
+        private readonly Rectangle? _bounds;
 
         public TextOutValidator(
-            string text,
-            Color textColor,
-            Rectangle? bounds,
-            Gdi32.MM mapMode = default,
-            Gdi32.BKMODE backgroundMode = default,
-            string? fontFace = null,
-            Flags validate = default)
+            string? text,
+            Rectangle? bounds = default,
+            string? fontFace = default,
+            params IStateValidator[] stateValidators) : base(stateValidators)
         {
             _text = text;
-            _textColor = textColor;
-            _mapMode = mapMode;
-            _backgroundMode = backgroundMode;
             _fontFace = fontFace;
-            _bounds = bounds.HasValue ? bounds.Value : default;
-
-            if (validate != default)
-            {
-                _validate = validate;
-            }
-            else
-            {
-                _validate = Flags.Text;
-
-                if (bounds.HasValue)
-                {
-                    _validate |= Flags.Bounds;
-                }
-
-                if (!textColor.IsEmpty)
-                {
-                    _validate |= Flags.TextColor;
-                }
-
-                if (mapMode != default)
-                {
-                    _validate |= Flags.MapMode;
-                }
-
-                if (backgroundMode != default)
-                {
-                    _validate |= Flags.BackgroundMode;
-                }
-
-                if (!string.IsNullOrEmpty(fontFace))
-                {
-                    _validate |= Flags.FontFace;
-                }
-            }
+            _bounds = bounds;
         }
 
-        public bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.EXTTEXTOUTW;
+        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.EXTTEXTOUTW;
 
-        public unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
+        public override unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {
+            base.Validate(ref record, state, out _);
+
             // We're only checking one TextOut record, so this call completes our work.
             complete = true;
 
             EMREXTTEXTOUTW* textOut = record.ExtTextOutWRecord;
 
-            if (_validate.HasFlag(Flags.Text))
+            if (_text != null)
             {
-                Assert.Equal(_text, textOut->emrtext.GetString().ToString());
+                Assert.Equal(_text, textOut->emrtext.GetText().ToString());
             }
 
-            if (_validate.HasFlag(Flags.Bounds))
+            if (_bounds.HasValue)
             {
-                Assert.Equal(_bounds, (Rectangle)textOut->rclBounds);
+                Assert.Equal(_bounds.Value, (Rectangle)textOut->rclBounds);
             }
 
-            if (_validate.HasFlag(Flags.MapMode))
-            {
-                Assert.Equal(_mapMode, state.MapMode);
-            }
-
-            if (_validate.HasFlag(Flags.BackgroundMode))
-            {
-                Assert.Equal(_backgroundMode, state.BackgroundMode);
-            }
-
-            if (_validate.HasFlag(Flags.TextColor))
-            {
-                Assert.Equal((COLORREF)_textColor, state.TextColor);
-            }
-
-            if (_validate.HasFlag(Flags.FontFace))
+            if (_fontFace != null)
             {
                 Assert.Equal(_fontFace, state.SelectedFont.FaceName.ToString());
             }
-        }
-
-        [Flags]
-        public enum Flags : uint
-        {
-            Text            = 0b00000000_00000000_00000000_00000001,
-            TextColor       = 0b00000000_00000000_00000000_00000010,
-            MapMode         = 0b00000000_00000000_00000000_00000100,
-            BackgroundMode  = 0b00000000_00000000_00000000_00001000,
-            FontFace        = 0b00000000_00000000_00000000_00010000,
-            Bounds          = 0b00000000_00000000_00000000_00100000,
         }
     }
 }
