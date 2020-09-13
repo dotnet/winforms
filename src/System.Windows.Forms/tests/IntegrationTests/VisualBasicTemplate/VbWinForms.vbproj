@@ -5,9 +5,6 @@
     <RootNamespace>VbWinForms</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <MyType>WindowsForms</MyType>
     <StartupObject>Sub Main</StartupObject>
   </PropertyGroup>
