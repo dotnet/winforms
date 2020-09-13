@@ -3,6 +3,7 @@ Option Explicit On
 
 Imports System.Windows.Forms
 
+'This constant indicates whether the Application Framework is in use.
 #Const APPLICATION_FRAMEWORK = True
 
 #If APPLICATION_FRAMEWORK Then
@@ -32,7 +33,7 @@ Namespace My
         End Property
 
         'IMPORTANT:
-        'If this method causes a compilation error after you've unchecked 'Application Framework' 
+        'If this method causes an compilation error after you've unchecked 'Application Framework' 
         'in the project properties, go to the top of this file and change the value to 'False' in this line:
         '#Const APPLICATION_FRAMEWORK = False
         Protected Overrides Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
@@ -65,6 +66,8 @@ End Namespace
 
 #Else
 
+' For more about using WinForms without the Application Framework 
+' see: https://aka.ms/visualbasic-appframework-net5
 Friend Module Program
     <STAThread()>
     Friend Sub Main(args As String())
@@ -73,7 +76,6 @@ Friend Module Program
         Application.SetCompatibleTextRenderingDefault(False)
         Application.Run(New Form1)
     End Sub
-
 End Module
 
 #End If
