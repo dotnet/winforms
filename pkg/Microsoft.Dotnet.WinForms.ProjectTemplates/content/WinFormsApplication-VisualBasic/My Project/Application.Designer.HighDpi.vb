@@ -1,7 +1,6 @@
 ﻿Option Strict On
 Option Explicit On
 
-
 'This constant indicates whether the Application Framework is in use.
 #Const APPLICATION_FRAMEWORK = True
 
@@ -10,7 +9,6 @@ Option Explicit On
 #If Not NET5_0 Then
 #Else
 
-Imports System.Windows.Forms
 Imports System.Collections.ObjectModel
 
 Namespace My
@@ -23,10 +21,10 @@ Namespace My
 
         Friend Shadows Property HighDpiMode As HighDpiMode
             Get
-                If _highDpiMode Is Nothing Then
-                    Return Application.HighDpiMode
-                End If
-                Return _highDpiMode.Value
+                Return If(
+                    _highDpiMode Is Nothing,
+                    Application.HighDpiMode,
+                    _highDpiMode.Value)
             End Get
             Set(value As HighDpiMode)
                 _highDpiMode = value
@@ -49,7 +47,8 @@ Namespace My
 
             RaiseEvent ApplyHighDpiMode(Me, eventArgs)
 
-            Dim test = System.Windows.Forms.Application.SetHighDpiMode(eventArgs.HighDpiMode)
+            Windows.Forms.Application.SetHighDpiMode(eventArgs.HighDpiMode)
+
             Return MyBase.OnInitialize(commandLineArgs)
         End Function
     End Class
@@ -57,7 +56,7 @@ Namespace My
     Public Class ApplyHighDpiModeEventArgs
         Inherits EventArgs
 
-        Sub New(highDpiMode As HighDpiMode)
+        Public Sub New(highDpiMode As HighDpiMode)
             Me.HighDpiMode = highDpiMode
         End Sub
 
