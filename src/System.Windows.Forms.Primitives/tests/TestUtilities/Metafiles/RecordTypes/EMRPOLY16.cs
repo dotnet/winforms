@@ -5,7 +5,9 @@
 #nullable enable
 
 using System.Runtime.InteropServices;
+using System.Linq;
 using static Interop;
+using System.Drawing;
 
 namespace System.Windows.Forms.Metafiles
 {
@@ -27,11 +29,16 @@ namespace System.Windows.Forms.Metafiles
         public EMR emr;
         public RECT rclBounds;          // Inclusive-inclusive bounds in device units
         public uint cpts;
-        public POINTS apts;
+        private POINTS _apts;
 
-        public override string ToString()
+        public ReadOnlySpan<POINTS> points => TrailingArray<POINTS>.GetBuffer(ref _apts, cpts);
+
+        public override string ToString() => $"[EMR{emr.iType}] Bounds: {rclBounds} Points: {string.Join(' ', points.ToArray())}";
+
+        public string ToString(DeviceContextState state)
         {
-            return $"[EMR{emr.iType}] Bounds: {rclBounds} Points: {cpts}";
+            Point[] transformedPoints = points.Transform(point => state.TransformPoint(point));
+            return $"[EMR{emr.iType}] Bounds: {rclBounds} Points: {string.Join(' ', transformedPoints)}";
         }
     }
 }

@@ -5,95 +5,66 @@
 #nullable enable
 
 using System.Drawing;
-using System.Net;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     internal static class Validate
     {
-        internal static IEmfValidator TextOut(
-            string text,
-            Gdi32.MM mapMode = Gdi32.MM.TEXT,
-            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
-            string? fontFace = null,
-            TextOutValidator.Flags validate = default) => new TextOutValidator(
-                text,
-                textColor: Color.Empty,
-                bounds: null,
-                mapMode,
-                backgroundMode,
-                fontFace,
-                validate);
-
-        internal static IEmfValidator TextOut(
-            string text,
-            Color textColor,
-            Rectangle bounds,
-            Gdi32.MM mapMode = Gdi32.MM.TEXT,
-            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
-            string? fontFace = null,
-            TextOutValidator.Flags validate = default) => new TextOutValidator(
-                text,
-                textColor,
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="points">Optional points to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
+        internal static IEmfValidator Polygon16(
+            Rectangle? bounds = default,
+            Point[]? points = default,
+            params IStateValidator[] stateValidators) => new Polygon16Validator(
                 bounds,
-                mapMode,
-                backgroundMode,
-                fontFace,
-                validate);
+                points,
+                stateValidators);
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="points">Optional points to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
+        internal static IEmfValidator Polyline16(
+            Rectangle? bounds = default,
+            Point[]? points = default,
+            params IStateValidator[] stateValidators) => new Polyline16Validator(
+                bounds,
+                points,
+                stateValidators);
+
+        /// <param name="text">Optional text to validate.</param>
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="fontFace">Optional font face name to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator TextOut(
-            string text,
-            Color textColor,
-            Gdi32.MM mapMode = Gdi32.MM.TEXT,
-            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
-            string? fontFace = null,
-            TextOutValidator.Flags validate = default) => new TextOutValidator(
+            string? text = default,
+            Rectangle? bounds = default,
+            string? fontFace = default,
+            params IStateValidator[] stateValidators) => new TextOutValidator(
                 text,
-                textColor,
-                bounds: null,
-                mapMode,
-                backgroundMode,
+                bounds,
                 fontFace,
-                validate);
+                stateValidators);
 
+        /// <param name="from">Optional source point to validate.</param>
+        /// <param name="to">Optional destination point to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator LineTo(
-            EasyPoint from,
-            EasyPoint to,
-            Color penColor,
-            int penWidth = 1,
-            Gdi32.PS penStyle = default,
-            Gdi32.R2 rop2Mode = Gdi32.R2.COPYPEN,
-            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
-            LineToValidator.Flags validate = default) => new LineToValidator(
+            EasyPoint? from,
+            EasyPoint? to,
+            params IStateValidator[] stateValidators) => new LineToValidator(
                 from,
                 to,
-                penColor,
-                penWidth,
-                penStyle,
-                rop2Mode,
-                backgroundMode,
-                validate);
+                stateValidators);
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator Rectangle(
-            RECT bounds,
-            Color penColor,
-            Color brushColor,
-            int penWidth = 1,
-            Gdi32.PS penStyle = default,
-            Gdi32.R2 rop2 = Gdi32.R2.COPYPEN,
-            Gdi32.BKMODE backgroundMode = Gdi32.BKMODE.TRANSPARENT,
-            Gdi32.BS brushStyle = default,
-            RectangleValidator.Flags validate = default) => new RectangleValidator(
+            RECT? bounds,
+            params IStateValidator[] stateValidators) => new RectangleValidator(
                 bounds,
-                penColor,
-                brushColor,
-                penWidth,
-                penStyle,
-                rop2,
-                backgroundMode,
-                brushStyle,
-                validate);
+                stateValidators);
 
         /// <summary>
         ///  Simple wrapper to allow doing an arbitrary action for a given <paramref name="recordType"/>.

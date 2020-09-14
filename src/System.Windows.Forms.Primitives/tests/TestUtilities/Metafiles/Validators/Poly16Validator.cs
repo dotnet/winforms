@@ -10,32 +10,34 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal sealed class RectangleValidator : StateValidator
+    internal abstract class Poly16Validator : StateValidator
     {
         private readonly Rectangle? _bounds;
+        private readonly Point[]? _points;
 
         /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="points">Optional points to validate.</param>
         /// <param name="stateValidators">Optional device context state validation to perform.</param>
-        public RectangleValidator(
+        public Poly16Validator(
             RECT? bounds,
-            params IStateValidator[] stateValidators) : base (stateValidators)
+            Point[]? points,
+            params IStateValidator[] stateValidators) : base(stateValidators)
         {
             _bounds = bounds;
+            _points = points;
         }
 
-        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.RECTANGLE;
-
-        public override unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
+        protected unsafe void Validate(EMRPOLY16* poly)
         {
-            base.Validate(ref record, state, out _);
-
-            // We're only checking one Rectangle record, so this call completes our work.
-            complete = true;
-
             if (_bounds.HasValue)
             {
-                EMRRECTRECORD* rectangle = record.RectangleRecord;
-                Assert.Equal(_bounds.Value, (Rectangle)rectangle->rect);
+                Assert.Equal(_bounds.Value, (Rectangle)poly->rclBounds);
+            }
+
+            if (_points != null)
+            {
+                Assert.Equal(_points.Length, (int)poly->cpts);
+                Assert.Equal(_points, poly->points.Transform<POINTS, Point>(p => p));
             }
         }
     }

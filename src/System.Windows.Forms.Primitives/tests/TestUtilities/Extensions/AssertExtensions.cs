@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 
 namespace System

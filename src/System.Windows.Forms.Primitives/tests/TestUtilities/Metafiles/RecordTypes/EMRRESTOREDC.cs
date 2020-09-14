@@ -5,18 +5,15 @@
 #nullable enable
 
 using System.Runtime.InteropServices;
-using System.Numerics;
-using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct EMRMODIFYWORLDTRANSFORM
+    internal struct EMRRESTOREDC
     {
         public EMR emr;
-        public Matrix3x2 xform;
-        public Gdi32.MWT iMode;
+        public int iRelative;
 
-        public override string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
+        public override string ToString() => $"[{nameof(EMRRESTOREDC)}] Index: {iRelative}";
     }
 }
