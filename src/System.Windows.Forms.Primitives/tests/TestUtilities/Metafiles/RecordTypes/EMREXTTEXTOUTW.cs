@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Metafiles
         public EMRTEXT emrtext;          // This is followed by the string and spacing
 
         public override string ToString()
-            => $@"[{nameof(EMREXTTEXTOUTW)}] Bounds: {rclBounds} Text: '{emrtext.GetString().ToString()}'";
+            => $@"[{nameof(EMREXTTEXTOUTW)}] Bounds: {rclBounds} Text: '{emrtext.GetText().ToString()}'";
 
         internal enum GM : uint
         {

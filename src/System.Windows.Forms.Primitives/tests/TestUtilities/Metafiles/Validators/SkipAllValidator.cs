@@ -19,5 +19,8 @@ namespace System.Windows.Forms.Metafiles
             // Always want to remain in scope.
             complete = false;
         }
+
+        // We don't require any more records to "pass"
+        public bool FailIfIncomplete => false;
     }
 }
