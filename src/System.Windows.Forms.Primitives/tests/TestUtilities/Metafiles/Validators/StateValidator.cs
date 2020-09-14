@@ -8,10 +8,13 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal abstract class Validator : IEmfValidator
+    /// <summary>
+    ///  Base <see cref="IEmfValidator"/> that handles optional validation of device context state.
+    /// </summary>
+    internal abstract class StateValidator : IEmfValidator
     {
         private readonly IStateValidator[] _stateValidators;
-        public Validator(IStateValidator[] stateValidators) => _stateValidators = stateValidators;
+        public StateValidator(IStateValidator[] stateValidators) => _stateValidators = stateValidators;
         public abstract bool ShouldValidate(Gdi32.EMR recordType);
 
         public virtual void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)

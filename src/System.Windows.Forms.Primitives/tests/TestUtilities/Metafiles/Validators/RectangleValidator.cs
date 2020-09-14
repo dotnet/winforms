@@ -10,12 +10,14 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal sealed class RectangleValidator : Validator
+    internal sealed class RectangleValidator : StateValidator
     {
-        private readonly Rectangle _bounds;
+        private readonly Rectangle? _bounds;
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         public RectangleValidator(
-            RECT bounds,
+            RECT? bounds,
             params IStateValidator[] stateValidators) : base (stateValidators)
         {
             _bounds = bounds;
@@ -30,8 +32,11 @@ namespace System.Windows.Forms.Metafiles
             // We're only checking one Rectangle record, so this call completes our work.
             complete = true;
 
-            EMRRECTRECORD* rectangle = record.RectangleRecord;
-            Assert.Equal(_bounds, (Rectangle)rectangle->rect);
+            if (_bounds.HasValue)
+            {
+                EMRRECTRECORD* rectangle = record.RectangleRecord;
+                Assert.Equal(_bounds.Value, (Rectangle)rectangle->rect);
+            }
         }
     }
 }

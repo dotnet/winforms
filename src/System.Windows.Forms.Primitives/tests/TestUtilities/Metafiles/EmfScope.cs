@@ -159,6 +159,7 @@ namespace System.Windows.Forms.Metafiles
                         state.SaveDC();
                         break;
                     case Gdi32.EMR.RESTOREDC:
+                        state.RestoreDC(record.RestoreDCRecord->iRelative);
                         break;
                 }
 

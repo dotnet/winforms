@@ -11,6 +11,9 @@ namespace System.Windows.Forms.Metafiles
 {
     internal static class Validate
     {
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="points">Optional points to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator Polygon16(
             Rectangle? bounds = default,
             Point[]? points = default,
@@ -19,6 +22,9 @@ namespace System.Windows.Forms.Metafiles
                 points,
                 stateValidators);
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="points">Optional points to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator Polyline16(
             Rectangle? bounds = default,
             Point[]? points = default,
@@ -27,6 +33,10 @@ namespace System.Windows.Forms.Metafiles
                 points,
                 stateValidators);
 
+        /// <param name="text">Optional text to validate.</param>
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="fontFace">Optional font face name to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator TextOut(
             string? text = default,
             Rectangle? bounds = default,
@@ -37,16 +47,21 @@ namespace System.Windows.Forms.Metafiles
                 fontFace,
                 stateValidators);
 
+        /// <param name="from">Optional source point to validate.</param>
+        /// <param name="to">Optional destination point to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator LineTo(
-            EasyPoint from,
-            EasyPoint to,
+            EasyPoint? from,
+            EasyPoint? to,
             params IStateValidator[] stateValidators) => new LineToValidator(
                 from,
                 to,
                 stateValidators);
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator Rectangle(
-            RECT bounds,
+            RECT? bounds,
             params IStateValidator[] stateValidators) => new RectangleValidator(
                 bounds,
                 stateValidators);

@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal static class EmfValidator
+    internal static partial class EmfValidator
     {
         internal static void Validate(
             this EmfScope emf,
@@ -60,17 +60,9 @@ namespace System.Windows.Forms.Metafiles
 
             if (currentValidator != null)
             {
-                Assert.True(
-                    currentValidator.NeedsMoreRecords,
+                Assert.False(
+                    currentValidator.FailIfIncomplete,
                     $"{currentValidator.GetType().Name} did not receive expected records");
-            }
-        }
-
-        private class WrappedXunitException : XunitException
-        {
-            public WrappedXunitException(string userMessage, XunitException innerException)
-                : base (userMessage, innerException)
-            {
             }
         }
 

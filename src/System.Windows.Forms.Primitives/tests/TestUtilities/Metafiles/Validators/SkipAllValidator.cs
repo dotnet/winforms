@@ -21,6 +21,6 @@ namespace System.Windows.Forms.Metafiles
         }
 
         // We don't require any more records to "pass"
-        public bool NeedsMoreRecords => true;
+        public bool FailIfIncomplete => false;
     }
 }

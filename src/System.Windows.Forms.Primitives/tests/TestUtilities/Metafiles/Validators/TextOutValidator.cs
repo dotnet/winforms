@@ -10,12 +10,16 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal sealed class TextOutValidator : Validator
+    internal sealed class TextOutValidator : StateValidator
     {
         private readonly string? _text;
         private readonly string? _fontFace;
         private readonly Rectangle? _bounds;
 
+        /// <param name="text">Optional text to validate.</param>
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="fontFace">Optional font face name to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         public TextOutValidator(
             string? text,
             Rectangle? bounds = default,

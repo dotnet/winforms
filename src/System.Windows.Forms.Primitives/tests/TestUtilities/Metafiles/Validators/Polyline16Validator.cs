@@ -11,6 +11,7 @@ namespace System.Windows.Forms.Metafiles
 {
     internal class Polyline16Validator : Poly16Validator
     {
+        /// <inheritdoc/>
         public Polyline16Validator(
             RECT? bounds,
             Point[]? points,

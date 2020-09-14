@@ -10,14 +10,17 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal sealed class LineToValidator : Validator
+    internal sealed class LineToValidator : StateValidator
     {
-        private readonly Point _from;
-        private readonly Point _to;
+        private readonly Point? _from;
+        private readonly Point? _to;
 
+        /// <param name="from">Optional source point to validate.</param>
+        /// <param name="to">Optional destination point to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         public LineToValidator(
-            Point from,
-            Point to,
+            Point? from,
+            Point? to,
             params IStateValidator[] stateValidators) : base(stateValidators)
         {
             _from = from;
@@ -34,8 +37,16 @@ namespace System.Windows.Forms.Metafiles
             complete = true;
 
             EMRPOINTRECORD* lineTo = record.LineToRecord;
-            Assert.Equal(_from, state.BrushOrigin);
-            Assert.Equal(_to, lineTo->point);
+
+            if (_from.HasValue)
+            {
+                Assert.Equal(_from.Value, state.BrushOrigin);
+            }
+
+            if (_to.HasValue)
+            {
+                Assert.Equal(_to.Value, lineTo->point);
+            }
         }
     }
 }

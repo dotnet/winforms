@@ -10,11 +10,14 @@ using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal abstract class Poly16Validator : Validator
+    internal abstract class Poly16Validator : StateValidator
     {
         private readonly Rectangle? _bounds;
         private readonly Point[]? _points;
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="points">Optional points to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
         public Poly16Validator(
             RECT? bounds,
             Point[]? points,
