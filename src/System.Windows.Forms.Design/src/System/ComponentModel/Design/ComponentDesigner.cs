@@ -42,7 +42,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy operation on this component.
+        ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy
+        ///  operation on this component.
         /// </summary>
         public virtual ICollection AssociatedComponents
         {
@@ -112,7 +113,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Gets a collection that houses shadow properties.  Shadow properties. are properties that fall through to the underlying component before they are set, but return their set values once they are set.
+        ///  Gets a collection that houses shadow properties.  Shadow properties. are properties that fall through to
+        ///  the underlying component before they are set, but return their set values once they are set.
         /// </summary>
         protected ShadowPropertyCollection ShadowProperties
         {
@@ -127,9 +129,16 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This method is called when an existing component is being re-initialized.  This may occur after dragging a component to another container, for example.
-        ///  The defaultValues property contains a name/value dictionary of default values that should be applied to properties. This dictionary may be null if no default values are specified.
-        ///  You may use the defaultValues dictionary to apply recommended defaults to proeprties but you should not modify component properties beyond what is stored in the dictionary, because this is an existing component that may already have properties set on it.
+        ///  This method is called when an existing component is being re-initialized.  This may occur after dragging
+        ///  a component to another container, for example.
+        ///
+        ///  The defaultValues property contains a name/value dictionary of default values that should be applied to
+        ///  properties. This dictionary may be null if no default values are specified.
+        ///
+        ///  You may use the defaultValues dictionary to apply recommended defaults to proeprties but you should not
+        ///  modify component properties beyond what is stored in the dictionary, because this is an existing component
+        ///  that may already have properties set on it.
+        ///
         ///  The default implemenation of this method does nothing.
         /// </summary>
         public virtual void InitializeExistingComponent(IDictionary defaultValues)
@@ -227,7 +236,8 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    // If there were missing designers, our array could have some missing bits. Because that's not the norm, we don't optimize for that.
+                    // If there were missing designers, our array could have some missing bits. Because that's not
+                    // the norm, we don't optimize for that.
                     if (idx < designers.Length)
                     {
                         IDesigner[] newDesigners = new IDesigner[idx];
@@ -267,7 +277,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a method signature in the source code file for the default event on the component and navigates the user's cursor to that location in preparation to assign the default action.
+        ///  Creates a method signature in the source code file for the default event on the component and navigates
+        ///  the user's cursor to that location in preparation to assign the default action.
         /// </summary>
         public virtual void DoDefaultAction()
         {
@@ -415,8 +426,9 @@ namespace System.ComponentModel.Design
         {
             _component = component;
 
-            // For inherited components, save off the current values so we can compute a delta.  We also do this for the root component, but,
-            // as it is ALWAYS inherited, the computation of default values favors the presence of a default value attribute over the current code value.
+            // For inherited components, save off the current values so we can compute a delta.  We also do this for
+            // the root component, but, as it is ALWAYS inherited, the computation of default values favors the
+            // presence of a default value attribute over the current code value.
             bool isRoot = false;
             if (GetService(typeof(IDesignerHost)) is IDesignerHost host && component == host.RootComponent)
             {
@@ -503,7 +515,8 @@ namespace System.ComponentModel.Design
 
                     if (inheritedProp is null)
                     {
-                        // This ia a publicly inherited component.  We replace all component properties with inherited versions that reset the default property values to those that are currently on the component.
+                        // This ia a publicly inherited component.  We replace all component properties with inherited
+                        // versions that reset the default property values to those that are currently on the component.
                         props[prop.Name] = new InheritedPropertyDescriptor(prop, _component);
                     }
                 }
@@ -608,8 +621,11 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Called when the designer has been associated with a control that is not in it's default state, such as one that has been pasted or drag-dropped onto the designer.
+        ///  Called when the designer has been associated with a control that is not in it's default state, such as
+        ///  one that has been pasted or drag-dropped onto the designer.
+        ///
         ///  This is an opportunity to fixup any shadowed properties in a different way than for default components.
+        ///
         ///  This is called after the other initialize functions.
         /// </summary>
         [Obsolete("This method has been deprecated. Use InitializeExistingComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
@@ -668,12 +684,14 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Allows a designer to filter the set of member attributes the component it is designing will expose through the TypeDescriptor object.
+        ///  Allows a designer to filter the set of member attributes the component it is designing will expose
+        ///  through the TypeDescriptor object.
         /// </summary>
         protected virtual void PostFilterAttributes(IDictionary attributes)
         {
             // If this component is being inherited, mark it as such in the class attributes.
-            // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and through InheritanceAttribute directly is the same.
+            // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and
+            // through InheritanceAttribute directly is the same.
             if (attributes is null)
             {
                 return;
@@ -743,7 +761,9 @@ namespace System.ComponentModel.Design
                 for (int i = 0; i < values.Length; i++)
                 {
                     PropertyDescriptor prop = values[i];
-                    // This is a private component. Therefore, the user should not be allowed to modify any properties. We replace all properties with read-only versions.
+
+                    // This is a private component. Therefore, the user should not be allowed to modify any properties.
+                    // We replace all properties with read-only versions.
                     properties[prop.Name] = TypeDescriptor.CreateProperty(prop.ComponentType, prop, ReadOnlyAttribute.Yes);
                 }
 
@@ -767,21 +787,24 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Allows a designer to filter the set of member attributes the component it is designing will expose through the TypeDescriptor object.
+        ///  Allows a designer to filter the set of member attributes the component it is designing will expose
+        ///  through the TypeDescriptor object.
         /// </summary>
         protected virtual void PreFilterAttributes(IDictionary attributes)
         {
         }
 
         /// <summary>
-        ///  Allows a designer to filter the set of events the component it is designing will expose through the TypeDescriptor object.
+        ///  Allows a designer to filter the set of events the component it is designing will expose through the
+        ///  TypeDescriptor object.
         /// </summary>
         protected virtual void PreFilterEvents(IDictionary events)
         {
         }
 
         /// <summary>
-        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.
+        ///  Allows a designer to filter the set of properties the component it is designing will expose through
+        ///  the TypeDescriptor object.
         /// </summary>
         protected virtual void PreFilterProperties(IDictionary properties)
         {
@@ -807,8 +830,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is about to be changed.
-        ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
+        ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is
+        ///  about to be changed. You only need to call this when you are affecting component properties directly and
+        ///  not through the MemberDescriptor's accessors.
         /// </summary>
         protected void RaiseComponentChanging(MemberDescriptor member)
         {
@@ -832,7 +856,8 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Accesses the given property name.  This will throw an exception if the property does not exsit on the base component.
+            ///  Accesses the given property name.  This will throw an exception if the property does not exsit on the
+            ///  base component.
             /// </summary>
             public object this[string propertyName]
             {
@@ -849,7 +874,8 @@ namespace System.ComponentModel.Design
                         return _properties[propertyName];
                     }
 
-                    // Next, check to see if the name is in the descriptors table.  If it isn't, we will search the underlying component and add it.
+                    // Next, check to see if the name is in the descriptors table.  If it isn't, we will search the
+                    //underlying component and add it.
                     PropertyDescriptor property = GetShadowedPropertyDescriptor(propertyName);
 
                     return property.GetValue(_designer.Component);

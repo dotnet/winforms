@@ -31,29 +31,29 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public sealed class BehaviorService : IDisposable
     {
-        private readonly IServiceProvider _serviceProvider; //standard service provider
-        private readonly AdornerWindow _adornerWindow; //the transparent window all glyphs are drawn to
-        private readonly BehaviorServiceAdornerCollection _adorners; //we manage all adorners (glyph-containers) here
-        private readonly ArrayList _behaviorStack;  //the stack behavior objects can be pushed to and popped from
-        private Behavior _captureBehavior;  //the behavior that currently has capture; may be null
-        private Glyph _hitTestedGlyph; //the last valid glyph that was hit tested
-        private IToolboxService _toolboxSvc; //allows us to have the toolbox choose a cursor
-        private Control _dropSource; //actual control used to call .dodragdrop
-        private DragEventArgs _validDragArgs; //if valid - this is used to fabricate drag enter/leave envents
-        private BehaviorDragDropEventHandler _beginDragHandler; //fired directly before we call .DoDragDrop()
-        private BehaviorDragDropEventHandler _endDragHandler; //fired directly after we call .DoDragDrop()
-        private EventHandler _synchronizeEventHandler; //fired when we want to synchronize the selection
-        private User32.TRACKMOUSEEVENT _trackMouseEvent; //demand created (once) used to track the mouse hover event
-        private bool _trackingMouseEvent; //state identifying current mouse tracking
-        private string[] _testHook_RecentSnapLines; //we keep track of the last snaplines we found - for testing purposes
-        private readonly MenuCommandHandler _menuCommandHandler; //private object that handles all menu commands
-        private bool _useSnapLines; //indicates if this designer session is using snaplines or snapping to a grid
-        private bool _queriedSnapLines; //only query for this once since we require the user restart design sessions when this changes
-        private readonly Hashtable _dragEnterReplies; // we keep track of whether glyph has already responded to a DragEnter this D&D.
+        private readonly IServiceProvider _serviceProvider;             // standard service provider
+        private readonly AdornerWindow _adornerWindow;                  // the transparent window all glyphs are drawn to
+        private readonly BehaviorServiceAdornerCollection _adorners;    // we manage all adorners (glyph-containers) here
+        private readonly ArrayList _behaviorStack;                      // the stack behavior objects can be pushed to and popped from
+        private Behavior _captureBehavior;                              // the behavior that currently has capture; may be null
+        private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
+        private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
+        private Control _dropSource;                                    // actual control used to call .dodragdrop
+        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave envents
+        private BehaviorDragDropEventHandler _beginDragHandler;         // fired directly before we call .DoDragDrop()
+        private BehaviorDragDropEventHandler _endDragHandler;           // fired directly after we call .DoDragDrop()
+        private EventHandler _synchronizeEventHandler;                  // fired when we want to synchronize the selection
+        private User32.TRACKMOUSEEVENT _trackMouseEvent;                // demand created (once) used to track the mouse hover event
+        private bool _trackingMouseEvent;                               // state identifying current mouse tracking
+        private string[] _testHook_RecentSnapLines;                     // we keep track of the last snaplines we found - for testing purposes
+        private readonly MenuCommandHandler _menuCommandHandler;        // private object that handles all menu commands
+        private bool _useSnapLines;                                     // indicates if this designer session is using snaplines or snapping to a grid
+        private bool _queriedSnapLines;                                 // only query for this once since we require the user restart design sessions when this changes
+        private readonly Hashtable _dragEnterReplies;                   // we keep track of whether glyph has already responded to a DragEnter this D&D.
         private static readonly TraceSwitch s_dragDropSwitch = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
-        private bool _dragging; // are we in a drag
-        private bool _cancelDrag; // should we cancel the drag on the next QueryContinueDrag
+        private bool _dragging;                                         // are we in a drag
+        private bool _cancelDrag;                                       // should we cancel the drag on the next QueryContinueDrag
 
         private readonly int _adornerWindowIndex = -1;
 
@@ -64,6 +64,7 @@ namespace System.Windows.Forms.Design.Behavior
         private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
 
         private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
+
         internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
         {
             _serviceProvider = serviceProvider;
@@ -90,18 +91,19 @@ namespace System.Windows.Forms.Design.Behavior
             _trackingMouseEvent = false;
 
             //create out object that will handle all menucommands
-            if (serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService && serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+            if (serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService
+                && serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 _menuCommandHandler = new MenuCommandHandler(this, menuCommandService);
                 host.RemoveService(typeof(IMenuCommandService));
                 host.AddService(typeof(IMenuCommandService), _menuCommandHandler);
             }
 
-            //default layoutmode is SnapToGrid.
+            // default layoutmode is SnapToGrid.
             _useSnapLines = false;
             _queriedSnapLines = false;
 
-            //test hooks
+            // test hooks
             WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
             WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
 
@@ -141,7 +143,8 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                //we only check for this service/value once since we require the  user to re-open the designer session after these types of option have been modified
+                // we only check for this service/value once since we require the  user to re-open the designer session
+                // after these types of option have been modified
                 if (!_queriedSnapLines)
                 {
                     _queriedSnapLines = true;
@@ -196,13 +199,16 @@ namespace System.Windows.Forms.Design.Behavior
             get => _actionPointer;
             set => _actionPointer = value;
         }
+
         /// <summary>
-        ///  Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for testing purposes. See TestHook_GetRecentSnapLines method.
+        ///  Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for
+        ///  testing purposes. See TestHook_GetRecentSnapLines method.
         /// </summary>
         internal string[] RecentSnapLines
         {
             set => _testHook_RecentSnapLines = value;
         }
+
         /// <summary>
         ///  Disposes the behavior service.
         /// </summary>
@@ -246,13 +252,13 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal DragDropEffects DoDragDrop(DropSourceBehavior dropSourceBehavior)
         {
-            //hook events
+            // hook events
             DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
             DropSource.GiveFeedback += new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
 
             DragDropEffects res = DragDropEffects.None;
 
-            //build up the eventargs for firing our dragbegin/end events
+            // build up the eventargs for firing our dragbegin/end events
             ICollection dragComponents = ((DropSourceBehavior.BehaviorDataObject)dropSourceBehavior.DataObject).DragComponents;
             BehaviorDragDropEventArgs eventArgs = new BehaviorDragDropEventArgs(dragComponents);
 
@@ -263,6 +269,7 @@ namespace System.Windows.Forms.Design.Behavior
                     OnBeginDrag(eventArgs);
                     _dragging = true;
                     _cancelDrag = false;
+
                     // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
                     // So let's make sure it is really cleared when we start the drag.
                     _dragEnterReplies.Clear();
@@ -272,8 +279,9 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     DropSource.QueryContinueDrag -= new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
                     DropSource.GiveFeedback -= new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
-                    //If the drop gets cancelled, we won't get a OnDragDrop, so let's make sure that we stop
-                    //processing drag notifications. Also VSWhidbey #354552 and 133339.
+
+                    // If the drop gets cancelled, we won't get a OnDragDrop, so let's make sure that we stop
+                    // processing drag notifications. Also VSWhidbey #354552 and 133339.
                     EndDragNotification();
                     _validDragArgs = null;
                     _dragging = false;
@@ -294,7 +302,9 @@ namespace System.Windows.Forms.Design.Behavior
             }
             finally
             {
-                // It's possible we did not receive an EndDrag, and therefore we weren't able to cleanup the drag.  We will do that here. Scenarios where this happens: dragging from designer to recycle-bin, or over the taskbar.
+                // It's possible we did not receive an EndDrag, and therefore we weren't able to cleanup the drag.
+                // We will do that here. Scenarios where this happens: dragging from designer to recycle-bin,
+                // or over the taskbar.
                 if (dropSourceBehavior != null)
                 {
                     dropSourceBehavior.CleanupDrag();
@@ -379,8 +389,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  The BehaviorService fires the BeginDrag event immediately
-        ///  before it starts a drop/drop operation via DoBeginDragDrop.
+        ///  The BehaviorService fires the BeginDrag event immediately before it starts a drop/drop operation
+        ///  via DoBeginDragDrop.
         /// </summary>
         public event BehaviorDragDropEventHandler BeginDrag
         {
@@ -389,8 +399,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  The BehaviorService fires the EndDrag event immediately
-        ///  after the drag operation has completed.
+        ///  The BehaviorService fires the EndDrag event immediately after the drag operation has completed.
         /// </summary>
         public event BehaviorDragDropEventHandler EndDrag
         {
@@ -409,8 +418,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Given a behavior returns the behavior immediately
-        ///  after the behavior in the behaviorstack.
+        ///  Given a behavior returns the behavior immediately after the behavior in the behaviorstack.
         ///  Can return null.
         /// </summary>
         public Behavior GetNextBehavior(Behavior behavior)
@@ -503,13 +511,13 @@ namespace System.Windows.Forms.Design.Behavior
 
         internal void ProcessPaintMessage(Rectangle paintRect)
         {
-            //Note, we don't call BehSvc.Invalidate because this will just cause the messages to recurse. Instead, invalidating this adornerWindow will just cause a "propagatePaint" and draw the glyphs.
+            // Note, we don't call BehSvc.Invalidate because this will just cause the messages to recurse.
+            // Instead, invalidating this adornerWindow will just cause a "propagatePaint" and draw the glyphs.
             _adornerWindow.Invalidate(paintRect);
         }
 
         /// <summary>
-        ///  Pushes a Behavior object onto the BehaviorStack.  This is often done through hit-tested
-        ///  Glyph.
+        ///  Pushes a Behavior object onto the BehaviorStack.  This is often done through hit-tested Glyph.
         /// </summary>
         public void PushBehavior(Behavior behavior)
         {
@@ -520,6 +528,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             // Should we catch this
             _behaviorStack.Insert(0, behavior);
+
             // If there is a capture behavior, and it isn't this behavior, notify it that it no longer has capture.
             if (_captureBehavior != null && _captureBehavior != behavior)
             {
@@ -538,7 +547,9 @@ namespace System.Windows.Forms.Design.Behavior
             _captureBehavior = behavior;
             _adornerWindow.Capture = true;
 
-            //VSWhidbey #373836. Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
+            // VSWhidbey #373836. Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE
+            // which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window,
+            // let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
             if (uiService != null)
             {
@@ -576,7 +587,8 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame.  This window is used by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
+        ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame. This window is used
+        ///  by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
         /// </summary>
         private class AdornerWindow : Control
         {
@@ -712,7 +724,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
+            ///  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow()
             {
@@ -724,7 +737,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
+            ///  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Region region)
             {
@@ -740,7 +754,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.  Note the they use of the .Update() call for perf. purposes.
+            ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
+            ///  Note the they use of the .Update() call for perf. purposes.
             /// </summary>
             internal void InvalidateAdornerWindow(Rectangle rectangle)
             {
@@ -756,7 +771,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate
+            ///  Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragDrop(DragEventArgs e)
             {
@@ -803,13 +819,16 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so  they can be forwarded to the appropriate
+            ///  Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragEnter(DragEventArgs e)
             {
                 ProcessingDrag = true;
 
-                // determine if this is a local drag, if it is, do normal processing otherwise, force a PropagateHitTest.  We need to force this because the OLE D&D service suspends mouse messages when the drag is not local so the mouse hook never sees them.
+                // determine if this is a local drag, if it is, do normal processing otherwise, force a
+                // PropagateHitTest.  We need to force this because the OLE D&D service suspends mouse messages
+                // when the drag is not local so the mouse hook never sees them.
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
@@ -821,7 +840,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
+            ///  Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragLeave(EventArgs e)
             {
@@ -838,7 +858,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
+            ///  Behavior via the BehaviorService.
             /// </summary>
             protected override void OnDragOver(DragEventArgs e)
             {
@@ -855,7 +876,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
+            ///  Behavior via the BehaviorService.
             /// </summary>
             protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
             {
@@ -863,7 +885,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate Behavior via the BehaviorService.
+            ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
+            ///  Behavior via the BehaviorService.
             /// </summary>
             protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
             {
@@ -871,7 +894,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse Messages so we can send drag notifcations.
+            ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse
+            ///  Messages so we can send drag notifcations.
             /// </summary>
             internal void StartDragNotification()
             {
@@ -879,7 +903,8 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
+            ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService
+            ///  for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
             /// </summary>
             protected override void WndProc(ref Message m)
             {
@@ -1019,7 +1044,10 @@ namespace System.Windows.Forms.Design.Behavior
 
             /// <summary>
             ///  This class knows how to hook all the messages to a given process/thread.
-            ///  On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propogate it to the control it was meant for.   This allows us to synchrounously process mouse messages when the AdornerWindow itself may be pumping messages.
+            ///
+            ///  On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propogate
+            ///  it to the control it was meant for.   This allows us to synchrounously process mouse messages when
+            ///  the AdornerWindow itself may be pumping messages.
             /// </summary>
             private class MouseHook
             {
@@ -1043,7 +1071,9 @@ namespace System.Windows.Forms.Design.Behavior
                 readonly string _callingStack;
                 ~MouseHook()
                 {
-                    Debug.Assert(_mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
+                    Debug.Assert(
+                        _mouseHookHandle == IntPtr.Zero,
+                        "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
                 }
 #endif
 
@@ -1249,14 +1279,18 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 SetAppropriateCursor(cursor);
             }
+
             _hitTestedGlyph = null;
-            return true; // Returning false will cause the transparent window to return HTCLIENT when handling WM_NCHITTEST, thus blocking underline window to receive mouse events.
+
+            // Returning false will cause the transparent window to return HTCLIENT when handling WM_NCHITTEST,
+            // thus blocking underline window to receive mouse events.
+            return true;
         }
 
         private class MenuCommandHandler : IMenuCommandService
         {
-            private readonly BehaviorService _owner; // ptr back to the behavior service
-            private readonly IMenuCommandService _menuService; // core service used for most implementations of the IMCS interface
+            private readonly BehaviorService _owner;            // ptr back to the behavior service
+            private readonly IMenuCommandService _menuService;  // core service used for most implementations of the IMCS interface
             private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
 
             public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
@@ -1554,6 +1588,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
             return behavior.OnMouseUp(_hitTestedGlyph, button);
         }
+
         private void HookMouseEvent()
         {
             if (!_trackingMouseEvent)
@@ -1573,6 +1608,7 @@ namespace System.Windows.Forms.Design.Behavior
                 User32.TrackMouseEvent(ref _trackMouseEvent);
             }
         }
+
         private void UnHookMouseEvent()
         {
             _trackingMouseEvent = false;
