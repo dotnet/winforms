@@ -419,7 +419,7 @@ namespace System.Windows.Forms
                 subList = GetList(listAccessors[startIndex].GetValue(instance));
             }
 
-            if (null == subList)
+            if (subList is null)
             {
                 // Can't get shape by Instance, try by Type
                 pdc = GetListItemPropertiesByType(listAccessors[startIndex].PropertyType, listAccessors, startIndex);
@@ -638,7 +638,7 @@ namespace System.Windows.Forms
 
             // See if we were successful - if not, return the shape of the first
             // item in the list
-            if (null == pdc)
+            if (pdc is null)
             {
                 object instance = GetFirstItemByEnumerable(enumerable);
                 if (enumerable is string)

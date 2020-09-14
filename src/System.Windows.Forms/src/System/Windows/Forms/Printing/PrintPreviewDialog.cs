@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
@@ -21,7 +20,7 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms.Control.TopLevel")]
     [ToolboxItem(true)]
     [SRDescription(nameof(SR.DescriptionPrintPreviewDialog))]
-    public class PrintPreviewDialog : Form
+    public partial class PrintPreviewDialog : Form
     {
         readonly PrintPreviewControl previewControl;
         private System.Windows.Forms.ToolStrip toolStrip1;
@@ -39,11 +38,11 @@ namespace System.Windows.Forms
         private ToolStripMenuItem toolStripMenuItem7;
         private ToolStripMenuItem toolStripMenuItem8;
         private ToolStripSeparator separatorToolStripSeparator;
-        private ToolStripButton onepageToolStripButton;
-        private ToolStripButton twopagesToolStripButton;
-        private ToolStripButton threepagesToolStripButton;
-        private ToolStripButton fourpagesToolStripButton;
-        private ToolStripButton sixpagesToolStripButton;
+        private PrintPreviewDialogToolStripButton onepageToolStripButton;
+        private PrintPreviewDialogToolStripButton twopagesToolStripButton;
+        private PrintPreviewDialogToolStripButton threepagesToolStripButton;
+        private PrintPreviewDialogToolStripButton fourpagesToolStripButton;
+        private PrintPreviewDialogToolStripButton sixpagesToolStripButton;
         private ToolStripSeparator separatorToolStripSeparator1;
         private ToolStripButton closeToolStripButton;
         private ToolStripLabel pageToolStripLabel;
@@ -952,11 +951,11 @@ namespace System.Windows.Forms
             toolStripMenuItem7 = new ToolStripMenuItem();
             toolStripMenuItem8 = new ToolStripMenuItem();
             separatorToolStripSeparator = new ToolStripSeparator();
-            onepageToolStripButton = new ToolStripButton();
-            twopagesToolStripButton = new ToolStripButton();
-            threepagesToolStripButton = new ToolStripButton();
-            fourpagesToolStripButton = new ToolStripButton();
-            sixpagesToolStripButton = new ToolStripButton();
+            onepageToolStripButton = new PrintPreviewDialogToolStripButton();
+            twopagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            threepagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            fourpagesToolStripButton = new PrintPreviewDialogToolStripButton();
+            sixpagesToolStripButton = new PrintPreviewDialogToolStripButton();
             separatorToolStripSeparator1 = new ToolStripSeparator();
             closeToolStripButton = new ToolStripButton();
             pageCounterItem = new ToolStripNumericUpDown();

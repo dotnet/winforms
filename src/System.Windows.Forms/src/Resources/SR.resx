@@ -5867,6 +5867,12 @@ Stack trace where the illegal operation occurred was:
   <data name="ToolStripLabelIsLinkDescr" xml:space="preserve">
     <value>Specifies whether the label acts as a link.</value>
   </data>
+  <data name="DataGridViewCheckBoxCellCheckedStateDescription" xml:space="preserve">
+    <value>{0} check box checked</value>
+  </data>
+  <data name="DataGridViewCheckBoxCellUncheckedStateDescription" xml:space="preserve">
+    <value>{0} check box unchecked</value>
+  </data>
   <data name="ToolStripLabelLinkBehaviorDescr" xml:space="preserve">
     <value>The underlining behavior of the link.</value>
   </data>
@@ -6721,5 +6727,8 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="InvalidHdcType" xml:space="preserve">
     <value>Invalid HDC type: {0}</value>
+  </data>
+  <data name="PropertyGridViewDropDownControlHolderAccessibleName" xml:space="preserve">
+    <value>Drop down control holder</value>
   </data>
 </root>

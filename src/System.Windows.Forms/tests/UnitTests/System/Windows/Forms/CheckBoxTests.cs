@@ -430,8 +430,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(1, accessibleObject.RaiseAutomationEventCallsCount);
             Assert.Equal(1, accessibleObject.RaiseAutomationPropertyChangedEventCallsCount);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(checkBox.IsHandleCreated);
+            Assert.False(checkBox.IsHandleCreated);
         }
 
         // the zero here may be an issue with cultural variance

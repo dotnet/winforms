@@ -1183,10 +1183,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (selectedGridEntry.Enumerable &&
                         propertyGridView.DropDownVisible &&
-                        propertyGridView.DropDownControlHolder != null &&
-                        propertyGridView.DropDownControlHolder.Component == propertyGridView.DropDownListBox)
+                        propertyGridView.DropDownControlHolder?.Component == propertyGridView.DropDownListBox)
                     {
                         return propertyGridView.DropDownListBoxAccessibleObject;
+                    }
+
+                    if (propertyGridView.DropDownVisible && propertyGridView.DropDownControlHolder != null)
+                    {
+                        return propertyGridView.DropDownControlHolder.AccessibilityObject;
                     }
 
                     return propertyGridView.EditAccessibleObject;
@@ -1268,6 +1272,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void ExpandOrCollapse()
             {
+                if (!GetPropertyGridView().IsHandleCreated)
+                {
+                    return;
+                }
+
                 var propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
@@ -1275,6 +1284,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
+
                 if (row != -1)
                 {
                     propertyGridView.PopupDialog(row);

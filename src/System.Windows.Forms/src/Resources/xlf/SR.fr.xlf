@@ -2212,6 +2212,16 @@
         <target state="translated">La propriété ValueType d'une cellule d'une grille ne peut pas avoir une valeur null.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">Case à cocher {0} activée</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">Case à cocher {0} désactivée</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">Sélectionné</target>
@@ -8299,6 +8309,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">Couleur des bordures de la grille.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">

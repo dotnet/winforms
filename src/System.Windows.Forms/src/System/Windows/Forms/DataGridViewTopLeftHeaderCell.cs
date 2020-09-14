@@ -449,6 +449,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (!Owner.DataGridView.IsHandleCreated)
+                    {
+                        return Rectangle.Empty;
+                    }
+
                     Rectangle cellRect = Owner.DataGridView.GetCellDisplayRectangle(-1, -1, false /*cutOverflow*/);
                     return Owner.DataGridView.RectangleToScreen(cellRect);
                 }
@@ -542,7 +547,10 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                Owner.DataGridView.SelectAll();
+                if (Owner?.DataGridView?.IsHandleCreated is true)
+                {
+                    Owner.DataGridView.SelectAll();
+                }
             }
 
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
@@ -593,6 +601,11 @@ namespace System.Windows.Forms
                 if (Owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
+
+                if (Owner.DataGridView?.IsHandleCreated != true)
+                {
+                    return;
                 }
 
                 // AccessibleSelection.TakeFocus should focus the grid and then focus the first data grid view data cell

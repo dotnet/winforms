@@ -2212,6 +2212,16 @@
         <target state="translated">Die ValueType-Eigenschaft einer Zelle in einem Raster kann nicht NULL sein.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">Das Kontrollkästchen "{0}" ist aktiviert.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">Das Kontrollkästchen "{0}" ist deaktiviert.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">Ausgewählt</target>
@@ -8299,6 +8309,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">Die Farbe des Rahmens, der den Rasterbereich umgibt.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">

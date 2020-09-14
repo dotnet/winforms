@@ -2212,6 +2212,16 @@
         <target state="translated">Vlastnost ValueType buňky v mřížce nemůže mít hodnotu Null.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">Zaškrtávací políčko {0} je zaškrtnuté.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">Zaškrtávací políčko {0} není zaškrtnuté.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">Vybráno</target>
@@ -8299,6 +8309,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">Barva ohraničení oblasti mřížky</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">

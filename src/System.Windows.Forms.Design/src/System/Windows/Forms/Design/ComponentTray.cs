@@ -2457,7 +2457,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the size of the bitmap so we can size our component correctly.
-                if (null == _toolboxBitmap)
+                if (_toolboxBitmap is null)
                 {
                     _cxIcon = 0;
                     _cyIcon = SystemInformation.IconSize.Height;

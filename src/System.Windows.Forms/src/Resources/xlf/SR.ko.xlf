@@ -2212,6 +2212,16 @@
         <target state="translated">모눈에 있는 셀의 ValueType 속성은 null일 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">{0} 확인란 선택됨</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">{0} 확인란 선택 취소</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">선택한 상태</target>
@@ -8299,6 +8309,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">표 영역 주위의 테두리 색입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">

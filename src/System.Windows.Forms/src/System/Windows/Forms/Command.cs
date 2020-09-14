@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             {
                 int icmd;
 
-                if (null == cmds)
+                if (cmds is null)
                 {
                     cmds = new Command[20];
                     icmd = 0;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
                     // First look for an empty slot (starting at icmdTry).
                     for (icmd = icmdTry; icmd < icmdLim; icmd++)
                     {
-                        if (null == cmds[icmd])
+                        if (cmds[icmd] is null)
                         {
                             goto FindSlotComplete;
                         }
@@ -66,7 +66,7 @@ namespace System.Windows.Forms
 
                     for (icmd = 0; icmd < icmdTry; icmd++)
                     {
-                        if (null == cmds[icmd])
+                        if (cmds[icmd] is null)
                         {
                             goto FindSlotComplete;
                         }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                     // with a null referent.
                     for (icmd = 0; icmd < icmdLim; icmd++)
                     {
-                        if (null == cmds[icmd].Target)
+                        if (cmds[icmd].Target is null)
                         {
                             goto FindSlotComplete;
                         }
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
                         GC.Collect();
                         for (icmd = 0; icmd < icmdLim; icmd++)
                         {
-                            if (null == cmds[icmd] || null == cmds[icmd].Target)
+                            if (cmds[icmd] is null || cmds[icmd].Target is null)
                             {
                                 goto FindSlotComplete;
                             }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         public static bool DispatchID(int id)
         {
             Command cmd = GetCommandFromID(id);
-            if (null == cmd)
+            if (cmd is null)
             {
                 return false;
             }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
         {
             lock (internalSyncObject)
             {
-                if (null == cmds)
+                if (cmds is null)
                 {
                     return null;
                 }

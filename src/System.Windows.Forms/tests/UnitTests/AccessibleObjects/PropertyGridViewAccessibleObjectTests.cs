@@ -257,11 +257,20 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void PropertyGridViewAccessibleObject_Parent_IsNotNull()
+        public void PropertyGridViewAccessibleObject_Parent_IsNotNull_IfHandleIsCreated()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            propertyGrid.CreateControl();
+            ControlAccessibleObject accessibleObject = (ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
+            Assert.NotNull(accessibleObject.Parent);
+        }
+
+        [WinFormsFact]
+        public void PropertyGridViewAccessibleObject_Parent_IsNull_IfHandleIsNotCreated()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             ControlAccessibleObject accessibleObject = (ControlAccessibleObject)propertyGrid.GridViewAccessibleObject;
-            Assert.NotNull(accessibleObject.Parent);
+            Assert.Null(accessibleObject.Parent);
         }
 
         [WinFormsTheory]

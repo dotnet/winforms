@@ -12,9 +12,7 @@ namespace System.Windows.Forms
     public partial class ListBox
     {
         /// <summary>
-        ///  ListBox control accessible object with UI Automation provider functionality.
-        ///  This inherits from the base ListBoxExAccessibleObject and ListBoxAccessibleObject
-        ///  to have all base functionality.
+        ///  ListBox item control accessible object with UI Automation provider functionality.
         /// </summary>
         internal class ListBoxItemAccessibleObject : AccessibleObject
         {
@@ -71,12 +69,17 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Gets the ListBox Item bounds.
+            ///  Gets the <see cref="ListBox"/> item bounds.
             /// </summary>
             public override Rectangle Bounds
             {
                 get
                 {
+                    if (!_owningListBox.IsHandleCreated)
+                    {
+                        return Rectangle.Empty;
+                    }
+
                     Rectangle bounds = _owningListBox.GetItemRectangle(CurrentIndex);
 
                     if (bounds.IsEmpty)
@@ -99,7 +102,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Gets the ListBox item default action.
+            ///  Gets the <see cref="ListBox"/> item default action.
             /// </summary>
             public override string? DefaultAction
                 => _systemIAccessible?.accDefaultAction[GetChildId()];
@@ -111,13 +114,13 @@ namespace System.Windows.Forms
                 => _systemIAccessible?.accHelp[GetChildId()];
 
             /// <summary>
-            ///  Gets or sets the accessible name.
+            ///  Gets or sets the item accessible name.
             /// </summary>
             public override string? Name
             {
                 get
                 {
-                    return _itemEntry.item.ToString();
+                    return _owningListBox.GetItemText(_itemEntry.item);
                 }
                 set => base.Name = value;
             }
@@ -137,7 +140,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Gets the accessible state.
+            ///  Gets the item accessible state.
             /// </summary>
             public override AccessibleStates State
             {
@@ -162,12 +165,18 @@ namespace System.Windows.Forms
 
             internal override void AddToSelection()
             {
-                SelectItem();
+                if (_owningListBox.IsHandleCreated)
+                {
+                    SelectItem();
+                }
             }
 
             public override void DoDefaultAction()
             {
-                SetFocus();
+                if (_owningListBox.IsHandleCreated)
+                {
+                    SetFocus();
+                }
             }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
@@ -199,7 +208,8 @@ namespace System.Windows.Forms
 
             internal override int GetChildId()
             {
-                return CurrentIndex + 1; // Index is zero-based, Child ID is 1-based.
+                // Index is zero-based, Child ID is 1-based.
+                return CurrentIndex + 1;
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
@@ -246,6 +256,11 @@ namespace System.Windows.Forms
 
             internal override void ScrollIntoView()
             {
+                if (!_owningListBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 int currentIndex = CurrentIndex;
 
                 if (_owningListBox.SelectedIndex == -1) //no item selected
@@ -262,7 +277,6 @@ namespace System.Windows.Forms
                 }
 
                 int itemsHeightSum = 0;
-                int visibleItemsCount = 0;
                 int listBoxHeight = _owningListBox.ClientRectangle.Height;
                 int itemsCount = _owningListBox.Items.Count;
 
@@ -276,7 +290,7 @@ namespace System.Windows.Forms
                     }
 
                     int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
-                    visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin with 0
+                    int visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin with 0
 
                     if (currentIndex > lastVisibleIndex)
                     {
@@ -289,6 +303,11 @@ namespace System.Windows.Forms
 
             internal unsafe override void SelectItem()
             {
+                if (!_owningListBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 _owningListBox.SelectedIndex = CurrentIndex;
 
                 User32.InvalidateRect(new HandleRef(this, _owningListBox.Handle), null, BOOL.FALSE);
@@ -298,6 +317,11 @@ namespace System.Windows.Forms
 
             internal override void SetFocus()
             {
+                if (!_owningListBox.IsHandleCreated)
+                {
+                    return;
+                }
+
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 SelectItem();
             }
@@ -310,12 +334,13 @@ namespace System.Windows.Forms
                 }
                 catch (ArgumentException)
                 {
-                    // In Everett, the ListBox accessible children did not have any selection capability.
-                    // In Whidbey, they delegate the selection capability to OLEACC.
-                    // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
+                    // In .NET Framework 1.1, the ListBox accessible children did not have any selection capability.
+                    // In .NET Framework 2.0, they delegate the selection capability to OLEACC.
+                    // However, OLEACC does not deal with several selection flags:
+                    // ExtendSelection, AddSelection, RemoveSelection.
                     // OLEACC instead throws an ArgumentException.
-                    // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
-                    // the ArgumentException and fail silently.
+                    // Since .NET Framework 2.0 API's should not throw an exception in places where
+                    // .NET Framework 1.1 API's did not, we catch the ArgumentException and fail silently.
                 }
             }
         }

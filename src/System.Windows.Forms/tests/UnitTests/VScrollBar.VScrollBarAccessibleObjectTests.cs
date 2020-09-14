@@ -2,11 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -20,16 +15,23 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>(() => new VScrollBar.VScrollBarAccessibleObject(null));
         }
 
-        [WinFormsFact]
-        public void VScrollBarAccessibleObject_Ctor_Default()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.ScrollBar)]
+        [InlineData(false, AccessibleRole.None)]
+        public void VScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)
         {
             using var vertScrollBar = new VScrollBar();
+
+            if (createControl)
+            {
+                vertScrollBar.CreateControl();
+            }
+
             AccessibleObject accessibleObject = vertScrollBar.AccessibilityObject;
 
             Assert.NotNull(accessibleObject);
-            Assert.Equal(AccessibleRole.ScrollBar, accessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(vertScrollBar.IsHandleCreated);
+            Assert.Equal(accessibleRole, accessibleObject.Role);
+            Assert.Equal(createControl, vertScrollBar.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -39,8 +41,7 @@ namespace System.Windows.Forms.Tests
             VScrollBar.VScrollBarAccessibleObject accessibleObject
                 = Assert.IsType<VScrollBar.VScrollBarAccessibleObject>(vertScrollBar.AccessibilityObject);
             Assert.Equal("Vertical", accessibleObject.Name);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(vertScrollBar.IsHandleCreated);
+            Assert.False(vertScrollBar.IsHandleCreated);
         }
     }
 }

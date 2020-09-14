@@ -2212,6 +2212,16 @@
         <target state="translated">La propiedad ValueType de la celda de una cuadrícula no puede ser nula.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
+        <source>{0} check box checked</source>
+        <target state="translated">Casilla seleccionada: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
+        <source>{0} check box unchecked</source>
+        <target state="translated">Casilla no seleccionada: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardChecked">
         <source>Selected</source>
         <target state="translated">Seleccionado</target>
@@ -8299,6 +8309,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="PropertyGridViewBorderColorDesc">
         <source>The color of the border surrounding the grid area.</source>
         <target state="translated">Color del borde que rodea el área de la cuadrícula.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
+        <source>Drop down control holder</source>
+        <target state="new">Drop down control holder</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">

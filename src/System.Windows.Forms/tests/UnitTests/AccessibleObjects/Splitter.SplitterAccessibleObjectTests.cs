@@ -23,8 +23,7 @@ namespace System.Windows.Forms.Tests
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
             Assert.NotNull(splitterAccessibleObject.Owner);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.False(splitter.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -39,8 +38,7 @@ namespace System.Windows.Forms.Tests
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
             Assert.Equal("TestDescription", splitterAccessibleObject.Description);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.False(splitter.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -55,8 +53,7 @@ namespace System.Windows.Forms.Tests
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
             Assert.Equal("TestName", splitterAccessibleObject.Name);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.False(splitter.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -71,20 +68,25 @@ namespace System.Windows.Forms.Tests
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
             Assert.Equal(AccessibleRole.PushButton, splitterAccessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.False(splitter.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void SplitterAccessibleObject_DefaultRole_ReturnsExpected()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Client)]
+        [InlineData(false, AccessibleRole.None)]
+        public void SplitterAccessibleObject_DefaultRole_ReturnsNone_IfControlIsNotCreated(bool createControl, AccessibleRole accessibleRole)
         {
             using var splitter = new Splitter();
-            Assert.False(splitter.IsHandleCreated);
+
+            if (createControl)
+            {
+                splitter.CreateControl();
+            }
+
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
-            Assert.Equal(AccessibleRole.Client, splitterAccessibleObject.Role);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.Equal(accessibleRole, splitterAccessibleObject.Role);
+            Assert.Equal(createControl, splitter.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -105,8 +107,7 @@ namespace System.Windows.Forms.Tests
             object value = splitterAccessibleObject.GetPropertyValue((UIA)propertyID);
 
             Assert.Equal(expected, value);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.False(splitter.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -120,8 +121,7 @@ namespace System.Windows.Forms.Tests
             var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
             Assert.True(splitterAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            Assert.True(splitter.IsHandleCreated);
+            Assert.False(splitter.IsHandleCreated);
         }
     }
 }

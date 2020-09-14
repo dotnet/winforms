@@ -7,7 +7,7 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
 ## Windows Forms Designer
-For more information about the designer, please see the [Windows Forms Designer Documentation](Documentation/winforms-designer.md).
+For more information about the designer, please see the [Windows Forms Designer Documentation](docs/winforms-designer.md).
 
 To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap](roadmap.md).
 
@@ -44,7 +44,7 @@ To learn about project priorities as well as status and ship dates see the [Wind
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
 * The [contributing guidelines][contributing] and the more general [.NET Core contributing guide](https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md) define contributing rules.
-* The [Developer Guide](Documentation/developer-guide.md) defines the setup and workflow for working on this repository.
+* The [Developer Guide](docs/developer-guide.md) defines the setup and workflow for working on this repository.
 * If you have a question or have found a bug, [file an issue](https://github.com/dotnet/winforms/issues/new?template=bug_report.md).
 * Use [daily builds][getting-started] if you want to contribute and stay up to date with the team.
 
@@ -75,9 +75,9 @@ This project uses the [.NET Foundation Code of Conduct](https://dotnetfoundation
 .NET Core WinForms is a [.NET Foundation](https://www.dotnetfoundation.org/projects) project.<br />
 See the [.NET home repository](https://github.com/Microsoft/dotnet) to find other .NET-related projects.
 
-[getting-started]: Documentation/getting-started.md
-[contributing]: Documentation/contributing.md
-[porting-guidelines]: Documentation/porting-guidelines.md
+[getting-started]: docs/getting-started.md
+[contributing]: docs/contributing.md
+[porting-guidelines]: docs/porting-guidelines.md
 
 [master-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=master
 [release3-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=release%2f3.0

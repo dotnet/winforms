@@ -2775,6 +2775,7 @@ namespace System.Windows.Forms
 
                 if (!value.Equals(GridPenColor))
                 {
+                    GridPenColor = value;
                     OnGridColorChanged(EventArgs.Empty);
                 }
             }
@@ -4461,7 +4462,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (null == Columns.GetFirstColumn(DataGridViewElementStates.Visible))
+                if (Columns.GetFirstColumn(DataGridViewElementStates.Visible) is null)
                 {
                     return false;
                 }

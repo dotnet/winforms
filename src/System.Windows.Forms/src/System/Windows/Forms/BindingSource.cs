@@ -955,7 +955,7 @@ namespace System.Windows.Forms
 
                 // Only reset the position if the list really changed or if the list
                 // position is incorrect
-                currentItemChanged = ((null == _lastCurrentItem) || (cm.Count == 0) || (_lastCurrentItem != cm.Current) || (Position >= Count));
+                currentItemChanged = ((_lastCurrentItem is null) || (cm.Count == 0) || (_lastCurrentItem != cm.Current) || (Position >= Count));
 
                 // Save last current item
                 _lastCurrentItem = cm.Count > 0 ? cm.Current : null;

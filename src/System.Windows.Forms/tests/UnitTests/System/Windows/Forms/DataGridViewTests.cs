@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Xunit;
 using WinForms.Common.Tests;
+using System.Drawing;
 
 namespace System.Windows.Forms.Tests
 {
@@ -2711,6 +2712,23 @@ namespace System.Windows.Forms.Tests
             public new void OnRowHeadersWidthChanged(EventArgs e) => base.OnRowHeadersWidthChanged(e);
 
             public new void OnRowHeadersWidthSizeModeChanged(DataGridViewAutoSizeModeEventArgs e) => base.OnRowHeadersWidthSizeModeChanged(e);
+        }
+
+        [WinFormsFact]
+        public void DataGridView_GridColor()
+        {
+            using var dataGrid = new DataGridView();
+
+            int changedCount = 0;
+            dataGrid.GridColorChanged += (object sender, EventArgs e) =>
+            {
+                changedCount++;
+            };
+
+            dataGrid.GridColor = Color.Red;
+
+            Assert.Equal(1, changedCount);
+            Assert.Equal(Color.Red, dataGrid.GridColor);
         }
     }
 }

@@ -1793,7 +1793,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    if (owner.DataGridView is null)
+                    if (owner.DataGridView is null || !owner.DataGridView.IsHandleCreated)
                     {
                         return Rectangle.Empty;
                     }
@@ -1941,7 +1941,7 @@ namespace System.Windows.Forms
                         accState |= AccessibleStates.Selected;
                     }
 
-                    if (owner.DataGridView != null)
+                    if (owner.DataGridView != null && owner.DataGridView.IsHandleCreated)
                     {
                         Rectangle rowBounds = owner.DataGridView.GetRowDisplayRectangle(owner.Index, true /*cutOverflow*/);
                         if (!rowBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
@@ -2157,14 +2157,17 @@ namespace System.Windows.Forms
                 }
 
                 DataGridView dataGridView = owner.DataGridView;
-                if (dataGridView is null)
+
+                if (dataGridView is null || !dataGridView.IsHandleCreated)
                 {
                     return;
                 }
+
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
                     dataGridView.Focus();
                 }
+
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
                     if (owner.Cells.Count > 0)

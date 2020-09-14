@@ -16,23 +16,34 @@ namespace System.Windows.Forms
     internal static partial class DpiHelper
     {
         internal const double LogicalDpi = 96.0;
-        private static InterpolationMode s_interpolationMode = InterpolationMode.Invalid;
+        private static InterpolationMode s_interpolationMode;
 
         // Backing field, indicating that we will need to send a PerMonitorV2 query in due course.
-        private static readonly bool s_perMonitorAware = GetPerMonitorAware();
+        private static bool s_perMonitorAware;
 
-        internal static int DeviceDpi { get; } = GetDeviceDPI();
+        internal static int DeviceDpi { get; private set; }
+
+        static DpiHelper() => Initialize();
+
+        private static void Initialize()
+        {
+            s_interpolationMode = InterpolationMode.Invalid;
+            s_perMonitorAware = GetPerMonitorAware();
+            DeviceDpi = GetDeviceDPI();
+        }
 
         private static int GetDeviceDPI()
         {
-            // This never changes for the process. Depending on what the DPI awareness settings are we'll get
-            // either the actual DPI of the primary display at process startup or the default LogicalDpi;
+            // This will only change when the first call to set the process DPI awareness is made. Multiple calls to
+            // set the DPI have no effect after making the first call. Depending on what the DPI awareness settings are
+            // we'll get either the actual DPI of the primary display at process startup or the default LogicalDpi;
 
             if (!OsVersion.IsWindows10_1607OrGreater)
             {
                 using var dc = User32.GetDcScope.ScreenDC;
                 return Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
             }
+
             // This avoids needing to create a DC
             return (int)User32.GetDpiForSystem();
         }
@@ -351,6 +362,8 @@ namespace System.Windows.Forms
         /// <returns>true/false - If the process DPI awareness is successfully set, returns true. Otherwise false.</returns>
         internal static bool SetWinformsApplicationDpiAwareness(HighDpiMode highDpiMode)
         {
+            bool success = false;
+
             if (OsVersion.IsWindows10_1703OrGreater)
             {
                 // SetProcessIntPtr needs Windows 10 RS2 and above
@@ -379,7 +392,8 @@ namespace System.Windows.Forms
                         rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.UNAWARE;
                         break;
                 }
-                return User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag).IsTrue();
+
+                success = User32.SetProcessDpiAwarenessContext(rs2AndAboveDpiFlag).IsTrue();
             }
             else if (OsVersion.IsWindows8_1OrGreater)
             {
@@ -403,7 +417,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                return SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
+                success = SHCore.SetProcessDpiAwareness(dpiFlag) == HRESULT.S_OK;
             }
             else
             {
@@ -424,11 +438,14 @@ namespace System.Windows.Forms
 
                 if (dpiFlag == SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE)
                 {
-                    return User32.SetProcessDPIAware().IsTrue();
+                    success = User32.SetProcessDPIAware().IsTrue();
                 }
             }
 
-            return false;
+            // Need to reset as our DPI will change if this was the first call to set the DPI context for the process.
+            Initialize();
+
+            return success;
         }
     }
 }

@@ -1081,8 +1081,9 @@ namespace System.Windows.Forms.Tests
         public void ComboBox_SelectionStart_GetWithoutHandle_ReturnsExpected()
         {
             using var control = new ComboBox();
+            Assert.False(control.IsHandleCreated);
             Assert.Equal(0, control.SelectionStart);
-            Assert.True(control.IsHandleCreated);
+            Assert.True(control.IsHandleCreated); // SelectionStart forces Handle creating
 
             // Get again.
             Assert.Equal(0, control.SelectionStart);
@@ -1377,18 +1378,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("startIndex", () => control.FindStringExact("s", startIndex, ignoreCase: false));
         }
 
-        private SubComboBox CreateControlForCtrlBackspace(string text = "", int cursorRelativeToEnd = 0)
-        {
-            var tb = new SubComboBox
-            {
-                Text = text
-            };
-            tb.Focus();
-            tb.SelectionStart = tb.Text.Length + cursorRelativeToEnd;
-            tb.SelectionLength = 0;
-            return tb;
-        }
-
         private void SendCtrlBackspace(SubComboBox tb)
         {
             var message = new Message();
@@ -1398,7 +1387,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void CtrlBackspaceTextRemainsEmpty()
         {
-            using SubComboBox control = CreateControlForCtrlBackspace();
+            using SubComboBox control = new SubComboBox();
+            control.ConfigureForCtrlBackspace();
             SendCtrlBackspace(control);
             Assert.Equal("", control.Text);
         }
@@ -1407,7 +1397,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
         public void CtrlBackspaceTextChanged(string value, string expected, int cursorRelativeToEnd)
         {
-            using SubComboBox control = CreateControlForCtrlBackspace(value, cursorRelativeToEnd);
+            using SubComboBox control = new SubComboBox(value);
+            control.ConfigureForCtrlBackspace(cursorRelativeToEnd);
             SendCtrlBackspace(control);
             Assert.Equal(expected, control.Text);
         }
@@ -1416,7 +1407,8 @@ namespace System.Windows.Forms.Tests
         [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
         public void CtrlBackspaceRepeatedTextChanged(string value, string expected, int repeats)
         {
-            using SubComboBox control = CreateControlForCtrlBackspace(value);
+            using SubComboBox control = new SubComboBox(value);
+            control.ConfigureForCtrlBackspace();
             for (int i = 0; i < repeats; i++)
             {
                 SendCtrlBackspace(control);
@@ -1427,7 +1419,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void CtrlBackspaceDeletesSelection()
         {
-            using SubComboBox control = CreateControlForCtrlBackspace("123-5-7-9");
+            using SubComboBox control = new SubComboBox("123-5-7-9");
+            control.ConfigureForCtrlBackspace();
             control.SelectionStart = 2;
             control.SelectionLength = 5;
             SendCtrlBackspace(control);
@@ -1816,6 +1809,14 @@ namespace System.Windows.Forms.Tests
 
         private class SubComboBox : ComboBox
         {
+            public SubComboBox()
+            { }
+
+            public SubComboBox(string text)
+            {
+                Text = text;
+            }
+
             public new bool AllowSelection => base.AllowSelection;
 
             public new bool CanEnableIme => base.CanEnableIme;
@@ -1879,6 +1880,13 @@ namespace System.Windows.Forms.Tests
             public new AccessibleObject CreateAccessibilityInstance() => base.CreateAccessibilityInstance();
 
             public new void CreateHandle() => base.CreateHandle();
+
+            public void ConfigureForCtrlBackspace(int cursorRelativeToEnd = 0)
+            {
+                Focus();
+                SelectionStart = this.Text.Length + cursorRelativeToEnd;
+                SelectionLength = 0;
+            }
 
             public new void Dispose(bool disposing) => base.Dispose(disposing);
 

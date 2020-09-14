@@ -1,8 +1,6 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using static Interop;
 
@@ -12,7 +10,7 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewLinkCellAccessibleObject : DataGridViewCellAccessibleObject
         {
-            public DataGridViewLinkCellAccessibleObject(DataGridViewCell owner) : base(owner)
+            public DataGridViewLinkCellAccessibleObject(DataGridViewCell? owner) : base(owner)
             {
             }
 
@@ -26,12 +24,25 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                DataGridViewLinkCell dataGridViewCell = (DataGridViewLinkCell)Owner;
-                DataGridView dataGridView = dataGridViewCell.DataGridView;
+                if (Owner is null)
+                {
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
 
-                if (dataGridView != null && dataGridViewCell.RowIndex == -1)
+                if (!(Owner is DataGridViewLinkCell dataGridViewCell))
+                {
+                    return;
+                }
+
+                if (dataGridViewCell.RowIndex == -1)
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedCell);
+                }
+
+                DataGridView? dataGridView = dataGridViewCell.DataGridView;
+                if (dataGridView?.IsHandleCreated != true)
+                {
+                    return;
                 }
 
                 if (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
@@ -40,22 +51,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override int GetChildCount()
-            {
-                return 0;
-            }
+            public override int GetChildCount() => 0;
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
                 {
-                    return UiaCore.UIA.HyperlinkControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HyperlinkControlTypeId,
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }

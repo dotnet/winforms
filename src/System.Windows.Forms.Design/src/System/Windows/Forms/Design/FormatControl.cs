@@ -261,7 +261,7 @@ namespace System.Windows.Forms.Design
             }
 
             tableLayoutPanel1.SuspendLayout();
-            secondRowLabel.Text = "";
+            secondRowLabel.Text = string.Empty;
 
             // process the decimalPlacesLabelVisible
             if (formatType.DropDownVisible)
@@ -315,14 +315,7 @@ namespace System.Windows.Forms.Design
                 dateTimeFormatsListBox.Visible = false;
             }
 
-            if (secondRowLabel.Text == "")
-            {
-                secondRowLabel.Visible = false;
-            }
-            else
-            {
-                secondRowLabel.Visible = true;
-            }
+            secondRowLabel.Visible = secondRowLabel.Text.Length > 0;
 
             tableLayoutPanel1.ResumeLayout(true /*performLayout*/);
         }
