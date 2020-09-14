@@ -6,8 +6,7 @@ Option Explicit On
 
 #If APPLICATION_FRAMEWORK Then
 
-#If Not NET5_0 Then
-#Else
+#If NET5_0 And Not NET6_0 Then
 
 Imports System.Collections.ObjectModel
 
@@ -31,10 +30,10 @@ Namespace My
             End Set
         End Property
 
-        'IMPORTANT:
-        'If this method causes an compilation error after you've unchecked 'Application Framework' 
-        'in the project properties, go to the top of this file and change the value to 'False' in this line:
-        '#Const APPLICATION_FRAMEWORK = False
+        ' IMPORTANT:
+        ' If this method causes an compilation error after you've unchecked 'Application Framework' 
+        ' in the project properties, go to the top of this file and change the value to 'False' in this line:
+        ' #Const APPLICATION_FRAMEWORK = False
 
         ' For more about using WinForms without the Application Framework 
         ' see: https://aka.ms/visualbasic-appframework-net5
@@ -65,5 +64,6 @@ Namespace My
     End Class
 
 End Namespace
-#End If
-#End If
+
+#End If ' #If NET5_0 And Not NET6_0
+#End If ' #If APPLICATION_FRAMEWORK
