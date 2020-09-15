@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            ES actual = providerMock.Object.GetEditStyle(textBox.Handle);
+            ES actual = providerMock.Object.GetEditStyle(textBox);
             Assert.True(actual.HasFlag(ES.MULTILINE));
         }
 
@@ -35,17 +35,8 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            ES actual = providerMock.Object.GetEditStyle(textBox.Handle);
+            ES actual = providerMock.Object.GetEditStyle(textBox);
             Assert.False(actual.HasFlag(ES.MULTILINE));
-        }
-
-        [StaFact]
-        public void UiaTextProvider_GetEditStyle_ReturnsLeft_WithoutHandle()
-        {
-            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
-
-            ES actual = providerMock.Object.GetEditStyle(IntPtr.Zero);
-            Assert.Equal(ES.LEFT, actual);
         }
 
         [StaFact]
@@ -56,17 +47,8 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            WS actual = providerMock.Object.GetWindowStyle(textBox.Handle);
+            WS actual = providerMock.Object.GetWindowStyle(textBox);
             Assert.True(actual.HasFlag(WS.VISIBLE));
-        }
-
-        [StaFact]
-        public void UiaTextProvider_GetWindowStyle_ReturnsDisabled_WithoutHandle()
-        {
-            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
-
-            WS actual = providerMock.Object.GetWindowStyle(IntPtr.Zero);
-            Assert.Equal(WS.DISABLED, actual);
         }
 
         [StaFact]
@@ -76,16 +58,8 @@ namespace System.Windows.Forms.Primitives.Tests.Automation
                 style: WS.OVERLAPPED | WS.VISIBLE);
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-            WS_EX actual = providerMock.Object.GetWindowExStyle(textBox.Handle);
+            WS_EX actual = providerMock.Object.GetWindowExStyle(textBox);
             Assert.True(actual.HasFlag(WS_EX.CLIENTEDGE));
-        }
-
-        [StaFact]
-        public void UiaTextProvider_GetWindowExStyle_ReturnsLeft_WithoutHandle()
-        {
-            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
-            WS_EX actual = providerMock.Object.GetWindowExStyle(IntPtr.Zero);
-            Assert.Equal(WS_EX.LEFT, actual);
         }
 
         [StaFact]
