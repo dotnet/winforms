@@ -12,10 +12,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public class BehaviorDragDropEventArgs : EventArgs
     {
-        public BehaviorDragDropEventArgs(ICollection dragComponents)
-        {
-            DragComponents = dragComponents;
-        }
+        public BehaviorDragDropEventArgs(ICollection dragComponents) => DragComponents = dragComponents;
 
         /// <summary>
         ///  Returns the list of IComponents currently being dragged.

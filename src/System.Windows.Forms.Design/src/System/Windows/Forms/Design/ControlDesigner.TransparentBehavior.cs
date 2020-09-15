@@ -16,16 +16,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal class TransparentBehavior : Behavior.Behavior
         {
-            readonly ControlDesigner _designer;
-            Rectangle _controlRect = Rectangle.Empty;
+            private readonly ControlDesigner _designer;
+            private Rectangle _controlRect = Rectangle.Empty;
 
             /// <summary>
             ///  Constructor that accepts the related ControlDesigner.
             /// </summary>
-            internal TransparentBehavior(ControlDesigner designer)
-            {
-                _designer = designer;
-            }
+            internal TransparentBehavior(ControlDesigner designer) => _designer = designer;
 
             /// <summary>
             ///  This property performs a hit test on the ControlDesigner to determine if the BodyGlyph should return

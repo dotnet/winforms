@@ -16,13 +16,12 @@ namespace System.ComponentModel.Design
     /// </summary>
     public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, IComponentInitializer
     {
-        IComponent _component;
-        InheritanceAttribute _inheritanceAttribute;
-        Hashtable _inheritedProps;
-        DesignerVerbCollection _verbs;
-        DesignerActionListCollection _actionLists;
-        ShadowPropertyCollection _shadowProperties;
-        bool _settingsKeyExplicitlySet;
+        private InheritanceAttribute _inheritanceAttribute;
+        private Hashtable _inheritedProps;
+        private DesignerVerbCollection _verbs;
+        private DesignerActionListCollection _actionLists;
+        private ShadowPropertyCollection _shadowProperties;
+        private bool _settingsKeyExplicitlySet;
 
         private protected const string SettingsKeyName = "SettingsKey";
 
@@ -45,10 +44,7 @@ namespace System.ComponentModel.Design
         ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy
         ///  operation on this component.
         /// </summary>
-        public virtual ICollection AssociatedComponents
-        {
-            get => Array.Empty<IComponent>();
-        }
+        public virtual ICollection AssociatedComponents => Array.Empty<IComponent>();
 
         internal virtual bool CanBeAssociatedWith(IDesigner parentDesigner) => true;
 
@@ -162,46 +158,22 @@ namespace System.ComponentModel.Design
 #pragma warning restore 618
         }
 
-        void IDesignerFilter.PostFilterAttributes(IDictionary attributes)
-        {
-            PostFilterAttributes(attributes);
-        }
+        void IDesignerFilter.PostFilterAttributes(IDictionary attributes) => PostFilterAttributes(attributes);
 
-        void IDesignerFilter.PostFilterEvents(IDictionary events)
-        {
-            PostFilterEvents(events);
-        }
+        void IDesignerFilter.PostFilterEvents(IDictionary events) => PostFilterEvents(events);
 
-        void IDesignerFilter.PostFilterProperties(IDictionary properties)
-        {
-            PostFilterProperties(properties);
-        }
+        void IDesignerFilter.PostFilterProperties(IDictionary properties) => PostFilterProperties(properties);
 
-        void IDesignerFilter.PreFilterAttributes(IDictionary attributes)
-        {
-            PreFilterAttributes(attributes);
-        }
+        void IDesignerFilter.PreFilterAttributes(IDictionary attributes) => PreFilterAttributes(attributes);
 
-        void IDesignerFilter.PreFilterEvents(IDictionary events)
-        {
-            PreFilterEvents(events);
-        }
+        void IDesignerFilter.PreFilterEvents(IDictionary events) => PreFilterEvents(events);
 
-        void IDesignerFilter.PreFilterProperties(IDictionary properties)
-        {
-            PreFilterProperties(properties);
-        }
+        void IDesignerFilter.PreFilterProperties(IDictionary properties) => PreFilterProperties(properties);
 
         /// <summary>
         ///  Gets or sets the component this designer is designing.
         /// </summary>
-        public IComponent Component
-        {
-            get
-            {
-                return _component;
-            }
-        }
+        public IComponent Component { get; private set; }
 
         /// <summary>
         ///  Gets the design-time verbs supported by the component associated with the designer.
@@ -214,6 +186,7 @@ namespace System.ComponentModel.Design
                 {
                     _verbs = new DesignerVerbCollection();
                 }
+
                 return _verbs;
             }
         }
@@ -302,6 +275,7 @@ namespace System.ComponentModel.Design
             {
                 return;
             }
+
             try
             {
                 foreach (IComponent comp in components.OfType<IComponent>())
@@ -372,7 +346,7 @@ namespace System.ComponentModel.Design
                         defaultPropEvent.SetValue(comp, handler);
                     }
 
-                    if (_component == comp)
+                    if (Component == comp)
                     {
                         thisDefaultEvent = defaultEvent;
                         thisHandler = handler;
@@ -398,7 +372,7 @@ namespace System.ComponentModel.Design
             // Now show the event code.
             if (thisHandler != null && thisDefaultEvent != null)
             {
-                eps.ShowCode(_component, thisDefaultEvent);
+                eps.ShowCode(Component, thisDefaultEvent);
             }
         }
 
@@ -406,12 +380,12 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                Debug.Assert(_component != null,
+                Debug.Assert(Component != null,
                     "this.component needs to be set before this method is valid.");
 
                 bool isRoot = false;
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && _component == host.RootComponent)
+                if (host != null && Component == host.RootComponent)
                 {
                     isRoot = true;
                 }
@@ -424,7 +398,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void Initialize(IComponent component)
         {
-            _component = component;
+            Component = component;
 
             // For inherited components, save off the current values so we can compute a delta.  We also do this for
             // the root component, but, as it is ALWAYS inherited, the computation of default values favors the
@@ -488,7 +462,7 @@ namespace System.ComponentModel.Design
                     {
                         // This ia a publicly inherited component.  We replace all component properties with inherited
                         // versions that reset the default property values to those that are currently on the component.
-                        props[prop.Name] = new InheritedPropertyDescriptor(prop, _component);
+                        props[prop.Name] = new InheritedPropertyDescriptor(prop, Component);
                     }
                 }
             }
@@ -501,9 +475,7 @@ namespace System.ComponentModel.Design
         ///  Invokes the get inheritance attribute of the specified ComponentDesigner.
         /// </summary>
         protected InheritanceAttribute InvokeGetInheritanceAttribute(ComponentDesigner toInvoke)
-        {
-            return toInvoke?.InheritanceAttribute;
-        }
+            => toInvoke?.InheritanceAttribute;
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.ComponentDesigner' />.
@@ -517,7 +489,7 @@ namespace System.ComponentModel.Design
                     cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 }
 
-                _component = null;
+                Component = null;
                 _inheritedProps = null;
             }
         }
@@ -609,9 +581,9 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual object GetService(Type serviceType)
         {
-            if (_component != null)
+            if (Component != null)
             {
-                ISite site = _component.Site;
+                ISite site = Component.Site;
                 if (site != null)
                 {
                     return site.GetService(serviceType);

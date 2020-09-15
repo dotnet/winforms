@@ -33,6 +33,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return base.SerializeCollection(manager, targetExpression, targetType, originalCollection, subset);
             }
         }

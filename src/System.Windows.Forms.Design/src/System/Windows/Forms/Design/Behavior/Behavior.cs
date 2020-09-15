@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior

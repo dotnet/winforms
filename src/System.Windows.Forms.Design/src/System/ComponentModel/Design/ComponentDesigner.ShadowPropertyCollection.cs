@@ -16,10 +16,8 @@ namespace System.ComponentModel.Design
             private readonly ComponentDesigner _designer;
             private Hashtable _properties;
             private Hashtable _descriptors;
-            internal ShadowPropertyCollection(ComponentDesigner designer)
-            {
-                _designer = designer;
-            }
+
+            internal ShadowPropertyCollection(ComponentDesigner designer) => _designer = designer;
 
             /// <summary>
             ///  Accesses the given property name.  This will throw an exception if the property does not exsit on the
@@ -59,10 +57,7 @@ namespace System.ComponentModel.Design
             /// <summary>
             ///  Returns true if this shadow properties object contains the given property name.
             /// </summary>
-            public bool Contains(string propertyName)
-            {
-                return _properties != null && _properties.ContainsKey(propertyName);
-            }
+            public bool Contains(string propertyName) => _properties != null && _properties.ContainsKey(propertyName);
 
             /// <summary>
             ///  Returns the underlying property descriptor for this property on the component

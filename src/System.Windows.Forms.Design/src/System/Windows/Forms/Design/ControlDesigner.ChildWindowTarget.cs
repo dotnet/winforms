@@ -13,22 +13,18 @@ namespace System.Windows.Forms.Design
         {
             private readonly ControlDesigner _designer;
             private readonly Control _childControl;
-            private readonly IWindowTarget _oldWindowTarget;
             private IntPtr _handle = IntPtr.Zero;
 
             public ChildWindowTarget(ControlDesigner designer, Control childControl, IWindowTarget oldWindowTarget)
             {
                 _designer = designer;
                 _childControl = childControl;
-                _oldWindowTarget = oldWindowTarget;
+                OldWindowTarget = oldWindowTarget;
             }
 
-            public IWindowTarget OldWindowTarget
-            {
-                get => _oldWindowTarget;
-            }
+            public IWindowTarget OldWindowTarget { get; }
 
-            public void DefWndProc(ref Message m) => _oldWindowTarget.OnMessage(ref m);
+            public void DefWndProc(ref Message m) => OldWindowTarget.OnMessage(ref m);
 
             public void Dispose()
             {
@@ -38,7 +34,7 @@ namespace System.Windows.Forms.Design
             public void OnHandleChange(IntPtr newHandle)
             {
                 _handle = newHandle;
-                _oldWindowTarget.OnHandleChange(newHandle);
+                OldWindowTarget.OnHandleChange(newHandle);
             }
 
             public void OnMessage(ref Message m)
@@ -46,7 +42,7 @@ namespace System.Windows.Forms.Design
                 // If the designer has jumped ship, the continue partying on messages, but send them back to the original control.
                 if (_designer.Component is null)
                 {
-                    _oldWindowTarget.OnMessage(ref m);
+                    OldWindowTarget.OnMessage(ref m);
                     return;
                 }
 

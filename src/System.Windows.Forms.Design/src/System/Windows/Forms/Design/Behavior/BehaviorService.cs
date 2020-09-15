@@ -33,7 +33,6 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private readonly IServiceProvider _serviceProvider;             // standard service provider
         private readonly AdornerWindow _adornerWindow;                  // the transparent window all glyphs are drawn to
-        private readonly BehaviorServiceAdornerCollection _adorners;    // we manage all adorners (glyph-containers) here
         private readonly ArrayList _behaviorStack;                      // the stack behavior objects can be pushed to and popped from
         private Behavior _captureBehavior;                              // the behavior that currently has capture; may be null
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
@@ -50,47 +49,39 @@ namespace System.Windows.Forms.Design.Behavior
         private bool _useSnapLines;                                     // indicates if this designer session is using snaplines or snapping to a grid
         private bool _queriedSnapLines;                                 // only query for this once since we require the user restart design sessions when this changes
         private readonly Hashtable _dragEnterReplies;                   // we keep track of whether glyph has already responded to a DragEnter this D&D.
-        private static readonly TraceSwitch s_dragDropSwitch = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
-
-        private bool _dragging;                                         // are we in a drag
-        private bool _cancelDrag;                                       // should we cancel the drag on the next QueryContinueDrag
-
-        private readonly int _adornerWindowIndex = -1;
+        private static readonly TraceSwitch s_dragDropSwitch
+            = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
 
         //test hooks for SnapLines
         private static User32.WM WM_GETALLSNAPLINES;
         private static User32.WM WM_GETRECENTSNAPLINES;
-
-        private DesignerActionUI _actionPointer; // pointer to the designer action service so we can supply mouse over notifications
-
         private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
 
         internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
         {
             _serviceProvider = serviceProvider;
-            //create the AdornerWindow
             _adornerWindow = new AdornerWindow(this, windowFrame);
 
-            //use the adornerWindow as an overlay
+            // Use the adornerWindow as an overlay
             IOverlayService os = (IOverlayService)serviceProvider.GetService(typeof(IOverlayService));
             if (os != null)
             {
-                _adornerWindowIndex = os.PushOverlay(_adornerWindow);
+                AdornerWindowIndex = os.PushOverlay(_adornerWindow);
             }
 
             _dragEnterReplies = new Hashtable();
 
-            //start with an empty adorner collection & no behavior on the stack
-            _adorners = new BehaviorServiceAdornerCollection(this);
+            // Start with an empty adorner collection & no behavior on the stack
+            Adorners = new BehaviorServiceAdornerCollection(this);
             _behaviorStack = new ArrayList();
 
             _hitTestedGlyph = null;
             _validDragArgs = null;
-            _actionPointer = null;
+            DesignerActionUI = null;
             _trackMouseEvent = default;
             _trackingMouseEvent = false;
 
-            //create out object that will handle all menucommands
+            // Create out object that will handle all menucommands
             if (serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService
                 && serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
@@ -99,42 +90,31 @@ namespace System.Windows.Forms.Design.Behavior
                 host.AddService(typeof(IMenuCommandService), _menuCommandHandler);
             }
 
-            // default layoutmode is SnapToGrid.
+            // Default layoutmode is SnapToGrid.
             _useSnapLines = false;
             _queriedSnapLines = false;
 
-            // test hooks
+            // Test hooks
             WM_GETALLSNAPLINES = User32.RegisterWindowMessageW("WM_GETALLSNAPLINES");
             WM_GETRECENTSNAPLINES = User32.RegisterWindowMessageW("WM_GETRECENTSNAPLINES");
 
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
+
         /// <summary>
         ///  Read-only property that returns the AdornerCollection that the BehaivorService manages.
         /// </summary>
-        public BehaviorServiceAdornerCollection Adorners
-        {
-            get => _adorners;
-        }
+        public BehaviorServiceAdornerCollection Adorners { get; }
 
         /// <summary>
         ///  Returns the actual Control that represents the transparent AdornerWindow.
         /// </summary>
-        internal Control AdornerWindowControl
-        {
-            get => _adornerWindow;
-        }
+        internal Control AdornerWindowControl => _adornerWindow;
 
-        internal int AdornerWindowIndex
-        {
-            get => _adornerWindowIndex;
-        }
+        internal int AdornerWindowIndex { get; } = -1;
 
-        internal bool HasCapture
-        {
-            get => _captureBehavior != null;
-        }
+        internal bool HasCapture => _captureBehavior != null;
 
         /// <summary>
         ///  Returns the LayoutMode setting of the current designer session.  Either SnapLines or SnapToGrid.
@@ -183,22 +163,11 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
-        internal bool Dragging
-        {
-            get => _dragging;
-        }
+        internal bool Dragging { get; private set; }
 
-        internal bool CancelDrag
-        {
-            get => _cancelDrag;
-            set => _cancelDrag = value;
-        }
+        internal bool CancelDrag { get; set; }
 
-        internal DesignerActionUI DesignerActionUI
-        {
-            get => _actionPointer;
-            set => _actionPointer = value;
-        }
+        internal DesignerActionUI DesignerActionUI { get; set; }
 
         /// <summary>
         ///  Called by the DragAssistanceManager after a snapline/drag op has completed - we store this data for
@@ -267,8 +236,8 @@ namespace System.Windows.Forms.Design.Behavior
                 try
                 {
                     OnBeginDrag(eventArgs);
-                    _dragging = true;
-                    _cancelDrag = false;
+                    Dragging = true;
+                    CancelDrag = false;
 
                     // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
                     // So let's make sure it is really cleared when we start the drag.
@@ -284,8 +253,8 @@ namespace System.Windows.Forms.Design.Behavior
                     // processing drag notifications. Also VSWhidbey #354552 and 133339.
                     EndDragNotification();
                     _validDragArgs = null;
-                    _dragging = false;
-                    _cancelDrag = false;
+                    Dragging = false;
+                    CancelDrag = false;
                     OnEndDrag(eventArgs);
                 }
             }
@@ -313,20 +282,11 @@ namespace System.Windows.Forms.Design.Behavior
             return res;
         }
 
-        internal void EndDragNotification()
-        {
-            _adornerWindow.EndDragNotification();
-        }
+        internal void EndDragNotification() => _adornerWindow.EndDragNotification();
 
-        private void OnEndDrag(BehaviorDragDropEventArgs e)
-        {
-            _endDragHandler?.Invoke(this, e);
-        }
+        private void OnEndDrag(BehaviorDragDropEventArgs e) => _endDragHandler?.Invoke(this, e);
 
-        private void OnBeginDrag(BehaviorDragDropEventArgs e)
-        {
-            _beginDragHandler?.Invoke(this, e);
-        }
+        private void OnBeginDrag(BehaviorDragDropEventArgs e) => _beginDragHandler?.Invoke(this, e);
 
         /// <summary>
         ///  Translates a point in the AdornerWindow to screen coords.
@@ -447,36 +407,24 @@ namespace System.Windows.Forms.Design.Behavior
         ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
-        public void Invalidate()
-        {
-            _adornerWindow.InvalidateAdornerWindow();
-        }
+        public void Invalidate() => _adornerWindow.InvalidateAdornerWindow();
 
         /// <summary>
         ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
-        public void Invalidate(Rectangle rect)
-        {
-            _adornerWindow.InvalidateAdornerWindow(rect);
-        }
+        public void Invalidate(Rectangle rect) => _adornerWindow.InvalidateAdornerWindow(rect);
 
         /// <summary>
         ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
-        public void Invalidate(Region r)
-        {
-            _adornerWindow.InvalidateAdornerWindow(r);
-        }
+        public void Invalidate(Region r) => _adornerWindow.InvalidateAdornerWindow(r);
 
         /// <summary>
         ///  Synchronizes all selection glyphs.
         /// </summary>
-        public void SyncSelection()
-        {
-            _synchronizeEventHandler?.Invoke(this, EventArgs.Empty);
-        }
+        public void SyncSelection() => _synchronizeEventHandler?.Invoke(this, EventArgs.Empty);
 
         /// <summary>
         ///  Removes the behavior from the behavior stack
@@ -588,20 +536,20 @@ namespace System.Windows.Forms.Design.Behavior
 
         private bool PropagateHitTest(Point pt)
         {
-            for (int i = _adorners.Count - 1; i >= 0; i--)
+            for (int i = Adorners.Count - 1; i >= 0; i--)
             {
-                if (!_adorners[i].Enabled)
+                if (!Adorners[i].Enabled)
                 {
                     continue;
                 }
 
-                for (int j = 0; j < _adorners[i].Glyphs.Count; j++)
+                for (int j = 0; j < Adorners[i].Glyphs.Count; j++)
                 {
-                    Cursor hitTestCursor = _adorners[i].Glyphs[j].GetHitTest(pt);
+                    Cursor hitTestCursor = Adorners[i].Glyphs[j].GetHitTest(pt);
                     if (hitTestCursor != null)
                     {
                         // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
-                        Glyph newGlyph = _adorners[i].Glyphs[j];
+                        Glyph newGlyph = Adorners[i].Glyphs[j];
 
                         //with a valid hit test, fire enter/leave events
                         InvokeMouseEnterLeave(_hitTestedGlyph, newGlyph);
@@ -639,10 +587,7 @@ namespace System.Windows.Forms.Design.Behavior
             return true;
         }
 
-        internal void StartDragNotification()
-        {
-            _adornerWindow.StartDragNotification();
-        }
+        internal void StartDragNotification() => _adornerWindow.StartDragNotification();
 
         private MenuCommand FindCommand(CommandID commandID, IMenuCommandService menuService)
         {
@@ -909,17 +854,18 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragDrop(_hitTestedGlyph, e);
         }
+
         private void PropagatePaint(PaintEventArgs pe)
         {
-            for (int i = 0; i < _adorners.Count; i++)
+            for (int i = 0; i < Adorners.Count; i++)
             {
-                if (!_adorners[i].Enabled)
+                if (!Adorners[i].Enabled)
                 {
                     continue;
                 }
-                for (int j = _adorners[i].Glyphs.Count - 1; j >= 0; j--)
+                for (int j = Adorners[i].Glyphs.Count - 1; j >= 0; j--)
                 {
-                    _adorners[i].Glyphs[j].Paint(pe);
+                    Adorners[i].Glyphs[j].Paint(pe);
                 }
             }
         }
@@ -995,6 +941,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             TestHook_SetText(ref m, snapLineInfo);
         }
 
@@ -1004,12 +951,14 @@ namespace System.Windows.Forms.Design.Behavior
             _validDragArgs = e;
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragOver");
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
+
             if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, exiting with DragDropEffects.None");
                 e.Effect = DragDropEffects.None;
                 return;
             }
+
             if (_hitTestedGlyph is null ||
                (_hitTestedGlyph != null && !_dragEnterReplies.ContainsKey(_hitTestedGlyph)))
             {

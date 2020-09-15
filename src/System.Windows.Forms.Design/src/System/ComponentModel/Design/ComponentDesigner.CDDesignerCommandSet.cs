@@ -15,26 +15,14 @@ namespace System.ComponentModel.Design
         {
             private readonly ComponentDesigner _componentDesigner;
 
-            public CDDesignerCommandSet(ComponentDesigner componentDesigner)
-            {
-                _componentDesigner = componentDesigner;
-            }
+            public CDDesignerCommandSet(ComponentDesigner componentDesigner) => _componentDesigner = componentDesigner;
 
-            public override ICollection GetCommands(string name)
+            public override ICollection GetCommands(string name) => name switch
             {
-                if (name == VerbsCommand)
-                {
-                    return _componentDesigner.Verbs;
-                }
-                else if (name == ActionListsCommand)
-                {
-                    return _componentDesigner.ActionLists;
-                }
-                else
-                {
-                    return base.GetCommands(name);
-                }
-            }
+                VerbsCommand => _componentDesigner.Verbs,
+                ActionListsCommand => _componentDesigner.ActionLists,
+                _ => base.GetCommands(name)
+            };
         }
     }
 }
