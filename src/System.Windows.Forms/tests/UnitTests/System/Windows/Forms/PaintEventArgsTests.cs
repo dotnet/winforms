@@ -58,6 +58,17 @@ namespace System.Windows.Forms.Tests
             e.DisposeEntry(disposing);
         }
 
+        [Fact]
+        public void GraphicsIdentity()
+        {
+            // https://github.com/dotnet/winforms/issues/3910
+            using var hdc = GdiCache.GetScreenHdc();
+            PaintEventArgs args = new PaintEventArgs(hdc, default);
+            Graphics g1 = args.Graphics;
+            Graphics g2 = args.Graphics;
+            Assert.Same(g1, g2);
+        }
+
         private class SubPaintEventArgs : PaintEventArgs
         {
             public SubPaintEventArgs(Graphics graphics, Rectangle clipRect) : base(graphics, clipRect)
