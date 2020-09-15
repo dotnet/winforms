@@ -21,6 +21,7 @@ namespace System.Windows.Forms.Design
                 {
                     designer.DisposingHandler += new EventHandler(OnDesignerDisposing);
                 }
+
                 AssignHandle(hwnd);
             }
 
@@ -54,6 +55,7 @@ namespace System.Windows.Forms.Design
                 IDesignerTarget designerTarget = _designer.DesignerTarget;
                 _designer.DesignerTarget = this;
                 Debug.Assert(m.HWnd == Handle, "Message handle differs from target handle");
+
                 try
                 {
                     _designer.WndProc(ref m);

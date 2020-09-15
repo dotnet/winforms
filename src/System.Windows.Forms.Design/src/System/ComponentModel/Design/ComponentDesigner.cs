@@ -28,17 +28,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Gets the design-time actionlists supported by the component associated with the designer.
         /// </summary>
-        public virtual DesignerActionListCollection ActionLists
-        {
-            get
-            {
-                if (_actionLists is null)
-                {
-                    _actionLists = new DesignerActionListCollection();
-                }
-                return _actionLists;
-            }
-        }
+        public virtual DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection();
 
         /// <summary>
         ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy
@@ -73,14 +63,7 @@ namespace System.ComponentModel.Design
             {
                 IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
                 IComponent root = host?.RootComponent;
-                if (root == Component)
-                {
-                    return null;
-                }
-                else
-                {
-                    return root;
-                }
+                return root == Component ? null : root;
             }
         }
 
@@ -112,17 +95,7 @@ namespace System.ComponentModel.Design
         ///  Gets a collection that houses shadow properties.  Shadow properties. are properties that fall through to
         ///  the underlying component before they are set, but return their set values once they are set.
         /// </summary>
-        protected ShadowPropertyCollection ShadowProperties
-        {
-            get
-            {
-                if (_shadowProperties is null)
-                {
-                    _shadowProperties = new ShadowPropertyCollection(this);
-                }
-                return _shadowProperties;
-            }
-        }
+        protected ShadowPropertyCollection ShadowProperties => _shadowProperties ??= new ShadowPropertyCollection(this);
 
         /// <summary>
         ///  This method is called when an existing component is being re-initialized.  This may occur after dragging
@@ -138,9 +111,7 @@ namespace System.ComponentModel.Design
         ///  The default implemenation of this method does nothing.
         /// </summary>
         public virtual void InitializeExistingComponent(IDictionary defaultValues)
-        {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
+            => throw new NotImplementedException(SR.NotImplementedByDesign);
 
         /// <summary>
         ///  This method is called when a component is first initialized, typically after being first added
@@ -178,18 +149,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Gets the design-time verbs supported by the component associated with the designer.
         /// </summary>
-        public virtual DesignerVerbCollection Verbs
-        {
-            get
-            {
-                if (_verbs is null)
-                {
-                    _verbs = new DesignerVerbCollection();
-                }
-
-                return _verbs;
-            }
-        }
+        public virtual DesignerVerbCollection Verbs => _verbs ??= new DesignerVerbCollection();
 
         ICollection ITreeDesigner.Children
         {
@@ -220,6 +180,7 @@ namespace System.ComponentModel.Design
 
                     return designers;
                 }
+
                 return Array.Empty<object>();
             }
         }
@@ -229,12 +190,9 @@ namespace System.ComponentModel.Design
             get
             {
                 IComponent parent = ParentComponent;
-                if (parent != null)
+                if (parent != null && GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
-                    if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
-                    {
-                        return host.GetDesigner(parent);
-                    }
+                    return host.GetDesigner(parent);
                 }
                 return null;
             }
@@ -256,11 +214,8 @@ namespace System.ComponentModel.Design
         public virtual void DoDefaultAction()
         {
             // If the event binding service is not available, there is nothing much we can do, so just return.
-            if (!(GetService(typeof(IEventBindingService)) is IEventBindingService eps))
-            {
-                return;
-            }
-            if (!(GetService(typeof(ISelectionService)) is ISelectionService selectionService))
+            if (!(GetService(typeof(IEventBindingService)) is IEventBindingService eps)
+                || !(GetService(typeof(ISelectionService)) is ISelectionService selectionService))
             {
                 return;
             }
@@ -340,7 +295,7 @@ namespace System.ComponentModel.Design
                     }
 
                     // Save the new value... BEFORE navigating to it!
-                    //s_codemarkers.CodeMarker(CodeMarkerEvent.perfFXBindEventDesignToCode);
+                    // s_codemarkers.CodeMarker(CodeMarkerEvent.perfFXBindEventDesignToCode);
                     if (eventChanged)
                     {
                         defaultPropEvent.SetValue(comp, handler);
@@ -355,18 +310,12 @@ namespace System.ComponentModel.Design
             }
             catch (InvalidOperationException)
             {
-                if (t != null)
-                {
-                    t.Cancel();
-                    t = null;
-                }
+                t?.Cancel();
+                t = null;
             }
             finally
             {
-                if (t != null)
-                {
-                    t.Commit();
-                }
+                t?.Commit();
             }
 
             // Now show the event code.
@@ -380,7 +329,8 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                Debug.Assert(Component != null,
+                Debug.Assert(
+                    Component != null,
                     "this.component needs to be set before this method is valid.");
 
                 bool isRoot = false;
@@ -751,12 +701,14 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void PreFilterProperties(IDictionary properties)
         {
-            if (Component is IPersistComponentSettings && properties != null)
+            if (Component is IPersistComponentSettings
+                && properties != null
+                && properties[SettingsKeyName] is PropertyDescriptor prop)
             {
-                if (properties[SettingsKeyName] is PropertyDescriptor prop)
-                {
-                    properties[SettingsKeyName] = TypeDescriptor.CreateProperty(typeof(ComponentDesigner), prop, Array.Empty<Attribute>());
-                }
+                properties[SettingsKeyName] = TypeDescriptor.CreateProperty(
+                    typeof(ComponentDesigner),
+                    prop,
+                    Array.Empty<Attribute>());
             }
         }
 

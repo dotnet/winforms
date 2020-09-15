@@ -29,16 +29,7 @@ namespace System.Windows.Forms.Design
             public override string Description => _control.AccessibilityObject.Description;
 
             private IDesignerHost DesignerHost
-            {
-                get
-                {
-                    if (_host is null)
-                    {
-                        _host = (IDesignerHost)_designer.GetService(typeof(IDesignerHost));
-                    }
-                    return _host;
-                }
-            }
+                => _host ??= (IDesignerHost)_designer.GetService(typeof(IDesignerHost));
 
             public override string DefaultAction => string.Empty;
 
@@ -49,16 +40,7 @@ namespace System.Windows.Forms.Design
             public override AccessibleRole Role => _control.AccessibilityObject.Role;
 
             private ISelectionService SelectionService
-            {
-                get
-                {
-                    if (_selSvc is null)
-                    {
-                        _selSvc = (ISelectionService)_designer.GetService(typeof(ISelectionService));
-                    }
-                    return _selSvc;
-                }
-            }
+                => _selSvc ??= (ISelectionService)_designer.GetService(typeof(ISelectionService));
 
             public override AccessibleStates State
             {
@@ -72,6 +54,7 @@ namespace System.Windows.Forms.Design
                         {
                             state |= AccessibleStates.Selected;
                         }
+
                         if (s.PrimarySelection == _control)
                         {
                             state |= AccessibleStates.Focused;
@@ -97,6 +80,7 @@ namespace System.Windows.Forms.Design
                         return cao;
                     }
                 }
+
                 return _control.AccessibilityObject.GetChild(index);
             }
 
@@ -108,10 +92,12 @@ namespace System.Windows.Forms.Design
                 {
                     return null;
                 }
+
                 if (DesignerHost.GetDesigner(cao.Owner) is ControlDesigner ctlDesigner)
                 {
                     return ctlDesigner.AccessibilityObject;
                 }
+
                 return null;
             }
 

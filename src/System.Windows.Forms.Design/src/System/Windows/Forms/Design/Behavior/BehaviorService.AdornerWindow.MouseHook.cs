@@ -78,48 +78,50 @@ namespace System.Windows.Forms.Design.Behavior
                             hook,
                             IntPtr.Zero,
                             (uint)AppDomain.GetCurrentThreadId());
+
                         if (_mouseHookHandle != IntPtr.Zero)
                         {
                             _isHooked = true;
                         }
+
                         Debug.Assert(_mouseHookHandle != IntPtr.Zero, "Failed to install mouse hook");
                     }
                 }
 
                 private unsafe IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
                 {
-                    if (_isHooked && nCode == User32.HC.ACTION)
+                    if (_isHooked && nCode == User32.HC.ACTION && lparam != IntPtr.Zero)
                     {
                         User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
-                        if (mhs != null)
+
+                        try
                         {
-                            try
+                            if (ProcessMouseMessage(mhs->hWnd, unchecked((int)(long)wparam), mhs->pt.X, mhs->pt.Y))
                             {
-                                if (ProcessMouseMessage(mhs->hWnd, unchecked((int)(long)wparam), mhs->pt.X, mhs->pt.Y))
-                                {
-                                    return (IntPtr)1;
-                                }
+                                return (IntPtr)1;
                             }
-                            catch (Exception ex)
+                        }
+                        catch (Exception ex)
+                        {
+                            _currentAdornerWindow.Capture = false;
+
+                            if (ex != CheckoutException.Canceled)
                             {
-                                _currentAdornerWindow.Capture = false;
-                                if (ex != CheckoutException.Canceled)
-                                {
-                                    _currentAdornerWindow._behaviorService.ShowError(ex);
-                                }
-                                if (ClientUtils.IsCriticalException(ex))
-                                {
-                                    throw;
-                                }
+                                _currentAdornerWindow._behaviorService.ShowError(ex);
                             }
-                            finally
+
+                            if (ClientUtils.IsCriticalException(ex))
                             {
-                                _currentAdornerWindow = null;
+                                throw;
                             }
+                        }
+                        finally
+                        {
+                            _currentAdornerWindow = null;
                         }
                     }
 
-                    Debug.Assert(_isHooked, "How did we get here when we are diposed?");
+                    Debug.Assert(_isHooked, "How did we get here when we are disposed?");
                     return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
                 }
 
@@ -144,7 +146,7 @@ namespace System.Windows.Forms.Design.Behavior
                         return false;
                     }
 
-                    foreach (AdornerWindow adornerWindow in AdornerWindow.s_adornerWindowList)
+                    foreach (AdornerWindow adornerWindow in s_adornerWindowList)
                     {
                         if (!adornerWindow.DesignerFrameValid)
                         {
@@ -154,8 +156,9 @@ namespace System.Windows.Forms.Design.Behavior
                         _currentAdornerWindow = adornerWindow;
                         IntPtr handle = adornerWindow.DesignerFrame.Handle;
 
-                        // if it's us or one of our children, just process as normal
-                        if (adornerWindow.ProcessingDrag || (hWnd != handle && User32.IsChild(new HandleRef(this, handle), hWnd).IsTrue()))
+                        // If it's us or one of our children, just process as normal
+                        if (adornerWindow.ProcessingDrag
+                            || (hWnd != handle && User32.IsChild(new HandleRef(this, handle), hWnd).IsTrue()))
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
 
@@ -191,7 +194,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                                 if (!adornerWindow.WndProcProxy(ref m, pt.X, pt.Y))
                                 {
-                                    // we did the work, stop the message propogation
+                                    // We did the work, stop the message propogation
                                     return true;
                                 }
                             }
@@ -199,7 +202,9 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 _processingMessage = false;
                             }
-                            break; // no need to enumerate the other adorner windows since only one can be focused at a time.
+
+                            // No need to enumerate the other adorner windows since only one can be focused at a time.
+                            break;
                         }
                     }
                     return false;
