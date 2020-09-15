@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Design.Behavior
             ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
-                => DesignerFrame is not null && !DesignerFrame.IsDisposed && DesignerFrame.IsHandleCreated;
+                => DesignerFrame != null && !DesignerFrame.IsDisposed && DesignerFrame.IsHandleCreated;
 
             public IEnumerable<Adorner> Adorners { get; private set; }
 

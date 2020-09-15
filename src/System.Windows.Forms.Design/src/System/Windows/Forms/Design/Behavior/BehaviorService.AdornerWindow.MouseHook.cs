@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
 
-                    Debug.Assert(_isHooked, "How did we get here when we are diposed?");
+                    Debug.Assert(_isHooked, "How did we get here when we are disposed?");
                     return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
                 }
 

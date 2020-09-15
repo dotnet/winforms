@@ -272,9 +272,10 @@ namespace System.Windows.Forms.Design
             bool autoSize = false;
             bool growOnly = false;
 
-            if (autoSizeProp != null
-                && !(autoSizeProp.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)
-                    || autoSizeProp.Attributes.Contains(BrowsableAttribute.No)))
+            AttributeCollection attributes = autoSizeProp?.Attributes;
+            if (attributes != null
+                && !(attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden)
+                    || attributes.Contains(BrowsableAttribute.No)))
             {
                 autoSize = (bool)autoSizeProp.GetValue(component);
             }
