@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design.Behavior
 {
     public sealed partial class BehaviorService
     {
-private partial class AdornerWindow
+        private partial class AdornerWindow
         {
             /// <summary>
             ///  This class knows how to hook all the messages to a given process/thread.
@@ -39,6 +39,7 @@ private partial class AdornerWindow
 #endif
                     HookMouse();
                 }
+
 #if DEBUG
                 readonly string _callingStack;
                 ~MouseHook()

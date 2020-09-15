@@ -24,15 +24,9 @@ namespace System.Windows.Forms.Design
                 _control = control;
             }
 
-            public override Rectangle Bounds
-            {
-                get => _control.AccessibilityObject.Bounds;
-            }
+            public override Rectangle Bounds => _control.AccessibilityObject.Bounds;
 
-            public override string Description
-            {
-                get => _control.AccessibilityObject.Description;
-            }
+            public override string Description => _control.AccessibilityObject.Description;
 
             private IDesignerHost DesignerHost
             {
@@ -46,25 +40,13 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            public override string DefaultAction
-            {
-                get => "";
-            }
+            public override string DefaultAction => string.Empty;
 
-            public override string Name
-            {
-                get => _control.Name;
-            }
+            public override string Name => _control.Name;
 
-            public override AccessibleObject Parent
-            {
-                get => _control.AccessibilityObject.Parent;
-            }
+            public override AccessibleObject Parent => _control.AccessibilityObject.Parent;
 
-            public override AccessibleRole Role
-            {
-                get => _control.AccessibilityObject.Role;
-            }
+            public override AccessibleRole Role => _control.AccessibilityObject.Role;
 
             private ISelectionService SelectionService
             {
@@ -99,10 +81,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            public override string Value
-            {
-                get => _control.AccessibilityObject.Value;
-            }
+            public override string Value => _control.AccessibilityObject.Value;
 
             public override AccessibleObject GetChild(int index)
             {
@@ -137,22 +116,10 @@ namespace System.Windows.Forms.Design
             }
 
             public override AccessibleObject GetFocused()
-            {
-                if ((State & AccessibleStates.Focused) != 0)
-                {
-                    return this;
-                }
-                return base.GetFocused();
-            }
+                => (State & AccessibleStates.Focused) != 0 ? this : base.GetFocused();
 
             public override AccessibleObject GetSelected()
-            {
-                if ((State & AccessibleStates.Selected) != 0)
-                {
-                    return this;
-                }
-                return base.GetFocused();
-            }
+                => (State & AccessibleStates.Selected) != 0 ? this : base.GetFocused();
 
             public override AccessibleObject HitTest(int x, int y) => _control.AccessibilityObject.HitTest(x, y);
         }

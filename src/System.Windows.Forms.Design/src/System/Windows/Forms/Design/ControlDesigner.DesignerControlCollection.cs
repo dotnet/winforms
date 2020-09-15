@@ -14,36 +14,19 @@ namespace System.Windows.Forms.Design
         [DesignerSerializer(typeof(DesignerControlCollectionCodeDomSerializer), typeof(CodeDomSerializer))]
         internal class DesignerControlCollection : Control.ControlCollection, IList
         {
-            readonly Control.ControlCollection _realCollection;
-            public DesignerControlCollection(Control owner) : base(owner)
-            {
-                _realCollection = owner.Controls;
-            }
+            private readonly Control.ControlCollection _realCollection;
 
-            public override int Count
-            {
-                get => _realCollection.Count;
-            }
+            public DesignerControlCollection(Control owner) : base(owner) => _realCollection = owner.Controls;
 
-            object ICollection.SyncRoot
-            {
-                get => this;
-            }
+            public override int Count => _realCollection.Count;
 
-            bool ICollection.IsSynchronized
-            {
-                get => false;
-            }
+            object ICollection.SyncRoot => this;
 
-            bool IList.IsFixedSize
-            {
-                get => false;
-            }
+            bool ICollection.IsSynchronized => false;
 
-            public new bool IsReadOnly
-            {
-                get => _realCollection.IsReadOnly;
-            }
+            bool IList.IsFixedSize => false;
+
+            public new bool IsReadOnly => _realCollection.IsReadOnly;
 
             int IList.Add(object control) => ((IList)_realCollection).Add(control);
 
@@ -75,10 +58,11 @@ namespace System.Windows.Forms.Design
                 set => throw new NotSupportedException();
             }
 
-            public override int GetChildIndex(Control child, bool throwException) => _realCollection.GetChildIndex(child, throwException);
+            public override int GetChildIndex(Control child, bool throwException)
+                => _realCollection.GetChildIndex(child, throwException);
 
-            // we also need to redirect this guy
-            public override void SetChildIndex(Control child, int newIndex) => _realCollection.SetChildIndex(child, newIndex);
+            public override void SetChildIndex(Control child, int newIndex)
+                => _realCollection.SetChildIndex(child, newIndex);
 
             public override void Clear()
             {

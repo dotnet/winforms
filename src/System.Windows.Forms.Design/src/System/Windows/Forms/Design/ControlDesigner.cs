@@ -29,14 +29,12 @@ namespace System.Windows.Forms.Design
 
         private static uint s_currentProcessId;
         private IDesignerHost _host;                        // the host for our designer
-        private IDesignerTarget _designerTarget;            // the target window proc for the control.
 
         private bool _liveRegion;                           // is the mouse is over a live region of the control?
         private bool _inHitTest;                            // A popular way to implement GetHitTest is by WM_NCHITTEST
                                                             //  ...which would cause a cycle.
         private bool _hasLocation;                          // Do we have a location property?
         private bool _locationChecked;                      // And did we check it
-        private bool _locked;                               // signifies if this control is locked or not
         private bool _enabledchangerecursionguard;
 
         // Behavior work
@@ -75,9 +73,6 @@ namespace System.Windows.Forms.Design
         private static bool s_inContextMenu;
         private DockingActionList _dockingAction;
         private StatusCommandUI _statusCommandUI;           // UI for setting the StatusBar Information..
-
-        private bool _forceVisible = true;
-        private bool _autoResizeHandles;                    // used for disabling AutoSize effect on resize modes. Needed for compat.
         private Dictionary<IntPtr, bool> _subclassedChildren;
 
         protected BehaviorService BehaviorService
@@ -92,11 +87,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        internal bool ForceVisible
-        {
-            get => _forceVisible;
-            set => _forceVisible = value;
-        }
+        internal bool ForceVisible { get; set; } = true;
 
         /// <summary>
         ///  Retrieves a list of associated components. These are components that should be incluced
@@ -145,18 +136,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Retrieves the control we're designing.
         /// </summary>
-        public virtual Control Control
-        {
-            get => (Control)Component;
-        }
+        public virtual Control Control => (Control)Component;
 
         /// <summary>
         ///  Determines whether drag rects can be drawn on this designer.
         /// </summary>
-        protected virtual bool EnableDragRect
-        {
-            get => false;
-        }
+        protected virtual bool EnableDragRect => false;
 
         /// <summary>
         ///  Returns the parent component for this control designer. The default implementation just checks to see if
@@ -180,22 +165,11 @@ namespace System.Windows.Forms.Design
         ///  the primary drag control is over this designer, or when a control is being dragged from the toolbox, or
         ///  when a control is being drawn through click-drag.
         /// </summary>
-        public virtual bool ParticipatesWithSnapLines
-        {
-            get => true;
-        }
+        public virtual bool ParticipatesWithSnapLines => true;
 
-        public bool AutoResizeHandles
-        {
-            get => _autoResizeHandles;
-            set => _autoResizeHandles = value;
-        }
+        public bool AutoResizeHandles { get; set; }
 
-        private IDesignerTarget DesignerTarget
-        {
-            get => _designerTarget;
-            set => _designerTarget = value;
-        }
+        private IDesignerTarget DesignerTarget { get; set; }
 
         private Dictionary<IntPtr, bool> SubclassedChildWindows
         {
@@ -205,6 +179,7 @@ namespace System.Windows.Forms.Design
                 {
                     _subclassedChildren = new Dictionary<IntPtr, bool>();
                 }
+
                 return _subclassedChildren;
             }
         }
@@ -224,8 +199,8 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(component);
                 PropertyDescriptor autoSizeProp = props["AutoSize"];
                 PropertyDescriptor autoSizeModeProp = props["AutoSizeMode"];
-                if ((prop = props["Location"]) != null &&
-                    !prop.IsReadOnly)
+
+                if ((prop = props["Location"]) != null && !prop.IsReadOnly)
                 {
                     rules |= SelectionRules.Moveable;
                 }
@@ -234,7 +209,9 @@ namespace System.Windows.Forms.Design
                 {
                     if (AutoResizeHandles && Component != _host.RootComponent)
                     {
-                        rules = IsResizableConsiderAutoSize(autoSizeProp, autoSizeModeProp) ? rules | SelectionRules.AllSizeable : rules;
+                        rules = IsResizableConsiderAutoSize(autoSizeProp, autoSizeModeProp)
+                            ? rules | SelectionRules.AllSizeable
+                            : rules;
                     }
                     else
                     {
@@ -295,10 +272,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        internal virtual bool ControlSupportsSnaplines
-        {
-            get => true;
-        }
+        internal virtual bool ControlSupportsSnaplines => true;
 
         internal Point GetOffsetToClientArea()
         {
@@ -338,6 +312,7 @@ namespace System.Windows.Forms.Design
             {
                 resizable = growOnly;
             }
+
             return resizable;
         }
 
@@ -345,15 +320,9 @@ namespace System.Windows.Forms.Design
         ///  Returns a list of SnapLine objects representing interesting alignment points for this control.
         ///  These SnapLines are used to assist in the positioning of the control on a parent's surface.
         /// </summary>
-        public virtual IList SnapLines
-        {
-            get => SnapLinesInternal();
-        }
+        public virtual IList SnapLines => SnapLinesInternal();
 
-        internal IList SnapLinesInternal()
-        {
-            return SnapLinesInternal(Control.Margin);
-        }
+        internal IList SnapLinesInternal() => SnapLinesInternal(Control.Margin);
 
         internal IList SnapLinesInternal(Padding margin)
         {
@@ -423,22 +392,21 @@ namespace System.Windows.Forms.Design
         ///  control.  This is useful if you want to block this message from getting to the control, but you do not
         ///  want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
-        protected void BaseWndProc(ref Message m) => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
+        protected void BaseWndProc(ref Message m)
+            => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the
         ///  control for this designer can be parented into the given ParentControlDesigner's designer.
         /// </summary>
-        public virtual bool CanBeParentedTo(IDesigner parentDesigner) => parentDesigner is ParentControlDesigner p && !Control.Contains(p.Control);
+        public virtual bool CanBeParentedTo(IDesigner parentDesigner)
+            => parentDesigner is ParentControlDesigner p && !Control.Contains(p.Control);
 
         /// <summary>
         ///  Default processing for messages. This method causes the message to get processed by the control, rather
         ///  than the designer.
         /// </summary>
-        protected void DefWndProc(ref Message m)
-        {
-            _designerTarget.DefWndProc(ref m);
-        }
+        protected void DefWndProc(ref Message m) => DesignerTarget.DefWndProc(ref m);
 
         /// <summary>
         ///  Displays the given exception to the user.
@@ -502,9 +470,9 @@ namespace System.Windows.Forms.Design
                     UnhookChildControls(Control);
                 }
 
-                if (_designerTarget != null)
+                if (DesignerTarget != null)
                 {
-                    _designerTarget.Dispose();
+                    DesignerTarget.Dispose();
                 }
 
                 _downPos = Point.Empty;
@@ -520,71 +488,74 @@ namespace System.Windows.Forms.Design
 
         private void OnControlAdded(object sender, ControlEventArgs e)
         {
-            if (e.Control != null && _host != null)
+            if (e.Control is null || _host is null || _host.GetDesigner(e.Control) is ControlDesigner)
             {
-                if (!(_host.GetDesigner(e.Control) is ControlDesigner))
-                {
-                    // No, no designer means we must replace the window target in this control.
-                    IWindowTarget oldTarget = e.Control.WindowTarget;
-                    if (!(oldTarget is ChildWindowTarget))
-                    {
-                        e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
+                return;
+            }
 
-                        // Controls added in UserControl.OnLoad() do not  setup sniffing WndProc properly.
-                        e.Control.ControlAdded += new ControlEventHandler(OnControlAdded);
-                    }
+            // No designer means we must replace the window target in this control.
+            IWindowTarget oldTarget = e.Control.WindowTarget;
+            if (!(oldTarget is ChildWindowTarget))
+            {
+                e.Control.WindowTarget = new ChildWindowTarget(this, e.Control, oldTarget);
 
-                    // Some controls (primarily RichEdit) will register themselves as drag-drop source/targets when
-                    // they are instantiated. We have to RevokeDragDrop() for them so that the ParentControlDesigner()'s
-                    // drag-drop support can work correctly. Normally, the hwnd for the child control is not created at
-                    // this time, and we will use the WM_CREATE message in ChildWindowTarget's WndProc() to revoke
-                    // drag-drop. But, if the handle was already created for some reason, we will need to revoke
-                    // drag-drop right away.
-                    if (e.Control.IsHandleCreated)
-                    {
-                        Application.OleRequired();
-                        Ole32.RevokeDragDrop(e.Control.Handle);
+                // Controls added in UserControl.OnLoad() do not  setup sniffing WndProc properly.
+                e.Control.ControlAdded += new ControlEventHandler(OnControlAdded);
+            }
 
-                        // We only hook the control's children if there was no designer. We leave it up to the designer
-                        // to hook its own children.
-                        HookChildControls(e.Control);
-                    }
-                }
+            // Some controls (primarily RichEdit) will register themselves as drag-drop source/targets when
+            // they are instantiated. We have to RevokeDragDrop() for them so that the ParentControlDesigner()'s
+            // drag-drop support can work correctly. Normally, the hwnd for the child control is not created at
+            // this time, and we will use the WM_CREATE message in ChildWindowTarget's WndProc() to revoke
+            // drag-drop. But, if the handle was already created for some reason, we will need to revoke
+            // drag-drop right away.
+            if (e.Control.IsHandleCreated)
+            {
+                Application.OleRequired();
+                Ole32.RevokeDragDrop(e.Control.Handle);
+
+                // We only hook the control's children if there was no designer. We leave it up to the designer
+                // to hook its own children.
+                HookChildControls(e.Control);
             }
         }
 
         private void DataSource_ComponentRemoved(object sender, ComponentEventArgs e)
         {
             // It is possible to use the control designer with NON CONTROl types.
-            if (Component is Control ctl)
+            if (!(Component is Control ctl))
             {
-                Debug.Assert(ctl.DataBindings.Count > 0, "we should not be notified if the control has no dataBindings");
-                ctl.DataBindings.CollectionChanged -= _dataBindingsCollectionChanged;
-                for (int i = 0; i < ctl.DataBindings.Count; i++)
-                {
-                    Binding binding = ctl.DataBindings[i];
-                    if (binding.DataSource == e.Component)
-                    {
-                        // remove the binding from the control's collection. this will also remove the binding from
-                        // the bindingManagerBase's bindingscollection
-                        // NOTE: we can't remove the bindingManager from the bindingContext, cause there may be some
-                        // complex bound controls ( such as the dataGrid, or the ComboBox, or the ListBox ) that still
-                        // use that bindingManager
-                        ctl.DataBindings.Remove(binding);
-                    }
-                }
-                // if after removing those bindings the collection is empty, then unhook the changeNotificationService
-                if (ctl.DataBindings.Count == 0)
-                {
-                    IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (csc != null)
-                    {
-                        csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
-                    }
-                    _removalNotificationHooked = false;
-                }
-                ctl.DataBindings.CollectionChanged += _dataBindingsCollectionChanged;
+                return;
             }
+
+            Debug.Assert(ctl.DataBindings.Count > 0, "we should not be notified if the control has no dataBindings");
+            ctl.DataBindings.CollectionChanged -= _dataBindingsCollectionChanged;
+            for (int i = 0; i < ctl.DataBindings.Count; i++)
+            {
+                Binding binding = ctl.DataBindings[i];
+                if (binding.DataSource == e.Component)
+                {
+                    // remove the binding from the control's collection. this will also remove the binding from
+                    // the bindingManagerBase's bindingscollection
+                    // NOTE: we can't remove the bindingManager from the bindingContext, cause there may be some
+                    // complex bound controls ( such as the dataGrid, or the ComboBox, or the ListBox ) that still
+                    // use that bindingManager
+                    ctl.DataBindings.Remove(binding);
+                }
+            }
+
+            // if after removing those bindings the collection is empty, then unhook the changeNotificationService
+            if (ctl.DataBindings.Count == 0)
+            {
+                IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+                if (csc != null)
+                {
+                    csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
+                }
+                _removalNotificationHooked = false;
+            }
+
+            ctl.DataBindings.CollectionChanged += _dataBindingsCollectionChanged;
         }
 
         /// <summary>
@@ -626,6 +597,7 @@ namespace System.Windows.Forms.Design
                     return true;
                 }
             }
+
             nc.Add(child, name);
             return true;
         }
@@ -674,15 +646,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void OnGiveFeedback(object s, GiveFeedbackEventArgs e)
-        {
-            OnGiveFeedback(e);
-        }
+        private void OnGiveFeedback(object s, GiveFeedbackEventArgs e) => OnGiveFeedback(e);
 
-        private void OnDragLeave(object s, EventArgs e)
-        {
-            OnDragLeave(e);
-        }
+        private void OnDragLeave(object s, EventArgs e) => OnDragLeave(e);
 
         private void OnDragEnter(object s, DragEventArgs e)
         {
@@ -691,13 +657,11 @@ namespace System.Windows.Forms.Design
                 //Tell the BehaviorService to monitor mouse messages so it can send appropriate drag notifications.
                 BehaviorService.StartDragNotification();
             }
+
             OnDragEnter(e);
         }
 
-        private void OnDragOver(object s, DragEventArgs e)
-        {
-            OnDragOver(e);
-        }
+        private void OnDragOver(object s, DragEventArgs e) => OnDragOver(e);
 
         private void OnDragDrop(object s, DragEventArgs e)
         {
@@ -770,6 +734,7 @@ namespace System.Windows.Forms.Design
                 // we are not totally clipped by the parent
                 g = new ControlBodyGlyph(translatedBounds, cursor, Control, this);
             }
+
             return g;
         }
 
@@ -783,98 +748,102 @@ namespace System.Windows.Forms.Design
         public virtual GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
         {
             GlyphCollection glyphs = new GlyphCollection();
-            if (selectionType != GlyphSelectionType.NotSelected)
+
+            if (selectionType == GlyphSelectionType.NotSelected)
             {
-                Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(Control);
-                bool primarySelection = (selectionType == GlyphSelectionType.SelectedPrimary);
-                SelectionRules rules = SelectionRules;
-                if ((Locked) || (InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+                return glyphs;
+            }
+
+            Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(Control);
+            bool primarySelection = (selectionType == GlyphSelectionType.SelectedPrimary);
+            SelectionRules rules = SelectionRules;
+
+            if ((Locked) || (InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+            {
+                // the lock glyph
+                glyphs.Add(new LockedHandleGlyph(translatedBounds, primarySelection));
+
+                // the four locked border glyphs
+                glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Top));
+                glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Bottom));
+                glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Left));
+                glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Right));
+            }
+            else if ((rules & SelectionRules.AllSizeable) == SelectionRules.None)
+            {
+                // the non-resizeable grab handle
+                glyphs.Add(new NoResizeHandleGlyph(translatedBounds, rules, primarySelection, MoveBehavior));
+
+                // the four resizeable border glyphs
+                glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Top, MoveBehavior));
+                glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Bottom, MoveBehavior));
+                glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, MoveBehavior));
+                glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Right, MoveBehavior));
+
+                // enable the designeractionpanel for this control if it needs one
+                if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
+                    && _behaviorService.DesignerActionUI != null)
                 {
-                    // the lock glyph
-                    glyphs.Add(new LockedHandleGlyph(translatedBounds, primarySelection));
-
-                    // the four locked border glyphs
-                    glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Top));
-                    glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Bottom));
-                    glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Left));
-                    glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Right));
-                }
-                else if ((rules & SelectionRules.AllSizeable) == SelectionRules.None)
-                {
-                    // the non-resizeable grab handle
-                    glyphs.Add(new NoResizeHandleGlyph(translatedBounds, rules, primarySelection, MoveBehavior));
-
-                    // the four resizeable border glyphs
-                    glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Top, MoveBehavior));
-                    glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Bottom, MoveBehavior));
-                    glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, MoveBehavior));
-                    glyphs.Add(new NoResizeSelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Right, MoveBehavior));
-
-                    // enable the designeractionpanel for this control if it needs one
-                    if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
-                        && _behaviorService.DesignerActionUI != null)
+                    Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
+                    if (dapGlyph != null)
                     {
-                        Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
-                        if (dapGlyph != null)
-                        {
-                            glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
-                        }
+                        glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
                     }
                 }
-                else
+            }
+            else
+            {
+                // Grab handles
+                if ((rules & SelectionRules.TopSizeable) != 0)
                 {
-                    // Grab handles
-                    if ((rules & SelectionRules.TopSizeable) != 0)
-                    {
-                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleTop, StandardBehavior, primarySelection));
-                        if ((rules & SelectionRules.LeftSizeable) != 0)
-                        {
-                            glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperLeft, StandardBehavior, primarySelection));
-                        }
-                        if ((rules & SelectionRules.RightSizeable) != 0)
-                        {
-                            glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperRight, StandardBehavior, primarySelection));
-                        }
-                    }
-
-                    if ((rules & SelectionRules.BottomSizeable) != 0)
-                    {
-                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleBottom, StandardBehavior, primarySelection));
-                        if ((rules & SelectionRules.LeftSizeable) != 0)
-                        {
-                            glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerLeft, StandardBehavior, primarySelection));
-                        }
-                        if ((rules & SelectionRules.RightSizeable) != 0)
-                        {
-                            glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerRight, StandardBehavior, primarySelection));
-                        }
-                    }
-
+                    glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleTop, StandardBehavior, primarySelection));
                     if ((rules & SelectionRules.LeftSizeable) != 0)
                     {
-                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleLeft, StandardBehavior, primarySelection));
+                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperLeft, StandardBehavior, primarySelection));
                     }
-
                     if ((rules & SelectionRules.RightSizeable) != 0)
                     {
-                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleRight, StandardBehavior, primarySelection));
+                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperRight, StandardBehavior, primarySelection));
                     }
+                }
 
-                    // the four resizeable border glyphs
-                    glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Top, StandardBehavior));
-                    glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Bottom, StandardBehavior));
-                    glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, StandardBehavior));
-                    glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Right, StandardBehavior));
-
-                    // enable the designeractionpanel for this control if it needs one
-                    if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
-                        && _behaviorService.DesignerActionUI != null)
+                if ((rules & SelectionRules.BottomSizeable) != 0)
+                {
+                    glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleBottom, StandardBehavior, primarySelection));
+                    if ((rules & SelectionRules.LeftSizeable) != 0)
                     {
-                        Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
-                        if (dapGlyph != null)
-                        {
-                            glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
-                        }
+                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerLeft, StandardBehavior, primarySelection));
+                    }
+                    if ((rules & SelectionRules.RightSizeable) != 0)
+                    {
+                        glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerRight, StandardBehavior, primarySelection));
+                    }
+                }
+
+                if ((rules & SelectionRules.LeftSizeable) != 0)
+                {
+                    glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleLeft, StandardBehavior, primarySelection));
+                }
+
+                if ((rules & SelectionRules.RightSizeable) != 0)
+                {
+                    glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleRight, StandardBehavior, primarySelection));
+                }
+
+                // the four resizeable border glyphs
+                glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Top, StandardBehavior));
+                glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Bottom, StandardBehavior));
+                glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Left, StandardBehavior));
+                glyphs.Add(new SelectionBorderGlyph(translatedBounds, rules, SelectionBorderGlyphType.Right, StandardBehavior));
+
+                // enable the designeractionpanel for this control if it needs one
+                if (TypeDescriptor.GetAttributes(Component).Contains(DesignTimeVisibleAttribute.Yes)
+                    && _behaviorService.DesignerActionUI != null)
+                {
+                    Glyph dapGlyph = _behaviorService.DesignerActionUI.GetDesignerActionGlyph(Component);
+                    if (dapGlyph != null)
+                    {
+                        glyphs.Insert(0, dapGlyph); // we WANT to be in front of the other UI
                     }
                 }
             }
@@ -894,20 +863,14 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        internal virtual bool SerializePerformLayout
-        {
-            get => false;
-        }
+        internal virtual bool SerializePerformLayout => false;
 
         /// <summary>
         ///  Allows your component to support a design time user interface.  A TabStrip control, for example, has a
         ///  design time user interface that allows the user to click the tabs to change tabs.  To implement this,
         ///  TabStrip returns true whenever the given point is within its tabs.
         /// </summary>
-        protected virtual bool GetHitTest(Point point)
-        {
-            return false;
-        }
+        protected virtual bool GetHitTest(Point point) => false;
 
         /// <summary>
         ///  Hooks the children of the given control.  We need to do this for child controls that are not in design
@@ -1149,6 +1112,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
+        /// <summary>
+        ///  Accessor for AllowDrop.  Since we often turn this on, we shadow it so it doesn't show up to the user.
+        /// </summary>
         private bool AllowDrop
         {
             get => (bool)ShadowProperties[nameof(AllowDrop)];
@@ -1207,47 +1173,47 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (defaultValues != null)
+            if (defaultValues != null
+                && defaultValues["Parent"] is IComponent parent
+                && GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
-                if (defaultValues["Parent"] is IComponent parent && GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                if (host.GetDesigner(parent) is ParentControlDesigner parentDesigner)
                 {
-                    if (host.GetDesigner(parent) is ParentControlDesigner parentDesigner)
-                    {
-                        parentDesigner.AddControl(Control, defaultValues);
-                    }
+                    parentDesigner.AddControl(Control, defaultValues);
+                }
 
-                    if (parent is Control parentControl)
+                if (parent is Control parentControl)
+                {
+                    // Some containers are docked differently (instead of DockStyle.None) when they are added through the designer
+                    AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
+                    DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
+
+                    if (dockingAttribute != null
+                        && dockingAttribute.DockingBehavior != DockingBehavior.Never
+                        && dockingAttribute.DockingBehavior == DockingBehavior.AutoDock)
                     {
-                        // Some containers are docked differently (instead of DockStyle.None) when they are added through the designer
-                        AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
-                        DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
-                        if (dockingAttribute != null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
+                        bool onlyNonDockedChild = true;
+                        foreach (Control c in parentControl.Controls)
                         {
-                            if (dockingAttribute.DockingBehavior == DockingBehavior.AutoDock)
+                            if (c != Control && c.Dock == DockStyle.None)
                             {
-                                bool onlyNonDockedChild = true;
-                                foreach (Control c in parentControl.Controls)
-                                {
-                                    if (c != Control && c.Dock == DockStyle.None)
-                                    {
-                                        onlyNonDockedChild = false;
-                                        break;
-                                    }
-                                }
+                                onlyNonDockedChild = false;
+                                break;
+                            }
+                        }
 
-                                if (onlyNonDockedChild)
-                                {
-                                    PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                                    if (dockProp != null && dockProp.IsBrowsable)
-                                    {
-                                        dockProp.SetValue(Component, DockStyle.Fill);
-                                    }
-                                }
+                        if (onlyNonDockedChild)
+                        {
+                            PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
+                            if (dockProp != null && dockProp.IsBrowsable)
+                            {
+                                dockProp.SetValue(Component, DockStyle.Fill);
                             }
                         }
                     }
                 }
             }
+
             base.InitializeNewComponent(defaultValues);
         }
 
@@ -1273,10 +1239,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Called when the context menu should be displayed
         /// </summary>
-        protected virtual void OnContextMenu(int x, int y)
-        {
-            ShowContextMenu(x, y);
-        }
+        protected virtual void OnContextMenu(int x, int y) => ShowContextMenu(x, y);
 
         /// <summary>
         ///  This is called immediately after the control handle has been created.
@@ -1369,6 +1332,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             _mouseDragLast = new Point(x, y);
             _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
             ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
@@ -1416,6 +1380,7 @@ namespace System.Windows.Forms.Design
             {
                 BehaviorService.CancelDrag = true;
             }
+
             // Leave this here in case we are doing a ComponentTray drag
             if (_selectionUISvc is null)
             {
@@ -1524,6 +1489,7 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
+
             while (parentDesigner is null && parent != null)
             {
                 parent = parent.Parent;
@@ -1552,6 +1518,7 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
+
             while (parentDesigner is null && parent != null)
             {
                 parent = parent.Parent;
@@ -1580,6 +1547,7 @@ namespace System.Windows.Forms.Design
             Control ctl = Control;
             Control parent = ctl;
             object parentDesigner = null;
+
             while (parentDesigner is null && parent != null)
             {
                 parent = parent.Parent;
@@ -1630,51 +1598,47 @@ namespace System.Windows.Forms.Design
             if (Control.Dock != DockStyle.None)
             {
                 Cursor.Current = Cursors.Default;
+                return;
             }
-            else
+
+            if (_toolboxSvc is null)
             {
-                if (_toolboxSvc is null)
-                {
-                    _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
-                }
-
-                if (_toolboxSvc != null && _toolboxSvc.SetCursor())
-                {
-                    return;
-                }
-
-                if (!_locationChecked)
-                {
-                    _locationChecked = true;
-                    try
-                    {
-                        _hasLocation = TypeDescriptor.GetProperties(Component)["Location"] != null;
-                    }
-                    catch
-                    {
-                    }
-                }
-
-                if (!_hasLocation)
-                {
-                    Cursor.Current = Cursors.Default;
-                    return;
-                }
-
-                if (Locked)
-                {
-                    Cursor.Current = Cursors.Default;
-                    return;
-                }
-                Cursor.Current = Cursors.SizeAll;
+                _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
             }
+
+            if (_toolboxSvc != null && _toolboxSvc.SetCursor())
+            {
+                return;
+            }
+
+            if (!_locationChecked)
+            {
+                _locationChecked = true;
+                try
+                {
+                    _hasLocation = TypeDescriptor.GetProperties(Component)["Location"] != null;
+                }
+                catch
+                {
+                }
+            }
+
+            if (!_hasLocation)
+            {
+                Cursor.Current = Cursors.Default;
+                return;
+            }
+
+            if (Locked)
+            {
+                Cursor.Current = Cursors.Default;
+                return;
+            }
+
+            Cursor.Current = Cursors.SizeAll;
         }
 
-        private bool Locked
-        {
-            get => _locked;
-            set => _locked = value;
-        }
+        private bool Locked { get; set; }
 
         /// <summary>
         ///  Allows a designer to filter the set of properties the component it is designing will expose through the
@@ -1755,6 +1719,7 @@ namespace System.Windows.Forms.Design
                         child.WindowTarget = target.OldWindowTarget;
                     }
                 }
+
                 if (!(oldTarget is DesignerWindowTarget))
                 {
                     UnhookChildControls(child);
@@ -1771,26 +1736,24 @@ namespace System.Windows.Forms.Design
             IMouseHandler mouseHandler = null;
 
             // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
-            if (m.Msg == (int)User32.WM.NCHITTEST)
+            if (m.Msg == (int)User32.WM.NCHITTEST && !_inHitTest)
             {
-                if (!_inHitTest)
+                _inHitTest = true;
+                Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
+                try
                 {
-                    _inHitTest = true;
-                    Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
-                    try
-                    {
-                        _liveRegion = GetHitTest(pt);
-                    }
-                    catch (Exception e)
-                    {
-                        _liveRegion = false;
-                        if (ClientUtils.IsCriticalException(e))
-                        {
-                            throw;
-                        }
-                    }
-                    _inHitTest = false;
+                    _liveRegion = GetHitTest(pt);
                 }
+                catch (Exception e)
+                {
+                    _liveRegion = false;
+                    if (ClientUtils.IsCriticalException(e))
+                    {
+                        throw;
+                    }
+                }
+
+                _inHitTest = false;
             }
 
             // Check to see if the mouse is in a live region of the control and that the context key is not being fired
@@ -1817,6 +1780,7 @@ namespace System.Windows.Forms.Design
                     {
                         s_inContextMenu = false;
                     }
+
                     if (m.Msg == (int)User32.WM.LBUTTONUP)
                     {
                         // terminate the drag. TabControl loses shortcut menu options after adding ActiveX control.
@@ -1841,6 +1805,7 @@ namespace System.Windows.Forms.Design
                 {
                     _eventSvc = (IEventHandlerService)GetService(typeof(IEventHandlerService));
                 }
+
                 if (_eventSvc != null)
                 {
                     mouseHandler = (IMouseHandler)_eventSvc.GetHandler(typeof(IMouseHandler));
@@ -2598,37 +2563,40 @@ namespace System.Windows.Forms.Design
 
         internal void SetUnhandledException(Control owner, Exception exception)
         {
-            if (_thrownException is null)
+            if (_thrownException != null)
             {
-                _thrownException = exception;
-                if (owner is null)
-                {
-                    owner = Control;
-                }
-
-                string stack = string.Empty;
-                string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
-                string typeName = owner.GetType().FullName;
-                foreach (string line in exceptionLines)
-                {
-                    if (line.IndexOf(typeName) != -1)
-                    {
-                        stack = string.Format(CultureInfo.CurrentCulture, "{0}\r\n{1}", stack, line);
-                    }
-                }
-
-                Exception wrapper = new Exception(
-                    string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
-                    exception);
-                DisplayError(wrapper);
-
-                // hide all the child controls.
-                foreach (Control c in Control.Controls)
-                {
-                    c.Visible = false;
-                }
-                Control.Invalidate(true);
+                return;
             }
+
+            _thrownException = exception;
+            if (owner is null)
+            {
+                owner = Control;
+            }
+
+            string stack = string.Empty;
+            string[] exceptionLines = exception.StackTrace.Split('\r', '\n');
+            string typeName = owner.GetType().FullName;
+            foreach (string line in exceptionLines)
+            {
+                if (line.IndexOf(typeName) != -1)
+                {
+                    stack = string.Format(CultureInfo.CurrentCulture, "{0}\r\n{1}", stack, line);
+                }
+            }
+
+            Exception wrapper = new Exception(
+                string.Format(SR.ControlDesigner_WndProcException, typeName, exception.Message, stack),
+                exception);
+            DisplayError(wrapper);
+
+            // hide all the child controls.
+            foreach (Control c in Control.Controls)
+            {
+                c.Visible = false;
+            }
+
+            Control.Invalidate(true);
         }
     }
 }

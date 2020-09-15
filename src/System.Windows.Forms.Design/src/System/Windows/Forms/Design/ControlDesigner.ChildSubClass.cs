@@ -42,6 +42,7 @@ namespace System.Windows.Forms.Design
                 {
                     _designer.RemoveSubclassedWindow(m.HWnd);
                 }
+
                 if (m.Msg == (int)User32.WM.PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)User32.WM.CREATE)
                 {
                     _designer.HookChildHandles(m.LParam); // they will get removed from the collection just above

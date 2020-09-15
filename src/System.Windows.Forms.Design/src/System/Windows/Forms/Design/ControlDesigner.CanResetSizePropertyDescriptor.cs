@@ -12,32 +12,17 @@ namespace System.Windows.Forms.Design
         {
             private readonly PropertyDescriptor _basePropDesc;
 
-            public CanResetSizePropertyDescriptor(PropertyDescriptor pd) : base(pd)
-            {
-                _basePropDesc = pd;
-            }
+            public CanResetSizePropertyDescriptor(PropertyDescriptor pd) : base(pd) => _basePropDesc = pd;
 
-            public override Type ComponentType
-            {
-                get => _basePropDesc.ComponentType;
-            }
+            public override Type ComponentType => _basePropDesc.ComponentType;
 
-            public override string DisplayName
-            {
-                get => _basePropDesc.DisplayName;
-            }
+            public override string DisplayName => _basePropDesc.DisplayName;
 
-            public override bool IsReadOnly
-            {
-                get => _basePropDesc.IsReadOnly;
-            }
+            public override bool IsReadOnly => _basePropDesc.IsReadOnly;
 
-            public override Type PropertyType
-            {
-                get => _basePropDesc.PropertyType;
-            }
+            public override Type PropertyType => _basePropDesc.PropertyType;
 
-            // since we can't get to the DefaultSize property, we use the existing ShouldSerialize logic.
+            // Since we can't get to the DefaultSize property, we use the existing ShouldSerialize logic.
             public override bool CanResetValue(object component) => _basePropDesc.ShouldSerializeValue(component);
 
             public override object GetValue(object component) => _basePropDesc.GetValue(component);

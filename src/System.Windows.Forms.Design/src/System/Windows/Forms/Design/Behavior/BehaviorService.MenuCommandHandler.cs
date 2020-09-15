@@ -11,35 +11,22 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private class MenuCommandHandler : IMenuCommandService
         {
-            private readonly BehaviorService _owner;            // ptr back to the behavior service
-            private readonly IMenuCommandService _menuService;  // core service used for most implementations of the IMCS interface
+            private readonly BehaviorService _owner;
             private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
 
             public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
             {
                 _owner = owner;
-                _menuService = menuService;
+                MenuService = menuService;
             }
 
-            public IMenuCommandService MenuService
-            {
-                get => _menuService;
-            }
+            public IMenuCommandService MenuService { get; }
 
-            void IMenuCommandService.AddCommand(MenuCommand command)
-            {
-                _menuService.AddCommand(command);
-            }
+            void IMenuCommandService.AddCommand(MenuCommand command) => MenuService.AddCommand(command);
 
-            void IMenuCommandService.RemoveVerb(DesignerVerb verb)
-            {
-                _menuService.RemoveVerb(verb);
-            }
+            void IMenuCommandService.RemoveVerb(DesignerVerb verb) => MenuService.RemoveVerb(verb);
 
-            void IMenuCommandService.RemoveCommand(MenuCommand command)
-            {
-                _menuService.RemoveCommand(command);
-            }
+            void IMenuCommandService.RemoveCommand(MenuCommand command) => MenuService.RemoveCommand(command);
 
             MenuCommand IMenuCommandService.FindCommand(CommandID commandID)
             {
@@ -49,8 +36,9 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         return null;
                     }
+
                     _currentCommands.Push(commandID);
-                    return _owner.FindCommand(commandID, _menuService);
+                    return _owner.FindCommand(commandID, MenuService);
                 }
                 finally
                 {
@@ -58,25 +46,14 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            bool IMenuCommandService.GlobalInvoke(CommandID commandID)
-            {
-                return _menuService.GlobalInvoke(commandID);
-            }
+            bool IMenuCommandService.GlobalInvoke(CommandID commandID) => MenuService.GlobalInvoke(commandID);
 
             void IMenuCommandService.ShowContextMenu(CommandID menuID, int x, int y)
-            {
-                _menuService.ShowContextMenu(menuID, x, y);
-            }
+                => MenuService.ShowContextMenu(menuID, x, y);
 
-            void IMenuCommandService.AddVerb(DesignerVerb verb)
-            {
-                _menuService.AddVerb(verb);
-            }
+            void IMenuCommandService.AddVerb(DesignerVerb verb) => MenuService.AddVerb(verb);
 
-            DesignerVerbCollection IMenuCommandService.Verbs
-            {
-                get => _menuService.Verbs;
-            }
+            DesignerVerbCollection IMenuCommandService.Verbs => MenuService.Verbs;
         }
     }
 }

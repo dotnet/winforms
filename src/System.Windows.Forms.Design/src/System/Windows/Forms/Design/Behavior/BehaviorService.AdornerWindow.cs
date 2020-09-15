@@ -13,15 +13,13 @@ namespace System.Windows.Forms.Design.Behavior
     {
         /// <summary>
         ///  The AdornerWindow is a transparent window that resides ontop of the Designer's Frame. This window is used
-        ///  by the BehaviorService to  intercept all messages.  It also serves as a unified canvas on which to paint Glyphs.
+        ///  by the BehaviorService to intercept all messages. It also serves as a unified canvas on which to paint Glyphs.
         /// </summary>
         private partial class AdornerWindow : Control
         {
-            private readonly BehaviorService _behaviorService;//ptr back to BehaviorService
-            private Control _designerFrame;//the designer's frame
-            private static MouseHook s_mouseHook; // shared mouse hook
+            private readonly BehaviorService _behaviorService;
+            private static MouseHook s_mouseHook;
             private static readonly List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
-            private bool _processingDrag; // is this particular window in a drag operation
 
             /// <summary>
             ///  Constructor that parents itself to the Designer Frame and hooks all
@@ -30,7 +28,7 @@ namespace System.Windows.Forms.Design.Behavior
             internal AdornerWindow(BehaviorService behaviorService, Control designerFrame)
             {
                 _behaviorService = behaviorService;
-                _designerFrame = designerFrame;
+                DesignerFrame = designerFrame;
                 Dock = DockStyle.Fill;
                 AllowDrop = true;
                 Text = "AdornerWindow";
@@ -51,11 +49,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            internal bool ProcessingDrag
-            {
-                get => _processingDrag;
-                set => _processingDrag = value;
-            }
+            internal bool ProcessingDrag { get; set; }
 
             /// <summary>
             ///  We'll use CreateHandle as our notification for creating our mouse attacher.
@@ -92,18 +86,15 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (disposing)
                 {
-                    if (_designerFrame != null)
+                    if (DesignerFrame != null)
                     {
-                        _designerFrame = null;
+                        DesignerFrame = null;
                     }
                 }
                 base.Dispose(disposing);
             }
 
-            internal Control DesignerFrame
-            {
-                get => _designerFrame;
-            }
+            internal Control DesignerFrame { get; private set; }
 
             /// <summary>
             ///  Returns the display rectangle for the adorner window
@@ -114,7 +105,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     if (DesignerFrameValid)
                     {
-                        return ((DesignerFrame)_designerFrame).DisplayRectangle;
+                        return ((DesignerFrame)DesignerFrame).DisplayRectangle;
                     }
                     else
                     {
@@ -130,7 +121,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 get
                 {
-                    if (_designerFrame is null || _designerFrame.IsDisposed || !_designerFrame.IsHandleCreated)
+                    if (DesignerFrame is null || DesignerFrame.IsDisposed || !DesignerFrame.IsHandleCreated)
                     {
                         return false;
                     }
@@ -143,10 +134,7 @@ namespace System.Windows.Forms.Design.Behavior
             /// <summary>
             ///  Ultimately called by ControlDesigner when it receives a DragDrop message - here, we'll exit from 'drag mode'.
             /// </summary>
-            internal void EndDragNotification()
-            {
-                ProcessingDrag = false;
-            }
+            internal void EndDragNotification() => ProcessingDrag = false;
 
             /// <summary>
             ///  Invalidates the transparent AdornerWindow by asking the Designer Frame beneath it to invalidate.
@@ -156,8 +144,8 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (DesignerFrameValid)
                 {
-                    _designerFrame.Invalidate(true);
-                    _designerFrame.Update();
+                    DesignerFrame.Invalidate(true);
+                    DesignerFrame.Update();
                 }
             }
 
@@ -170,11 +158,11 @@ namespace System.Windows.Forms.Design.Behavior
                 if (DesignerFrameValid)
                 {
                     //translate for non-zero scroll positions
-                    Point scrollPosition = ((DesignerFrame)_designerFrame).AutoScrollPosition;
+                    Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
                     region.Translate(scrollPosition.X, scrollPosition.Y);
 
-                    _designerFrame.Invalidate(region, true);
-                    _designerFrame.Update();
+                    DesignerFrame.Invalidate(region, true);
+                    DesignerFrame.Update();
                 }
             }
 
@@ -187,11 +175,11 @@ namespace System.Windows.Forms.Design.Behavior
                 if (DesignerFrameValid)
                 {
                     //translate for non-zero scroll positions
-                    Point scrollPosition = ((DesignerFrame)_designerFrame).AutoScrollPosition;
+                    Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
                     rectangle.Offset(scrollPosition.X, scrollPosition.Y);
 
-                    _designerFrame.Invalidate(rectangle, true);
-                    _designerFrame.Update();
+                    DesignerFrame.Invalidate(rectangle, true);
+                    DesignerFrame.Update();
                 }
             }
 
@@ -304,41 +292,33 @@ namespace System.Windows.Forms.Design.Behavior
             ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
             ///  Behavior via the BehaviorService.
             /// </summary>
-            protected override void OnGiveFeedback(GiveFeedbackEventArgs e)
-            {
-                _behaviorService.OnGiveFeedback(e);
-            }
+            protected override void OnGiveFeedback(GiveFeedbackEventArgs e) => _behaviorService.OnGiveFeedback(e);
 
             /// <summary>
             ///  The AdornerWindow hooks all Drag/Drop notification so they can be forwarded to the appropriate
             ///  Behavior via the BehaviorService.
             /// </summary>
-            protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e)
-            {
-                _behaviorService.OnQueryContinueDrag(e);
-            }
+            protected override void OnQueryContinueDrag(QueryContinueDragEventArgs e) => _behaviorService.OnQueryContinueDrag(e);
 
             /// <summary>
             ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse
             ///  Messages so we can send drag notifcations.
             /// </summary>
-            internal void StartDragNotification()
-            {
-                ProcessingDrag = true;
-            }
+            internal void StartDragNotification() => ProcessingDrag = true;
 
             /// <summary>
             ///  The AdornerWindow intercepts all designer-related messages and forwards them to the BehaviorService
-            ///  for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated to AdornerWindow coords.
+            ///  for appropriate actions.  Note that Paint and HitTest messages are correctly parsed and translated
+            ///  to AdornerWindow coords.
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 //special test hooks
-                if (m.Msg == (int)BehaviorService.WM_GETALLSNAPLINES)
+                if (m.Msg == (int)WM_GETALLSNAPLINES)
                 {
                     _behaviorService.TestHook_GetAllSnapLines(ref m);
                 }
-                else if (m.Msg == (int)BehaviorService.WM_GETRECENTSNAPLINES)
+                else if (m.Msg == (int)WM_GETRECENTSNAPLINES)
                 {
                     _behaviorService.TestHook_GetRecentSnapLines(ref m);
                 }
