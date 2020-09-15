@@ -23,6 +23,12 @@
       "datatype": "string",
       "defaultValue": ""
     },
+    "UseAppFramework": {
+      "type": "parameter",
+      "description": "The application should use the Visual Basic Application Framework",
+      "datatype": "bool",
+      "defaultValue": "false"
+    },
     "Framework": {
       "type": "parameter",
       "description": "The target framework for the project.",
@@ -60,57 +66,86 @@
       "datatype": "bool",
       "description": "If specified, skips the automatic restore of the project on create.",
       "defaultValue": "false"
-    }
-  },
-  "primaryOutputs": [
-    { "path": "Company.WinFormsApplication1.vbproj" },
-    {
-      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
-      "path": "Form1.vb"
-    }
-  ],
-  "sources": [
-    {
-      "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
-      "modifiers": [
-        {
-          "condition": "(UseWindowsDesktopSdk)",
-          "exclude": [
-            "Company.WinFormsApplication1.vbproj"
-          ],
-          "rename": {
-            "Company.WinFormsApplication3x1.vbproj": "Company.WinFormsApplication1.vbproj"
-          }
-        },
-        {
-          "condition": "(!UseWindowsDesktopSdk)",
-          "exclude": [
-            "Company.WinFormsApplication3x1.vbproj"
-          ]
-        }
-      ]
-    }
-  ],
-  "defaultName": "WinFormsApp1",
-  "postActions": [
-    {
-      "condition": "(!skipRestore)",
-      "description": "Restore NuGet packages required by this project.",
-      "manualInstructions": [
-        { "text": "Run 'dotnet restore'" }
-      ],
-      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
-      "continueOnError": true
     },
-    {
-      "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
-      "description": "Opens Form1.vb in the editor",
-      "manualInstructions": [ ],
-      "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
-      "args": {
-        "files": "1"
+    "hostIsCli": {
+      "type": "computed",
+      "value": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")"
+    },
+      "skipAppModel": {
+        "type": "computed",
+        "value": "hostIsCli || !UseAppFramework"
+      }
+    },
+    "primaryOutputs": [
+      { "path": "Company.WinFormsApplication1.vbproj" },
+      {
+        "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+        "path": "Form1.vb"
+      }
+    ],
+    "sources": [
+      {
+        "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
+        "modifiers": [
+          {
+            "condition": "(UseWindowsDesktopSdk)",
+            "exclude": [
+              "Company.WinFormsApplication1.vbproj",
+              "Company.WinFormsApplicationSkipAppModel1.vbproj",
+              "My Project/**/*",
+              "ApplicationEvents.vb"
+            ],
+            "rename": {
+              "Company.WinFormsApplication3x1.vbproj": "Company.WinFormsApplication1.vbproj"
+            }
+          },
+          {
+            "condition": "(!UseWindowsDesktopSdk)",
+            "exclude": [
+              "Company.WinFormsApplication3x1.vbproj"
+            ]
+          },
+          {
+            "condition": "(!skipAppModel)",
+            "exclude": [
+              "Program.vb",
+              "Company.WinFormsApplicationSkipAppModel1.vbproj"
+            ],
+            "copyOnly": [ "My Project/**/*" ]
+          },
+          {
+            "condition": "(skipAppModel)",
+            "exclude": [
+              "My Project/**/*",
+              "ApplicationEvents.vb"
+            ],
+            "rename": {
+              "Company.WinFormsApplicationSkipAppModel1.vbproj": "Company.WinFormsApplication1.vbproj"
+            }
+          }
+        ]
+      }
+    ],
+    "defaultName": "WinFormsApp1",
+    "postActions": [
+      {
+        "condition": "(!skipRestore)",
+        "description": "Restore NuGet packages required by this project.",
+        "manualInstructions": [
+          { "text": "Run 'dotnet restore'" }
+        ],
+        "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+        "continueOnError": true
       },
-      "continueOnError": true
-    }
-  ]
-}
+      {
+        "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
+        "description": "Opens Form1.vb in the editor",
+        "manualInstructions": [],
+        "actionId": "84C0DA21-51C8-4541-9940-6CA19AF04EE6",
+        "args": {
+          "files": "1"
+        },
+        "continueOnError": true
+      }
+    ]
+  }
