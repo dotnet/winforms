@@ -58,10 +58,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 base.OnHandleCreated(e);
                 s_adornerWindowList.Add(this);
-                if (s_mouseHook is null)
-                {
-                    s_mouseHook = new MouseHook();
-                }
+                s_mouseHook ??= new MouseHook();
             }
 
             /// <summary>
@@ -70,12 +67,14 @@ namespace System.Windows.Forms.Design.Behavior
             protected override void OnHandleDestroyed(EventArgs e)
             {
                 s_adornerWindowList.Remove(this);
-                // unregister the mouse hook once all adorner windows have been disposed.
+
+                // Unregister the mouse hook once all adorner windows have been disposed.
                 if (s_adornerWindowList.Count == 0 && s_mouseHook != null)
                 {
                     s_mouseHook.Dispose();
                     s_mouseHook = null;
                 }
+
                 base.OnHandleDestroyed(e);
             }
 
@@ -84,13 +83,11 @@ namespace System.Windows.Forms.Design.Behavior
             /// </summary>
             protected override void Dispose(bool disposing)
             {
-                if (disposing)
+                if (disposing && DesignerFrame != null)
                 {
-                    if (DesignerFrame != null)
-                    {
-                        DesignerFrame = null;
-                    }
+                    DesignerFrame = null;
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -100,34 +97,13 @@ namespace System.Windows.Forms.Design.Behavior
             ///  Returns the display rectangle for the adorner window
             /// </summary>
             internal Rectangle DesignerFrameDisplayRectangle
-            {
-                get
-                {
-                    if (DesignerFrameValid)
-                    {
-                        return ((DesignerFrame)DesignerFrame).DisplayRectangle;
-                    }
-                    else
-                    {
-                        return Rectangle.Empty;
-                    }
-                }
-            }
+                => DesignerFrameValid ? ((DesignerFrame)DesignerFrame).DisplayRectangle : Rectangle.Empty;
 
             /// <summary>
             ///  Returns true if the DesignerFrame is created and not being disposed.
             /// </summary>
             internal bool DesignerFrameValid
-            {
-                get
-                {
-                    if (DesignerFrame is null || DesignerFrame.IsDisposed || !DesignerFrame.IsHandleCreated)
-                    {
-                        return false;
-                    }
-                    return true;
-                }
-            }
+                => DesignerFrame is not null && !DesignerFrame.IsDisposed && DesignerFrame.IsHandleCreated;
 
             public IEnumerable<Adorner> Adorners { get; private set; }
 
@@ -157,7 +133,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (DesignerFrameValid)
                 {
-                    //translate for non-zero scroll positions
+                    // Translate for non-zero scroll positions
                     Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
                     region.Translate(scrollPosition.X, scrollPosition.Y);
 
@@ -174,7 +150,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (DesignerFrameValid)
                 {
-                    //translate for non-zero scroll positions
+                    // Translate for non-zero scroll positions
                     Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
                     rectangle.Offset(scrollPosition.X, scrollPosition.Y);
 
@@ -205,6 +181,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     adorner.EnabledInternal = enabled;
                 }
+
                 Invalidate();
             }
 
@@ -221,13 +198,14 @@ namespace System.Windows.Forms.Design.Behavior
 
                     for (int i = 0; i < allFormats.Length; i++)
                     {
-                        if (allFormats[i].Length == ToolboxFormat.Length &&
-                            string.Equals(ToolboxFormat, allFormats[i]))
+                        if (allFormats[i].Length == ToolboxFormat.Length
+                            && string.Equals(ToolboxFormat, allFormats[i]))
                         {
                             return true;
                         }
                     }
                 }
+
                 return false;
             }
 
@@ -249,6 +227,7 @@ namespace System.Windows.Forms.Design.Behavior
                     User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
                     _behaviorService.PropagateHitTest(pt);
                 }
+
                 _behaviorService.OnDragEnter(null, e);
             }
 
@@ -352,11 +331,13 @@ namespace System.Windows.Forms.Design.Behavior
                         }
 
                     case User32.WM.NCHITTEST:
-                        Point pt = new Point((short)PARAM.LOWORD(m.LParam),
-                                             (short)PARAM.HIWORD(m.LParam));
+                        Point pt = new Point(
+                            (short)PARAM.LOWORD(m.LParam),
+                            (short)PARAM.HIWORD(m.LParam));
                         var pt1 = new Point();
                         User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
                         pt.Offset(pt1.X, pt1.Y);
+
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
                             m.Result = (IntPtr)User32.HT.TRANSPARENT;
@@ -403,7 +384,7 @@ namespace System.Windows.Forms.Design.Behavior
                         break;
 
                     case User32.WM.MOUSEMOVE:
-                        if (_behaviorService.OnMouseMove(Control.MouseButtons, mouseLoc))
+                        if (_behaviorService.OnMouseMove(MouseButtons, mouseLoc))
                         {
                             return false;
                         }
@@ -444,6 +425,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         break;
                 }
+
                 return true;
             }
         }

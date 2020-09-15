@@ -53,21 +53,13 @@ namespace System.Windows.Forms.Design
             {
                 if (sender is DesignerVerb designerVerb && _host != null)
                 {
-                    using (DesignerTransaction t = _host.CreateTransaction(designerVerb.Text))
-                    {
-                        // set the dock prop to DockStyle.Fill
-                        PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
-                        DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
-                        if (dockStyle == DockStyle.Fill)
-                        {
-                            dockProp.SetValue(Component, DockStyle.None);
-                        }
-                        else
-                        {
-                            dockProp.SetValue(Component, DockStyle.Fill);
-                        }
-                        t.Commit();
-                    }
+                    using DesignerTransaction t = _host.CreateTransaction(designerVerb.Text);
+
+                    // Set the dock prop to DockStyle.Fill
+                    PropertyDescriptor dockProp = TypeDescriptor.GetProperties(Component)["Dock"];
+                    DockStyle dockStyle = (DockStyle)dockProp.GetValue(Component);
+                    dockProp.SetValue(Component, dockStyle == DockStyle.Fill ? DockStyle.None : DockStyle.Fill);
+                    t.Commit();
                 }
             }
         }

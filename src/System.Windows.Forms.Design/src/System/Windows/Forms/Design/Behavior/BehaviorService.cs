@@ -183,7 +183,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Dispose()
         {
-            // remove adorner window from overlay service
+            // Remove adorner window from overlay service
             IOverlayService os = (IOverlayService)_serviceProvider.GetService(typeof(IOverlayService));
             if (os != null)
             {
@@ -207,27 +207,17 @@ namespace System.Windows.Forms.Design.Behavior
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
-        private Control DropSource
-        {
-            get
-            {
-                if (_dropSource is null)
-                {
-                    _dropSource = new Control();
-                }
-                return _dropSource;
-            }
-        }
+        private Control DropSource => _dropSource ??= new Control();
 
         internal DragDropEffects DoDragDrop(DropSourceBehavior dropSourceBehavior)
         {
-            // hook events
+            // Hook events
             DropSource.QueryContinueDrag += new QueryContinueDragEventHandler(dropSourceBehavior.QueryContinueDrag);
             DropSource.GiveFeedback += new GiveFeedbackEventHandler(dropSourceBehavior.GiveFeedback);
 
             DragDropEffects res = DragDropEffects.None;
 
-            // build up the eventargs for firing our dragbegin/end events
+            // Build up the eventargs for firing our dragbegin/end events
             ICollection dragComponents = ((DropSourceBehavior.BehaviorDataObject)dropSourceBehavior.DataObject).DragComponents;
             BehaviorDragDropEventArgs eventArgs = new BehaviorDragDropEventArgs(dragComponents);
 
@@ -322,6 +312,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 pt.X -= c.Width;
             }
+
             return pt;
         }
 
@@ -343,8 +334,8 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return Rectangle.Empty;
             }
-            Point loc = ControlToAdornerWindow(c);
 
+            Point loc = ControlToAdornerWindow(c);
             return new Rectangle(loc, c.Size);
         }
 
@@ -373,7 +364,6 @@ namespace System.Windows.Forms.Design.Behavior
         public event EventHandler Synchronize
         {
             add => _synchronizeEventHandler += value;
-
             remove => _synchronizeEventHandler -= value;
         }
 
@@ -391,6 +381,7 @@ namespace System.Windows.Forms.Design.Behavior
                     return _behaviorStack[index + 1] as Behavior;
                 }
             }
+
             return null;
         }
 
@@ -400,6 +391,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 adorner.EnabledInternal = enabled;
             }
+
             Invalidate();
         }
 
@@ -447,6 +439,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (behavior == _captureBehavior)
             {
                 _adornerWindow.Capture = false;
+
                 // Defensive:  adornerWindow should get a WM_CAPTURECHANGED, but do this by hand if it didn't.
                 if (_captureBehavior != null)
                 {
@@ -454,6 +447,7 @@ namespace System.Windows.Forms.Design.Behavior
                     Debug.Assert(_captureBehavior is null, "OnLostCapture should have cleared captureBehavior");
                 }
             }
+
             return behavior;
         }
 
@@ -592,29 +586,32 @@ namespace System.Windows.Forms.Design.Behavior
         private MenuCommand FindCommand(CommandID commandID, IMenuCommandService menuService)
         {
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
+
             if (behavior != null)
             {
-                //if the behavior wants all commands disabled..
                 if (behavior.DisableAllCommands)
                 {
                     MenuCommand menuCommand = menuService.FindCommand(commandID);
+
                     if (menuCommand != null)
                     {
                         menuCommand.Enabled = false;
                     }
+
                     return menuCommand;
                 }
-                // check to see if the behavior wants to interrupt this command
                 else
                 {
+                    // Check to see if the behavior wants to interrupt this command
                     MenuCommand menuCommand = behavior.FindCommand(commandID);
                     if (menuCommand != null)
                     {
-                        // the behavior chose to interrupt - so return the new command
+                        // The behavior chose to interrupt - so return the new command
                         return menuCommand;
                     }
                 }
             }
+
             return menuService.FindCommand(commandID);
         }
 
@@ -656,6 +653,7 @@ namespace System.Windows.Forms.Design.Behavior
                     cursor = new Cursor(User32.GetCursor());
                 }
             }
+
             _adornerWindow.Cursor = cursor;
         }
 
@@ -665,9 +663,10 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (enterGlyph != null && leaveGlyph.Equals(enterGlyph))
                 {
-                    //same glyph - no change
+                    // Same glyph - no change
                     return;
                 }
+
                 if (_validDragArgs != null)
                 {
                     OnDragLeave(leaveGlyph, EventArgs.Empty);
@@ -690,14 +689,14 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
         }
+
         private void OnDragEnter(Glyph g, DragEventArgs e)
         {
-            // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragEnter");
-            if (g is null)
-            {
-                g = _hitTestedGlyph;
-            }
+
+            // If the AdornerWindow receives a drag message, this method will be called without
+            // a glyph - assign the last hit tested one
+            g ??= _hitTestedGlyph;
 
             Behavior behavior = GetAppropriateBehavior(g);
             if (behavior is null)
@@ -705,6 +704,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior, returning");
                 return;
             }
+
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragEnter(g, e);
 
@@ -718,15 +718,14 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnDragLeave(Glyph g, EventArgs e)
         {
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragLeave");
+
             // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
             // So let's make sure it is really cleared when we start the drag.
             _dragEnterReplies.Clear();
 
-            // if the AdornerWindow receives a drag message, this fn() will be called w/o a glyph - so we'll assign the last hit tested one
-            if (g is null)
-            {
-                g = _hitTestedGlyph;
-            }
+            // If the AdornerWindow receives a drag message, this method will be called without
+            // a glyph - assign the last hit tested one
+            g ??= _hitTestedGlyph;
 
             Behavior behavior = GetAppropriateBehavior(g);
             if (behavior is null)
@@ -734,86 +733,41 @@ namespace System.Windows.Forms.Design.Behavior
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\t No behavior returning ");
                 return;
             }
+
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tBehavior found calling OnDragLeave");
             behavior.OnDragLeave(g, e);
         }
 
         private bool OnMouseDoubleClick(MouseButtons button, Point mouseLoc)
-        {
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseDoubleClick(_hitTestedGlyph, button, mouseLoc);
-        }
+            => GetAppropriateBehavior(_hitTestedGlyph)?.OnMouseDoubleClick(_hitTestedGlyph, button, mouseLoc) ?? false;
 
         private bool OnMouseDown(MouseButtons button, Point mouseLoc)
-        {
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseDown(_hitTestedGlyph, button, mouseLoc);
-        }
+            => GetAppropriateBehavior(_hitTestedGlyph)?.OnMouseDown(_hitTestedGlyph, button, mouseLoc) ?? false;
 
-        private bool OnMouseEnter(Glyph g)
-        {
-            Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseEnter(g);
-        }
+        private bool OnMouseEnter(Glyph g) => GetAppropriateBehavior(g)?.OnMouseEnter(g) ?? false;
 
         private bool OnMouseHover(Point mouseLoc)
-        {
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseHover(_hitTestedGlyph, mouseLoc);
-        }
+            => GetAppropriateBehavior(_hitTestedGlyph)?.OnMouseHover(_hitTestedGlyph, mouseLoc) ?? false;
 
         private bool OnMouseLeave(Glyph g)
         {
-            //stop tracking mouse events for MouseHover
+            // Stop tracking mouse events for MouseHover
             UnHookMouseEvent();
-
-            Behavior behavior = GetAppropriateBehavior(g);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseLeave(g);
+            return GetAppropriateBehavior(g)?.OnMouseLeave(g) ?? false;
         }
 
         private bool OnMouseMove(MouseButtons button, Point mouseLoc)
         {
-            //hook mouse events (if we haven't already) for MouseHover
+            // Hook mouse events (if we haven't already) for MouseHover
             HookMouseEvent();
-
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseMove(_hitTestedGlyph, button, mouseLoc);
+            return GetAppropriateBehavior(_hitTestedGlyph)?.OnMouseMove(_hitTestedGlyph, button, mouseLoc) ?? false;
         }
 
         private bool OnMouseUp(MouseButtons button)
         {
             _dragEnterReplies.Clear();
             _validDragArgs = null;
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return false;
-            }
-            return behavior.OnMouseUp(_hitTestedGlyph, button);
+            return GetAppropriateBehavior(_hitTestedGlyph)?.OnMouseUp(_hitTestedGlyph, button) ?? false;
         }
 
         private void HookMouseEvent()
@@ -836,21 +790,20 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
-        private void UnHookMouseEvent()
-        {
-            _trackingMouseEvent = false;
-        }
+        private void UnHookMouseEvent() => _trackingMouseEvent = false;
 
         private void OnDragDrop(DragEventArgs e)
         {
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::OnDragDrop");
-            _validDragArgs = null;//be sure to null out our cached drag args
+            _validDragArgs = null;
+
             Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
             if (behavior is null)
             {
                 Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tNo behavior. returning");
                 return;
             }
+
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragDrop(_hitTestedGlyph, e);
         }
@@ -863,6 +816,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     continue;
                 }
+
                 for (int j = Adorners[i].Glyphs.Count - 1; j >= 0; j--)
                 {
                     Adorners[i].Glyphs[j].Paint(pe);
@@ -880,6 +834,7 @@ namespace System.Windows.Forms.Design.Behavior
                     snapLineInfo += line + "\n";
                 }
             }
+
             TestHook_SetText(ref m, snapLineInfo);
         }
 
@@ -973,24 +928,10 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         private void OnGiveFeedback(GiveFeedbackEventArgs e)
-        {
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return;
-            }
-            behavior.OnGiveFeedback(_hitTestedGlyph, e);
-        }
+            => GetAppropriateBehavior(_hitTestedGlyph)?.OnGiveFeedback(_hitTestedGlyph, e);
 
         private void OnQueryContinueDrag(QueryContinueDragEventArgs e)
-        {
-            Behavior behavior = GetAppropriateBehavior(_hitTestedGlyph);
-            if (behavior is null)
-            {
-                return;
-            }
-            behavior.OnQueryContinueDrag(_hitTestedGlyph, e);
-        }
+            => GetAppropriateBehavior(_hitTestedGlyph)?.OnQueryContinueDrag(_hitTestedGlyph, e);
 
         private void OnSystemSettingChanged(object sender, EventArgs e)
         {
