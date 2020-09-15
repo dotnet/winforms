@@ -13,19 +13,19 @@
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>3.1.3</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCoreAppInternalPackageVersion>3.1.3-servicing.20120.1</MicrosoftNETCoreAppInternalPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>3.1.9</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCoreAppInternalPackageVersion>3.1.9-servicing.20459.3</MicrosoftNETCoreAppInternalPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>3.1.0</MicrosoftNETCoreAppRefPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCorePlatformsPackageVersion>3.1.0</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.1.3</MicrosoftNETCorePlatformsPackageVersion>
     <MicrosoftWin32RegistryPackageVersion>4.7.0</MicrosoftWin32RegistryPackageVersion>
     <MicrosoftWin32SystemEventsPackageVersion>4.7.0</MicrosoftWin32SystemEventsPackageVersion>
     <SystemCodeDomPackageVersion>4.7.0</SystemCodeDomPackageVersion>
     <SystemConfigurationConfigurationManagerPackageVersion>4.7.0</SystemConfigurationConfigurationManagerPackageVersion>
     <SystemDrawingCommonPackageVersion>4.7.0</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>4.7.0</SystemResourcesExtensionsPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>4.7.1</SystemResourcesExtensionsPackageVersion>
     <SystemSecurityCryptographyCngPackageVersion>4.7.0</SystemSecurityCryptographyCngPackageVersion>
     <SystemSecurityPermissionsPackageVersion>4.7.0</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>4.7.0</SystemWindowsExtensionsPackageVersion>
@@ -33,7 +33,7 @@
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
     <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>3.1.3-servicing.20118.3</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>3.1.9-servicing.20458.2</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
