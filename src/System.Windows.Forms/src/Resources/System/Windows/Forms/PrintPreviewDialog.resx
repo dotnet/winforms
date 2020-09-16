@@ -165,46 +165,46 @@
     <value xml:space="preserve">Display one page</value>
   </data>
   <data name="onepageToolStripButton.AccessibleName">
-    <value xml:space="preserve">One page</value>
+    <value xml:space="preserve">One page (Ctrl+1)</value>
   </data>
   <data name="onepageToolStripButton.Text">
-    <value xml:space="preserve">One page</value>
+    <value xml:space="preserve">One page (Ctrl+1)</value>
   </data>
   <data name="twopagesToolStripButton.AccessibleDescription">
     <value xml:space="preserve">Display two pages</value>
   </data>
   <data name="twopagesToolStripButton.AccessibleName">
-    <value xml:space="preserve">Two pages</value>
+    <value xml:space="preserve">Two pages (Ctrl+2)</value>
   </data>
   <data name="twopagesToolStripButton.Text">
-    <value xml:space="preserve">Two pages</value>
+    <value xml:space="preserve">Two pages (Ctrl+2)</value>
   </data>
   <data name="threepagesToolStripButton.AccessibleDescription">
     <value xml:space="preserve">Display three pages</value>
   </data>
   <data name="threepagesToolStripButton.AccessibleName">
-    <value xml:space="preserve">Three pages</value>
+    <value xml:space="preserve">Three pages (Ctrl+3)</value>
   </data>
   <data name="threepagesToolStripButton.Text">
-    <value xml:space="preserve">Three pages</value>
+    <value xml:space="preserve">Three pages (Ctrl+3)</value>
   </data>
   <data name="fourpagesToolStripButton.AccessibleDescription">
     <value xml:space="preserve">Display four pages</value>
   </data>
   <data name="fourpagesToolStripButton.AccessibleName">
-    <value xml:space="preserve">Four pages</value>
+    <value xml:space="preserve">Four pages (Ctrl+4)</value>
   </data>
   <data name="fourpagesToolStripButton.Text">
-    <value xml:space="preserve">Four pages</value>
+    <value xml:space="preserve">Four pages (Ctrl+4)</value>
   </data>
   <data name="sixpagesToolStripButton.AccessibleDescription">
     <value xml:space="preserve">Display six pages</value>
   </data>
   <data name="sixpagesToolStripButton.AccessibleName">
-    <value xml:space="preserve">Six pages</value>
+    <value xml:space="preserve">Six pages (Ctrl+5)</value>
   </data>
   <data name="sixpagesToolStripButton.Text">
-    <value xml:space="preserve">Six pages</value>
+    <value xml:space="preserve">Six pages (Ctrl+5)</value>
   </data>
   <data name="closeToolStripButton.AccessibleDescription">
     <value xml:space="preserve">Close this window</value>

@@ -1260,9 +1260,9 @@ namespace System.Windows.Forms
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
+            Keys keyCode = (Keys)keyData & Keys.KeyCode;
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
             {
-                Keys keyCode = (Keys)keyData & Keys.KeyCode;
                 switch (keyCode)
                 {
                     case Keys.Left:
@@ -1272,6 +1272,27 @@ namespace System.Windows.Forms
                         return false;
                 }
             }
+            else if ((keyData & Keys.Control) == Keys.Control)
+            {
+                Func<PrintPreviewDialogToolStripButton, bool> performPageClick = (PrintPreviewDialogToolStripButton pageToolStripButton) =>
+                {
+                    pageToolStripButton.PerformClick();
+                    toolStrip1.Focus();
+                    toolStrip1.ChangeSelection(pageToolStripButton);
+                    return true;
+                };
+
+                return keyCode switch
+                    {
+                        Keys.D1 => performPageClick(onepageToolStripButton),
+                        Keys.D2 => performPageClick(twopagesToolStripButton),
+                        Keys.D3 => performPageClick(threepagesToolStripButton),
+                        Keys.D4 => performPageClick(fourpagesToolStripButton),
+                        Keys.D5 => performPageClick(sixpagesToolStripButton),
+                        _ => base.ProcessDialogKey(keyData)
+                    };
+            }
+
             return base.ProcessDialogKey(keyData);
         }
 
