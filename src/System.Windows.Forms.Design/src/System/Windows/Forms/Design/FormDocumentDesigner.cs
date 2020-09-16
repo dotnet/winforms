@@ -121,7 +121,7 @@ namespace System.Windows.Forms.Design
             }
             set
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                GetService<IDesignerHost>();
                 ((Form)Component).ClientSize = value;
             }
         }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms.Design
             get => Control.Size;
             set
             {
-                IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+                IComponentChangeService cs = GetService<IComponentChangeService>();
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
                 if (cs != null)
                 {
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                IDesignerHost host = GetService<IDesignerHost>();
                 Debug.Assert(host != null, "Must have a designer host on dispose");
             }
             base.Dispose(disposing);
@@ -294,10 +294,7 @@ namespace System.Windows.Forms.Design
 
         private void EnsureToolStripWindowAdornerService()
         {
-            if (_toolStripAdornerWindowService is null)
-            {
-                _toolStripAdornerWindowService = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
-            }
+            _toolStripAdornerWindowService ??= GetService<ToolStripAdornerWindowService>();
         }
 
         /// <summary>
@@ -325,17 +322,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called when a component is added to the design container. If the component isn't a control, this will demand create the component tray and add the component to it.
+        ///  Called when a component is added to the design container. If the component isn't a control, this will
+        ///  demand create the component tray and add the component to it.
         /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
-            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is null)
+            if (ce.Component is ToolStrip && _toolStripAdornerWindowService is null && TryGetService(out IDesignerHost _))
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
-                {
-                    EnsureToolStripWindowAdornerService();
-                }
+                EnsureToolStripWindowAdornerService();
             }
         }
 
@@ -400,19 +394,18 @@ namespace System.Windows.Forms.Design
                 {
                     clientHeight += SystemInformation.HorizontalScrollBarHeight;
                 }
+
                 if (form.VerticalScroll.Visible && form.AutoScroll)
                 {
                     clientWidth += SystemInformation.VerticalScrollBarWidth;
                 }
 
-                // ApplyAutoScaling causes WmWindowPosChanging to be called and there we calculate if we need to compensate for a menu being visible we were causing that calculation to fail if we set ClientSize too early. we now do the right thing AND check again if we need to compensate for the menu.
+                // ApplyAutoScaling causes WmWindowPosChanging to be called and there we calculate if we need to
+                // compensate for a menu being visible we were causing that calculation to fail if we set ClientSize
+                // too early. We now do the right thing and check again if we need to compensate for the menu.
                 ApplyAutoScaling(_autoScaleBaseSize, form);
                 ClientSize = new Size(clientWidth, clientHeight);
-                BehaviorService svc = (BehaviorService)GetService(typeof(BehaviorService));
-                if (svc != null)
-                {
-                    svc.SyncSelection();
-                }
+                GetService<BehaviorService>()?.SyncSelection();
 
                 form.PerformLayout();
             }
@@ -461,8 +454,7 @@ namespace System.Windows.Forms.Design
             bool updateSize = _inAutoscale;
             if (!updateSize)
             {
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (TryGetService(out IDesignerHost host))
                 {
                     updateSize = host.Loading;
                 }

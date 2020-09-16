@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
             private readonly ControlDesigner _designer;
             private readonly Control _control;
             private IDesignerHost _host;
-            private ISelectionService _selSvc;
+            private ISelectionService _selectionService;
 
             public ControlDesignerAccessibleObject(ControlDesigner designer, Control control)
             {
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
             public override AccessibleRole Role => _control.AccessibilityObject.Role;
 
             private ISelectionService SelectionService
-                => _selSvc ??= (ISelectionService)_designer.GetService(typeof(ISelectionService));
+                => _selectionService ??= _designer.GetService<ISelectionService>();
 
             public override AccessibleStates State
             {

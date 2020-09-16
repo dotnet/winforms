@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
         private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
         private int _indexOfItemUnderMouseToDrag = -1; //defaulted to invalid index andwill be set by the behaviour.
         private ToolStripTemplateNode _tn; //templateNode
-        private ISelectionService _selectionSvc; // cached selection service.
+        private ISelectionService _selectionService; // cached selection service.
         private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
         private DesignerTransaction _pendingTransaction; // our transaction for adding/removing items.
         private bool _addingItem; // true if we are expecting to be notified of adding a ToolStripItem to the designer.
@@ -384,18 +384,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Get and cache the selection service
         /// </summary>
-        internal ISelectionService SelectionService
-        {
-            get
-            {
-                if (_selectionSvc is null)
-                {
-                    _selectionSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                    Debug.Assert(_selectionSvc != null, "Failed to get Selection Service!");
-                }
-                return _selectionSvc;
-            }
-        }
+        internal ISelectionService SelectionService => _selectionService ??= GetService<ISelectionService>();
 
         public bool SupportEditing
         {
@@ -426,8 +415,8 @@ namespace System.Windows.Forms.Design
             {
                 if (_keyboardHandlingService is null)
                 {
-                    //Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
-                    _keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
+                    // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
+                    _keyboardHandlingService = GetService<ToolStripKeyboardHandlingService>();
                     if (_keyboardHandlingService is null)
                     {
                         _keyboardHandlingService = new ToolStripKeyboardHandlingService(Component.Site);
@@ -680,11 +669,11 @@ namespace System.Windows.Forms.Design
                 if (designer != null && item.Placement != ToolStripItemPlacement.Overflow)
                 {
                     Rectangle bounds = designer.GetGlyphBounds();
-                    SelectionManager selMgr = (SelectionManager)GetService(typeof(SelectionManager));
                     Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
                     ToolStripItemGlyph bodyGlyphForItem = new ToolStripItemGlyph(item, designer, bounds, toolStripBehavior);
-                    //Add ItemGlyph to the Collection
-                    selMgr.BodyGlyphAdorner.Glyphs.Insert(0, bodyGlyphForItem);
+
+                    // Add ItemGlyph to the Collection
+                    GetService<SelectionManager>().BodyGlyphAdorner.Glyphs.Insert(0, bodyGlyphForItem);
                 }
                 else if (designer != null && item.Placement == ToolStripItemPlacement.Overflow)
                 {
@@ -1157,9 +1146,9 @@ namespace System.Windows.Forms.Design
                 {
                     _items = null;
                 }
-                if (_selectionSvc != null)
+                if (_selectionService != null)
                 {
-                    _selectionSvc = null;
+                    _selectionService = null;
                 }
 
                 EnableDragDrop(false);
@@ -1257,12 +1246,14 @@ namespace System.Windows.Forms.Design
             {
                 return null;
             }
-            SelectionManager selMgr = (SelectionManager)GetService(typeof(SelectionManager));
-            if (selMgr != null && ToolStrip != null && CanAddItems && ToolStrip.Visible)
+
+            if (TryGetService(out SelectionManager selectionManager) && ToolStrip != null && CanAddItems && ToolStrip.Visible)
             {
                 object primarySelection = SelectionService.PrimarySelection;
                 Behavior.Behavior toolStripBehavior = new ToolStripItemBehavior();
-                //sometimes the Collection changes when the ToolStrip gets the Selection and we are in Dummy Insitu edit... so remove that before you access the collection..
+
+                // Sometimes the Collection changes when the ToolStrip gets the Selection and we are in a dummy insitu
+                // edit so remove that before accessing the collection
                 if (ToolStrip.Items.Count > 0)
                 {
                     ToolStripItem[] items = new ToolStripItem[ToolStrip.Items.Count];
@@ -1317,12 +1308,13 @@ namespace System.Windows.Forms.Design
                                 ToolStripItemGlyph bodyGlyphForItem = new ToolStripItemGlyph(item, itemDesigner, itemBounds, toolStripBehavior);
                                 itemDesigner.bodyGlyph = bodyGlyphForItem;
                                 //Add ItemGlyph to the Collection
-                                selMgr.BodyGlyphAdorner.Glyphs.Add(bodyGlyphForItem);
+                                selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyphForItem);
                             }
                         }
                     }
                 }
             }
+
             return (base.GetControlGlyph(selectionType));
         }
 
@@ -1400,22 +1392,22 @@ namespace System.Windows.Forms.Design
         {
             base.Initialize(component);
             AutoResizeHandles = true;
-            _host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (_host != null)
+            if (TryGetService(out IDesignerHost _host))
             {
                 _componentChangeSvc = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
             }
 
             // initialize new Manager For Editing ToolStrips
             _editManager = new ToolStripEditorManager(component);
-            // setup the dropdown if our handle has been created.
+
+            // Setup the dropdown if our handle has been created.
             if (Control.IsHandleCreated)
             {
                 InitializeNewItemDropDown();
             }
 
-            //hookup to the AdornerService..for the overflow dropdown to be parent properly.
-            _toolStripAdornerWindowService = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
+            // Hookup to the AdornerService for the overflow dropdown to be parent properly.
+            _toolStripAdornerWindowService = GetService<ToolStripAdornerWindowService>();
 
             // Make sure the overflow is not toplevel
             ToolStrip.OverflowButton.DropDown.TopLevel = false;
@@ -1424,18 +1416,17 @@ namespace System.Windows.Forms.Design
             if (CanAddItems)
             {
                 new EditorServiceContext(this, TypeDescriptor.GetProperties(Component)["Items"], SR.ToolStripItemCollectionEditorVerb);
-                //Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
-                _keyboardHandlingService = (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
-                if (_keyboardHandlingService is null)
+
+                // Add the EditService so that the ToolStrip can do its own Tab and Keyboard Handling
+                if (GetService<ToolStripKeyboardHandlingService>() is null)
                 {
-                    _keyboardHandlingService = new ToolStripKeyboardHandlingService(Component.Site);
+                    new ToolStripKeyboardHandlingService(Component.Site);
                 }
 
-                //Add the InsituEditService so that the ToolStrip can do its own Tab and Keyboard Handling
-                ISupportInSituService inSituService = (ISupportInSituService)GetService(typeof(ISupportInSituService));
-                if (inSituService is null)
+                // Add the InsituEditService so that the ToolStrip can do its own Tab and Keyboard Handling
+                if (GetService<ISupportInSituService>() is null)
                 {
-                    inSituService = new ToolStripInSituService(Component.Site);
+                    new ToolStripInSituService(Component.Site);
                 }
             }
 
@@ -1812,124 +1803,124 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (de.Data is ToolStripItemDataObject data)
+            if (!(de.Data is ToolStripItemDataObject data) || data.Owner != parentToolStrip)
             {
-                if (data.Owner == parentToolStrip)
+                return;
+            }
+
+            string transDesc;
+            ArrayList components = data.DragComponents;
+            ToolStripItem primaryItem = data.PrimarySelection as ToolStripItem;
+            int primaryIndex = -1;
+            bool copy = (de.Effect == DragDropEffects.Copy);
+
+            if (components.Count == 1)
+            {
+                string name = TypeDescriptor.GetComponentName(components[0]);
+                if (name is null || name.Length == 0)
                 {
-                    string transDesc;
-                    ArrayList components = data.DragComponents;
-                    ToolStripItem primaryItem = data.PrimarySelection as ToolStripItem;
-                    int primaryIndex = -1;
-                    bool copy = (de.Effect == DragDropEffects.Copy);
+                    name = components[0].GetType().Name;
+                }
+                transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
+            }
+            else
+            {
+                transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+            }
 
-                    if (components.Count == 1)
+            // create a transaction so this happens as an atomic unit.
+            DesignerTransaction changeParent = _host.CreateTransaction(transDesc);
+            try
+            {
+                if (TryGetService(out IComponentChangeService changeService))
+                {
+                    changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                }
+
+                // If we are copying, then we want to make a copy of the components we are dragging
+                if (copy)
+                {
+                    // Remember the primary selection if we had one
+                    if (primaryItem != null)
                     {
-                        string name = TypeDescriptor.GetComponentName(components[0]);
-                        if (name is null || name.Length == 0)
-                        {
-                            name = components[0].GetType().Name;
-                        }
-                        transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
+                        primaryIndex = components.IndexOf(primaryItem);
                     }
-                    else
+                    if (KeyboardHandlingService != null)
                     {
-                        transDesc = string.Format(copy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, components.Count);
+                        KeyboardHandlingService.CopyInProgress = true;
                     }
-
-                    // create a transaction so this happens as an atomic unit.
-                    DesignerTransaction changeParent = _host.CreateTransaction(transDesc);
-                    try
+                    components = DesignerUtils.CopyDragObjects(components, Component.Site) as ArrayList;
+                    if (KeyboardHandlingService != null)
                     {
-                        IComponentChangeService changeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                        if (changeSvc != null)
-                        {
-                            changeSvc.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                        }
+                        KeyboardHandlingService.CopyInProgress = false;
+                    }
+                    if (primaryIndex != -1)
+                    {
+                        primaryItem = components[primaryIndex] as ToolStripItem;
+                    }
+                }
 
-                        // If we are copying, then we want to make a copy of the components we are dragging
-                        if (copy)
+                if (de.Effect == DragDropEffects.Move || copy)
+                {
+                    // Add the item.
+                    for (int i = 0; i < components.Count; i++)
+                    {
+                        if (dropAtHead)
                         {
-                            // Remember the primary selection if we had one
-                            if (primaryItem != null)
-                            {
-                                primaryIndex = components.IndexOf(primaryItem);
-                            }
-                            if (KeyboardHandlingService != null)
-                            {
-                                KeyboardHandlingService.CopyInProgress = true;
-                            }
-                            components = DesignerUtils.CopyDragObjects(components, Component.Site) as ArrayList;
-                            if (KeyboardHandlingService != null)
-                            {
-                                KeyboardHandlingService.CopyInProgress = false;
-                            }
-                            if (primaryIndex != -1)
-                            {
-                                primaryItem = components[primaryIndex] as ToolStripItem;
-                            }
+                            parentToolStrip.Items.Insert(0, components[i] as ToolStripItem);
                         }
-
-                        if (de.Effect == DragDropEffects.Move || copy)
+                        else
                         {
-                            // Add the item.
-                            for (int i = 0; i < components.Count; i++)
-                            {
-                                if (dropAtHead)
-                                {
-                                    parentToolStrip.Items.Insert(0, components[i] as ToolStripItem);
-                                }
-                                else
-                                {
-                                    parentToolStrip.Items.Add(components[i] as ToolStripItem);
-                                }
-                            }
-
-                            // show the dropDown for the primarySelection before the Drag-Drop operation started.
-                            if (primaryItem is ToolStripDropDownItem primaryDropDownItem)
-                            {
-                                if (_host.GetDesigner(primaryDropDownItem) is ToolStripMenuItemDesigner dropDownItemDesigner)
-                                {
-                                    dropDownItemDesigner.InitializeDropDown();
-                                }
-                            }
-
-                            //Set the Selection ..
-                            SelectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
+                            parentToolStrip.Items.Add(components[i] as ToolStripItem);
                         }
-
-                        if (changeSvc != null)
-                        {
-                            changeSvc.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
-                        }
-                        //fire extra changing/changed events so that the order is "restored" after undo/redo
-                        if (copy)
-                        {
-                            if (changeSvc != null)
-                            {
-                                changeSvc.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                                changeSvc.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
-                            }
-                        }
-                        // Refresh Glyphs...
-                        BehaviorService.SyncSelection();
                     }
 
-                    catch
+                    // show the dropDown for the primarySelection before the Drag-Drop operation started.
+                    if (primaryItem is ToolStripDropDownItem primaryDropDownItem)
                     {
-                        if (changeParent != null)
+                        if (_host.GetDesigner(primaryDropDownItem) is ToolStripMenuItemDesigner dropDownItemDesigner)
                         {
-                            changeParent.Cancel();
-                            changeParent = null;
+                            dropDownItemDesigner.InitializeDropDown();
                         }
                     }
-                    finally
+
+                    //Set the Selection ..
+                    SelectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
+                }
+
+                if (changeService != null)
+                {
+                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
+                }
+
+                // Fire extra changing/changed events so that the order is "restored" after undo/redo
+                if (copy)
+                {
+                    if (changeService != null)
                     {
-                        if (changeParent != null)
-                        {
-                            changeParent.Commit();
-                            changeParent = null;
-                        }
+                        changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                        changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
                     }
+                }
+
+                // Refresh Glyphs...
+                BehaviorService.SyncSelection();
+            }
+
+            catch
+            {
+                if (changeParent != null)
+                {
+                    changeParent.Cancel();
+                    changeParent = null;
+                }
+            }
+            finally
+            {
+                if (changeParent != null)
+                {
+                    changeParent.Commit();
+                    changeParent = null;
                 }
             }
         }
@@ -2031,21 +2022,17 @@ namespace System.Windows.Forms.Design
         {
             foreach (ToolStripItem item in ToolStrip.Items)
             {
-                if (item.Visible && item.IsOnOverflow && SelectionService.GetComponentSelected(item))
+                if (item.Visible
+                    && item.IsOnOverflow
+                    && SelectionService.GetComponentSelected(item)
+                    && _host.GetDesigner(item) is ToolStripItemDesigner designer)
                 {
-                    if (_host.GetDesigner(item) is ToolStripItemDesigner designer)
-                    {
-                        Rectangle r = designer.GetGlyphBounds();
-                        ToolStripDesignerUtils.GetAdjustedBounds(item, ref r);
-                        r.Inflate(GLYPHBORDER, GLYPHBORDER);
-                        //this will allow any Glyphs to re-paint
-                        //after this control and its designer has painted
-                        BehaviorService b = (BehaviorService)GetService(typeof(BehaviorService));
-                        if (b != null)
-                        {
-                            b.ProcessPaintMessage(r);
-                        }
-                    }
+                    Rectangle r = designer.GetGlyphBounds();
+                    ToolStripDesignerUtils.GetAdjustedBounds(item, ref r);
+                    r.Inflate(GLYPHBORDER, GLYPHBORDER);
+
+                    // This will allow any Glyphs to re-paint after this control and its designer has painted
+                    GetService<BehaviorService>()?.ProcessPaintMessage(r);
                 }
             }
         }
@@ -2093,12 +2080,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnSetCursor()
         {
-            if (_toolboxService is null)
-            {
-                _toolboxService = (IToolboxService)GetService(typeof(IToolboxService));
-            }
+            _toolboxService ??= GetService<IToolboxService>();
 
-            if (_toolboxService is null || !_toolboxService.SetCursor() || InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
+            if (_toolboxService is null
+                || !_toolboxService.SetCursor()
+                || InheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
             {
                 Cursor.Current = Cursors.Default;
             }
@@ -2158,19 +2144,20 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Remove all the glyphs we were are not visible..
         /// </summary>
-        private void OnToolStripVisibleChanged(object sender, System.EventArgs e)
+        private void OnToolStripVisibleChanged(object sender, EventArgs e)
         {
             if (sender is ToolStrip tool && !tool.Visible)
             {
-                SelectionManager selMgr = (SelectionManager)GetService(typeof(SelectionManager));
-                Glyph[] currentBodyGlyphs = new Glyph[selMgr.BodyGlyphAdorner.Glyphs.Count];
-                selMgr.BodyGlyphAdorner.Glyphs.CopyTo(currentBodyGlyphs, 0);
-                //Remove the ToolStripItemGlyphs.
+                SelectionManager selectionManager = GetService<SelectionManager>();
+                Glyph[] currentBodyGlyphs = new Glyph[selectionManager.BodyGlyphAdorner.Glyphs.Count];
+                selectionManager.BodyGlyphAdorner.Glyphs.CopyTo(currentBodyGlyphs, 0);
+
+                // Remove the ToolStripItemGlyphs.
                 foreach (Glyph g in currentBodyGlyphs)
                 {
                     if (g is ToolStripItemGlyph)
                     {
-                        selMgr.BodyGlyphAdorner.Glyphs.Remove(g);
+                        selectionManager.BodyGlyphAdorner.Glyphs.Remove(g);
                     }
                 }
             }
@@ -2423,8 +2410,7 @@ namespace System.Windows.Forms.Design
                 catch (InvalidOperationException ex)
                 {
                     Debug.Assert(NewItemTransaction is null, "NewItemTransaction should have been nulled out and cancelled by now.");
-                    IUIService uiService = (IUIService)GetService(typeof(IUIService));
-                    uiService.ShowError(ex.Message);
+                    GetService<IUIService>().ShowError(ex.Message);
 
                     if (KeyboardHandlingService != null)
                     {
