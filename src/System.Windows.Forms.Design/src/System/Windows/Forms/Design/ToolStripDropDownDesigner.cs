@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Design
 
             selected = false;
 
-            if (host.RootComponent is not Control)
+            if (!(host.RootComponent is Control))
             {
                 return;
             }

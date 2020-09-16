@@ -670,9 +670,9 @@ namespace System.Windows.Forms.Design
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
-            if (TryGetService(out ISelectionService selectionService))
+            if (TryGetService(out _selectionService))
             {
-                selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+                _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
         }
 

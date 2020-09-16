@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms.Design
         {
             base.Initialize(component);
             AutoResizeHandles = true;
-            if (TryGetService(out IDesignerHost _host))
+            if (TryGetService(out _host))
             {
                 _componentChangeSvc = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
             }
