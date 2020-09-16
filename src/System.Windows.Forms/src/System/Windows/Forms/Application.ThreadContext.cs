@@ -208,13 +208,11 @@ namespace System.Windows.Forms
                                 return null;
                             }
                         }
-#pragma warning disable CA1031 // This is an external component, if it fails we just won't use it
                         catch (Exception e)
                         {
                             Debug.Fail($"Failed to query service: {e.Message}");
                             return null;
                         }
-#pragma warning restore CA1031
 
                         // We have the component manager service, now get the component manager interface
                         HRESULT hr = (HRESULT)Marshal.QueryInterface(serviceHandle, ref iid, out IntPtr componentManagerHandle);

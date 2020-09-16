@@ -48,7 +48,6 @@ namespace System.Resources
 
         // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
         // Pragma added to prevent converting the "type is obsolete" warning into build error.
-#pragma warning disable 618
         private static bool IsCriticalException(Exception ex)
         {
             return ex is NullReferenceException
@@ -60,6 +59,5 @@ namespace System.Resources
                     || ex is AccessViolationException
                     || ex is Security.SecurityException;
         }
-#pragma warning restore 618
     }
 }

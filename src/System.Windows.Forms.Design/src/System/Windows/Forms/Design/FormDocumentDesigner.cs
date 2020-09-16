@@ -58,9 +58,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 // we don't want to get inherited value from a base form that might have been designed in a different DPI so we recalculate the thing instead of getting  AutoScaleBaseSize (QFE 2280)
-#pragma warning disable 618
                 SizeF real = Form.GetAutoScaleSize(((Form)Component).Font);
-#pragma warning restore 618
                 return new Size((int)Math.Round(real.Width), (int)Math.Round(real.Height));
             }
             set
@@ -83,10 +81,8 @@ namespace System.Windows.Forms.Design
         private bool ShouldSerializeAutoScaleBaseSize()
         {
             // Never serialize this unless AutoScale is turned on
-#pragma warning disable 618
             return _initializing ? false
                 : ((Form)Component).AutoScale && ShadowProperties.Contains(nameof(AutoScaleBaseSize));
-#pragma warning restore 618
         }
 
         /// <summary>
@@ -253,9 +249,7 @@ namespace System.Windows.Forms.Design
             // We also don't do this if the property is empty.  Otherwise we will perform two GetAutoScaleBaseSize calls only to find that they returned the same value.
             if (!baseVar.IsEmpty)
             {
-#pragma warning disable 618
                 SizeF newVarF = Form.GetAutoScaleSize(form.Font);
-#pragma warning restore 618
                 Size newVar = new Size((int)Math.Round(newVarF.Width), (int)Math.Round(newVarF.Height));
                 // We save a significant amount of time by bailing early if there's no work to be done
                 if (baseVar.Equals(newVar))
@@ -268,9 +262,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     _inAutoscale = true;
-#pragma warning disable 618
                     form.Scale(percX, percY);
-#pragma warning restore 618
                 }
                 finally
                 {

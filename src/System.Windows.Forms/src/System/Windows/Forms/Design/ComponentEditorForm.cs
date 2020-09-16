@@ -317,13 +317,10 @@ namespace System.Windows.Forms.Design
                 helpButton
             });
 
-#pragma warning disable 618
             // continuing with the old autoscale base size stuff, it works,
             // and is currently set to a non-standard height
             AutoScaleBaseSize = new Size(5, 14);
             ApplyAutoScaling();
-#pragma warning restore 618
-
         }
 
         protected override void OnActivated(EventArgs e)

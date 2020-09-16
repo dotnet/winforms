@@ -29,6 +29,7 @@
   <PropertyGroup>
     <!-- Disable a VS-specific target that is failing when building this csproj -->
     <GenerateDependencyFile>false</GenerateDependencyFile>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <!-- nuspec properties -->
