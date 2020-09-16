@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  That would make things a little more robust, but would require API review as the class itself would have to
     ///  be public. The internal functionality can obviously still be internal.
     /// </remarks>
-    internal partial struct DrawingEventArgs
+    internal partial class DrawingEventArgs
     {
         private Graphics? _graphics;
 
