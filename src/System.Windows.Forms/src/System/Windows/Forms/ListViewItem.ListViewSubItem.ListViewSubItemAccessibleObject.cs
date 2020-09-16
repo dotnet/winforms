@@ -112,7 +112,9 @@ namespace System.Windows.Forms
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.NamePropertyId => Name,
                         UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
+#pragma warning disable CA1837 // Use 'Environment.ProcessId'
                         UiaCore.UIA.ProcessIdPropertyId => Process.GetCurrentProcess().Id,
+#pragma warning restore CA1837 // Use 'Environment.ProcessId'
                         UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                         UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,

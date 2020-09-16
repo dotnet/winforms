@@ -33,7 +33,6 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         Public Property CurrentDirectory() As String
             Get
                 Return FileIO.FileSystem.CurrentDirectory
@@ -271,7 +270,6 @@ Namespace Microsoft.VisualBasic.MyServices
 
             Return FileIO.FileSystem.OpenTextFileWriter(file, append, encoding)
         End Function
-#Enable Warning CA1822 ' Mark members as static
 
         ''' <summary>
         ''' Proxy class can only created by internal classes.

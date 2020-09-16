@@ -117,12 +117,12 @@ namespace System.Windows.Forms.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                 formatter.Serialize(stream, original);
 
                 stream.Position = 0;
                 OwnerDrawPropertyBag bag = Assert.IsType<OwnerDrawPropertyBag>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 Assert.Equal(Color.Blue, bag.BackColor);
                 Assert.Equal(SystemFonts.MenuFont.Name, bag.Font.Name);
                 Assert.Equal(Color.Red, bag.ForeColor);

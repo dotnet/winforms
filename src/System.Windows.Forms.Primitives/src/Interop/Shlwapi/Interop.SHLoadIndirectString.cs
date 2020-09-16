@@ -11,6 +11,8 @@ internal static partial class Interop
     internal static partial class Shlwapi
     {
         [DllImport(Libraries.Shlwapi, ExactSpelling = true, CharSet = CharSet.Unicode)]
+#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         public static extern HRESULT SHLoadIndirectString(string pszSource, StringBuilder pszOutBuf, uint cchOutBuf, IntPtr ppvReserved);
+#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
     }
 }

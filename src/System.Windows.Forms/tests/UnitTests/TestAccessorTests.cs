@@ -232,7 +232,6 @@ namespace System.Windows.Forms.Tests
         }
 #pragma warning restore IDE0044
 #pragma warning restore IDE0051
-#pragma warning disable IDE0052
 #pragma warning restore CS0169
 #pragma warning restore CA1823
     }

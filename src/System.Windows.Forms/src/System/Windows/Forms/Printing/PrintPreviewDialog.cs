@@ -54,9 +54,7 @@ namespace System.Windows.Forms
         /// </summary>
         public PrintPreviewDialog()
         {
-#pragma warning disable 618
             base.AutoScaleBaseSize = new Size(5, 13);
-#pragma warning restore 618
 
             previewControl = new PrintPreviewControl();
             imageList = new ImageList();
@@ -88,15 +86,11 @@ namespace System.Windows.Forms
         {
             get
             {
-#pragma warning disable 618
                 return base.AutoScale;
-#pragma warning restore 618
             }
             set
             {
-#pragma warning disable 618
                 base.AutoScale = value;
-#pragma warning restore 618
             }
         }
 
@@ -849,7 +843,6 @@ namespace System.Windows.Forms
         ///  PrintPreviewDialog does not support AutoScaleBaseSize.
         /// </summary>
         ///  Keeping implementation of obsoleted AutoScaleBaseSize API
-#pragma warning disable 618
         // disable csharp compiler warning #0809: obsolete member overrides non-obsolete member
 #pragma warning disable 0809
         [Browsable(false)]
@@ -865,7 +858,6 @@ namespace System.Windows.Forms
             }
         }
 #pragma warning restore 0809
-#pragma warning restore 618
 
         /// <summary>
         ///  Gets or sets the document to preview.
