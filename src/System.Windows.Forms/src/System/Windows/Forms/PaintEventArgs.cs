@@ -92,7 +92,7 @@ namespace System.Windows.Forms
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing) => _event.Dispose(disposing);
+        protected virtual void Dispose(bool disposing) => _event?.Dispose(disposing);
 
         /// <summary>
         ///  If ControlStyles.AllPaintingInWmPaint, we call this method after OnPaintBackground so it appears to
