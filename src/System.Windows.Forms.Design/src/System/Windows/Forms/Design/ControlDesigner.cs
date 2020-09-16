@@ -43,9 +43,9 @@ namespace System.Windows.Forms.Design
         private ContainerSelectorBehavior _moveBehavior;    // the behavior for non-resize glyphs - demand created
 
         // Services that we use enough to cache
-        private ISelectionUIService _selectionUISvc;
-        private IEventHandlerService _eventSvc;
-        private IToolboxService _toolboxSvc;
+        private ISelectionUIService _selectionUIService;
+        private IEventHandlerService _eventService;
+        private IToolboxService _toolboxService;
         private InheritanceUI _inheritanceUI;
         private IOverlayService _overlayService;
 
@@ -75,8 +75,7 @@ namespace System.Windows.Forms.Design
         private StatusCommandUI _statusCommandUI;           // UI for setting the StatusBar Information..
         private Dictionary<IntPtr, bool> _subclassedChildren;
 
-        protected BehaviorService BehaviorService
-            => _behaviorService ??= (BehaviorService)GetService(typeof(BehaviorService));
+        protected BehaviorService BehaviorService => _behaviorService ??= GetService<BehaviorService>();
 
         internal bool ForceVisible { get; set; } = true;
 
@@ -332,14 +331,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 Debug.Assert(Component != null, "this.component needs to be set before this method is valid.");
-                bool isRoot = false;
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && Component == host.RootComponent)
-                {
-                    isRoot = true;
-                }
-
-                return isRoot;
+                return TryGetService(out IDesignerHost host) && Component == host.RootComponent;
             }
         }
 
@@ -383,8 +375,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void DisplayError(Exception e)
         {
-            IUIService uis = (IUIService)GetService(typeof(IUIService));
-            if (uis != null)
+            if (TryGetService(out IUIService uis))
             {
                 uis.ShowError(e);
             }
@@ -428,8 +419,7 @@ namespace System.Windows.Forms.Design
 
                     if (_removalNotificationHooked)
                     {
-                        IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                        if (csc != null)
+                        if (TryGetService(out IComponentChangeService csc))
                         {
                             csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                         }
@@ -518,8 +508,7 @@ namespace System.Windows.Forms.Design
             // if after removing those bindings the collection is empty, then unhook the changeNotificationService
             if (ctl.DataBindings.Count == 0)
             {
-                IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (csc != null)
+                if (TryGetService(out IComponentChangeService csc))
                 {
                     csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                 }
@@ -555,7 +544,7 @@ namespace System.Windows.Forms.Design
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (!(GetService(typeof(INestedContainer)) is INestedContainer nc))
+            if (!TryGetService(out INestedContainer nc))
             {
                 return false;
             }
@@ -671,14 +660,13 @@ namespace System.Windows.Forms.Design
                 Rectangle controlRect = Control.RectangleToScreen(Control.ClientRectangle);
                 if (!parentRect.Contains(controlRect) && !parentRect.IntersectsWith(controlRect))
                 {
-                    // since the parent is completely clipping the control, the control cannot be a drop target, and
+                    // Since the parent is completely clipping the control, the control cannot be a drop target, and
                     // it will not get mouse messages. So we don't have to give the glyph a transparentbehavior
                     // (default for ControlBodyGlyph). But we still would like to be able to move the control, so push
                     // a MoveBehavior. If we didn't we wouldn't be able to move the control, since it won't get any
                     // mouse messages.
 
-                    ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
-                    if (sel != null && sel.GetComponentSelected(Control))
+                    if (TryGetService(out ISelectionService sel) && sel.GetComponentSelected(Control))
                     {
                         g = new ControlBodyGlyph(translatedBounds, cursor, Control, MoveBehavior);
                     }
@@ -897,17 +885,18 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
 
             // And get other commonly used services.
-            _host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            _host = GetService<IDesignerHost>();
 
-            // this is to create the action in the DAP for this component if it requires docking/undocking logic
+            // This is to create the action in the DAP for this component if it requires docking/undocking logic
             AttributeCollection attributes = TypeDescriptor.GetAttributes(Component);
             DockingAttribute dockingAttribute = (DockingAttribute)attributes[typeof(DockingAttribute)];
             if (dockingAttribute != null && dockingAttribute.DockingBehavior != DockingBehavior.Never)
             {
-                // create the action for this control
+                // Create the action for this control
                 _dockingAction = new DockingActionList(this);
-                // add our 'dock in parent' or 'undock in parent' action
-                if (GetService(typeof(DesignerActionService)) is DesignerActionService das)
+
+                // Add our 'dock in parent' or 'undock in parent' action
+                if (TryGetService(out DesignerActionService das))
                 {
                     das.Add(Component, _dockingAction);
                 }
@@ -938,7 +927,7 @@ namespace System.Windows.Forms.Design
             // If we are an inherited control, notify our inheritance UI
             if (Inherited && _host != null && _host.RootComponent != component)
             {
-                _inheritanceUI = (InheritanceUI)GetService(typeof(InheritanceUI));
+                _inheritanceUI = GetService<InheritanceUI>();
                 _inheritanceUI?.AddInheritedControl(Control, InheritanceAttribute.InheritanceLevel);
             }
 
@@ -967,9 +956,8 @@ namespace System.Windows.Forms.Design
         // remember to change ComponentCache's RemoveEntry method back to private (from internal).
         private void OnSizeChanged(object sender, EventArgs e)
         {
-            ComponentCache cache = (ComponentCache)GetService(typeof(ComponentCache));
             object component = Component;
-            if (cache != null && component != null)
+            if (TryGetService(out ComponentCache cache) && component != null)
             {
                 cache.RemoveEntry(component);
             }
@@ -977,9 +965,8 @@ namespace System.Windows.Forms.Design
 
         private void OnLocationChanged(object sender, EventArgs e)
         {
-            ComponentCache cache = (ComponentCache)GetService(typeof(ComponentCache));
             object component = Component;
-            if (cache != null && component != null)
+            if (TryGetService(out ComponentCache cache) && component != null)
             {
                 cache.RemoveEntry(component);
             }
@@ -1014,9 +1001,8 @@ namespace System.Windows.Forms.Design
             {
                 if (ctl.DataBindings.Count == 0 && _removalNotificationHooked)
                 {
-                    // remove the notification for the ComponentRemoved event
-                    IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (csc != null)
+                    // Remove the notification for the ComponentRemoved event
+                    if (TryGetService(out IComponentChangeService csc))
                     {
                         csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
@@ -1025,9 +1011,8 @@ namespace System.Windows.Forms.Design
                 }
                 else if (ctl.DataBindings.Count > 0 && !_removalNotificationHooked)
                 {
-                    // add he notification for the ComponentRemoved event
-                    IComponentChangeService csc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                    if (csc != null)
+                    // Add the notification for the ComponentRemoved event
+                    if (TryGetService(out IComponentChangeService csc))
                     {
                         csc.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
@@ -1116,7 +1101,7 @@ namespace System.Windows.Forms.Design
 
             if (defaultValues != null
                 && defaultValues["Parent"] is IComponent parent
-                && GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                && TryGetService(out IDesignerHost host))
             {
                 if (host.GetDesigner(parent) is ParentControlDesigner parentDesigner)
                 {
@@ -1276,12 +1261,12 @@ namespace System.Windows.Forms.Design
 
             _mouseDragLast = new Point(x, y);
             _ctrlSelect = (Control.ModifierKeys & Keys.Control) != 0;
-            ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
+            ISelectionService selectionService = GetService<ISelectionService>();
 
             // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-            if (!_ctrlSelect && sel != null)
+            if (!_ctrlSelect && selectionService != null)
             {
-                sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
+                selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
             }
 
             Control.Capture = true;
@@ -1300,14 +1285,17 @@ namespace System.Windows.Forms.Design
                 // ParentControlDesigner.Dispose depends on cancel having this behavior.
                 if (!cancel)
                 {
-                    ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
+                    ISelectionService selectionService = GetService<ISelectionService>();
                     bool shiftSelect = (Control.ModifierKeys & Keys.Shift) != 0;
-                    if (!shiftSelect && (_ctrlSelect || (sel != null && !sel.GetComponentSelected(Component))))
+                    if (!shiftSelect &&
+                        (_ctrlSelect
+                            || (selectionService != null && !selectionService.GetComponentSelected(Component))))
                     {
-                        sel?.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
+                        selectionService?.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
                         _ctrlSelect = false;
                     }
                 }
+
                 return;
             }
 
@@ -1321,18 +1309,18 @@ namespace System.Windows.Forms.Design
             }
 
             // Leave this here in case we are doing a ComponentTray drag
-            _selectionUISvc ??= (ISelectionUIService)GetService(typeof(ISelectionUIService));
+            _selectionUIService ??= GetService<ISelectionUIService>();
 
-            if (_selectionUISvc is null)
+            if (_selectionUIService is null)
             {
                 return;
             }
 
             // We must check to ensure that UI service is still in drag mode.  It is possible that the user hit escape,
             // which will cancel drag mode.
-            if (_selectionUISvc.Dragging)
+            if (_selectionUIService.Dragging)
             {
-                _selectionUISvc.EndDrag(cancel);
+                _selectionUIService.EndDrag(cancel);
             }
         }
 
@@ -1367,17 +1355,17 @@ namespace System.Windows.Forms.Design
 
             // Make sure the component is selected
             // But only select it if it is not already the primary selection, and we want to toggle the current primary selection.
-            ISelectionService sel = (ISelectionService)GetService(typeof(ISelectionService));
-            if (sel != null && !Component.Equals(sel.PrimarySelection))
+            ISelectionService selectionService = GetService<ISelectionService>();
+            if (selectionService != null && !Component.Equals(selectionService.PrimarySelection))
             {
-                sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary | SelectionTypes.Toggle);
+                selectionService.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary | SelectionTypes.Toggle);
             }
 
-            if (BehaviorService != null && sel != null)
+            if (BehaviorService != null && selectionService != null)
             {
                 // create our list of controls-to-drag
                 ArrayList dragControls = new ArrayList();
-                ICollection selComps = sel.GetSelectedComponents();
+                ICollection selComps = selectionService.GetSelectedComponents();
 
                 // must identify a required parent to avoid dragging mixes of children
                 Control requiredParent = null;
@@ -1535,12 +1523,9 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            if (_toolboxSvc is null)
-            {
-                _toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
-            }
+            _toolboxService ??= GetService<IToolboxService>();
 
-            if (_toolboxSvc != null && _toolboxSvc.SetCursor())
+            if (_toolboxService != null && _toolboxService.SetCursor())
             {
                 return;
             }
@@ -1636,7 +1621,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected void UnhookChildControls(Control firstChild)
         {
-            _host ??= (IDesignerHost)GetService(typeof(IDesignerHost));
+            _host ??= GetService<IDesignerHost>();
 
             foreach (Control child in firstChild.Controls)
             {
@@ -1732,11 +1717,11 @@ namespace System.Windows.Forms.Design
                 || (m.Msg >= (int)User32.WM.NCMOUSEMOVE && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                 || m.Msg == (int)User32.WM.SETCURSOR)
             {
-                _eventSvc ??= (IEventHandlerService)GetService(typeof(IEventHandlerService));
+                _eventService ??= GetService<IEventHandlerService>();
 
-                if (_eventSvc != null)
+                if (_eventService != null)
                 {
-                    mouseHandler = (IMouseHandler)_eventSvc.GetHandler(typeof(IMouseHandler));
+                    mouseHandler = (IMouseHandler)_eventService.GetHandler(typeof(IMouseHandler));
                 }
             }
 
@@ -1891,9 +1876,9 @@ namespace System.Windows.Forms.Design
                         _toolPassThrough = false;
                         if (!EnableDragRect && button == MouseButtons.Left)
                         {
-                            _toolboxSvc ??= (IToolboxService)GetService(typeof(IToolboxService));
+                            _toolboxService ??= GetService<IToolboxService>();
 
-                            if (_toolboxSvc?.GetSelectedToolboxItem((IDesignerHost)GetService(typeof(IDesignerHost))) != null)
+                            if (_toolboxService?.GetSelectedToolboxItem(GetService<IDesignerHost>()) != null)
                             {
                                 // There is a tool to be dragged, so set passthrough and pass to the parent.
                                 _toolPassThrough = true;
@@ -1920,11 +1905,9 @@ namespace System.Windows.Forms.Design
                         }
                         else if (button == MouseButtons.Right)
                         {
-                            ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-                            if (selSvc != null)
-                            {
-                                selSvc.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
-                            }
+                            GetService<ISelectionService>()?.SetSelectedComponents(
+                                new object[] { Component },
+                                SelectionTypes.Primary);
                         }
 
                         _lastMoveScreenX = x;
@@ -2181,14 +2164,7 @@ namespace System.Windows.Forms.Design
                     x = PARAM.SignedLOWORD(m.LParam);
                     y = PARAM.SignedHIWORD(m.LParam);
 
-                    ToolStripKeyboardHandlingService keySvc =
-                        (ToolStripKeyboardHandlingService)GetService(typeof(ToolStripKeyboardHandlingService));
-
-                    bool handled = false;
-                    if (keySvc != null)
-                    {
-                        handled = keySvc.OnContextMenu(x, y);
-                    }
+                    bool handled = GetService<ToolStripKeyboardHandlingService>()?.OnContextMenu(x, y) ?? false;
 
                     if (!handled)
                     {
@@ -2294,17 +2270,7 @@ namespace System.Windows.Forms.Design
             stringFormat.Dispose();
         }
 
-        private IOverlayService OverlayService
-        {
-            get
-            {
-                if (_overlayService is null)
-                {
-                    _overlayService = (IOverlayService)GetService(typeof(IOverlayService));
-                }
-                return _overlayService;
-            }
-        }
+        private IOverlayService OverlayService => _overlayService ??= GetService<IOverlayService>();
 
         private bool IsMouseMessage(int msg)
         {

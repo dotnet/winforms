@@ -61,8 +61,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-                IComponent root = host?.RootComponent;
+                IComponent root = GetService<IDesignerHost>()?.RootComponent;
                 return root == Component ? null : root;
             }
         }
@@ -77,9 +76,9 @@ namespace System.ComponentModel.Design
                 if (_inheritanceAttribute is null)
                 {
                     // Record if this component is being inherited or not.
-                    if (GetService(typeof(IInheritanceService)) is IInheritanceService inher)
+                    if (TryGetService(out IInheritanceService inheritanceService))
                     {
-                        _inheritanceAttribute = inher.GetInheritanceAttribute(Component);
+                        _inheritanceAttribute = inheritanceService.GetInheritanceAttribute(Component);
                     }
                     else
                     {
@@ -156,7 +155,7 @@ namespace System.ComponentModel.Design
             get
             {
                 ICollection comps = AssociatedComponents;
-                if (comps != null && comps.Count > 0 && GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                if (comps != null && comps.Count > 0 && TryGetService(out IDesignerHost host))
                 {
                     IDesigner[] designers = new IDesigner[comps.Count];
                     int idx = 0;
@@ -190,7 +189,7 @@ namespace System.ComponentModel.Design
             get
             {
                 IComponent parent = ParentComponent;
-                if (parent != null && GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                if (parent != null && TryGetService(out IDesignerHost host))
                 {
                     return host.GetDesigner(parent);
                 }
@@ -214,8 +213,8 @@ namespace System.ComponentModel.Design
         public virtual void DoDefaultAction()
         {
             // If the event binding service is not available, there is nothing much we can do, so just return.
-            if (!(GetService(typeof(IEventBindingService)) is IEventBindingService eps)
-                || !(GetService(typeof(ISelectionService)) is ISelectionService selectionService))
+            if (!TryGetService(out IEventBindingService ebs)
+                || !TryGetService(out ISelectionService selectionService))
             {
                 return;
             }
@@ -223,7 +222,7 @@ namespace System.ComponentModel.Design
             ICollection components = selectionService.GetSelectedComponents();
             EventDescriptor thisDefaultEvent = null;
             string thisHandler = null;
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+            IDesignerHost host = GetService<IDesignerHost>();
             DesignerTransaction t = null;
 
             if (components is null)
@@ -241,7 +240,7 @@ namespace System.ComponentModel.Design
 
                     if (defaultEvent != null)
                     {
-                        defaultPropEvent = eps.GetEventProperty(defaultEvent);
+                        defaultPropEvent = ebs.GetEventProperty(defaultEvent);
                     }
 
                     // If we couldn't find a property for this event, or of the property is read only, then abort.
@@ -274,13 +273,13 @@ namespace System.ComponentModel.Design
                         }
 
                         eventChanged = true;
-                        handler = eps.CreateUniqueMethodName((IComponent)comp, defaultEvent);
+                        handler = ebs.CreateUniqueMethodName((IComponent)comp, defaultEvent);
                     }
                     else
                     {
                         // ensure the handler is still there
                         eventChanged = true;
-                        ICollection methods = eps.GetCompatibleMethods(defaultEvent);
+                        ICollection methods = ebs.GetCompatibleMethods(defaultEvent);
                         if (methods != null)
                         {
                             foreach (string compatibleMethod in methods.OfType<string>())
@@ -321,7 +320,7 @@ namespace System.ComponentModel.Design
             // Now show the event code.
             if (thisHandler != null && thisDefaultEvent != null)
             {
-                eps.ShowCode(Component, thisDefaultEvent);
+                ebs.ShowCode(Component, thisDefaultEvent);
             }
         }
 
@@ -333,13 +332,7 @@ namespace System.ComponentModel.Design
                     Component != null,
                     "this.component needs to be set before this method is valid.");
 
-                bool isRoot = false;
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                if (host != null && Component == host.RootComponent)
-                {
-                    isRoot = true;
-                }
-                return isRoot;
+                return TryGetService(out IDesignerHost host) && Component == host.RootComponent;
             }
         }
 
@@ -353,18 +346,14 @@ namespace System.ComponentModel.Design
             // For inherited components, save off the current values so we can compute a delta.  We also do this for
             // the root component, but, as it is ALWAYS inherited, the computation of default values favors the
             // presence of a default value attribute over the current code value.
-            bool isRoot = false;
-            if (GetService(typeof(IDesignerHost)) is IDesignerHost host && component == host.RootComponent)
-            {
-                isRoot = true;
-            }
+            bool isRoot = TryGetService(out IDesignerHost host) && component == host.RootComponent;
 
             if (component?.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) is null)
             {
                 sc.AddService(typeof(DesignerCommandSet), new CDDesignerCommandSet(this));
             }
 
-            if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+            if (TryGetService(out IComponentChangeService cs))
             {
                 cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
@@ -434,7 +423,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+                if (TryGetService(out IComponentChangeService cs))
                 {
                     cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 }
@@ -451,8 +440,7 @@ namespace System.ComponentModel.Design
         {
             if (Component is IPersistComponentSettings)
             {
-                IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-                IComponent rootComponent = host?.RootComponent;
+                IComponent rootComponent = GetService<IDesignerHost>()?.RootComponent;
 
                 // SettingsKey is formed based on the name of the component and the root component. If either of
                 // these change, we reset settings key (if it hasn't been explicitly set) so it can be recomputed.
@@ -472,7 +460,7 @@ namespace System.ComponentModel.Design
             {
                 if (string.IsNullOrEmpty((string)ShadowProperties[SettingsKeyName]))
                 {
-                    IComponent rootComponent = GetService(typeof(IDesignerHost)) is IDesignerHost host ? host.RootComponent : null;
+                    IComponent rootComponent = GetService<IDesignerHost>()?.RootComponent;
 
                     if (Component is IPersistComponentSettings persistableComponent && rootComponent != null)
                     {
@@ -491,6 +479,7 @@ namespace System.ComponentModel.Design
                         return persistableComponent.SettingsKey;
                     }
                 }
+
                 return ShadowProperties[SettingsKeyName] as string;
             }
             set
@@ -542,6 +531,15 @@ namespace System.ComponentModel.Design
             return null;
         }
 
+        internal T GetService<T>() where T : class
+            => GetService(typeof(T)) as T;
+
+        internal bool TryGetService<T>(out T service) where T : class
+        {
+            service = GetService<T>();
+            return service != null;
+        }
+
         /// <summary>
         ///  Raises the SetComponentDefault event.
         /// </summary>
@@ -568,13 +566,7 @@ namespace System.ComponentModel.Design
         ///  Called when the context menu should be displayed
         /// </summary>
         internal virtual void ShowContextMenu(int x, int y)
-        {
-            IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-            if (mcs != null)
-            {
-                mcs.ShowContextMenu(MenuCommands.SelectionMenu, x, y);
-            }
-        }
+            => GetService<IMenuCommandService>()?.ShowContextMenu(MenuCommands.SelectionMenu, x, y);
 
         /// <summary>
         ///  Allows a designer to filter the set of member attributes the component it is designing will expose
@@ -717,12 +709,7 @@ namespace System.ComponentModel.Design
         ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
         protected void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
-        {
-            if (GetService(typeof(IComponentChangeService)) is IComponentChangeService changeSvc)
-            {
-                changeSvc.OnComponentChanged(Component, member, oldValue, newValue);
-            }
-        }
+            => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);
 
         /// <summary>
         ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is
@@ -730,11 +717,6 @@ namespace System.ComponentModel.Design
         ///  not through the MemberDescriptor's accessors.
         /// </summary>
         protected void RaiseComponentChanging(MemberDescriptor member)
-        {
-            if (GetService(typeof(IComponentChangeService)) is IComponentChangeService changeSvc)
-            {
-                changeSvc.OnComponentChanging(Component, member);
-            }
-        }
+            => GetService<IComponentChangeService>()?.OnComponentChanging(Component, member);
     }
 }
