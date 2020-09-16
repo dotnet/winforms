@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
 
-            var e = new PaintEventArgs(graphics, clipRect);
+            using var e = new PaintEventArgs(graphics, clipRect);
             Assert.Equal(graphics, e.Graphics);
             Assert.Equal(clipRect, e.ClipRectangle);
         }
@@ -56,6 +56,17 @@ namespace System.Windows.Forms.Tests
             var e = new SubPaintEventArgs(graphics, new Rectangle(1, 2, 3, 4));
             e.DisposeEntry(disposing);
             e.DisposeEntry(disposing);
+        }
+
+        [Fact]
+        public void GraphicsIdentity()
+        {
+            // https://github.com/dotnet/winforms/issues/3910
+            using var hdc = GdiCache.GetScreenHdc();
+            using PaintEventArgs args = new PaintEventArgs(hdc, default);
+            Graphics g1 = args.Graphics;
+            Graphics g2 = args.Graphics;
+            Assert.Same(g1, g2);
         }
 
         private class SubPaintEventArgs : PaintEventArgs
