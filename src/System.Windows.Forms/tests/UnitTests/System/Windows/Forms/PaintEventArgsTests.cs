@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
 
-            var e = new PaintEventArgs(graphics, clipRect);
+            using var e = new PaintEventArgs(graphics, clipRect);
             Assert.Equal(graphics, e.Graphics);
             Assert.Equal(clipRect, e.ClipRectangle);
         }
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Tests
         {
             // https://github.com/dotnet/winforms/issues/3910
             using var hdc = GdiCache.GetScreenHdc();
-            PaintEventArgs args = new PaintEventArgs(hdc, default);
+            using PaintEventArgs args = new PaintEventArgs(hdc, default);
             Graphics g1 = args.Graphics;
             Graphics g2 = args.Graphics;
             Assert.Same(g1, g2);
