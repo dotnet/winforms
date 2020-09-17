@@ -6,15 +6,15 @@ Option Explicit On
 Option Strict On
 Imports System.ComponentModel
 Imports System.Net
-Imports NetInfoAlias = System.Net.NetworkInformation
 Imports System.Security
 Imports System.Security.Permissions
 Imports System.Threading
-Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
+Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -819,8 +819,10 @@ Namespace Microsoft.VisualBasic.Devices
             Return request
         End Function
 
+#Disable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
         Friend Sub New()
         End Sub
+#Enable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
 
         ' The Timeout value to be used by WebClient's WebRequest for Downloading or Uploading a file
         Private _timeout As Integer = 100000
