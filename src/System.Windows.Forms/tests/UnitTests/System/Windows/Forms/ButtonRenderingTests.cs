@@ -44,14 +44,30 @@ namespace System.Windows.Forms.Tests
             emf.Validate(
                 state,
                 Validate.Repeat(Validate.SkipType(Gdi32.EMR.BITBLT), 2),
-                Validate.LineTo((bounds.Right - 1, 0), (0, 0), SystemColors.ControlLightLight),
-                Validate.LineTo((0, 0), (0, bounds.Bottom - 1), SystemColors.ControlLightLight),
-                Validate.LineTo((0, bounds.Bottom - 1), (bounds.Right - 1, bounds.Bottom - 1), SystemColors.ControlDarkDark),
-                Validate.LineTo((bounds.Right - 1, bounds.Bottom - 1), (bounds.Right - 1, -1), SystemColors.ControlDarkDark),
-                Validate.LineTo((bounds.Right - 2, 1), (1, 1), SystemColors.Control),
-                Validate.LineTo((1, 1), (1, bounds.Bottom - 2), SystemColors.Control),
-                Validate.LineTo((1, bounds.Bottom - 2), (bounds.Right - 2, bounds.Bottom - 2), SystemColors.ControlDark),
-                Validate.LineTo((bounds.Right - 2, bounds.Bottom - 2), (bounds.Right - 2, 0), SystemColors.ControlDark));
+                Validate.LineTo(
+                    (bounds.Right - 1, 0), (0, 0),
+                    State.PenColor(SystemColors.ControlLightLight)),
+                Validate.LineTo(
+                    (0, 0), (0, bounds.Bottom - 1),
+                    State.PenColor(SystemColors.ControlLightLight)),
+                Validate.LineTo(
+                    (0, bounds.Bottom - 1), (bounds.Right - 1, bounds.Bottom - 1),
+                    State.PenColor(SystemColors.ControlDarkDark)),
+                Validate.LineTo(
+                    (bounds.Right - 1, bounds.Bottom - 1), (bounds.Right - 1, -1),
+                    State.PenColor(SystemColors.ControlDarkDark)),
+                Validate.LineTo(
+                    (bounds.Right - 2, 1), (1, 1),
+                    State.PenColor(SystemColors.Control)),
+                Validate.LineTo(
+                    (1, 1), (1, bounds.Bottom - 2),
+                    State.PenColor(SystemColors.Control)),
+                Validate.LineTo(
+                    (1, bounds.Bottom - 2), (bounds.Right - 2, bounds.Bottom - 2),
+                    State.PenColor(SystemColors.ControlDark)),
+                Validate.LineTo(
+                    (bounds.Right - 2, bounds.Bottom - 2), (bounds.Right - 2, 0),
+                    State.PenColor(SystemColors.ControlDark)));
         }
 
         [WinFormsFact]
@@ -69,14 +85,30 @@ namespace System.Windows.Forms.Tests
                 state,
                 Validate.SkipType(Gdi32.EMR.BITBLT),
                 Validate.TextOut("Hello"),
-                Validate.LineTo((bounds.Right - 1, 0), (0, 0), SystemColors.ControlLightLight),
-                Validate.LineTo((0, 0), (0, bounds.Bottom - 1), SystemColors.ControlLightLight),
-                Validate.LineTo((0, bounds.Bottom - 1), (bounds.Right - 1, bounds.Bottom - 1), SystemColors.ControlDarkDark),
-                Validate.LineTo((bounds.Right - 1, bounds.Bottom - 1), (bounds.Right - 1, -1), SystemColors.ControlDarkDark),
-                Validate.LineTo((bounds.Right - 2, 1), (1, 1), SystemColors.Control),
-                Validate.LineTo((1, 1), (1, bounds.Bottom - 2), SystemColors.Control),
-                Validate.LineTo((1, bounds.Bottom - 2), (bounds.Right - 2, bounds.Bottom - 2), SystemColors.ControlDark),
-                Validate.LineTo((bounds.Right - 2, bounds.Bottom - 2), (bounds.Right - 2, 0), SystemColors.ControlDark));
+                Validate.LineTo(
+                    (bounds.Right - 1, 0), (0, 0),
+                    State.PenColor(SystemColors.ControlLightLight)),
+                Validate.LineTo(
+                    (0, 0), (0, bounds.Bottom - 1),
+                    State.PenColor(SystemColors.ControlLightLight)),
+                Validate.LineTo(
+                    (0, bounds.Bottom - 1), (bounds.Right - 1, bounds.Bottom - 1),
+                    State.PenColor(SystemColors.ControlDarkDark)),
+                Validate.LineTo(
+                    (bounds.Right - 1, bounds.Bottom - 1), (bounds.Right - 1, -1),
+                    State.PenColor(SystemColors.ControlDarkDark)),
+                Validate.LineTo(
+                    (bounds.Right - 2, 1), (1, 1),
+                    State.PenColor(SystemColors.Control)),
+                Validate.LineTo(
+                    (1, 1), (1, bounds.Bottom - 2),
+                    State.PenColor(SystemColors.Control)),
+                Validate.LineTo(
+                    (1, bounds.Bottom - 2), (bounds.Right - 2, bounds.Bottom - 2),
+                    State.PenColor(SystemColors.ControlDark)),
+                Validate.LineTo(
+                    (bounds.Right - 2, bounds.Bottom - 2), (bounds.Right - 2, 0),
+                    State.PenColor(SystemColors.ControlDark)));
         }
 
         [WinFormsFact]
@@ -114,11 +146,10 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut("Flat Style"),
                 Validate.Rectangle(
                     new Rectangle(0, 0, button.Width - 1, button.Height - 1),
-                    penColor: Color.Black,
-                    penStyle: Gdi32.PS.ENDCAP_ROUND,
-                    brushColor: Color.Empty,        // Color doesn't really matter as we're using a null brush
-                    brushStyle: Gdi32.BS.NULL,      // Regressed in https://github.com/dotnet/winforms/pull/3667
-                    rop2: Gdi32.R2.COPYPEN));
+                    State.PenColor(Color.Black),
+                    State.PenStyle(Gdi32.PS.ENDCAP_ROUND),
+                    State.BrushStyle(Gdi32.BS.NULL),       // Regressed in https://github.com/dotnet/winforms/pull/3667
+                    State.Rop2( Gdi32.R2.COPYPEN)));
         }
     }
 }

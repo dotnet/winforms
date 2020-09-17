@@ -57,6 +57,8 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.SETBKMODE ? (EMRENUMRECORD<Gdi32.BKMODE>*)_lpmr : null;
         public EMRCREATEPEN* CreatePenRecord
             => Type == Gdi32.EMR.CREATEPEN ? (EMRCREATEPEN*)_lpmr : null;
+        public EMREXTCREATEPEN* ExtCreatePenRecord
+            => Type == Gdi32.EMR.EXTCREATEPEN ? (EMREXTCREATEPEN*)_lpmr : null;
         public EMRINDEXRECORD* SelectObjectRecord
             => Type == Gdi32.EMR.SELECTOBJECT ? (EMRINDEXRECORD*)_lpmr : null;
         public EMRINDEXRECORD* DeleteObjectRecord
@@ -75,6 +77,8 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.POLYLINETO16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* PolyBezierTo16Record
             => Type == Gdi32.EMR.POLYBEZIERTO16 ? (EMRPOLY16*)_lpmr : null;
+        public EMRSETWORLDTRANSFORM* SetWorldTransformRecord
+            => Type == Gdi32.EMR.SETWORLDTRANSFORM ? (EMRSETWORLDTRANSFORM*)_lpmr : null;
         public EMRMODIFYWORLDTRANSFORM* ModifyWorldTransformRecord
             => Type == Gdi32.EMR.MODIFYWORLDTRANSFORM ? (EMRMODIFYWORLDTRANSFORM*)_lpmr : null;
         public EMRSETCOLOR* SetBkColorRecord
@@ -105,6 +109,8 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.ELLIPSE ? (EMRRECTRECORD*)_lpmr : null;
         public EMRRECTRECORD* RectangleRecord
             => Type == Gdi32.EMR.RECTANGLE ? (EMRRECTRECORD*)_lpmr : null;
+        public EMRRESTOREDC* RestoreDCRecord
+            => Type == Gdi32.EMR.RESTOREDC ? (EMRRESTOREDC*)_lpmr : null;
 
         public override string ToString() => Type switch
         {
@@ -120,11 +126,17 @@ namespace System.Windows.Forms.Metafiles
             Gdi32.EMR.SETBKMODE => SetBkModeRecord->ToString(),
             Gdi32.EMR.SETROP2 => SetROP2Record->ToString(),
             Gdi32.EMR.CREATEPEN => CreatePenRecord->ToString(),
+            Gdi32.EMR.EXTCREATEPEN => ExtCreatePenRecord->ToString(),
             Gdi32.EMR.SELECTOBJECT => SelectObjectRecord->ToString(),
             Gdi32.EMR.DELETEOBJECT => DeleteObjectRecord->ToString(),
             Gdi32.EMR.BITBLT => BitBltRecord->ToString(),
             Gdi32.EMR.SETICMMODE => SetIcmModeRecord->ToString(),
+            Gdi32.EMR.POLYLINE16 => PolyLine16Record->ToString(),
+            Gdi32.EMR.POLYBEZIER16 => PolyBezier16Record->ToString(),
             Gdi32.EMR.POLYGON16 => Polygon16Record->ToString(),
+            Gdi32.EMR.POLYBEZIERTO16 => PolyBezierTo16Record->ToString(),
+            Gdi32.EMR.POLYLINETO16 => PolyLineTo16Record->ToString(),
+            Gdi32.EMR.SETWORLDTRANSFORM => SetWorldTransformRecord->ToString(),
             Gdi32.EMR.MODIFYWORLDTRANSFORM => ModifyWorldTransformRecord->ToString(),
             Gdi32.EMR.SETTEXTCOLOR => SetTextColorRecord->ToString(),
             Gdi32.EMR.SETBKCOLOR => SetBkColorRecord->ToString(),
@@ -140,7 +152,15 @@ namespace System.Windows.Forms.Metafiles
             Gdi32.EMR.INTERSECTCLIPRECT => IntersetClipRectRecord->ToString(),
             Gdi32.EMR.ELLIPSE => EllipseRecord->ToString(),
             Gdi32.EMR.RECTANGLE => RectangleRecord->ToString(),
+            Gdi32.EMR.RESTOREDC => RestoreDCRecord->ToString(),
             _ => $"[EMR{Type}]"
+        };
+
+        public string ToString(DeviceContextState state) => Type switch
+        {
+            Gdi32.EMR.POLYLINE16 => PolyLine16Record->ToString(state),
+            Gdi32.EMR.POLYGON16 => Polygon16Record->ToString(state),
+            _ => ToString()
         };
     }
 }
