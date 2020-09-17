@@ -1274,23 +1274,23 @@ namespace System.Windows.Forms
             }
             else if ((keyData & Keys.Control) == Keys.Control)
             {
-                Func<PrintPreviewDialogToolStripButton, bool> performPageClick = (PrintPreviewDialogToolStripButton pageToolStripButton) =>
+                return keyCode switch
+                {
+                    Keys.D1 => PerformPageToolStripButtonClick(onepageToolStripButton),
+                    Keys.D2 => PerformPageToolStripButtonClick(twopagesToolStripButton),
+                    Keys.D3 => PerformPageToolStripButtonClick(threepagesToolStripButton),
+                    Keys.D4 => PerformPageToolStripButtonClick(fourpagesToolStripButton),
+                    Keys.D5 => PerformPageToolStripButtonClick(sixpagesToolStripButton),
+                    _ => base.ProcessDialogKey(keyData)
+                };
+
+                bool PerformPageToolStripButtonClick(PrintPreviewDialogToolStripButton pageToolStripButton)
                 {
                     pageToolStripButton.PerformClick();
                     toolStrip1.Focus();
                     toolStrip1.ChangeSelection(pageToolStripButton);
                     return true;
-                };
-
-                return keyCode switch
-                    {
-                        Keys.D1 => performPageClick(onepageToolStripButton),
-                        Keys.D2 => performPageClick(twopagesToolStripButton),
-                        Keys.D3 => performPageClick(threepagesToolStripButton),
-                        Keys.D4 => performPageClick(fourpagesToolStripButton),
-                        Keys.D5 => performPageClick(sixpagesToolStripButton),
-                        _ => base.ProcessDialogKey(keyData)
-                    };
+                }
             }
 
             return base.ProcessDialogKey(keyData);
