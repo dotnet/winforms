@@ -5,6 +5,7 @@
 #nullable enable
 
 using System.Runtime.InteropServices;
+using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -18,7 +19,6 @@ namespace System.Windows.Forms.Metafiles
     ///  - EMRPOLYPOLYLINE16
     ///  - EMRPOLYPOLYBEZIER16
     ///  - EMRPOLYPOLYGON16
-    ///  - EMRPOLYPOLYBEZIERTO16
     ///  - EMRPOLYPOLYLINETO16
     /// </remarks>
     [StructLayout(LayoutKind.Sequential)]
@@ -28,14 +28,55 @@ namespace System.Windows.Forms.Metafiles
         public RECT rclBounds;          // Inclusive-inclusive bounds in device units
         public uint nPolys;             // Number of polys
         public uint cpts;               // Total number of points in all polys
-        public uint aPolyCounts;        // Array of point counts for each poly
+        public uint _aPolyCounts;       // Array of point counts for each poly
 
-        // Can't represent this as it comes nPolys uints after cpts
-        //public POINTS apts[1];        // Array of points
+        // Can't represent this as a field as it comes nPolys uints after cpts
+        // public POINTS apts[1];        // Array of points
 
-        public override string ToString()
+        public override string ToString() => ToString(null);
+
+        public string ToString(DeviceContextState? state)
         {
-            return $"[EMR{emr.iType}] Bounds: {rclBounds} Polys: {nPolys} Points: {cpts}";
+            StringBuilder sb = new StringBuilder(512);
+            sb.Append($"[EMR{emr.iType}] Bounds: {rclBounds} Poly count: {nPolys} Total points: {cpts}");
+
+            for (int i = 0; i < nPolys; i++)
+            {
+                if (state is null)
+                {
+                    sb.AppendFormat("\n\tPoly index {0}: {1}", i, string.Join(' ', GetPointsForPoly(i).ToArray()));
+                }
+                else
+                {
+                    sb.AppendFormat(
+                        "\n\tPoly index {0}: {1}",
+                        i,
+                        string.Join(' ', GetPointsForPoly(i).Transform(p => state.TransformPoint(p))));
+                }
+            }
+
+            return sb.ToString();
+        }
+
+        public ReadOnlySpan<uint> aPolyCounts => TrailingArray<uint>.GetBuffer(ref _aPolyCounts, nPolys);
+
+        public unsafe ReadOnlySpan<POINTS> GetPointsForPoly(int index)
+        {
+            if (index < 0 || index >= nPolys)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            int current = 0;
+            fixed (void* s = &emr)
+            {
+                POINTS* currentPoint = (POINTS*)((byte*)s + sizeof(EMRPOLYPOLY16) + (sizeof(uint) * (nPolys - 1)));
+                var counts = aPolyCounts;
+                while (current != index)
+                {
+                    currentPoint += counts[current];
+                    current++;
+                }
+                return new ReadOnlySpan<POINTS>(currentPoint, (int)counts[current]);
+            }
         }
     }
 }

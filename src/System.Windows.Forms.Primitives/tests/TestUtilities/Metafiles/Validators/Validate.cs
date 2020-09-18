@@ -33,6 +33,28 @@ namespace System.Windows.Forms.Metafiles
                 points,
                 stateValidators);
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="polyCount">Optional count of polygons to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
+        internal static IEmfValidator PolyPolygon16(
+            Rectangle? bounds = default,
+            int? polyCount = default,
+            params IStateValidator[] stateValidators) => new PolyPolygon16Validator(
+                bounds,
+                polyCount,
+                stateValidators);
+
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="polyCount">Optional count of polygons to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
+        internal static IEmfValidator PolyPolyline16(
+            Rectangle? bounds = default,
+            int? polyCount = default,
+            params IStateValidator[] stateValidators) => new PolyPolyline16Validator(
+                bounds,
+                polyCount,
+                stateValidators);
+
         /// <param name="text">Optional text to validate.</param>
         /// <param name="bounds">Optional bounds to validate.</param>
         /// <param name="fontFace">Optional font face name to validate.</param>
