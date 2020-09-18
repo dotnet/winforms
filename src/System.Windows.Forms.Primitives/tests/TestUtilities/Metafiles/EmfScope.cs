@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -167,16 +168,16 @@ namespace System.Windows.Forms.Metafiles
             }
         }
 
-        public List<string> RecordsToString()
+        public string RecordsToString()
         {
-            var strings = new List<string>();
+            var strings = new StringBuilder();
             Enumerate((ref EmfRecord record) =>
             {
-                strings.Add(record.ToString());
+                strings.AppendLine(record.ToString());
                 return true;
             });
 
-            return strings;
+            return strings.ToString();
         }
 
         public List<string> RecordsToStringWithState(DeviceContextState state)
