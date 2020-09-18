@@ -374,6 +374,5 @@ namespace System.Windows.Forms.Tests
                     State.Pen(16, Color.Pink, penStyle),
                     State.Brush(Color.Pink, Gdi32.BS.SOLID)));
         }
-
     }
 }
