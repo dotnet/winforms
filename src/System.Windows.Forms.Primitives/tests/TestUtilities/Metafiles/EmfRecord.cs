@@ -69,14 +69,18 @@ namespace System.Windows.Forms.Metafiles
             => Type == Gdi32.EMR.SETICMMODE ? (EMRENUMRECORD<Gdi32.ICM>*)_lpmr : null;
         public EMRPOLY16* Polygon16Record
             => Type == Gdi32.EMR.POLYGON16 ? (EMRPOLY16*)_lpmr : null;
-        public EMRPOLY16* PolyLine16Record
+        public EMRPOLY16* Polyline16Record
             => Type == Gdi32.EMR.POLYLINE16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* PolyBezier16Record
             => Type == Gdi32.EMR.POLYBEZIER16 ? (EMRPOLY16*)_lpmr : null;
-        public EMRPOLY16* PolyLineTo16Record
+        public EMRPOLY16* PolylineTo16Record
             => Type == Gdi32.EMR.POLYLINETO16 ? (EMRPOLY16*)_lpmr : null;
         public EMRPOLY16* PolyBezierTo16Record
             => Type == Gdi32.EMR.POLYBEZIERTO16 ? (EMRPOLY16*)_lpmr : null;
+        public EMRPOLYPOLY16* PolyPolyline16Record
+            => Type == Gdi32.EMR.POLYPOLYLINE16 ? (EMRPOLYPOLY16*)_lpmr : null;
+        public EMRPOLYPOLY16* PolyPolygon16Record
+            => Type == Gdi32.EMR.POLYPOLYGON16 ? (EMRPOLYPOLY16*)_lpmr : null;
         public EMRSETWORLDTRANSFORM* SetWorldTransformRecord
             => Type == Gdi32.EMR.SETWORLDTRANSFORM ? (EMRSETWORLDTRANSFORM*)_lpmr : null;
         public EMRMODIFYWORLDTRANSFORM* ModifyWorldTransformRecord
@@ -131,11 +135,13 @@ namespace System.Windows.Forms.Metafiles
             Gdi32.EMR.DELETEOBJECT => DeleteObjectRecord->ToString(),
             Gdi32.EMR.BITBLT => BitBltRecord->ToString(),
             Gdi32.EMR.SETICMMODE => SetIcmModeRecord->ToString(),
-            Gdi32.EMR.POLYLINE16 => PolyLine16Record->ToString(),
+            Gdi32.EMR.POLYLINE16 => Polyline16Record->ToString(),
             Gdi32.EMR.POLYBEZIER16 => PolyBezier16Record->ToString(),
             Gdi32.EMR.POLYGON16 => Polygon16Record->ToString(),
             Gdi32.EMR.POLYBEZIERTO16 => PolyBezierTo16Record->ToString(),
-            Gdi32.EMR.POLYLINETO16 => PolyLineTo16Record->ToString(),
+            Gdi32.EMR.POLYLINETO16 => PolylineTo16Record->ToString(),
+            Gdi32.EMR.POLYPOLYGON16 => PolyPolygon16Record->ToString(),
+            Gdi32.EMR.POLYPOLYLINE16 => PolyPolyline16Record->ToString(),
             Gdi32.EMR.SETWORLDTRANSFORM => SetWorldTransformRecord->ToString(),
             Gdi32.EMR.MODIFYWORLDTRANSFORM => ModifyWorldTransformRecord->ToString(),
             Gdi32.EMR.SETTEXTCOLOR => SetTextColorRecord->ToString(),
@@ -158,8 +164,10 @@ namespace System.Windows.Forms.Metafiles
 
         public string ToString(DeviceContextState state) => Type switch
         {
-            Gdi32.EMR.POLYLINE16 => PolyLine16Record->ToString(state),
+            Gdi32.EMR.POLYLINE16 => Polyline16Record->ToString(state),
             Gdi32.EMR.POLYGON16 => Polygon16Record->ToString(state),
+            Gdi32.EMR.POLYPOLYGON16 => PolyPolygon16Record->ToString(state),
+            Gdi32.EMR.POLYPOLYLINE16 => PolyPolyline16Record->ToString(state),
             _ => ToString()
         };
     }

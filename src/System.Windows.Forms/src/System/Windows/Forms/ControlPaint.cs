@@ -1154,7 +1154,7 @@ namespace System.Windows.Forms
 
             if (color.HasTransparency() || style != ButtonBorderStyle.Solid)
             {
-                // Gdi+ right and bottom DrawRectangle border are 1 greater than Gdi
+                // GDI+ right and bottom DrawRectangle border are 1 greater than GDI
                 bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
                 Graphics graphics = context.TryGetGraphics(create: true);
@@ -1164,13 +1164,14 @@ namespace System.Windows.Forms
                     {
                         using var pen = color.GetCachedPenScope();
                         graphics.DrawRectangle(pen, bounds);
-                        return;
                     }
                     else
                     {
                         using var pen = color.CreateStaticPen(BorderStyleToDashStyle(style));
                         graphics.DrawRectangle(pen, bounds);
                     }
+
+                    return;
                 }
             }
 
