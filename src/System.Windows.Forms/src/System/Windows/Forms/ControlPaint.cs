@@ -1943,9 +1943,9 @@ namespace System.Windows.Forms
 
             for (int i = 0; i < size - 4; i += 4)
             {
-                hdc.DrawLine(hpenDark, right - (i + 1) - 2, bottom, right, bottom - (i + 1) - 2);
-                hdc.DrawLine(hpenDark, right - (i + 2) - 2, bottom, right, bottom - (i + 2) - 2);
-                hdc.DrawLine(hpenBright, right - (i + 3) - 2, bottom, right, bottom - (i + 3) - 2);
+                hdc.DrawLine(hpenDark, right - (i + 1) - 2, bottom, right + 1, bottom - (i + 1) - 3);
+                hdc.DrawLine(hpenDark, right - (i + 2) - 2, bottom, right + 1, bottom - (i + 2) - 3);
+                hdc.DrawLine(hpenBright, right - (i + 3) - 2, bottom, right + 1, bottom - (i + 3) - 3);
             }
         }
 
