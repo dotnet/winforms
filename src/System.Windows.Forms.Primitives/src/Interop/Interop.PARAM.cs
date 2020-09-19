@@ -31,17 +31,19 @@ internal partial class Interop
         public static int LOWORD(int n)
             => n & 0xffff;
 
+#pragma warning disable IDE0004 // (nint) cast in (int)(nint)IntPtr is not actually redundant
         public static int LOWORD(IntPtr n)
-            => LOWORD(unchecked((int)(long)n));
+            => LOWORD(unchecked((int)(nint)n));
 
         public static int HIWORD(IntPtr n)
-            => HIWORD(unchecked((int)(long)n));
+            => HIWORD(unchecked((int)(nint)n));
 
         public static int SignedHIWORD(IntPtr n)
-            => SignedHIWORD(unchecked((int)(long)n));
+            => SignedHIWORD(unchecked((int)(nint)n));
 
         public static int SignedLOWORD(IntPtr n)
-            => SignedLOWORD(unchecked((int)(long)n));
+            => SignedLOWORD(unchecked((int)(nint)n));
+#pragma warning restore IDE0004
 
         public static int SignedHIWORD(int n)
             => (int)(short)HIWORD(n);
@@ -55,15 +57,17 @@ internal partial class Interop
         public static IntPtr FromColor(Color color)
             => (IntPtr)ColorTranslator.ToWin32(color);
 
+#pragma warning disable IDE0004 // (int) cast in (nint)(nint)IntPtr is not actually redundant
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
         /// </summary>
-        public static int ToInt(IntPtr param) => (int)(long)param;
+        public static int ToInt(IntPtr param) => (int)(nint)param;
 
         /// <summary>
         ///  Hard casts to <see langword="uint" /> without bounds checks.
         /// </summary>
-        public static uint ToUInt(IntPtr param) => (uint)(long)param;
+        public static uint ToUInt(IntPtr param) => (uint)(nint)param;
+#pragma warning restore IDE0004
 
         /// <summary>
         ///  Hard casts to <see langword="long" /> without bounds checks.
