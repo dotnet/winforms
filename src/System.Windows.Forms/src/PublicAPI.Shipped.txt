@@ -10720,7 +10720,7 @@ System.Windows.Forms.ScrollProperties.ScrollProperties(System.Windows.Forms.Scro
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
-~System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject.ToolStripHostedControlAccessibleObject(System.Windows.Forms.Control toolStripHostedControl, System.Windows.Forms.ToolStripControlHost toolStripControlHost) -> void
+System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject.ToolStripHostedControlAccessibleObject(System.Windows.Forms.Control! toolStripHostedControl, System.Windows.Forms.ToolStripControlHost? toolStripControlHost) -> void
 ~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.set -> void
 ~System.Windows.Forms.ToolStripDropDown.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton

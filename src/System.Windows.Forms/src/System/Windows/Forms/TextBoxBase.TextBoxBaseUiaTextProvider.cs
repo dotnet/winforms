@@ -78,7 +78,7 @@ namespace System.Windows.Forms
 
                 // Convert screen to client coordinates.
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-                if (MapWindowPoints(new HandleRef(null, IntPtr.Zero), new HandleRef(this, _owningTextBoxBase.Handle), ref clientLocation, 1) == 0)
+                if (MapWindowPoints(default, _owningTextBoxBase, ref clientLocation, 1) == 0)
                 {
                     return new UiaTextRange(new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject), this, 0, 0);
                 }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
 
             public override int LinesCount
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(new HandleRef(this, _owningTextBoxBase.Handle), (WM)EM.GETLINECOUNT)
+                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
                     : -1;
 
             public override int LinesPerPage
@@ -222,17 +222,17 @@ namespace System.Windows.Forms
 
             public override WS_EX WindowExStyle
                 => _owningTextBoxBase.IsHandleCreated
-                    ? GetWindowExStyle(_owningTextBoxBase.Handle)
+                    ? GetWindowExStyle(_owningTextBoxBase)
                     : WS_EX.LEFT;
 
             public override WS WindowStyle
                 => _owningTextBoxBase.IsHandleCreated
-                    ? GetWindowStyle(_owningTextBoxBase.Handle)
+                    ? GetWindowStyle(_owningTextBoxBase)
                     : WS.OVERLAPPED;
 
             public override ES EditStyle
                 => _owningTextBoxBase.IsHandleCreated
-                    ? GetEditStyle(_owningTextBoxBase.Handle)
+                    ? GetEditStyle(_owningTextBoxBase)
                     : ES.LEFT;
 
             public override int GetLineFromCharIndex(int charIndex)
