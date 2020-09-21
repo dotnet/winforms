@@ -23,9 +23,9 @@ namespace System.Windows.Forms
                 BinaryFormatter formatter = new BinaryFormatter();
                 try
                 {
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                     bag = (Hashtable)formatter.Deserialize(stream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 }
                 catch
                 {
@@ -70,9 +70,9 @@ namespace System.Windows.Forms
             internal void Write(Stream stream)
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                 formatter.Serialize(stream, bag);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
             }
         }
     }

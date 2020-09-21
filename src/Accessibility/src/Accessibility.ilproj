@@ -6,6 +6,7 @@
     <!-- ILAsm doesn't produce a PDB - https://github.com/dotnet/coreclr/issues/15299 -->
     <IncludePdbInPackage>false</IncludePdbInPackage>
     <PublishWindowsPdb>false</PublishWindowsPdb>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
   
   <ItemGroup>

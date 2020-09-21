@@ -584,12 +584,12 @@ namespace System.Windows.Forms.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                 formatter.Serialize(stream, subItem);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 Assert.Equal(subItem.BackColor, result.BackColor);
                 Assert.Equal(subItem.Font, result.Font);
                 Assert.Equal(subItem.ForeColor, result.ForeColor);

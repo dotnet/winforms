@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,7 +16,9 @@ internal partial class Interop
             IntPtr lpSource,
             uint dwMessageId,
             uint dwLanguageId,
+#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
             StringBuilder lpBuffer,
+#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
             int nSize,
             IntPtr arguments);
     }

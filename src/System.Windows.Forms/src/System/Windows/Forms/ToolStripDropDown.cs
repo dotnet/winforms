@@ -1639,9 +1639,7 @@ namespace System.Windows.Forms
                 {
                     if (control != null)
                     {
-#pragma warning disable 618
                         control.Scale(dx, dy);
-#pragma warning restore 618
                     }
                 }
             }
