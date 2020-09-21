@@ -745,7 +745,8 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(topColor);
                             for (int i = 0; i < topWidth; i++)
                             {
-                                hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
+                                // Need to add one to the destination point for GDI to render the same as GDI+
+                                hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i] + 1, bounds.Y + i);
                             }
                         }
                         else
@@ -778,7 +779,9 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(topStyle == ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
-                            hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
+
+                            // Need to add one to the destination point for GDI to render the same as GDI+
+                            hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i] + 1, bounds.Y + i);
                         }
                         break;
                     }
@@ -799,7 +802,8 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(leftColor);
                             for (int i = 0; i < leftWidth; i++)
                             {
-                                hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
+                                // Need to add one to the destination point for GDI to render the same as GDI+
+                                hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i] + 1);
                             }
                         }
                         else
@@ -831,7 +835,9 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(leftStyle == ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
-                            hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
+
+                            // Need to add one to the destination point for GDI to render the same as GDI+
+                            hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i] + 1);
                         }
                         break;
                     }
@@ -852,11 +858,12 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(bottomColor);
                             for (int i = 0; i < bottomWidth; i++)
                             {
+                                // Need to add one to the destination point for GDI to render the same as GDI+
                                 hdc.DrawLine(
                                     hpen,
                                     bottomLineLefts[i],
                                     bounds.Y + bounds.Height - 1 - i,
-                                    bottomLineRights[i],
+                                    bottomLineRights[i] + 1,
                                     bounds.Y + bounds.Height - 1 - i);
                             }
                         }
@@ -894,11 +901,13 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(bottomStyle != ButtonBorderStyle.Inset
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
+
+                            // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(
                                 hpen,
                                 bottomLineLefts[i],
                                 bounds.Y + bounds.Height - 1 - i,
-                                bottomLineRights[i],
+                                bottomLineRights[i] + 1,
                                 bounds.Y + bounds.Height - 1 - i);
                         }
                         break;
@@ -920,12 +929,13 @@ namespace System.Windows.Forms
                             using var hpen = new Gdi32.CreatePenScope(rightColor);
                             for (int i = 0; i < rightWidth; i++)
                             {
+                                // Need to add one to the destination point for GDI to render the same as GDI+
                                 hdc.DrawLine(
                                     hpen,
                                     bounds.X + bounds.Width - 1 - i,
                                     rightLineTops[i],
                                     bounds.X + bounds.Width - 1 - i,
-                                    rightLineBottoms[i]);
+                                    rightLineBottoms[i] + 1);
                             }
                         }
                         else
@@ -963,11 +973,12 @@ namespace System.Windows.Forms
                                 ? hlsColor.Darker(1.0f - i * inc)
                                 : hlsColor.Lighter(1.0f - i * inc));
 
+                            // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen,
                                 bounds.X + bounds.Width - 1 - i,
                                 rightLineTops[i],
                                 bounds.X + bounds.Width - 1 - i,
-                                rightLineBottoms[i]);
+                                rightLineBottoms[i] + 1);
                         }
                         break;
                     }
@@ -1154,7 +1165,7 @@ namespace System.Windows.Forms
 
             if (color.HasTransparency() || style != ButtonBorderStyle.Solid)
             {
-                // Gdi+ right and bottom DrawRectangle border are 1 greater than Gdi
+                // GDI+ right and bottom DrawRectangle border are 1 greater than GDI
                 bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
                 Graphics graphics = context.TryGetGraphics(create: true);
@@ -1164,13 +1175,14 @@ namespace System.Windows.Forms
                     {
                         using var pen = color.GetCachedPenScope();
                         graphics.DrawRectangle(pen, bounds);
-                        return;
                     }
                     else
                     {
                         using var pen = color.CreateStaticPen(BorderStyleToDashStyle(style));
                         graphics.DrawRectangle(pen, bounds);
                     }
+
+                    return;
                 }
             }
 
@@ -1931,9 +1943,9 @@ namespace System.Windows.Forms
 
             for (int i = 0; i < size - 4; i += 4)
             {
-                hdc.DrawLine(hpenDark, right - (i + 1) - 2, bottom, right, bottom - (i + 1) - 2);
-                hdc.DrawLine(hpenDark, right - (i + 2) - 2, bottom, right, bottom - (i + 2) - 2);
-                hdc.DrawLine(hpenBright, right - (i + 3) - 2, bottom, right, bottom - (i + 3) - 2);
+                hdc.DrawLine(hpenDark, right - (i + 1) - 2, bottom, right + 1, bottom - (i + 1) - 3);
+                hdc.DrawLine(hpenDark, right - (i + 2) - 2, bottom, right + 1, bottom - (i + 2) - 3);
+                hdc.DrawLine(hpenBright, right - (i + 3) - 2, bottom, right + 1, bottom - (i + 3) - 3);
             }
         }
 

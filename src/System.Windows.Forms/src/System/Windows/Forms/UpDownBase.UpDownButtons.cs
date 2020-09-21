@@ -329,19 +329,11 @@ namespace System.Windows.Forms
 
                     Rectangle clientRect = ClientRectangle;
                     Point pt1 = new Point(clientRect.Left, clientRect.Bottom - 1);
-                    Point pt2 = new Point(clientRect.Right - 1, clientRect.Bottom - 1);
+                    Point pt2 = new Point(clientRect.Right, clientRect.Bottom - 1);
 
-                    if (!color.HasTransparency())
-                    {
-                        using var hdc = new DeviceContextHdcScope(e);
-                        using var hpen = new Gdi32.CreatePenScope(color);
-                        hdc.DrawLine(hpen, pt1, pt2);
-                    }
-                    else
-                    {
-                        using var pen = color.GetCachedPenScope();
-                        e.Graphics.DrawLine(pen, pt1, pt2);
-                    }
+                    using var hdc = new DeviceContextHdcScope(e);
+                    using var hpen = new Gdi32.CreatePenScope(color);
+                    hdc.DrawLine(hpen, pt1, pt2);
                 }
 
                 // Raise the paint event, just in case this inner class goes public some day
