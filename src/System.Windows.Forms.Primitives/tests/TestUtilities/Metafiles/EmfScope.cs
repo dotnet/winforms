@@ -4,7 +4,6 @@
 
 #nullable enable
 
-using System.Collections.Generic;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -170,27 +169,27 @@ namespace System.Windows.Forms.Metafiles
 
         public string RecordsToString()
         {
-            var strings = new StringBuilder();
+            StringBuilder sb = new StringBuilder(1024);
             Enumerate((ref EmfRecord record) =>
             {
-                strings.AppendLine(record.ToString());
+                sb.AppendLine(record.ToString());
                 return true;
             });
 
-            return strings.ToString();
+            return sb.ToString();
         }
 
-        public List<string> RecordsToStringWithState(DeviceContextState state)
+        public string RecordsToStringWithState(DeviceContextState state)
         {
-            var strings = new List<string>();
+            StringBuilder sb = new StringBuilder(1024);
             EnumerateWithState((ref EmfRecord record, DeviceContextState state) =>
             {
-                strings.Add(record.ToString(state));
+                sb.AppendLine(record.ToString(state));
                 return true;
             },
             state);
 
-            return strings;
+            return sb.ToString();
         }
 
         private static unsafe BOOL CallBack(
