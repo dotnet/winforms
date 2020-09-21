@@ -69,12 +69,12 @@
     },
     "hostIsCli": {
       "type": "computed",
-      "value": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")"
+      "value": "(HostIdentifier == \"dotnetcli\" || HostIdentifier == \"dotnetcli-preview\")"
     },
-      "skipAppModel": {
-        "type": "computed",
-        "value": "hostIsCli || !UseAppFramework"
-      }
+    "skipAppModel": {
+      "type": "computed",
+      "value": "(hostIsCli && !UseAppFramework)"
+    }
     },
     "primaryOutputs": [
       { "path": "Company.WinFormsApplication1.vbproj" },

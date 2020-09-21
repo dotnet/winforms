@@ -11,6 +11,7 @@ Namespace My
     ' **NEW** ApplyHighDpiMode: Raised when the application queries the HighDpiMode to set it for the application.
 
     ' Example:
+
     ' Private Sub MyApplication_ApplyHighDpiMode(sender As Object, e As ApplyHighDpiModeEventArgs) Handles Me.ApplyHighDpiMode
     '     e.HighDpiMode = HighDpiMode.PerMonitorV2
     ' End Sub

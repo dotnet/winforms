@@ -1,5 +1,6 @@
-Friend Module Program
+﻿Friend Module Program
 
+    ' Start and set HighDpiMode, Styles and TextRenderingDefault.
     <STAThread()>
     Friend Sub Main(args As String())
         Application.SetHighDpiMode(HighDpiMode.SystemAware)
