@@ -9,7 +9,6 @@ using System.Windows.Forms.Metafiles;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -669,7 +668,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "Acrylic",
                     bounds: null,                                   // Don't care about the bounds for this test
-                    fontFace: SystemFonts.DefaultFont.Name,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Blue)));
         }
 
@@ -772,7 +771,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "Sparkling Cider",
                     expectedBounds,
-                    SystemFonts.DefaultFont.Name,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Red)));
         }
 
@@ -795,7 +794,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "Sparkling Cider",
                     expectedBounds,
-                    SystemFonts.DefaultFont.Name,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Red)));
         }
 

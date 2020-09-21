@@ -35,16 +35,13 @@ namespace System.Windows.Forms.Metafiles
 
         /// <param name="text">Optional text to validate.</param>
         /// <param name="bounds">Optional bounds to validate.</param>
-        /// <param name="fontFace">Optional font face name to validate.</param>
         /// <param name="stateValidators">Optional device context state validation to perform.</param>
         internal static IEmfValidator TextOut(
             string? text = default,
             Rectangle? bounds = default,
-            string? fontFace = default,
             params IStateValidator[] stateValidators) => new TextOutValidator(
                 text,
                 bounds,
-                fontFace,
                 stateValidators);
 
         /// <param name="from">Optional source point to validate.</param>
