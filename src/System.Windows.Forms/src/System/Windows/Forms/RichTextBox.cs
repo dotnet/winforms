@@ -578,6 +578,11 @@ namespace System.Windows.Forms
             set { richTextBoxFlags[protectedErrorSection] = value ? 1 : 0; }
         }
 
+        private protected override void RaiseAccessibilityTextChangedEvent()
+        {
+            // Do not do anything because Win32 provides unmanaged Text pattern for RichTextBox
+        }
+
         /// <summary>
         ///  Returns the name of the action that will be performed if the user
         ///  Redo's their last Undone operation. If no operation can be redone,
