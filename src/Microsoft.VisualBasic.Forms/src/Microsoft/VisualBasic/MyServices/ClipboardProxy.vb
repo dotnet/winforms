@@ -9,19 +9,16 @@ Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Drawing
 Imports System.IO
-Imports System.Security.Permissions
 Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices
 
-#Disable Warning BC40000 ' Type or member is obsolete
     ''' <summary>
     ''' A class that wraps System.Windows.Forms.Clipboard so that
     ''' a clipboard can be instanced.
     ''' </summary>
-    <EditorBrowsable(EditorBrowsableState.Never), HostProtection(Resources:=HostProtectionResource.ExternalProcessMgmt)>
+    <EditorBrowsable(EditorBrowsableState.Never)>
     Public Class ClipboardProxy
-#Enable Warning BC40000 ' Type or member is obsolete
 
         ''' <summary>
         ''' Only Allows instantiation of the class

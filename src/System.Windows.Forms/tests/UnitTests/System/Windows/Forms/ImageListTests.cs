@@ -448,11 +448,11 @@ namespace System.Windows.Forms.Tests
         {
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618, SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(stream, source);
             stream.Position = 0;
             return (T)formatter.Deserialize(stream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618, SYSLIB0011 // Type or member is obsolete
         }
 
         [WinFormsTheory]
