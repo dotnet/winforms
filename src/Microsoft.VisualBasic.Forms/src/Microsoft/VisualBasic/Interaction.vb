@@ -45,22 +45,16 @@ Namespace Microsoft.VisualBasic
                 'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
                 'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
-#Disable Warning BC40000 ' Type or member is obsolete
-                RuntimeHelpers.PrepareConstrainedRegions()
-#Enable Warning BC40000 ' Type or member is obsolete
-                Try
-                Finally
-                    ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
-                    If ok = 0 Then
-                        ErrorCode = Marshal.GetLastWin32Error()
-                    End If
-                    If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.INVALID_HANDLE Then
-                        safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
-                    End If
-                    If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.INVALID_HANDLE Then
-                        safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
-                    End If
-                End Try
+                ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
+                If ok = 0 Then
+                    ErrorCode = Marshal.GetLastWin32Error()
+                End If
+                If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.INVALID_HANDLE Then
+                    safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
+                End If
+                If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.INVALID_HANDLE Then
+                    safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
+                End If
 
                 Try
                     If (ok <> 0) Then

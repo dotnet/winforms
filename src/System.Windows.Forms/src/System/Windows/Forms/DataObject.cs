@@ -804,9 +804,9 @@ namespace System.Windows.Forms
                 formatter.Binder = new BitmapBinder();
             }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618, SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(stream, data);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618, SYSLIB0011 // Type or member is obsolete
         }
 
         /// <summary>

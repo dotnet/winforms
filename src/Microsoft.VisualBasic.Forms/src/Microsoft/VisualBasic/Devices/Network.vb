@@ -7,7 +7,6 @@ Option Strict On
 Imports System.ComponentModel
 Imports System.Net
 Imports System.Security
-Imports System.Security.Permissions
 Imports System.Threading
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -391,12 +390,6 @@ Namespace Microsoft.VisualBasic.Devices
 
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
-                    ' Do UI demand here rather than waiting for form.show so that exception is thrown as early as possible
-#Disable Warning BC40000 ' Type or member is obsolete
-                    Dim UIPermission As New UIPermission(UIPermissionWindow.SafeSubWindows)
-#Enable Warning BC40000 ' Type or member is obsolete
-                    UIPermission.Demand()
-
                     dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
                         .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
