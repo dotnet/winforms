@@ -14,7 +14,6 @@ namespace System.Windows.Forms
         // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
         // Pragma added to prevent converting the "type is obsolete" warning into build error.
         // File owner should fix this.
-#pragma warning disable 618
         public static bool IsCriticalException(Exception ex)
         {
             return ex is NullReferenceException
@@ -25,7 +24,6 @@ namespace System.Windows.Forms
                     || ex is IndexOutOfRangeException
                     || ex is AccessViolationException;
         }
-#pragma warning restore 618
 
         // Sequential version
         // assumes sequential enum members 0,1,2,3,4 -etc.
@@ -154,9 +152,7 @@ namespace System.Windows.Forms
                 int actualMaximum = int.MinValue;
                 int countEnumVals = 0;
 
-#pragma warning disable CS8605 // Unboxing a possibly null value.
                 foreach (int iVal in Enum.GetValues(t))
-#pragma warning restore CS8605 // Unboxing a possibly null value.
                 {
                     actualMinimum = Math.Min(actualMinimum, iVal);
                     actualMaximum = Math.Max(actualMaximum, iVal);
@@ -217,9 +213,7 @@ namespace System.Windows.Forms
         {
             Type t = value.GetType();
             uint newmask = 0;
-#pragma warning disable CS8605 // Unboxing a possibly null value.
             foreach (int iVal in Enum.GetValues(t))
-#pragma warning restore CS8605 // Unboxing a possibly null value.
             {
                 newmask |= (uint)iVal;
             }
@@ -233,10 +227,8 @@ namespace System.Windows.Forms
                int checkedValue = Convert.ToInt32(value, CultureInfo.InvariantCulture);
                int maxBitsFound = 0;
                bool foundValue = false;
-#pragma warning disable CS8605 // Unboxing a possibly null value.
-               foreach (int iVal in Enum.GetValues(t)){
-#pragma warning restore CS8605 // Unboxing a possibly null value.
-                   actualMinimum = Math.Min(actualMinimum, iVal);
+            foreach (int iVal in Enum.GetValues(t)){
+                actualMinimum = Math.Min(actualMinimum, iVal);
                    actualMaximum = Math.Max(actualMaximum, iVal);
                    maxBitsFound = Math.Max(maxBitsFound, BitOperations.PopCount((uint)iVal));
                    if (checkedValue == iVal) {

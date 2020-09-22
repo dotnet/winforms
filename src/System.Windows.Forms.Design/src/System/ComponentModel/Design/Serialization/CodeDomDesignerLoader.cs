@@ -134,9 +134,7 @@ namespace System.ComponentModel.Design.Serialization
                 return;
             }
 
-#pragma warning disable 618
             ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-#pragma warning restore 618
             using var sw = new StringWriter(CultureInfo.InvariantCulture);
 
             try
@@ -268,7 +266,6 @@ namespace System.ComponentModel.Design.Serialization
                             // Backwards Compat:  RootDesignerSerializer is obsolete, but we need to still
                             // be compatible and read it.
                             // Walk the member attributes for this type, looking for an appropriate serializer attribute.
-#pragma warning disable 0618
                             AttributeCollection attributes = TypeDescriptor.GetAttributes(baseType);
 
                             foreach (Attribute attr in attributes)
@@ -300,7 +297,6 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                 }
                             }
-#pragma warning restore 0618
 
                             //add a check for root designer -- this allows an extra level of checking so we can skip classes
                             //that cannot be designed.
@@ -1200,9 +1196,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (provider != null)
                 {
-#pragma warning disable 618
                     _codeGenerator = provider.CreateGenerator();
-#pragma warning restore 618
                 }
             }
 
@@ -1238,9 +1232,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (provider != null)
                 {
-#pragma warning disable 618
                     _codeGenerator = provider.CreateGenerator();
-#pragma warning restore 618
                 }
             }
 
@@ -1318,9 +1310,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (provider != null)
                 {
-#pragma warning disable 618
                     _codeGenerator = provider.CreateGenerator();
-#pragma warning restore 618
                 }
             }
 

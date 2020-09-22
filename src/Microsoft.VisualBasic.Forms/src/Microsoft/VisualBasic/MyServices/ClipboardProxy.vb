@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -26,7 +26,6 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Gets text from the clipboard
         ''' </summary>
@@ -212,6 +211,5 @@ Namespace Microsoft.VisualBasic.MyServices
         Public Sub SetDataObject(data As System.Windows.Forms.DataObject)
             Clipboard.SetDataObject(data)
         End Sub
-#Enable Warning CA1822 ' Mark members as static
     End Class
 End Namespace

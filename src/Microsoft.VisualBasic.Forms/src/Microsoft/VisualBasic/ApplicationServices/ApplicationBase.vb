@@ -18,7 +18,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Sub New()
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Returns the value of the specified environment variable.
         ''' </summary>
@@ -27,7 +26,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <exception cref="ArgumentNullException">if name is Nothing.</exception>
         ''' <exception cref="ArgumentException">if the specified environment variable does not exist.</exception>
         Public Function GetEnvironmentVariable(name As String) As String
-#Enable Warning CA1822 ' Mark members as static
 
             ' Framework returns Null if not found.
             Dim VariableValue As String = Environment.GetEnvironmentVariable(name)
@@ -94,7 +92,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
         End Property
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Changes the culture currently in used by the current thread.
         ''' </summary>
@@ -117,7 +114,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Sub ChangeUICulture(cultureName As String)
             Threading.Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
         End Sub
-#Enable Warning CA1822 ' Mark members as static
 
         Private _log As Logging.Log 'Lazy-initialized and cached log object.
         Private _info As AssemblyInfo ' The executing application (the EntryAssembly)

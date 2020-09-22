@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -584,12 +584,12 @@ namespace System.Windows.Forms.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618, SYSLIB0011 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 formatter.Serialize(stream, subItem);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 ListViewItem.ListViewSubItem result = Assert.IsType<ListViewItem.ListViewSubItem>(formatter.Deserialize(stream));
-#pragma warning restore CS0618, SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 Assert.Equal(subItem.BackColor, result.BackColor);
                 Assert.Equal(subItem.Font, result.Font);
                 Assert.Equal(subItem.ForeColor, result.ForeColor);

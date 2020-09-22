@@ -406,9 +406,9 @@ namespace System.ComponentModel.Design.Serialization
                             BinaryFormatter formatter = new BinaryFormatter();
                             _resourceStream = new MemoryStream();
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                             formatter.Serialize(_resourceStream, _resources.Data);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                         }
                     }
 
@@ -480,9 +480,9 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     _resourceStream.Seek(0, SeekOrigin.Begin);
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                     Hashtable resources = formatter.Deserialize(_resourceStream) as Hashtable;
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                     _resources = new LocalResourceManager(resources);
                 }
 
@@ -570,9 +570,9 @@ namespace System.ComponentModel.Design.Serialization
             internal static CodeDomSerializationStore Load(Stream stream)
             {
                 BinaryFormatter f = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                 return (CodeDomSerializationStore)f.Deserialize(stream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
             }
 
             /// <summary>
@@ -609,9 +609,7 @@ namespace System.ComponentModel.Design.Serialization
                     return;
                 }
 
-#pragma warning disable 618
                 System.CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-#pragma warning restore 618
                 using var sw = new StringWriter(CultureInfo.InvariantCulture);
                 Trace("Stored CodeDom for {0}: ", name);
                 Debug.Indent();

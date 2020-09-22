@@ -615,9 +615,7 @@ namespace System.Windows.Forms
             {
                 // Convert the value to an ushort before converting it to a pointer,
                 // which corresponds to using the MAKEINTRESOURCEW macro in native code.
-#pragma warning disable IDE0004 // Remove Unnecessary Cast (false positive, see https://github.com/dotnet/roslyn/issues/20617)
                 iconUnion.pszIcon = (char*)checked((ushort)icon.StandardIcon);
-#pragma warning restore IDE0004 // Remove Unnecessary Cast
                 iconIsFromHandle = false;
             }
 

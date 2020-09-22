@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -804,9 +804,9 @@ namespace System.ComponentModel.Design.Serialization.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618, SYSLIB0011 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 Assert.Throws<SerializationException>(() => formatter.Serialize(stream, store));
-#pragma warning restore CS0618, SYSLIB0011 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
 
