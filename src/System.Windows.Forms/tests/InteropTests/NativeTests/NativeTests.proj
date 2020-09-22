@@ -1,6 +1,5 @@
 <Project Sdk="Microsoft.DotNet.CMake.Sdk">
-  <PropertyGroup>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <CMakeLists>CMakeLists.txt</CMakeLists>
-  </PropertyGroup>
+    <PropertyGroup>
+        <CMakeLists>CMakeLists.txt</CMakeLists>
+    </PropertyGroup>
 </Project>
