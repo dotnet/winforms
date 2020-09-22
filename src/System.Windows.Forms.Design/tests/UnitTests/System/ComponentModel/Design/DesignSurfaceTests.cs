@@ -1019,7 +1019,6 @@ namespace System.ComponentModel.Design.Tests
             Assert.Throws<ObjectDisposedException>(() => surface.CreateDesigner(new Component(), false));
         }
 
-#pragma warning disable 0618
         [WinFormsFact]
         public void DesignSurface_CreateComponent_IComponentWithPublicDefaultConstructor_ReturnsExpected()
         {
@@ -1070,7 +1069,6 @@ namespace System.ComponentModel.Design.Tests
             using var surface = new SubDesignSurface();
             Assert.Throws<ArgumentNullException>("type", () => surface.CreateComponent(null));
         }
-#pragma warning restore 0618
 
         [WinFormsFact]
         public void DesignSurface_CreateInstance_NonIComponentWithPublicDefaultConstructor_ReturnsExpected()

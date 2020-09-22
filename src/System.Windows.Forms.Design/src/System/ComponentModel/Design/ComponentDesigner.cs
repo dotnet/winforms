@@ -147,10 +147,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void InitializeNewComponent(IDictionary defaultValues)
         {
-#pragma warning disable 618
             // execute legacy code
             InitializeNonDefault();
-#pragma warning restore 618
         }
 
         void IDesignerFilter.PostFilterAttributes(IDictionary attributes)

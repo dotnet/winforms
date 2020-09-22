@@ -1319,12 +1319,12 @@ namespace System.Windows.Forms.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                 formatter.Serialize(stream, group);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
                 Assert.Equal(group.Header, result.Header);
                 Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);
                 Assert.Equal(group.Items.Cast<ListViewItem>().Select(i => i.Text), result.Items.Cast<ListViewItem>().Select(i => i.Text));

@@ -233,9 +233,9 @@ Namespace Microsoft.VisualBasic.Logging
 
                 ' We shouldn't use fields for demands so we use a local variable
                 Dim returnPath As String = _fullFileName
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
                 Dim filePermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, returnPath)
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
                 filePermission.Demand()
 
                 Return returnPath
@@ -373,9 +373,9 @@ Namespace Microsoft.VisualBasic.Logging
                 End If
 
                 Dim fileName As String = Path.GetFullPath(_customLocation)
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
                 Dim filePermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, fileName)
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
                 filePermission.Demand()
                 Return fileName
             End Get
@@ -726,9 +726,9 @@ Namespace Microsoft.VisualBasic.Logging
                         Else
                             If Append Then
                                 ' We are handing off an already existing stream, so we need to make sure the caller has permissions to write to this stream
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
                                 Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
                                 filePermission.Demand()
 
                                 refStream.AddReference()
@@ -879,9 +879,9 @@ Namespace Microsoft.VisualBasic.Logging
             Dim TotalUserSpace As Long
             Dim TotalFreeSpace As Long
 
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
             Dim discoveryPermission As New FileIOPermission(FileIOPermissionAccess.PathDiscovery, PathName)
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
             discoveryPermission.Demand()
 
             If UnsafeNativeMethods.GetDiskFreeSpaceEx(PathName, FreeUserSpace, TotalUserSpace, TotalFreeSpace) Then
@@ -947,9 +947,9 @@ Namespace Microsoft.VisualBasic.Logging
         Private Sub DemandWritePermission()
             Debug.Assert(Not String.IsNullOrWhiteSpace(Path.GetDirectoryName(LogFileName)), "The log directory shouldn't be empty.")
             Dim fileName As String = Path.GetDirectoryName(LogFileName)
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
             Dim filePermission As New FileIOPermission(FileIOPermissionAccess.Write, fileName)
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
             filePermission.Demand()
         End Sub
 

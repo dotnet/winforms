@@ -14,14 +14,14 @@ Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices
 
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
     ''' <summary>
     ''' A class that wraps System.Windows.Forms.Clipboard so that
     ''' a clipboard can be instanced.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never), HostProtection(Resources:=HostProtectionResource.ExternalProcessMgmt)>
     Public Class ClipboardProxy
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
 
         ''' <summary>
         ''' Only Allows instantiation of the class
@@ -29,7 +29,6 @@ Namespace Microsoft.VisualBasic.MyServices
         Friend Sub New()
         End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         ''' Gets text from the clipboard
         ''' </summary>
@@ -215,6 +214,5 @@ Namespace Microsoft.VisualBasic.MyServices
         Public Sub SetDataObject(data As System.Windows.Forms.DataObject)
             Clipboard.SetDataObject(data)
         End Sub
-#Enable Warning CA1822 ' Mark members as static
     End Class
 End Namespace

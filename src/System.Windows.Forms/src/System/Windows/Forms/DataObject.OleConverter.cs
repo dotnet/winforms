@@ -379,9 +379,9 @@ namespace System.Windows.Forms
                     formatter.Binder = new BitmapBinder();
                 }
                 formatter.AssemblyFormat = FormatterAssemblyStyle.Simple;
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011
                 return formatter.Deserialize(stream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011
             }
 
             /// <summary>

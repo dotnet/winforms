@@ -27,10 +27,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
             GetDesktopWindow _
                 Lib "user32" () As IntPtr
 
-#Disable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
+#Disable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
         <DllImport("user32", CharSet:=CharSet.Auto, PreserveSig:=True, SetLastError:=True)>
         Friend Shared Function GetWindowText(hWnd As IntPtr, <Out(), MarshalAs(UnmanagedType.LPTStr)> lpString As StringBuilder, nMaxCount As Integer) As Integer
-#Enable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
+#Enable Warning CA1838 ' Avoid 'StringBuilder' parameters for P/Invokes
         End Function
 
         <PreserveSig()>
@@ -48,12 +48,10 @@ Namespace Microsoft.VisualBasic.CompilerServices
             SetFocus _
                 Lib "user32" (hwnd As IntPtr) As IntPtr
 
-#Disable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
         <PreserveSig()>
         Friend Declare Auto Function _
             FindWindow _
                 Lib "user32" (lpClassName As String, lpWindowName As String) As IntPtr
-#Enable Warning CA2101 ' Specify marshaling for P/Invoke string arguments
 
         <PreserveSig()>
         Friend Declare Function _

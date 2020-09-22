@@ -85,7 +85,6 @@ Namespace Microsoft.VisualBasic
                 Play(New Media.SoundPlayer(stream), playMode)
             End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
             ''' <summary>
             '''   Plays a system messageBeep sound.
             ''' </summary>
@@ -107,7 +106,6 @@ Namespace Microsoft.VisualBasic
                 Dim sound As New Media.SoundPlayer()
                 InternalStop(sound)
             End Sub
-#Enable Warning CA1822 ' Mark members as static
 
             ''' <summary>
             '''  Plays the passed in SoundPlayer in the passed in mode
@@ -147,13 +145,13 @@ Namespace Microsoft.VisualBasic
             Private Shared Sub InternalStop(sound As Media.SoundPlayer)
 
                 ' Stop requires unmanaged code permission. Stop demands SafeSubWindows permissions, so we don't need to do it here                     
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
                 Call New Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode).Assert()
                 Try
                     sound.Stop()
                 Finally
                     System.Security.CodeAccessPermission.RevertAssert()
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
                 End Try
             End Sub
 

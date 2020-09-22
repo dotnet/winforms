@@ -2,12 +2,11 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Text
-Imports System.Threading
 Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
-
+Imports System.Text
+Imports System.Threading
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
@@ -45,9 +44,9 @@ Namespace Microsoft.VisualBasic
                 'free the string fields since the API manages it instead.  But its OK here because we are just passing along the memory
                 'that GetStartupInfo() allocated along to CreateProcess() which just reads the string fields.
 
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0004 ' Type or member is obsolete
                 RuntimeHelpers.PrepareConstrainedRegions()
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0004 ' Type or member is obsolete
                 Try
                 Finally
                     ok = NativeMethods.CreateProcess(Nothing, PathName, Nothing, Nothing, False, NativeTypes.NORMAL_PRIORITY_CLASS, Nothing, Nothing, StartupInfo, ProcessInfo)
@@ -267,10 +266,8 @@ Namespace Microsoft.VisualBasic
             Public Sub StartHere()
                 Try
                     _result = InternalInputBox(_prompt, _title, _defaultResponse, _xPos, _yPos, _parentWindow)
-#Disable Warning CA1031 ' Do not catch general exception types
                 Catch ex As Exception
                     _exception = ex
-#Enable Warning CA1031 ' Do not catch general exception types
                 End Try
             End Sub
 

@@ -307,12 +307,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '(network gets created during event hookup) and we need the context in place for it to latch on to.  The WindowsFormsSynchronizationContext
             'won't otherwise get created until OnCreateMainForm() when the startup form is created and by then it is too late.
             'When the startup form gets created, WinForms is going to push our context into the previous context and then restore it when Application.Run() exits.
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
             Call New UIPermission(UIPermissionWindow.AllWindows).Assert()
             _appSyncronizationContext = AsyncOperationManager.SynchronizationContext
             AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
             PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
         End Sub
 
         ''' <summary>
@@ -447,12 +447,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Set
         End Property
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         '''  Processes all windows messages currently in the message queue
         ''' </summary>
         Public Sub DoEvents()
-#Enable Warning CA1822 ' Mark members as static
             Windows.Forms.Application.DoEvents()
         End Sub
 
@@ -513,9 +511,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Overridable Sub OnStartupNextInstance(eventArgs As StartupNextInstanceEventArgs)
             RaiseEvent StartupNextInstance(Me, eventArgs)
             'Activate the original instance
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
             Call New UIPermission(UIPermissionWindow.SafeSubWindows Or UIPermissionWindow.SafeTopLevelWindows).Assert()
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
             If eventArgs.BringToForeground = True AndAlso MainForm IsNot Nothing Then
                 If MainForm.WindowState = Windows.Forms.FormWindowState.Minimized Then
                     MainForm.WindowState = Windows.Forms.FormWindowState.Normal
@@ -641,11 +639,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 '       swapping the order of the two If blocks). This is to fix the issue where the main form
                 '       doesn't come to the front after the Splash screen disappears
                 If MainForm IsNot Nothing Then
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
                     Call New UIPermission(UIPermissionWindow.AllWindows).Assert()
                     MainForm.Activate()
                     PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
                 End If
                 If _splashScreen IsNot Nothing AndAlso Not _splashScreen.IsDisposed Then
                     Dim TheBigGoodbye As New DisposeDelegate(AddressOf _splashScreen.Dispose)
@@ -781,11 +779,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _app.ShutdownStyle = ShutdownMode.AfterMainFormCloses Then
                     MyBase.OnMainFormClosed(sender, e)
                 Else 'identify a new main form so we can keep running
-#Disable Warning BC40000 ' Type or member is obsolete
+#Disable Warning SYSLIB0003 ' Type or member is obsolete
                     Call New UIPermission(UIPermissionWindow.AllWindows).Assert()
                     Dim forms As Windows.Forms.FormCollection = Windows.Forms.Application.OpenForms
                     PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function.
-#Enable Warning BC40000 ' Type or member is obsolete
+#Enable Warning SYSLIB0003 ' Type or member is obsolete
 
                     If forms.Count > 0 Then
                         'Note: Initially I used Process::MainWindowHandle to obtain an open form.  But that is bad for two reasons:
