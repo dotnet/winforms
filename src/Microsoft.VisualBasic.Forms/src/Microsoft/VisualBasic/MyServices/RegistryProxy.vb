@@ -49,7 +49,6 @@ Namespace Microsoft.VisualBasic.MyServices
             End Get
         End Property
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         Public Function GetValue(keyName As String, valueName As String,
             defaultValue As Object) As Object
 
@@ -65,7 +64,6 @@ Namespace Microsoft.VisualBasic.MyServices
 
             Registry.SetValue(keyName, valueName, value, valueKind)
         End Sub
-#Enable Warning CA1822 ' Mark members as static
 
         ''' <summary>
         ''' Proxy class can only created by internal classes.

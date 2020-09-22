@@ -10291,9 +10291,7 @@ namespace System.Windows.Forms
                     // enumerate
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
-#pragma warning disable 618
                         controlsCollection[i].Scale(dx, dy);
-#pragma warning restore 618
                     }
                 }
             }

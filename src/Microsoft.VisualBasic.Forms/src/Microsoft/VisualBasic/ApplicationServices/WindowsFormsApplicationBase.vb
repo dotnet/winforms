@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -442,12 +442,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Set
         End Property
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
         ''' <summary>
         '''  Processes all windows messages currently in the message queue
         ''' </summary>
         Public Sub DoEvents()
-#Enable Warning CA1822 ' Mark members as static
             Windows.Forms.Application.DoEvents()
         End Sub
 
