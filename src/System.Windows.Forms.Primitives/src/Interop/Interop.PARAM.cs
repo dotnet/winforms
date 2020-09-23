@@ -31,7 +31,7 @@ internal partial class Interop
         public static int LOWORD(int n)
             => n & 0xffff;
 
-#pragma warning disable IDE0004 // (nint) cast in (int)(nint)IntPtr is not actually redundant
+#pragma warning disable IDE0004 // (nint) cast is not actually redundant
         public static int LOWORD(IntPtr n)
             => LOWORD(unchecked((int)(nint)n));
 
@@ -57,7 +57,7 @@ internal partial class Interop
         public static IntPtr FromColor(Color color)
             => (IntPtr)ColorTranslator.ToWin32(color);
 
-#pragma warning disable IDE0004 // (int) cast in (nint)(nint)IntPtr is not actually redundant
+//#pragma warning disable IDE0004 // (nint) cast is not actually redundant
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
         /// </summary>
