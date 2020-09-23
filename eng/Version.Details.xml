@@ -14,7 +14,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/core-setup</Uri>
       <Sha>1a04dd08e56bf52e88668c1ef2bd3f630ad442a5</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Internal" Version="3.1.9-servicing.20459.3" CoherentParentDependency="Microsoft.NETCore.App.Runtime.win-x64">
+    <Dependency Name="Microsoft.NETCore.App.Internal" Version="3.1.9-servicing.20459.3">
       <Uri>https://github.com/dotnet/core-setup</Uri>
       <Sha>1a04dd08e56bf52e88668c1ef2bd3f630ad442a5</Sha>
     </Dependency>
