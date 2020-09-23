@@ -57,7 +57,7 @@ internal partial class Interop
         public static IntPtr FromColor(Color color)
             => (IntPtr)ColorTranslator.ToWin32(color);
 
-//#pragma warning disable IDE0004 // (nint) cast is not actually redundant
+#pragma warning disable IDE0004 // (nint) cast is not actually redundant
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
         /// </summary>
