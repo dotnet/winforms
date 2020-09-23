@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlPaintTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ControlPaintTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> ControlCreateHBitmap16Bit_TestData()
         {

@@ -531,40 +531,25 @@ namespace System.Windows.Forms
                     clipRight.Intersect(clipBounds);
                     clipBottom.Intersect(clipBounds);
 
+                    using var hdc = new DeviceContextHdcScope(e);
+                    vsr.DrawBackground(hdc, bounds, clipLeft, HandleInternal);
+                    vsr.DrawBackground(hdc, bounds, clipTop, HandleInternal);
+                    vsr.DrawBackground(hdc, bounds, clipRight, HandleInternal);
+                    vsr.DrawBackground(hdc, bounds, clipBottom, HandleInternal);
+
+                    // Draw a rectangle around edit control with the background color.
                     Rectangle backRect = editBounds;
                     backRect.X--;
                     backRect.Y--;
-                    backRect.Width++;
-                    backRect.Height++;
-
-                    bool transparent = backColor.HasTransparency();
-
-                    using (var hdc = new DeviceContextHdcScope(e))
-                    {
-                        vsr.DrawBackground(hdc, bounds, clipLeft, HandleInternal);
-                        vsr.DrawBackground(hdc, bounds, clipTop, HandleInternal);
-                        vsr.DrawBackground(hdc, bounds, clipRight, HandleInternal);
-                        vsr.DrawBackground(hdc, bounds, clipBottom, HandleInternal);
-
-                        if (!transparent)
-                        {
-                            // Draw rectangle around edit control with background color
-                            using var hpen = new Gdi32.CreatePenScope(backColor);
-                            hdc.DrawRectangle(backRect, hpen);
-                        }
-                    }
-
-                    if (transparent)
-                    {
-                        // Need to use GDI+
-                        using var pen = backColor.GetCachedPenScope();
-                        e.GraphicsInternal.DrawRectangle(pen, backRect);
-                    }
+                    backRect.Width += 2;
+                    backRect.Height += 2;
+                    using var hpen = new Gdi32.CreatePenScope(backColor);
+                    hdc.DrawRectangle(backRect, hpen);
                 }
             }
             else
             {
-                // Draw rectangle around edit control with background color
+                // Draw a rectangle around edit control with the background color.
                 Rectangle backRect = editBounds;
                 backRect.Inflate(1, 1);
                 if (!Enabled)
@@ -577,17 +562,11 @@ namespace System.Windows.Forms
 
                 int width = Enabled ? 2 : 1;
 
-                if (!backColor.HasTransparency())
-                {
-                    using var hdc = new DeviceContextHdcScope(e);
-                    using var hpen = new Gdi32.CreatePenScope(backColor, width);
-                    hdc.DrawRectangle(backRect, hpen);
-                }
-                else
-                {
-                    using var pen = backColor.GetCachedPenScope(width);
-                    e.GraphicsInternal.DrawRectangle(pen, backRect);
-                }
+                backRect.Width++;
+                backRect.Height++;
+                using var hdc = new DeviceContextHdcScope(e);
+                using var hpen = new Gdi32.CreatePenScope(backColor, width);
+                hdc.DrawRectangle(backRect, hpen);
             }
 
             if (!Enabled && BorderStyle != BorderStyle.None && !_upDownEdit.ShouldSerializeBackColor())

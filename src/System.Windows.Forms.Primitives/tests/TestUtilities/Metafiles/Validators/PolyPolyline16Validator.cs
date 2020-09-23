@@ -4,34 +4,33 @@
 
 #nullable enable
 
-using System.Drawing;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
 {
-    internal class Polyline16Validator : Poly16Validator
+    internal class PolyPolyline16Validator : PolyPoly16Validator
     {
         /// <inheritdoc/>
-        public Polyline16Validator(
+        public PolyPolyline16Validator(
             RECT? bounds,
-            Point[]? points,
+            int? polyCount,
             params IStateValidator[] stateValidators) : base(
                 bounds,
-                points,
+                polyCount,
                 stateValidators)
         {
         }
 
-        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.POLYLINE16;
+        public override bool ShouldValidate(Gdi32.EMR recordType) => recordType == Gdi32.EMR.POLYPOLYLINE16;
 
         public override unsafe void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {
             base.Validate(ref record, state, out _);
 
-            // We're only checking one Polyline16 record, so this call completes our work.
+            // We're only checking one PolyPolyline16 record, so this call completes our work.
             complete = true;
 
-            Validate(record.Polyline16Record);
+            Validate(record.PolyPolyline16Record);
         }
     }
 }
