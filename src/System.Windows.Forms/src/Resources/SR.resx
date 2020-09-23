@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -6724,6 +6724,9 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="AccessibleActionDoubleClick" xml:space="preserve">
     <value>Double Click</value>
+  </data>
+  <data name="ListViewFocusedGroupDescription" xml:space="preserve">
+    <value>The ListView group that currently has the user focus.</value>
   </data>
   <data name="InvalidHdcType" xml:space="preserve">
     <value>Invalid HDC type: {0}</value>

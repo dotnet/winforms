@@ -153,7 +153,7 @@ namespace System.Windows.Forms
         private CheckedIndexCollection checkedIndexCollection;
         private CheckedListViewItemCollection checkedListViewItemCollection;
         private SelectedListViewItemCollection selectedListViewItemCollection;
-        private SelectedIndexCollection selectedIndexCollection;
+        internal SelectedIndexCollection selectedIndexCollection;
         private ListViewGroupCollection groups;
         private ListViewInsertionMark insertionMark;
         private LabelEditEventHandler onAfterLabelEdit;
@@ -824,6 +824,10 @@ namespace System.Windows.Forms
         ///  group that's drawn with the dotted focus rectangle around it.
         ///  Returns null if no group is currently focused.
         /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.ListViewFocusedGroupDescription))]
         internal ListViewGroup FocusedGroup
         {
             get => IsHandleCreated ? focusedGroup : null;
@@ -5904,7 +5908,7 @@ namespace System.Windows.Forms
             }
 
             Point screenPoint = PointToScreen(new Point(x, y));
-            AccessibleObject accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
+            AccessibleObject accessibilityObject = (AccessibilityObject as ListViewAccessibleObject).HitTest(screenPoint.X, screenPoint.Y);
             accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
 

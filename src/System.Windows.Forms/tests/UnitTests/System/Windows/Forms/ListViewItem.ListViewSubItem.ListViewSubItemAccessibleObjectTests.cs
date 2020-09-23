@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = listViewItem1.AccessibilityObject.GetChild(0);
 
             int actualWidth = accessibleObject.Bounds.Width;
-            int expectedWidth = listViewItem1.SubItems[1].Bounds.X - subItem.Bounds.X;
+            int expectedWidth = subItem.Bounds.Width;
             Assert.Equal(expectedWidth, actualWidth);
 
             int actualHeight = accessibleObject.Bounds.Height;
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
 
             Rectangle actualBounds = accessibleObject.Bounds;
             actualBounds.Location = new Point(0, 0);
-            Rectangle expectedBounds = new Rectangle(subItem.Bounds.X, subItem.Bounds.Y, expectedWidth, expectedHeight);
+            Rectangle expectedBounds = subItem.Bounds;
             expectedBounds.Location = new Point(0, 0);
             Assert.Equal(expectedBounds, actualBounds);
             Assert.False(list.IsHandleCreated);

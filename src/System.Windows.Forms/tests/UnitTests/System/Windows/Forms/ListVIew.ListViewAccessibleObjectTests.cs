@@ -46,34 +46,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ListViewAccessibleObject_GetMultiViewProviderCurrentView_ReturnsCorrectValue()
-        {
-            using ListView listView = new ListView();
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal((int)listView.View, accessibleObject.GetMultiViewProviderCurrentView());
-            Assert.False(listView.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void ListViewAccessibleObject_GetMultiViewProviderSupportedViews_ReturnsExpected()
-        {
-            using ListView listView = new ListView();
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(new int[] { (int)View.Details }, accessibleObject.GetMultiViewProviderSupportedViews());
-            Assert.False(listView.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void ListViewAccessibleObject_GetMultiViewProviderViewName_ReturnsCorrectValue()
-        {
-            using ListView listView = new ListView();
-            listView.View = View.Details;
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(((int)(listView.View)).ToString(), accessibleObject.GetMultiViewProviderViewName((int)View.Details));
-            Assert.False(listView.IsHandleCreated);
-        }
-
         [WinFormsTheory]
         [InlineData(true, 1)]
         [InlineData(false, 0)]

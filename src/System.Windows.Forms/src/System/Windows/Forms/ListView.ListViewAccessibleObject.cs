@@ -266,13 +266,14 @@ namespace System.Windows.Forms
                     return Array.Empty<UiaCore.IRawElementProviderSimple>();
                 }
 
-                UiaCore.IRawElementProviderSimple[] selectedItemProviders = new UiaCore.IRawElementProviderSimple[_owningListView.SelectedItems.Count];
-                for (int i = 0; i < selectedItemProviders.Length; i++)
+                List<UiaCore.IRawElementProviderSimple> selectedItemProviders = new List<UiaCore.IRawElementProviderSimple>();
+                SelectedListViewItemCollection selectedItems = _owningListView.SelectedItems;
+                foreach (ListViewItem selectedItem in selectedItems)
                 {
-                    selectedItemProviders[i] = _owningListView.SelectedItems[i].AccessibilityObject;
+                    selectedItemProviders.Add(selectedItem.AccessibilityObject);
                 }
 
-                return selectedItemProviders;
+                return selectedItemProviders.ToArray();
             }
 
             public override AccessibleObject? HitTest(int x, int y)
