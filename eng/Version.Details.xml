@@ -60,15 +60,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Sha>0f7f38c4fd323b26da10cce95f857f77f0f09b48</Sha>
     </Dependency>
     <!-- CoreCLR via Core Setup -->
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="3.1.9-servicing.20458.2" CoherentParentDependency="Microsoft.NETCore.App.Runtime.win-x64">
-      <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>c2e8c9f71737d87a95610851587e2a1eaf18c91c</Sha>
-      <SourceBuildId>5596</SourceBuildId>
-    </Dependency>
     <Dependency Name="Microsoft.NETCore.ILAsm" Version="3.1.9-servicing.20458.2" CoherentParentDependency="Microsoft.NETCore.App.Runtime.win-x64">
       <Uri>https://github.com/dotnet/coreclr</Uri>
       <Sha>c2e8c9f71737d87a95610851587e2a1eaf18c91c</Sha>
-      <SourceBuildId>5596</SourceBuildId>
     </Dependency>
     <!-- Arcade -->
     <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.20113.5">
