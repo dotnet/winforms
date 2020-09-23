@@ -10801,6 +10801,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">SU</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Specifica se il rendering del testo deve essere compatibile con le versioni precedenti di Windows Form.</target>

@@ -10801,6 +10801,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Yukarı</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Metin işlemenin Windows Forms'un derlemeleriyle uyumlu olması gerekip gerekmediğini belirtir.</target>

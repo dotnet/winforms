@@ -10801,6 +10801,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Arriba</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="new">Edit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Especifica si la representación del texto debería ser compatible con versiones anteriores de Windows Forms.</target>
