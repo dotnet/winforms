@@ -130,8 +130,7 @@ namespace System.Windows.Forms
 
             if (!needToApplyProperties || graphics is null)
             {
-                HDC = !HDC.IsNull ? HDC : (Gdi32.HDC)DeviceContext.GetHdc();
-                Debug.Assert(!HDC.IsNull);
+                HDC = HDC.IsNull ? (Gdi32.HDC)DeviceContext.GetHdc() : HDC;
                 _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
                 return;
             }

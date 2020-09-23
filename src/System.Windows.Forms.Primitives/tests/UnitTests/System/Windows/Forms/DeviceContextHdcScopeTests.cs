@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
         {
             using var hdc = User32.GetDcScope.ScreenDC;
             RECT originalClipRect = default;
-            Gdi32.GetClipBox(hdc, ref originalClipRect);
+            RegionType originalRegionType = Gdi32.GetClipBox(hdc, ref originalClipRect);
             Gdi32.GetViewportOrgEx(hdc, out Point originalOrigin);
 
             using Graphics g = Graphics.FromHdcInternal(hdc);
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
 
                 RECT clipRect = default;
                 RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
-                Assert.Equal(RegionType.COMPLEXREGION, regionType);
+                Assert.Equal(originalRegionType, regionType);
                 Rectangle expectedClipRect = originalClipRect;
                 expectedClipRect.X -= 1;
                 expectedClipRect.Y -= 2;
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Tests
 
                 RECT clipRect = default;
                 RegionType regionType = Gdi32.GetClipBox(scope, ref clipRect);
-                Assert.Equal(RegionType.COMPLEXREGION, regionType);
+                Assert.Equal(originalRegionType, regionType);
                 Assert.Equal((Rectangle)originalClipRect, (Rectangle)clipRect);
 
                 Assert.Equal(g, scope.DeviceContext);
