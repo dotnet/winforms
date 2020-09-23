@@ -15,7 +15,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
-using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -30,7 +29,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Items))]
     [DefaultEvent(nameof(SelectedIndexChanged))]
     [SRDescription(nameof(SR.DescriptionListView))]
-    public partial class ListView : Control
+    public class ListView : Control
     {
         //members
         private const int MASK_HITTESTFLAG = 0x00F7;
@@ -128,7 +127,6 @@ namespace System.Windows.Forms
         private int virtualListSize;
 
         private ListViewGroup defaultGroup;
-        private ListViewGroup focusedGroup;
 
         // Invariant: the table always contains all Items in the ListView, and maps IDs -> Items.
         // listItemsArray is null if the handle is created; otherwise, it contains all Items.
@@ -153,7 +151,7 @@ namespace System.Windows.Forms
         private CheckedIndexCollection checkedIndexCollection;
         private CheckedListViewItemCollection checkedListViewItemCollection;
         private SelectedListViewItemCollection selectedListViewItemCollection;
-        internal SelectedIndexCollection selectedIndexCollection;
+        private SelectedIndexCollection selectedIndexCollection;
         private ListViewGroupCollection groups;
         private ListViewInsertionMark insertionMark;
         private LabelEditEventHandler onAfterLabelEdit;
@@ -779,9 +777,7 @@ namespace System.Windows.Forms
                 if (defaultGroup is null)
                 {
                     defaultGroup = new ListViewGroup(string.Format(SR.ListViewGroupDefaultGroup, "1"));
-                    defaultGroup.ListView = this;
                 }
-
                 return defaultGroup;
             }
         }
@@ -816,28 +812,6 @@ namespace System.Windows.Forms
             get
             {
                 return listViewState[LISTVIEWSTATE_expectingMouseUp];
-            }
-        }
-
-        /// <summary>
-        ///  Retreives the group which currently has the user focus.  This is the
-        ///  group that's drawn with the dotted focus rectangle around it.
-        ///  Returns null if no group is currently focused.
-        /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRDescription(nameof(SR.ListViewFocusedGroupDescription))]
-        internal ListViewGroup FocusedGroup
-        {
-            get => IsHandleCreated ? focusedGroup : null;
-            set
-            {
-                if (IsHandleCreated && value != null)
-                {
-                    value.Focused = true;
-                    focusedGroup = value;
-                }
             }
         }
 
@@ -1696,8 +1670,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        internal override bool SupportsUiaProviders => true;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3520,21 +3492,6 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        internal int GetGroupIndex(ListViewGroup owningGroup)
-        {
-            if (Groups.Count == 0)
-            {
-                return -1;
-            }
-            // Default group it's last group in accessibility and not specified in Groups collection, therefore default group index = Groups.Count
-            if (DefaultGroup == owningGroup)
-            {
-                return Groups.Count;
-            }
-
-            return Groups.IndexOf(owningGroup);
-        }
-
         /// <summary>
         ///  Returns the current ListViewItem corresponding to the specific
         ///  x,y co-ordinate.
@@ -4865,12 +4822,6 @@ namespace System.Windows.Forms
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
             ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
-
-            if (SelectedItems.Count > 0 && SelectedItems[0].Focused)
-            {
-                AccessibleObject accessibilityObject = SelectedItems[0].AccessibilityObject;
-                accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
         }
 
         protected override void OnSystemColorsChanged(EventArgs e)
@@ -5906,10 +5857,6 @@ namespace System.Windows.Forms
                     DefWndProc(ref m);
                 }
             }
-
-            Point screenPoint = PointToScreen(new Point(x, y));
-            AccessibleObject accessibilityObject = (AccessibilityObject as ListViewAccessibleObject).HitTest(screenPoint.X, screenPoint.Y);
-            accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
 
         private unsafe bool WmNotify(ref Message m)
@@ -6564,26 +6511,6 @@ namespace System.Windows.Forms
                     break;
 
                 case (int)LVN.KEYDOWN:
-                    if (Groups.Count > 0)
-                    {
-                        NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;
-                        if (lvkd->wVKey == (short)Keys.Down
-                            && SelectedItems.Count > 0
-                            && SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
-                        {
-                            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
-                            ListViewGroupAccessibleObject nextGroupAccObj = (ListViewGroupAccessibleObject)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-                            nextGroupAccObj?.SetFocus();
-                        }
-
-                        if (lvkd->wVKey == (short)Keys.Up
-                            && SelectedItems.Count > 0
-                            && SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
-                        {
-                            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
-                            groupAccObj?.SetFocus();
-                        }
-                    }
                     if (CheckBoxes)
                     {
                         NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;
@@ -9867,6 +9794,44 @@ namespace System.Windows.Forms
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new ListViewAccessibleObject(this);
+        }
+
+        internal class ListViewAccessibleObject : ControlAccessibleObject
+        {
+            private readonly ListView owner;
+
+            internal ListViewAccessibleObject(ListView owner) : base(owner)
+            {
+                this.owner = owner;
+            }
+
+            internal override bool IsIAccessibleExSupported()
+            {
+                if (owner != null)
+                {
+                    return true;
+                }
+
+                return base.IsIAccessibleExSupported();
+            }
+
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                if (propertyID == UiaCore.UIA.ItemStatusPropertyId)
+                {
+                    switch (owner.Sorting)
+                    {
+                        case SortOrder.None:
+                            return SR.NotSortedAccessibleStatus;
+                        case SortOrder.Ascending:
+                            return SR.SortedAscendingAccessibleStatus;
+                        case SortOrder.Descending:
+                            return SR.SortedDescendingAccessibleStatus;
+                    }
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
         }
     }
 }

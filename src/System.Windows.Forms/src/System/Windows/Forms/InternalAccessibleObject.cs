@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -41,7 +41,6 @@ namespace System.Windows.Forms
         ISelectionItemProvider,
         IScrollItemProvider,
         IRawElementProviderHwndOverride,
-        IMultipleViewProvider,
         ITextProvider,
         ITextProvider2
     {
@@ -71,7 +70,6 @@ namespace System.Windows.Forms
         private readonly ISelectionItemProvider publicISelectionItemProvider;                      // AccessibleObject as ISelectionItemProvider
         private readonly IScrollItemProvider publicIScrollItemProvider;                            // AccessibleObject as IScrollItemProvider
         private readonly IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride;    // AccessibleObject as IRawElementProviderHwndOverride
-        private readonly IMultipleViewProvider publicIMultiViewProvider;                           // AccessibleObject as IMultipleViewProvider
         private readonly ITextProvider publicITextProvider;                                        // AccessibleObject as ITextProvider
         private readonly ITextProvider2 publicITextProvider2;                                      // AccessibleObject as ITextProvider2
 
@@ -104,7 +102,6 @@ namespace System.Windows.Forms
             publicISelectionItemProvider = (ISelectionItemProvider)accessibleImplemention;
             publicIScrollItemProvider = (IScrollItemProvider)accessibleImplemention;
             publicIRawElementProviderHwndOverride = (IRawElementProviderHwndOverride)accessibleImplemention;
-            publicIMultiViewProvider = (IMultipleViewProvider)accessibleImplemention;
             publicITextProvider = (ITextProvider)accessibleImplemention;
             publicITextProvider2 = (ITextProvider2)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
@@ -320,7 +317,6 @@ namespace System.Windows.Forms
                 UIA.SelectionPatternId => (ISelectionProvider)this,
                 UIA.SelectionItemPatternId => (ISelectionItemProvider)this,
                 UIA.ScrollItemPatternId => (IScrollItemProvider)this,
-                UIA.MultipleViewPatternId => (IMultipleViewProvider)this,
                 UIA.TextPatternId => (ITextProvider)this,
                 UIA.TextPattern2Id => (ITextProvider2)this,
                 _ => null
@@ -542,17 +538,5 @@ namespace System.Windows.Forms
         /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
         IRawElementProviderSimple? IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
-
-        int IMultipleViewProvider.CurrentView
-            => publicIMultiViewProvider.CurrentView;
-
-        int[]? IMultipleViewProvider.GetSupportedViews()
-            => publicIMultiViewProvider.GetSupportedViews();
-
-        string? IMultipleViewProvider.GetViewName(int viewId)
-            => publicIMultiViewProvider.GetViewName(viewId);
-
-        void IMultipleViewProvider.SetCurrentView(int viewId)
-            => publicIMultiViewProvider.SetCurrentView(viewId);
     }
 }

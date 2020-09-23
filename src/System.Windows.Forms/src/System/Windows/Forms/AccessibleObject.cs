@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -43,7 +43,6 @@ namespace System.Windows.Forms
         UiaCore.ISelectionItemProvider,
         UiaCore.IRawElementProviderHwndOverride,
         UiaCore.IScrollItemProvider,
-        UiaCore.IMultipleViewProvider,
         UiaCore.ITextProvider,
         UiaCore.ITextProvider2
     {
@@ -508,16 +507,6 @@ namespace System.Windows.Forms
         }
 
         internal virtual UiaCore.IRawElementProviderSimple? GetOverrideProviderForHwnd(IntPtr hwnd) => null;
-
-        internal virtual int GetMultiViewProviderCurrentView() => 0;
-
-        internal virtual int[]? GetMultiViewProviderSupportedViews() => Array.Empty<int>();
-
-        internal virtual string GetMultiViewProviderViewName(int viewId) => string.Empty;
-
-        internal virtual void SetMultiViewProviderCurrentView(int viewId)
-        {
-        }
 
         internal virtual void SetValue(double newValue)
         {
@@ -1855,14 +1844,6 @@ namespace System.Windows.Forms
 
         UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
             => GetOverrideProviderForHwnd(hwnd);
-
-        int UiaCore.IMultipleViewProvider.CurrentView => GetMultiViewProviderCurrentView();
-
-        int[]? UiaCore.IMultipleViewProvider.GetSupportedViews() => GetMultiViewProviderSupportedViews();
-
-        string? UiaCore.IMultipleViewProvider.GetViewName(int viewId) => GetMultiViewProviderViewName(viewId);
-
-        void UiaCore.IMultipleViewProvider.SetCurrentView(int viewId) => SetMultiViewProviderCurrentView(viewId);
 
         BOOL UiaCore.IRangeValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
 

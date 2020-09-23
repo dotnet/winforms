@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.Serialization;
-using static System.Windows.Forms.ListView;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -26,7 +25,7 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultProperty(nameof(Text))]
     [Serializable] // This type is participating in resx serialization scenarios.
-    public partial class ListViewItem : ICloneable, ISerializable
+    public class ListViewItem : ICloneable, ISerializable
     {
         private const int MaxSubItems = 4096;
 
@@ -57,8 +56,6 @@ namespace System.Windows.Forms
         private ListViewItemImageIndexer imageIndexer;
         private string toolTipText = string.Empty;
         private object userData;
-
-        private AccessibleObject _accessibilityObject;
 
         public ListViewItem()
         {
@@ -230,22 +227,6 @@ namespace System.Windows.Forms
             Group = group;
         }
 
-        internal AccessibleObject AccessibilityObject
-        {
-            get
-            {
-                if (_accessibilityObject is null)
-                {
-                    bool inDefaultGroup = listView?.GroupsEnabled == true && Group is null;
-
-                    _accessibilityObject = new ListViewItemAccessibleObject(
-                        this, inDefaultGroup ? listView.DefaultGroup : Group);
-                }
-
-                return _accessibilityObject;
-            }
-        }
-
         /// <summary>
         ///  The font that this item will be displayed in. If its value is null, it will be displayed
         ///  using the global font for the ListView control that hosts it.
@@ -347,8 +328,6 @@ namespace System.Windows.Forms
                 if (listView != null && listView.IsHandleCreated)
                 {
                     listView.SetItemState(Index, value ? LVIS.FOCUSED : 0, LVIS.FOCUSED);
-
-                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }
             }
         }
@@ -1302,7 +1281,7 @@ namespace System.Windows.Forms
         [DesignTimeVisible(false)]
         [DefaultProperty(nameof(Text))]
         [Serializable] // This type is participating in resx serialization scenarios.
-        public partial class ListViewSubItem
+        public class ListViewSubItem
         {
             [NonSerialized]
             internal ListViewItem owner;
@@ -1317,9 +1296,6 @@ namespace System.Windows.Forms
             [OptionalField(VersionAdded = 2)]
             private object userData;  // Do NOT rename (binary serialization).
 #pragma warning restore IDE1006
-
-            [NonSerialized]
-            private AccessibleObject _accessibilityObject;
 
             public ListViewSubItem()
             {
@@ -1341,19 +1317,6 @@ namespace System.Windows.Forms
                     backColor = backColor,
                     font = font
                 };
-            }
-
-            internal AccessibleObject AccessibilityObject
-            {
-                get
-                {
-                    if (_accessibilityObject is null)
-                    {
-                        _accessibilityObject = new ListViewSubItemAccessibleObject(this, owner);
-                    }
-
-                    return _accessibilityObject;
-                }
             }
 
             public Color BackColor
