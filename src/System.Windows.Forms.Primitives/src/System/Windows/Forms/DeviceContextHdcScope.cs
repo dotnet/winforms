@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using static Interop;
@@ -83,41 +84,65 @@ namespace System.Windows.Forms
             IGraphicsHdcProvider? provider = deviceContext as IGraphicsHdcProvider;
             Graphics? graphics = deviceContext as Graphics;
 
-            // If we weren't passed a Graphics object we can't save state, so it is effectively the same as apply none.
-            // If we were passed an IGraphicsHdcProvider and it tells us we're clean, we also don't need to save state.
-            if (applyGraphicsState == ApplyGraphicsProperties.None || graphics is null || provider?.IsGraphicsStateClean == true)
+            // There are three states of IDeviceContext that come into this class:
+            //
+            //  1. One that also implements IGraphicsHdcProvider
+            //  2. One that is directly on Graphics
+            //  3. All other IDeviceContext instances
+            //
+            // In the third case there is no Graphics to apply Properties from. In the second case we must query
+            // the Graphics object itself for Properties (transform and clip). In the first case the
+            // IGraphicsHdcProvider will let us know if we have an "unclean" Graphics object that we need to apply
+            // Properties from.
+            //
+            // PaintEventArgs implements IGraphicsHdcProvider and uses it to let us know that either (1) a Graphics
+            // object hasn't been created yet, OR (2) the Graphics object has never been given a transform or clip.
+
+            bool needToApplyProperties = applyGraphicsState != ApplyGraphicsProperties.None;
+            if (graphics is null && provider is null)
             {
-                if (provider is null)
-                {
-                    // We have an IDeviceContext
-                    HDC = (Gdi32.HDC)deviceContext.GetHdc();
-                }
-                else
-                {
-                    // We have a provider
-                    HDC = provider.GetHDC();
+                // We have an IDeviceContext (case 3 above), we can't apply properties because there is no
+                // Graphics object available.
+                needToApplyProperties = false;
+            }
+            else if (provider != null && provider.IsGraphicsStateClean)
+            {
+                // We have IGraphicsHdcProvider and it is telling us we have no properties to apply (case 1 above)
+                needToApplyProperties = false;
+            }
 
-                    if (HDC.IsNull)
+            if (provider != null)
+            {
+                // We have a provider, grab the underlying HDC if possible unless we know we've created and
+                // modified a Graphics object around it.
+                HDC = needToApplyProperties ? default : provider.GetHDC();
+
+                if (HDC.IsNull)
+                {
+                    graphics = provider.GetGraphics(createIfNeeded: true);
+                    if (graphics is null)
                     {
-                        graphics = provider.GetGraphics(createIfNeeded: true);
-                        if (graphics is null)
-                        {
-                            throw new InvalidOperationException();
-                        }
-                        HDC = (Gdi32.HDC)graphics.GetHdc();
-                        DeviceContext = graphics;
+                        throw new InvalidOperationException();
                     }
+                    DeviceContext = graphics;
                 }
+            }
 
+            if (!needToApplyProperties || graphics is null)
+            {
+                HDC = !HDC.IsNull ? HDC : (Gdi32.HDC)DeviceContext.GetHdc();
+                Debug.Assert(!HDC.IsNull);
                 _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
                 return;
             }
 
-            _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
+            // We have a Graphics object (either directly passed in or given to us by IGraphicsHdcProvider)
+            // that needs properties applied.
+
             bool applyTransform = applyGraphicsState.HasFlag(ApplyGraphicsProperties.TranslateTransform);
             bool applyClipping = applyGraphicsState.HasFlag(ApplyGraphicsProperties.Clipping);
 
-            // This API is very expensive
+            // This API is very expensive and cannot be called after GetHdc()
             object[]? data = applyTransform || applyClipping ? (object[])graphics.GetContextInfo() : null;
 
             using Region? clipRegion = (Region?)data?[0];
