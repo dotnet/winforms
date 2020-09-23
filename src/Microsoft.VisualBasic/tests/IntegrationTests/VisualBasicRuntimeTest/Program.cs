@@ -58,12 +58,10 @@ namespace VisualBasicRuntimeTest
                         throw new ArgumentException();
                 }
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
                 Environment.Exit(2);
             }
-#pragma warning restore CA1031 // Do not catch general exception types
         }
 
         private static void Interaction_InputBox(bool useVbHost)

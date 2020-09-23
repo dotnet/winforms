@@ -486,7 +486,9 @@ namespace System.Windows.Forms
                 }
                 else
                 {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
                     using (WebClient wc = new WebClient())
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
                     {
                         _uriImageStream = wc.OpenRead(uri.ToString());
                         img = Image.FromStream(_uriImageStream);
@@ -554,7 +556,9 @@ namespace System.Windows.Forms
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
 
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
             WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
 
             Task.Run(() =>
             {

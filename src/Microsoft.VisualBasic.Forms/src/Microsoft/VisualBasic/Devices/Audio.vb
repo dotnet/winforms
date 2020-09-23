@@ -1,4 +1,4 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
@@ -85,7 +85,6 @@ Namespace Microsoft.VisualBasic
                 Play(New Media.SoundPlayer(stream), playMode)
             End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
             ''' <summary>
             '''   Plays a system messageBeep sound.
             ''' </summary>
@@ -107,7 +106,6 @@ Namespace Microsoft.VisualBasic
                 Dim sound As New Media.SoundPlayer()
                 sound.Stop()
             End Sub
-#Enable Warning CA1822 ' Mark members as static
 
             ''' <summary>
             '''  Plays the passed in SoundPlayer in the passed in mode
