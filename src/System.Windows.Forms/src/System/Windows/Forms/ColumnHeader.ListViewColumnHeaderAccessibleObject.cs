@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     {
         internal class ListViewColumnHeaderAccessibleObject : AccessibleObject
         {
-            private readonly ColumnHeader _owningColumnHeader;
+            private ColumnHeader _owningColumnHeader;
 
             public ListViewColumnHeaderAccessibleObject(ColumnHeader columnHeader)
             {

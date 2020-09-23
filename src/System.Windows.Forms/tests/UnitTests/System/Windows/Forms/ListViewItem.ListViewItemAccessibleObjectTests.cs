@@ -5,7 +5,6 @@
 using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.ListViewItem;
-using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
@@ -115,8 +114,8 @@ namespace System.Windows.Forms.Tests
             // Childs
             AccessibleObject firstChild = accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewSubItemAccessibleObject>(firstChild);
-            Assert.IsType<ListViewSubItemAccessibleObject>(lastChild);
+            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(firstChild);
+            Assert.IsType<ListView.ListViewSubItemAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
             Assert.True(listView.IsHandleCreated);
         }
