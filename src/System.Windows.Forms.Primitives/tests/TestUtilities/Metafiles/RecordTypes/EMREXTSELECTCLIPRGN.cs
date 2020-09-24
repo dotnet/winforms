@@ -77,8 +77,8 @@ namespace System.Windows.Forms.Metafiles
 
         public unsafe static RECT[] GetRectsFromRegion(Gdi32.RGNDATAHEADER* regionData)
         {
-            int count = (int)regionData->nCount;
-            if (count == 0)
+            int count;
+            if (regionData is null || (count = (int)regionData->nCount) == 0)
             {
                 return Array.Empty<RECT>();
             }
