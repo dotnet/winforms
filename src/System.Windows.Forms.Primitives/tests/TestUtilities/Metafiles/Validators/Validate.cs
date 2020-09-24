@@ -88,6 +88,14 @@ namespace System.Windows.Forms.Metafiles
                 bounds,
                 stateValidators);
 
+        /// <param name="bounds">Optional bounds to validate.</param>
+        /// <param name="stateValidators">Optional device context state validation to perform.</param>
+        public static IEmfValidator BitBltValidator(
+            RECT? bounds,
+            params IStateValidator[] stateValidators) => new BitBltValidator(
+                bounds,
+                stateValidators);
+
         /// <summary>
         ///  Simple wrapper to allow doing an arbitrary action for a given <paramref name="recordType"/>.
         /// </summary>

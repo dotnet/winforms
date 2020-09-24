@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Collections.Generic;
 using System.Drawing;
 using System.Numerics;
@@ -67,6 +69,7 @@ namespace System
         public Point LastBeginPathBrushOrigin { get => _currentState.LastBeginPathBrushOrigin; set => _currentState.LastBeginPathBrushOrigin = value; }
         public bool InPath { get => _currentState.InPath; set => _currentState.InPath = value; }
         public Matrix3x2 Transform { get => _currentState.Transform; set => _currentState.Transform = value; }
+        public RECT[] ClipRegion { get => _currentState.ClipRegion; set => _currentState.ClipRegion = value; }
 
         private struct State
         {
@@ -83,6 +86,7 @@ namespace System
             public Point LastBeginPathBrushOrigin { get; set; }
             public bool InPath { get; set; }
             public Matrix3x2 Transform { get; set; }
+            public RECT[] ClipRegion { get; set; }
         }
 
         /// <summary>
@@ -95,11 +99,13 @@ namespace System
         /// </summary>
         public void AddGdiObject(ref EmfRecord record, int index)
         {
+            // Ensure we have capacity
             if (GdiObjects.Capacity <= index)
             {
                 GdiObjects.Capacity = index + 1;
             }
 
+            // Fill in any gaps if we have them
             while (GdiObjects.Count <= index)
             {
                 GdiObjects.Add(default);
