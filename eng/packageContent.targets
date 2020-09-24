@@ -13,30 +13,38 @@
 
   <PropertyGroup>
     <!-- Also in global.json -->
-    <DotNetApiDocsNetCoreApp30>0.0.0.1</DotNetApiDocsNetCoreApp30>
-    <IntellisenseXmlDir>$(RepositoryToolsDir)\bin\dotnet-api-docs_netcoreapp3.0\$(DotNetApiDocsNetCoreApp30)\_intellisense\netcore-3.0\</IntellisenseXmlDir>
-  </PropertyGroup>
+    <DotNetApiDocsNet50>0.0.0.1</DotNetApiDocsNet50>
 
-  <PropertyGroup>
+    <!-- The xml file should ALWAYS come from the dotnet-api-docs artifact -->
+    <IntellisenseXmlDir>$(CommonLibrary_NativeInstallDir)\bin\dotnet-api-docs_net5.0\$(DotNetApiDocsNet50)\_intellisense\net-5.0\</IntellisenseXmlDir>
     <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
-    <!-- TODO: remove when we get dotnet-api-docs_netcoreapp5.0 -->
-    <IntellisenseXmlFileSource Condition="!Exists('$(IntellisenseXmlFileSource)')">$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlFileSource>
 
-    <IntellisenseXml Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXml>
-    <IntellisenseXml Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXml>
+    <!-- Set the xml destination (for a later step that copies files from the dotnet-api-docs to local build artifacts) -->
+    <IntellisenseXmlDest Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXmlDest>
+    <IntellisenseXmlDest Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlDest>
+    <IntellisenseXmlDestDir Condition="'$(IntellisenseXmlDest)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))</IntellisenseXmlDestDir>
 
-    <IntellisenseXmlDir Condition="'$(IntellisenseXml)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))</IntellisenseXmlDir>
   </PropertyGroup>
 
   <Target Name="GetPackageContent"
           DependsOnTargets="SatelliteDllsProjectOutputGroup"
           Returns="@(PackageFile)">
+
+    <!-- 
+      If this file does NOT exist, and the assembly is NOT a facade assembly, this is an error. 
+      This means we build a real assembly that has no associated official intellisense docs.
+      Contact the intellisense team for guidance.
+    -->
+    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true'" 
+            Text="$(AssemblyName).xml not found in dotnet-api-docs package. Contact the intellisense team about adding the docs for this assembly."
+    />
+
     <ItemGroup>
       <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(IncludePdbInPackage)' == 'true'" Include="$(TargetDir)$(TargetName).pdb" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true'" Include="$(TargetRefPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true' Or '$(PackageAsRefAndLib)' == 'true'"
-                   Include="$(IntellisenseXml)"
+                   Include="$(IntellisenseXmlFileSource)"
                    PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(PackageAsRefAndLib)' == 'true'" Include="$(TargetPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(IncludeResourcesInPackage)' == 'true'"
@@ -49,18 +57,18 @@
   <Target Name="CopyIntellisenseXmlsToTargetRefPath"
           AfterTargets="Build"
           Inputs="$(IntellisenseXmlFileSource)"
-          Outputs="$(IntellisenseXml)"
+          Outputs="$(IntellisenseXmlDest)"
           Condition="'$(ProduceReferenceAssembly)' == 'true' Or '$(PackageAsRefAndLib)' == 'true'">
 
     <Message Condition="!Exists('$(IntellisenseXmlFileSource)')"
              Text="$(IntellisenseXmlFileSource) is missing" />
 
-    <MakeDir Condition="!Exists('$(IntellisenseXmlDir)')"
-             Directories="$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))" />
+    <MakeDir Condition="!Exists('$(IntellisenseXmlDestDir)')"
+             Directories="$([System.IO.Path]::GetDirectoryName('$(IntellisenseXmlDest)'))" />
 
     <Copy SourceFiles="$(IntellisenseXmlFileSource)"
           Condition="Exists('$(IntellisenseXmlFileSource)')"
-          DestinationFiles="$(IntellisenseXml)"
+          DestinationFiles="$(IntellisenseXmlDest)"
           SkipUnchangedFiles="true" />
   </Target>
 </Project>
