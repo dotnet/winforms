@@ -22,6 +22,6 @@
   },
   "native-tools": {
     "cmake": "3.17.3",
-    "dotnet-api-docs_netcoreapp3.0": "0.0.0.1"
+    "dotnet-api-docs_net5.0": "0.0.0.1"
   }
 }
