@@ -34,6 +34,7 @@ internal static partial class Interop
                 HBrush = color.IsSystemColor
                     ? User32.GetSysColorBrush(color)
                     : CreateSolidBrush(ColorTranslator.ToWin32(color));
+                ValidateBrushHandle();
             }
 
             public static implicit operator HBRUSH(in CreateBrushScope scope) => scope.HBrush;
@@ -60,6 +61,9 @@ internal static partial class Interop
                 if (HBrush.IsNull)
                 {
                     // Take LastError with a grain of salt here as it may not have been set.
+#if DEBUG
+                    GC.SuppressFinalize(this);
+#endif
                     throw new Win32Exception("Could not create a GDI brush.");
                 }
             }
