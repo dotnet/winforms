@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Tests
         [InlineData((int)ApplyGraphicsProperties.None)]
         public void CreateFromCleanIGraphicsHdcProviderDoesNotCreateGraphics(int apply)
         {
-            Gdi32.HDC mockHdc = new Gdi32.HDC((IntPtr)1234);
+            using var hdc = User32.GetDcScope.ScreenDC;
             var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
             var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
             mockHdcProvider
@@ -214,11 +214,11 @@ namespace System.Windows.Forms.Tests
                 .Returns(true);
             mockHdcProvider
                 .Setup(p => p.GetHDC())
-                .Returns(mockHdc);
+                .Returns(hdc);
 
             using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
             {
-                Assert.Equal(mockHdc, scope.HDC);
+                Assert.Equal(hdc, scope.HDC);
                 Assert.Equal(mockIDeviceContext.Object, scope.DeviceContext);
 
                 mockHdcProvider.VerifyGet(p => p.IsGraphicsStateClean, Times.AtLeastOnce());
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.Tests
         {
             // If we don't request to apply properties, there is no need to get the graphics.
 
-            Gdi32.HDC mockHdc = new Gdi32.HDC((IntPtr)1234);
+            using var hdc = User32.GetDcScope.ScreenDC;
             var mockHdcProvider = new Mock<IGraphicsHdcProvider>();
             var mockIDeviceContext = mockHdcProvider.As<IDeviceContext>();
             mockHdcProvider
@@ -286,11 +286,11 @@ namespace System.Windows.Forms.Tests
                 .Returns(false);
             mockHdcProvider
                 .Setup(p => p.GetHDC())
-                .Returns(mockHdc);
+                .Returns(hdc);
 
             using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, ApplyGraphicsProperties.None))
             {
-                Assert.Equal(mockHdc, scope.HDC);
+                Assert.Equal(hdc, scope.HDC);
                 Assert.Equal(mockIDeviceContext.Object, scope.DeviceContext);
 
                 mockHdcProvider.VerifyGet(p => p.IsGraphicsStateClean, Times.AtLeastOnce());
@@ -311,17 +311,17 @@ namespace System.Windows.Forms.Tests
         [InlineData((int)ApplyGraphicsProperties.None)]
         public void CreateFromIDeviceContext(int apply)
         {
-            Gdi32.HDC mockHdc = new Gdi32.HDC((IntPtr)1234);
+            using var hdc = User32.GetDcScope.ScreenDC;
             var mockIDeviceContext = new Mock<IDeviceContext>();
             mockIDeviceContext
                 .Setup(p => p.GetHdc())
-                .Returns((IntPtr)mockHdc);
+                .Returns(hdc);
             mockIDeviceContext
                 .Setup(p => p.ReleaseHdc());
 
             using (var scope = new DeviceContextHdcScope(mockIDeviceContext.Object, (ApplyGraphicsProperties)apply))
             {
-                Assert.Equal(mockHdc, scope.HDC);
+                Assert.Equal(hdc, scope.HDC);
                 Assert.Equal(mockIDeviceContext.Object, scope.DeviceContext);
 
                 mockIDeviceContext.Verify(p => p.GetHdc(), Times.Once);
