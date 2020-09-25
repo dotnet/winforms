@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -20,6 +20,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public void VARIANT_Sizeof_InvokeX86_ReturnsExpected()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(16, Marshal.SizeOf<VARIANT>());
             Assert.Equal(16, sizeof(VARIANT));
         }
@@ -27,6 +32,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public void VARIANT_Sizeof_InvokeX64_ReturnsExpected()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(24, Marshal.SizeOf<VARIANT>());
             Assert.Equal(24, sizeof(VARIANT));
         }

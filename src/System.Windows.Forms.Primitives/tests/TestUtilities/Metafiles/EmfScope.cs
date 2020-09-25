@@ -5,6 +5,7 @@
 #nullable enable
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -18,7 +19,7 @@ namespace System.Windows.Forms.Metafiles
         private Gdi32.HENHMETAFILE _hmf;
 
         public unsafe EmfScope()
-            : this (Gdi32.CreateEnhMetaFileW(hdc: default, lpFilename: null, lprc: null, lpDesc: null))
+            : this (CreateEnhMetaFile())
         {
         }
 
@@ -26,6 +27,20 @@ namespace System.Windows.Forms.Metafiles
         {
             HDC = hdc;
             _hmf = default;
+        }
+
+        private unsafe static Gdi32.HDC CreateEnhMetaFile(
+            Gdi32.HDC hdc = default,
+            string? lpFilename = null,
+            RECT* lprc = null,
+            string? lpDesc = null)
+        {
+            Gdi32.HDC metafileHdc = Gdi32.CreateEnhMetaFileW(hdc, lpFilename, lprc, lpDesc);
+            if (metafileHdc.IsNull)
+            {
+                throw new Win32Exception("Could not create metafile");
+            }
+            return metafileHdc;
         }
 
         public unsafe static EmfScope Create() => new EmfScope();

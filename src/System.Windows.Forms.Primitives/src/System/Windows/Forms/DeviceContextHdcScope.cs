@@ -72,6 +72,9 @@ namespace System.Windows.Forms
         {
             if (deviceContext is null)
             {
+                // As we're throwing in the constructor, `this` will never be passed back and as such .Dispose()
+                // can't be called. We don't have anything to release at this point so there is no point in having
+                // the finalizer run.
                 DisposalTracking.SuppressFinalize(this!);
                 throw new ArgumentNullException(nameof(deviceContext));
             }
@@ -131,6 +134,7 @@ namespace System.Windows.Forms
             if (!needToApplyProperties || graphics is null)
             {
                 HDC = HDC.IsNull ? (Gdi32.HDC)DeviceContext.GetHdc() : HDC;
+                ValidateHDC();
                 _savedHdcState = saveHdcState ? Gdi32.SaveDC(HDC) : 0;
                 return;
             }
@@ -196,6 +200,30 @@ namespace System.Windows.Forms
 
         public static implicit operator Gdi32.HDC(in DeviceContextHdcScope scope) => scope.HDC;
         public static explicit operator IntPtr(in DeviceContextHdcScope scope) => scope.HDC.Handle;
+
+        [Conditional("DEBUG")]
+        private void ValidateHDC()
+        {
+            if (HDC.IsNull)
+            {
+                // We don't want the disposal tracking to fire as it will take down unrelated tests.
+                DisposalTracking.SuppressFinalize(this!);
+                throw new InvalidOperationException("Null HDC");
+            }
+
+            var type = Gdi32.GetObjectType(HDC);
+            switch (type)
+            {
+                case Gdi32.OBJ.DC:
+                case Gdi32.OBJ.MEMDC:
+                case Gdi32.OBJ.METADC:
+                case Gdi32.OBJ.ENHMETADC:
+                    break;
+                default:
+                    DisposalTracking.SuppressFinalize(this!);
+                    throw new InvalidOperationException($"Invalid handle ({type})");
+            }
+        }
 
         public void Dispose()
         {

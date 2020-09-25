@@ -388,58 +388,6 @@ namespace System.Windows.Forms.Tests
             mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(16));
         }
 
-        public static IEnumerable<object[]> DrawText_InvalidHdc_TestData()
-        {
-            yield return new object[] { IntPtr.Zero };
-            yield return new object[] { (IntPtr)1 };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(DrawText_InvalidHdc_TestData))]
-        public void TextRenderer_DrawText_MockedInvalid_Success(IntPtr hdc)
-        {
-            var mockDeviceContext = new Mock<IDeviceContext>(MockBehavior.Strict);
-            mockDeviceContext
-                .Setup(c => c.GetHdc())
-                .Returns(() => hdc)
-                .Verifiable();
-            mockDeviceContext
-                .Setup(c => c.ReleaseHdc())
-                .Verifiable();
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, Point.Empty, Color.Red);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Once());
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Once());
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, Point.Empty, Color.Red, Color.Blue);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(2));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(2));
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, Point.Empty, Color.Red, TextFormatFlags.Default);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(3));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(3));
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, Point.Empty, Color.Red, Color.Blue, TextFormatFlags.Default);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(4));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(4));
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(5));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(5));
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, TextFormatFlags.Default);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(6));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(6));
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, Color.Blue);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(7));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(7));
-
-            TextRenderer.DrawText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Rectangle(1, 2, 300, 400), Color.Red, Color.Blue, TextFormatFlags.Default);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(8));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(8));
-        }
-
         [WinFormsFact]
         public void TextRenderer_DrawText_NullDc_ThrowsArgumentNullException()
         {
@@ -601,38 +549,6 @@ namespace System.Windows.Forms.Tests
             mockDeviceContext
                 .Setup(c => c.ReleaseHdc())
                 .Callback(() => graphics.ReleaseHdc())
-                .Verifiable();
-
-            TextRenderer.MeasureText(mockDeviceContext.Object, "text", SystemFonts.MenuFont);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Once());
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Once());
-
-            TextRenderer.MeasureText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Size(300, 400));
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(2));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(2));
-
-            TextRenderer.MeasureText(mockDeviceContext.Object, "text", SystemFonts.MenuFont, new Size(300, 400), TextFormatFlags.Default);
-            mockDeviceContext.Verify(c => c.GetHdc(), Times.Exactly(3));
-            mockDeviceContext.Verify(c => c.ReleaseHdc(), Times.Exactly(3));
-        }
-
-        public static IEnumerable<object[]> MeasureText_InvalidHdc_TestData()
-        {
-            yield return new object[] { IntPtr.Zero };
-            yield return new object[] { (IntPtr)1 };
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(MeasureText_InvalidHdc_TestData))]
-        public void TextRenderer_MeasureText_MockedInvalid_Success(IntPtr hdc)
-        {
-            var mockDeviceContext = new Mock<IDeviceContext>(MockBehavior.Strict);
-            mockDeviceContext
-                .Setup(c => c.GetHdc())
-                .Returns(() => hdc)
-                .Verifiable();
-            mockDeviceContext
-                .Setup(c => c.ReleaseHdc())
                 .Verifiable();
 
             TextRenderer.MeasureText(mockDeviceContext.Object, "text", SystemFonts.MenuFont);

@@ -13,12 +13,22 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void TASKDIALOGCONFIG_x32_Size()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(96, sizeof(TASKDIALOGCONFIG));
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void TASKDIALOGCONFIG_x32_ensure_layout()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             TASKDIALOGCONFIG sut = new TASKDIALOGCONFIG();
             byte* addr = (byte*)&sut;
 
@@ -51,12 +61,22 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void TASKDIALOGCONFIG_x64_Size()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(160, sizeof(TASKDIALOGCONFIG));
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void TASKDIALOGCONFIG_x64_ensure_layout()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             TASKDIALOGCONFIG sut = new TASKDIALOGCONFIG();
             byte* addr = (byte*)&sut;
 
