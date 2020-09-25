@@ -43,13 +43,13 @@
         <note />
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.AccessibleName">
-        <source>Four pages</source>
-        <target state="translated">Quattro pagine</target>
+        <source>Four pages (Ctrl+4)</source>
+        <target state="needs-review-translation">Quattro pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.Text">
-        <source>Four pages</source>
-        <target state="translated">Quattro pagine</target>
+        <source>Four pages (Ctrl+4)</source>
+        <target state="needs-review-translation">Quattro pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.AccessibleDescription">
@@ -58,13 +58,13 @@
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.AccessibleName">
-        <source>One page</source>
-        <target state="translated">Una pagina</target>
+        <source>One page (Ctrl+1)</source>
+        <target state="needs-review-translation">Una pagina</target>
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.Text">
-        <source>One page</source>
-        <target state="translated">Una pagina</target>
+        <source>One page (Ctrl+1)</source>
+        <target state="needs-review-translation">Una pagina</target>
         <note />
       </trans-unit>
       <trans-unit id="pageCounter.AccessibleDescription">
@@ -108,13 +108,13 @@
         <note />
       </trans-unit>
       <trans-unit id="sixpagesToolStripButton.AccessibleName">
-        <source>Six pages</source>
-        <target state="translated">Sei pagine</target>
+        <source>Six pages (Ctrl+5)</source>
+        <target state="needs-review-translation">Sei pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="sixpagesToolStripButton.Text">
-        <source>Six pages</source>
-        <target state="translated">Sei pagine</target>
+        <source>Six pages (Ctrl+5)</source>
+        <target state="needs-review-translation">Sei pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.AccessibleDescription">
@@ -123,13 +123,13 @@
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.AccessibleName">
-        <source>Three pages</source>
-        <target state="translated">Tre pagine</target>
+        <source>Three pages (Ctrl+3)</source>
+        <target state="needs-review-translation">Tre pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.Text">
-        <source>Three pages</source>
-        <target state="translated">Tre pagine</target>
+        <source>Three pages (Ctrl+3)</source>
+        <target state="needs-review-translation">Tre pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStrip1.AccessibleName">
@@ -268,13 +268,13 @@
         <note />
       </trans-unit>
       <trans-unit id="twopagesToolStripButton.AccessibleName">
-        <source>Two pages</source>
-        <target state="translated">Due pagine</target>
+        <source>Two pages (Ctrl+2)</source>
+        <target state="needs-review-translation">Due pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="twopagesToolStripButton.Text">
-        <source>Two pages</source>
-        <target state="translated">Due pagine</target>
+        <source>Two pages (Ctrl+2)</source>
+        <target state="needs-review-translation">Due pagine</target>
         <note />
       </trans-unit>
       <trans-unit id="zoomToolStripSplitButton.AccessibleDescription">
