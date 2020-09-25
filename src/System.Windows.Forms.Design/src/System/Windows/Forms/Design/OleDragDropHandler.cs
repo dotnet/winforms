@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 
@@ -11,12 +10,13 @@ namespace System.Windows.Forms.Design
 {
     internal class OleDragDropHandler
     {
-        // This is a bit that we stuff into the DoDragDrop
-        // to indicate that the thing that is being dragged should only
-        // be allowed to be moved in the current DropTarget (e.g. parent designer).
-        // We use this for interited components that can be modified (e.g. location/size) changed
-        // but not removed from their parent.
-        //
+        // NOTE: This is only a stub of the .NET Framework OleDragDropHandler. Disabled code that interacted with
+        // this class is behind #if FEATURE_OLEDRAGDROPHANDLER
+
+        // This is a bit that we stuff into the DoDragDrop to indicate that the thing that is being dragged should
+        // only be allowed to be moved in the current DropTarget (e.g. parent designer). We use this for interited
+        // components that can be modified (e.g. location/size) changed but not removed from their parent.
+
         protected const int AllowLocalMoveOnly = 0x04000000;
         public const string CF_CODE = "CF_XMLCODE";
         public const string CF_COMPONENTTYPES = "CF_COMPONENTTYPES";

@@ -436,12 +436,16 @@ namespace System.Windows.Forms.Design
                 }
 
                 _downPos = Point.Empty;
-                Control.ControlAdded -= new ControlEventHandler(OnControlAdded);
-                Control.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
-                Control.ParentChanged -= new EventHandler(OnParentChanged);
-                Control.SizeChanged -= new EventHandler(OnSizeChanged);
-                Control.LocationChanged -= new EventHandler(OnLocationChanged);
-                Control.EnabledChanged -= new EventHandler(OnEnabledChanged);
+
+                if (Control != null)
+                {
+                    Control.ControlAdded -= new ControlEventHandler(OnControlAdded);
+                    Control.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
+                    Control.ParentChanged -= new EventHandler(OnParentChanged);
+                    Control.SizeChanged -= new EventHandler(OnSizeChanged);
+                    Control.LocationChanged -= new EventHandler(OnLocationChanged);
+                    Control.EnabledChanged -= new EventHandler(OnEnabledChanged);
+                }
             }
 
             base.Dispose(disposing);
@@ -2009,17 +2013,20 @@ namespace System.Windows.Forms.Design
                     break;
                 case User32.WM.PAINT:
                     {
-                        // First, save off the update region and call our base class.
+#if FEATURE_OLEDRAGDROPHANDLER
                         if (OleDragDropHandler.FreezePainting)
                         {
                             User32.ValidateRect(m.HWnd, null);
                             break;
                         }
+#endif
 
                         if (Control is null)
                         {
                             break;
                         }
+
+                        // First, save off the update region and call our base class.
 
                         RECT clip = new RECT();
                         using var hrgn = new Gdi32.RegionScope(0, 0, 0, 0);
