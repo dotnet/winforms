@@ -153,6 +153,9 @@ namespace System.Windows.Forms.Metafiles
                     case Gdi32.EMR.DELETEOBJECT:
                         state.GdiObjects[(int)record.DeleteObjectRecord->index] = default;
                         break;
+                    case Gdi32.EMR.EXTSELECTCLIPRGN:
+                        state.ClipRegion = record.ExtSelectClipRgnRecord->ClippingRectangles;
+                        break;
                     case Gdi32.EMR.SETWORLDTRANSFORM:
                         state.Transform = record.SetWorldTransformRecord->xform;
                         break;

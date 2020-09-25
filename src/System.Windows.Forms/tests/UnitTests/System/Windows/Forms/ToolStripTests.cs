@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class ToolStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ToolStripTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ToolStrip_Ctor_Default()

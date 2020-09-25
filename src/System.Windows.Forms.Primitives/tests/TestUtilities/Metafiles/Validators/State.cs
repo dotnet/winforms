@@ -24,5 +24,6 @@ namespace System.Windows.Forms.Metafiles
         internal static IStateValidator BrushStyle(Gdi32.BS brushStyle) => new BrushStyleValidator(brushStyle);
         internal static IStateValidator Rop2(Gdi32.R2 rop2Mode) => new Rop2Validator(rop2Mode);
         internal static IStateValidator Transform(Matrix3x2 transform) => new TransformValidator(transform);
+        internal static IStateValidator Clipping(RECT[] clippingRectangles) => new ClippingValidator(clippingRectangles);
     }
 }
