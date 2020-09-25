@@ -5331,70 +5331,20 @@ namespace System.Windows.Forms
 
             using (Region region = new Region(scroll))
             {
-                IntPtr handle = IntPtr.Zero;
+                Gdi32.HRGN hrgn = default;
                 using (Graphics graphics = CreateGraphicsInternal())
                 {
-                    handle = region.GetHrgn(graphics);
+                    hrgn = (Gdi32.HRGN)region.GetHrgn(graphics);
                 }
-                if (handle != IntPtr.Zero)
-                {
-                    _cachedScrollableRegion = GetRectsFromRegion(handle);
 
-                    region.ReleaseHrgn(handle);
+                if (!hrgn.IsNull)
+                {
+                    _cachedScrollableRegion = hrgn.GetRegionRects();
+                    region.ReleaseHrgn((IntPtr)hrgn);
                 }
             }
+
             return _cachedScrollableRegion;
-        }
-
-        private unsafe static RECT[] GetRectsFromRegion(IntPtr hRgn)
-        {
-            // see how much memory we need to allocate
-            uint regionDataSize = Gdi32.GetRegionData(hRgn, 0, IntPtr.Zero);
-            if (regionDataSize == 0)
-            {
-                return null;
-            }
-
-            IntPtr pBytes = IntPtr.Zero;
-            try
-            {
-                pBytes = Marshal.AllocCoTaskMem((int)regionDataSize);
-                // get the data
-                uint ret = Gdi32.GetRegionData(hRgn, regionDataSize, pBytes);
-                if (ret != regionDataSize)
-                {
-                    return null;
-                }
-
-                // cast to the structure
-                Gdi32.RGNDATAHEADER* pRgnDataHeader = (Gdi32.RGNDATAHEADER*)pBytes;
-                if (pRgnDataHeader->iType != 1)
-                {
-                    return null;
-                }
-
-                // expecting RDH_RECTANGLES
-                var regionRects = new RECT[pRgnDataHeader->nCount];
-
-                Debug.Assert(regionDataSize == pRgnDataHeader->dwSize + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                Debug.Assert(sizeof(RECT) == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
-
-                // use the header size as the offset, and cast each rect in.
-                uint rectStart = pRgnDataHeader->dwSize;
-                for (int i = 0; i < pRgnDataHeader->nCount; i++)
-                {
-                    regionRects[i] = *((RECT*)((byte*)pBytes + rectStart + (sizeof(RECT) * i)));
-                }
-
-                return regionRects;
-            }
-            finally
-            {
-                if (pBytes != IntPtr.Zero)
-                {
-                    Marshal.FreeCoTaskMem(pBytes);
-                }
-            }
         }
 
         private void DiscardNewRow()
@@ -5412,10 +5362,11 @@ namespace System.Windows.Forms
             // Delete the 'new' row
             Debug.Assert(NewRowIndex == Rows.Count - 1);
             DataGridViewRow dataGridViewRow = Rows[NewRowIndex];
-            Rows.RemoveAtInternal(NewRowIndex, false /*force*/);
+            Rows.RemoveAtInternal(NewRowIndex, force: false);
             Debug.Assert(dataGridViewRow.Index == -1);
             DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
             OnUserDeletedRow(dgvre);
+
             // CorrectRowIndexesAfterDeletion resets this.newRowIndex to -1.
             Debug.Assert(NewRowIndex == -1);
 
@@ -5430,12 +5381,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DiscardZonesInScrollingArea(ref Rectangle rectScrollingArea,
-                                                 int emptyBackgroundWidth,
-                                                 int emptyBackgroundHeight,
-                                                 int frozenVisibleRowsHeight,
-                                                 bool discardFrozenColumns,
-                                                 bool discardFrozenRows)
+        private void DiscardZonesInScrollingArea(
+            ref Rectangle rectScrollingArea,
+            int emptyBackgroundWidth,
+            int emptyBackgroundHeight,
+            int frozenVisibleRowsHeight,
+            bool discardFrozenColumns,
+            bool discardFrozenRows)
         {
             // Discard empty background
             rectScrollingArea.Width -= emptyBackgroundWidth;

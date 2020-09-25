@@ -23,9 +23,8 @@ namespace System.Windows.Forms.Tests
             form.Controls.Add(toolStrip);
 
             // Force the handle creation
-            _ = form.Handle;
-            _ = toolStrip.Handle;
-            form.PerformLayout();
+            Assert.NotEqual(IntPtr.Zero, form.Handle);
+            Assert.NotEqual(IntPtr.Zero, toolStrip.Handle);
 
             using var emf = new EmfScope();
             DeviceContextState state = new DeviceContextState(emf);

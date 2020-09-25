@@ -16,6 +16,17 @@ internal static partial class Interop
             public uint nCount;
             public uint nRgnSize;
             public RECT rcBound;
+
+            public unsafe static RECT[] GetRegionRects(RGNDATAHEADER* regionData)
+            {
+                if (regionData is null || regionData->nCount == 0)
+                {
+                    return Array.Empty<RECT>();
+                }
+
+                // Region RECTs directly follow the header
+                return new Span<RECT>((byte*)regionData + regionData->dwSize, (int)regionData->nCount).ToArray();
+            }
         }
     }
 }
