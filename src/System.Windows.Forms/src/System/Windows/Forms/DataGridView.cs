@@ -2789,30 +2789,26 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_gridColorChangedEvent, value);
         }
 
-        private bool ShouldSerializeGridColor()
-        {
-            return !GridPenColor.Equals(DefaultGridColor);
-        }
+        private bool ShouldSerializeGridColor() => !GridPenColor.Equals(DefaultGridColor);
 
         internal Color GridPenColor { get; private set; }
 
         internal int HorizontalOffset
         {
-            get
-            {
-                return _horizontalOffset;
-            }
+            get => _horizontalOffset;
             set
             {
                 if (value < 0)
                 {
                     value = 0;
                 }
+
                 int widthNotVisible = Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - _layout.Data.Width;
                 if (value > widthNotVisible && widthNotVisible > 0)
                 {
                     value = widthNotVisible;
                 }
+
                 if (value == _horizontalOffset)
                 {
                     return;
@@ -2825,6 +2821,7 @@ namespace System.Windows.Forms
                 {
                     _horizScrollBar.Value = value;
                 }
+
                 _horizontalOffset = value;
 
                 int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
@@ -2832,7 +2829,7 @@ namespace System.Windows.Forms
                 Rectangle rectTmp = _layout.Data;
                 if (_layout.ColumnHeadersVisible)
                 {
-                    // column headers must scroll as well
+                    // Column headers must scroll as well
                     rectTmp = Rectangle.Union(rectTmp, _layout.ColumnHeaders);
                 }
                 else if (SingleVerticalBorderAdded)
@@ -2841,16 +2838,17 @@ namespace System.Windows.Forms
                     {
                         rectTmp.X--;
                     }
+
                     rectTmp.Width++;
                 }
 
-                if (SingleVerticalBorderAdded &&
-                    totalVisibleFrozenWidth > 0)
+                if (SingleVerticalBorderAdded && totalVisibleFrozenWidth > 0)
                 {
                     if (!RightToLeftInternal)
                     {
                         rectTmp.X++;
                     }
+
                     rectTmp.Width--;
                 }
 
@@ -2858,17 +2856,19 @@ namespace System.Windows.Forms
                 {
                     rectTmp.X += totalVisibleFrozenWidth;
                 }
+
                 rectTmp.Width -= totalVisibleFrozenWidth;
 
                 DisplayedBandsInfo.FirstDisplayedScrollingCol = ComputeFirstVisibleScrollingColumn();
-                // update the lastTotallyDisplayedScrollingCol
+
+                // Update the lastTotallyDisplayedScrollingCol
                 ComputeVisibleColumns();
 
-                if (EditingControl != null &&
-                    !Columns[_ptCurrentCell.X].Frozen &&
-                    DisplayedBandsInfo.FirstDisplayedScrollingCol > -1)
+                if (EditingControl != null
+                    && !Columns[_ptCurrentCell.X].Frozen
+                    && DisplayedBandsInfo.FirstDisplayedScrollingCol > -1)
                 {
-                    PositionEditingControl(true /*setLocation*/, false /*setSize*/, false /*setFocus*/);
+                    PositionEditingControl(setLocation: true, setSize: false, setFocus: false);
                 }
 
                 // The mouse probably is not over the same cell after the scroll.
@@ -2893,47 +2893,28 @@ namespace System.Windows.Forms
                 {
                     change = -change;
                 }
+
                 ScrollRectangles(rects, change);
                 if (!_dataGridViewState2[State2_StopRaisingHorizontalScroll])
                 {
                     OnScroll(scrollEventType, _horizontalOffset + change, _horizontalOffset, ScrollOrientation.HorizontalScroll);
                 }
+
                 FlushDisplayedChanged();
             }
         }
 
-        protected ScrollBar HorizontalScrollBar
-        {
-            get
-            {
-                return _horizScrollBar;
-            }
-        }
+        protected ScrollBar HorizontalScrollBar => _horizScrollBar;
 
-        internal int HorizontalScrollBarHeight
-        {
-            get
-            {
-                return _horizScrollBar.Height;
-            }
-        }
+        internal int HorizontalScrollBarHeight => _horizScrollBar.Height;
 
-        internal bool HorizontalScrollBarVisible
-        {
-            get
-            {
-                return _horizScrollBar.Visible;
-            }
-        }
+        internal bool HorizontalScrollBarVisible => _horizScrollBar.Visible;
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int HorizontalScrollingOffset
         {
-            get
-            {
-                return _horizontalOffset;
-            }
+            get => _horizontalOffset;
             set
             {
                 // int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
@@ -2943,9 +2924,9 @@ namespace System.Windows.Forms
                 }
                 // Intentionally ignoring the out of range situation.
                 // else if (value > widthNotVisible && widthNotVisible > 0)
-                //{
-                //    throw new ArgumentOutOfRangeException(string.Format(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
-                //}
+                // {
+                //     throw new ArgumentOutOfRangeException(string.Format(SR.DataGridView_PropertyTooLarge, "HorizontalScrollingOffset", (widthNotVisible).ToString()));
+                // }
                 else if (value > 0 && (Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - _layout.Data.Width) <= 0)
                 {
                     // Intentionally ignoring the case where dev tries to set value while there is no horizontal scrolling possible.
@@ -2953,10 +2934,12 @@ namespace System.Windows.Forms
                     Debug.Assert(_horizontalOffset == 0);
                     return;
                 }
+
                 if (value == _horizontalOffset)
                 {
                     return;
                 }
+
                 HorizontalOffset = value;
             }
         }
@@ -2970,83 +2953,33 @@ namespace System.Windows.Forms
                     _horizScrollTimer = new Timer();
                     _horizScrollTimer.Tick += new EventHandler(HorizScrollTimer_Tick);
                 }
+
                 return _horizScrollTimer;
             }
         }
 
         private bool InAdjustFillingColumns
-        {
-            get
-            {
-                return _dataGridViewOper[OperationInAdjustFillingColumn] || _dataGridViewOper[OperationInAdjustFillingColumns];
-            }
-        }
+            => _dataGridViewOper[OperationInAdjustFillingColumn] || _dataGridViewOper[OperationInAdjustFillingColumns];
 
-        internal bool InBeginEdit
-        {
-            get
-            {
-                return _dataGridViewOper[OperationInBeginEdit];
-            }
-        }
+        internal bool InBeginEdit => _dataGridViewOper[OperationInBeginEdit];
 
         internal bool InDisplayIndexAdjustments
         {
-            get
-            {
-                return _dataGridViewOper[OperationInDisplayIndexAdjustments];
-            }
-            set
-            {
-                _dataGridViewOper[OperationInDisplayIndexAdjustments] = value;
-            }
+            get => _dataGridViewOper[OperationInDisplayIndexAdjustments];
+            set => _dataGridViewOper[OperationInDisplayIndexAdjustments] = value;
         }
 
-        internal bool InEndEdit
-        {
-            get
-            {
-                return _dataGridViewOper[OperationInEndEdit];
-            }
-        }
+        internal bool InEndEdit => _dataGridViewOper[OperationInEndEdit];
 
         private DataGridViewCellStyle InheritedEditingCellStyle
-        {
-            get
-            {
-                if (_ptCurrentCell.X == -1)
-                {
-                    return null;
-                }
+            => _ptCurrentCell.X == -1 ? null : CurrentCellInternal.GetInheritedStyleInternal(_ptCurrentCell.Y);
 
-                return CurrentCellInternal.GetInheritedStyleInternal(_ptCurrentCell.Y);
-            }
-        }
+        internal bool InInitialization => _dataGridViewState2[State2_Initializing];
 
-        internal bool InInitialization
-        {
-            get
-            {
-                return _dataGridViewState2[State2_Initializing];
-            }
-        }
-
-        internal bool InSortOperation
-        {
-            get
-            {
-                return _dataGridViewOper[OperationInSort];
-            }
-        }
+        internal bool InSortOperation => _dataGridViewOper[OperationInSort];
 
         [Browsable(false)]
-        public bool IsCurrentCellDirty
-        {
-            get
-            {
-                return _dataGridViewState1[State1_EditedCellChanged];
-            }
-        }
+        public bool IsCurrentCellDirty => _dataGridViewState1[State1_EditedCellChanged];
 
         private bool IsCurrentCellDirtyInternal
         {
@@ -3062,12 +2995,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         public bool IsCurrentCellInEditMode
-        {
-            get
-            {
-                return EditingControl != null || _dataGridViewState1[State1_CurrentCellInEditMode];
-            }
-        }
+            => EditingControl != null || _dataGridViewState1[State1_CurrentCellInEditMode];
 
         // Only used in bound scenarios, when binding to a IEditableObject
         [Browsable(false)]
@@ -3104,41 +3032,28 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool IsEscapeKeyEffective
-        {
-            get
-            {
-                return _dataGridViewOper[OperationTrackColResize] ||
-                       _dataGridViewOper[OperationTrackRowResize] ||
-                       _dataGridViewOper[OperationTrackColHeadersResize] ||
-                       _dataGridViewOper[OperationTrackRowHeadersResize] ||
-                       _dataGridViewOper[OperationTrackColRelocation] ||
-                       IsCurrentCellDirty ||
-                       ((VirtualMode || DataSource != null) && IsCurrentRowDirty) ||
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                       (EditMode != DataGridViewEditMode.EditOnEnter && EditingControl != null ||
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
-                       _dataGridViewState1[State1_NewRowEdited]);
-            }
-        }
+        private bool IsEscapeKeyEffective => _dataGridViewOper[OperationTrackColResize]
+            || _dataGridViewOper[OperationTrackRowResize]
+            || _dataGridViewOper[OperationTrackColHeadersResize]
+            || _dataGridViewOper[OperationTrackRowHeadersResize]
+            || _dataGridViewOper[OperationTrackColRelocation]
+            || IsCurrentCellDirty
+            || ((VirtualMode || DataSource != null) && IsCurrentRowDirty)
+            || (EditMode != DataGridViewEditMode.EditOnEnter && EditingControl != null)
+            || _dataGridViewState1[State1_NewRowEdited];
 
         private bool IsMinimized
-        {
-            get
-            {
-                return TopLevelControlInternal is Form parentForm && parentForm.WindowState == FormWindowState.Minimized;
-            }
-        }
+            => TopLevelControlInternal is Form parentForm && parentForm.WindowState == FormWindowState.Minimized;
 
         private bool IsSharedCellReadOnly(DataGridViewCell dataGridViewCell, int rowIndex)
         {
             Debug.Assert(dataGridViewCell != null);
             Debug.Assert(rowIndex >= 0);
             DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
-            return ReadOnly ||
-                   (rowState & DataGridViewElementStates.ReadOnly) != 0 ||
-                   (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.ReadOnly) ||
-                   dataGridViewCell.StateIncludes(DataGridViewElementStates.ReadOnly);
+            return ReadOnly
+                || (rowState & DataGridViewElementStates.ReadOnly) != 0
+                || (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.ReadOnly)
+                || dataGridViewCell.StateIncludes(DataGridViewElementStates.ReadOnly);
         }
 
         internal bool IsSharedCellSelected(DataGridViewCell dataGridViewCell, int rowIndex)
@@ -3146,9 +3061,9 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell != null);
             Debug.Assert(rowIndex >= 0);
             DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
-            return (rowState & DataGridViewElementStates.Selected) != 0 ||
-                   (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Selected) ||
-                   dataGridViewCell.StateIncludes(DataGridViewElementStates.Selected);
+            return (rowState & DataGridViewElementStates.Selected) != 0
+                || (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Selected)
+                || dataGridViewCell.StateIncludes(DataGridViewElementStates.Selected);
         }
 
         internal bool IsSharedCellVisible(DataGridViewCell dataGridViewCell, int rowIndex)
@@ -3156,8 +3071,9 @@ namespace System.Windows.Forms
             Debug.Assert(dataGridViewCell != null);
             Debug.Assert(rowIndex >= 0);
             DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
-            return (rowState & DataGridViewElementStates.Visible) != 0 &&
-                   (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningColumn.Visible);
+            return (rowState & DataGridViewElementStates.Visible) != 0
+                && dataGridViewCell.OwningColumn != null
+                && dataGridViewCell.OwningColumn.Visible;
         }
 
         internal ToolTip KeyboardToolTip
@@ -3167,15 +3083,19 @@ namespace System.Windows.Forms
                 ToolTip toolTip;
                 if (!Properties.ContainsObject(s_propToolTip))
                 {
-                    toolTip = new ToolTip();
-                    toolTip.ReshowDelay = 500;
-                    toolTip.InitialDelay = 500;
+                    toolTip = new ToolTip
+                    {
+                        ReshowDelay = 500,
+                        InitialDelay = 500
+                    };
+
                     Properties.SetObject(s_propToolTip, toolTip);
                 }
                 else
                 {
                     toolTip = (ToolTip)Properties.GetObject(s_propToolTip);
                 }
+
                 return toolTip;
             }
         }
@@ -3186,29 +3106,25 @@ namespace System.Windows.Forms
             {
                 if (_layout._dirty && IsHandleCreated)
                 {
-                    PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
+                    PerformLayoutPrivate(
+                        useRowShortcut: false,
+                        computeVisibleRows: true,
+                        invalidInAdjustFillingColumns: false,
+                        repositionEditingControl: false);
                 }
+
                 return _layout;
             }
         }
 
-        internal Point MouseDownCellAddress
-        {
-            get
-            {
-                return _ptMouseDownCell;
-            }
-        }
+        internal Point MouseDownCellAddress => _ptMouseDownCell;
 
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.DataGridView_MultiSelectDescr))]
         public bool MultiSelect
         {
-            get
-            {
-                return _dataGridViewState1[State1_MultiSelect];
-            }
+            get => _dataGridViewState1[State1_MultiSelect];
             set
             {
                 if (MultiSelect != value)
@@ -3232,20 +3148,11 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int NewRowIndex { get; private set; } = -1;
 
-        internal bool NoDimensionChangeAllowed
-        {
-            get
-            {
-                return _noDimensionChangeCount > 0;
-            }
-        }
+        internal bool NoDimensionChangeAllowed => _noDimensionChangeCount > 0;
 
         private int NoSelectionChangeCount
         {
-            get
-            {
-                return _noSelectionChangeCount;
-            }
+            get => _noSelectionChangeCount;
             set
             {
                 Debug.Assert(value >= 0);
@@ -3275,17 +3182,7 @@ namespace System.Windows.Forms
             remove => base.PaddingChanged -= value;
         }
 
-        internal DataGridViewCellStyle PlaceholderCellStyle
-        {
-            get
-            {
-                if (_placeholderCellStyle is null)
-                {
-                    _placeholderCellStyle = new DataGridViewCellStyle();
-                }
-                return _placeholderCellStyle;
-            }
-        }
+        internal DataGridViewCellStyle PlaceholderCellStyle => _placeholderCellStyle ??= new DataGridViewCellStyle();
 
         [Browsable(true)]
         [DefaultValue(false)]
@@ -3293,73 +3190,75 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.DataGridView_ReadOnlyDescr))]
         public bool ReadOnly
         {
-            get
-            {
-                return _dataGridViewState1[State1_ReadOnly];
-            }
+            get => _dataGridViewState1[State1_ReadOnly];
             set
             {
-                if (value != _dataGridViewState1[State1_ReadOnly])
+                if (value == _dataGridViewState1[State1_ReadOnly])
                 {
-                    if (value &&
-                        _ptCurrentCell.X != -1 &&
-                        IsCurrentCellInEditMode)
-                    {
-                        // Current cell becomes read-only. Exit editing mode.
-                        if (!EndEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit,
-                                     DataGridViewValidateCellInternal.Always /*validateCell*/,
-                                     false /*fireCellLeave*/,
-                                     false /*fireCellEnter*/,
-                                     false /*fireRowLeave*/,
-                                     false /*fireRowEnter*/,
-                                     false /*fireLeave*/,
-                                     true /*keepFocus*/,
-                                     false /*resetCurrentCell*/,
-                                     false /*resetAnchorCell*/))
-                        {
-                            throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
-                        }
-                    }
+                    return;
+                }
 
-                    _dataGridViewState1[State1_ReadOnly] = value;
-
-                    if (value)
+                if (value &&
+                    _ptCurrentCell.X != -1 &&
+                    IsCurrentCellInEditMode)
+                {
+                    // Current cell becomes read-only. Exit editing mode.
+                    if (!EndEdit(
+                        DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit,
+                        DataGridViewValidateCellInternal.Always,
+                        fireCellLeave: false,
+                        fireCellEnter: false,
+                        fireRowLeave: false,
+                        fireRowEnter: false,
+                        fireLeave: false,
+                        keepFocus: true,
+                        resetCurrentCell: false,
+                        resetAnchorCell: false))
                     {
-                        try
-                        {
-                            _dataGridViewOper[OperationInReadOnlyChange] = true;
-                            for (int columnIndex = 0; columnIndex < Columns.Count; columnIndex++)
-                            {
-                                SetReadOnlyColumnCore(columnIndex, false);
-                            }
-                            int rowCount = Rows.Count;
-                            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                            {
-                                SetReadOnlyRowCore(rowIndex, false);
-                            }
-                        }
-                        finally
-                        {
-                            _dataGridViewOper[OperationInReadOnlyChange] = false;
-                        }
+                        throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                     }
-#if DEBUG
-                    else
+                }
+
+                _dataGridViewState1[State1_ReadOnly] = value;
+
+                if (value)
+                {
+                    try
                     {
-                        Debug.Assert(_individualReadOnlyCells.Count == 0);
+                        _dataGridViewOper[OperationInReadOnlyChange] = true;
                         for (int columnIndex = 0; columnIndex < Columns.Count; columnIndex++)
                         {
-                            Debug.Assert(Columns[columnIndex].ReadOnly == false);
+                            SetReadOnlyColumnCore(columnIndex, false);
                         }
+
                         int rowCount = Rows.Count;
                         for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                         {
-                            Debug.Assert((Rows.GetRowState(rowIndex) & DataGridViewElementStates.ReadOnly) == 0);
+                            SetReadOnlyRowCore(rowIndex, false);
                         }
                     }
-#endif
-                    OnReadOnlyChanged(EventArgs.Empty);
+                    finally
+                    {
+                        _dataGridViewOper[OperationInReadOnlyChange] = false;
+                    }
                 }
+#if DEBUG
+                else
+                {
+                    Debug.Assert(_individualReadOnlyCells.Count == 0);
+                    for (int columnIndex = 0; columnIndex < Columns.Count; columnIndex++)
+                    {
+                        Debug.Assert(Columns[columnIndex].ReadOnly == false);
+                    }
+
+                    int rowCount = Rows.Count;
+                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                    {
+                        Debug.Assert((Rows.GetRowState(rowIndex) & DataGridViewElementStates.ReadOnly) == 0);
+                    }
+                }
+#endif
+                OnReadOnlyChanged(EventArgs.Empty);
             }
         }
 
@@ -3373,21 +3272,18 @@ namespace System.Windows.Forms
 
         private void ResetCurrentCell()
         {
-            if (_ptCurrentCell.X != -1 &&
-                !SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
+            if (_ptCurrentCell.X != -1 && !SetCurrentCellAddressCore(
+                -1, -1,
+                setAnchorCellAddress: true,
+                validateCurrentCell: true,
+                throughMouseClick: false))
             {
                 // Edited value couldn't be committed or aborted
                 throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
             }
         }
 
-        internal bool ResizingOperationAboutToStart
-        {
-            get
-            {
-                return _dataGridViewOper[OperationResizingOperationAboutToStart];
-            }
-        }
+        internal bool ResizingOperationAboutToStart => _dataGridViewOper[OperationResizingOperationAboutToStart];
 
         internal bool RightToLeftInternal
         {
@@ -3397,6 +3293,7 @@ namespace System.Windows.Forms
                 {
                     return _dataGridViewState2[State2_RightToLeftMode];
                 }
+
                 _dataGridViewState2[State2_RightToLeftMode] = (RightToLeft == RightToLeft.Yes);
                 _dataGridViewState2[State2_RightToLeftValid] = true;
                 return _dataGridViewState2[State2_RightToLeftMode];
@@ -3409,65 +3306,72 @@ namespace System.Windows.Forms
         [DefaultValue(0)]
         public int RowCount
         {
-            get
-            {
-                return Rows.Count;
-            }
+            get => Rows.Count;
             set
             {
                 if (AllowUserToAddRowsInternal)
                 {
                     if (value < 1)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 1));
+                        throw new ArgumentOutOfRangeException(
+                            nameof(value),
+                            value,
+                            string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 1));
                     }
                 }
                 else
                 {
                     if (value < 0)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
+                        throw new ArgumentOutOfRangeException(
+                            nameof(value),
+                            value,
+                            string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
                     }
                 }
+
                 if (DataSource != null)
                 {
                     throw new InvalidOperationException(SR.DataGridView_CannotSetRowCountOnDataBoundDataGridView);
                 }
-                if (value != Rows.Count)
+
+                if (value == Rows.Count)
                 {
-                    if (value == 0)
+                    return;
+                }
+
+                if (value == 0)
+                {
+                    // Total removal of the rows.
+                    Rows.Clear();
+                }
+                else if (value < Rows.Count)
+                {
+                    // Some rows need to be removed, from the tail of the rows collection
+                    while (value < Rows.Count)
                     {
-                        // Total removal of the rows.
-                        Rows.Clear();
-                    }
-                    else if (value < Rows.Count)
-                    {
-                        // Some rows need to be removed, from the tail of the rows collection
-                        while (value < Rows.Count)
+                        int currentRowCount = Rows.Count;
+                        Rows.RemoveAt(currentRowCount - (AllowUserToAddRowsInternal ? 2 : 1));
+                        if (Rows.Count >= currentRowCount)
                         {
-                            int currentRowCount = Rows.Count;
-                            Rows.RemoveAt(currentRowCount - (AllowUserToAddRowsInternal ? 2 : 1));
-                            if (Rows.Count >= currentRowCount)
-                            {
-                                // Row removal failed. We stop the loop.
-                                break;
-                            }
+                            // Row removal failed. We stop the loop.
+                            break;
                         }
                     }
-                    else
+                }
+                else
+                {
+                    // Some rows need to be appened.
+                    if (Columns.Count == 0)
                     {
-                        // Some rows need to be appened.
-                        if (Columns.Count == 0)
-                        {
-                            // There are no columns yet, we simply create a single DataGridViewTextBoxColumn.
-                            DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-                            Columns.Add(dataGridViewTextBoxColumn);
-                        }
-                        int rowsToAdd = value - Rows.Count;
-                        if (rowsToAdd > 0)
-                        {
-                            Rows.Add(rowsToAdd);
-                        }
+                        // There are no columns yet, we simply create a single DataGridViewTextBoxColumn.
+                        DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+                        Columns.Add(dataGridViewTextBoxColumn);
+                    }
+                    int rowsToAdd = value - Rows.Count;
+                    if (rowsToAdd > 0)
+                    {
+                        Rows.Add(rowsToAdd);
                     }
                 }
             }
