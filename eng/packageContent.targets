@@ -1,38 +1,38 @@
 ﻿<Project>
 
-  <PropertyGroup>
-    <RefPackagePath Condition="'$(RefPackagePath)' == ''">ref/$(TargetFramework)</RefPackagePath>
-    <IncludePdbInPackage Condition="'$(IncludePdbInPackage)' == '' AND '$(IsFacadeAssembly)' != 'true' AND '$(DebugType)' != 'embedded'">true</IncludePdbInPackage>
-    <IncludeResourcesInPackage>true</IncludeResourcesInPackage>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(PackagePath)' == ''">
-    <PackagePath>lib/$(TargetFramework)</PackagePath>
-    <PackagePath Condition="'$(IsFacadeAssembly)' == 'true'">lib/$(TargetFramework);$(RefPackagePath)</PackagePath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <!-- Also in global.json -->
-    <DotNetApiDocsNet50>0.0.0.1</DotNetApiDocsNet50>
-
-    <!-- 
-      The xml file should ALWAYS come from the dotnet-api-docs artifact.
-      This blob lives in Azure storage at https://netcorenativeassets.blob.core.windows.net/resource-packages/external/windows/dotnet-api-docs_net5.0/
-      Instructions for updating these artifacts are at https://github.com/dotnet/winforms/blob/master/docs/intellisense.md
-    -->
-    <IntellisenseXmlDir>$(CommonLibrary_NativeInstallDir)\bin\dotnet-api-docs_net5.0\$(DotNetApiDocsNet50)\_intellisense\net-5.0\</IntellisenseXmlDir>
-    <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
-
-    <!-- Set the xml destination (for a later step that copies files from the dotnet-api-docs to local build artifacts) -->
-    <IntellisenseXmlDest Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXmlDest>
-    <IntellisenseXmlDest Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlDest>
-    <IntellisenseXmlDestDir Condition="'$(IntellisenseXmlDest)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))</IntellisenseXmlDestDir>
-
-  </PropertyGroup>
-
   <Target Name="GetPackageContent"
           DependsOnTargets="SatelliteDllsProjectOutputGroup"
           Returns="@(PackageFile)">
+
+    <PropertyGroup>
+      <RefPackagePath Condition="'$(RefPackagePath)' == ''">ref/$(TargetFramework)</RefPackagePath>
+      <IncludePdbInPackage Condition="'$(IncludePdbInPackage)' == '' AND '$(IsFacadeAssembly)' != 'true' AND '$(DebugType)' != 'embedded'">true</IncludePdbInPackage>
+      <IncludeResourcesInPackage>true</IncludeResourcesInPackage>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(PackagePath)' == ''">
+      <PackagePath>lib/$(TargetFramework)</PackagePath>
+      <PackagePath Condition="'$(IsFacadeAssembly)' == 'true'">lib/$(TargetFramework);$(RefPackagePath)</PackagePath>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <!-- Also in global.json -->
+      <DotNetApiDocsNet50>0.0.0.1</DotNetApiDocsNet50>
+
+      <!-- 
+        The xml file should ALWAYS come from the dotnet-api-docs artifact.
+        This blob lives in Azure storage at https://netcorenativeassets.blob.core.windows.net/resource-packages/external/windows/dotnet-api-docs_net5.0/
+        Instructions for updating these artifacts are at https://github.com/dotnet/winforms/blob/master/docs/intellisense.md
+      -->
+      <IntellisenseXmlDir>$(CommonLibrary_NativeInstallDir)\bin\dotnet-api-docs_net5.0\$(DotNetApiDocsNet50)\_intellisense\net-5.0\</IntellisenseXmlDir>
+      <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
+
+      <!-- Set the xml destination (for a later step that copies files from the dotnet-api-docs to local build artifacts) -->
+      <IntellisenseXmlDest Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXmlDest>
+      <IntellisenseXmlDest Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlDest>
+      <IntellisenseXmlDestDir Condition="'$(IntellisenseXmlDest)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))</IntellisenseXmlDestDir>
+
+    </PropertyGroup>
 
     <!-- 
       If this file does NOT exist, and the assembly is NOT a facade assembly, this is an error. 
