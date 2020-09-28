@@ -233,7 +233,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             LayoutOptions layout = CommonLayout();
             layout.TextOffset = !up;
-            layout.EverettButtonCompat = !Application.RenderWithVisualStyles;
+            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
 
             return layout;
         }

@@ -123,7 +123,7 @@ namespace System.Windows.Forms
                 layoutOptions.TextImageRelation = Owner.TextImageRelation;
                 // Set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
                 layoutOptions.TextImageInset = 0;
-                layoutOptions.EverettButtonCompat = false;
+                layoutOptions.DotNetOneButtonCompat = false;
 
                 // Support RTL
                 layoutOptions.GdiTextFormatFlags = ContentAlignToTextFormat(Owner.TextAlign, Owner.RightToLeft == RightToLeft.Yes);

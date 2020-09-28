@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -29,12 +27,8 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal static int Adjust255(float percentage, int value)
             {
-                int v = (int)(percentage * value);
-                if (v > 255)
-                {
-                    return 255;
-                }
-                return v;
+                int result = (int)(percentage * value);
+                return result > 255 ? 255 : result;
             }
 
             internal ColorData Calculate()
@@ -65,6 +59,7 @@ namespace System.Windows.Forms.ButtonInternal
                         colors.Highlight = ControlPaint.LightLight(_backColor);
                     }
                 }
+
                 colors.WindowDisabled = HighContrast ? SystemColors.GrayText : colors.ButtonShadow;
 
                 const float lowlight = .1f;

@@ -25,7 +25,7 @@ namespace System.Windows.Forms.ButtonInternal
                 LayoutData layout = Layout(e).Layout();
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
-                if (!layout.Options.EverettButtonCompat)
+                if (!layout.Options.DotNetOneButtonCompat)
                 {
                     layout.TextBounds.Offset(-1, -1);
                 }
@@ -121,7 +121,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             LayoutOptions layout = CommonLayout();
             layout.CheckPaddingSize = 1;
-            layout.EverettButtonCompat = !Application.RenderWithVisualStyles;
+            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles)
             {

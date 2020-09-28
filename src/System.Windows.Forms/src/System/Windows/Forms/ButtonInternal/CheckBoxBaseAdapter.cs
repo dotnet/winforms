@@ -51,7 +51,7 @@ namespace System.Windows.Forms.ButtonInternal
             // since we were using GDI+ to draw the border. Now that we are using GDI,
             // we should not do before drawing the border.
 
-            if (!layout.Options.EverettButtonCompat)
+            if (!layout.Options.DotNetOneButtonCompat)
             {
                 bounds.Width--;
                 bounds.Height--;
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ButtonInternal
                 hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
-                if (layout.Options.EverettButtonCompat)
+                if (layout.Options.DotNetOneButtonCompat)
                 {
                     bounds.Width--;
                     bounds.Height--;
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.ButtonInternal
                 checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageIndeterminateBackColor, ref t_checkImageIndeterminate);
             }
 
-            fullSize.Y -= layout.Options.EverettButtonCompat ? 1 : 2;
+            fullSize.Y -= layout.Options.DotNetOneButtonCompat ? 1 : 2;
 
             ControlPaint.DrawImageColorized(g, checkImage, fullSize, checkColor);
         }

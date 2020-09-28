@@ -1459,7 +1459,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.EverettButtonCompat = false;
+                            options.DotNetOneButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1508,7 +1508,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.EverettButtonCompat = false;
+                            options.DotNetOneButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.EverettButtonCompat = false;
+                            options.DotNetOneButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))

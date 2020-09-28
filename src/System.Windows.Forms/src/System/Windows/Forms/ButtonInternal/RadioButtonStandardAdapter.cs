@@ -72,7 +72,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             LayoutOptions layout = CommonLayout();
             layout.HintTextUp = false;
-            layout.EverettButtonCompat = !Application.RenderWithVisualStyles;
+            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles)
             {

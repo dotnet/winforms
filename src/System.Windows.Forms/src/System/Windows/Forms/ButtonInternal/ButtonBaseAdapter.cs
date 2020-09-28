@@ -20,8 +20,7 @@ namespace System.Windows.Forms.ButtonInternal
         // SystemInformation.Border3DSize + 2 pixels for focus rect
         protected const int ButtonBorderSize = 4;
 
-        internal ButtonBaseAdapter(ButtonBase control)
-            => Control = control;
+        internal ButtonBaseAdapter(ButtonBase control) => Control = control;
 
         protected ButtonBase Control { get; }
 
@@ -63,40 +62,36 @@ namespace System.Windows.Forms.ButtonInternal
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected bool IsHighContrastHighlighted()
-            => SystemInformation.HighContrast && Application.RenderWithVisualStyles &&
-                (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
+            => SystemInformation.HighContrast
+                && Application.RenderWithVisualStyles
+                && (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
 
         internal static Brush CreateDitherBrush(Color color1, Color color2)
         {
             // Note: Don't dispose the bitmap here. The texture brush will take ownership
             // of the bitmap. So the bitmap will get disposed by the brush's Dispose().
 
-            using (Bitmap b = new Bitmap(2, 2))
-            {
-                b.SetPixel(0, 0, color1);
-                b.SetPixel(0, 1, color2);
-                b.SetPixel(1, 1, color1);
-                b.SetPixel(1, 0, color2);
+            using Bitmap b = new Bitmap(2, 2);
 
-                return new TextureBrush(b);
-            }
+            b.SetPixel(0, 0, color1);
+            b.SetPixel(0, 1, color2);
+            b.SetPixel(1, 1, color1);
+            b.SetPixel(1, 0, color2);
+
+            return new TextureBrush(b);
         }
 
         /// <summary>
         ///  Get StringFormat object for rendering text using GDI+ (Graphics).
         /// </summary>
         internal virtual StringFormat CreateStringFormat()
-        {
-            return ControlPaint.CreateStringFormat(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
-        }
+            => ControlPaint.CreateStringFormat(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
 
         /// <summary>
         ///  Get TextFormatFlags flags for rendering text using GDI (TextRenderer).
         /// </summary>
         internal virtual TextFormatFlags CreateTextFormatFlags()
-        {
-            return ControlPaint.CreateTextFormatFlags(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
-        }
+            => ControlPaint.CreateTextFormatFlags(Control, Control.TextAlign, Control.ShowToolTip, Control.UseMnemonic);
 
         internal static void DrawDitheredFill(Graphics g, Color color1, Color color2, Rectangle bounds)
         {
@@ -137,26 +132,28 @@ namespace System.Windows.Forms.ButtonInternal
 
             using var hdc = new DeviceContextHdcScope(deviceContext);
 
-            // Draw counter-clock-wise.
-            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
-            Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
-            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
-            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
+            // Draw counter-clock-wise
+            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
+            Point p2 = new Point(bounds.X, bounds.Y);                                           // Upper left
+            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);                       // Bottom inner left
+            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
-            // top + left
+            // Top + left
             using var penTopLeft = new Gdi32.CreatePenScope(
                 disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
 
-            hdc.DrawLine(penTopLeft, p1, p2); // top  (right-left)
-            hdc.DrawLine(penTopLeft, p2, p3); // left (up-down)
+            hdc.DrawLine(penTopLeft, p1, p2);           // Top  (right-left)
+            hdc.DrawLine(penTopLeft, p2, p3);           // Left (up-down)
 
-            // bottom + right
+            // Bottom + right
             using var penBottomRight = new Gdi32.CreatePenScope(
-                disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
+                disabledHighContrast
+                    ? colors.WindowDisabled
+                    : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
 
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(penBottomRight, p3, p4);  // bottom (left-right)
-            hdc.DrawLine(penBottomRight, p4, p1);  // right  (bottom-up )
+            p1.Offset(0, -1);                           // Need to paint last pixel too.
+            hdc.DrawLine(penBottomRight, p3, p4);       // Bottom (left-right)
+            hdc.DrawLine(penBottomRight, p4, p1);       // Right  (bottom-up)
 
             // Draw inset using the background color to make the top and left lines thinner
             using var insetPen = new Gdi32.CreatePenScope(
@@ -169,39 +166,39 @@ namespace System.Windows.Forms.ButtonInternal
             p3.Offset(1, -1);
             p4.Offset(-1, -1);
 
-            // top + left inset
-            hdc.DrawLine(insetPen, p1, p2); // top (right-left)
-            hdc.DrawLine(insetPen, p2, p3); // left( up-down)
+            // Top + left inset
+            hdc.DrawLine(insetPen, p1, p2);             // Top  (right-left)
+            hdc.DrawLine(insetPen, p2, p3);             // Left (up-down)
 
             // Bottom + right inset
             using var bottomRightInsetPen = new Gdi32.CreatePenScope(
                 disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(bottomRightInsetPen, p3, p4); // bottom (left-right)
-            hdc.DrawLine(bottomRightInsetPen, p4, p1); // right  (bottom-up)
+            p1.Offset(0, -1);                           // Need to paint last pixel too.
+            hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)
+            hdc.DrawLine(bottomRightInsetPen, p4, p1);  // Right  (bottom-up)
         }
 
         private void Draw3DBorderNormal(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
         {
             using var hdc = new DeviceContextHdcScope(deviceContext);
 
-            // Draw counter-clock-wise.
-            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
-            Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
-            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
-            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
+            // Draw counter-clock-wise
+            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
+            Point p2 = new Point(bounds.X, bounds.Y);                                           // Upper left
+            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);                       // Bottom inner left
+            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
-            // top + left
+            // Top + left
             using var shadowPen = new Gdi32.CreatePenScope(colors.ButtonShadowDark);
-            hdc.DrawLine(shadowPen, p1, p2); // top (right-left)
-            hdc.DrawLine(shadowPen, p2, p3); // left(up-down)
+            hdc.DrawLine(shadowPen, p1, p2);                                                    // Top (right-left)
+            hdc.DrawLine(shadowPen, p2, p3);                                                    // Left(up-down)
 
-            // bottom + right
+            // Bottom + right
             using var highlightPen = new Gdi32.CreatePenScope(colors.Highlight);
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(highlightPen, p3, p4); // bottom(left-right)
-            hdc.DrawLine(highlightPen, p4, p1); // right (bottom-up)
+            p1.Offset(0, -1);                       // Need to paint last pixel too.
+            hdc.DrawLine(highlightPen, p3, p4);     // Bottom (left-right)
+            hdc.DrawLine(highlightPen, p4, p1);     // Right  (bottom-up)
 
             // Draw inset
 
@@ -212,19 +209,19 @@ namespace System.Windows.Forms.ButtonInternal
             p3.Offset(1, -1);
             p4.Offset(-1, -1);
 
-            // top + left inset
-            hdc.DrawLine(facePen, p1, p2); // top (right-left)
-            hdc.DrawLine(facePen, p2, p3); // left(up-down)
+            // Top + left inset
+            hdc.DrawLine(facePen, p1, p2);          // Top  (right-left)
+            hdc.DrawLine(facePen, p2, p3);          // Left (up-down)
 
-            // bottom + right inset
+            // Bottom + right inset
             using var insetPen = new Gdi32.CreatePenScope(
                 colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor()
                     ? SystemColors.ControlLight
                     : colors.ButtonFace);
 
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(insetPen, p3, p4); // bottom(left-right)
-            hdc.DrawLine(insetPen, p4, p1); // right (bottom-up)
+            p1.Offset(0, -1);                       // Need to paint last pixel too.
+            hdc.DrawLine(insetPen, p3, p4);         // Bottom (left-right)
+            hdc.DrawLine(insetPen, p4, p1);         // Right  (bottom-up)
         }
 
         private void Draw3DBorderRaised(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
@@ -235,49 +232,51 @@ namespace System.Windows.Forms.ButtonInternal
             using var hdc = new DeviceContextHdcScope(deviceContext);
 
             // Draw counter-clock-wise.
-            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);  // upper inner right.
-            Point p2 = new Point(bounds.X, bounds.Y);  // upper left.
-            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);  // bottom inner left.
-            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);  // inner bottom right.
+            Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
+            Point p2 = new Point(bounds.X, bounds.Y);                                           // Upper left
+            Point p3 = new Point(bounds.X, bounds.Y + bounds.Height - 1);                       // Bottom inner left
+            Point p4 = new Point(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height - 1);    // Inner bottom right
 
-            // Draw counter-clock-wise.
-
-            // top + left
+            // Top + left
             using var topLeftPen = new Gdi32.CreatePenScope(
-                disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
+                disabledHighContrast
+                    ? colors.WindowDisabled
+                    : stockColor ? SystemColors.ControlLightLight : colors.Highlight);
 
-            hdc.DrawLine(topLeftPen, p1, p2);   // top (right-left)
-            hdc.DrawLine(topLeftPen, p2, p3);   // left(up-down)
+            hdc.DrawLine(topLeftPen, p1, p2);           // Top  (right-left)
+            hdc.DrawLine(topLeftPen, p2, p3);           // Left (up-down)
 
-            // bottom + right
+            // Bottom + right
             using var bottomRightPen = new Gdi32.CreatePenScope(
                 disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDarkDark : colors.ButtonShadowDark);
 
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(bottomRightPen, p3, p4);    // bottom(left-right)
-            hdc.DrawLine(bottomRightPen, p4, p1);    // right (bottom-up)
+            p1.Offset(0, -1);                           // Need to paint last pixel too.
+            hdc.DrawLine(bottomRightPen, p3, p4);       // Bottom (left-right)
+            hdc.DrawLine(bottomRightPen, p4, p1);       // Right  (bottom-up)
 
-            // Draw inset - use the back ground color here to have a thinner border
+            // Draw inset - use the back ground color here to have a thinner border.
             p1.Offset(-1, 2);
             p2.Offset(1, 1);
             p3.Offset(1, -1);
             p4.Offset(-1, -1);
 
             using var topLeftInsetPen = new Gdi32.CreatePenScope(
-                !stockColor ? colors.ButtonFace : SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control);
+                !stockColor
+                    ? colors.ButtonFace
+                    : SystemInformation.HighContrast ? SystemColors.ControlLight : SystemColors.Control);
 
-            // top + left inset
-            hdc.DrawLine(topLeftInsetPen, p1, p2); // top (right-left)
-            hdc.DrawLine(topLeftInsetPen, p2, p3); // left(up-down)
+            // Top + left inset
+            hdc.DrawLine(topLeftInsetPen, p1, p2);      // Top  (right-left)
+            hdc.DrawLine(topLeftInsetPen, p2, p3);      // Left (up-down)
 
             // Bottom + right inset
 
             using var bottomRightInsetPen = new Gdi32.CreatePenScope(
                 disabledHighContrast ? colors.WindowDisabled : stockColor ? SystemColors.ControlDark : colors.ButtonShadow);
 
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(bottomRightInsetPen, p3, p4);  // bottom(left-right)
-            hdc.DrawLine(bottomRightInsetPen, p4, p1);  // right (bottom-up)
+            p1.Offset(0, -1);                           // Need to paint last pixel too.
+            hdc.DrawLine(bottomRightInsetPen, p3, p4);  // Bottom (left-right)
+            hdc.DrawLine(bottomRightInsetPen, p4, p1);  // Right  (bottom-up)
         }
 
         /// <summary>
@@ -288,29 +287,31 @@ namespace System.Windows.Forms.ButtonInternal
             using var hdc = new DeviceContextHdcScope(deviceContext);
 
             // Draw counter-clock-wise.
-            Point p1 = new Point(r.Right - 1, r.Top);  // upper inner right.
-            Point p2 = new Point(r.Left, r.Top);  // upper left.
-            Point p3 = new Point(r.Left, r.Bottom - 1);  // bottom inner left.
-            Point p4 = new Point(r.Right - 1, r.Bottom - 1);  // inner bottom right.
+            Point p1 = new Point(r.Right - 1, r.Top);           // Upper inner right
+            Point p2 = new Point(r.Left, r.Top);                // Upper left
+            Point p3 = new Point(r.Left, r.Bottom - 1);         // Bottom inner left
+            Point p4 = new Point(r.Right - 1, r.Bottom - 1);    // Inner bottom right
 
-            // top, left
+            // Top, left
             using var topLeftPen = new Gdi32.CreatePenScope(up ? colors.Highlight : colors.ButtonShadow);
 
-            hdc.DrawLine(topLeftPen, p1, p2); // top (right-left)
-            hdc.DrawLine(topLeftPen, p2, p3); // left (top-down)
+            hdc.DrawLine(topLeftPen, p1, p2);                   // top  (right-left)
+            hdc.DrawLine(topLeftPen, p2, p3);                   // left (top-down)
 
-            // bottom, right
+            // Bottom, right
             using var bottomRightPen = new Gdi32.CreatePenScope(up ? colors.ButtonShadow : colors.Highlight);
 
-            p1.Offset(0, -1); // need to paint last pixel too.
-            hdc.DrawLine(bottomRightPen, p3, p4); // bottom (left-right)
-            hdc.DrawLine(bottomRightPen, p4, p1); // right(bottom-up)
+            p1.Offset(0, -1);                                   // Need to paint last pixel too.
+            hdc.DrawLine(bottomRightPen, p3, p4);               // Bottom (left-right)
+            hdc.DrawLine(bottomRightPen, p4, p1);               // Right  (bottom-up)
         }
 
         /// <summary>
         ///  Draws the flat border with specified bordersize.
-        ///  This function gets called only for Flatstyle == Flatstyle.Flat.
         /// </summary>
+        /// <remarks>
+        ///  This function gets called only for Flatstyle == Flatstyle.Flat.
+        /// </remarks>
         internal static void DrawFlatBorderWithSize(
             PaintEventArgs e,
             Rectangle bounds,
@@ -366,7 +367,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             Region oldClip = graphics.Clip;
 
-            if (!layout.Options.EverettButtonCompat)
+            if (!layout.Options.DotNetOneButtonCompat)
             {
                 Rectangle bounds = new Rectangle(
                     ButtonBorderSize,
@@ -404,7 +405,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             finally
             {
-                if (!layout.Options.EverettButtonCompat)
+                if (!layout.Options.DotNetOneButtonCompat)
                 {
                     graphics.Clip = oldClip;
                 }
@@ -422,11 +423,11 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (color.HasTransparency())
             {
-                Graphics g = deviceContext.TryGetGraphics(create: true);
-                if (g != null)
+                Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                if (graphics != null)
                 {
                     using var pen = color.GetCachedPenScope();
-                    g.DrawRectangle(pen, r.X, r.Y, r.Width - 1, r.Height - 1);
+                    graphics.DrawRectangle(pen, r.X, r.Y, r.Width - 1, r.Height - 1);
                     return;
                 }
             }
@@ -477,7 +478,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                // Draw text using GDI (.NET 2.0+ feature).
+                // Draw text using GDI (.NET Framework 2.0+ feature).
                 TextFormatFlags formatFlags = CreateTextFormatFlags();
                 if (disabledText3D && !Control.Enabled && !colors.Options.HighContrast)
                 {
@@ -543,8 +544,15 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-        // used by the DataGridViewButtonCell
-        internal static LayoutOptions CommonLayout(Rectangle clientRectangle, Padding padding, bool isDefault, Font font, string text, bool enabled, ContentAlignment textAlign, RightToLeft rtl)
+        internal static LayoutOptions CommonLayout(
+            Rectangle clientRectangle,
+            Padding padding,
+            bool isDefault,
+            Font font,
+            string text,
+            bool enabled,
+            ContentAlignment textAlign,
+            RightToLeft rtl)
         {
             LayoutOptions layout = new LayoutOptions
             {
@@ -570,6 +578,7 @@ namespace System.Windows.Forms.ButtonInternal
                 TextImageRelation = TextImageRelation.Overlay,
                 UseCompatibleTextRendering = false
             };
+
             return layout;
         }
 
@@ -616,13 +625,17 @@ namespace System.Windows.Forms.ButtonInternal
             return layout;
         }
 
-        // used by the DataGridViewButtonCell
-        private static ColorOptions CommonRender(IDeviceContext deviceContext, Color foreColor, Color backColor, bool enabled)
+        private static ColorOptions CommonRender(
+            IDeviceContext deviceContext,
+            Color foreColor,
+            Color backColor,
+            bool enabled)
         {
             ColorOptions colors = new ColorOptions(deviceContext, foreColor, backColor)
             {
                 Enabled = enabled
             };
+
             return colors;
         }
 
@@ -632,34 +645,23 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 Enabled = Control.Enabled
             };
+
             return colors;
         }
 
         protected ColorOptions PaintRender(IDeviceContext deviceContext)
-        {
-            return CommonRender(deviceContext);
-        }
+            => CommonRender(deviceContext);
 
-        // used by the DataGridViewButtonCell
         internal static ColorOptions PaintFlatRender(Graphics g, Color foreColor, Color backColor, bool enabled)
-        {
-            return CommonRender(g, foreColor, backColor, enabled);
-        }
+            => CommonRender(g, foreColor, backColor, enabled);
 
         protected ColorOptions PaintFlatRender(IDeviceContext deviceContext)
-        {
-            return CommonRender(deviceContext);
-        }
+            => CommonRender(deviceContext);
 
-        // used by the DataGridViewButtonCell
         internal static ColorOptions PaintPopupRender(Graphics g, Color foreColor, Color backColor, bool enabled)
-        {
-            return CommonRender(g, foreColor, backColor, enabled);
-        }
+            => CommonRender(g, foreColor, backColor, enabled);
 
         protected ColorOptions PaintPopupRender(IDeviceContext deviceContext)
-        {
-            return CommonRender(deviceContext);
-        }
+            => CommonRender(deviceContext);
     }
 }
