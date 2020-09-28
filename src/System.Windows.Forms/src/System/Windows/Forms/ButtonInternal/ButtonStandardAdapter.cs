@@ -174,7 +174,7 @@ namespace System.Windows.Forms.ButtonInternal
             // Inflate the focus rectangle to be consistent with the behavior of Win32 app
             if (Application.RenderWithVisualStyles)
             {
-                layout.focus.Inflate(1, 1);
+                layout.Focus.Inflate(1, 1);
             }
 
             if (up & IsHighContrastHighlighted())
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.ButtonInternal
                 if (Control.Focused && Control.ShowFocusCues)
                 {
                     // Drawing focus rectangle of HighlightText color
-                    ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.focus, highlightTextColor);
+                    ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.Focus, highlightTextColor);
                 }
             }
             else if (up & IsHighContrastHighlighted())

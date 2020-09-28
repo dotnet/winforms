@@ -25,30 +25,30 @@ namespace System.Windows.Forms.ButtonInternal
                 LayoutData layout = Layout(e).Layout();
                 PaintButtonBackground(e, Control.ClientRectangle, null);
 
-                if (!layout.options.EverettButtonCompat)
+                if (!layout.Options.EverettButtonCompat)
                 {
-                    layout.textBounds.Offset(-1, -1);
+                    layout.TextBounds.Offset(-1, -1);
                 }
-                layout.imageBounds.Offset(-1, -1);
+                layout.ImageBounds.Offset(-1, -1);
 
                 AdjustFocusRectangle(layout);
 
                 if (!string.IsNullOrEmpty(Control.Text))
                 {
                     //minor adjustment to make sure the appearance is exactly the same as Win32 app.
-                    int focusRectFixup = layout.focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
+                    int focusRectFixup = layout.Focus.X & 0x1; // if it's odd, subtract one pixel for fixup.
                     if (!Application.RenderWithVisualStyles)
                     {
                         focusRectFixup = 1 - focusRectFixup;
                     }
-                    layout.focus.Offset(-(focusRectFixup + 1), -2);
-                    layout.focus.Width = layout.textBounds.Width + layout.imageBounds.Width - 1;
-                    layout.focus.Intersect(layout.textBounds);
+                    layout.Focus.Offset(-(focusRectFixup + 1), -2);
+                    layout.Focus.Width = layout.TextBounds.Width + layout.ImageBounds.Width - 1;
+                    layout.Focus.Intersect(layout.TextBounds);
 
-                    if (layout.options.TextAlign != LayoutUtils.AnyLeft && layout.options.UseCompatibleTextRendering && layout.options.Font.Italic)
+                    if (layout.Options.TextAlign != LayoutUtils.AnyLeft && layout.Options.UseCompatibleTextRendering && layout.Options.Font.Italic)
                     {
                         // fixup for GDI+ text rendering.
-                        layout.focus.Width += 2;
+                        layout.Focus.Width += 2;
                     }
                 }
 

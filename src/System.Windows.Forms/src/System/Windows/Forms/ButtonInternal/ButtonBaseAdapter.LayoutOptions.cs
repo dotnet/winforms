@@ -276,12 +276,12 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 LayoutData layout = new LayoutData(this)
                 {
-                    client = Client
+                    Client = Client
                 };
 
                 // subtract border size from layout area
                 int fullBorderSize = FullBorderSize;
-                layout.face = Rectangle.Inflate(layout.client, -fullBorderSize, -fullBorderSize);
+                layout.Face = Rectangle.Inflate(layout.Client, -fullBorderSize, -fullBorderSize);
 
                 // checkBounds, checkArea, field
                 //
@@ -294,36 +294,36 @@ namespace System.Windows.Forms.ButtonInternal
                 //
                 if (MaxFocus)
                 {
-                    layout.focus = layout.field;
-                    layout.focus.Inflate(-1, -1);
+                    layout.Focus = layout.Field;
+                    layout.Focus.Inflate(-1, -1);
 
                     // Adjust for padding.
-                    layout.focus = LayoutUtils.InflateRect(layout.focus, Padding);
+                    layout.Focus = LayoutUtils.InflateRect(layout.Focus, Padding);
                 }
                 else
                 {
-                    Rectangle textAdjusted = new Rectangle(layout.textBounds.X - 1, layout.textBounds.Y - 1,
-                                                           layout.textBounds.Width + 2, layout.textBounds.Height + 3);
+                    Rectangle textAdjusted = new Rectangle(layout.TextBounds.X - 1, layout.TextBounds.Y - 1,
+                                                           layout.TextBounds.Width + 2, layout.TextBounds.Height + 3);
                     if (ImageSize != Size.Empty)
                     {
-                        layout.focus = Rectangle.Union(textAdjusted, layout.imageBounds);
+                        layout.Focus = Rectangle.Union(textAdjusted, layout.ImageBounds);
                     }
                     else
                     {
-                        layout.focus = textAdjusted;
+                        layout.Focus = textAdjusted;
                     }
                 }
                 if (FocusOddEvenFixup)
                 {
-                    if (layout.focus.Height % 2 == 0)
+                    if (layout.Focus.Height % 2 == 0)
                     {
-                        layout.focus.Y++;
-                        layout.focus.Height--;
+                        layout.Focus.Y++;
+                        layout.Focus.Height--;
                     }
-                    if (layout.focus.Width % 2 == 0)
+                    if (layout.Focus.Width % 2 == 0)
                     {
-                        layout.focus.X++;
-                        layout.focus.Width--;
+                        layout.Focus.X++;
+                        layout.Focus.Width--;
                     }
                 }
 
@@ -381,37 +381,37 @@ namespace System.Windows.Forms.ButtonInternal
             void CalcCheckmarkRectangle(LayoutData layout)
             {
                 int checkSizeFull = FullCheckSize;
-                layout.checkBounds = new Rectangle(Client.X, Client.Y, checkSizeFull, checkSizeFull);
+                layout.CheckBounds = new Rectangle(Client.X, Client.Y, checkSizeFull, checkSizeFull);
 
                 // Translate checkAlign for Rtl applications
                 ContentAlignment align = RtlTranslateContent(CheckAlign);
 
-                Rectangle field = Rectangle.Inflate(layout.face, -PaddingSize, -PaddingSize);
+                Rectangle field = Rectangle.Inflate(layout.Face, -PaddingSize, -PaddingSize);
 
-                layout.field = field;
+                layout.Field = field;
 
                 if (checkSizeFull > 0)
                 {
                     if ((align & LayoutUtils.AnyRight) != 0)
                     {
-                        layout.checkBounds.X = (field.X + field.Width) - layout.checkBounds.Width;
+                        layout.CheckBounds.X = (field.X + field.Width) - layout.CheckBounds.Width;
                     }
                     else if ((align & LayoutUtils.AnyCenter) != 0)
                     {
-                        layout.checkBounds.X = field.X + (field.Width - layout.checkBounds.Width) / 2;
+                        layout.CheckBounds.X = field.X + (field.Width - layout.CheckBounds.Width) / 2;
                     }
 
                     if ((align & LayoutUtils.AnyBottom) != 0)
                     {
-                        layout.checkBounds.Y = (field.Y + field.Height) - layout.checkBounds.Height;
+                        layout.CheckBounds.Y = (field.Y + field.Height) - layout.CheckBounds.Height;
                     }
                     else if ((align & LayoutUtils.AnyTop) != 0)
                     {
-                        layout.checkBounds.Y = field.Y + 2; // + 2: this needs to be aligned to the text (
+                        layout.CheckBounds.Y = field.Y + 2; // + 2: this needs to be aligned to the text (
                     }
                     else
                     {
-                        layout.checkBounds.Y = field.Y + (field.Height - layout.checkBounds.Height) / 2;
+                        layout.CheckBounds.Y = field.Y + (field.Height - layout.CheckBounds.Height) / 2;
                     }
 
                     switch (align)
@@ -419,54 +419,54 @@ namespace System.Windows.Forms.ButtonInternal
                         case ContentAlignment.TopLeft:
                         case ContentAlignment.MiddleLeft:
                         case ContentAlignment.BottomLeft:
-                            layout.checkArea.X = field.X;
-                            layout.checkArea.Width = checkSizeFull + 1;
+                            layout.CheckArea.X = field.X;
+                            layout.CheckArea.Width = checkSizeFull + 1;
 
-                            layout.checkArea.Y = field.Y;
-                            layout.checkArea.Height = field.Height;
+                            layout.CheckArea.Y = field.Y;
+                            layout.CheckArea.Height = field.Height;
 
-                            layout.field.X += checkSizeFull + 1;
-                            layout.field.Width -= checkSizeFull + 1;
+                            layout.Field.X += checkSizeFull + 1;
+                            layout.Field.Width -= checkSizeFull + 1;
                             break;
                         case ContentAlignment.TopRight:
                         case ContentAlignment.MiddleRight:
                         case ContentAlignment.BottomRight:
-                            layout.checkArea.X = field.X + field.Width - checkSizeFull;
-                            layout.checkArea.Width = checkSizeFull + 1;
+                            layout.CheckArea.X = field.X + field.Width - checkSizeFull;
+                            layout.CheckArea.Width = checkSizeFull + 1;
 
-                            layout.checkArea.Y = field.Y;
-                            layout.checkArea.Height = field.Height;
+                            layout.CheckArea.Y = field.Y;
+                            layout.CheckArea.Height = field.Height;
 
-                            layout.field.Width -= checkSizeFull + 1;
+                            layout.Field.Width -= checkSizeFull + 1;
                             break;
                         case ContentAlignment.TopCenter:
-                            layout.checkArea.X = field.X;
-                            layout.checkArea.Width = field.Width;
+                            layout.CheckArea.X = field.X;
+                            layout.CheckArea.Width = field.Width;
 
-                            layout.checkArea.Y = field.Y;
-                            layout.checkArea.Height = checkSizeFull;
+                            layout.CheckArea.Y = field.Y;
+                            layout.CheckArea.Height = checkSizeFull;
 
-                            layout.field.Y += checkSizeFull;
-                            layout.field.Height -= checkSizeFull;
+                            layout.Field.Y += checkSizeFull;
+                            layout.Field.Height -= checkSizeFull;
                             break;
 
                         case ContentAlignment.BottomCenter:
-                            layout.checkArea.X = field.X;
-                            layout.checkArea.Width = field.Width;
+                            layout.CheckArea.X = field.X;
+                            layout.CheckArea.Width = field.Width;
 
-                            layout.checkArea.Y = field.Y + field.Height - checkSizeFull;
-                            layout.checkArea.Height = checkSizeFull;
+                            layout.CheckArea.Y = field.Y + field.Height - checkSizeFull;
+                            layout.CheckArea.Height = checkSizeFull;
 
-                            layout.field.Height -= checkSizeFull;
+                            layout.Field.Height -= checkSizeFull;
                             break;
 
                         case ContentAlignment.MiddleCenter:
-                            layout.checkArea = layout.checkBounds;
+                            layout.CheckArea = layout.CheckBounds;
                             break;
                     }
 
-                    layout.checkBounds.Width -= CheckPaddingSize;
-                    layout.checkBounds.Height -= CheckPaddingSize;
+                    layout.CheckBounds.Width -= CheckPaddingSize;
+                    layout.CheckBounds.Height -= CheckPaddingSize;
                 }
             }
 
@@ -505,7 +505,7 @@ namespace System.Windows.Forms.ButtonInternal
                 TextImageRelation textImageRelation = RtlTranslateRelation(this.TextImageRelation);
 
                 // Figure out the maximum bounds for text & image
-                Rectangle maxBounds = Rectangle.Inflate(layout.field, -TextImageInset, -TextImageInset);
+                Rectangle maxBounds = Rectangle.Inflate(layout.Field, -TextImageInset, -TextImageInset);
                 if (OnePixExtraBorder)
                 {
                     maxBounds.Inflate(1, 1);
@@ -519,13 +519,13 @@ namespace System.Windows.Forms.ButtonInternal
 
                     // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
                     Size size = ImageSize;
-                    if (layout.options.EverettButtonCompat && ImageSize != Size.Empty)
+                    if (layout.Options.EverettButtonCompat && ImageSize != Size.Empty)
                     {
                         size = new Size(size.Width + 1, size.Height + 1);
                     }
 
-                    layout.imageBounds = LayoutUtils.Align(size, maxBounds, imageAlign);
-                    layout.textBounds = LayoutUtils.Align(textSize, maxBounds, textAlign);
+                    layout.ImageBounds = LayoutUtils.Align(size, maxBounds, imageAlign);
+                    layout.TextBounds = LayoutUtils.Align(textSize, maxBounds, textAlign);
                 }
                 else
                 {
@@ -550,23 +550,23 @@ namespace System.Windows.Forms.ButtonInternal
                     if (imageEdge)
                     {
                         // If imageEdge, just split imageSize off of maxCombinedBounds.
-                        LayoutUtils.SplitRegion(maxCombinedBounds, ImageSize, (AnchorStyles)textImageRelation, out layout.imageBounds, out layout.textBounds);
+                        LayoutUtils.SplitRegion(maxCombinedBounds, ImageSize, (AnchorStyles)textImageRelation, out layout.ImageBounds, out layout.TextBounds);
                     }
                     else if (textEdge)
                     {
                         // Else if textEdge, just split textSize off of maxCombinedBounds.
-                        LayoutUtils.SplitRegion(maxCombinedBounds, textSize, (AnchorStyles)LayoutUtils.GetOppositeTextImageRelation(textImageRelation), out layout.textBounds, out layout.imageBounds);
+                        LayoutUtils.SplitRegion(maxCombinedBounds, textSize, (AnchorStyles)LayoutUtils.GetOppositeTextImageRelation(textImageRelation), out layout.TextBounds, out layout.ImageBounds);
                     }
                     else
                     {
                         // Expand the adjacent regions to maxCombinedBounds (centered) and split the rectangle into imageBounds and textBounds.
-                        LayoutUtils.SplitRegion(combinedBounds, ImageSize, (AnchorStyles)textImageRelation, out layout.imageBounds, out layout.textBounds);
-                        LayoutUtils.ExpandRegionsToFillBounds(maxCombinedBounds, (AnchorStyles)textImageRelation, ref layout.imageBounds, ref layout.textBounds);
+                        LayoutUtils.SplitRegion(combinedBounds, ImageSize, (AnchorStyles)textImageRelation, out layout.ImageBounds, out layout.TextBounds);
+                        LayoutUtils.ExpandRegionsToFillBounds(maxCombinedBounds, (AnchorStyles)textImageRelation, ref layout.ImageBounds, ref layout.TextBounds);
                     }
 
                     // align text/image within their regions.
-                    layout.imageBounds = LayoutUtils.Align(ImageSize, layout.imageBounds, imageAlign);
-                    layout.textBounds = LayoutUtils.Align(textSize, layout.textBounds, textAlign);
+                    layout.ImageBounds = LayoutUtils.Align(ImageSize, layout.ImageBounds, imageAlign);
+                    layout.TextBounds = LayoutUtils.Align(textSize, layout.TextBounds, textAlign);
                 }
 
                 //Don't call "layout.imageBounds = Rectangle.Intersect(layout.imageBounds, maxBounds);"
@@ -580,51 +580,51 @@ namespace System.Windows.Forms.ButtonInternal
                 if (textImageRelation == TextImageRelation.TextBeforeImage || textImageRelation == TextImageRelation.ImageBeforeText)
                 {
                     //adjust the vertical position of textBounds so that the text doesn't fall off the boundary of the button
-                    int textBottom = Math.Min(layout.textBounds.Bottom, layout.field.Bottom);
-                    layout.textBounds.Y = Math.Max(Math.Min(layout.textBounds.Y, layout.field.Y + (layout.field.Height - layout.textBounds.Height) / 2), layout.field.Y);
-                    layout.textBounds.Height = textBottom - layout.textBounds.Y;
+                    int textBottom = Math.Min(layout.TextBounds.Bottom, layout.Field.Bottom);
+                    layout.TextBounds.Y = Math.Max(Math.Min(layout.TextBounds.Y, layout.Field.Y + (layout.Field.Height - layout.TextBounds.Height) / 2), layout.Field.Y);
+                    layout.TextBounds.Height = textBottom - layout.TextBounds.Y;
                 }
                 if (textImageRelation == TextImageRelation.TextAboveImage || textImageRelation == TextImageRelation.ImageAboveText)
                 {
                     //adjust the horizontal position of textBounds so that the text doesn't fall off the boundary of the button
-                    int textRight = Math.Min(layout.textBounds.Right, layout.field.Right);
-                    layout.textBounds.X = Math.Max(Math.Min(layout.textBounds.X, layout.field.X + (layout.field.Width - layout.textBounds.Width) / 2), layout.field.X);
-                    layout.textBounds.Width = textRight - layout.textBounds.X;
+                    int textRight = Math.Min(layout.TextBounds.Right, layout.Field.Right);
+                    layout.TextBounds.X = Math.Max(Math.Min(layout.TextBounds.X, layout.Field.X + (layout.Field.Width - layout.TextBounds.Width) / 2), layout.Field.X);
+                    layout.TextBounds.Width = textRight - layout.TextBounds.X;
                 }
-                if (textImageRelation == TextImageRelation.ImageBeforeText && layout.imageBounds.Size.Width != 0)
+                if (textImageRelation == TextImageRelation.ImageBeforeText && layout.ImageBounds.Size.Width != 0)
                 {
                     //squeezes imageBounds.Width so that text is visible
-                    layout.imageBounds.Width = Math.Max(0, Math.Min(maxBounds.Width - layout.textBounds.Width, layout.imageBounds.Width));
-                    layout.textBounds.X = layout.imageBounds.X + layout.imageBounds.Width;
+                    layout.ImageBounds.Width = Math.Max(0, Math.Min(maxBounds.Width - layout.TextBounds.Width, layout.ImageBounds.Width));
+                    layout.TextBounds.X = layout.ImageBounds.X + layout.ImageBounds.Width;
                 }
-                if (textImageRelation == TextImageRelation.ImageAboveText && layout.imageBounds.Size.Height != 0)
+                if (textImageRelation == TextImageRelation.ImageAboveText && layout.ImageBounds.Size.Height != 0)
                 {
                     //squeezes imageBounds.Height so that the text is visible
-                    layout.imageBounds.Height = Math.Max(0, Math.Min(maxBounds.Height - layout.textBounds.Height, layout.imageBounds.Height));
-                    layout.textBounds.Y = layout.imageBounds.Y + layout.imageBounds.Height;
+                    layout.ImageBounds.Height = Math.Max(0, Math.Min(maxBounds.Height - layout.TextBounds.Height, layout.ImageBounds.Height));
+                    layout.TextBounds.Y = layout.ImageBounds.Y + layout.ImageBounds.Height;
                 }
                 //make sure that textBound is contained in layout.field
-                layout.textBounds = Rectangle.Intersect(layout.textBounds, layout.field);
+                layout.TextBounds = Rectangle.Intersect(layout.TextBounds, layout.Field);
                 if (HintTextUp)
                 {
-                    layout.textBounds.Y--;
+                    layout.TextBounds.Y--;
                 }
                 if (TextOffset)
                 {
-                    layout.textBounds.Offset(1, 1);
+                    layout.TextBounds.Offset(1, 1);
                 }
 
                 // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-                if (layout.options.EverettButtonCompat)
+                if (layout.Options.EverettButtonCompat)
                 {
-                    layout.imageStart = layout.imageBounds.Location;
-                    layout.imageBounds = Rectangle.Intersect(layout.imageBounds, layout.field);
+                    layout.ImageStart = layout.ImageBounds.Location;
+                    layout.ImageBounds = Rectangle.Intersect(layout.ImageBounds, layout.Field);
                 }
                 else if (!Application.RenderWithVisualStyles)
                 {
                     // Not sure why this is here, but we can't remove it, since it might break
                     // ToolStrips on non-themed machines
-                    layout.textBounds.X++;
+                    layout.TextBounds.X++;
                 }
 
                 // clip
@@ -635,17 +635,17 @@ namespace System.Windows.Forms.ButtonInternal
                 // maxbounds.
                 if (!UseCompatibleTextRendering)
                 {
-                    bottom = Math.Min(layout.textBounds.Bottom, maxBounds.Bottom);
-                    layout.textBounds.Y = Math.Max(layout.textBounds.Y, maxBounds.Y);
+                    bottom = Math.Min(layout.TextBounds.Bottom, maxBounds.Bottom);
+                    layout.TextBounds.Y = Math.Max(layout.TextBounds.Y, maxBounds.Y);
                 }
                 else
                 {
                     // If we are using GDI+ (like Everett), then use the old Everett code
                     // This ensures that we have pixel-level rendering compatibility
-                    bottom = Math.Min(layout.textBounds.Bottom, layout.field.Bottom);
-                    layout.textBounds.Y = Math.Max(layout.textBounds.Y, layout.field.Y);
+                    bottom = Math.Min(layout.TextBounds.Bottom, layout.Field.Bottom);
+                    layout.TextBounds.Y = Math.Max(layout.TextBounds.Y, layout.Field.Y);
                 }
-                layout.textBounds.Height = bottom - layout.textBounds.Y;
+                layout.TextBounds.Height = bottom - layout.TextBounds.Y;
 
                 //This causes a breaking change because images get shrunk to the new clipped size instead of clipped.
                 //********** bottom = Math.Min(layout.imageBounds.Bottom, maxBounds.Bottom);

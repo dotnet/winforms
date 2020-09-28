@@ -37,8 +37,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle imageRect = LayoutData.imageBounds;
-                    imageRect.Intersect(_layoutData.field);
+                    Rectangle imageRect = LayoutData.ImageBounds;
+                    imageRect.Intersect(_layoutData.Field);
                     return imageRect;
                 }
             }
@@ -60,13 +60,13 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle textRect = LayoutData.textBounds;
-                    textRect.Intersect(_layoutData.field);
+                    Rectangle textRect = LayoutData.TextBounds;
+                    textRect.Intersect(_layoutData.Field);
                     return textRect;
                 }
             }
 
-            public virtual Rectangle ContentRectangle => LayoutData.field;
+            public virtual Rectangle ContentRectangle => LayoutData.Field;
 
             public virtual TextFormatFlags TextFormat
             {

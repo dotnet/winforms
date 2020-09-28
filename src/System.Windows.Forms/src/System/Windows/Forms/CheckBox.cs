@@ -356,7 +356,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Popup mouseover rectangle is actually bigger than GetCheckmarkRectangle
-                        return Adapter.CommonLayout().Layout().checkBounds;
+                        return Adapter.CommonLayout().Layout().CheckBounds;
                     }
                 }
             }
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // Popup mouseover rectangle is actually bigger than GetCheckmarkRectangle()
-                    return Adapter.CommonLayout().Layout().checkBounds;
+                    return Adapter.CommonLayout().Layout().CheckBounds;
                 }
             }
         }

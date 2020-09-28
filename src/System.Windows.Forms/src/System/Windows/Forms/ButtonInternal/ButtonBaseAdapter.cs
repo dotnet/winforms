@@ -366,7 +366,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             Region oldClip = graphics.Clip;
 
-            if (!layout.options.EverettButtonCompat)
+            if (!layout.Options.EverettButtonCompat)
             {
                 Rectangle bounds = new Rectangle(
                     ButtonBorderSize,
@@ -404,7 +404,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             finally
             {
-                if (!layout.options.EverettButtonCompat)
+                if (!layout.Options.EverettButtonCompat)
                 {
                     graphics.Clip = oldClip;
                 }
@@ -441,8 +441,8 @@ namespace System.Windows.Forms.ButtonInternal
         /// </summary>
         private void DrawText(PaintEventArgs e, LayoutData layout, Color color, ColorData colors)
         {
-            Rectangle r = layout.textBounds;
-            bool disabledText3D = layout.options.ShadowedText;
+            Rectangle r = layout.TextBounds;
+            bool disabledText3D = layout.Options.ShadowedText;
 
             if (Control.UseCompatibleTextRendering)
             {
@@ -521,7 +521,7 @@ namespace System.Windows.Forms.ButtonInternal
             Color foreColor,
             bool drawFocus)
         {
-            Rectangle maxFocus = layout.focus;
+            Rectangle maxFocus = layout.Focus;
 
             DrawText(e, layout, foreColor, colors);
 
@@ -539,7 +539,7 @@ namespace System.Windows.Forms.ButtonInternal
             if (Control.Image != null)
             {
                 // Setup new clip region & draw
-                DrawImageCore(e.GraphicsInternal, Control.Image, layout.imageBounds, layout.imageStart, layout);
+                DrawImageCore(e.GraphicsInternal, Control.Image, layout.ImageBounds, layout.ImageStart, layout);
             }
         }
 

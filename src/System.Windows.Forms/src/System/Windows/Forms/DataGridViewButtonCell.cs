@@ -946,7 +946,7 @@ namespace System.Windows.Forms
 
                         ButtonBaseAdapter.DrawFlatFocus(
                             g,
-                            layout.focus,
+                            layout.Focus,
                             colors.Options.HighContrast ? colors.WindowText : colors.ConstrastButtonShadow);
                     }
                 }
@@ -976,7 +976,7 @@ namespace System.Windows.Forms
 
                         ControlPaint.DrawFocusRectangle(
                             g,
-                            layout.focus,
+                            layout.Focus,
                             cellStyle.ForeColor,
                             cellStyle.BackColor);
                     }

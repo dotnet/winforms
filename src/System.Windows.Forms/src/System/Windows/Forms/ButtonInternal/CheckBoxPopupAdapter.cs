@@ -32,13 +32,13 @@ namespace System.Windows.Forms.ButtonInternal
 
                 DrawCheckBackground(
                     e,
-                    layout.checkBounds,
+                    layout.CheckBounds,
                     colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                     disabledColors: true,
                     colors);
                 ControlPaint.DrawBorderSimple(
                     e,
-                    layout.checkBounds,
+                    layout.CheckBounds,
                     (colors.Options.HighContrast && !Control.Enabled) ? colors.WindowFrame : colors.ButtonShadow);
                 DrawCheckOnly(e, layout, colors, colors.WindowText);
 
@@ -65,19 +65,19 @@ namespace System.Windows.Forms.ButtonInternal
 
                 DrawCheckBackground(
                     e,
-                    layout.checkBounds,
+                    layout.CheckBounds,
                     colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                     disabledColors: true,
                     colors);
 
-                DrawPopupBorder(e, layout.checkBounds, colors);
+                DrawPopupBorder(e, layout.CheckBounds, colors);
                 DrawCheckOnly(e, layout, colors, colors.WindowText);
 
                 Region originalClip = null;
                 if (!string.IsNullOrEmpty(Control.Text))
                 {
                     originalClip = e.GraphicsInternal.Clip;
-                    e.GraphicsInternal.ExcludeClip(layout.checkArea);
+                    e.GraphicsInternal.ExcludeClip(layout.CheckArea);
                 }
 
                 AdjustFocusRectangle(layout);
@@ -106,8 +106,8 @@ namespace System.Windows.Forms.ButtonInternal
 
                 PaintImage(e, layout);
 
-                DrawCheckBackground(e, layout.checkBounds, colors.ButtonFace, true, colors);
-                DrawPopupBorder(e, layout.checkBounds, colors);
+                DrawCheckBackground(e, layout.CheckBounds, colors.ButtonFace, true, colors);
+                DrawPopupBorder(e, layout.CheckBounds, colors);
                 DrawCheckOnly(e, layout, colors, colors.WindowText);
 
                 AdjustFocusRectangle(layout);

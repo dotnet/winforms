@@ -323,7 +323,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return Adapter.CommonLayout().Layout().checkBounds;
+                        return Adapter.CommonLayout().Layout().CheckBounds;
                     }
                 }
             }
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return Adapter.CommonLayout().Layout().checkBounds;
+                    return Adapter.CommonLayout().Layout().CheckBounds;
                 }
             }
         }

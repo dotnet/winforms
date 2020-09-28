@@ -13,21 +13,21 @@ namespace System.Windows.Forms.ButtonInternal
     {
         internal class LayoutData
         {
-            internal Rectangle client;
-            internal Rectangle face;
-            internal Rectangle checkArea;
-            internal Rectangle checkBounds;
-            internal Rectangle textBounds;
-            internal Rectangle field;
-            internal Rectangle focus;
-            internal Rectangle imageBounds;
-            internal Point imageStart; // FOR EVERETT COMPATIBILITY - DO NOT CHANGE
-            internal LayoutOptions options;
+            public Rectangle Client;
+            public Rectangle Face;
+            public Rectangle CheckArea;
+            public Rectangle CheckBounds;
+            public Rectangle TextBounds;
+            public Rectangle Field;
+            public Rectangle Focus;
+            public Rectangle ImageBounds;
+            public Point ImageStart;            // For .NET Framework 1.1 compatibility
+            public LayoutOptions Options;
 
             internal LayoutData(LayoutOptions options)
             {
                 Debug.Assert(options != null, "must have options");
-                this.options = options;
+                Options = options;
             }
         }
     }

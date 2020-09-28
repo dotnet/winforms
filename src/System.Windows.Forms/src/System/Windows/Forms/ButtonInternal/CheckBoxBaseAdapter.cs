@@ -45,13 +45,13 @@ namespace System.Windows.Forms.ButtonInternal
             Color checkBorder,
             ColorData colors)
         {
-            Rectangle bounds = layout.checkBounds;
+            Rectangle bounds = layout.CheckBounds;
 
             // Removed subtracting one for Width and Height. In Everett we needed to do this,
             // since we were using GDI+ to draw the border. Now that we are using GDI,
             // we should not do before drawing the border.
 
-            if (!layout.options.EverettButtonCompat)
+            if (!layout.Options.EverettButtonCompat)
             {
                 bounds.Width--;
                 bounds.Height--;
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ButtonInternal
                 hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
-                if (layout.options.EverettButtonCompat)
+                if (layout.Options.EverettButtonCompat)
                 {
                     bounds.Width--;
                     bounds.Height--;
@@ -182,7 +182,7 @@ namespace System.Windows.Forms.ButtonInternal
                 checkColor = SystemInformation.HighContrast ? colors.Highlight : colors.ButtonShadow;
             }
 
-            Rectangle fullSize = layout.checkBounds;
+            Rectangle fullSize = layout.CheckBounds;
 
             if (fullSize.Width == checkSize)
             {
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.ButtonInternal
                 checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageIndeterminateBackColor, ref t_checkImageIndeterminate);
             }
 
-            fullSize.Y -= layout.options.EverettButtonCompat ? 1 : 2;
+            fullSize.Y -= layout.Options.EverettButtonCompat ? 1 : 2;
 
             ControlPaint.DrawImageColorized(g, checkImage, fullSize, checkColor);
         }
@@ -278,13 +278,13 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                         e,
-                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, true, Control.MouseIsOver),
                         Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawMixedCheckBox(e.GraphicsInternal, layout.checkBounds, style);
+                    ControlPaint.DrawMixedCheckBox(e.GraphicsInternal, layout.CheckBounds, style);
                 }
             }
             else
@@ -293,13 +293,13 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     CheckBoxRenderer.DrawCheckBoxWithVisualStyles(
                         e,
-                        new Point(layout.checkBounds.Left, layout.checkBounds.Top),
+                        new Point(layout.CheckBounds.Left, layout.CheckBounds.Top),
                         CheckBoxRenderer.ConvertFromButtonState(style, false, Control.MouseIsOver),
                         Control.HandleInternal);
                 }
                 else
                 {
-                    ControlPaint.DrawCheckBox(e.GraphicsInternal, layout.checkBounds, style);
+                    ControlPaint.DrawCheckBox(e.GraphicsInternal, layout.CheckBounds, style);
                 }
             }
         }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.ButtonInternal
                 // to draw the focus rectangle. So, when AutoSize == true we want the focus rectangle to be rendered
                 // inside the box. Otherwise, it should encircle all the available space next to the box (like it's
                 // done in WPF and ComCtl32).
-                layout.focus = Control.AutoSize ? Rectangle.Inflate(layout.checkBounds, -2, -2) : layout.field;
+                layout.Focus = Control.AutoSize ? Rectangle.Inflate(layout.CheckBounds, -2, -2) : layout.Field;
             }
         }
 
