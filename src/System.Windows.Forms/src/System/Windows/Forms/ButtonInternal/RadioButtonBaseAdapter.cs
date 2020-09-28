@@ -43,9 +43,9 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             using var fieldBrush = field.GetCachedSolidBrushScope();
-            using var dark = colors.buttonShadow.GetCachedPenScope();
-            using var light = colors.buttonFace.GetCachedPenScope();
-            using var lightlight = colors.highlight.GetCachedPenScope();
+            using var dark = colors.ButtonShadow.GetCachedPenScope();
+            using var light = colors.ButtonFace.GetCachedPenScope();
+            using var lightlight = colors.Highlight.GetCachedPenScope();
 
             bounds.Width--;
             bounds.Height--;
@@ -234,7 +234,7 @@ namespace System.Windows.Forms.ButtonInternal
         internal override LayoutOptions CommonLayout()
         {
             LayoutOptions layout = base.CommonLayout();
-            layout.checkAlign = Control.CheckAlign;
+            layout.CheckAlign = Control.CheckAlign;
 
             return layout;
         }

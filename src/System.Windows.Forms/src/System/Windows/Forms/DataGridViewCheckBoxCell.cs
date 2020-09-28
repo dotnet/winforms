@@ -1459,7 +1459,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options.EverettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1474,7 +1474,7 @@ namespace System.Windows.Forms
                                     checkState,
                                     g,
                                     layout.checkBounds,
-                                    colors.buttonFace,
+                                    colors.ButtonFace,
                                     disabledColors: true);
                                 CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
                                 CheckBoxBaseAdapter.DrawCheckOnly(
@@ -1485,7 +1485,7 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText);
+                                    colors.WindowText);
                             }
 
                             resultBounds = layout.checkBounds;
@@ -1508,7 +1508,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options.EverettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms
                                     checkState,
                                     g,
                                     layout.checkBounds,
-                                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                                     disabledColors: true);
 
                                 CheckBoxBaseAdapter.DrawPopupBorder(g, layout.checkBounds, colors);
@@ -1535,7 +1535,7 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText);
+                                    colors.WindowText);
                             }
                             resultBounds = layout.checkBounds;
                         }
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms
                                 DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                                 DataGridView.RightToLeft);
 
-                            options.everettButtonCompat = false;
+                            options.EverettButtonCompat = false;
                             ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                             if (paint && PaintContentForeground(paintParts))
@@ -1569,10 +1569,10 @@ namespace System.Windows.Forms
                                     checkState,
                                     g,
                                     layout.checkBounds,
-                                    colors.options.HighContrast ? colors.buttonFace : colors.highlight,
+                                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight,
                                     disabledColors: true);
 
-                                ControlPaint.DrawBorderSimple(g, layout.checkBounds, colors.buttonShadow);
+                                ControlPaint.DrawBorderSimple(g, layout.checkBounds, colors.ButtonShadow);
                                 CheckBoxBaseAdapter.DrawCheckOnly(
                                     checkBoxSize.Width,
                                     checkState == CheckState.Checked || checkState == CheckState.Indeterminate,
@@ -1581,7 +1581,7 @@ namespace System.Windows.Forms
                                     g,
                                     layout,
                                     colors,
-                                    colors.windowText);
+                                    colors.WindowText);
                             }
 
                             resultBounds = layout.checkBounds;

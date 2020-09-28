@@ -23,7 +23,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (state == CheckState.Indeterminate)
             {
-                using Brush backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
+                using Brush backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
                 PaintButtonBackground(e, r, backbrush);
             }
             else
@@ -41,14 +41,14 @@ namespace System.Windows.Forms.ButtonInternal
                 e,
                 layout,
                 colors,
-                state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText,
+                state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText,
                 drawFocus: true);
 
-            DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
+            DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow, Control.IsDefault);
 
             if (state == CheckState.Unchecked)
             {
-                ControlPaint.DrawBorderSimple(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
+                ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (state == CheckState.Indeterminate)
             {
-                using Brush backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
+                using Brush backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
                 PaintButtonBackground(e, r, backbrush);
             }
             else
@@ -79,16 +79,16 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
+            PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.WindowText, true);
 
-            DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow, Control.IsDefault);
+            DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow, Control.IsDefault);
 
             if (SystemInformation.HighContrast)
             {
                 Graphics g = e.GraphicsInternal;
-                using var windowFrame = colors.windowFrame.GetCachedPenScope();
-                using var highlight = colors.highlight.GetCachedPenScope();
-                using var buttonShadow = colors.buttonShadow.GetCachedPenScope();
+                using var windowFrame = colors.WindowFrame.GetCachedPenScope();
+                using var highlight = colors.Highlight.GetCachedPenScope();
+                using var buttonShadow = colors.ButtonShadow.GetCachedPenScope();
 
                 // top, left white
                 g.DrawLine(windowFrame, r.Left + 1, r.Top + 1, r.Right - 2, r.Top + 1);
@@ -128,11 +128,11 @@ namespace System.Windows.Forms.ButtonInternal
             r.Inflate(-1, -1);
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, colors.windowText, true);
+            PaintField(e, layout, colors, colors.WindowText, true);
 
             r.Inflate(1, 1);
-            DrawDefaultBorder(e, r, colors.options.HighContrast ? colors.windowText : colors.windowFrame, Control.IsDefault);
-            ControlPaint.DrawBorderSimple(e, r, colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
+            DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame, Control.IsDefault);
+            ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow);
         }
 
         #region Layout
@@ -160,13 +160,13 @@ namespace System.Windows.Forms.ButtonInternal
             RightToLeft rtl)
         {
             LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
-            layout.borderSize = paintedBorder;
-            layout.paddingSize = 2 - paintedBorder;
-            layout.hintTextUp = false;
-            layout.textOffset = !up;
-            layout.shadowedText = SystemInformation.HighContrast;
+            layout.BorderSize = paintedBorder;
+            layout.PaddingSize = 2 - paintedBorder;
+            layout.HintTextUp = false;
+            layout.TextOffset = !up;
+            layout.ShadowedText = SystemInformation.HighContrast;
 
-            Debug.Assert(layout.borderSize + layout.paddingSize == 2,
+            Debug.Assert(layout.BorderSize + layout.PaddingSize == 2,
                 "It is assemed borderSize + paddingSize will always be 2. Bad value for paintedBorder?");
 
             return layout;
@@ -175,13 +175,13 @@ namespace System.Windows.Forms.ButtonInternal
         private LayoutOptions PaintPopupLayout(PaintEventArgs e, bool up, int paintedBorder)
         {
             LayoutOptions layout = CommonLayout();
-            layout.borderSize = paintedBorder;
-            layout.paddingSize = 2 - paintedBorder;//3 - paintedBorder - (Control.IsDefault ? 1 : 0);
-            layout.hintTextUp = false;
-            layout.textOffset = !up;
-            layout.shadowedText = SystemInformation.HighContrast;
+            layout.BorderSize = paintedBorder;
+            layout.PaddingSize = 2 - paintedBorder;//3 - paintedBorder - (Control.IsDefault ? 1 : 0);
+            layout.HintTextUp = false;
+            layout.TextOffset = !up;
+            layout.ShadowedText = SystemInformation.HighContrast;
 
-            Debug.Assert(layout.borderSize + layout.paddingSize == 2,
+            Debug.Assert(layout.BorderSize + layout.PaddingSize == 2,
                 "borderSize + paddingSize will always be 2. Bad value for paintedBorder?");
 
             return layout;

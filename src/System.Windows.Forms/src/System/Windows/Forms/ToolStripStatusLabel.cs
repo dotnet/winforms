@@ -263,7 +263,7 @@ namespace System.Windows.Forms
             protected override ToolStripItemLayoutOptions CommonLayoutOptions()
             {
                 ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
-                layoutOptions.borderSize = 0;
+                layoutOptions.BorderSize = 0;
                 return layoutOptions;
             }
         }

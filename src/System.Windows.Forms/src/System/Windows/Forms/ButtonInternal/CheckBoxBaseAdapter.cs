@@ -13,17 +13,17 @@ namespace System.Windows.Forms.ButtonInternal
 {
     internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
     {
-        protected const int flatCheckSize = 11;
+        protected const int FlatCheckSize = 11;
 
         [ThreadStatic]
-        private static Bitmap checkImageChecked = null;
+        private static Bitmap t_checkImageChecked = null;
         [ThreadStatic]
-        private static Color checkImageCheckedBackColor = Color.Empty;
+        private static Color t_checkImageCheckedBackColor = Color.Empty;
 
         [ThreadStatic]
-        private static Bitmap checkImageIndeterminate = null;
+        private static Bitmap t_checkImageIndeterminate = null;
         [ThreadStatic]
-        private static Color checkImageIndeterminateBackColor = Color.Empty;
+        private static Color t_checkImageIndeterminateBackColor = Color.Empty;
 
         internal CheckBoxBaseAdapter(ButtonBase control) : base(control) { }
 
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.ButtonInternal
             // since we were using GDI+ to draw the border. Now that we are using GDI,
             // we should not do before drawing the border.
 
-            if (!layout.options.everettButtonCompat)
+            if (!layout.options.EverettButtonCompat)
             {
                 bounds.Width--;
                 bounds.Height--;
@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ButtonInternal
                 hdc.DrawRectangle(bounds, hpen);
 
                 // Now subtract, since the rest of the code is like Everett.
-                if (layout.options.everettButtonCompat)
+                if (layout.options.EverettButtonCompat)
                 {
                     bounds.Width--;
                     bounds.Height--;
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 bounds.Width++;
                 bounds.Height++;
-                DrawDitheredFill(e.Graphics, colors.buttonFace, checkBackground, bounds);
+                DrawDitheredFill(e.Graphics, colors.ButtonFace, checkBackground, bounds);
             }
             else
             {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (Control.CheckState == CheckState.Indeterminate)
             {
-                DrawDitheredFill(e.GraphicsInternal, colors.buttonFace, checkBackground, bounds);
+                DrawDitheredFill(e.GraphicsInternal, colors.ButtonFace, checkBackground, bounds);
             }
             else
             {
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.ButtonInternal
         protected void DrawCheckOnly(PaintEventArgs e, LayoutData layout, ColorData colors, Color checkColor)
         {
             DrawCheckOnly(
-                flatCheckSize,
+                FlatCheckSize,
                 Control.Checked,
                 Control.Enabled,
                 Control.CheckState,
@@ -175,11 +175,11 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!controlEnabled)
             {
-                checkColor = colors.buttonShadow;
+                checkColor = colors.ButtonShadow;
             }
             else if (controlCheckState == CheckState.Indeterminate)
             {
-                checkColor = SystemInformation.HighContrast ? colors.highlight : colors.buttonShadow;
+                checkColor = SystemInformation.HighContrast ? colors.Highlight : colors.ButtonShadow;
             }
 
             Rectangle fullSize = layout.checkBounds;
@@ -196,17 +196,17 @@ namespace System.Windows.Forms.ButtonInternal
             Bitmap checkImage;
             if (controlCheckState == CheckState.Checked)
             {
-                checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageCheckedBackColor, ref checkImageChecked);
+                checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageCheckedBackColor, ref t_checkImageChecked);
             }
             else
             {
                 Debug.Assert(
                     controlCheckState == CheckState.Indeterminate,
                     "we want to paint the check box only if the item is checked or indeterminate");
-                checkImage = GetCheckBoxImage(checkColor, fullSize, ref checkImageIndeterminateBackColor, ref checkImageIndeterminate);
+                checkImage = GetCheckBoxImage(checkColor, fullSize, ref t_checkImageIndeterminateBackColor, ref t_checkImageIndeterminate);
             }
 
-            fullSize.Y -= layout.options.everettButtonCompat ? 1 : 2;
+            fullSize.Y -= layout.options.EverettButtonCompat ? 1 : 2;
 
             ControlPaint.DrawImageColorized(g, checkImage, fullSize, checkColor);
         }
@@ -225,9 +225,9 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal static Rectangle DrawPopupBorder(Gdi32.HDC hdc, Rectangle r, ColorData colors)
         {
-            using var high = new Gdi32.CreatePenScope(colors.highlight);
-            using var shadow = new Gdi32.CreatePenScope(colors.buttonShadow);
-            using var face = new Gdi32.CreatePenScope(colors.buttonFace);
+            using var high = new Gdi32.CreatePenScope(colors.Highlight);
+            using var shadow = new Gdi32.CreatePenScope(colors.ButtonShadow);
+            using var face = new Gdi32.CreatePenScope(colors.ButtonFace);
 
             hdc.DrawLine(high, r.Right - 1, r.Top, r.Right - 1, r.Bottom);
             hdc.DrawLine(high, r.Left, r.Bottom - 1, r.Right, r.Bottom - 1);
@@ -355,10 +355,10 @@ namespace System.Windows.Forms.ButtonInternal
         internal override LayoutOptions CommonLayout()
         {
             LayoutOptions layout = base.CommonLayout();
-            layout.checkAlign = Control.CheckAlign;
-            layout.textOffset = false;
-            layout.shadowedText = !Control.Enabled;
-            layout.layoutRTL = RightToLeft.Yes == Control.RightToLeft;
+            layout.CheckAlign = Control.CheckAlign;
+            layout.TextOffset = false;
+            layout.ShadowedText = !Control.Enabled;
+            layout.LayoutRTL = RightToLeft.Yes == Control.RightToLeft;
 
             return layout;
         }
