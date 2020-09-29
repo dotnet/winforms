@@ -1402,5 +1402,53 @@ namespace System.Windows.Forms.Tests
             var context = new StreamingContext();
             Assert.Throws<ArgumentNullException>("info", () => iSerializable.GetObjectData(null, context));
         }
+
+        public static IEnumerable<object[]> ListViewGroup_AddGroup_Invoke_VirtualMode_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                // View.Tile is not supported by ListView in virtual mode
+                if (view == View.Tile)
+                {
+                    continue;
+                }
+
+                foreach (bool showGroups in new[] { true, false })
+                {
+                    yield return new object[] { view, showGroups };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroup_AddGroup_Invoke_VirtualMode_TestData))]
+        public void ListViewGroup_AddGroup_Invoke_VirtualMode_ThrowsException_IfHandleCreated(View view, bool showGroups)
+        {
+            using var listView = new ListView
+            {
+                View = view,
+                VirtualMode = true,
+                ShowGroups = showGroups
+            };
+
+            listView.CreateControl();
+
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.Add(new ListViewGroup()));
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroup_AddGroup_Invoke_VirtualMode_TestData))]
+        public void ListViewGroup_AddGroup_Invoke_VirtualMode_DoesNotThrowException_IfHandleNotCreated(View view, bool showGroups)
+        {
+            using var listView = new ListView
+            {
+                View = view,
+                VirtualMode = true,
+                ShowGroups = showGroups
+            };
+
+            // ListView in Virtual Mode does not throw exception when trying to add new group
+            listView.Groups.Add(new ListViewGroup());
+        }
     }
 }
