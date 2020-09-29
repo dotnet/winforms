@@ -32,7 +32,9 @@ namespace System.Windows.Forms
                 => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
 
             public override Rectangle Bounds
-                => new Rectangle(
+                => _owningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                    ? Rectangle.Empty
+                    : new Rectangle(
                         _owningListView.AccessibilityObject.Bounds.X + _owningItem.Bounds.X,
                         _owningListView.AccessibilityObject.Bounds.Y + _owningItem.Bounds.Y,
                         _owningItem.Bounds.Width,

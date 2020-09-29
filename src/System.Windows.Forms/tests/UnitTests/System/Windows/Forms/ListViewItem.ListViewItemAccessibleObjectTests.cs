@@ -773,5 +773,95 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedAcessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
+
+        public static IEnumerable<object[]> ListViewItemAccessibleObject_Bounds_TestData()
+        {
+            foreach (bool virtualMode in new[] { true, false })
+            {
+                foreach (View view in Enum.GetValues(typeof(View)))
+                {
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (virtualMode == true && View.Tile == view)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool createHandle in new[] { true, false })
+                        {
+                            yield return new object[] { view, showGroups, createHandle, virtualMode };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewItemAccessibleObject_Bounds_TestData))]
+        public void ListViewItemAccessibleObject_Bounds_ReturnExpected(View view, bool showGroups, bool createHandle, bool virtualMode)
+        {
+            using ListView listView = new ListView
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualMode = virtualMode,
+                VirtualListSize = 3
+            };
+
+            var lvgroup1 = new ListViewGroup
+            {
+                Header = "CollapsibleGroup1",
+                CollapsedState = ListViewGroupCollapsedState.Expanded
+            };
+
+            listView.Groups.Add(lvgroup1);
+            var listViewItem1 = new ListViewItem("Item1", lvgroup1);
+
+            var lvgroup2 = new ListViewGroup
+            {
+                Header = "CollapsibleGroup2",
+                CollapsedState = ListViewGroupCollapsedState.Collapsed
+            };
+
+            var listViewItem2 = new ListViewItem("Item2", lvgroup2);
+            var listViewItem3 = new ListViewItem("Item3");
+            listView.Groups.Add(lvgroup2);
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem1,
+                        2 => listViewItem2,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
+
+            listView.Columns.Add(new ColumnHeader());
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            Assert.NotEqual(Rectangle.Empty, listViewItem1.AccessibilityObject.Bounds);
+            Assert.Equal(Rectangle.Empty, listViewItem2.AccessibilityObject.Bounds);
+            Assert.NotEqual(Rectangle.Empty, listViewItem3.AccessibilityObject.Bounds);
+        }
     }
 }
