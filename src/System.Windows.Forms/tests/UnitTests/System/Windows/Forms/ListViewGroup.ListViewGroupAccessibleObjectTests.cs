@@ -595,5 +595,44 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(listViewGroup.AccessibilityObject);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroupAccessibleObject_TestData))]
+        public void ListViewGroupAccessibleObject_ExpandCollapseState_ReturnExpected(View view, bool showGroups, bool createHandle)
+        {
+            using ListView listView = new ListView
+            {
+                View = view,
+                ShowGroups = showGroups,
+            };
+
+            var lvgroup1 = new ListViewGroup
+            {
+                Header = "CollapsibleGroup1",
+                CollapsedState = ListViewGroupCollapsedState.Expanded
+            };
+
+            listView.Groups.Add(lvgroup1);
+            listView.Items.Add(new ListViewItem("Item1", lvgroup1));
+
+            var lvgroup2 = new ListViewGroup
+            {
+                Header = "CollapsibleGroup2",
+                CollapsedState = ListViewGroupCollapsedState.Collapsed
+            };
+
+            listView.Groups.Add(lvgroup2);
+            listView.Items.Add(new ListViewItem("Item2", lvgroup2));
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            Assert.Equal(ExpandCollapseState.Expanded, lvgroup1.AccessibilityObject.ExpandCollapseState);
+            Assert.Equal(ExpandCollapseState.Collapsed, lvgroup2.AccessibilityObject.ExpandCollapseState);
+            Assert.Equal(ExpandCollapseState.Expanded, listView.DefaultGroup.AccessibilityObject.ExpandCollapseState);
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
     }
 }

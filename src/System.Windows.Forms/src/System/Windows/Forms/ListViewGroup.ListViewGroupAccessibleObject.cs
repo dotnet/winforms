@@ -63,9 +63,9 @@ namespace System.Windows.Forms
                 => SR.AccessibleActionDoubleClick;
 
             internal override UiaCore.ExpandCollapseState ExpandCollapseState
-                => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Expanded
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                    ? UiaCore.ExpandCollapseState.Collapsed
+                    : UiaCore.ExpandCollapseState.Expanded;
 
             public override string Name
                 => _owningGroup.Header;
