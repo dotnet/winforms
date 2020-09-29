@@ -2669,7 +2669,7 @@ namespace System.Windows.Forms
                         if (OwnerDraw)
                         {
                             using Graphics g = nmcd->nmcd.hdc.CreateGraphics();
-                            DrawListViewItemEventArgs e =  new DrawListViewItemEventArgs(
+                            DrawListViewItemEventArgs e = new DrawListViewItemEventArgs(
                                 g,
                                 Items[(int)nmcd->nmcd.dwItemSpec],
                                 itemBounds,
@@ -4862,10 +4862,15 @@ namespace System.Windows.Forms
         {
             ((EventHandler)Events[EVENT_SELECTEDINDEXCHANGED])?.Invoke(this, e);
 
-            if (SelectedItems.Count > 0 && SelectedItems[0].Focused)
+            if (SelectedIndices.Count == 0)
             {
-                AccessibleObject accessibilityObject = SelectedItems[0].AccessibilityObject;
-                accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                return;
+            }
+
+            ListViewItem firstSelectedItem = Items[SelectedIndices[0]];
+            if (firstSelectedItem.Focused)
+            {
+                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
         }
 
@@ -6560,26 +6565,29 @@ namespace System.Windows.Forms
                     break;
 
                 case (int)LVN.KEYDOWN:
-                    if (Groups.Count > 0)
+                    if (GroupsEnabled)
                     {
                         NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;
-                        if (lvkd->wVKey == (short)Keys.Down
-                            && SelectedItems.Count > 0
-                            && SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
+                        if ((lvkd->wVKey == (short)Keys.Down || lvkd->wVKey == (short)Keys.Up) && SelectedItems.Count > 0)
                         {
-                            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
-                            ListViewGroupAccessibleObject nextGroupAccObj = (ListViewGroupAccessibleObject)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-                            nextGroupAccObj?.SetFocus();
-                        }
+                            AccessibleObject accessibleObject = SelectedItems[0].AccessibilityObject;
+                            if (lvkd->wVKey == (short)Keys.Down
+                                && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
+                            {
+                                ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                                ListViewGroupAccessibleObject nextGroupAccObj = (ListViewGroupAccessibleObject)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+                                nextGroupAccObj?.SetFocus();
+                            }
 
-                        if (lvkd->wVKey == (short)Keys.Up
-                            && SelectedItems.Count > 0
-                            && SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
-                        {
-                            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)SelectedItems[0].AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
-                            groupAccObj?.SetFocus();
+                            if (lvkd->wVKey == (short)Keys.Up
+                            && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
+                            {
+                                ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                                groupAccObj?.SetFocus();
+                            }
                         }
                     }
+
                     if (CheckBoxes)
                     {
                         NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;

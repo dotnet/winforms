@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             public ListViewItemAccessibleObject(ListViewItem owningItem, ListViewGroup? owningGroup)
             {
                 _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
-                _owningListView = owningItem.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
+                _owningListView = owningItem.ListView ?? owningGroup?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 _owningGroup = owningGroup;
                 _systemIAccessible = _owningListView.AccessibilityObject.GetSystemIAccessibleInternal();
             }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable | AccessibleStates.MultiSelectable;
 
-                    if (_owningListView.SelectedItems.Contains(_owningItem))
+                    if (_owningListView.SelectedIndices.Contains(_owningItem.Index))
                     {
                         return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
@@ -232,10 +232,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
                 => _owningListView.AccessibilityObject;
 
-            internal override void ScrollIntoView()
-            {
-                _owningItem.EnsureVisible();
-            }
+            internal override void ScrollIntoView() => _owningItem.EnsureVisible();
 
             internal unsafe override void SelectItem()
             {
