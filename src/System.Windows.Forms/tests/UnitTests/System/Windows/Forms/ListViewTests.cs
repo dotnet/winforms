@@ -4612,6 +4612,72 @@ namespace System.Windows.Forms.Tests
             Assert.False(item2.Checked);
         }
 
+        public static IEnumerable<object[]> ListView_SelectedIndexies_Contains_Invoke_TestData()
+        {
+            foreach (bool virtualMode in new[] { true, false })
+            {
+                foreach (View view in Enum.GetValues(typeof(View)))
+                {
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (virtualMode == true && View.Tile == view)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool createHandle in new[] { true, false })
+                        {
+                            yield return new object[] { view, showGroups, createHandle, virtualMode };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_SelectedIndexies_Contains_Invoke_TestData))]
+        public void ListView_SelectedIndexies_Contains_Invoke_ReturnExpected(View view, bool showGroups, bool createHandle, bool virtualMode)
+        {
+            using ListView listView = new ListView
+            {
+                ShowGroups = showGroups,
+                VirtualMode = virtualMode,
+                View = view,
+                VirtualListSize = 1
+            };
+
+            var listItem = new ListViewItem();
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+            }
+            else
+            {
+                listView.Items.Add(listItem);
+            }
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            listView.Items[0].Selected = true;
+
+            Assert.False(listView.SelectedIndices.Contains(-1));
+            Assert.False(listView.SelectedIndices.Contains(1));
+            Assert.True(listView.SelectedIndices.Contains(0));
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
         private class SubListView : ListView
         {
             public new bool CanEnableIme => base.CanEnableIme;

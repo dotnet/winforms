@@ -7676,6 +7676,11 @@ namespace System.Windows.Forms
 
             public bool Contains(int selectedIndex)
             {
+                if (selectedIndex < 0 || selectedIndex >= owner.Items.Count)
+                {
+                    return false;
+                }
+
                 return owner.Items[selectedIndex].Selected;
             }
 
