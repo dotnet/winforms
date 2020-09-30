@@ -4752,6 +4752,15 @@ namespace System.Windows.Forms
             base.OnHandleDestroyed(e);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            if (IsHandleCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
+            {
+                focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
+        }
+
         /// <summary>
         ///  Fires the itemActivate event.
         /// </summary>
