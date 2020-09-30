@@ -6818,7 +6818,7 @@ namespace System.Windows.Forms.Tests
             {
                 if (i == 0x000B) // Vertical Tabulation
                 {
-                    // NB: The old control works the same, but StreamOut() substituted 0x000B with \n
+                    // NOTE: The old control works the same, but StreamOut() substituted 0x000B with \n
                     yield return new object[] { $"{(char)i}ab", "ab", "\nab" };
                     yield return new object[] { $"a{(char)i}b", "ab", "a\nb" };
                     yield return new object[] { $"ab\r\n{(char)i}\r\n", "ab\n\n", "ab\n\n\n" };
@@ -6841,7 +6841,7 @@ namespace System.Windows.Forms.Tests
 
                 if (i == 0x2028) // Line Separator (\v)
                 {
-                    // NB: The old control works the same, but StreamOut() substituted 0x2028 with \n
+                    // NOTE: The old control works the same, but StreamOut() substituted 0x2028 with \n
                     yield return new object[] { $"{(char)i}ab", "ab", "\nab" };
                     yield return new object[] { $"a{(char)i}b", "ab", "a\nb" };
                     yield return new object[] { $"ab\r\n{(char)i}\r\n", "ab\n\n", "ab\n\n\n" };
@@ -6872,10 +6872,9 @@ namespace System.Windows.Forms.Tests
 
         private const string SAME = "SAME";
 
-        //[WinFormsTheory]
-        //[MemberData(nameof(RichTextBox_Text_GetWithHandle_TestData))]
-        [WinFormsFact(Skip = "Causes buffer overruns, see: https://github.com/dotnet/winforms/issues/3867")]
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/3867")]
+        // NOTE: do not convert this into a theory as it will run hundreds of tests
+        // and with that will cycle through hundreds of UI controls.
+        [WinFormsFact]
         public void RichTextBox_Text_GetWithHandle_ReturnsExpected()
         {
             using (var control = new RichTextBox())
@@ -6890,7 +6889,7 @@ namespace System.Windows.Forms.Tests
                 control.HandleCreated += (sender, e) => createdCallCount++;
 
                 // verify against RichEdit20W
-                using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+                using (var riched20 = new RichEdit20W())
                 {
                     riched20.CreateControl();
 
@@ -6901,7 +6900,7 @@ namespace System.Windows.Forms.Tests
                         string oldWayExpectedText = testCaseData.Length > 2 ? (string)testCaseData[2] : SAME;
                         string oldControlExpectedText = testCaseData.Length > 3 ? (string)testCaseData[3] : SAME;
 
-                        // NB: in certain scenarios the old way (using StreamOut() method) returned a different
+                        // NOTE: in certain scenarios the old way (using StreamOut() method) returned a different
                         // text value to the new way (via GetTextEx() method).
                         // If oldWayExpectedText is SAME, assume StreamOut() returned the same expectedText.
                         if (oldWayExpectedText is SAME)
@@ -6909,7 +6908,7 @@ namespace System.Windows.Forms.Tests
                             oldWayExpectedText = expectedText;
                         }
 
-                        // NB: in certain scenarios the old control returns a different text value to the new control.
+                        // NOTE: in certain scenarios the old control returns a different text value to the new control.
                         // If oldControlExpectedText is SAME, assume the old control returns the same expectedText.
                         if (oldControlExpectedText is SAME)
                         {
@@ -6973,7 +6972,7 @@ namespace System.Windows.Forms.Tests
             }
 
             // verify against RichEdit20W
-            using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+            using (var riched20 = new RichEdit20W())
             {
                 Assert.Empty(riched20.Text);
                 Assert.False(riched20.IsHandleCreated);
@@ -10547,13 +10546,13 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void RichTextBox_CheckRichEditWithVersionCanCreateOldVersions()
         {
-            using (var riched32 = new RichEditWithVersion("riched32.dll", "RichEdit"))
+            using (var riched32 = new RichEdit())
             {
                 riched32.CreateControl();
                 Assert.Contains(".RichEdit.", GetClassName(riched32.Handle), StringComparison.InvariantCultureIgnoreCase);
             }
 
-            using (var riched20 = new RichEditWithVersion("riched20.dll", "RichEdit20W"))
+            using (var riched20 = new RichEdit20W())
             {
                 riched20.CreateControl();
                 Assert.Contains(".RichEdit20W.", GetClassName(riched20.Handle), StringComparison.InvariantCultureIgnoreCase);
@@ -10718,47 +10717,57 @@ namespace System.Windows.Forms.Tests
             return sb.ToString();
         }
 
-        private class RichEditWithVersion : RichTextBox
+        /// <summary>
+        /// Represents RichEdit 1.0 control.
+        /// </summary>
+        private class RichEdit : RichEditWithVersion
         {
-            public RichEditWithVersion(string nativeDll, string windowClassName)
-            {
-                this.nativeDll = nativeDll;
-                this.windowClassName = windowClassName;
-            }
+            protected override string NativeDll => "riched32.dll";
+            protected override string WindowClassName => "RichEdit";
+        }
 
+        /// <summary>
+        /// Represents RichEdit 2.0 control.
+        /// </summary>
+        private class RichEdit20W : RichEditWithVersion
+        {
+            protected override string NativeDll => "riched20.dll";
+            protected override string WindowClassName => "RichEdit20W";
+        }
+
+        private abstract class RichEditWithVersion : RichTextBox
+        {
+            // NOTE: Do not unload the library once it is loaded!
+            // To prevent race conditions where one thread unloads the library
+            // while another thread instantiates the control.
             private IntPtr _nativeDllHandle = IntPtr.Zero;
-            protected string nativeDll;
-            protected string windowClassName;
+
+            protected abstract string NativeDll { get; }
+            protected abstract string WindowClassName { get; }
 
             protected override CreateParams CreateParams
             {
                 get
                 {
+                    // This code is copied and adapted from the original RichTextBox implemenation
+                    // https://referencesource.microsoft.com/#System.Windows.Forms/winforms/Managed/System/WinForms/RichTextBox.cs,357
+
+                    if (_nativeDllHandle == IntPtr.Zero)
+                    {
+                        _nativeDllHandle = Kernel32.LoadLibraryFromSystemPathIfAvailable(NativeDll);
+
+                        int lastWin32Error = Marshal.GetLastWin32Error();
+                        if ((ulong)_nativeDllHandle < (ulong)32)
+                        {
+                            throw new Win32Exception(lastWin32Error, $"Failed to load '{NativeDll}'");
+                        }
+                    }
+
                     CreateParams cp = base.CreateParams;
 
-                    if (_nativeDllHandle == IntPtr.Zero &&
-                        !string.IsNullOrEmpty(nativeDll)) // CreateParams is called in the base class constructor, before nativeDll is assigned.
-                    {
-                        _nativeDllHandle = NativeLibrary.Load(nativeDll);
-                    }
-
-                    if (!string.IsNullOrEmpty(windowClassName))
-                    {
-                        cp.ClassName = windowClassName;
-                    }
+                    cp.ClassName = WindowClassName;
 
                     return cp;
-                }
-            }
-
-            protected override void Dispose(bool disposing)
-            {
-                base.Dispose(disposing);
-
-                if (_nativeDllHandle != IntPtr.Zero)
-                {
-                    NativeLibrary.Free(_nativeDllHandle);
-                    _nativeDllHandle = IntPtr.Zero;
                 }
             }
         }
