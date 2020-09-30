@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,7 +9,6 @@ using System.Windows.Forms.Metafiles;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -585,7 +584,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "Acrylic",
                     bounds: null,                                   // Don't care about the bounds for this test
-                    fontFace: SystemFonts.DefaultFont.Name,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Blue)));
         }
 
@@ -688,7 +687,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "Sparkling Cider",
                     expectedBounds,
-                    SystemFonts.DefaultFont.Name,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Red)));
         }
 
@@ -711,7 +710,7 @@ namespace System.Windows.Forms.Tests
                 Validate.TextOut(
                     "Sparkling Cider",
                     expectedBounds,
-                    SystemFonts.DefaultFont.Name,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
                     State.TextColor(Color.Red)));
         }
 

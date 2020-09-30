@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(TextChanged))]
     [DefaultBindingProperty(nameof(Text))]
     [Designer("System.Windows.Forms.Design.TextBoxBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract class TextBoxBase : Control
+    public abstract partial class TextBoxBase : Control
     {
         // The boolean properties for this control are contained in the textBoxFlags bit
         // vector.  We can store up to 32 boolean values in this one vector.  Here we
@@ -1124,6 +1124,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
+
                 Select(value, SelectionLength);
             }
         }
@@ -1363,6 +1364,8 @@ namespace System.Windows.Forms
         ///  Copies the current selection in the text box to the Clipboard.
         /// </summary>
         public void Copy() => SendMessageW(this, WM.COPY);
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new TextBoxBaseAccessibleObject(this);
 
         protected override void CreateHandle()
         {
@@ -1653,7 +1656,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetLineFromCharIndex(int index)
         {
-            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index));
+            return (int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index);
         }
 
         /// <summary>
@@ -1666,7 +1669,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)User32.SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
+            int i = (int)(long)SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
@@ -1812,6 +1815,7 @@ namespace System.Windows.Forms
                 {
                     length = (int)longLength;
                 }
+
                 start = textLen;
             }
 
@@ -1834,6 +1838,8 @@ namespace System.Windows.Forms
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
                 SendMessageW(this, (WM)EM.SETSEL, (IntPtr)s, (IntPtr)e);
+
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
             else
             {

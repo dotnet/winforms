@@ -1,0 +1,3 @@
+~override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+~override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
+~override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void

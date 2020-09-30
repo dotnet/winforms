@@ -11,15 +11,15 @@ internal partial class Interop
         [Flags]
         public enum SCF : uint
         {
-            SELECTION = 0x0001,
-            WORD = 0x0002,
-            DEFAULT = 0x0000,
-            ALL = 0x0004,
-            USEUIRULES = 0x0008,
-            ASSOCIATEFONT = 0x0010,
-            NOKBUPDATE = 0x0020,
-            ASSOCIATEFONT2 = 0x0040,
-            SMARTFONT = 0x0080,
+            DEFAULT         = 0x0000,
+            SELECTION       = 0x0001,
+            WORD            = 0x0002,
+            ALL             = 0x0004,
+            USEUIRULES      = 0x0008,
+            ASSOCIATEFONT   = 0x0010,
+            NOKBUPDATE      = 0x0020,
+            ASSOCIATEFONT2  = 0x0040,
+            SMARTFONT       = 0x0080,
             CHARREPFROMLCID = 0x0100,
         }
     }

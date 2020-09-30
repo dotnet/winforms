@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,7 +15,8 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>(() => new VScrollBar.VScrollBarAccessibleObject(null));
         }
 
-        [WinFormsTheory]
+        [WinFormsTheory(Skip = "Crash with an unexpected result. See: https://github.com/dotnet/winforms/issues/3856")]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/3856")]
         [InlineData(true, AccessibleRole.ScrollBar)]
         [InlineData(false, AccessibleRole.None)]
         public void VScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)

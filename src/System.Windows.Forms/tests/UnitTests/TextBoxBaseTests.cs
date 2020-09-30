@@ -1235,8 +1235,7 @@ namespace System.Windows.Forms.Tests
             {
                 Multiline = multiline
             };
-
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.CreateControl();
             IntPtr result = User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMARGINS);
             Assert.Equal(expected, PARAM.LOWORD(result));
             Assert.Equal(expected, PARAM.HIWORD(result));
@@ -4873,6 +4872,7 @@ namespace System.Windows.Forms.Tests
             {
                 Text = "text"
             };
+            control.CreateControl();
             Assert.Equal(0, control.GetLineFromCharIndex(index));
             Assert.True(control.IsHandleCreated);
         }
@@ -4884,7 +4884,7 @@ namespace System.Windows.Forms.Tests
         public void TextBoxBase_GetLineFromCharIndex_InvokeEmptyWithHandle_Success(int index)
         {
             using var control = new SubTextBox();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.CreateControl();
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -4911,7 +4911,7 @@ namespace System.Windows.Forms.Tests
             {
                 Text = "text"
             };
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            control.CreateControl();
             int invalidatedCallCount = 0;
             control.Invalidated += (sender, e) => invalidatedCallCount++;
             int styleChangedCallCount = 0;
@@ -7798,6 +7798,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
         }
+
         [WinFormsTheory]
         [InlineData(true, 3)]
         [InlineData(false, 0)]
@@ -7820,6 +7821,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(IntPtr.Zero, m.Result);
                 Assert.Equal(!multiline, control.IsHandleCreated);
                 Assert.Equal(0, textChangedCallCount);
+                control.CreateControl();
                 IntPtr result = SendMessageW(control.Handle, (WM)EM.GETMARGINS);
                 Assert.Equal(expectedMargin, PARAM.HIWORD(result));
                 Assert.Equal(expectedMargin, PARAM.LOWORD(result));
@@ -7976,6 +7978,49 @@ namespace System.Windows.Forms.Tests
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private class SubTextBoxBase : TextBoxBase
+        {
+        }
+
+        public static IEnumerable<object[]> TextBoxBase_GetLineFromCharIndex_TestData()
+        {
+            yield return new object[] { new Size(50, 20), false, 0, 0 };
+            yield return new object[] { new Size(50, 20), false, 50, 0 };
+            yield return new object[] { new Size(100, 50), true, 50, 3 };
+            yield return new object[] { new Size(50, 50), true, 50, 8 };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextBoxBase_GetLineFromCharIndex_TestData))]
+        public void TextBoxBase_GetLineFromCharIndex_ReturnsCorrectValue(Size size, bool multiline, int charIndex, int expectedLine)
+        {
+            using var textBoxBase = new SubTextBoxBase() { Size = size, Multiline = multiline };
+            textBoxBase.Text = "Some test text for testing GetLineFromCharIndex method";
+            int actualLine = textBoxBase.GetLineFromCharIndex(charIndex);
+            Assert.Equal(expectedLine, actualLine);
+        }
+
+        public static IEnumerable<object[]> TextBoxBase_GetPositionFromCharIndex_TestData()
+        {
+            yield return new object[] { new Size(50, 20), false, 0, new Point(1, 0) };
+            yield return new object[] { new Size(50, 20), false, 15, new Point(79, 0) };
+            yield return new object[] { new Size(50, 50), true, 12, new Point(14, 31) };
+            yield return new object[] { new Size(100, 50), true, 22, new Point(37, 16) };
+            yield return new object[] { new Size(50, 50), true, 100, Point.Empty };
+            yield return new object[] { new Size(50, 50), true, -1, Point.Empty };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextBoxBase_GetPositionFromCharIndex_TestData))]
+        public void TextBoxBase_GetPositionFromCharIndex_ReturnsCorrectValue(Size size, bool multiline, int charIndex, Point expectedPoint)
+        {
+            using var textBoxBase = new SubTextBoxBase() { Size = size, Multiline = multiline };
+            textBoxBase.Text = "Some test text for testing GetPositionFromCharIndex method";
+            Point actualPoint = textBoxBase.GetPositionFromCharIndex(charIndex);
+            Assert.True(actualPoint.X >= expectedPoint.X - 1 || actualPoint.X <= expectedPoint.X + 1);
+            Assert.True(actualPoint.Y >= expectedPoint.Y - 1 || actualPoint.Y <= expectedPoint.Y + 1);
         }
     }
 }

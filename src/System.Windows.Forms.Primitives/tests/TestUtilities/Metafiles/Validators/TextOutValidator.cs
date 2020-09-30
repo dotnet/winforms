@@ -13,21 +13,17 @@ namespace System.Windows.Forms.Metafiles
     internal sealed class TextOutValidator : StateValidator
     {
         private readonly string? _text;
-        private readonly string? _fontFace;
         private readonly Rectangle? _bounds;
 
         /// <param name="text">Optional text to validate.</param>
         /// <param name="bounds">Optional bounds to validate.</param>
-        /// <param name="fontFace">Optional font face name to validate.</param>
         /// <param name="stateValidators">Optional device context state validation to perform.</param>
         public TextOutValidator(
             string? text,
             Rectangle? bounds = default,
-            string? fontFace = default,
             params IStateValidator[] stateValidators) : base(stateValidators)
         {
             _text = text;
-            _fontFace = fontFace;
             _bounds = bounds;
         }
 
@@ -50,11 +46,6 @@ namespace System.Windows.Forms.Metafiles
             if (_bounds.HasValue)
             {
                 Assert.Equal(_bounds.Value, (Rectangle)textOut->rclBounds);
-            }
-
-            if (_fontFace != null)
-            {
-                Assert.Equal(_fontFace, state.SelectedFont.FaceName.ToString());
             }
         }
     }

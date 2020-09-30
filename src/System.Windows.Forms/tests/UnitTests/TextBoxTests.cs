@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -455,13 +455,14 @@ namespace System.Windows.Forms.Tests
             }
 
             Assert.Equal(createControl, control.IsHandleCreated);
-            Control.ControlAccessibleObject instance = Assert.IsType<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsType<TextBoxBase.TextBoxBaseAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
             Assert.Equal(expectedAccessibleRole, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -471,12 +472,13 @@ namespace System.Windows.Forms.Tests
             {
                 AccessibleRole = AccessibleRole.HelpBalloon
             };
-            Control.ControlAccessibleObject instance = Assert.IsType<Control.ControlAccessibleObject>(control.CreateAccessibilityInstance());
+            Control.ControlAccessibleObject instance = Assert.IsType<TextBoxBase.TextBoxBaseAccessibleObject>(control.CreateAccessibilityInstance());
             Assert.NotNull(instance);
             Assert.Same(control, instance.Owner);
             Assert.Equal(AccessibleRole.HelpBalloon, instance.Role);
             Assert.NotSame(control.CreateAccessibilityInstance(), instance);
             Assert.NotSame(control.AccessibilityObject, instance);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]

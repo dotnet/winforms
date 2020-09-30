@@ -1612,6 +1612,10 @@ namespace System.Windows.Forms
                 {
                     _columnHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
                 }
+
+                // Update ambient font flag depending on cell style font
+                _dataGridViewState1[State1_AmbientColumnHeadersFont] = value?.Font == base.Font;
+
                 DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(ColumnHeadersDefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
@@ -2128,6 +2132,10 @@ namespace System.Windows.Forms
                 {
                     _defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
                 }
+
+                // Update ambient font flag depending on cell style font
+                _dataGridViewState1[State1_AmbientFont] = value?.Font == base.Font;
+
                 DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(DefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {
@@ -2359,7 +2367,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return EditingControl.AccessibilityObject;
+                return EditingControl?.AccessibilityObject;
             }
         }
 
@@ -3481,6 +3489,10 @@ namespace System.Windows.Forms
                 {
                     _rowHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
                 }
+
+                // Update ambient font flag depending on cell style font
+                _dataGridViewState1[State1_AmbientRowHeadersFont] = value?.Font == base.Font;
+
                 DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(RowHeadersDefaultCellStyle);
                 if (dgvcsc != DataGridViewCellStyleDifferences.None)
                 {

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +28,7 @@ namespace System
         private readonly string _className;
         private readonly string _menuName;
 
-        public ushort Atom { get; private set; }
+        public Atom Atom { get; private set; }
         public IntPtr MainWindow { get; private set; }
         public IntPtr ModuleInstance { get; }
 
@@ -111,7 +110,7 @@ namespace System
             };
         }
 
-        public bool IsRegistered => Atom != 0;
+        public bool IsRegistered => Atom.IsValid || ModuleInstance == IntPtr.Zero;
 
         public unsafe WindowClass Register()
         {
@@ -122,11 +121,12 @@ namespace System
                 if (!string.IsNullOrEmpty(_menuName))
                     _wndClass.lpszMenuName = menuName;
 
-                ushort atom = User32.RegisterClassW(ref _wndClass);
-                if (atom == 0)
+                Atom atom = User32.RegisterClassW(ref _wndClass);
+                if (!atom.IsValid)
                 {
                     throw new Win32Exception();
                 }
+
                 Atom = atom;
                 return this;
             }
@@ -165,19 +165,52 @@ namespace System
             if (!IsRegistered)
                 throw new ArgumentException("Window class must be registered before using.");
 
-            IntPtr window = User32.CreateWindowExW(
-                dwExStyle: extendedStyle,
-                lpClassName: (char*)Atom,
-                lpWindowName: windowName,
-                dwStyle: style,
-                X: bounds.X,
-                Y: bounds.Y,
-                nWidth: bounds.Width,
-                nHeight: bounds.Height,
-                hWndParent: parentWindow,
-                hMenu: menuHandle,
-                hInst: IntPtr.Zero,
-                lpParam: parameters);
+            IntPtr window;
+            if (Atom.IsValid)
+            {
+                window = User32.CreateWindowExW(
+                    dwExStyle: extendedStyle,
+                    lpClassName: (char*)Atom.ATOM,
+                    lpWindowName: windowName,
+                    dwStyle: style,
+                    X: bounds.X,
+                    Y: bounds.Y,
+                    nWidth: bounds.Width,
+                    nHeight: bounds.Height,
+                    hWndParent: parentWindow,
+                    hMenu: menuHandle,
+                    hInst: IntPtr.Zero,
+                    lpParam: parameters);
+            }
+            else
+            {
+                fixed (char* atom = _className)
+                {
+                    window = User32.CreateWindowExW(
+                        dwExStyle: extendedStyle,
+                        lpClassName: atom,
+                        lpWindowName: windowName,
+                        dwStyle: style,
+                        X: bounds.X,
+                        Y: bounds.Y,
+                        nWidth: bounds.Width,
+                        nHeight: bounds.Height,
+                        hWndParent: parentWindow,
+                        hMenu: menuHandle,
+                        hInst: IntPtr.Zero,
+                        lpParam: parameters);
+                }
+            }
+
+            if (window == IntPtr.Zero)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            if (!Atom.IsValid)
+            {
+                Atom = User32.GetClassLong(window, User32.GCL.ATOM);
+            }
 
             if (isMainWindow)
                 MainWindow = window;

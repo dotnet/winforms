@@ -647,6 +647,48 @@ namespace System.Windows.Forms
             base.OnHandleDestroyed(e);
         }
 
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            if (IsHandleCreated && ContainsNavigationKeyCode(e.KeyCode))
+            {
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
+        }
+
+        private bool ContainsNavigationKeyCode(Keys keyCode)
+        {
+            switch (keyCode)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.PageUp:
+                case Keys.PageDown:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Left:
+                case Keys.Right:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (IsHandleCreated)
+            {
+                // As there is no corresponding windows notification
+                // about text selection changed for TextBox assuming
+                // that any mouse down on textbox leads to change of
+                // the caret position and thereby change the selection.
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
+        }
+
         protected virtual void OnTextAlignChanged(EventArgs e)
         {
             if (Events[EVENT_TEXTALIGNCHANGED] is EventHandler eh)

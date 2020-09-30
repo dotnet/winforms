@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             public ListViewItemAccessibleObject(ListViewItem owningItem, ListViewGroup? owningGroup)
             {
                 _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
-                _owningListView = owningItem.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
+                _owningListView = owningItem.ListView ?? owningGroup?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 _owningGroup = owningGroup;
                 _systemIAccessible = _owningListView.AccessibilityObject.GetSystemIAccessibleInternal();
             }
@@ -32,7 +32,9 @@ namespace System.Windows.Forms
                 => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
 
             public override Rectangle Bounds
-                => new Rectangle(
+                => _owningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                    ? Rectangle.Empty
+                    : new Rectangle(
                         _owningListView.AccessibilityObject.Bounds.X + _owningItem.Bounds.X,
                         _owningListView.AccessibilityObject.Bounds.Y + _owningItem.Bounds.Y,
                         _owningItem.Bounds.Width,
@@ -78,7 +80,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable | AccessibleStates.MultiSelectable;
 
-                    if (_owningListView.SelectedItems.Contains(_owningItem))
+                    if (_owningListView.SelectedIndices.Contains(_owningItem.Index))
                     {
                         return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
@@ -232,54 +234,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
                 => _owningListView.AccessibilityObject;
 
-            internal override void ScrollIntoView()
-            {
-                if (!_owningListView.IsHandleCreated)
-                {
-                    return;
-                }
-
-                int currentIndex = CurrentIndex;
-
-                if (_owningListView.SelectedItems is null) // no items selected
-                {
-                    User32.SendMessageW(_owningListView, (User32.WM)User32.LB.SETCARETINDEX, (IntPtr)currentIndex);
-                    return;
-                }
-
-                int firstVisibleIndex = (int)(long)User32.SendMessageW(_owningListView, (User32.WM)User32.LB.GETTOPINDEX);
-                if (currentIndex < firstVisibleIndex)
-                {
-                    User32.SendMessageW(_owningListView, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)currentIndex);
-                    return;
-                }
-
-                int itemsHeightSum = 0;
-                int listBoxHeight = _owningListView.ClientRectangle.Height;
-                int itemsCount = _owningListView.Items.Count;
-
-                for (int i = firstVisibleIndex; i < itemsCount; i++)
-                {
-                    int itemHeight = PARAM.ToInt(User32.SendMessageW(_owningListView, (User32.WM)User32.LB.GETITEMHEIGHT, (IntPtr)i));
-
-                    itemsHeightSum += itemHeight;
-
-                    if (itemsHeightSum <= listBoxHeight)
-                    {
-                        continue;
-                    }
-
-                    int lastVisibleIndex = i - 1; // less 1 because last "i" index is invisible
-                    int visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // add 1 because array indexes begin with 0
-
-                    if (currentIndex > lastVisibleIndex)
-                    {
-                        User32.SendMessageW(_owningListView, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)(currentIndex - visibleItemsCount + 1));
-                    }
-
-                    break;
-                }
-            }
+            internal override void ScrollIntoView() => _owningItem.EnsureVisible();
 
             internal unsafe override void SelectItem()
             {
