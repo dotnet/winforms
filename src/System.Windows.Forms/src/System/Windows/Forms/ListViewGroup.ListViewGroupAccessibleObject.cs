@@ -19,7 +19,13 @@ namespace System.Windows.Forms
             public ListViewGroupAccessibleObject(ListViewGroup owningGroup, bool owningGroupIsDefault)
             {
                 _owningGroup = owningGroup ?? throw new ArgumentNullException(nameof(owningGroup));
-                _owningListView = owningGroup.ListView ?? throw new InvalidOperationException(nameof(owningGroup.ListView));
+
+                // Using item from group for getting of ListView is a workaround for https://github.com/dotnet/winforms/issues/4019
+                _owningListView = owningGroup.ListView
+                    ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView != null
+                        ? _owningGroup.Items[0].ListView
+                        : throw new InvalidOperationException(nameof(owningGroup.ListView)));
+
                 _owningGroupIsDefault = owningGroupIsDefault;
             }
 
@@ -30,7 +36,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owningListView.IsHandleCreated)
+                    if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
                     {
                         return Rectangle.Empty;
                     }
@@ -57,9 +63,9 @@ namespace System.Windows.Forms
                 => SR.AccessibleActionDoubleClick;
 
             internal override UiaCore.ExpandCollapseState ExpandCollapseState
-                => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Expanded
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                    ? UiaCore.ExpandCollapseState.Collapsed
+                    : UiaCore.ExpandCollapseState.Expanded;
 
             public override string Name
                 => _owningGroup.Header;
@@ -114,7 +120,7 @@ namespace System.Windows.Forms
 
             private bool GetNativeFocus()
             {
-                if (!_owningListView.IsHandleCreated)
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
                 {
                     return false;
                 }
@@ -144,6 +150,11 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return null;
+                }
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
@@ -160,6 +171,7 @@ namespace System.Windows.Forms
                         }
 
                         return null;
+
                     case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildCount();
                         if (childCount > 0)
@@ -168,6 +180,7 @@ namespace System.Windows.Forms
                         }
 
                         return null;
+
                     default:
                         return null;
                 }
@@ -175,6 +188,11 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return null;
+                }
+
                 if (!_owningGroupIsDefault)
                 {
                     if (index < 0 || index >= _owningGroup.Items.Count)
@@ -198,6 +216,11 @@ namespace System.Windows.Forms
 
             private int GetChildIndex(AccessibleObject child)
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return -1;
+                }
+
                 int childCount = GetChildCount();
                 for (int i = 0; i < childCount; i++)
                 {
@@ -213,6 +236,11 @@ namespace System.Windows.Forms
 
             internal AccessibleObject? GetNextChild(AccessibleObject currentChild)
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return null;
+                }
+
                 int currentChildIndex = GetChildIndex(currentChild);
                 if (currentChildIndex == -1)
                 {
@@ -230,6 +258,11 @@ namespace System.Windows.Forms
 
             internal AccessibleObject? GetPreviousChild(AccessibleObject currentChild)
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return null;
+                }
+
                 int currentChildIndex = GetChildIndex(currentChild);
                 if (currentChildIndex <= 0)
                 {
@@ -241,6 +274,11 @@ namespace System.Windows.Forms
 
             public override int GetChildCount()
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return -1;
+                }
+
                 if (_owningGroupIsDefault)
                 {
                     int count = 0;
@@ -273,6 +311,11 @@ namespace System.Windows.Forms
 
             internal override unsafe void SetFocus()
             {
+                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                {
+                    return;
+                }
+
                 _owningListView.FocusedGroup = _owningGroup;
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

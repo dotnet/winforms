@@ -228,7 +228,7 @@ namespace System.Windows.Forms
             Group = group;
         }
 
-        internal AccessibleObject AccessibilityObject
+        internal virtual AccessibleObject AccessibilityObject
         {
             get
             {

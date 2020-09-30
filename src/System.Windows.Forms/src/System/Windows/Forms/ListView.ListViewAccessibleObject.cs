@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using static Interop;
 
@@ -30,7 +29,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owningListView.IsHandleCreated || !_owningListView.ShowGroups)
+                    if (!_owningListView.IsHandleCreated || !_owningListView.ShowGroups || _owningListView.VirtualMode)
                     {
                         return false;
                     }
@@ -266,10 +265,10 @@ namespace System.Windows.Forms
                     return Array.Empty<UiaCore.IRawElementProviderSimple>();
                 }
 
-                UiaCore.IRawElementProviderSimple[] selectedItemProviders = new UiaCore.IRawElementProviderSimple[_owningListView.SelectedItems.Count];
+                UiaCore.IRawElementProviderSimple[] selectedItemProviders = new UiaCore.IRawElementProviderSimple[_owningListView.SelectedIndices.Count];
                 for (int i = 0; i < selectedItemProviders.Length; i++)
                 {
-                    selectedItemProviders[i] = _owningListView.SelectedItems[i].AccessibilityObject;
+                    selectedItemProviders[i] = _owningListView.Items[_owningListView.SelectedIndices[i]].AccessibilityObject;
                 }
 
                 return selectedItemProviders;
