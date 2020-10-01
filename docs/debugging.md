@@ -20,6 +20,10 @@ to your dotnet folder at:
 
 where **[Drive]** is your OS drive (for example, C:)  and **[path-to-repo]** is the additional path to our repository from the base drive. **[Version]** is your DesktopUI version directory (for example, 3.0.0-alpha-27017-4). Note if you have Microsoft.DesktopUI.App instead of Microsoft.WindowsDesktop.App, this is the outdated version.
 
+If you have updated any public APIs, you'll need to overwrite the ref assemblies too (since that's what VS uses when resolving types):
+- The ref assemblies compile to `[path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0\ref`
+- These need to be copied to `[Drive]:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\[Version]`
+
 **NOTE** that this will modify your SDK; to revert back, you will have to repair the install or reinstall. See the [dotnet Core repository][dotnet-core-repos] for more information.
 
 ## 2. Point your project to your experimental binary(-ies)
