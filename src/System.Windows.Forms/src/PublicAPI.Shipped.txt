@@ -11793,6 +11793,7 @@ override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DefaultAct
 ~override System.Windows.Forms.RadioButton.ToString() -> string
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
+~override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.RichTextBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.RichTextBox.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.RichTextBox.Font.set -> void
@@ -11913,6 +11914,8 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.TextBox.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.TextBox.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.TextBox.OnHandleDestroyed(System.EventArgs e) -> void
+~override System.Windows.Forms.TextBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
+~override System.Windows.Forms.TextBox.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.TextBox.Text.get -> string
 ~override System.Windows.Forms.TextBox.Text.set -> void
 ~override System.Windows.Forms.TextBoxBase.BackgroundImage.get -> System.Drawing.Image

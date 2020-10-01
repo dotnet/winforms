@@ -15,6 +15,9 @@ System.Windows.Forms.Automation.AutomationNotificationProcessing.CurrentThenMost
 System.Windows.Forms.Automation.AutomationNotificationProcessing.ImportantAll = 0 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
 System.Windows.Forms.Automation.AutomationNotificationProcessing.ImportantMostRecent = 1 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
 System.Windows.Forms.Automation.AutomationNotificationProcessing.MostRecent = 3 -> System.Windows.Forms.Automation.AutomationNotificationProcessing
+System.Windows.Forms.Automation.IAutomationLiveRegion
+System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.get -> System.Windows.Forms.Automation.AutomationLiveSetting
+System.Windows.Forms.Automation.IAutomationLiveRegion.LiveSetting.set -> void
 System.Windows.Forms.FileDialogCustomPlace
 System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(System.Guid knownFolderGuid) -> void
 System.Windows.Forms.FileDialogCustomPlace.FileDialogCustomPlace(string? path) -> void
