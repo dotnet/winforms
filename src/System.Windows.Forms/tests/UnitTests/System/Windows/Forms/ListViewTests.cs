@@ -4367,32 +4367,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidOperationException>(() => listView.CheckBoxes = false);
         }
 
-        private class SubListViewItem : ListViewItem
-        {
-            public AccessibleObject CustomAccessibleObject { get; set; }
-
-            public SubListViewItem(string text) : base(text)
-            {
-            }
-
-            internal override AccessibleObject AccessibilityObject => CustomAccessibleObject;
-        }
-
-        private class SubListViewItemAccessibleObject : ListViewItemAccessibleObject
-        {
-            public int RaiseAutomationEventCalls;
-
-            public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem, null)
-            {
-            }
-
-            internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
-            {
-                RaiseAutomationEventCalls++;
-                return base.RaiseAutomationEvent(eventId);
-            }
-        }
-
         [WinFormsFact]
         public void ListView_WmReflectNotify_LVN_KEYDOWN_WithoutGroups_and_CheckBoxes_DoesntHaveSelectedItems()
         {
@@ -4678,6 +4652,110 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
+        public static IEnumerable<object[]> ListView_OnGotFocus_Invoke_TestData()
+        {
+            foreach (bool virtualMode in new[] { true, false })
+            {
+                foreach (View view in Enum.GetValues(typeof(View)))
+                {
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (virtualMode == true && View.Tile == view)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool createHandle in new[] { true, false })
+                        {
+                            foreach (bool focused in new[] { true, false })
+                            {
+                                int expectedCount = createHandle
+                                    ? focused
+                                        ? 2 // "RaiseAutomationEvent" method is called when test updates "Focused" property and calls "OnGotFocus" method
+                                        : 1 // "RaiseAutomationEvent" method is called when test updates "Focused" property
+                                    : 0; // "RaiseAutomationEvent method" is not called if handle is not created
+
+                                yield return new object[] { view, virtualMode, showGroups, createHandle, focused, expectedCount };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_OnGotFocus_Invoke_TestData))]
+        public void ListView_OnGotFocus_Invoke(View view, bool virtualMode, bool showGroups, bool createHandle, bool focused, int expectedCount)
+        {
+            using var listView = new SubListView
+            {
+                View = view,
+                VirtualMode = virtualMode,
+                ShowGroups = showGroups,
+                VirtualListSize = 1
+            };
+
+            SubListViewItem listItem = new SubListViewItem("Test 1");
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem.SetItemIndex(listView, 0);
+            }
+            else
+            {
+                listView.Items.Add(listItem);
+            }
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(listItem);
+            listItem.CustomAccessibleObject = customAccessibleObject;
+            listView.Items[0].Focused = focused;
+            listView.OnGotFocus(new EventArgs());
+
+            Assert.Equal(expectedCount, customAccessibleObject.RaiseAutomationEventCalls);
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        private class SubListViewItem : ListViewItem
+        {
+            public AccessibleObject CustomAccessibleObject { get; set; }
+
+            public SubListViewItem(string text) : base(text)
+            {
+            }
+
+            internal override AccessibleObject AccessibilityObject => CustomAccessibleObject;
+        }
+
+        private class SubListViewItemAccessibleObject : ListViewItemAccessibleObject
+        {
+            public int RaiseAutomationEventCalls;
+
+            public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem, null)
+            {
+            }
+
+            internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+            {
+                RaiseAutomationEventCalls++;
+                return base.RaiseAutomationEvent(eventId);
+            }
+        }
+
         private class SubListView : ListView
         {
             public new bool CanEnableIme => base.CanEnableIme;
@@ -4737,6 +4815,8 @@ namespace System.Windows.Forms.Tests
             public new bool GetStyle(ControlStyles flag) => base.GetStyle(flag);
 
             public new bool GetTopLevel() => base.GetTopLevel();
+
+            public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }
