@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
+using EnumValidation;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.ComCtl32;
@@ -603,7 +604,7 @@ namespace System.Windows.Forms
 
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                EnumValidator.Validate(value);
 
                 if (format != value)
                 {
