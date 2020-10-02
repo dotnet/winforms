@@ -174,10 +174,8 @@ namespace System.Windows.Forms
 
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
-                }
+                EnumValidation.EnumValidator.Validate(value);
+
                 _dialogResult = value;
             }
         }

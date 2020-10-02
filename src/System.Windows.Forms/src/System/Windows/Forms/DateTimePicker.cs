@@ -603,11 +603,7 @@ namespace System.Windows.Forms
 
             set
             {
-                //valid values are 0x1, 0x2,0x4,0x8. max number of bits on at a time is 1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DateTimePickerFormat.Long, (int)DateTimePickerFormat.Custom, /*maxNumberOfBitsOn*/1))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DateTimePickerFormat));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (format != value)
                 {
