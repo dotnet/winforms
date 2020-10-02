@@ -66,10 +66,11 @@ namespace WinformsControlsTest
                 VirtualMode = true,
                 VirtualListSize = 3,
             };
+
             listView2.SelectedIndexChanged += listView2_SelectedIndexChanged;
             listView2.Click += listView2_Click;
 
-            ListViewGroup listViewGroup1 = new ListViewGroup("ListViewGroup", HorizontalAlignment.Left)
+            ListViewGroup listViewGroup1 = new("ListViewGroup", HorizontalAlignment.Left)
             {
                 Header = "ListViewGroup",
                 Name = "listViewGroup1"
@@ -77,7 +78,7 @@ namespace WinformsControlsTest
             listView2.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
 
             // Create three items and three sets of subitems for each item.
-            ListViewItem item1 = new ListViewItem("item1", 0)
+            ListViewItem item1 = new("item1", 0)
             {
                 // Place a check mark next to the item.
                 Checked = true
@@ -85,11 +86,11 @@ namespace WinformsControlsTest
             item1.SubItems.Add("1");
             item1.SubItems.Add("2");
             item1.SubItems.Add("3");
-            ListViewItem item2 = new ListViewItem("item2", 1);
+            ListViewItem item2 = new("item2", 1);
             item2.SubItems.Add("4");
             item2.SubItems.Add("5");
             item2.SubItems.Add("6");
-            ListViewItem item3 = new ListViewItem("item3", 0)
+            ListViewItem item3 = new("item3", 0)
             {
                 // Place a check mark next to the item.
                 Checked = true
@@ -121,16 +122,16 @@ namespace WinformsControlsTest
             listView2.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             // Create two ImageList objects.
-            ImageList imageListSmall = new ImageList();
-            ImageList imageListLarge = new ImageList();
+            ImageList imageListSmall = new();
+            ImageList imageListLarge = new();
 
-            // Initialize the ImageList objects with bitmaps.\
+            // Initialize the ImageList objects with bitmaps.
             imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
             imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallABlue.bmp"));
             imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeA.bmp"));
             imageListLarge.Images.Add(Bitmap.FromFile("Images\\LargeABlue.bmp"));
 
-            //Assign the ImageList objects to the ListView.
+            // Assign the ImageList objects to the ListView.
             listView2.LargeImageList = imageListLarge;
             listView2.SmallImageList = imageListSmall;
 
@@ -206,7 +207,7 @@ namespace WinformsControlsTest
         private void listView2_Click(object sender, System.EventArgs e)
         {
             Debug.WriteLine(listView1.TileSize);
-            MessageBox.Show(this, "listView1_Click", "event");
+            MessageBox.Show(this, "listView2_Click", "event");
         }
 
         private void listView2_SelectedIndexChanged(object sender, System.EventArgs e)

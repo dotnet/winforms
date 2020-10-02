@@ -88,7 +88,7 @@ namespace WinformsControlsTest
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listView1);
             this.Name = "ListViewTest";
-            this.Name = "ListView Test";
+            this.Text = "ListView Test";
             this.ResumeLayout(false);
 
         }
