@@ -188,6 +188,11 @@ namespace System.Windows.Forms
                 }
             }
 
+            internal override UiaCore.ToggleState ToggleState
+                => _owningItem.Checked
+                    ? UiaCore.ToggleState.On
+                    : UiaCore.ToggleState.Off;
+
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
@@ -218,7 +223,8 @@ namespace System.Windows.Forms
                 if (patternId == UiaCore.UIA.ScrollItemPatternId ||
                     patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
                     patternId == UiaCore.UIA.SelectionItemPatternId ||
-                    patternId == UiaCore.UIA.InvokePatternId)
+                    patternId == UiaCore.UIA.InvokePatternId ||
+                    (patternId == UiaCore.UIA.TogglePatternId && _owningListView.CheckBoxes))
                 {
                     return true;
                 }
@@ -274,6 +280,11 @@ namespace System.Windows.Forms
                     // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
                     // the ArgumentException and fail silently.
                 }
+            }
+
+            internal override void Toggle()
+            {
+                _owningItem.Checked = !_owningItem.Checked;
             }
         }
     }

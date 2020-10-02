@@ -4773,6 +4773,16 @@ namespace System.Windows.Forms
         protected virtual void OnItemChecked(ItemCheckedEventArgs e)
         {
             onItemChecked?.Invoke(this, e);
+
+            if (!CheckBoxes)
+            {
+                return;
+            }
+
+            ListViewItem item = e.Item;
+            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
+            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
         }
 
         protected virtual void OnItemDrag(ItemDragEventArgs e)
