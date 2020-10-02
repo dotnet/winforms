@@ -444,6 +444,11 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
+                if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && Owner is ToolStripProgressBarControl toolStripProgressBarControl)
+                {
+                    return toolStripProgressBarControl.Owner.Placement != ToolStripItemPlacement.Main || Bounds.Height <= 0 || Bounds.Width <= 0;
+                }
+
                 return base.GetPropertyValue(propertyID);
             }
         }

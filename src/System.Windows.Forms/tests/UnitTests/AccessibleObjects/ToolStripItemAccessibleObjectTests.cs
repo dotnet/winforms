@@ -107,6 +107,22 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("Test Name", accessibleName);
         }
 
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripItemAccessibleObject_TestData))]
+        public void ToolStripHostedControlAccessibleObject_GetPropertyValue_IsOffscreenPropertyId_ReturnExpected(Type type)
+        {
+            using var toolStrip = new ToolStrip();
+            toolStrip.CreateControl();
+            using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
+            item.Size = new Size(0, 0);
+            toolStrip.Items.Add(item);
+
+            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
+
+            Assert.True((bool)toolStripItemAccessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId) ||
+                (toolStripItemAccessibleObject.Bounds.Width > 0 && toolStripItemAccessibleObject.Bounds.Height > 0));
+        }
+
         private class SubToolStripItem : ToolStripItem
         {
             public SubToolStripItem() : base()
