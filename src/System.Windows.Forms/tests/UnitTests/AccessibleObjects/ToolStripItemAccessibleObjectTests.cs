@@ -124,12 +124,25 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripItemAccessibleObject_Role_IsPushButton_ByDefault()
+        public static IEnumerable<object[]> ToolStripItemAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData()
         {
-            using ToolStripItem toolStripDropDownButton = new SubToolStripItem();
-            // AccessibleRole is not set = Default
-            AccessibleRole actual = toolStripDropDownButton.AccessibilityObject.Role;
-            Assert.Equal(AccessibleRole.PushButton, actual);
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripItemAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData))]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue(AccessibleRole role)
+        {
+            using ToolStripItem toolStripItem = new SubToolStripItem();
+            toolStripItem.AccessibleRole = role;
+            // Check if the method returns an exist UIA_ControlTypeId
+            UIA actual = (UIA)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+            Assert.True(actual >= UIA.ButtonControlTypeId && actual <= UIA.AppBarControlTypeId);
         }
 
         private class SubToolStripItem : ToolStripItem

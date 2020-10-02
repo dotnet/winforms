@@ -121,6 +121,8 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return AccessibleRoleControlTypeMap.GetControlType(Role);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:

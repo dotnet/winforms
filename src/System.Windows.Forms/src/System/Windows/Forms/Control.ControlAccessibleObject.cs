@@ -480,9 +480,12 @@ namespace System.Windows.Forms
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == UiaCore.UIA.LiveSettingPropertyId && Owner is IAutomationLiveRegion)
+                switch (propertyID)
                 {
-                    return ((IAutomationLiveRegion)Owner).LiveSetting;
+                    case UiaCore.UIA.LiveSettingPropertyId:
+                        return Owner is IAutomationLiveRegion owner ? owner.LiveSetting : base.GetPropertyValue(propertyID);
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return AccessibleRoleControlTypeMap.GetControlType(Role);
                 }
 
                 if (Owner.SupportsUiaProviders)
