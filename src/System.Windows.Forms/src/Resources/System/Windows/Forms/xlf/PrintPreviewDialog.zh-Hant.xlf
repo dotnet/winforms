@@ -44,12 +44,12 @@
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.AccessibleName">
         <source>Four pages (Ctrl+4)</source>
-        <target state="needs-review-translation">四頁</target>
+        <target state="translated">四頁 (Ctrl+4)</target>
         <note />
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.Text">
         <source>Four pages (Ctrl+4)</source>
-        <target state="needs-review-translation">四頁</target>
+        <target state="translated">四頁 (Ctrl+4)</target>
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.AccessibleDescription">
@@ -59,12 +59,12 @@
       </trans-unit>
       <trans-unit id="onepageToolStripButton.AccessibleName">
         <source>One page (Ctrl+1)</source>
-        <target state="needs-review-translation">一頁</target>
+        <target state="translated">一頁 (Ctrl+1)</target>
         <note />
       </trans-unit>
       <trans-unit id="onepageToolStripButton.Text">
         <source>One page (Ctrl+1)</source>
-        <target state="needs-review-translation">一頁</target>
+        <target state="translated">一頁 (Ctrl+1)</target>
         <note />
       </trans-unit>
       <trans-unit id="pageCounter.AccessibleDescription">
@@ -109,12 +109,12 @@
       </trans-unit>
       <trans-unit id="sixpagesToolStripButton.AccessibleName">
         <source>Six pages (Ctrl+5)</source>
-        <target state="needs-review-translation">六頁</target>
+        <target state="translated">六頁 (Ctrl+5)</target>
         <note />
       </trans-unit>
       <trans-unit id="sixpagesToolStripButton.Text">
         <source>Six pages (Ctrl+5)</source>
-        <target state="needs-review-translation">六頁</target>
+        <target state="translated">六頁 (Ctrl+5)</target>
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.AccessibleDescription">
@@ -124,12 +124,12 @@
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.AccessibleName">
         <source>Three pages (Ctrl+3)</source>
-        <target state="needs-review-translation">三頁</target>
+        <target state="translated">三頁 (Ctrl+3)</target>
         <note />
       </trans-unit>
       <trans-unit id="threepagesToolStripButton.Text">
         <source>Three pages (Ctrl+3)</source>
-        <target state="needs-review-translation">三頁</target>
+        <target state="translated">三頁 (Ctrl+3)</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStrip1.AccessibleName">
@@ -269,12 +269,12 @@
       </trans-unit>
       <trans-unit id="twopagesToolStripButton.AccessibleName">
         <source>Two pages (Ctrl+2)</source>
-        <target state="needs-review-translation">兩頁</target>
+        <target state="translated">兩頁 (Ctrl+2)</target>
         <note />
       </trans-unit>
       <trans-unit id="twopagesToolStripButton.Text">
         <source>Two pages (Ctrl+2)</source>
-        <target state="needs-review-translation">兩頁</target>
+        <target state="translated">兩頁 (Ctrl+2)</target>
         <note />
       </trans-unit>
       <trans-unit id="zoomToolStripSplitButton.AccessibleDescription">
