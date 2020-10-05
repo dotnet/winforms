@@ -68,7 +68,7 @@ namespace EnumValidation
             {
                 string indent = "        ";
 
-                sb.AppendLine($"public static void Validate({info.EnumType} enumToValidate)");
+                sb.AppendLine($"{indent}public static void Validate({info.EnumType} enumToValidate)");
                 sb.AppendLine($"{indent}{{");
 
                 GenerateValidateMethodBody(context, sb, info, indent + "    ");
@@ -110,7 +110,14 @@ namespace EnumValidation
         {
             foreach ((int min, int max) in GetElementSets(context, info.Elements))
             {
-                sb.AppendLine($"{indent}if (intValue >= {min} && intValue <= {max}) return;");
+                if (min == max)
+                {
+                    sb.AppendLine($"{indent}if (intValue == {min}) return;");
+                }
+                else
+                {
+                    sb.AppendLine($"{indent}if (intValue >= {min} && intValue <= {max}) return;");
+                }
             }
         }
 
