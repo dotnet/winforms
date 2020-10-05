@@ -192,19 +192,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid_NotSequential(value, (int)value,
-                                                    (int)AutoCompleteSource.None,
-                                                    (int)AutoCompleteSource.AllSystemSources,
-                                                    (int)AutoCompleteSource.AllUrl,
-                                                    (int)AutoCompleteSource.CustomSource,
-                                                    (int)AutoCompleteSource.FileSystem,
-                                                    (int)AutoCompleteSource.FileSystemDirectories,
-                                                    (int)AutoCompleteSource.HistoryList,
-                                                    (int)AutoCompleteSource.ListItems,
-                                                    (int)AutoCompleteSource.RecentlyUsedList))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&
                     AutoCompleteMode != AutoCompleteMode.None &&
