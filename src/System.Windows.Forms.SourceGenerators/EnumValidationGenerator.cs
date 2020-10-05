@@ -103,7 +103,7 @@ namespace EnumValidation
             {
                 total |= element.Value;
             }
-            sb.AppendLine($"{indent}if (intValue & {total} == intValue) return;");
+            sb.AppendLine($"{indent}if ((intValue & {total}) == intValue) return;");
         }
 
         private static void GenerateSequenceValidationMethodBody(GeneratorExecutionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
