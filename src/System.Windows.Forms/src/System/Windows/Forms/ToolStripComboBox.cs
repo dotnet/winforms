@@ -727,8 +727,6 @@ namespace System.Windows.Forms
                 {
                     switch (propertyID)
                     {
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.ComboBoxControlTypeId;
                         case UiaCore.UIA.IsOffscreenPropertyId:
                             return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     }

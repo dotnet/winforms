@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
 using static System.Windows.Forms.LinkLabel;
 using static Interop;
@@ -21,11 +22,43 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void LinkLabelAccessibleObject_ControlType_IsNull()
+        public void LinkLabelAccessibleObject_ControlType_IsText_IfAccessibleRoleIsDefault()
         {
             using LinkLabel linkLabel = new LinkLabel();
+            // AccessibleRole is not set = Default
+
             object actual = linkLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            Assert.Null(actual);
+
+            Assert.Equal(UiaCore.UIA.TextControlTypeId, actual);
+            Assert.False(linkLabel.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> LinkLabelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(LinkLabelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void LinkLabelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using LinkLabel linkLabel = new LinkLabel();
+            linkLabel.AccessibleRole = role;
+
+            object actual = linkLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
             Assert.False(linkLabel.IsHandleCreated);
         }
 

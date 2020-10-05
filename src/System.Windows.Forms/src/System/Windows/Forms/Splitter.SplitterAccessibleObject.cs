@@ -22,7 +22,12 @@ namespace System.Windows.Forms
                     UiaCore.UIA.AutomationIdPropertyId
                         => Owner.Name,
                     UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.PaneControlTypeId,
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        => Owner.AccessibleRole == AccessibleRole.Default
+                           ? UiaCore.UIA.PaneControlTypeId
+                           : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

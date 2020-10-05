@@ -29,9 +29,6 @@ namespace System.Windows.Forms
                 _ownerMonthCalendar = (MonthCalendar)owner;
             }
 
-            public UiaCore.UIA ControlType =>
-                string.IsNullOrEmpty(base.Name) ? UiaCore.UIA.CalendarControlTypeId : UiaCore.UIA.TableControlTypeId;
-
             public bool Enabled => _ownerMonthCalendar.Enabled;
 
             public bool HasHeaderRow
@@ -54,7 +51,9 @@ namespace System.Windows.Forms
             }
 
             public override AccessibleRole Role =>
-                (_ownerMonthCalendar is null ||  _ownerMonthCalendar.AccessibleRole == AccessibleRole.Default) ? AccessibleRole.Table : _ownerMonthCalendar.AccessibleRole;
+                (_ownerMonthCalendar is null || _ownerMonthCalendar.AccessibleRole == AccessibleRole.Default)
+                    ? AccessibleRole.Table
+                    : _ownerMonthCalendar.AccessibleRole;
 
             public override string Help
             {
@@ -601,7 +600,13 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
                 propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => ControlType,
+                    // Unlike other controls, here the default "ControlType" also depends on AccessibleObject.Name value.
+                    // In other cases "ControlType" will reflect changes to MonthCalendar.AccessibleRole (i.e. if it is set to a custom role).
+                    UiaCore.UIA.ControlTypePropertyId => _ownerMonthCalendar.AccessibleRole == AccessibleRole.Default
+                                                         ? string.IsNullOrEmpty(base.Name)
+                                                               ? UiaCore.UIA.CalendarControlTypeId
+                                                               : UiaCore.UIA.TableControlTypeId
+                                                         : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.IsGridPatternAvailablePropertyId => true,
                     UiaCore.UIA.IsTablePatternAvailablePropertyId => true,

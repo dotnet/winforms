@@ -253,8 +253,6 @@ namespace System.Windows.Forms
                         return IsPatternSupported(UiaCore.UIA.TablePatternId);
                     case UiaCore.UIA.IsGridPatternAvailablePropertyId:
                         return IsPatternSupported(UiaCore.UIA.GridPatternId);
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.TableControlTypeId;
                     case UiaCore.UIA.ItemStatusPropertyId:
                         // Whether the _ownerDataGridView DataGridView can be sorted by some column.
                         // If so, provide not-sorted/sorted-by item status.

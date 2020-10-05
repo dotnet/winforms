@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.ToolStripItem;
@@ -51,6 +52,38 @@ namespace System.Windows.Forms.Tests
             AccessibleRole actual = accessibleObject.Role;
 
             Assert.Equal(AccessibleRole.PushButton, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ToolStripAccessibleObjectWrapperForItemsOnOverflow_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripAccessibleObjectWrapperForItemsOnOverflow_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ToolStripAccessibleObjectWrapperForItemsOnOverflow_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ToolStrip toolStrip = new ToolStrip();
+            using ToolStripButton toolStripItem = new ToolStripButton();
+            toolStrip.Items.Add(toolStripItem);
+            toolStripItem.SetPlacement(ToolStripItemPlacement.Overflow);
+            toolStripItem.AccessibleRole = role;
+
+            AccessibleObject accessibleObject = toolStrip.AccessibilityObject.GetChild(1);
+            AccessibleRole actual = accessibleObject.Role;
+
+            Assert.Equal(role, actual);
             Assert.False(toolStrip.IsHandleCreated);
         }
     }

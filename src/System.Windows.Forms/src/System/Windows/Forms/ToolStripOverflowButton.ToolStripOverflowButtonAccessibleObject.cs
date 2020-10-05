@@ -21,16 +21,6 @@ namespace System.Windows.Forms
                 get => Owner.AccessibleName ?? SR.ToolStripOptions;
                 set => base.Name = value;
             }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.MenuItemControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

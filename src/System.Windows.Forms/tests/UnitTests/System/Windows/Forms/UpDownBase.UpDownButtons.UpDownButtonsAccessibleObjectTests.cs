@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
 using static System.Windows.Forms.UpDownBase;
 using static System.Windows.Forms.UpDownBase.UpDownButtons;
@@ -46,6 +47,36 @@ namespace System.Windows.Forms.Tests
             AccessibleRole actual = upDownButtons.AccessibilityObject.Role;
 
             Assert.Equal(AccessibleRole.SpinButton, actual);
+            Assert.False(upDownBase.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> UpDownButtonsAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(UpDownButtonsAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void UpDownButtonsAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using UpDownBase upDownBase = new SubUpDownBase();
+            UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
+            upDownButtons.AccessibleRole = role;
+
+            object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
             Assert.False(upDownBase.IsHandleCreated);
         }
 

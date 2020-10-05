@@ -60,5 +60,34 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(UiaCore.UIA.ScrollBarControlTypeId, actual);
             Assert.False(scrollBar.IsHandleCreated);
         }
+
+        public static IEnumerable<object[]> HScrollBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(HScrollBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void HScrollBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using HScrollBar scrollBar = new HScrollBar();
+            scrollBar.AccessibleRole = role;
+
+            object actual = scrollBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(scrollBar.IsHandleCreated);
+        }
     }
 }

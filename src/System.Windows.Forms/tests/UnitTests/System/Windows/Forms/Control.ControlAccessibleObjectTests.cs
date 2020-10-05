@@ -1301,8 +1301,12 @@ namespace System.Windows.Forms.Tests
         {
             using Control control = new Control();
             control.AccessibleRole = role;
-            // Check if the method returns an exist UIA_ControlTypeId
+
             UiaCore.UIA actual = (UiaCore.UIA)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            // Check if the method returns an exist UIA_ControlTypeId
             Assert.True(actual >= UiaCore.UIA.ButtonControlTypeId && actual <= UiaCore.UIA.AppBarControlTypeId);
         }
 

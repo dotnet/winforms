@@ -485,6 +485,8 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.LiveSettingPropertyId:
                         return Owner is IAutomationLiveRegion owner ? owner.LiveSetting : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.ControlTypePropertyId:
+                        // "ControlType" value depends on owner's AccessibleRole value.
+                        // See: docs/accessibility/accessible-role-controltype.md
                         return AccessibleRoleControlTypeMap.GetControlType(Role);
                 }
 

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
@@ -65,6 +66,35 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             AccessibleRole actual = monthCalendar.AccessibilityObject.Role;
 
             Assert.Equal(AccessibleRole.Table, actual);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> MonthCalendarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void MonthCalendarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using MonthCalendar monthCalendar = new MonthCalendar();
+            monthCalendar.AccessibleRole = role;
+
+            object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
             Assert.False(monthCalendar.IsHandleCreated);
         }
     }

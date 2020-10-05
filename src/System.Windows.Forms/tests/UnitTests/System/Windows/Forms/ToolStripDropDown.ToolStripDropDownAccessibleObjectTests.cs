@@ -46,5 +46,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.MenuPopup, actual);
             Assert.False(toolStripDropDown.IsHandleCreated);
         }
+
+        public static IEnumerable<object[]> ToolStripDropDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripDropDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ToolStripDropDownAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ToolStripDropDown toolStripDropDown = new ToolStripDropDown();
+            toolStripDropDown.AccessibleRole = role;
+
+            AccessibleObject accessibleObject = toolStripDropDown.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(role, accessibleObject.Role);
+            Assert.Equal(expected, actual);
+            Assert.False(toolStripDropDown.IsHandleCreated);
+        }
     }
 }

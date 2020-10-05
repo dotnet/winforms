@@ -81,10 +81,15 @@ namespace System.Windows.Forms
             {
                 switch (propertyId)
                 {
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        return Owner.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.PaneControlTypeId
+                               : base.GetPropertyValue(propertyId);
                     case UiaCore.UIA.NamePropertyId:
                         return SR.DataGridView_AccEditingPanelAccName;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.PaneControlTypeId;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:

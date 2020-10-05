@@ -34,8 +34,6 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.NamePropertyId
                         => Name,
-                    UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.GroupControlTypeId,
                     UiaCore.UIA.AutomationIdPropertyId
                         => Owner.Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId

@@ -77,8 +77,6 @@ namespace System.Windows.Forms
                         => Owner.Name,
                     UiaCore.UIA.IsTogglePatternAvailablePropertyId
                         => IsPatternSupported(UiaCore.UIA.TogglePatternId),
-                    UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.CheckBoxControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         =>
                         // This is necessary for compatibility with MSAA proxy:

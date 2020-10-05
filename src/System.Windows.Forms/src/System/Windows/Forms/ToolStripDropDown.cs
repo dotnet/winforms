@@ -196,8 +196,8 @@ namespace System.Windows.Forms
         }
 
         [DefaultValue(false)]
-         [Browsable(false)]
-         [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CanOverflow
         {
             get => base.CanOverflow;
@@ -477,8 +477,8 @@ namespace System.Windows.Forms
         }
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
-         [Browsable(false)]
-         [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public new ToolStripGripStyle GripStyle
         {
             get => base.GripStyle;
@@ -2233,8 +2233,6 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.MenuControlTypeId;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.NamePropertyId:

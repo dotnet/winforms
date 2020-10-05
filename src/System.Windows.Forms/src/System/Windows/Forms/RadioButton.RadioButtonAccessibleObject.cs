@@ -56,8 +56,6 @@ namespace System.Windows.Forms
                         => Owner.Name,
                     UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId
                         => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
-                    UiaCore.UIA.ControlTypePropertyId
-                        => UiaCore.UIA.RadioButtonControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

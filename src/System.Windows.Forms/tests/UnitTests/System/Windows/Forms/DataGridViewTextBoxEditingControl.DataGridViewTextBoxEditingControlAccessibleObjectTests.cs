@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
 using static System.Windows.Forms.DataGridViewTextBoxEditingControl;
 using static Interop;
@@ -87,6 +88,35 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expectedRole, actual);
             Assert.Equal(createControl, textCellControl.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
+            textCellControl.AccessibleRole = role;
+
+            object actual = textCellControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(textCellControl.IsHandleCreated);
         }
     }
 }

@@ -34,8 +34,6 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.LiveSettingPropertyId:
                         return _owningToolStripStatusLabel.LiveSetting;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.TextControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

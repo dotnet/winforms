@@ -38,7 +38,12 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ProgressBarControlTypeId;
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        return Owner.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.ProgressBarControlTypeId
+                               : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

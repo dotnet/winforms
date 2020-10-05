@@ -51,5 +51,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedRole, actual);
             Assert.Equal(createControl, toolStripProgressBarControl.IsHandleCreated);
         }
+
+        public static IEnumerable<object[]> ToolStripProgressBarControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripProgressBarControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ToolStripProgressBarControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
+            toolStripProgressBarControl.AccessibleRole = role;
+
+            AccessibleObject accessibleObject = toolStripProgressBarControl.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(role, accessibleObject.Role);
+            Assert.Equal(expected, actual);
+            Assert.False(toolStripProgressBarControl.IsHandleCreated);
+        }
     }
 }

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
@@ -185,12 +186,53 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createControl, control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ButtonBaseAccessibleObject_ControlType_IsNull()
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Client)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ButtonBaseBoxAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole)
         {
             using ButtonBase buttonBase = new SubButtonBase();
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                buttonBase.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = buttonBase.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(expectedRole, accessibleObject.Role);
+            Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+            Assert.Equal(createControl, buttonBase.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ButtonBaseAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ButtonBaseAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ButtonBaseAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ButtonBase buttonBase = new SubButtonBase();
+            buttonBase.AccessibleRole = role;
+
             object actual = buttonBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            Assert.Null(actual);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
             Assert.False(buttonBase.IsHandleCreated);
         }
 

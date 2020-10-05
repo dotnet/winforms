@@ -48,18 +48,12 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.MenuItemControlTypeId;
-                }
-                else if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
+                if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
                 {
                     return _owningToolStripMenuItem.GetShortcutText();
                 }
-                else
-                {
-                    return base.GetPropertyValue(propertyID);
-                }
+
+                return base.GetPropertyValue(propertyID);
             }
         }
     }

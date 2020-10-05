@@ -39,7 +39,12 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.AutomationIdPropertyId => _owningScrollBar.Name,
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ScrollBarControlTypeId,
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    UiaCore.UIA.ControlTypePropertyId => _owningScrollBar.AccessibleRole == AccessibleRole.Default
+                                                         ? UiaCore.UIA.ScrollBarControlTypeId
+                                                         : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
                     UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                     _ => base.GetPropertyValue(propertyID)

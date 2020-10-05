@@ -37,6 +37,39 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(AccessibleRole.ComboBox, accessibleObject.Role);
             Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ToolStripComboBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripComboBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ToolStripComboBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ToolStripComboBox toolStripComboBox = new ToolStripComboBox();
+            toolStripComboBox.AccessibleRole = role;
+            ToolStripComboBoxControl control = (ToolStripComboBoxControl)toolStripComboBox.ComboBox;
+            control.CreateControl();
+
+            AccessibleObject accessibleObject = toolStripComboBox.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(role, accessibleObject.Role);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+            Assert.Equal(expected, actual);
         }
     }
 }

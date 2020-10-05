@@ -101,7 +101,13 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsTogglePatternAvailablePropertyId:
                         return IsPatternSupported(UiaCore.UIA.TogglePatternId);
                     case UiaCore.UIA.LocalizedControlTypePropertyId:
-                        return s_dateTimePickerLocalizedControlTypeString;
+                        // We define a custom "LocalizedControlType" by default.
+                        // If DateTimePicker.AccessibleRole value is customized by a user
+                        // then "LocalizedControlType" value will be based on "ControlType"
+                        // which depends on DateTimePicker.AccessibleRole.
+                        return Owner.AccessibleRole == AccessibleRole.Default
+                               ? s_dateTimePickerLocalizedControlTypeString
+                               : base.GetPropertyValue(propertyID);
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
