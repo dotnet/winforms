@@ -1966,10 +1966,7 @@ namespace System.Windows.Forms
             get => _textImageRelation;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (value != TextImageRelation)
                 {

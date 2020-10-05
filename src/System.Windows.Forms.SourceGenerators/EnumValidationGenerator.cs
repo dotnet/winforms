@@ -153,15 +153,19 @@ namespace EnumValidation
         {
             var flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
 
+            var foundTypes = new HashSet<ITypeSymbol>();
+
             foreach (SyntaxNode argument in argumentsToValidate)
             {
                 var semanticModel = compilation.GetSemanticModel(argument.SyntaxTree);
 
                 var enumType = semanticModel.GetTypeInfo(argument).Type;
-                if (enumType == null)
+                if (enumType == null || foundTypes.Contains(enumType))
                 {
                     continue;
                 }
+
+                foundTypes.Add(enumType);
 
                 var isFlags = enumType.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, flagsAttributeType));
 
