@@ -304,14 +304,9 @@ namespace System.Windows.Forms.VisualStyles
 
         internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges, (uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal)))
-                throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
-
-            if (!ClientUtils.IsEnumValid_NotSequential(style, (int)style, (int)EdgeStyle.Raised, (int)EdgeStyle.Sunken, (int)EdgeStyle.Etched, (int)EdgeStyle.Bump))
-                throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
-
-            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono)))
-                throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
+            EnumValidation.EnumValidator.Validate(edges);
+            EnumValidation.EnumValidator.Validate(style);
+            EnumValidation.EnumValidator.Validate(effects);
 
             RECT destRect = bounds;
             var contentRect = new RECT();
