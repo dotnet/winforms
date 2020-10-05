@@ -4410,7 +4410,6 @@ namespace System.Windows.Forms.Tests
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)Keys.Space;
             uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4442,7 +4441,6 @@ namespace System.Windows.Forms.Tests
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)key;
             uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4488,7 +4486,6 @@ namespace System.Windows.Forms.Tests
                 // The MSDN page tells us what bits of lParam to use for each of the parameters.
                 // All we need to do is some bit shifting to assemble lParam
                 // lParam = repeatCount | (scanCode << 16)
-                // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
                 uint keyCode = (uint)(key_s == "Keys.Down" ? Keys.Down : Keys.Up);
                 uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4534,7 +4531,6 @@ namespace System.Windows.Forms.Tests
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)key;
             uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4577,7 +4573,6 @@ namespace System.Windows.Forms.Tests
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)Keys.Space;
             uint lParam = (0x00000001 | keyCode << 16);
 
