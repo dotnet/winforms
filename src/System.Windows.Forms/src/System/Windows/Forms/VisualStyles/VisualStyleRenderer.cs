@@ -567,8 +567,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            if (!ClientUtils.IsEnumValid_NotSequential(prop, (int)prop, (int)FontProperty.TextFont, (int)FontProperty.GlyphFont))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
+            EnumValidation.EnumValidator.Validate(prop);
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
