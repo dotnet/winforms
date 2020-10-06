@@ -722,20 +722,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // we could be more clever here, but it doesnt seem like this would get set enough
-                // to warrant a clever bitmask.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                    (int)value,
-                    (int)RichTextBoxScrollBars.Both,
-                    (int)RichTextBoxScrollBars.None,
-                    (int)RichTextBoxScrollBars.Horizontal,
-                    (int)RichTextBoxScrollBars.Vertical,
-                    (int)RichTextBoxScrollBars.ForcedHorizontal,
-                    (int)RichTextBoxScrollBars.ForcedVertical,
-                    (int)RichTextBoxScrollBars.ForcedBoth))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (value != ScrollBars)
                 {
