@@ -79,6 +79,7 @@ namespace WinformsControlsTest
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += Button1_Click;
             //
             // label1
             //
@@ -114,6 +115,7 @@ namespace WinformsControlsTest
             //
             this.textBox1.Location = new System.Drawing.Point(13, 229);
             this.textBox1.Name = "textBox1";
+            this.textBox1.PlaceholderText = "Type some text here...";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 5;
             this.textBox1.Text = "LLLLL";

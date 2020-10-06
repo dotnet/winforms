@@ -936,7 +936,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, BackColor, flags);
+            TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, Color.Empty, flags);
         }
 
         /// <summary>
