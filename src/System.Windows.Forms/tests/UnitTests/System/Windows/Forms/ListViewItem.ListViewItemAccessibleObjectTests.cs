@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (bool showGroups in new[] { true, false })
                 {
-                    yield return new object[] { view, showGroups};
+                    yield return new object[] { view, showGroups };
                 }
             }
         }
@@ -862,6 +862,174 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(Rectangle.Empty, listViewItem1.AccessibilityObject.Bounds);
             Assert.Equal(Rectangle.Empty, listViewItem2.AccessibilityObject.Bounds);
             Assert.NotEqual(Rectangle.Empty, listViewItem3.AccessibilityObject.Bounds);
+        }
+
+        private void AddItemToListView(ListView listView, ListViewItem listViewItem, bool virtualMode)
+        {
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem.SetItemIndex(listView, 0);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem);
+            }
+        }
+
+        public static IEnumerable<object[]> ListViewItemAccessibleObject_IsTogglePatternSupported_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                // View.Tile does not support enabled CheckBoxes
+                if (View.Tile == view)
+                {
+                    continue;
+                }
+
+                foreach (bool showGroups in new[] { true, false })
+                {
+                    foreach (bool createHandle in new[] { true, false })
+                    {
+                        foreach (bool virtualMode in new[] { true, false })
+                        {
+                            foreach (bool checkboxes in new[] { true, false })
+                            {
+                                yield return new object[] { view, showGroups, createHandle, virtualMode, checkboxes };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewItemAccessibleObject_IsTogglePatternSupported_TestData))]
+        public void ListViewItemAccessibleObject_IsTogglePatternSupported_ReturnExpected(View view, bool showGroups, bool createHandle, bool virtualMode, bool checkboxesEnabled)
+        {
+            using ListView listView = new ListView()
+            {
+                View = view,
+                VirtualMode = virtualMode,
+                VirtualListSize = 1,
+                CheckBoxes = checkboxesEnabled,
+                ShowGroups = showGroups
+            };
+
+            ListViewItem listViewItem = new ListViewItem("Item");
+            AddItemToListView(listView, listViewItem, virtualMode);
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            Assert.Equal(checkboxesEnabled, listViewItem.AccessibilityObject.IsPatternSupported(UiaCore.UIA.TogglePatternId));
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ListViewItemAccessibleObject_ToggleState_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                // View.Tile does not support enabled CheckBoxes
+                if (View.Tile == view)
+                {
+                    continue;
+                }
+
+                foreach (bool showGroups in new[] { true, false })
+                {
+                    foreach (bool createHandle in new[] { true, false })
+                    {
+                        foreach (bool virtualMode in new[] { true, false })
+                        {
+                            yield return new object[] { view, showGroups, createHandle, virtualMode };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewItemAccessibleObject_ToggleState_TestData))]
+        public void ListViewItemAccessibleObject_ToggleState_ReturnExpected(View view, bool showGroups, bool createHandle, bool virtualMode)
+        {
+            using ListView listView = new ListView()
+            {
+                View = view,
+                VirtualMode = virtualMode,
+                VirtualListSize = 1,
+                CheckBoxes = true,
+                ShowGroups = showGroups
+            };
+
+            ListViewItem listViewItem = new ListViewItem("Item");
+            AddItemToListView(listView, listViewItem, virtualMode);
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            AccessibleObject listViewItemAccessibleObject = listViewItem.AccessibilityObject;
+
+            Assert.Equal(UiaCore.ToggleState.Off, listViewItemAccessibleObject.ToggleState);
+
+            listViewItem.Checked = true;
+            Assert.Equal(UiaCore.ToggleState.On, listViewItemAccessibleObject.ToggleState);
+
+            listViewItem.Checked = false;
+            Assert.Equal(UiaCore.ToggleState.Off, listViewItemAccessibleObject.ToggleState);
+
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewItemAccessibleObject_ToggleState_TestData))]
+        public void ListViewItemAccessibleObject_Toggle_Invoke(View view, bool showGroups, bool createHandle, bool virtualMode)
+        {
+            using ListView listView = new ListView()
+            {
+                View = view,
+                VirtualMode = virtualMode,
+                VirtualListSize = 1,
+                CheckBoxes = true,
+                ShowGroups = showGroups
+            };
+
+            ListViewItem listViewItem = new ListViewItem("Item");
+            AddItemToListView(listView, listViewItem, virtualMode);
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            AccessibleObject listViewItemaAccessibleObject = listViewItem.AccessibilityObject;
+
+            Assert.Equal(UiaCore.ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.False(listViewItem.Checked);
+
+            listViewItemaAccessibleObject.Toggle();
+
+            Assert.Equal(UiaCore.ToggleState.On, listViewItemaAccessibleObject.ToggleState);
+            Assert.True(listViewItem.Checked);
+
+            // toggle again
+            listViewItemaAccessibleObject.Toggle();
+
+            Assert.Equal(UiaCore.ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.False(listViewItem.Checked);
+            Assert.Equal(createHandle, listView.IsHandleCreated);
         }
     }
 }
