@@ -8326,6 +8326,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Définit la couleur de premier plan de la grille.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">La propriété {0} n'existe pas dans {1}.</target>

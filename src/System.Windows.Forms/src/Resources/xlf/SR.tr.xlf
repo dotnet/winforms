@@ -8326,6 +8326,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Kılavuz alanının ön plan rengini ayarlar.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">{0} özelliği {1} içinde yok.</target>

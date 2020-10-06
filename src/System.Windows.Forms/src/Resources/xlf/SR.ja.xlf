@@ -8326,6 +8326,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">グリッド領域の前景色です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">プロパティ {0} は {1} に存在しません。</target>

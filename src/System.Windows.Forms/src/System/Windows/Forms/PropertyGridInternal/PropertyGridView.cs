@@ -1774,11 +1774,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             var gridEntry = GetGridEntryFromRow(selectedRow);
             if (gridEntry != null)
             {
-                gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                    UiaCore.ExpandCollapseState.Collapsed,
-                    UiaCore.ExpandCollapseState.Expanded);
+                gridEntry.AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+                    SR.PropertyGridViewGridEntryExpandedStateDescription);
             }
 
             try

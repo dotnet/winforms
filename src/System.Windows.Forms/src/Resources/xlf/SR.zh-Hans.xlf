@@ -8326,6 +8326,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">设置网格区域的前景色。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">{1} 中不存在属性 {0}。</target>

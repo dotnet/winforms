@@ -8326,6 +8326,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">設定方格區域的前景色彩。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">屬性 {0} 不存在於 {1} 中。</target>

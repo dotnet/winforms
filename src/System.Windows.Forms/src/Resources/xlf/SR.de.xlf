@@ -8326,6 +8326,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Legt die Vordergrundfarbe des Rasterbereichs fest.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">Die Eigenschaft {0} ist nicht in {1} vorhanden.</target>

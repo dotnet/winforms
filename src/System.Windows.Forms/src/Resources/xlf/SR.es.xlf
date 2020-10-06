@@ -8326,6 +8326,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Establece el color de primer plano del área de cuadrícula.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridViewGridEntryExpandedStateDescription">
+        <source>Expanded</source>
+        <target state="new">Expanded</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyManagerPropDoesNotExist">
         <source>Property {0} does not exist in {1}.</source>
         <target state="translated">La propiedad {0} no existe en {1}.</target>
