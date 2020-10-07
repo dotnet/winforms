@@ -42,5 +42,39 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
             Assert.NotNull(lastChild);
         }
+
+        [WinFormsFact]
+        public void DataGridViewEditingPanelAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            Panel editingPanel = dataGridView.EditingPanel;
+            // AccessibleRole is not set = Default
+
+            object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+            Assert.False(editingPanel.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Client)]
+        [InlineData(false, AccessibleRole.None)]
+        public void DataGridViewEditingPanelAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+        {
+            using DataGridView dataGridView = new DataGridView();
+            Panel editingPanel = dataGridView.EditingPanel;
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                editingPanel.CreateControl();
+            }
+
+            object actual = editingPanel.AccessibilityObject.Role;
+
+            Assert.Equal(expectedRole, actual);
+            Assert.Equal(createControl, editingPanel.IsHandleCreated);
+        }
     }
 }

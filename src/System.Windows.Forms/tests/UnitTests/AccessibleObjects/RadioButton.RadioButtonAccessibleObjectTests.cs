@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData((int)UIA.NamePropertyId, "TestName")]
-        [InlineData((int)UIA.ControlTypePropertyId, UIA.RadioButtonControlTypeId)]
+        [InlineData((int)UIA.ControlTypePropertyId, UIA.RadioButtonControlTypeId)] // If AccessibleRole is Default
         [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
         [InlineData((int)UIA.AutomationIdPropertyId, "RadioButton1")]
         public void RadioButtonAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)

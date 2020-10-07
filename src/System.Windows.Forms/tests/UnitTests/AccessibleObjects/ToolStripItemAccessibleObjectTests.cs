@@ -123,6 +123,15 @@ namespace System.Windows.Forms.Tests
                 (toolStripItemAccessibleObject.Bounds.Width > 0 && toolStripItemAccessibleObject.Bounds.Height > 0));
         }
 
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_Role_IsPushButton_ByDefault()
+        {
+            using ToolStripItem toolStripDropDownButton = new SubToolStripItem();
+            // AccessibleRole is not set = Default
+            AccessibleRole actual = toolStripDropDownButton.AccessibilityObject.Role;
+            Assert.Equal(AccessibleRole.PushButton, actual);
+        }
+
         private class SubToolStripItem : ToolStripItem
         {
             public SubToolStripItem() : base()

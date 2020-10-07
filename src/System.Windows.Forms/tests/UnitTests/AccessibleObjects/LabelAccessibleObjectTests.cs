@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -52,6 +53,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void LabelAccessibleObject_Role_IsStaticText_ByDefault()
+        {
+            using Label label = new Label();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = label.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.StaticText, actual);
+            Assert.False(label.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void LabelAccessibleObject_LegacyIAccessible_Description_ReturnsExpected()
         {
             string testAccDescription = "Test description";
@@ -63,6 +76,18 @@ namespace System.Windows.Forms.Tests
 
             Assert.False(label.IsHandleCreated);
             Assert.Equal(testAccDescription, labelAccessibleObject.Description);
+        }
+
+        [WinFormsFact]
+        public void LabelAccessibleObject_ControlType_IsText_IfAccessibleRoleIsDefault()
+        {
+            using Label label = new Label();
+            // AccessibleRole is not set = Default
+
+            object actual = label.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.TextControlTypeId, actual);
+            Assert.False(label.IsHandleCreated);
         }
     }
 }

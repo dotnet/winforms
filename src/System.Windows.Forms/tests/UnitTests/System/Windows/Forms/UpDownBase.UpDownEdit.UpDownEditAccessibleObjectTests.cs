@@ -121,6 +121,17 @@ namespace System.Windows.Forms.Tests
             Assert.False(upDownEdit.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void UpDownEditAccessibleObject_ControlType_IsNull()
+        {
+            using UpDownBase upDownBase = new SubUpDownBase();
+            using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDownBase);
+            object actual = upDownEdit.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            Assert.Null(actual);
+            Assert.False(upDownBase.IsHandleCreated);
+            Assert.False(upDownEdit.IsHandleCreated);
+        }
+
         private class SubUpDownBase : UpDownBase
         {
             public override void DownButton() { }

@@ -52,5 +52,15 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.True(gridViewChild.IsPatternSupported((UiaCore.UIA)pattern));
         }
+
+        [WinFormsFact]
+        public void PropertyGridAccessibleObject_ControlType_IsNull()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            // AccessibleRole is not set = Default
+            object actual = propertyGrid.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            Assert.Null(actual);
+            Assert.False(propertyGrid.IsHandleCreated);
+        }
     }
 }

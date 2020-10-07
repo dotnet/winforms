@@ -5,6 +5,7 @@
 using System.Drawing;
 using Accessibility;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -106,6 +107,18 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = accessibilityObject;
             Assert.Equal(0, iAccessible.accChildCount);
             Assert.Equal(-1, accessibilityObject.GetChildCount());
+        }
+
+        [WinFormsFact]
+        public void ProgressBarAccessibleObject_ControlType_IsProgressBar_IfAccessibleRoleIsDefault()
+        {
+            using ProgressBar progressBar = new ProgressBar();
+            // AccessibleRole is not set = Default
+
+            object actual = progressBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.ProgressBarControlTypeId, actual);
+            Assert.False(progressBar.IsHandleCreated);
         }
     }
 }

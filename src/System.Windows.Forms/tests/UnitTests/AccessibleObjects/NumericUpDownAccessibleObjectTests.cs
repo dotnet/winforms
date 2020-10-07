@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -36,6 +37,30 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
             Assert.False(isKeyboardFocusable);
+        }
+
+        [WinFormsFact]
+        public void NumericUpDownAccessibleObject_ControlType_IsSpinner_IfAccessibleRoleIsDefault()
+        {
+            using NumericUpDown numericUpDown = new NumericUpDown();
+            // AccessibleRole is not set = Default
+
+            object actual = numericUpDown.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, actual);
+            Assert.False(numericUpDown.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void NumericUpDownAccessibleObject_Role_IsSpinButton_ByDefault()
+        {
+            using NumericUpDown numericUpDown = new NumericUpDown();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = numericUpDown.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.SpinButton, actual);
+            Assert.False(numericUpDown.IsHandleCreated);
         }
     }
 }

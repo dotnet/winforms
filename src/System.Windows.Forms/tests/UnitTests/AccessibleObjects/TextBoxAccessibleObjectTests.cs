@@ -33,5 +33,31 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True(textBoxAccessibleObject.IsPatternSupported((Interop.UiaCore.UIA)patternId));
             Assert.False(textBox.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void TextBoxAccessibilityObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
+        {
+            using TextBox textBox = new TextBox();
+            textBox.CreateControl();
+            // AccessibleRole is not set = Default
+
+            object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(Interop.UiaCore.UIA.EditControlTypeId, actual);
+            Assert.True(textBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxAccessibilityObject_Role_IsText_ByDefault()
+        {
+            using TextBox textBox = new TextBox();
+            textBox.CreateControl();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = textBox.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.Text, actual);
+            Assert.True(textBox.IsHandleCreated);
+        }
     }
 }

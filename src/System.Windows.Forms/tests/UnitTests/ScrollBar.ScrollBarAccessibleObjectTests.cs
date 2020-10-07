@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData((int)UIA.NamePropertyId, "TestName")]
-        [InlineData((int)UIA.ControlTypePropertyId, UIA.ScrollBarControlTypeId)]
+        [InlineData((int)UIA.ControlTypePropertyId, UIA.ScrollBarControlTypeId)] // If AccessibleRole is Default
         [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
         [InlineData((int)UIA.IsValuePatternAvailablePropertyId, true)]
         [InlineData((int)UIA.AutomationIdPropertyId, "AutomId")]

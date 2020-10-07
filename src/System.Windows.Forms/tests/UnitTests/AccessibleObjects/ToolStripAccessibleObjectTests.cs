@@ -83,5 +83,17 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.Equal("Test Description", accessibleObjectDescription);
         }
+
+        [WinFormsFact]
+        public void ToolStripAccessibleObject_ControlType_IsToolBar_IfAccessibleRoleIsDefault()
+        {
+            using ToolStrip toolStrip = new ToolStrip();
+            // AccessibleRole is not set = Default
+
+            object actual = toolStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.ToolBarControlTypeId, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
     }
 }

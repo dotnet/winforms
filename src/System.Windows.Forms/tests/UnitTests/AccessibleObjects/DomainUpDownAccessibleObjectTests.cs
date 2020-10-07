@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -14,6 +15,31 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using DomainUpDown domainUpDown = new DomainUpDown();
             AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
             Assert.NotNull(accessibleObject);
+            Assert.False(domainUpDown.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDownAccessibleObject_ControlType_IsSpinner_IfAccessibleRoleIsDefault()
+        {
+            using DomainUpDown domainUpDown = new DomainUpDown();
+            // AccessibleRole is not set = Default
+
+            object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, actual);
+            Assert.False(domainUpDown.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDownAccessibleObject_Role_IsSpinButton_ByDefault()
+        {
+            using DomainUpDown domainUpDown = new DomainUpDown();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = domainUpDown.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.SpinButton, actual);
+            Assert.False(domainUpDown.IsHandleCreated);
         }
 
         [WinFormsFact]

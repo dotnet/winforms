@@ -67,5 +67,37 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = textBox.AccessibilityObject;
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
         }
+
+        [WinFormsFact]
+        public void ToolStripTextBoxControlAccessibleObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
+        {
+            using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+            // AccessibleRole is not set = Default
+            TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
+
+            object actual = toolStripTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            Assert.Equal(UiaCore.UIA.EditControlTypeId, actual);
+            Assert.False(toolStripTextBoxControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ToolStripTextBoxControlAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+        {
+            using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+            // AccessibleRole is not set = Default
+            TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
+
+            if (createControl)
+            {
+                toolStripTextBoxControl.CreateControl();
+            }
+
+            object actual = toolStripTextBox.AccessibilityObject.Role;
+
+            Assert.Equal(expectedRole, actual);
+            Assert.Equal(createControl, toolStripTextBoxControl.IsHandleCreated);
+        }
     }
 }

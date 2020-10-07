@@ -145,7 +145,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [InlineData((int)UIA.NamePropertyId, "TestName")]
-        [InlineData((int)UIA.ControlTypePropertyId, UIA.CheckBoxControlTypeId)]
+        [InlineData((int)UIA.ControlTypePropertyId, UIA.CheckBoxControlTypeId)] // If AccessibleRole is Default
         [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
         [InlineData((int)UIA.AutomationIdPropertyId, "CheckBox1")]
         public void CheckBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)

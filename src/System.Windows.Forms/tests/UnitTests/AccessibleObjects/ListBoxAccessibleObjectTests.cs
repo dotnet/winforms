@@ -31,5 +31,36 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
                 Assert.True(child.IsPatternSupported(UiaCore.UIA.ScrollItemPatternId));
             }
         }
+
+        [WinFormsFact]
+        public void ListBoxAccessibleObject_ControlType_IsList_IfAccessibleRoleIsDefault()
+        {
+            using ListBox listBox = new ListBox();
+            // AccessibleRole is not set = Default
+
+            object actual = listBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.ListControlTypeId, actual);
+            Assert.False(listBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.List)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ListBoxAccessibleObject_Role_IsList_ByDefault(bool createControl, AccessibleRole expectedRole)
+        {
+            using ListBox listBox = new ListBox();
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                listBox.CreateControl();
+            }
+
+            AccessibleRole actual = listBox.AccessibilityObject.Role;
+
+            Assert.Equal(expectedRole, actual);
+            Assert.Equal(createControl, listBox.IsHandleCreated);
+        }
     }
 }

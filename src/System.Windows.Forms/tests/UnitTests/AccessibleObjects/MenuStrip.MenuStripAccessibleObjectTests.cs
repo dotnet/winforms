@@ -62,5 +62,29 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.Equal("Test Description", accessibleObjectDescription);
         }
+
+        [WinFormsFact]
+        public void MenuStripAccessibleObject_ControlType_IsMenuBar_IfAccessibleRoleIsDefault()
+        {
+            using MenuStrip menuStrip = new MenuStrip();
+            // AccessibleRole is not set = Default
+
+            object actual = menuStrip.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+
+            Assert.Equal(UIA.MenuBarControlTypeId, actual);
+            Assert.False(menuStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void MenuStripAccessibleObject_Role_IsMenuBar_ByDefault()
+        {
+            using MenuStrip menuStrip = new MenuStrip();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = menuStrip.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.MenuBar, actual);
+            Assert.False(menuStrip.IsHandleCreated);
+        }
     }
 }

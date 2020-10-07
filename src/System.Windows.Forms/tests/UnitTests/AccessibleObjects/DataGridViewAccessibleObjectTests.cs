@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_ControlType_IsTable()
+        public void DataGridViewAccessibleObject_ControlType_IsTable_IfAccessibleRoleIsDefault()
         {
             using DataGridView dataGridView = new DataGridView();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;

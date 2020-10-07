@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -95,6 +96,16 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Rectangle actual = accessibleObject.BoundingRectangle;
             Assert.Equal(expected, actual);
             Assert.True(textBoxBase.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TextBoxBaseAccessibleObject_ControlType_IsNull()
+        {
+            using TextBoxBase textBoxBase = new SubTextBoxBase();
+            // AccessibleRole is not set = Default
+            object actual = textBoxBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            Assert.Null(actual);
+            Assert.False(textBoxBase.IsHandleCreated);
         }
 
         private class SubTextBoxBase : TextBoxBase

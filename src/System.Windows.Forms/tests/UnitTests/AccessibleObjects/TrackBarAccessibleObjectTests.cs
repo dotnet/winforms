@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -146,6 +147,32 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             IAccessible iAccessible = accessibilityObject;
             Assert.Equal(expectedChildACount, iAccessible.accChildCount);
             Assert.Equal(-1, accessibilityObject.GetChildCount());
+        }
+
+        [WinFormsFact]
+        public void TrackBarAccessibilityObject_ControlType_IsSlider_IfAccessibleRoleIsDefault()
+        {
+            using TrackBar trackBar = new TrackBar();
+            trackBar.CreateControl();
+            // AccessibleRole is not set = Default
+
+            object actual = trackBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.SliderControlTypeId, actual);
+            Assert.True(trackBar.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TrackBarAccessibilityObject_Role_IsStatusBar_ByDefault()
+        {
+            using TrackBar trackBar = new TrackBar();
+            trackBar.CreateControl();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = trackBar.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.Slider, actual);
+            Assert.True(trackBar.IsHandleCreated);
         }
     }
 }

@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -34,6 +35,34 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             }
 
             Assert.Equal(listBoxHeight, sumItemsHeight);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBoxAccessibleObject_ControlType_IsNull()
+        {
+            using CheckedListBox checkedListBox = new CheckedListBox();
+            object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            Assert.Null(actual);
+            Assert.False(checkedListBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.List)]
+        [InlineData(false, AccessibleRole.None)]
+        public void CheckedListBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+        {
+            using CheckedListBox checkedListBox = new CheckedListBox();
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                checkedListBox.CreateControl();
+            }
+
+            AccessibleRole actual = checkedListBox.AccessibilityObject.Role;
+
+            Assert.Equal(expectedRole, actual);
+            Assert.Equal(createControl, checkedListBox.IsHandleCreated);
         }
     }
 }

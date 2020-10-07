@@ -3,10 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
-using System.Threading;
-using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -36,6 +35,37 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Type type = typeof(MonthCalendarAccessibleObject);
             MethodInfo method = type.GetMethod("GetCalendarCell", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.Null(method.Invoke(accessibleObject, new object[] { 0, /*parentAccessibleObject*/ null, 0 }));
+        }
+
+        [WinFormsTheory]
+        [InlineData("Test name", (int)UiaCore.UIA.TableControlTypeId)]
+        [InlineData(null, (int)UiaCore.UIA.CalendarControlTypeId)]
+        public void MonthCalendarAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(string name, int expected)
+        {
+            // UIA is less accessible than the test
+            // so we have to use "int" type here for "expected" argument
+            using MonthCalendar monthCalendar = new MonthCalendar()
+            {
+                AccessibleName = name
+            };
+            // AccessibleRole is not set = Default
+
+            object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal((UiaCore.UIA)expected, actual);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_Role_IsExpected_ByDefault()
+        {
+            using MonthCalendar monthCalendar = new MonthCalendar();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = monthCalendar.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.Table, actual);
+            Assert.False(monthCalendar.IsHandleCreated);
         }
     }
 }

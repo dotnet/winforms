@@ -4,10 +4,11 @@
 
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ButtonBase_ButtonBaseAccessibleObjectTests
+    public class ButtonBase_ButtonBaseAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ButtonBaseAccessibleObject_Ctor_NullControl_ThrowsArgumentException()
@@ -182,6 +183,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCallCount, callCount);
             Assert.Equal(0, performClickCallCount);
             Assert.Equal(createControl, control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ButtonBaseAccessibleObject_ControlType_IsNull()
+        {
+            using ButtonBase buttonBase = new SubButtonBase();
+            object actual = buttonBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            Assert.Null(actual);
+            Assert.False(buttonBase.IsHandleCreated);
         }
 
         private class SubButtonBase : ButtonBase

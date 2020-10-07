@@ -62,5 +62,29 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.Equal("Test Description", accessibleObjectDescription);
         }
+
+        [WinFormsFact]
+        public void StatusStripAccessibleObject_ControlType_IsStatusBar_IfAccessibleRoleIsDefault()
+        {
+            using StatusStrip statusStrip = new StatusStrip();
+            // AccessibleRole is not set = Default
+
+            object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+
+            Assert.Equal(UIA.StatusBarControlTypeId, actual);
+            Assert.False(statusStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void StatusStripAccessibleObject_Role_IsStatusBar_ByDefault()
+        {
+            using StatusStrip statusStrip = new StatusStrip();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = statusStrip.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.StatusBar, actual);
+            Assert.False(statusStrip.IsHandleCreated);
+        }
     }
 }

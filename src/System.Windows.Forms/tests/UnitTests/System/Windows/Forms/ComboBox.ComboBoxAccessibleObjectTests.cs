@@ -208,5 +208,17 @@ namespace System.Windows.Forms.Tests
         {
             return comboBox.AccessibilityObject as ComboBox.ComboBoxAccessibleObject;
         }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_ControlType_IsComboBox_IfAccessibeRoleIsDefault()
+        {
+            using ComboBox control = new ComboBox();
+            // AccessibleRole is not set = Default
+
+            object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }
