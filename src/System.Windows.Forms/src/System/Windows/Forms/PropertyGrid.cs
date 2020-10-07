@@ -2037,7 +2037,7 @@ namespace System.Windows.Forms
 
         private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useCheckButtonRole = false)
         {
-            ToolStripButton button = new ToolStripButton
+            PropertyGridToolStripButton button = new PropertyGridToolStripButton
             {
                 Text = toolTipText,
                 AutoToolTip = true,
