@@ -1,14 +1,12 @@
 # Developer Guide
 
-The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Document](contributing.md).
+The following document describes the setup and workflow that is recommended for working on the Windows Forms project. It assumes that you have read the [Contributing Guide](../CONTRIBUTING.md).
 
 The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Follow the [.NET Runtime][net-runtime-instructions] instructions.
-
-Windows Forms requires the following workloads and components be selected when installing Visual Studio:
+Windows Forms requires the following workloads and components be selected when installing Visual Studio 2019 (16.8+):
 
 * Required Workloads:
   * .NET Desktop Development
@@ -27,7 +25,7 @@ Windows Forms requires the following workloads and components be selected when i
 
 We use the following workflow for building as well as testing features and fixes.
 
-You first need to [fork][fork] and [clone][clone] this Windows Forms repository. This is a one-time task.
+You first need to [fork][fork] then [clone][clone] this Windows Forms repository. This is a one-time task.
 
 1. [Build](building.md) the repository.
 2. [Debug](debugging.md) the change, as needed.
@@ -35,19 +33,14 @@ You first need to [fork][fork] and [clone][clone] this Windows Forms repository.
 
 ## More Information
 
-* [Git commands and workflow][git-commands]
-* [Coding guidelines][corefx-coding-guidelines]
+* [.NET Docs and Guidelines][net-runtime-instructions]
 * ["up-for-grabs" issues][up-for-grabs]
-* ["easy" issues][easy]
 
 [comment]: <> (URI Links)
 
 [net-runtime-instructions]: https://github.com/dotnet/runtime/tree/master/docs
-[fork]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#fork-the-repository
-[clone]: https://github.com/dotnet/corefx/wiki/Checking-out-the-code-repository#clone-the-repository
-[git-commands]: https://github.com/dotnet/corefx/wiki/git-reference
-[corefx-coding-guidelines]: https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines
+[fork]: https://guides.github.com/activities/forking/
+[clone]: https://www.git-scm.com/docs/git-clone
 [up-for-grabs]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs
-[easy]: https://github.com/dotnet/winforms/issues?utf8=%E2%9C%93&q=is%3Aopen+is%3Aissue+label%3Aeasy
 [chocolatey]: https://chocolatey.org/
 [cmake-download]: https://cmake.org/download/

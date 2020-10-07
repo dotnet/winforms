@@ -12,9 +12,8 @@ You can help us streamline our response time to your feedback and ideas by filin
 
 ### Known Issues
 
-If you encounter an issue using the latest .NET Core 3.1 SDK, please:
+If you encounter an issue using the latest .NET 5.0 SDK, please:
 
-1. Check out the [Centralized 3.1 Preview Known Issues document][.net-core-3.1-known-issues],
 1. Explore [this repositories issues][winforms-issues], and then
 1. [Open a new issue][new-issue] if there is none.
 
