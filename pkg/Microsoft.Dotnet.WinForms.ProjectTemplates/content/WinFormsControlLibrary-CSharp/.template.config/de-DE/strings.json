@@ -1,7 +1,7 @@
-{
+﻿{
   "version": "1.0.0.0",
   "strings": {
     "name": "Windows Forms-Steuerelementebibliothek",
-    "description": "Eine Projektvorlage zum Erstellen einer Steuerelementebibliothek f�r Windows Forms (WinForms)-Anwendungen."
+    "description": "Eine Projektvorlage zum Erstellen einer Steuerelementebibliothek für Windows Forms (WinForms) Apps."
   }
 }
