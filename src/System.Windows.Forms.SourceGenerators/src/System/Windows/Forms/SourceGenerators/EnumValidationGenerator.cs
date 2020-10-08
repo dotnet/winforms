@@ -126,7 +126,7 @@ namespace EnumValidation
             int? max = null;
             foreach (int value in values)
             {
-                if (max == null || value != max + 1)
+                if (max is null || value != max + 1)
                 {
                     if (max != null)
                     {
@@ -140,7 +140,7 @@ namespace EnumValidation
                     max = value;
                 }
             }
-            if (max == null)
+            if (max is null)
             {
                 context.ReportDiagnostic(Diagnostic.Create("EV1", nameof(EnumValidationGenerator), $"Can't validate an enum that has no elements", DiagnosticSeverity.Error, DiagnosticSeverity.Error, true, 4));
                 yield break;
@@ -159,7 +159,7 @@ namespace EnumValidation
                 SemanticModel semanticModel = compilation.GetSemanticModel(argument.SyntaxTree);
 
                 ITypeSymbol? enumType = semanticModel.GetTypeInfo(argument).Type;
-                if (enumType == null || foundTypes.Contains(enumType))
+                if (enumType is null || foundTypes.Contains(enumType))
                 {
                     continue;
                 }
