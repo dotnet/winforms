@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Drawing.Text;
-using System.Windows.Forms.Internal;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -14,7 +13,7 @@ namespace System.Windows.Forms
     /// </summary>
     public static class TextRenderer
     {
-        private static readonly Gdi32.QUALITY s_defaultQuality = GetDefaultFontQuality();
+        internal static Gdi32.QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
 
         internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
 
@@ -335,7 +334,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                DrawTextInternal(hdc, text, font, bounds, foreColor, s_defaultQuality, backColor, flags);
+                DrawTextInternal(hdc, text, font, bounds, foreColor, DefaultQuality, backColor, flags);
             }
         }
 
