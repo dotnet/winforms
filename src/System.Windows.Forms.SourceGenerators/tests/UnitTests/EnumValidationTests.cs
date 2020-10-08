@@ -46,6 +46,40 @@ namespace People
         }
 
         [Fact]
+        public void NonSequentialEnum()
+        {
+            string source = @"
+namespace People
+{
+    enum Names
+    {
+        David = 1,
+        Igor = 7,
+        Jeremy = 6,
+        Hugh = 9,
+        Tobias = 2,
+        Olia = 15,
+        Merrie = 3
+    }
+
+    class C
+    {
+        void M(Names value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+    }
+}";
+            string expected =
+@"if (intValue >= 1 && intValue <= 3) return;
+if (intValue >= 6 && intValue <= 7) return;
+if (intValue == 9) return;
+if (intValue == 15) return;";
+
+            VerifyGeneratedMethodLines(source, "People.Names", expected);
+        }
+
+        [Fact]
         public void SequentialEnumWithPowersOf2()
         {
             string source = @"

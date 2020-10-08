@@ -20,7 +20,7 @@ namespace System.Windows.Forms.SourceGenerators
             EnumType = enumType;
             ArgumentName = argumentName;
             IsFlags = isFlags;
-            Elements = GetEnumElements(enumType).ToList();
+            Elements = GetEnumElements(enumType).OrderBy(e => e.Value).ToList();
         }
 
         private static IEnumerable<EnumElementInfo> GetEnumElements(ITypeSymbol enumType)
