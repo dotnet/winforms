@@ -46,6 +46,36 @@ namespace People
         }
 
         [Fact]
+        public void DuplicateValues()
+        {
+            string source = @"
+namespace People
+{
+    enum Names
+    {
+        David = 1,
+        Igor = 2,
+        Jeremy = 2,
+        Hugh = 4,
+        Tobias = 4
+    }
+
+    class C
+    {
+        void M(Names value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+    }
+}";
+            string expected =
+@"if (intValue >= 1 && intValue <= 2) return;
+if (intValue == 4) return;";
+
+            VerifyGeneratedMethodLines(source, "People.Names", expected);
+        }
+
+        [Fact]
         public void NonSequentialEnum()
         {
             string source = @"

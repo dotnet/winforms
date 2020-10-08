@@ -98,16 +98,16 @@ namespace EnumValidation
         private static void GenerateFlagsValidationMethodBody(GeneratorExecutionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
         {
             int total = 0;
-            foreach (EnumElementInfo element in info.Elements)
+            foreach (int value in info.Values)
             {
-                total |= element.Value;
+                total |= value;
             }
             sb.AppendLine($"{indent}if ((intValue & {total}) == intValue) return;");
         }
 
         private static void GenerateSequenceValidationMethodBody(GeneratorExecutionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
         {
-            foreach ((int min, int max) in GetElementSets(context, info.Elements))
+            foreach ((int min, int max) in GetElementSets(context, info.Values))
             {
                 if (min == max)
                 {
@@ -120,24 +120,24 @@ namespace EnumValidation
             }
         }
 
-        private static IEnumerable<(int min, int max)> GetElementSets(GeneratorExecutionContext context, List<EnumElementInfo> elements)
+        private static IEnumerable<(int min, int max)> GetElementSets(GeneratorExecutionContext context, List<int> values)
         {
             int min = 0;
             int? max = null;
-            foreach (EnumElementInfo info in elements)
+            foreach (int value in values)
             {
-                if (max == null || info.Value != max + 1)
+                if (max == null || value != max + 1)
                 {
                     if (max != null)
                     {
                         yield return (min, max.Value);
                     }
-                    min = info.Value;
-                    max = info.Value;
+                    min = value;
+                    max = value;
                 }
                 else
                 {
-                    max = info.Value;
+                    max = value;
                 }
             }
             if (max == null)

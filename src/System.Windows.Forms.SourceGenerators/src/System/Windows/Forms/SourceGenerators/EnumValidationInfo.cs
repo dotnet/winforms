@@ -12,7 +12,7 @@ namespace System.Windows.Forms.SourceGenerators
     {
         public ITypeSymbol EnumType { get; }
         public string ArgumentName { get; }
-        public List<EnumElementInfo> Elements { get; }
+        public List<int> Values { get; }
         public bool IsFlags { get; }
 
         public EnumValidationInfo(ITypeSymbol enumType, string argumentName, bool isFlags)
@@ -20,22 +20,21 @@ namespace System.Windows.Forms.SourceGenerators
             EnumType = enumType;
             ArgumentName = argumentName;
             IsFlags = isFlags;
-            Elements = GetEnumElements(enumType).OrderBy(e => e.Value).ToList();
+            Values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToList();
         }
 
-        private static IEnumerable<EnumElementInfo> GetEnumElements(ITypeSymbol enumType)
+        private static IEnumerable<int> GetElementValues(ITypeSymbol enumType)
         {
-            foreach (var member in enumType.GetMembers())
+            foreach (ISymbol member in enumType.GetMembers())
             {
                 if (member is IFieldSymbol
                     {
                         IsStatic: true,
                         IsConst: true,
-                        ConstantValue: int value,
-                        Name: var name
+                        ConstantValue: int value
                     })
                 {
-                    yield return new EnumElementInfo(name, value);
+                    yield return value;
                 }
             }
         }
