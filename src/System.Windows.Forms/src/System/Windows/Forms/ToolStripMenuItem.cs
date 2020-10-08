@@ -201,8 +201,10 @@ namespace System.Windows.Forms
         ///  Deriving classes can override this to configure a default size for their control.
         ///  This is more efficient than setting the size in the control's constructor.
         /// </summary>
-        protected override Size DefaultSize {
-            get {
+        protected override Size DefaultSize
+        {
+            get
+            {
                 return DpiHelper.IsPerMonitorV2Awareness ?
                       DpiHelper.LogicalToDeviceUnits(new Size(32, 19), DeviceDpi) :
                       new Size(32, 19);
@@ -254,8 +256,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets a value indicating whether the item is checked.
-            /// </summary>
+        ///  Gets or sets a value indicating whether the item is checked.
+        /// </summary>
         [Bindable(true)]
         [DefaultValue(false)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -548,11 +550,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  Gets or sets a value that indicates whether the shortcut
+        ///  Gets or sets a value that indicates whether the shortcut
         ///  keys that are assocaited
         ///  with the menu item are displayed next to the menu item
         ///  caption.
-            /// </summary>
+        /// </summary>
         [DefaultValue(true)]
         [Localizable(true)]
         [SRDescription(nameof(SR.MenuItemShowShortCutDescr))]
@@ -696,11 +698,15 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void Dispose(bool disposing) {
-            if (disposing) {
-                if (lastOwner != null) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (lastOwner != null)
+                {
                     Keys shortcut = this.ShortcutKeys;
-                    if (shortcut != Keys.None && lastOwner.Shortcuts.ContainsKey(shortcut)) {
+                    if (shortcut != Keys.None && lastOwner.Shortcuts.ContainsKey(shortcut))
+                    {
                         lastOwner.Shortcuts.Remove(shortcut);
                     }
                     lastOwner = null;
@@ -1257,59 +1263,6 @@ namespace System.Windows.Forms
             }
 
             return false;
-        }
-
-        /// <summary>
-        ///  An implementation of AccessibleChild for use with ToolStripItems
-        /// </summary>
-        internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
-        {
-            private readonly ToolStripMenuItem ownerItem;
-
-            public ToolStripMenuItemAccessibleObject(ToolStripMenuItem ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    if (ownerItem.Enabled)
-                    {
-                        AccessibleStates state = base.State;
-
-                        if ((state & AccessibleStates.Pressed) == AccessibleStates.Pressed)
-                        {
-                            // for some reason menu items are never "pressed".
-                            state &= ~AccessibleStates.Pressed;
-                        }
-
-                        if (ownerItem.Checked)
-                        {
-                            state |= AccessibleStates.Checked;
-                        }
-                        return state;
-                    }
-                    return base.State;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.MenuItemControlTypeId;
-                }
-                else if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
-                {
-                    return ownerItem.GetShortcutText();
-                }
-                else
-                {
-                    return base.GetPropertyValue(propertyID);
-                }
-            }
         }
     }
 

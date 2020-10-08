@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(SelectedItemChanged))]
     [DefaultBindingProperty(nameof(SelectedItem))]
     [SRDescription(nameof(SR.DescriptionDomainUpDown))]
-    public class DomainUpDown : UpDownBase
+    public partial class DomainUpDown : UpDownBase
     {
         private readonly static string s_defaultValue = string.Empty;
 
@@ -664,117 +664,6 @@ namespace System.Windows.Forms
                 }
 
                 return string.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
-            }
-        }
-
-        public class DomainUpDownAccessibleObject : ControlAccessibleObject
-        {
-            private DomainItemListAccessibleObject itemList;
-            private readonly UpDownBase _owner;
-
-            /// <summary>
-            /// </summary>
-            public DomainUpDownAccessibleObject(DomainUpDown owner) : base(owner)
-            {
-                _owner = owner;
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.SpinnerControlTypeId;
-                    case UiaCore.UIA.BoundingRectanglePropertyId:
-                        return Bounds;
-                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                        return State;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return false;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
-            private DomainItemListAccessibleObject ItemList
-            {
-                get
-                {
-                    if (itemList is null)
-                    {
-                        itemList = new DomainItemListAccessibleObject(this);
-                    }
-
-                    return itemList;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.SpinButton;
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public override AccessibleObject GetChild(int index)
-            {
-                switch (index)
-                {
-                    // TextBox child
-                    case 0:
-                        return _owner.TextBox.AccessibilityObject.Parent;
-                    // Up/down buttons
-                    case 1:
-                        return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
-                    case 2:
-                        return ItemList;
-                    default:
-                        return null;
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                return 3;
-            }
-
-            internal override int[] RuntimeId
-            {
-                get
-                {
-                    if (_owner is null)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    // we need to provide a unique ID
-                    // others are implementing this in the same manner
-                    // first item is static - 0x2a (RuntimeIDFirstItem)
-                    // second item can be anything, but here it is a hash
-
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
-
-                    return runtimeId;
-                }
             }
         }
 

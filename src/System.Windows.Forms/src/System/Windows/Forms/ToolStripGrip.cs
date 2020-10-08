@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    internal class ToolStripGrip : ToolStripButton
+    internal partial class ToolStripGrip : ToolStripButton
     {
         private Cursor _oldCursor;
         private Point _startLocation = Point.Empty;
@@ -261,7 +261,8 @@ namespace System.Windows.Forms
             base.OnMouseUp(mea);
         }
 
-        internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi) {
+        internal override void ToolStrip_RescaleConstants(int oldDpi, int newDpi)
+        {
             base.RescaleConstantsInternal(newDpi);
             _scaledDefaultPadding = DpiHelper.LogicalToDeviceUnits(_defaultPadding, newDpi);
             _scaledGripThickness = DpiHelper.LogicalToDeviceUnits(GripThicknessDefault, newDpi);
@@ -271,59 +272,6 @@ namespace System.Windows.Forms
             GripThickness = ToolStripManager.VisualStylesEnabled ? _scaledGripThicknessVisualStylesEnabled : _scaledGripThickness;
 
             OnFontChanged(EventArgs.Empty);
-        }
-
-        internal class ToolStripGripAccessibleObject : ToolStripButtonAccessibleObject
-        {
-            private string stockName;
-
-            public ToolStripGripAccessibleObject(ToolStripGrip owner) : base(owner)
-            {
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-                    if (string.IsNullOrEmpty(stockName))
-                    {
-                        stockName = SR.ToolStripGripAccessibleName;
-                    }
-                    return stockName;
-                }
-                set => base.Name = value;
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.Grip;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ThumbControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     [SRDescription(nameof(SR.DescriptionMenuStrip))]
-    public class MenuStrip : ToolStrip
+    public partial class MenuStrip : ToolStrip
     {
         private ToolStripMenuItem mdiWindowListItem;
 
@@ -258,40 +258,6 @@ namespace System.Windows.Forms
             }
 
             base.WndProc(ref m);
-        }
-
-        internal class MenuStripAccessibleObject : ToolStripAccessibleObject
-        {
-            public MenuStripAccessibleObject(MenuStrip owner)
-                : base(owner)
-            {
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return AccessibleRole.MenuBar;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.MenuBarControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-            }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }
