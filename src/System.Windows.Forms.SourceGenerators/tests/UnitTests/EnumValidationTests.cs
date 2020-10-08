@@ -46,6 +46,48 @@ namespace People
         }
 
         [Fact]
+        public void MultipleCalls_OneValidateMethod()
+        {
+            string source = @"
+namespace People
+{
+    enum Names
+    {
+        David,
+        Igor,
+        Jeremy,
+        Hugh,
+        Tobias,
+        Olia,
+        Merrie
+    }
+
+    class C
+    {
+        void M(Names value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+
+        void N(Names input)
+        {
+            EnumValidation.EnumValidator.Validate(input, nameof(input));
+        }
+
+        C(Names name)
+        {
+            EnumValidation.EnumValidator.Validate(name, nameof(name));
+            EnumValidation.EnumValidator.Validate(name);
+        }
+    }
+}";
+            string expected =
+@"if (intValue >= 0 && intValue <= 6) return;";
+
+            VerifyGeneratedMethodLines(source, "People.Names", expected);
+        }
+
+        [Fact]
         public void DuplicateValues()
         {
             string source = @"
