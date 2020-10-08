@@ -247,7 +247,7 @@ namespace Paint
             VerifyGeneratedMethodLines(source, "Paint.Colours", expected);
         }
 
-        private void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody, string expectedArgumentName = "value")
+        private void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody)
         {
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
 
@@ -278,7 +278,7 @@ namespace Paint
             AssertFirstLineAndRemove(lines, "{");
             AssertFirstLineAndRemove(lines, "internal static class EnumValidator");
             AssertFirstLineAndRemove(lines, "{");
-            AssertFirstLineAndRemove(lines, $"public static void Validate({expectedEnumName} enumToValidate)");
+            AssertFirstLineAndRemove(lines, $"public static void Validate({expectedEnumName} enumToValidate, string parameterName = \"value\")");
             AssertFirstLineAndRemove(lines, "{");
             AssertFirstLineAndRemove(lines, "int intValue = (int)enumToValidate;");
 
@@ -287,7 +287,7 @@ namespace Paint
                 AssertFirstLineAndRemove(lines, line.Trim());
             }
 
-            AssertFirstLineAndRemove(lines, $"throw new System.ComponentModel.InvalidEnumArgumentException(\"{expectedArgumentName}\", intValue, typeof({expectedEnumName}));");
+            AssertFirstLineAndRemove(lines, $"throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, intValue, typeof({expectedEnumName}));");
 
             AssertFirstLineAndRemove(lines, "}");
             AssertFirstLineAndRemove(lines, "");

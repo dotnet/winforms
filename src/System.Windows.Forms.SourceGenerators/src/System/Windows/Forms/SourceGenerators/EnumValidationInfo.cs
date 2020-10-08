@@ -11,14 +11,12 @@ namespace System.Windows.Forms.SourceGenerators
     internal class EnumValidationInfo
     {
         public ITypeSymbol EnumType { get; }
-        public string ArgumentName { get; }
         public List<int> Values { get; }
         public bool IsFlags { get; }
 
-        public EnumValidationInfo(ITypeSymbol enumType, string argumentName, bool isFlags)
+        public EnumValidationInfo(ITypeSymbol enumType, bool isFlags)
         {
             EnumType = enumType;
-            ArgumentName = argumentName;
             IsFlags = isFlags;
             Values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToList();
         }

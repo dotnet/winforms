@@ -304,9 +304,9 @@ namespace System.Windows.Forms.VisualStyles
 
         internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            EnumValidation.EnumValidator.Validate(edges);
-            EnumValidation.EnumValidator.Validate(style);
-            EnumValidation.EnumValidator.Validate(effects);
+            EnumValidation.EnumValidator.Validate(edges, nameof(edges));
+            EnumValidation.EnumValidator.Validate(style, nameof(style));
+            EnumValidation.EnumValidator.Validate(effects, nameof(effects));
 
             RECT destRect = bounds;
             var contentRect = new RECT();
@@ -567,7 +567,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            EnumValidation.EnumValidator.Validate(prop);
+            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);

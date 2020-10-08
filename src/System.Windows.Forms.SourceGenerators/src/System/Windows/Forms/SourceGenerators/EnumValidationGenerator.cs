@@ -19,7 +19,7 @@ namespace EnumValidation
 {
     internal static class EnumValidator
     {
-        public static void Validate(System.Enum enumToValidate)
+        public static void Validate(System.Enum enumToValidate, string parameterName = ""value"")
         {
             // This will be filled in by the generator once you call EnumValidator.Validate()
         }
@@ -67,7 +67,7 @@ namespace EnumValidation
             {
                 string indent = "        ";
 
-                sb.AppendLine($"{indent}public static void Validate({info.EnumType} enumToValidate)");
+                sb.AppendLine($"{indent}public static void Validate({info.EnumType} enumToValidate, string parameterName = \"value\")");
                 sb.AppendLine($"{indent}{{");
 
                 GenerateValidateMethodBody(context, sb, info, indent + "    ");
@@ -92,7 +92,7 @@ namespace EnumValidation
             {
                 GenerateSequenceValidationMethodBody(context, sb, info, indent);
             }
-            sb.AppendLine($"{indent}throw new System.ComponentModel.InvalidEnumArgumentException(\"{info.ArgumentName}\", intValue, typeof({info.EnumType}));");
+            sb.AppendLine($"{indent}throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, intValue, typeof({info.EnumType}));");
         }
 
         private static void GenerateFlagsValidationMethodBody(GeneratorExecutionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
@@ -168,7 +168,7 @@ namespace EnumValidation
 
                 var isFlags = enumType.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, flagsAttributeType));
 
-                var info = new EnumValidationInfo(enumType, argument.ToString(), isFlags);
+                var info = new EnumValidationInfo(enumType, isFlags);
 
                 yield return info;
             }

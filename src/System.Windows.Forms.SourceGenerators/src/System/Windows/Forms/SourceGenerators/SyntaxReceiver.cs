@@ -20,7 +20,7 @@ namespace System.Windows.Forms.SourceGenerators
                     {
                         Arguments:
                         {
-                            Count: 1
+                            Count: <= 2                           // 1 parameter for the enum value, 1 optional for the parameter name
                         } arguments
                     },
                     Expression: MemberAccessExpressionSyntax

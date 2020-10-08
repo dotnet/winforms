@@ -586,7 +586,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
 
-            Assert.Throws<InvalidEnumArgumentException>("edges", () => renderer.GetFont(graphics, value));
+            Assert.Throws<InvalidEnumArgumentException>("prop", () => renderer.GetFont(graphics, value));
         }
     }
 }
