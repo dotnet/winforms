@@ -45,6 +45,71 @@ namespace People
             VerifyGeneratedMethodLines(source, "People.Names", expected);
         }
 
+        [Fact]
+        public void SequentialEnumWithPowersOf2()
+        {
+            string source = @"
+namespace People
+{
+    enum Names
+    {
+        David = 1,
+        Igor = 2,
+        Jeremy = 4,
+        Hugh = 8,
+        Tobias = 16,
+        Olia = 32,
+        Merrie = 64
+    }
+
+    class C
+    {
+        void M(Names value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+    }
+}";
+            string expected =
+@"if (intValue >= 1 && intValue <= 2) return;
+if (intValue == 4) return;
+if (intValue == 8) return;
+if (intValue == 16) return;
+if (intValue == 32) return;
+if (intValue == 64) return;";
+
+            VerifyGeneratedMethodLines(source, "People.Names", expected);
+        }
+
+        [Fact]
+        public void FlagsEnum()
+        {
+            string source = @"
+namespace Paint
+{
+    [System.Flags]
+    enum Colours
+    {
+        Red = 1,
+        Green = 2,
+        Blue = 4,
+        Purple = 8
+    }
+
+    class C
+    {
+        void M(Colours value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+    }
+}";
+            string expected =
+@"if ((intValue & 15) == intValue) return;";
+
+            VerifyGeneratedMethodLines(source, "Paint.Colours", expected);
+        }
+
         private void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody, string expectedArgumentName = "value")
         {
             SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
