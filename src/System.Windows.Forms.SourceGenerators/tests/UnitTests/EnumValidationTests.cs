@@ -116,6 +116,42 @@ if (intValue == 64) return;";
         }
 
         [Fact]
+        public void SequentialEnumWithPowersOf2_BinaryNotation()
+        {
+            string source = @"
+namespace People
+{
+    enum Names
+    {
+        David =  0b0000001,
+        Igor =   0b0000010,
+        Jeremy = 0b0000100,
+        Hugh =   0b0001000,
+        Tobias = 0b0010000,
+        Olia =   0b0100000,
+        Merrie = 0b1000000
+    }
+
+    class C
+    {
+        void M(Names value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+    }
+}";
+            string expected =
+@"if (intValue >= 1 && intValue <= 2) return;
+if (intValue == 4) return;
+if (intValue == 8) return;
+if (intValue == 16) return;
+if (intValue == 32) return;
+if (intValue == 64) return;";
+
+            VerifyGeneratedMethodLines(source, "People.Names", expected);
+        }
+
+        [Fact]
         public void FlagsEnum()
         {
             string source = @"
