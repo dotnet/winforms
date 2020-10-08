@@ -411,10 +411,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (value != CheckState)
                 {

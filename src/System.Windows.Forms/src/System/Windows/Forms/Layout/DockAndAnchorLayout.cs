@@ -757,10 +757,7 @@ namespace System.Windows.Forms.Layout
 
             if (GetDock(element) != value)
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 bool dockNeedsLayout = CommonProperties.GetNeedsDockLayout(element);
                 CommonProperties.xSetDock(element, value);

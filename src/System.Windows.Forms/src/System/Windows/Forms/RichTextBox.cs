@@ -781,10 +781,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 ForceHandleCreate();
                 var pf = new PARAFORMAT
@@ -2387,10 +2384,7 @@ namespace System.Windows.Forms
         public void LoadFile(string path, RichTextBoxStreamType fileType)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
-            {
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-            }
+            EnumValidation.EnumValidator.Validate(fileType, nameof(fileType));
 
             Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
@@ -2412,10 +2406,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
-            {
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-            }
+            EnumValidation.EnumValidator.Validate(fileType, nameof(fileType));
 
             SF flags;
             switch (fileType)
@@ -2705,10 +2696,7 @@ namespace System.Windows.Forms
         public void SaveFile(string path, RichTextBoxStreamType fileType)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
-            {
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-            }
+            EnumValidation.EnumValidator.Validate(fileType, nameof(fileType));
 
             Stream file = File.Create(path);
             try

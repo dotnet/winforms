@@ -246,10 +246,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ItemActivation.Standard, (int)ItemActivation.TwoClick))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ItemActivation));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (HotTracking && value != ItemActivation.OneClick)
                 {
@@ -433,10 +430,7 @@ namespace System.Windows.Forms
             get => borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {
@@ -1046,10 +1040,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ColumnHeaderStyle.None, (int)ColumnHeaderStyle.Clickable))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColumnHeaderStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 if (headerStyle != value)
                 {
                     // We can switch between NONE and either *one* of the other styles without
@@ -1566,10 +1557,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SortOrder));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 if (sorting != value)
                 {
                     sorting = value;
@@ -1889,10 +1877,7 @@ namespace System.Windows.Forms
                 FlipViewToLargeIconAndSmallIcon = false;
 
                 //valid values are 0x0 to 0x4
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)View.LargeIcon, (int)View.Tile))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(View));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (value == View.Tile && VirtualMode)
                 {
@@ -3623,10 +3608,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly))
-            {
-                throw new InvalidEnumArgumentException(nameof(portion), (int)portion, typeof(ItemBoundsPortion));
-            }
+            EnumValidation.EnumValidator.Validate(portion, nameof(portion));
 
             if (View == View.Details && Columns.Count == 0)
             {
@@ -3699,10 +3681,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(subItemIndex), subItemIndex, string.Format(SR.InvalidArgument, nameof(subItemIndex), subItemIndex));
             }
             //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(portion, (int)portion, (int)ItemBoundsPortion.Entire, (int)ItemBoundsPortion.ItemOnly))
-            {
-                throw new InvalidEnumArgumentException(nameof(portion), (int)portion, typeof(ItemBoundsPortion));
-            }
+            EnumValidation.EnumValidator.Validate(portion, nameof(portion));
 
             if (Columns.Count == 0)
             {
@@ -5258,10 +5237,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(headerAutoResize, (int)headerAutoResize, (int)ColumnHeaderAutoResizeStyle.None, (int)ColumnHeaderAutoResizeStyle.ColumnContent))
-            {
-                throw new InvalidEnumArgumentException(nameof(headerAutoResize), (int)headerAutoResize, typeof(ColumnHeaderAutoResizeStyle));
-            }
+            EnumValidation.EnumValidator.Validate(headerAutoResize, nameof(headerAutoResize));
 
             int width = 0;
             int compensate = 0;

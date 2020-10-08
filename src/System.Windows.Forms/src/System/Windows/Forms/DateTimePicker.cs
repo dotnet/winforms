@@ -553,10 +553,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)LeftRightAlignment.Left, (int)LeftRightAlignment.Right))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(LeftRightAlignment));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 SetStyleBit(value == LeftRightAlignment.Right, DTS.RIGHTALIGN);
             }

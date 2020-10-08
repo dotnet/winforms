@@ -626,10 +626,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are -1 to 0x40
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AccessibleRole.Default, (int)AccessibleRole.OutlineButton))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AccessibleRole));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 Properties.SetInteger(s_accessibleRoleProperty, (int)value);
             }
         }
@@ -1018,10 +1015,7 @@ namespace System.Windows.Forms
                 if (BackgroundImageLayout != value)
                 {
                     // Valid values are 0x0 to 0x4
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImageLayout.None, (int)ImageLayout.Zoom))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImageLayout));
-                    }
+                    EnumValidation.EnumValidator.Validate(value);
 
                     // Check if the value is either center, strech or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch)
@@ -3238,10 +3232,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 RightToLeft oldValue = RightToLeft;
 

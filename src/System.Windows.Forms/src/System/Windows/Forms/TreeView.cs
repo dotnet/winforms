@@ -258,10 +258,7 @@ namespace System.Windows.Forms
             {
                 if (borderStyle != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                    }
+                    EnumValidation.EnumValidator.Validate(value);
 
                     borderStyle = value;
                     UpdateStyles();
@@ -958,10 +955,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TreeViewDrawMode.Normal, (int)TreeViewDrawMode.OwnerDrawAll))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TreeViewDrawMode));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (drawMode != value)
                 {

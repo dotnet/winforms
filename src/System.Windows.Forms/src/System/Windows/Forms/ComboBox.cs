@@ -151,10 +151,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&
                     AutoCompleteSource != AutoCompleteSource.ListItems &&
                     value != AutoCompleteMode.None)
@@ -444,10 +441,7 @@ namespace System.Windows.Forms
                 if (DrawMode != value)
                 {
                     //valid values are 0x0 to 0x2.
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)DrawMode.Normal, (int)DrawMode.OwnerDrawVariable))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DrawMode));
-                    }
+                    EnumValidation.EnumValidator.Validate(value);
                     ResetHeightCache();
                     Properties.SetInteger(PropDrawMode, (int)value);
                     RecreateHandle();
@@ -578,10 +572,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 _flatStyle = value;
                 Invalidate();
             }
@@ -1208,10 +1199,7 @@ namespace System.Windows.Forms
                 {
                     // verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ComboBoxStyle.Simple, (int)ComboBoxStyle.DropDownList))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ComboBoxStyle));
-                    }
+                    EnumValidation.EnumValidator.Validate(value);
 
                     if (value == ComboBoxStyle.DropDownList &&
                         AutoCompleteSource != AutoCompleteSource.ListItems &&

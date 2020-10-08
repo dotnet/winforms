@@ -551,10 +551,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
@@ -676,10 +673,7 @@ namespace System.Windows.Forms
             get => (FormBorderStyle)formState[FormStateBorderStyle];
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormBorderStyle.None, (int)FormBorderStyle.SizableToolWindow))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormBorderStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 formState[FormStateBorderStyle] = (int)value;
                 if (formState[FormStateSetClientSize] == 1 && !IsHandleCreated)
@@ -995,10 +989,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 dialogResult = value;
             }
@@ -1997,10 +1988,7 @@ namespace System.Windows.Forms
                     //do some bounds checking here
                     //
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)SizeGripStyle.Auto, (int)SizeGripStyle.Hide))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(SizeGripStyle));
-                    }
+                    EnumValidation.EnumValidator.Validate(value);
 
                     formState[FormStateSizeGripStyle] = (int)value;
                     UpdateRenderSizeGrip();
@@ -2025,10 +2013,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x4
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormStartPosition.Manual, (int)FormStartPosition.CenterParent))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormStartPosition));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 formState[FormStateStartPos] = (int)value;
             }
         }
@@ -2330,10 +2315,7 @@ namespace System.Windows.Forms
             get => (FormWindowState)formState[FormStateWindowState];
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormWindowState.Normal, (int)FormWindowState.Maximized))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormWindowState));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 switch (value)
                 {

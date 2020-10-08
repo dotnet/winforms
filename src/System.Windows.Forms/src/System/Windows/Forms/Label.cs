@@ -213,10 +213,7 @@ namespace System.Windows.Forms
             get => (BorderStyle)_labelState[s_stateBorderStyle];
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (BorderStyle != value)
                 {
@@ -326,10 +323,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                EnumValidation.EnumValidator.Validate(value);
 
                 if (_labelState[s_stateFlatStyle] != (int)value)
                 {
@@ -593,10 +587,7 @@ namespace System.Windows.Forms
             get => _liveSetting;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
-                }
+                EnumValidation.EnumValidator.Validate(value);
                 _liveSetting = value;
             }
         }
