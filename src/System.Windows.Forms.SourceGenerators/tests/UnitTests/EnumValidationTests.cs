@@ -76,6 +76,43 @@ if (intValue == 4) return;";
         }
 
         [Fact]
+        public void ValuesFromConstants()
+        {
+            string source = @"
+namespace People
+{
+    static class Win32
+    {
+        public const int HResult = 2;
+        public const int E_FAIL = 4;
+    }
+
+    enum Names
+    {
+        David = Win32.HResult,
+        Igor = Win32.E_FAIL,
+        Jeremy = Win32.HResult - 1,
+        Hugh = Win32.E_FAIL + Win32.HResult,
+        Tobias = Hugh
+    }
+
+    class C
+    {
+        void M(Names value)
+        {
+            EnumValidation.EnumValidator.Validate(value);
+        }
+    }
+}";
+            string expected =
+@"if (intValue >= 1 && intValue <= 2) return;
+if (intValue == 4) return;
+if (intValue == 6) return;";
+
+            VerifyGeneratedMethodLines(source, "People.Names", expected);
+        }
+
+        [Fact]
         public void NonSequentialEnum()
         {
             string source = @"
