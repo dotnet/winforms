@@ -278,6 +278,7 @@ namespace Paint
             AssertFirstLineAndRemove(lines, "{");
             AssertFirstLineAndRemove(lines, "internal static class EnumValidator");
             AssertFirstLineAndRemove(lines, "{");
+            AssertFirstLineAndRemove(lines, "/// <summary>Validates that the enum value passed in is valid for the enum type.</summary>");
             AssertFirstLineAndRemove(lines, $"public static void Validate({expectedEnumName} enumToValidate, string parameterName = \"value\")");
             AssertFirstLineAndRemove(lines, "{");
             AssertFirstLineAndRemove(lines, "int intValue = (int)enumToValidate;");

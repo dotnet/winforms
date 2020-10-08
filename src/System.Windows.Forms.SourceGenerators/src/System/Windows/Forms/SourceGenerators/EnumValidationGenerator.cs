@@ -67,7 +67,7 @@ namespace EnumValidation
 
             foreach (EnumValidationInfo info in infos)
             {
-
+                sb.AppendLine($"{indent}/// <summary>Validates that the enum value passed in is valid for the enum type.</summary>");
                 sb.AppendLine($"{indent}public static void Validate({info.EnumType} enumToValidate, string parameterName = \"value\")");
                 sb.AppendLine($"{indent}{{");
 
