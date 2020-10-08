@@ -15,7 +15,7 @@ namespace System.Windows.Forms
     ///  A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
-    public class ToolStripLabel : ToolStripItem
+    public partial class ToolStripLabel : ToolStripItem
     {
         private LinkBehavior _linkBehavior = LinkBehavior.SystemDefault;
         private bool _isLink;
@@ -392,70 +392,6 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
-        {
-            private readonly ToolStripLabel ownerItem;
-
-            public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            public override string DefaultAction
-            {
-                get
-                {
-                    if (ownerItem.IsLink)
-                    {
-                        return SR.AccessibleActionClick;
-                    }
-                    else
-                    {
-                        return string.Empty;
-                    }
-                }
-            }
-
-            public override void DoDefaultAction()
-            {
-                if (ownerItem.IsLink)
-                {
-                    base.DoDefaultAction();
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.TextControlTypeId;
-                }
-                else if (propertyID == UiaCore.UIA.LegacyIAccessibleStatePropertyId)
-                {
-                    return State;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    return (ownerItem.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get => base.State | AccessibleStates.ReadOnly;
-            }
-        }
         /// <summary>
         ///  This class performs internal layout for the "split button button" portion of a split button.
         ///  Its main job is to make sure the inner button has the same parent as the split button, so

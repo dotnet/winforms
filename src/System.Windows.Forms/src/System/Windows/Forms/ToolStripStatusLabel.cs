@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  A non selectable ToolStrip item
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
-    public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
+    public partial class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
     {
         private static readonly Padding defaultMargin = new Padding(0, 3, 0, 2);
         private Padding scaledDefaultMargin = defaultMargin;
@@ -243,38 +243,6 @@ namespace System.Windows.Forms
                 }
 
                 PaintText(e.Graphics);
-            }
-        }
-
-        internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
-        {
-            private readonly ToolStripStatusLabel ownerItem;
-
-            public ToolStripStatusLabelAccessibleObject(ToolStripStatusLabel ownerItem) : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            /// <summary>
-            ///  Raises the LiveRegionChanged UIA event.
-            /// </summary>
-            /// <returns>True if operation succeeds, False otherwise.</returns>
-            public override bool RaiseLiveRegionChanged()
-            {
-                return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.LiveSettingPropertyId:
-                        return ownerItem.LiveSetting;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.TextControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
             }
         }
 

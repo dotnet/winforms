@@ -1,0 +1,76 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+#nullable disable
+
+using static Interop;
+
+namespace System.Windows.Forms
+{
+    public partial class ProgressBar
+    {
+        internal class ProgressBarAccessibleObject : ControlAccessibleObject
+        {
+            internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner)
+            {
+            }
+
+            private ProgressBar OwningProgressBar => Owner as ProgressBar;
+
+            internal override bool IsIAccessibleExSupported() => true;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.ValuePatternId ||
+                    patternId == UiaCore.UIA.RangeValuePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                switch (propertyID)
+                {
+                    case UiaCore.UIA.NamePropertyId:
+                        return Name;
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return UiaCore.UIA.ProgressBarControlTypeId;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                        // This is necessary for compatibility with MSAA proxy:
+                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
+                        return true;
+                    case UiaCore.UIA.IsRangeValuePatternAvailablePropertyId:
+                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
+                    case UiaCore.UIA.RangeValueIsReadOnlyPropertyId:
+                        return true;
+                    case UiaCore.UIA.RangeValueLargeChangePropertyId:
+                    case UiaCore.UIA.RangeValueSmallChangePropertyId:
+                        return double.NaN;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override void SetValue(double newValue)
+            {
+                throw new InvalidOperationException("Progress Bar is read-only.");
+            }
+
+            internal override double LargeChange => double.NaN;
+
+            internal override double Maximum => OwningProgressBar?.Maximum ?? double.NaN;
+
+            internal override double Minimum => OwningProgressBar?.Minimum ?? double.NaN;
+
+            internal override double SmallChange => double.NaN;
+
+            internal override double RangeValue => OwningProgressBar?.Value ?? double.NaN;
+
+            internal override bool IsReadOnly => true;
+        }
+    }
+}

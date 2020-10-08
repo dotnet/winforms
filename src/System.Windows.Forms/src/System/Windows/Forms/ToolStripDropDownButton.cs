@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     ///  A ToolStripButton that can display a popup.
     /// </summary>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
-    public class ToolStripDropDownButton : ToolStripDropDownItem
+    public partial class ToolStripDropDownButton : ToolStripDropDownItem
     {
         private bool showDropDownArrow = true;
         private byte openMouseId;
@@ -211,49 +211,25 @@ namespace System.Windows.Forms
             return false;
         }
 
-        /// <summary>
-        ///  An implementation of Accessibleobject for use with ToolStripDropDownButton
-        /// </summary>
-        internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
-        {
-            private readonly ToolStripDropDownButton ownerItem;
-
-            public ToolStripDropDownButtonAccessibleObject(ToolStripDropDownButton ownerItem)
-                : base(ownerItem)
-            {
-                this.ownerItem = ownerItem;
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.ButtonControlTypeId;
-                }
-                else
-                {
-                    return base.GetPropertyValue(propertyID);
-                }
-            }
-        }
-
         private protected class ToolStripDropDownButtonInternalLayout : ToolStripItemInternalLayout
         {
-            private ToolStripDropDownButton    ownerItem;
-            private static readonly Size       dropDownArrowSizeUnscaled = new Size(5, 3);
-            private static Size                dropDownArrowSize = dropDownArrowSizeUnscaled;
-            private const int                  DROP_DOWN_ARROW_PADDING = 2;
-            private static Padding             dropDownArrowPadding = new Padding(DROP_DOWN_ARROW_PADDING);
-            private Padding                    scaledDropDownArrowPadding = dropDownArrowPadding;
-            private Rectangle                  dropDownArrowRect    = Rectangle.Empty;
+            private ToolStripDropDownButton ownerItem;
+            private static readonly Size dropDownArrowSizeUnscaled = new Size(5, 3);
+            private static Size dropDownArrowSize = dropDownArrowSizeUnscaled;
+            private const int DROP_DOWN_ARROW_PADDING = 2;
+            private static Padding dropDownArrowPadding = new Padding(DROP_DOWN_ARROW_PADDING);
+            private Padding scaledDropDownArrowPadding = dropDownArrowPadding;
+            private Rectangle dropDownArrowRect = Rectangle.Empty;
 
-            public ToolStripDropDownButtonInternalLayout(ToolStripDropDownButton ownerItem) : base(ownerItem) {
+            public ToolStripDropDownButtonInternalLayout(ToolStripDropDownButton ownerItem) : base(ownerItem)
+            {
                 if (DpiHelper.IsPerMonitorV2Awareness)
                 {
                     dropDownArrowSize = DpiHelper.LogicalToDeviceUnits(dropDownArrowSizeUnscaled, ownerItem.DeviceDpi);
                     scaledDropDownArrowPadding = DpiHelper.LogicalToDeviceUnits(dropDownArrowPadding, ownerItem.DeviceDpi);
                 }
-                else if (DpiHelper.IsScalingRequired) {
+                else if (DpiHelper.IsScalingRequired)
+                {
                     // these 2 values are used to calculate size of the clickable drop down button
                     // on the right of the image/text
                     dropDownArrowSize = DpiHelper.LogicalToDeviceUnits(dropDownArrowSizeUnscaled);
