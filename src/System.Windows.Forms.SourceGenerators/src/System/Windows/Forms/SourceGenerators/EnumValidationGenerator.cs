@@ -34,13 +34,12 @@ namespace EnumValidation
 
         public void Execute(GeneratorExecutionContext context)
         {
-            SyntaxReceiver? syntaxReceiver = context.SyntaxReceiver as SyntaxReceiver;
-            if (syntaxReceiver is null)
+            if (context.SyntaxReceiver is not SyntaxReceiver syntaxReceiver)
             {
                 throw new InvalidOperationException("We were given the wrong syntax receiver.");
             }
 
-            var enumsToValidate = GetEnumValidationInfo(context.Compilation, syntaxReceiver.ArgumentsToValidate);
+            IEnumerable<EnumValidationInfo> enumsToValidate = GetEnumValidationInfo(context.Compilation, syntaxReceiver.ArgumentsToValidate);
 
             if (enumsToValidate.Any())
             {
@@ -64,7 +63,7 @@ namespace EnumValidation
     internal static class EnumValidator
     {");
 
-            foreach (var info in infos)
+            foreach (EnumValidationInfo info in infos)
             {
                 string indent = "        ";
 
@@ -99,7 +98,7 @@ namespace EnumValidation
         private static void GenerateFlagsValidationMethodBody(GeneratorExecutionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
         {
             int total = 0;
-            foreach (var element in info.Elements)
+            foreach (EnumElementInfo element in info.Elements)
             {
                 total |= element.Value;
             }
@@ -125,7 +124,7 @@ namespace EnumValidation
         {
             int min = 0;
             int? max = null;
-            foreach (var info in elements)
+            foreach (EnumElementInfo info in elements)
             {
                 if (max == null || info.Value != max + 1)
                 {
@@ -151,15 +150,15 @@ namespace EnumValidation
 
         private static IEnumerable<EnumValidationInfo> GetEnumValidationInfo(Compilation compilation, List<SyntaxNode> argumentsToValidate)
         {
-            var flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
+            INamedTypeSymbol? flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
 
             var foundTypes = new HashSet<ITypeSymbol>();
 
             foreach (SyntaxNode argument in argumentsToValidate)
             {
-                var semanticModel = compilation.GetSemanticModel(argument.SyntaxTree);
+                SemanticModel semanticModel = compilation.GetSemanticModel(argument.SyntaxTree);
 
-                var enumType = semanticModel.GetTypeInfo(argument).Type;
+                ITypeSymbol? enumType = semanticModel.GetTypeInfo(argument).Type;
                 if (enumType == null || foundTypes.Contains(enumType))
                 {
                     continue;
