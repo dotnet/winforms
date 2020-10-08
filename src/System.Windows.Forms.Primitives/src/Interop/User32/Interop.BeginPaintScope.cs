@@ -21,7 +21,7 @@ internal static partial class Interop
         internal readonly ref struct BeginPaintScope
 #endif
         {
-            public readonly PAINTSTRUCT _paintStruct;
+            private readonly PAINTSTRUCT _paintStruct;
 
             public Gdi32.HDC HDC { get; }
             public IntPtr HWND { get; }
