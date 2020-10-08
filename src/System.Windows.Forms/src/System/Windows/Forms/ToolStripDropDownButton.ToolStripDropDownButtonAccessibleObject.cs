@@ -15,12 +15,12 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ToolStripDropDownButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private readonly ToolStripDropDownButton ownerItem;
+            private readonly ToolStripDropDownButton _owningToolStripDropDownButton;
 
             public ToolStripDropDownButtonAccessibleObject(ToolStripDropDownButton ownerItem)
                 : base(ownerItem)
             {
-                this.ownerItem = ownerItem;
+                _owningToolStripDropDownButton = ownerItem;
             }
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)

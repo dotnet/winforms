@@ -12,12 +12,12 @@ namespace System.Windows.Forms
     {
         internal class ToolStripSplitButtonExAccessibleObject : ToolStripSplitButtonAccessibleObject
         {
-            private readonly ToolStripSplitButton _ownerItem;
+            private readonly ToolStripSplitButton _owningToolStripSplitButton;
 
             public ToolStripSplitButtonExAccessibleObject(ToolStripSplitButton item)
                 : base(item)
             {
-                _ownerItem = item;
+                _owningToolStripSplitButton = item;
             }
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_ownerItem != null)
+                if (_owningToolStripSplitButton != null)
                 {
                     return true;
                 }
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == UiaCore.UIA.ExpandCollapsePatternId && _ownerItem.HasDropDownItems)
+                if (patternId == UiaCore.UIA.ExpandCollapsePatternId && _owningToolStripSplitButton.HasDropDownItems)
                 {
                     return true;
                 }
@@ -63,9 +63,9 @@ namespace System.Windows.Forms
 
             internal override void Collapse()
             {
-                if (_ownerItem != null && _ownerItem.DropDown != null && _ownerItem.DropDown.Visible)
+                if (_owningToolStripSplitButton != null && _owningToolStripSplitButton.DropDown != null && _owningToolStripSplitButton.DropDown.Visible)
                 {
-                    _ownerItem.DropDown.Close();
+                    _owningToolStripSplitButton.DropDown.Close();
                 }
             }
 
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _ownerItem.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                    return _owningToolStripSplitButton.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
 
@@ -82,9 +82,9 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.FirstChild:
-                        return DropDownItemsCount > 0 ? _ownerItem.DropDown.Items[0].AccessibilityObject : null;
+                        return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[0].AccessibilityObject : null;
                     case UiaCore.NavigateDirection.LastChild:
-                        return DropDownItemsCount > 0 ? _ownerItem.DropDown.Items[_ownerItem.DropDown.Items.Count - 1].AccessibilityObject : null;
+                        return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[_owningToolStripSplitButton.DropDown.Items.Count - 1].AccessibilityObject : null;
                 }
                 return base.FragmentNavigate(direction);
             }
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                         return 0;
                     }
 
-                    return _ownerItem.DropDownItems.Count;
+                    return _owningToolStripSplitButton.DropDownItems.Count;
                 }
             }
         }

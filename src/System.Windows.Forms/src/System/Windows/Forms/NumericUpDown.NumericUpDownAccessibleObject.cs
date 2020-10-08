@@ -12,11 +12,11 @@ namespace System.Windows.Forms
     {
         internal class NumericUpDownAccessibleObject : ControlAccessibleObject
         {
-            private readonly UpDownBase _owner;
+            private readonly UpDownBase _owningNumericUpDown;
 
             public NumericUpDownAccessibleObject(NumericUpDown owner) : base(owner)
             {
-                _owner = owner;
+                _owningNumericUpDown = owner;
             }
 
             public override AccessibleObject GetChild(int index)
@@ -24,13 +24,13 @@ namespace System.Windows.Forms
                 // TextBox child
                 if (index == 0)
                 {
-                    return _owner.TextBox.AccessibilityObject.Parent;
+                    return _owningNumericUpDown.TextBox.AccessibilityObject.Parent;
                 }
 
                 // Up/down buttons
                 if (index == 1)
                 {
-                    return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
+                    return _owningNumericUpDown.UpDownButtonsInternal.AccessibilityObject.Parent;
                 }
 
                 return null;
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner is null)
+                    if (_owningNumericUpDown is null)
                     {
                         return base.RuntimeId;
                     }
@@ -95,8 +95,8 @@ namespace System.Windows.Forms
 
                     var runtimeId = new int[3];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
+                    runtimeId[1] = (int)(long)_owningNumericUpDown.InternalHandle;
+                    runtimeId[2] = _owningNumericUpDown.GetHashCode();
 
                     return runtimeId;
                 }

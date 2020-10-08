@@ -12,11 +12,11 @@ namespace System.Windows.Forms
     {
         internal class ToolStripStatusLabelAccessibleObject : ToolStripLabelAccessibleObject
         {
-            private readonly ToolStripStatusLabel ownerItem;
+            private readonly ToolStripStatusLabel _owningToolStripStatusLabel;
 
             public ToolStripStatusLabelAccessibleObject(ToolStripStatusLabel ownerItem) : base(ownerItem)
             {
-                this.ownerItem = ownerItem;
+                _owningToolStripStatusLabel = ownerItem;
             }
 
             /// <summary>
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                 switch (propertyID)
                 {
                     case UiaCore.UIA.LiveSettingPropertyId:
-                        return ownerItem.LiveSetting;
+                        return _owningToolStripStatusLabel.LiveSetting;
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.TextControlTypeId;
                 }

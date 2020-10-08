@@ -12,27 +12,13 @@ namespace System.Windows.Forms
     {
         internal class ToolStripOverflowButtonAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private string stockName;
-
             public ToolStripOverflowButtonAccessibleObject(ToolStripOverflowButton owner) : base(owner)
             {
             }
 
             public override string Name
             {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-                    if (string.IsNullOrEmpty(stockName))
-                    {
-                        stockName = SR.ToolStripOptions;
-                    }
-                    return stockName;
-                }
+                get => Owner.AccessibleName ?? SR.ToolStripOptions;
                 set => base.Name = value;
             }
 

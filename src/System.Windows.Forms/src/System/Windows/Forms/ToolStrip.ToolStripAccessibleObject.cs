@@ -14,28 +14,28 @@ namespace System.Windows.Forms
     {
         public class ToolStripAccessibleObject : ControlAccessibleObject
         {
-            private readonly ToolStrip owner;
+            private readonly ToolStrip _owningToolStrip;
 
             public ToolStripAccessibleObject(ToolStrip owner) : base(owner)
             {
-                this.owner = owner;
+                _owningToolStrip = owner;
             }
 
             internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-                => owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
+                => _owningToolStrip.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.
             /// </summary>
             public override AccessibleObject HitTest(int x, int y)
             {
-                if (!owner.IsHandleCreated)
+                if (!_owningToolStrip.IsHandleCreated)
                 {
                     return null;
                 }
 
-                Point clientHit = owner.PointToClient(new Point(x, y));
-                ToolStripItem item = owner.GetItemAt(clientHit);
+                Point clientHit = _owningToolStrip.PointToClient(new Point(x, y));
+                ToolStripItem item = _owningToolStrip.GetItemAt(clientHit);
                 return ((item != null) && (item.AccessibilityObject != null))
                     ? item.AccessibilityObject
                     : base.HitTest(x, y);
@@ -48,33 +48,33 @@ namespace System.Windows.Forms
             //
             public override AccessibleObject GetChild(int index)
             {
-                if ((owner is null) || (owner.Items is null))
+                if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
                 {
                     return null;
                 }
 
-                if (index == 0 && owner.Grip.Visible)
+                if (index == 0 && _owningToolStrip.Grip.Visible)
                 {
-                    return owner.Grip.AccessibilityObject;
+                    return _owningToolStrip.Grip.AccessibilityObject;
                 }
-                else if (owner.Grip.Visible && index > 0)
+                else if (_owningToolStrip.Grip.Visible && index > 0)
                 {
                     index--;
                 }
 
-                if (index < owner.Items.Count)
+                if (index < _owningToolStrip.Items.Count)
                 {
                     ToolStripItem item = null;
                     int myIndex = 0;
 
                     // First we walk through the head aligned items.
-                    for (int i = 0; i < owner.Items.Count; ++i)
+                    for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
                     {
-                        if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Left)
+                        if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Left)
                         {
                             if (myIndex == index)
                             {
-                                item = owner.Items[i];
+                                item = _owningToolStrip.Items[i];
                                 break;
                             }
                             myIndex++;
@@ -84,13 +84,13 @@ namespace System.Windows.Forms
                     // If we didn't find it, then we walk through the tail aligned items.
                     if (item is null)
                     {
-                        for (int i = 0; i < owner.Items.Count; ++i)
+                        for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
                         {
-                            if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Right)
+                            if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Right)
                             {
                                 if (myIndex == index)
                                 {
-                                    item = owner.Items[i];
+                                    item = _owningToolStrip.Items[i];
                                     break;
                                 }
                                 myIndex++;
@@ -111,9 +111,9 @@ namespace System.Windows.Forms
                     return item.AccessibilityObject;
                 }
 
-                if (owner.CanOverflow && owner.OverflowButton.Visible && index == owner.Items.Count)
+                if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && index == _owningToolStrip.Items.Count)
                 {
-                    return owner.OverflowButton.AccessibilityObject;
+                    return _owningToolStrip.OverflowButton.AccessibilityObject;
                 }
                 return null;
             }
@@ -124,24 +124,24 @@ namespace System.Windows.Forms
             /// </summary>
             public override int GetChildCount()
             {
-                if ((owner is null) || (owner.Items is null))
+                if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
                 {
                     return -1;
                 }
 
                 int count = 0;
-                for (int i = 0; i < owner.Items.Count; i++)
+                for (int i = 0; i < _owningToolStrip.Items.Count; i++)
                 {
-                    if (owner.Items[i].Available)
+                    if (_owningToolStrip.Items[i].Available)
                     {
                         count++;
                     }
                 }
-                if (owner.Grip.Visible)
+                if (_owningToolStrip.Grip.Visible)
                 {
                     count++;
                 }
-                if (owner.CanOverflow && owner.OverflowButton.Visible)
+                if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible)
                 {
                     count++;
                 }
@@ -150,12 +150,12 @@ namespace System.Windows.Forms
 
             internal AccessibleObject GetChildFragment(int fragmentIndex, bool getOverflowItem = false)
             {
-                ToolStripItemCollection items = getOverflowItem ? owner.OverflowItems : owner.DisplayedItems;
+                ToolStripItemCollection items = getOverflowItem ? _owningToolStrip.OverflowItems : _owningToolStrip.DisplayedItems;
                 int childFragmentCount = items.Count;
 
-                if (!getOverflowItem && owner.CanOverflow && owner.OverflowButton.Visible && fragmentIndex == childFragmentCount - 1)
+                if (!getOverflowItem && _owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && fragmentIndex == childFragmentCount - 1)
                 {
-                    return owner.OverflowButton.AccessibilityObject;
+                    return _owningToolStrip.OverflowButton.AccessibilityObject;
                 }
 
                 for (int index = 0; index < childFragmentCount; index++)
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
 
                 for (int index = 0; index < childFragmentCount; index++)
                 {
-                    ToolStripItem item = owner.Items[index];
+                    ToolStripItem item = _owningToolStrip.Items[index];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Right && fragmentIndex == index)
                     {
                         if (item is ToolStripControlHost controlHostItem)
@@ -191,32 +191,32 @@ namespace System.Windows.Forms
 
             internal int GetChildOverflowFragmentCount()
             {
-                if (owner is null || owner.OverflowItems is null)
+                if (_owningToolStrip is null || _owningToolStrip.OverflowItems is null)
                 {
                     return -1;
                 }
 
-                return owner.OverflowItems.Count;
+                return _owningToolStrip.OverflowItems.Count;
             }
 
             internal int GetChildFragmentCount()
             {
-                if (owner is null || owner.DisplayedItems is null)
+                if (_owningToolStrip is null || _owningToolStrip.DisplayedItems is null)
                 {
                     return -1;
                 }
 
-                return owner.DisplayedItems.Count;
+                return _owningToolStrip.DisplayedItems.Count;
             }
 
             internal int GetChildFragmentIndex(ToolStripItem.ToolStripItemAccessibleObject child)
             {
-                if (owner is null || owner.Items is null)
+                if (_owningToolStrip is null || _owningToolStrip.Items is null)
                 {
                     return -1;
                 }
 
-                if (child.Owner == owner.Grip)
+                if (child.Owner == _owningToolStrip.Grip)
                 {
                     return 0;
                 }
@@ -224,20 +224,20 @@ namespace System.Windows.Forms
                 ToolStripItemCollection items;
                 ToolStripItemPlacement placement = child.Owner.Placement;
 
-                if (owner is ToolStripOverflow)
+                if (_owningToolStrip is ToolStripOverflow)
                 {
                     // Overflow items in ToolStripOverflow host are in DisplayedItems collection.
-                    items = owner.DisplayedItems;
+                    items = _owningToolStrip.DisplayedItems;
                 }
                 else
                 {
-                    if (owner.CanOverflow && owner.OverflowButton.Visible && child.Owner == owner.OverflowButton)
+                    if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && child.Owner == _owningToolStrip.OverflowButton)
                     {
                         return GetChildFragmentCount() - 1;
                     }
 
                     // Items can be either in DisplayedItems or in OverflowItems (if overflow)
-                    items = (placement == ToolStripItemPlacement.Main) ? owner.DisplayedItems : owner.OverflowItems;
+                    items = (placement == ToolStripItemPlacement.Main) ? _owningToolStrip.DisplayedItems : _owningToolStrip.OverflowItems;
                 }
 
                 // First we walk through the head aligned items.
@@ -265,32 +265,32 @@ namespace System.Windows.Forms
 
             internal int GetChildIndex(ToolStripItem.ToolStripItemAccessibleObject child)
             {
-                if ((owner is null) || (owner.Items is null))
+                if ((_owningToolStrip is null) || (_owningToolStrip.Items is null))
                 {
                     return -1;
                 }
 
                 int index = 0;
-                if (owner.Grip.Visible)
+                if (_owningToolStrip.Grip.Visible)
                 {
-                    if (child.Owner == owner.Grip)
+                    if (child.Owner == _owningToolStrip.Grip)
                     {
                         return 0;
                     }
                     index = 1;
                 }
 
-                if (owner.CanOverflow && owner.OverflowButton.Visible && child.Owner == owner.OverflowButton)
+                if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && child.Owner == _owningToolStrip.OverflowButton)
                 {
-                    return owner.Items.Count + index;
+                    return _owningToolStrip.Items.Count + index;
                 }
 
                 // First we walk through the head aligned items.
-                for (int i = 0; i < owner.Items.Count; ++i)
+                for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
                 {
-                    if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Left)
+                    if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Left)
                     {
-                        if (child.Owner == owner.Items[i])
+                        if (child.Owner == _owningToolStrip.Items[i])
                         {
                             return index;
                         }
@@ -299,11 +299,11 @@ namespace System.Windows.Forms
                 }
 
                 // If we didn't find it, then we walk through the tail aligned items.
-                for (int i = 0; i < owner.Items.Count; ++i)
+                for (int i = 0; i < _owningToolStrip.Items.Count; ++i)
                 {
-                    if (owner.Items[i].Available && owner.Items[i].Alignment == ToolStripItemAlignment.Right)
+                    if (_owningToolStrip.Items[i].Available && _owningToolStrip.Items[i].Alignment == ToolStripItemAlignment.Right)
                     {
-                        if (child.Owner == owner.Items[i])
+                        if (child.Owner == _owningToolStrip.Items[i])
                         {
                             return index;
                         }

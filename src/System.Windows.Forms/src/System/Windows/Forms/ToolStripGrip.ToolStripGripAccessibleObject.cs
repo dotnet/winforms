@@ -12,27 +12,13 @@ namespace System.Windows.Forms
     {
         internal class ToolStripGripAccessibleObject : ToolStripButtonAccessibleObject
         {
-            private string stockName;
-
             public ToolStripGripAccessibleObject(ToolStripGrip owner) : base(owner)
             {
             }
 
             public override string Name
             {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-                    if (string.IsNullOrEmpty(stockName))
-                    {
-                        stockName = SR.ToolStripGripAccessibleName;
-                    }
-                    return stockName;
-                }
+                get => Owner.AccessibleName ?? SR.ToolStripGripAccessibleName;
                 set => base.Name = value;
             }
 

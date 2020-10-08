@@ -10,16 +10,16 @@ namespace System.Windows.Forms
     {
         public class ToolStripSplitButtonAccessibleObject : ToolStripItemAccessibleObject
         {
-            private readonly ToolStripSplitButton _owner;
+            private readonly ToolStripSplitButton _owningToolStripSplitButton;
 
             public ToolStripSplitButtonAccessibleObject(ToolStripSplitButton item) : base(item)
             {
-                _owner = item;
+                _owningToolStripSplitButton = item;
             }
 
             public override void DoDefaultAction()
             {
-                _owner.PerformButtonClick();
+                _owningToolStripSplitButton.PerformButtonClick();
             }
         }
     }

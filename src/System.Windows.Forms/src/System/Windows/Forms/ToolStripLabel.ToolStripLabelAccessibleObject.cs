@@ -12,18 +12,18 @@ namespace System.Windows.Forms
     {
         internal class ToolStripLabelAccessibleObject : ToolStripItemAccessibleObject
         {
-            private readonly ToolStripLabel ownerItem;
+            private readonly ToolStripLabel _owningToolStripLabel;
 
             public ToolStripLabelAccessibleObject(ToolStripLabel ownerItem) : base(ownerItem)
             {
-                this.ownerItem = ownerItem;
+                _owningToolStripLabel = ownerItem;
             }
 
             public override string DefaultAction
             {
                 get
                 {
-                    if (ownerItem.IsLink)
+                    if (_owningToolStripLabel.IsLink)
                     {
                         return SR.AccessibleActionClick;
                     }
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (ownerItem.IsLink)
+                if (_owningToolStripLabel.IsLink)
                 {
                     base.DoDefaultAction();
                 }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
-                    return (ownerItem.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
+                    return (_owningToolStripLabel.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
                 }
             }
 

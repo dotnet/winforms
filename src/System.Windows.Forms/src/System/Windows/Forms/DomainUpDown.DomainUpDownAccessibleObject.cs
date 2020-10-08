@@ -12,14 +12,14 @@ namespace System.Windows.Forms
     {
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
-            private DomainItemListAccessibleObject itemList;
-            private readonly UpDownBase _owner;
+            private DomainItemListAccessibleObject _domainItemList;
+            private readonly UpDownBase _owningDomainUpDown;
 
             /// <summary>
             /// </summary>
             public DomainUpDownAccessibleObject(DomainUpDown owner) : base(owner)
             {
-                _owner = owner;
+                _owningDomainUpDown = owner;
             }
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
@@ -49,12 +49,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (itemList is null)
+                    if (_domainItemList is null)
                     {
-                        itemList = new DomainItemListAccessibleObject(this);
+                        _domainItemList = new DomainItemListAccessibleObject(this);
                     }
 
-                    return itemList;
+                    return _domainItemList;
                 }
             }
 
@@ -81,10 +81,10 @@ namespace System.Windows.Forms
                 {
                     // TextBox child
                     case 0:
-                        return _owner.TextBox.AccessibilityObject.Parent;
+                        return _owningDomainUpDown.TextBox.AccessibilityObject.Parent;
                     // Up/down buttons
                     case 1:
-                        return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
+                        return _owningDomainUpDown.UpDownButtonsInternal.AccessibilityObject.Parent;
                     case 2:
                         return ItemList;
                     default:
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner is null)
+                    if (_owningDomainUpDown is null)
                     {
                         return base.RuntimeId;
                     }
@@ -113,8 +113,8 @@ namespace System.Windows.Forms
 
                     var runtimeId = new int[3];
                     runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
+                    runtimeId[1] = (int)(long)_owningDomainUpDown.InternalHandle;
+                    runtimeId[2] = _owningDomainUpDown.GetHashCode();
 
                     return runtimeId;
                 }

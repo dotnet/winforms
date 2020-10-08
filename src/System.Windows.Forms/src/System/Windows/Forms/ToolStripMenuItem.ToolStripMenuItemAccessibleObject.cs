@@ -15,18 +15,18 @@ namespace System.Windows.Forms
         /// </summary>
         internal class ToolStripMenuItemAccessibleObject : ToolStripDropDownItemAccessibleObject
         {
-            private readonly ToolStripMenuItem ownerItem;
+            private readonly ToolStripMenuItem _owningToolStripMenuItem;
 
             public ToolStripMenuItemAccessibleObject(ToolStripMenuItem ownerItem) : base(ownerItem)
             {
-                this.ownerItem = ownerItem;
+                _owningToolStripMenuItem = ownerItem;
             }
 
             public override AccessibleStates State
             {
                 get
                 {
-                    if (ownerItem.Enabled)
+                    if (_owningToolStripMenuItem.Enabled)
                     {
                         AccessibleStates state = base.State;
 
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                             state &= ~AccessibleStates.Pressed;
                         }
 
-                        if (ownerItem.Checked)
+                        if (_owningToolStripMenuItem.Checked)
                         {
                             state |= AccessibleStates.Checked;
                         }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 }
                 else if (propertyID == UiaCore.UIA.AcceleratorKeyPropertyId)
                 {
-                    return ownerItem.GetShortcutText();
+                    return _owningToolStripMenuItem.GetShortcutText();
                 }
                 else
                 {
