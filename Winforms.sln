@@ -139,7 +139,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Intero
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPrintPreviewDialogTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiPrintPreviewDialogTests\MauiPrintPreviewDialogTests.csproj", "{2F0973AD-498D-45B6-82ED-CD672F7A03AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.SourceGenerators", "src\System.Windows.Forms.SourceGenerators\System.Windows.Forms.SourceGenerators.csproj", "{3BB220A9-7BC9-4D45-9DC7-B5A1D659B478}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.SourceGenerators", "src\System.Windows.Forms.SourceGenerators\src\System.Windows.Forms.SourceGenerators.csproj", "{3BB220A9-7BC9-4D45-9DC7-B5A1D659B478}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
