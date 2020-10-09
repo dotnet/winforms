@@ -4406,11 +4406,10 @@ namespace System.Windows.Forms.Tests
             item1.Selected = selectItems;
             item2.Selected = selectItems;
 
-            // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown?redirectedfrom=MSDN
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)Keys.Space;
             uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4438,11 +4437,10 @@ namespace System.Windows.Forms.Tests
             control.Groups.Add(group);
             control.CreateControl();
 
-            // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown?redirectedfrom=MSDN
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)key;
             uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4484,11 +4482,10 @@ namespace System.Windows.Forms.Tests
 
                 item2.Selected = true;
 
-                // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown?redirectedfrom=MSDN
+                // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
                 // The MSDN page tells us what bits of lParam to use for each of the parameters.
                 // All we need to do is some bit shifting to assemble lParam
                 // lParam = repeatCount | (scanCode << 16)
-                // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
                 uint keyCode = (uint)(key_s == "Keys.Down" ? Keys.Down : Keys.Up);
                 uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4530,11 +4527,10 @@ namespace System.Windows.Forms.Tests
 
             control.CreateControl();
 
-            // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown?redirectedfrom=MSDN
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)key;
             uint lParam = (0x00000001 | keyCode << 16);
 
@@ -4573,11 +4569,10 @@ namespace System.Windows.Forms.Tests
             item2.Checked = false;
             control.FocusedItem = item1;
 
-            // https://docs.microsoft.com/en-us/windows/win32/inputdev/wm-keydown?redirectedfrom=MSDN
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keydown
             // The MSDN page tells us what bits of lParam to use for each of the parameters.
             // All we need to do is some bit shifting to assemble lParam
             // lParam = repeatCount | (scanCode << 16)
-            // The source: https://stackoverflow.com/questions/21994276/setting-wm-keydown-lparam-parameters
             uint keyCode = (uint)Keys.Space;
             uint lParam = (0x00000001 | keyCode << 16);
 
