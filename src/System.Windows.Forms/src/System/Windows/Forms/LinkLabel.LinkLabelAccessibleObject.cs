@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if (index >= 0 && index < ((LinkLabel)Owner).Links.Count)
                 {
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
@@ -44,7 +42,7 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            public override AccessibleObject HitTest(int x, int y)
+            public override AccessibleObject? HitTest(int x, int y)
             {
                 if (!Owner.IsHandleCreated)
                 {
