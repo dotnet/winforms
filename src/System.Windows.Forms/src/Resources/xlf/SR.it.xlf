@@ -10803,7 +10803,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="UpDownEditLocalizedControlTypeName">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Modifica</target>
         <note />
       </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">

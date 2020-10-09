@@ -3,13 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace WinformsControlsTest
 {
@@ -37,6 +33,11 @@ namespace WinformsControlsTest
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressBar1.Value = e.ProgressPercentage;
+        }
+
+        private void Button1_Click(object sender, System.EventArgs e)
+        {
+            textBox1.Enabled = !textBox1.Enabled;
         }
 
         private void MenuStripScaling_Load(object sender, EventArgs e)

@@ -10803,7 +10803,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="UpDownEditLocalizedControlTypeName">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Upravit</target>
         <note />
       </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">

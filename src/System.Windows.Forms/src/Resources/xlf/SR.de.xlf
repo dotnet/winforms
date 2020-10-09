@@ -10803,7 +10803,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="UpDownEditLocalizedControlTypeName">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Bearbeiten</target>
         <note />
       </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">

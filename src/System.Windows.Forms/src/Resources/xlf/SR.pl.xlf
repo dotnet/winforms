@@ -10803,7 +10803,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="UpDownEditLocalizedControlTypeName">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">Edytuj</target>
         <note />
       </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">

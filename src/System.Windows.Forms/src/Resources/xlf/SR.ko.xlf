@@ -10803,7 +10803,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="UpDownEditLocalizedControlTypeName">
         <source>Edit</source>
-        <target state="new">Edit</target>
+        <target state="translated">편집</target>
         <note />
       </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
