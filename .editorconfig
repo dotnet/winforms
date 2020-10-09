@@ -72,6 +72,10 @@ dotnet_style_null_propagation = true:suggestion
 
 # C# files
 [*.cs]
+
+# .NET diagnostic
+dotnet_diagnostic.RS0041.severity = none
+
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
@@ -177,7 +181,3 @@ end_of_line = lf
 
 [*.{cmd,bat}]
 end_of_line = crlf
-
-
-# .NET diagnostic
-dotnet_diagnostic.RS0041.severity = none
