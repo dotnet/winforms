@@ -18,6 +18,8 @@ stages:
       enablePublishUsingPipelines: true
       enableTelemetry: true
       helixRepo: ${{ parameters.repoName }}
+      ${{ if eq(variables['System.TeamProject'], 'public') }}:
+        enableRichCodeNavigation: true
 
       jobs:
       - job: Windows
@@ -25,7 +27,6 @@ stages:
           ${{ if eq(variables['System.TeamProject'], 'public') }}:
             name: NetCorePublic-Pool
             queue: BuildPool.Windows.10.Amd64.VS2019.Open
-            enableRichCodeNavigation: true
           ${{ if ne(variables['System.TeamProject'], 'public') }}:
             name: NetCoreInternal-Pool
             queue: BuildPool.Windows.10.Amd64.VS2019.Pre
