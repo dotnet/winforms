@@ -38,13 +38,17 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ListViewSubItemAccessibleObject_GetPropertyValue_returns_correct_values()
+        [WinFormsTheory]
+        [InlineData(true, 0, (int)UiaCore.UIA.EditControlTypeId)]
+        [InlineData(false, 0, (int)UiaCore.UIA.TextControlTypeId)]
+        [InlineData(true, 1, (int)UiaCore.UIA.TextControlTypeId)]
+        [InlineData(false, 1, (int)UiaCore.UIA.TextControlTypeId)]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_returns_correct_values(bool labelEdit, int childId, int expectedControlType)
         {
             using ListView list = new ListView();
             ListViewItem listViewItem1 = new ListViewItem(new string[] {
             "Test 1",
-            "Item 1",
+            "Test 2",
             "Something 1"}, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
@@ -58,20 +62,21 @@ namespace System.Windows.Forms.Tests
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;
+            list.LabelEdit = labelEdit;
 
-            AccessibleObject accessibleObject = listViewItem1.AccessibilityObject.GetChild(0);
+            AccessibleObject accessibleObject = listViewItem1.AccessibilityObject.GetChild(childId);
 
             object accessibleName = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
-            Assert.Equal("Test 1", accessibleName);
+            Assert.Equal($"Test {childId + 1}", accessibleName);
 
             object automationId = accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
-            Assert.Equal("ListViewSubItem-0", automationId);
+            Assert.Equal($"ListViewSubItem-{childId}", automationId);
 
             object frameworkId = accessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId);
             Assert.Equal("WinForm", frameworkId);
 
             object controlType = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = UiaCore.UIA.TextControlTypeId;
+            UiaCore.UIA expected = (UiaCore.UIA)expectedControlType;
             Assert.Equal(expected, controlType);
 
             Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsGridItemPatternAvailablePropertyId));

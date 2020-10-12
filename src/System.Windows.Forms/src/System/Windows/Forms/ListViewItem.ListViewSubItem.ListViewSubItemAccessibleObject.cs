@@ -109,7 +109,11 @@ namespace System.Windows.Forms
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                     => propertyID switch
                     {
-                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
+                        // All subitems are "text" except the first.
+                        // It can be "edit" if ListView.LabelEdit is true.
+                        UiaCore.UIA.ControlTypePropertyId => _owningListView.LabelEdit && GetCurrentSubItemIndex() == 0
+                                                             ? UiaCore.UIA.EditControlTypeId
+                                                             : UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.NamePropertyId => Name,
                         UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
 #pragma warning disable CA1837 // Use 'Environment.ProcessId'
