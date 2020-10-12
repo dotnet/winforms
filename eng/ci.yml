@@ -21,6 +21,7 @@ stages:
 
       jobs:
       - job: Windows
+        enableRichCodeNavigation: true
         pool:
           ${{ if eq(variables['System.TeamProject'], 'public') }}:
             name: NetCorePublic-Pool

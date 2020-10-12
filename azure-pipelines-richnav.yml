@@ -1,0 +1,49 @@
+parameters:
+  # parameters should default to values for running in the External / Public
+  # be read from a user-defined variable (Azure DevOps limitation)
+  agentPoolName: NetCorePublic-Pool
+  agentPool: 'BuildPool.Windows.10.Amd64.VS2019.Open'
+  repoName: dotnet/winforms
+
+stages:
+- stage: build
+  displayName: Build
+  jobs:
+  - template: /eng/common/templates/jobs/jobs.yml
+    parameters:
+      enableMicrobuild: true
+      enablePublishBuildArtifacts: true
+      enablePublishTestResults: true
+      enablePublishBuildAssets: true
+      enablePublishUsingPipelines: true
+      enableTelemetry: true
+      helixRepo: ${{ parameters.repoName }}
+
+      jobs:
+      - job: Windows
+        enableRichCodeNavigation: true
+        _BuildConfig: Debug
+        pool:
+          ${{ if eq(variables['System.TeamProject'], 'public') }}:
+            name: NetCorePublic-Pool
+            queue: BuildPool.Windows.10.Amd64.VS2019.Open
+          ${{ if ne(variables['System.TeamProject'], 'public') }}:
+            name: NetCoreInternal-Pool
+            queue: BuildPool.Windows.10.Amd64.VS2019.Pre
+
+        variables:
+
+        steps:
+        - checkout: self
+          clean: true
+
+        # Build and rename binlog
+        # The /p:Coverage argument is passed here since some build properties change to accommodate running with
+        # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
+        # https://github.com/tonerdo/coverlet/issues/363.
+        - script: eng\cibuild.cmd
+            -restore
+            -build
+            -configuration $(_BuildConfig)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog
+          displayName: Build
