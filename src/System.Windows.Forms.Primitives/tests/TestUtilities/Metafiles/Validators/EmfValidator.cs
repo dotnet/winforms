@@ -45,13 +45,13 @@ namespace System.Windows.Forms.Metafiles
                         catch (XunitException ex)
                         {
                             throw new WrappedXunitException(
-                                $"\nValidator index {currentIndex}: {currentValidator!.GetType().Name} failed\n\n{emf.RecordsToStringWithState(state)}",
+                                $"\nValidator index {currentIndex}: {currentValidator!.GetType().Name} failed\n\n{emf.RecordsToString()}",
                                 ex);
                         }
                     }
                     else
                     {
-                        Assert.False(IsRenderingRecord(record.Type), $"Got unexpected {record.Type}\n\n{emf.RecordsToStringWithState(state)}");
+                        Assert.False(IsRenderingRecord(record.Type), $"Got unexpected {record.Type}\n\n{emf.RecordsToString()}");
                     }
 
                     return true;
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Metafiles
             {
                 Assert.False(
                     currentValidator.FailIfIncomplete,
-                    $"{currentValidator.GetType().Name} did not receive expected records\n\n{emf.RecordsToStringWithState(state)}");
+                    $"{currentValidator.GetType().Name} did not receive expected records\n\n{emf.RecordsToString()}");
             }
         }
 
