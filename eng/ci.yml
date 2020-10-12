@@ -70,14 +70,14 @@ stages:
             - _InternalRuntimeDownloadArgs: /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
                 /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
 
-          # - ${{ if and(eq(variables['System.TeamProject'], 'public'), eq(variables['_BuildConfig'], 'Debug')) }}:
-          #   enableRichCodeNavigation: true
+          - ${{ if and(eq(variables['System.TeamProject'], 'public'), eq(variables['_BuildConfig'], 'Debug')) }}:
+            enableRichCodeNavigation: true
 
         strategy:
           matrix:
             ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
               Debug:
-                enableRichCodeNavigation: true
+                # enableRichCodeNavigation: true
                 _BuildConfig: Debug
                 # override some variables for debug
                 _PublishType: none
