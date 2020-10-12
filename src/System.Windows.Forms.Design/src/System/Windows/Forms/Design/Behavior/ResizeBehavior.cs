@@ -464,7 +464,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             // When DesignerWindowPane has scrollbars and we resize, shrinking the the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
-            if (_lastMouseAbs != null)
+            if (_lastMouseAbs != Point.Empty)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
                 User32.ClientToScreen(new HandleRef(this, _behaviorService.AdornerWindowControl.Handle), ref mouseLocAbs);
