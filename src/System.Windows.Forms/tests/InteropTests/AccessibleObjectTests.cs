@@ -668,8 +668,11 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsFact]
         public void AccesibleObject_IScrollItemProviderScrollIntoView_Invoke_ReturnsExpected()
         {
-            var o = new AccessibleObject();
-            AssertSuccess(Test_IScrollItemProviderScrollIntoView(o));
+            using (new NoAssertContext())
+            {
+                var o = new AccessibleObject();
+                AssertSuccess(Test_IScrollItemProviderScrollIntoView(o));
+            }
         }
 
         private class CustomParentAccessibleObject : AccessibleObject

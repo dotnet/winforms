@@ -1994,6 +1994,7 @@ namespace System.Windows.Forms
 
         internal virtual void ScrollIntoView()
         {
+            Debug.Fail($"{nameof(ScrollIntoView)}() is not overriden");
         }
     }
 }
