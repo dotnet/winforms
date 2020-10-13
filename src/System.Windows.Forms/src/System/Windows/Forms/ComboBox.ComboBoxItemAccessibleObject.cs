@@ -58,6 +58,7 @@ namespace System.Windows.Forms
             ///  Gets the ComboBox item default action.
             /// </summary>
             public override string? DefaultAction => _systemIAccessible?.accDefaultAction[GetChildId()];
+
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (direction == UiaCore.NavigateDirection.Parent)
