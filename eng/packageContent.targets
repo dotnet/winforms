@@ -17,7 +17,7 @@
 
     <PropertyGroup>
       <!-- Also in global.json -->
-      <DotNetApiDocsNet50>0.0.0.2</DotNetApiDocsNet50>
+      <DotNetApiDocsNet50>0.0.0.3</DotNetApiDocsNet50>
 
       <!-- 
         The xml file should ALWAYS come from the dotnet-api-docs artifact.
