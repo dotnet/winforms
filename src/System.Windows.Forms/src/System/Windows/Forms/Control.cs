@@ -3837,7 +3837,7 @@ namespace System.Windows.Forms
             while (!processed)
             {
                 //Get the thread's exit code, if we found the thread as expected
-                if (threadHandle != null)
+                if (threadHandle != IntPtr.Zero)
                 {
                     returnValue = Kernel32.GetExitCodeThread(threadHandle, out exitCode);
                 }
