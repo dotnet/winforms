@@ -140,72 +140,57 @@ namespace System.Windows.Forms.Tests
             Assert.True(list.HandleCreated);
         }
 
-        [WinFormsFact]
-        public void ImageCollection_Item_Get32bppColorDepth_Success()
+        public static IEnumerable<object[]> ImageCollection_Item_Get32bppColorDepth_TestData()
         {
-            using var image1bppIndexedEmpty = new Bitmap(16, 16, PixelFormat.Format1bppIndexed);
-            using var image1bppIndexedCustom = new Bitmap(16, 16, PixelFormat.Format1bppIndexed);
-            using var image24bppRgbEmpty = new Bitmap(16, 16, PixelFormat.Format24bppRgb);
-            using var image24bppRgbCustom = new Bitmap(16, 16, PixelFormat.Format24bppRgb);
-            image24bppRgbCustom.SetPixel(0, 0, Color.Red);
-            image24bppRgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            using var image32bppRgbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppRgb);
-            using var image32bppRgbCustom = new Bitmap(16, 16, PixelFormat.Format32bppRgb);
-            image32bppRgbCustom.SetPixel(0, 0, Color.Red);
-            image32bppRgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            using var image32bppArgbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
-            using var image32bppArgbCustom = new Bitmap(16, 16, PixelFormat.Format32bppArgb);
-            image32bppArgbCustom.SetPixel(0, 0, Color.Red);
-            image32bppArgbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-            using var image32bppPargbEmpty = new Bitmap(16, 16, PixelFormat.Format32bppPArgb);
-            using var image32bppPargbCustom = new Bitmap(16, 16, PixelFormat.Format32bppPArgb);
-            image32bppPargbCustom.SetPixel(0, 0, Color.Red);
-            image32bppPargbCustom.SetPixel(1, 0, Color.FromArgb(200, 50, 75, 100));
-
-            // Add all bitmaps to an array for ease of tracking
-            Bitmap[] bitmaps = new[]
+            var pixelFormats = new[]
             {
-                image1bppIndexedEmpty,
-                image1bppIndexedCustom,
-                image24bppRgbEmpty,
-                image24bppRgbCustom,
-                image32bppRgbEmpty,
-                image32bppRgbCustom,
-                image32bppArgbEmpty,
-                image32bppArgbCustom,
-                image32bppPargbEmpty,
-                image32bppPargbCustom,
+                PixelFormat.Format1bppIndexed,
+                PixelFormat.Format24bppRgb,
+                PixelFormat.Format32bppRgb,
+                PixelFormat.Format32bppArgb,
+                PixelFormat.Format32bppPArgb,
             };
+
+            // SetPixel is not supported for images with indexed pixel formats.
+
+            foreach (PixelFormat pixelFormat in pixelFormats)
+            {
+                yield return new object[] { pixelFormat, Color.Empty, Color.Empty };
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100) };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageCollection_Item_Get32bppColorDepth_TestData))]
+        public void ImageCollection_Item_Get32bppColorDepth_Success(PixelFormat pixelFormat, Color pixel00Color, Color pixel10Color)
+        {
+            using var imageFiller1 = new Bitmap(16, 16, pixelFormat);
+            using var imageFiller2 = new Bitmap(16, 16, pixelFormat);
+
+            using var image = new Bitmap(16, 16, pixelFormat);
+            if (pixel00Color != Color.Empty)
+                image.SetPixel(0, 0, pixel00Color);
+            if (pixel10Color != Color.Empty)
+                image.SetPixel(1, 0, pixel10Color);
 
             using var list = new ImageList
             {
                 ColorDepth = ColorDepth.Depth32Bit
             };
             ImageList.ImageCollection collection = list.Images;
+            collection.Add(imageFiller1);
+            collection.Add(image);
+            collection.Add(imageFiller2);
 
-            collection.Add(image1bppIndexedEmpty);
-            collection.Add(image1bppIndexedCustom);
-            collection.Add(image24bppRgbEmpty);
-            collection.Add(image24bppRgbCustom);
-            collection.Add(image32bppRgbEmpty);
-            collection.Add(image32bppRgbCustom);
-            collection.Add(image32bppArgbEmpty);
-            collection.Add(image32bppArgbCustom);
-            collection.Add(image32bppPargbEmpty);
-            collection.Add(image32bppPargbCustom);
+            // By getting a bitmap from the ImageListcollection ImageList will clone the original bitmap.
+            // Assert that the new bitmap contains all the same properties.
 
-            for (int i = 0; i < collection.Count; i++)
-            {
-                // By getting a bitmap from the ImageListcollection ImageList will clone the original bitmap.
-                // Assert that the new bitmap contains all the same properties.
+            Bitmap resultImage = Assert.IsType<Bitmap>(collection[1]);
 
-                Bitmap resultImage = Assert.IsType<Bitmap>(collection[i]);
-
-                Assert.Equal(bitmaps[i].Size, resultImage.Size);
-                Assert.Equal(bitmaps[i].PixelFormat, resultImage.PixelFormat);
-                Assert.Equal(bitmaps[i].GetPixel(0, 0), resultImage.GetPixel(0, 0));
-                Assert.Equal(bitmaps[i].GetPixel(1, 0), resultImage.GetPixel(1, 0));
-            }
+            Assert.Equal(image.Size, resultImage.Size);
+            Assert.Equal(PixelFormat.Format32bppArgb, resultImage.PixelFormat);
+            Assert.Equal(image.GetPixel(0, 0), resultImage.GetPixel(0, 0));
+            Assert.Equal(image.GetPixel(1, 0), resultImage.GetPixel(1, 0));
         }
 
         [WinFormsTheory]
@@ -885,7 +870,7 @@ namespace System.Windows.Forms.Tests
             foreach (Color transparentColor in new Color[] { Color.Transparent, Color.FromArgb(0x12, 0x34, 0x56, 0x78), Color.Empty, Color.Black })
             {
                 yield return new object[] { transparentColor, new Bitmap(16, 16), 1 };
-                yield return new object[] { transparentColor, new Bitmap(32, 16), 2};
+                yield return new object[] { transparentColor, new Bitmap(32, 16), 2 };
                 yield return new object[] { transparentColor, new Bitmap(256, 16), 16 };
 
                 var bitmap = new Bitmap(16, 16);
