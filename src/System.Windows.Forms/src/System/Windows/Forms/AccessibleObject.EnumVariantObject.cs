@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             {
                 if (ppEnum is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.E_POINTER;
                 }
 
                 ppEnum[0] = new EnumVariantObject(owner, currentChild);
