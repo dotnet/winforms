@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Follow the prerequisites listed at [Building CoreFX on Windows][corefx-windows-instructions]
+Follow the prerequisites listed at [Developer Guide](developer-guide.md).
 
 ## Building
 
