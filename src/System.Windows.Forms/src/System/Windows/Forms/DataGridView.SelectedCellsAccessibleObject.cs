@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class DataGridView
@@ -57,7 +55,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if (index >= 0 && index < _owner.GetCellCount(DataGridViewElementStates.Selected))
                 {
@@ -79,7 +77,7 @@ namespace System.Windows.Forms
                 return this;
             }
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
                 if (_owner.CurrentCell != null && _owner.CurrentCell.Selected)
                 {
@@ -91,7 +89,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)
                 {

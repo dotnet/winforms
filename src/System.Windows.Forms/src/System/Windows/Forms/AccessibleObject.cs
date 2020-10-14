@@ -429,7 +429,7 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => null;
 
-        internal virtual UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) => this;
+        internal virtual UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y) => this;
 
         internal virtual UiaCore.IRawElementProviderFragment? GetFocus() => null;
 
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
 
         UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
 
-        object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
+        object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 
         object? UiaCore.IRawElementProviderFragmentRoot.GetFocus() => GetFocus();
 

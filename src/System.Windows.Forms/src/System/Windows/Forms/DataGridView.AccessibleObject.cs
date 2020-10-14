@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -13,11 +11,11 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewAccessibleObject : ControlAccessibleObject
         {
-            private int[] runtimeId; // Used by UIAutomation
+            private int[]? runtimeId; // Used by UIAutomation
 
             readonly DataGridView owner;
-            DataGridViewTopRowAccessibleObject topRowAccessibilityObject;
-            DataGridViewSelectedCellsAccessibleObject selectedCellsAccessibilityObject;
+            DataGridViewTopRowAccessibleObject? topRowAccessibilityObject;
+            DataGridViewSelectedCellsAccessibleObject? selectedCellsAccessibilityObject;
 
             public DataGridViewAccessibleObject(DataGridView owner)
                 : base(owner)
@@ -68,11 +66,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if (owner.Columns.Count == 0)
                 {
-                    System.Diagnostics.Debug.Assert(GetChildCount() == 0);
+                    Diagnostics.Debug.Assert(GetChildCount() == 0);
                     return null;
                 }
 
@@ -145,7 +143,7 @@ namespace System.Windows.Forms
                 return childCount;
             }
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
                 if (owner.Focused && owner.CurrentCell != null)
                 {
@@ -162,7 +160,7 @@ namespace System.Windows.Forms
                 return SelectedCellsAccessibilityObject;
             }
 
-            public override AccessibleObject HitTest(int x, int y)
+            public override AccessibleObject? HitTest(int x, int y)
             {
                 if (!owner.IsHandleCreated)
                 {
@@ -201,7 +199,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)
                 {
@@ -223,7 +221,7 @@ namespace System.Windows.Forms
             }
             */
 
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {
@@ -240,7 +238,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -303,7 +301,7 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaders()
+            internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders()
             {
                 if (!owner.RowHeadersVisible)
                 {
@@ -318,7 +316,7 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaders()
+            internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders()
             {
                 if (!owner.ColumnHeadersVisible)
                 {
@@ -341,7 +339,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderSimple GetItem(int row, int column)
+            internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
             {
                 if (row >= 0 && row < owner.Rows.Count &&
                     column >= 0 && column < owner.Columns.Count)
@@ -386,7 +384,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -422,10 +420,10 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderFragmentRoot Implementation
 
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
                 => owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
-            internal override UiaCore.IRawElementProviderFragment GetFocus() => GetFocused();
+            internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 
             #endregion
         }

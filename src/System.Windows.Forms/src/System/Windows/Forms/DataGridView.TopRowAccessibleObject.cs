@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -15,8 +13,8 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewTopRowAccessibleObject : AccessibleObject
         {
-            private int[] runtimeId;
-            private DataGridView owner;
+            private int[]? runtimeId;
+            private DataGridView? owner;
 
             public DataGridViewTopRowAccessibleObject() : base()
             {
@@ -53,7 +51,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public DataGridView Owner
+            public DataGridView? Owner
             {
                 get
                 {
@@ -65,6 +63,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerAlreadySet);
                     }
+
                     owner = value;
                 }
             }
@@ -77,6 +76,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                     }
+
                     return owner.AccessibilityObject;
                 }
             }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 if (owner is null)
                 {
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
                 if (owner is null)
                 {
@@ -206,12 +206,17 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (owner is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
+                    }
+
                     return owner.AccessibilityObject;
                 }
             }
 
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -254,7 +259,7 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
@@ -264,7 +269,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return false;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return owner.Enabled;
+                        return owner is null ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet) : owner.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     case UiaCore.UIA.IsContentElementPropertyId:
