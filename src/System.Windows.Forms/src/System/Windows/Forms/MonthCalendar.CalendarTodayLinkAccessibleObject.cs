@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
                 (patternId == UiaCore.UIA.InvokePatternId) || base.IsPatternSupported(patternId);
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
                 propertyID switch
                 {
                     UiaCore.UIA.BoundingRectanglePropertyId => BoundingRectangle,
@@ -39,7 +37,7 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction) =>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) =>
                 direction switch
                 {
                     UiaCore.NavigateDirection.PreviousSibling => _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody),

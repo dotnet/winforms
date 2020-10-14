@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -23,7 +21,7 @@ namespace System.Windows.Forms
 #pragma warning disable CA1805 // Do not initialize unnecessarily
             private int _calendarIndex = 0;
 #pragma warning restore CA1805 // Do not initialize unnecessarily
-            private AccessibleObject _focused;
+            private AccessibleObject? _focused;
 
             public MonthCalendarAccessibleObject(Control owner)
                 : base(owner)
@@ -56,7 +54,7 @@ namespace System.Windows.Forms
             }
 
             public override AccessibleRole Role =>
-                (_owner?.AccessibleRole != AccessibleRole.Default) ? _owner.AccessibleRole : AccessibleRole.Table;
+                (_owner is null ||  _owner.AccessibleRole == AccessibleRole.Default) ? AccessibleRole.Table : _owner.AccessibleRole;
 
             public override string Help
             {
@@ -69,20 +67,21 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (_owner != null)
+                        var baseType = _owner.GetType().BaseType;
+                        if (_owner != null && baseType != null)
                         {
-                            return _owner.GetType().Name + "(" + _owner.GetType().BaseType.Name + ")";
+                            return _owner.GetType().Name + "(" + baseType.Name + ")";
                         }
                     }
                     return string.Empty;
                 }
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
-                    string name = base.Name;
+                    string? name = base.Name;
                     if (name != null)
                     {
                         return name;
@@ -132,7 +131,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Value
+            public override string? Value
             {
                 get
                 {
@@ -264,9 +263,9 @@ namespace System.Windows.Forms
 
             internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
 
-            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaderItems() => null;
+            internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
 
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 int innerX = (int)x;
                 int innerY = (int)y;
@@ -295,7 +294,7 @@ namespace System.Windows.Forms
                     case MCHT.CALENDARWEEKNUM:
                     case MCHT.CALENDARDATE:
                         // Get calendar body's child.
-                        CalendarBodyAccessibleObject calendarBodyAccessibleObject = (CalendarBodyAccessibleObject)GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
+                        CalendarBodyAccessibleObject? calendarBodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody) as CalendarBodyAccessibleObject;
                         return calendarBodyAccessibleObject?.GetFromPoint(hitTestInfo);
 
                     case MCHT.TODAYLINK:
@@ -305,7 +304,7 @@ namespace System.Windows.Forms
                 return base.ElementProviderFromPoint(x, y);
             }
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -320,9 +319,9 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UiaCore.IRawElementProviderFragment GetFocus() => _focused;
+            internal override UiaCore.IRawElementProviderFragment? GetFocus() => _focused;
 
-            public override AccessibleObject GetFocused() => _focused;
+            public override AccessibleObject? GetFocused() => _focused;
 
             public unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
             {
@@ -344,7 +343,7 @@ namespace System.Windows.Forms
                 return hitTestInfo;
             }
 
-            public CalendarChildAccessibleObject GetCalendarChildAccessibleObject(int calendarIndex, CalendarChildType calendarChildType, AccessibleObject parentAccessibleObject = null, int index = -1) =>
+            public CalendarChildAccessibleObject? GetCalendarChildAccessibleObject(int calendarIndex, CalendarChildType calendarChildType, AccessibleObject? parentAccessibleObject = null, int index = -1) =>
                  calendarChildType switch
                  {
                      CalendarChildType.PreviousButton => new CalendarPreviousButtonAccessibleObject(this, _calendarIndex),
@@ -357,7 +356,7 @@ namespace System.Windows.Forms
                      _ => null
                  };
 
-            public string GetCalendarChildName(int calendarIndex, CalendarChildType calendarChildType, AccessibleObject parentAccessibleObject = null, int index = -1)
+            public string GetCalendarChildName(int calendarIndex, CalendarChildType calendarChildType, AccessibleObject? parentAccessibleObject = null, int index = -1)
             {
                 switch (calendarChildType)
                 {
@@ -371,7 +370,7 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            private CalendarCellAccessibleObject GetCalendarCell(int calendarIndex, AccessibleObject parentAccessibleObject, int columnIndex)
+            private CalendarCellAccessibleObject? GetCalendarCell(int calendarIndex, AccessibleObject? parentAccessibleObject, int columnIndex)
             {
                 if (parentAccessibleObject is null ||
                     !_owner.IsHandleCreated ||
@@ -430,7 +429,7 @@ namespace System.Windows.Forms
                 return defaultName;
             }
 
-            private CalendarRowAccessibleObject GetCalendarRow(int calendarIndex, AccessibleObject parentAccessibleObject, int rowIndex)
+            private CalendarRowAccessibleObject? GetCalendarRow(int calendarIndex, AccessibleObject? parentAccessibleObject, int rowIndex)
             {
                 if (parentAccessibleObject is null ||
                     !_owner.IsHandleCreated ||
@@ -599,7 +598,7 @@ namespace System.Windows.Forms
                 return success;
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
                 propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => ControlType,
@@ -696,7 +695,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                AccessibleObject calendarChildAccessibleObject = GetCalendarChildAccessibleObject(selectionStart, selectionEnd);
+                AccessibleObject? calendarChildAccessibleObject = GetCalendarChildAccessibleObject(selectionStart, selectionEnd);
 
                 if (calendarChildAccessibleObject != null)
                 {
@@ -709,14 +708,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            private AccessibleObject GetCalendarChildAccessibleObject(DateTime selectionStart, DateTime selectionEnd)
+            private AccessibleObject? GetCalendarChildAccessibleObject(DateTime selectionStart, DateTime selectionEnd)
             {
                 if (!_owner.IsHandleCreated)
                 {
                     return null;
                 }
 
-                AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
+                AccessibleObject? bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
 
                 if (bodyAccessibleObject is null)
                 {
@@ -725,7 +724,7 @@ namespace System.Windows.Forms
 
                 for (int row = 0; row < RowCount; row++)
                 {
-                    AccessibleObject rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, row);
+                    AccessibleObject? rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, row);
 
                     if (rowAccessibleObject is null)
                     {
@@ -749,7 +748,7 @@ namespace System.Windows.Forms
                             continue;
                         }
 
-                        AccessibleObject cellAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, rowAccessibleObject, column);
+                        AccessibleObject? cellAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, rowAccessibleObject, column);
 
                         if (cellAccessibleObject is null)
                         {
@@ -770,20 +769,25 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaders() => null;
+            internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
 
-            internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
+            internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
                 if (!_owner.IsHandleCreated || !HasHeaderRow)
                 {
                     return null;
                 }
 
-                UiaCore.IRawElementProviderSimple[] headers =
+                UiaCore.IRawElementProviderSimple[]? headers =
                     new UiaCore.IRawElementProviderSimple[MonthCalendarAccessibleObject.MAX_DAYS];
 
-                AccessibleObject bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody, this, -1);
-                AccessibleObject headerRowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, -1);
+                AccessibleObject? bodyAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody, this, -1);
+                if (bodyAccessibleObject is null)
+                {
+                    return null;
+                }
+
+                AccessibleObject? headerRowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, bodyAccessibleObject, -1);
 
                 if (headerRowAccessibleObject is null)
                 {
@@ -792,15 +796,17 @@ namespace System.Windows.Forms
 
                 for (int columnIndex = 0; columnIndex < MonthCalendarAccessibleObject.MAX_DAYS; columnIndex++)
                 {
-                    headers[columnIndex] = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, headerRowAccessibleObject, columnIndex);
+                    // GetCalendarChildAccessibleObject can't return null under normal operating conditions.
+                    // If it happens then it means that the control is broken...
+                    headers[columnIndex] = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, headerRowAccessibleObject, columnIndex)!;
                 }
 
                 return headers;
             }
 
-            internal override UiaCore.IRawElementProviderSimple GetItem(int row, int column)
+            internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
             {
-                AccessibleObject rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, row);
+                AccessibleObject? rowAccessibleObject = GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, row);
 
                 if (rowAccessibleObject is null)
                 {
