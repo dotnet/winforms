@@ -32,11 +32,9 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) =>
                 direction switch
                 {
-                    UiaCore.NavigateDirection.NextSibling => new Func<AccessibleObject?>(() =>
-                    {
-                        MonthCalendar owner = (MonthCalendar)_calendarAccessibleObject.Owner;
-                        return owner.ShowToday ? _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink) : null;
-                    })(),
+                    UiaCore.NavigateDirection.NextSibling => _calendarAccessibleObject.Owner is MonthCalendar monthCalendarrAccessibleObject && monthCalendarrAccessibleObject.ShowToday
+                        ? _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink)
+                        : null,
                     UiaCore.NavigateDirection.PreviousSibling => _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarHeader),
                     UiaCore.NavigateDirection.FirstChild => _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, _calendarAccessibleObject.HasHeaderRow ? -1 : 0),
                     UiaCore.NavigateDirection.LastChild => _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, this, _calendarAccessibleObject.RowCount - 1),

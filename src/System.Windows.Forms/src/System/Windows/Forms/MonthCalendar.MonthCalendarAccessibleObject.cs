@@ -17,7 +17,7 @@ namespace System.Windows.Forms
             internal const int MAX_DAYS = 7;
             internal const int MAX_WEEKS = 6;
 
-            private readonly MonthCalendar _owner;
+            private readonly MonthCalendar _ownerMonthCalendar;
 #pragma warning disable CA1805 // Do not initialize unnecessarily
             private int _calendarIndex = 0;
 #pragma warning restore CA1805 // Do not initialize unnecessarily
@@ -26,19 +26,19 @@ namespace System.Windows.Forms
             public MonthCalendarAccessibleObject(Control owner)
                 : base(owner)
             {
-                _owner = (MonthCalendar)owner;
+                _ownerMonthCalendar = (MonthCalendar)owner;
             }
 
             public UiaCore.UIA ControlType =>
                 string.IsNullOrEmpty(base.Name) ? UiaCore.UIA.CalendarControlTypeId : UiaCore.UIA.TableControlTypeId;
 
-            public bool Enabled => _owner.Enabled;
+            public bool Enabled => _ownerMonthCalendar.Enabled;
 
             public bool HasHeaderRow
             {
                 get
                 {
-                    if (!_owner.IsHandleCreated)
+                    if (!_ownerMonthCalendar.IsHandleCreated)
                     {
                         return false;
                     }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
             }
 
             public override AccessibleRole Role =>
-                (_owner is null ||  _owner.AccessibleRole == AccessibleRole.Default) ? AccessibleRole.Table : _owner.AccessibleRole;
+                (_ownerMonthCalendar is null ||  _ownerMonthCalendar.AccessibleRole == AccessibleRole.Default) ? AccessibleRole.Table : _ownerMonthCalendar.AccessibleRole;
 
             public override string Help
             {
@@ -67,10 +67,10 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        var baseType = _owner.GetType().BaseType;
-                        if (_owner != null && baseType != null)
+                        var baseType = _ownerMonthCalendar.GetType().BaseType;
+                        if (_ownerMonthCalendar != null && baseType != null)
                         {
-                            return _owner.GetType().Name + "(" + baseType.Name + ")";
+                            return _ownerMonthCalendar.GetType().Name + "(" + baseType.Name + ")";
                         }
                     }
                     return string.Empty;
@@ -89,42 +89,42 @@ namespace System.Windows.Forms
 
                     name = string.Empty;
 
-                    if (_owner._mcCurView == MCMV.MONTH)
+                    if (_ownerMonthCalendar._mcCurView == MCMV.MONTH)
                     {
-                        if (DateTime.Equals(_owner.SelectionStart.Date, _owner.SelectionEnd.Date))
+                        if (DateTime.Equals(_ownerMonthCalendar.SelectionStart.Date, _ownerMonthCalendar.SelectionEnd.Date))
                         {
-                            return string.Format(SR.MonthCalendarSingleDateSelected, _owner.SelectionStart.ToLongDateString());
+                            return string.Format(SR.MonthCalendarSingleDateSelected, _ownerMonthCalendar.SelectionStart.ToLongDateString());
                         }
                         else
                         {
-                            return string.Format(SR.MonthCalendarRangeSelected, _owner.SelectionStart.ToLongDateString(), _owner.SelectionEnd.ToLongDateString());
+                            return string.Format(SR.MonthCalendarRangeSelected, _ownerMonthCalendar.SelectionStart.ToLongDateString(), _ownerMonthCalendar.SelectionEnd.ToLongDateString());
                         }
                     }
-                    else if (_owner._mcCurView == MCMV.YEAR)
+                    else if (_ownerMonthCalendar._mcCurView == MCMV.YEAR)
                     {
-                        if (DateTime.Equals(_owner.SelectionStart.Month, _owner.SelectionEnd.Month))
+                        if (DateTime.Equals(_ownerMonthCalendar.SelectionStart.Month, _ownerMonthCalendar.SelectionEnd.Month))
                         {
-                            return string.Format(SR.MonthCalendarSingleDateSelected, _owner.SelectionStart.ToString("y"));
+                            return string.Format(SR.MonthCalendarSingleDateSelected, _ownerMonthCalendar.SelectionStart.ToString("y"));
                         }
                         else
                         {
-                            return string.Format(SR.MonthCalendarRangeSelected, _owner.SelectionStart.ToString("y"), _owner.SelectionEnd.ToString("y"));
+                            return string.Format(SR.MonthCalendarRangeSelected, _ownerMonthCalendar.SelectionStart.ToString("y"), _ownerMonthCalendar.SelectionEnd.ToString("y"));
                         }
                     }
-                    else if (_owner._mcCurView == MCMV.DECADE)
+                    else if (_ownerMonthCalendar._mcCurView == MCMV.DECADE)
                     {
-                        if (DateTime.Equals(_owner.SelectionStart.Year, _owner.SelectionEnd.Year))
+                        if (DateTime.Equals(_ownerMonthCalendar.SelectionStart.Year, _ownerMonthCalendar.SelectionEnd.Year))
                         {
-                            return string.Format(SR.MonthCalendarSingleYearSelected, _owner.SelectionStart.ToString("yyyy"));
+                            return string.Format(SR.MonthCalendarSingleYearSelected, _ownerMonthCalendar.SelectionStart.ToString("yyyy"));
                         }
                         else
                         {
-                            return string.Format(SR.MonthCalendarYearRangeSelected, _owner.SelectionStart.ToString("yyyy"), _owner.SelectionEnd.ToString("yyyy"));
+                            return string.Format(SR.MonthCalendarYearRangeSelected, _ownerMonthCalendar.SelectionStart.ToString("yyyy"), _ownerMonthCalendar.SelectionEnd.ToString("yyyy"));
                         }
                     }
-                    else if (_owner._mcCurView == MCMV.CENTURY)
+                    else if (_ownerMonthCalendar._mcCurView == MCMV.CENTURY)
                     {
-                        return string.Format(SR.MonthCalendarSingleDecadeSelected, _owner.SelectionStart.ToString("yyyy"));
+                        return string.Format(SR.MonthCalendarSingleDecadeSelected, _ownerMonthCalendar.SelectionStart.ToString("yyyy"));
                     }
 
                     return name;
@@ -137,27 +137,27 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        if (_owner._mcCurView == MCMV.MONTH)
+                        if (_ownerMonthCalendar._mcCurView == MCMV.MONTH)
                         {
-                            if (System.DateTime.Equals(_owner.SelectionStart.Date, _owner.SelectionEnd.Date))
+                            if (System.DateTime.Equals(_ownerMonthCalendar.SelectionStart.Date, _ownerMonthCalendar.SelectionEnd.Date))
                             {
-                                return _owner.SelectionStart.ToLongDateString();
+                                return _ownerMonthCalendar.SelectionStart.ToLongDateString();
                             }
 
-                            return string.Format("{0} - {1}", _owner.SelectionStart.ToLongDateString(), _owner.SelectionEnd.ToLongDateString());
+                            return string.Format("{0} - {1}", _ownerMonthCalendar.SelectionStart.ToLongDateString(), _ownerMonthCalendar.SelectionEnd.ToLongDateString());
                         }
 
-                        if (_owner._mcCurView == MCMV.YEAR)
+                        if (_ownerMonthCalendar._mcCurView == MCMV.YEAR)
                         {
-                            if (System.DateTime.Equals(_owner.SelectionStart.Month, _owner.SelectionEnd.Month))
+                            if (System.DateTime.Equals(_ownerMonthCalendar.SelectionStart.Month, _ownerMonthCalendar.SelectionEnd.Month))
                             {
-                                return _owner.SelectionStart.ToString("y");
+                                return _ownerMonthCalendar.SelectionStart.ToString("y");
                             }
 
-                            return string.Format("{0} - {1}", _owner.SelectionStart.ToString("y"), _owner.SelectionEnd.ToString("y"));
+                            return string.Format("{0} - {1}", _ownerMonthCalendar.SelectionStart.ToString("y"), _ownerMonthCalendar.SelectionEnd.ToString("y"));
                         }
 
-                        return string.Format("{0} - {1}", _owner.SelectionRange.Start.ToString(), _owner.SelectionRange.End.ToString());
+                        return string.Format("{0} - {1}", _ownerMonthCalendar.SelectionRange.Start.ToString(), _ownerMonthCalendar.SelectionRange.End.ToString());
                     }
                     catch
                     {
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owner.IsHandleCreated)
+                    if (!_ownerMonthCalendar.IsHandleCreated)
                     {
                         return 0;
                     }
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owner.IsHandleCreated)
+                    if (!_ownerMonthCalendar.IsHandleCreated)
                     {
                         return 0;
                     }
@@ -270,7 +270,7 @@ namespace System.Windows.Forms
                 int innerX = (int)x;
                 int innerY = (int)y;
 
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     return base.ElementProviderFromPoint(x, y);
                 }
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.PreviousButton);
                     case UiaCore.NavigateDirection.LastChild:
-                        return _owner.ShowTodayCircle
+                        return _ownerMonthCalendar.ShowTodayCircle
                             ? GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.TodayLink)
                             : GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarBody);
                 }
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
 
             public unsafe MCHITTESTINFO GetHitTestInfo(int xScreen, int yScreen)
             {
-                if (!_owner.IsHandleCreated || HandleInternal == IntPtr.Zero)
+                if (!_ownerMonthCalendar.IsHandleCreated || HandleInternal == IntPtr.Zero)
                 {
                     return new MCHITTESTINFO();
                 }
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
                     st = new Kernel32.SYSTEMTIME()
                 };
 
-                User32.SendMessageW(_owner, (User32.WM)MCM.HITTEST, IntPtr.Zero, ref hitTestInfo);
+                User32.SendMessageW(_ownerMonthCalendar, (User32.WM)MCM.HITTEST, IntPtr.Zero, ref hitTestInfo);
                 return hitTestInfo;
             }
 
@@ -364,7 +364,7 @@ namespace System.Windows.Forms
                         GetCalendarGridInfoText(MCGIP.CALENDARHEADER, calendarIndex, 0, 0, out string text);
                         return text;
                     case CalendarChildType.TodayLink:
-                        return string.Format(SR.MonthCalendarTodayButtonAccessibleName, _owner.TodayDate.ToShortDateString());
+                        return string.Format(SR.MonthCalendarTodayButtonAccessibleName, _ownerMonthCalendar.TodayDate.ToShortDateString());
                 };
 
                 return string.Empty;
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
             private CalendarCellAccessibleObject? GetCalendarCell(int calendarIndex, AccessibleObject? parentAccessibleObject, int columnIndex)
             {
                 if (parentAccessibleObject is null ||
-                    !_owner.IsHandleCreated ||
+                    !_ownerMonthCalendar.IsHandleCreated ||
                     columnIndex < 0 ||
                     columnIndex >= MAX_DAYS ||
                     columnIndex >= ColumnCount)
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
 
             private string GetCalendarCellName(DateTime endDate, DateTime startDate, string defaultName, bool headerCell)
             {
-                if (_owner._mcCurView == MCMV.MONTH)
+                if (_ownerMonthCalendar._mcCurView == MCMV.MONTH)
                 {
                     if (headerCell)
                     {
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
 
                     return startDate.ToString("dddd, MMMM dd, yyyy");
                 }
-                else if (_owner._mcCurView == MCMV.YEAR)
+                else if (_ownerMonthCalendar._mcCurView == MCMV.YEAR)
                 {
                     return startDate.ToString("MMMM yyyy");
                 }
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
             private CalendarRowAccessibleObject? GetCalendarRow(int calendarIndex, AccessibleObject? parentAccessibleObject, int rowIndex)
             {
                 if (parentAccessibleObject is null ||
-                    !_owner.IsHandleCreated ||
+                    !_ownerMonthCalendar.IsHandleCreated ||
                     (HasHeaderRow ? rowIndex < -1 : rowIndex < 0) ||
                     rowIndex >= RowCount)
                 {
@@ -456,7 +456,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                SelectionRange cellsRange = _owner.GetDisplayRange(false);
+                SelectionRange cellsRange = _ownerMonthCalendar.GetDisplayRange(false);
 
                 if (cellsRange is null || cellsRange.Start > DateTimePicker.SysTimeToDateTime(endDate) || cellsRange.End < DateTimePicker.SysTimeToDateTime(startDate))
                 {
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
                     "GetCalendarGridInfo() should be used only to obtain Date and Rect,"
                     + "dwFlags has flag bits other that MCGIF_DATE and MCGIF_RECT");
 
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     rectangle = default;
                     endDate = default;
@@ -519,7 +519,7 @@ namespace System.Windows.Forms
 
             private bool GetCalendarGridInfo(ref MCGRIDINFO gridInfo)
             {
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     return false;
                 }
@@ -532,12 +532,12 @@ namespace System.Windows.Forms
 
                 gridInfo.dwFlags &= ~MCGIF.NAME;
 
-                return User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+                return User32.SendMessageW(_ownerMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
             }
 
             private unsafe bool GetCalendarGridInfoText(MCGIP dwPart, int calendarIndex, int row, int column, out string text)
             {
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     text = string.Empty;
                     return false;
@@ -561,7 +561,7 @@ namespace System.Windows.Forms
                         cchName = (UIntPtr)name.Length - 1
                     };
 
-                    result = User32.SendMessageW(_owner, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+                    result = User32.SendMessageW(_ownerMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
                 }
 
                 text = name.SliceAtFirstNull().ToString();
@@ -570,7 +570,7 @@ namespace System.Windows.Forms
 
             public bool GetCalendarPartRectangle(int calendarIndex, MCGIP dwPart, int row, int column, out RECT calendarPartRectangle)
             {
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     calendarPartRectangle = default;
                     return false;
@@ -690,7 +690,7 @@ namespace System.Windows.Forms
 
             public void RaiseAutomationEventForChild(UiaCore.UIA automationEventId, DateTime selectionStart, DateTime selectionEnd)
             {
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     return;
                 }
@@ -710,7 +710,7 @@ namespace System.Windows.Forms
 
             private AccessibleObject? GetCalendarChildAccessibleObject(DateTime selectionStart, DateTime selectionEnd)
             {
-                if (!_owner.IsHandleCreated)
+                if (!_ownerMonthCalendar.IsHandleCreated)
                 {
                     return null;
                 }
@@ -773,7 +773,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
-                if (!_owner.IsHandleCreated || !HasHeaderRow)
+                if (!_ownerMonthCalendar.IsHandleCreated || !HasHeaderRow)
                 {
                     return null;
                 }
