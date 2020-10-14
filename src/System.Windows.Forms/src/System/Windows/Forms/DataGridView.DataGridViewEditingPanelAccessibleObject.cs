@@ -11,12 +11,12 @@ namespace System.Windows.Forms
     {
         internal class DataGridViewEditingPanelAccessibleObject : ControlAccessibleObject
         {
-            private readonly DataGridView _dataGridView;
+            private readonly DataGridView _ownerDataGridView;
             private readonly Panel _panel;
 
             public DataGridViewEditingPanelAccessibleObject(DataGridView dataGridView, Panel panel) : base(panel)
             {
-                _dataGridView = dataGridView;
+                _ownerDataGridView = dataGridView;
                 _panel = panel;
             }
 
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _dataGridView.AccessibilityObject;
+                    return _ownerDataGridView.AccessibilityObject;
                 }
             }
 
@@ -51,15 +51,15 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        DataGridViewCell currentCell = _dataGridView.CurrentCell;
-                        if (currentCell != null && _dataGridView.IsCurrentCellInEditMode)
+                        DataGridViewCell currentCell = _ownerDataGridView.CurrentCell;
+                        if (currentCell != null && _ownerDataGridView.IsCurrentCellInEditMode)
                         {
                             return currentCell.AccessibilityObject;
                         }
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
                     case UiaCore.NavigateDirection.LastChild:
-                        return _dataGridView.EditingControlAccessibleObject;
+                        return _ownerDataGridView.EditingControlAccessibleObject;
                 }
 
                 return null;
@@ -88,9 +88,9 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _dataGridView.CurrentCell != null;
+                        return _ownerDataGridView.CurrentCell != null;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return _dataGridView.Enabled;
+                        return _ownerDataGridView.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
                     case UiaCore.UIA.IsControlElementPropertyId:
