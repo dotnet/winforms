@@ -9525,13 +9525,13 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.DataGridView.CurrentCell.get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridView.CurrentCell.set -> void
 ~System.Windows.Forms.DataGridView.CurrentRow.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.DataGridViewAccessibleObject(System.Windows.Forms.DataGridView owner) -> void
+System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.DataGridViewAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
 ~System.Windows.Forms.DataGridView.DataGridViewControlCollection.CopyTo(System.Windows.Forms.Control[] array, int index) -> void
 ~System.Windows.Forms.DataGridView.DataGridViewControlCollection.DataGridViewControlCollection(System.Windows.Forms.DataGridView owner) -> void
 ~System.Windows.Forms.DataGridView.DataGridViewControlCollection.Insert(int index, System.Windows.Forms.Control value) -> void
-~System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject(System.Windows.Forms.DataGridView owner) -> void
-~System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.get -> System.Windows.Forms.DataGridView
-~System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.set -> void
+System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
+System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.get -> System.Windows.Forms.DataGridView?
+System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.set -> void
 ~System.Windows.Forms.DataGridView.DataMember.get -> string
 ~System.Windows.Forms.DataGridView.DataMember.set -> void
 ~System.Windows.Forms.DataGridView.DataSource.get -> object
@@ -11164,17 +11164,17 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.DataGridView.DataGridViewControlCollection.Remove(System.Windows.Forms.Control value) -> void
-~override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Value.get -> string
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Name.get -> string!
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject

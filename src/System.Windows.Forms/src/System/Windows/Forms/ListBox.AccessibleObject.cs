@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 if (!_owningListBox.IsHandleCreated)
                 {
