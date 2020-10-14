@@ -266,18 +266,18 @@ namespace System.Windows.Forms
                         // We're rendering horizontal....  make sure to take care of RTL issues.
 
                         int widthOfDropDown = dropDownArrowSize.Width + scaledDropDownArrowPadding.Horizontal;
-                        options.client.Width -= widthOfDropDown;
+                        options.Client.Width -= widthOfDropDown;
 
                         if (ownerItem.RightToLeft == RightToLeft.Yes)
                         {
                             // if RightToLeft.Yes: [ v | rest of drop down button ]
-                            options.client.Offset(widthOfDropDown, 0);
+                            options.Client.Offset(widthOfDropDown, 0);
                             dropDownArrowRect = new Rectangle(scaledDropDownArrowPadding.Left, 0, dropDownArrowSize.Width, ownerItem.Bounds.Height);
                         }
                         else
                         {
                             // if RightToLeft.No [ rest of drop down button | v ]
-                            dropDownArrowRect = new Rectangle(options.client.Right, 0, dropDownArrowSize.Width, ownerItem.Bounds.Height);
+                            dropDownArrowRect = new Rectangle(options.Client.Right, 0, dropDownArrowSize.Width, ownerItem.Bounds.Height);
                         }
                     }
                     else
@@ -285,10 +285,10 @@ namespace System.Windows.Forms
                         // else we're rendering vertically.
                         int heightOfDropDown = dropDownArrowSize.Height + scaledDropDownArrowPadding.Vertical;
 
-                        options.client.Height -= heightOfDropDown;
+                        options.Client.Height -= heightOfDropDown;
 
                         //  [ rest of button / v]
-                        dropDownArrowRect = new Rectangle(0, options.client.Bottom + scaledDropDownArrowPadding.Top, ownerItem.Bounds.Width - 1, dropDownArrowSize.Height);
+                        dropDownArrowRect = new Rectangle(0, options.Client.Bottom + scaledDropDownArrowPadding.Top, ownerItem.Bounds.Width - 1, dropDownArrowSize.Height);
                     }
                 }
                 return options;

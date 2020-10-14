@@ -37,8 +37,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle imageRect = LayoutData.imageBounds;
-                    imageRect.Intersect(_layoutData.field);
+                    Rectangle imageRect = LayoutData.ImageBounds;
+                    imageRect.Intersect(_layoutData.Field);
                     return imageRect;
                 }
             }
@@ -60,13 +60,13 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle textRect = LayoutData.textBounds;
-                    textRect.Intersect(_layoutData.field);
+                    Rectangle textRect = LayoutData.TextBounds;
+                    textRect.Intersect(_layoutData.Field);
                     return textRect;
                 }
             }
 
-            public virtual Rectangle ContentRectangle => LayoutData.field;
+            public virtual Rectangle ContentRectangle => LayoutData.Field;
 
             public virtual TextFormatFlags TextFormat
             {
@@ -74,10 +74,10 @@ namespace System.Windows.Forms
                 {
                     if (_currentLayoutOptions != null)
                     {
-                        return _currentLayoutOptions.gdiTextFormatFlags;
+                        return _currentLayoutOptions.GdiTextFormatFlags;
                     }
 
-                    return CommonLayoutOptions().gdiTextFormatFlags;
+                    return CommonLayoutOptions().GdiTextFormatFlags;
                 }
             }
 
@@ -101,35 +101,35 @@ namespace System.Windows.Forms
                 ToolStripItemLayoutOptions layoutOptions = new ToolStripItemLayoutOptions();
                 Rectangle bounds = new Rectangle(Point.Empty, _ownerItem.Size);
 
-                layoutOptions.client = bounds;
+                layoutOptions.Client = bounds;
 
-                layoutOptions.growBorderBy1PxWhenDefault = false;
+                layoutOptions.GrowBorderBy1PxWhenDefault = false;
 
-                layoutOptions.borderSize = BorderWidth;
-                layoutOptions.paddingSize = 0;
-                layoutOptions.maxFocus = true;
-                layoutOptions.focusOddEvenFixup = false;
-                layoutOptions.font = _ownerItem.Font;
-                layoutOptions.text = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : string.Empty;
-                layoutOptions.imageSize = PreferredImageSize;
-                layoutOptions.checkSize = 0;
-                layoutOptions.checkPaddingSize = 0;
-                layoutOptions.checkAlign = ContentAlignment.TopLeft;
-                layoutOptions.imageAlign = Owner.ImageAlign;
-                layoutOptions.textAlign = Owner.TextAlign;
-                layoutOptions.hintTextUp = false;
-                layoutOptions.shadowedText = !_ownerItem.Enabled;
-                layoutOptions.layoutRTL = RightToLeft.Yes == Owner.RightToLeft;
-                layoutOptions.textImageRelation = Owner.TextImageRelation;
+                layoutOptions.BorderSize = BorderWidth;
+                layoutOptions.PaddingSize = 0;
+                layoutOptions.MaxFocus = true;
+                layoutOptions.FocusOddEvenFixup = false;
+                layoutOptions.Font = _ownerItem.Font;
+                layoutOptions.Text = ((Owner.DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) ? Owner.Text : string.Empty;
+                layoutOptions.ImageSize = PreferredImageSize;
+                layoutOptions.CheckSize = 0;
+                layoutOptions.CheckPaddingSize = 0;
+                layoutOptions.CheckAlign = ContentAlignment.TopLeft;
+                layoutOptions.ImageAlign = Owner.ImageAlign;
+                layoutOptions.TextAlign = Owner.TextAlign;
+                layoutOptions.HintTextUp = false;
+                layoutOptions.ShadowedText = !_ownerItem.Enabled;
+                layoutOptions.LayoutRTL = RightToLeft.Yes == Owner.RightToLeft;
+                layoutOptions.TextImageRelation = Owner.TextImageRelation;
                 // Set textImageInset to 0 since we don't draw 3D border for ToolStripItems.
-                layoutOptions.textImageInset = 0;
-                layoutOptions.everettButtonCompat = false;
+                layoutOptions.TextImageInset = 0;
+                layoutOptions.DotNetOneButtonCompat = false;
 
                 // Support RTL
-                layoutOptions.gdiTextFormatFlags = ContentAlignToTextFormat(Owner.TextAlign, Owner.RightToLeft == RightToLeft.Yes);
+                layoutOptions.GdiTextFormatFlags = ContentAlignToTextFormat(Owner.TextAlign, Owner.RightToLeft == RightToLeft.Yes);
 
                 // Hide underlined &File unless ALT is pressed
-                layoutOptions.gdiTextFormatFlags = (Owner.ShowKeyboardCues) ? layoutOptions.gdiTextFormatFlags : layoutOptions.gdiTextFormatFlags | TextFormatFlags.HidePrefix;
+                layoutOptions.GdiTextFormatFlags = (Owner.ShowKeyboardCues) ? layoutOptions.GdiTextFormatFlags : layoutOptions.GdiTextFormatFlags | TextFormatFlags.HidePrefix;
 
                 return layoutOptions;
             }
@@ -151,7 +151,7 @@ namespace System.Windows.Forms
 
                 if (Owner.TextDirection != ToolStripTextDirection.Horizontal)
                 {
-                    _currentLayoutOptions.verticalText = true;
+                    _currentLayoutOptions.VerticalText = true;
                 }
 
                 ButtonBaseAdapter.LayoutData data = _currentLayoutOptions.Layout();

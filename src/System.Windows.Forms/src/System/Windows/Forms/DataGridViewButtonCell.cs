@@ -805,7 +805,7 @@ namespace System.Windows.Forms
 
                                     using var hdc = new DeviceContextHdcScope(g);
                                     using var hbrush = new Gdi32.CreateBrushScope(
-                                        colors.options.HighContrast ? colors.buttonShadow : colors.lowHighlight);
+                                        colors.Options.HighContrast ? colors.ButtonShadow : colors.LowHighlight);
                                     hdc.FillRectangle(valBounds, hbrush);
                                 }
                                 else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
@@ -837,12 +837,12 @@ namespace System.Windows.Forms
                                 ButtonBaseAdapter.DrawDefaultBorder(
                                     g,
                                     valBounds,
-                                    colors.options.HighContrast ? colors.windowText : colors.windowFrame,
+                                    colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame,
                                     isDefault: true);
                                 ControlPaint.DrawBorder(
                                     g,
                                     valBounds,
-                                    colors.options.HighContrast ? colors.windowText : colors.buttonShadow,
+                                    colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow,
                                     ButtonBorderStyle.Solid);
                             }
                             else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
@@ -858,7 +858,7 @@ namespace System.Windows.Forms
                                 ButtonBaseAdapter.DrawDefaultBorder(
                                     g,
                                     valBounds,
-                                    colors.options.HighContrast ? colors.windowText : colors.buttonShadow,
+                                    colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow,
                                     isDefault: false);
                                 ButtonBaseAdapter.Draw3DLiteBorder(g, valBounds, colors, true);
                             }
@@ -873,12 +873,12 @@ namespace System.Windows.Forms
                                 ButtonBaseAdapter.DrawDefaultBorder(
                                     g,
                                     valBounds,
-                                    colors.options.HighContrast ? colors.windowText : colors.buttonShadow,
+                                    colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow,
                                     isDefault: false);
                                 ControlPaint.DrawBorderSimple(
                                     g,
                                     valBounds,
-                                    colors.options.HighContrast ? colors.windowText : colors.buttonShadow);
+                                    colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow);
                             }
                         }
 
@@ -941,13 +941,13 @@ namespace System.Windows.Forms
                             DataGridView.Enabled,
                             DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                             DataGridView.RightToLeft);
-                        options.everettButtonCompat = false;
+                        options.DotNetOneButtonCompat = false;
                         ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                         ButtonBaseAdapter.DrawFlatFocus(
                             g,
-                            layout.focus,
-                            colors.options.HighContrast ? colors.windowText : colors.constrastButtonShadow);
+                            layout.Focus,
+                            colors.Options.HighContrast ? colors.WindowText : colors.ConstrastButtonShadow);
                     }
                 }
                 else
@@ -971,12 +971,12 @@ namespace System.Windows.Forms
                             DataGridView.Enabled,
                             DataGridViewUtilities.ComputeDrawingContentAlignmentForCellStyleAlignment(cellStyle.Alignment),
                             DataGridView.RightToLeft);
-                        options.everettButtonCompat = false;
+                        options.DotNetOneButtonCompat = false;
                         ButtonBaseAdapter.LayoutData layout = options.Layout();
 
                         ControlPaint.DrawFocusRectangle(
                             g,
-                            layout.focus,
+                            layout.Focus,
                             cellStyle.ForeColor,
                             cellStyle.BackColor);
                     }

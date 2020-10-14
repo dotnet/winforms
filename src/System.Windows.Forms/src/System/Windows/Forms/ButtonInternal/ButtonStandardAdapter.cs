@@ -144,7 +144,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Brush backbrush = null;
                 if (state == CheckState.Indeterminate)
                 {
-                    backbrush = CreateDitherBrush(colors.highlight, colors.buttonFace);
+                    backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);
                 }
 
                 try
@@ -174,7 +174,7 @@ namespace System.Windows.Forms.ButtonInternal
             // Inflate the focus rectangle to be consistent with the behavior of Win32 app
             if (Application.RenderWithVisualStyles)
             {
-                layout.focus.Inflate(1, 1);
+                layout.Focus.Inflate(1, 1);
             }
 
             if (up & IsHighContrastHighlighted())
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.ButtonInternal
                 if (Control.Focused && Control.ShowFocusCues)
                 {
                     // Drawing focus rectangle of HighlightText color
-                    ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.focus, highlightTextColor);
+                    ControlPaint.DrawHighContrastFocusRectangle(e.GraphicsInternal, layout.Focus, highlightTextColor);
                 }
             }
             else if (up & IsHighContrastHighlighted())
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
 
             if (!Application.RenderWithVisualStyles)
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.ButtonInternal
                     r.Inflate(-1, -1);
                 }
 
-                DrawDefaultBorder(e, r, colors.windowFrame, Control.IsDefault);
+                DrawDefaultBorder(e, r, colors.WindowFrame, Control.IsDefault);
 
                 if (up)
                 {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.ButtonInternal
                 else
                 {
                     // Not Draw3DBorder(..., raised: false);
-                    ControlPaint.DrawBorderSimple(e, r, colors.buttonShadow);
+                    ControlPaint.DrawBorderSimple(e, r, colors.ButtonShadow);
                 }
             }
         }
@@ -232,8 +232,8 @@ namespace System.Windows.Forms.ButtonInternal
         private LayoutOptions PaintLayout(PaintEventArgs e, bool up)
         {
             LayoutOptions layout = CommonLayout();
-            layout.textOffset = !up;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
+            layout.TextOffset = !up;
+            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
 
             return layout;
         }
