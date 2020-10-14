@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -40,7 +38,8 @@ namespace System.Windows.Forms
                 {
                     RuntimeIDFirstItem,
                     (int)(long)_calendarAccessibleObject.Owner.InternalHandle,
-                    Parent.Parent.GetChildId(),
+                    // Parent.Parent is CalendarChildAccessibleObject._calendarAccessibleObject, which we validate during initialization.
+                    Parent.Parent!.GetChildId(),
                     Parent.GetChildId(),
                     GetChildId()
                 };
@@ -53,7 +52,7 @@ namespace System.Windows.Forms
 
             internal override int GetChildId() => _columnIndex + 1;
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction) =>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) =>
                 direction switch
                 {
                     UiaCore.NavigateDirection.Parent => _parentAccessibleObject,
@@ -64,7 +63,7 @@ namespace System.Windows.Forms
                     _ => base.FragmentNavigate(direction)
                 };
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
                 propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => (_rowIndex == -1) ? UiaCore.UIA.HeaderControlTypeId : UiaCore.UIA.DataItemControlTypeId,
@@ -94,19 +93,25 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderSimple[] GetRowHeaderItems() => null;
+            internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
 
-            internal override UiaCore.IRawElementProviderSimple[] GetColumnHeaderItems()
+            internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
                 if (!_calendarAccessibleObject.Owner.IsHandleCreated || !_calendarAccessibleObject.HasHeaderRow)
                 {
                     return null;
                 }
 
-                AccessibleObject headerRowAccessibleObject =
+                AccessibleObject? headerRowAccessibleObject =
                     _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarRow, _parentAccessibleObject.Parent, -1);
+
+                if (headerRowAccessibleObject is null)
+                {
+                    return null;
+                }
+
                 AccessibleObject headerCellAccessibleObject =
-                    _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, headerRowAccessibleObject, _columnIndex);
+                    _calendarAccessibleObject.GetCalendarChildAccessibleObject(_calendarIndex, CalendarChildType.CalendarCell, headerRowAccessibleObject, _columnIndex)!;
 
                 return new UiaCore.IRawElementProviderSimple[1] { headerCellAccessibleObject };
             }
