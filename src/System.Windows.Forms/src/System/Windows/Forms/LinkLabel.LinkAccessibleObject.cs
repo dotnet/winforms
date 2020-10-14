@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -77,7 +75,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
@@ -148,7 +146,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {

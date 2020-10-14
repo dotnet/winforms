@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
@@ -21,7 +19,7 @@ namespace System.Windows.Forms
         {
             private readonly ComboBox _owningComboBox;
             private readonly object _owningItem;
-            private IAccessible _systemIAccessible;
+            private IAccessible? _systemIAccessible;
 
             /// <summary>
             ///  Initializes new instance of ComboBox item accessible object.
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             /// <param name="owningItem">The owning ComboBox item.</param>
             public ComboBoxItemAccessibleObject(ComboBox owningComboBox, object owningItem)
             {
-                _owningComboBox = owningComboBox;
+                _owningComboBox = owningComboBox ?? throw new ArgumentNullException(nameof(owningComboBox));
                 _owningItem = owningItem;
 
                 _systemIAccessible = _owningComboBox.ChildListAccessibleObject.GetSystemIAccessibleInternal();
@@ -59,37 +57,38 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the ComboBox item default action.
             /// </summary>
-            public override string DefaultAction => _systemIAccessible.accDefaultAction[GetChildId()];
+            public override string? DefaultAction => _systemIAccessible?.accDefaultAction[GetChildId()];
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (direction == UiaCore.NavigateDirection.Parent)
+                {
+                    return _owningComboBox.ChildListAccessibleObject;
+                }
+
+                if (!(_owningComboBox.ChildListAccessibleObject is ComboBoxChildListUiaProvider comboBoxChildListUiaProvider))
+                {
+                    return base.FragmentNavigate(direction);
+                }
+
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                        return _owningComboBox.ChildListAccessibleObject;
                     case UiaCore.NavigateDirection.NextSibling:
                         int currentIndex = GetCurrentIndex();
-                        if (_owningComboBox.ChildListAccessibleObject is ComboBoxChildListUiaProvider comboBoxChildListUiaProvider)
+                        int itemsCount = comboBoxChildListUiaProvider.GetChildFragmentCount();
+                        int nextItemIndex = currentIndex + 1;
+                        if (itemsCount > nextItemIndex)
                         {
-                            int itemsCount = comboBoxChildListUiaProvider.GetChildFragmentCount();
-                            int nextItemIndex = currentIndex + 1;
-                            if (itemsCount > nextItemIndex)
-                            {
-                                return comboBoxChildListUiaProvider.GetChildFragment(nextItemIndex);
-                            }
+                            return comboBoxChildListUiaProvider.GetChildFragment(nextItemIndex);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.PreviousSibling:
                         currentIndex = GetCurrentIndex();
-                        comboBoxChildListUiaProvider = _owningComboBox.ChildListAccessibleObject as ComboBoxChildListUiaProvider;
-                        if (comboBoxChildListUiaProvider != null)
+                        int previousItemIndex = currentIndex - 1;
+                        if (previousItemIndex >= 0)
                         {
-                            var itemsCount = comboBoxChildListUiaProvider.GetChildFragmentCount();
-                            int previousItemIndex = currentIndex - 1;
-                            if (previousItemIndex >= 0)
-                            {
-                                return comboBoxChildListUiaProvider.GetChildFragment(previousItemIndex);
-                            }
+                            return comboBoxChildListUiaProvider.GetChildFragment(previousItemIndex);
                         }
 
                         break;
@@ -116,7 +115,7 @@ namespace System.Windows.Forms
                 return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -161,7 +160,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the help text.
             /// </summary>
-            public override string Help => _systemIAccessible.accHelp[GetChildId()];
+            public override string? Help => _systemIAccessible?.accHelp[GetChildId()];
 
             /// <summary>
             ///  Indicates whether specified pattern is supported.
@@ -183,7 +182,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets or sets the accessible name.
             /// </summary>
-            public override string Name
+            public override string? Name
             {
                 get
                 {
@@ -204,7 +203,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var accRole = _systemIAccessible.get_accRole(GetChildId());
+                    var accRole = _systemIAccessible?.get_accRole(GetChildId());
                     return accRole != null
                         ? (AccessibleRole)accRole
                         : AccessibleRole.None;
@@ -214,11 +213,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the runtime ID.
             /// </summary>
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {
-                    if (!_owningComboBox.IsHandleCreated)
+                    if (!_owningComboBox.IsHandleCreated || !(_owningComboBox.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject))
                     {
                         return base.RuntimeId;
                     }
@@ -227,8 +226,6 @@ namespace System.Windows.Forms
                     runtimeId[0] = RuntimeIDFirstItem;
                     runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
                     runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
-
-                    var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
                     runtimeId[3] = comboBoxAccessibleObject.ItemAccessibleObjects.GetId(_owningItem);
 
                     return runtimeId;
@@ -242,7 +239,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var accState = _systemIAccessible.get_accState(GetChildId());
+                    var accState = _systemIAccessible?.get_accState(GetChildId());
                     return accState != null
                         ? (AccessibleStates)accState
                         : AccessibleStates.None;

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
         {
             private const int COMBOBOX_ACC_ITEM_INDEX = 1;
 
-            private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
+            private ComboBoxChildDropDownButtonUiaProvider? _dropDownButtonUiaProvider;
             private readonly ComboBox _owningComboBox;
 
             /// <summary>
@@ -70,7 +68,7 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {
@@ -111,11 +109,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override string get_accNameInternal(object childID)
+            internal override string? get_accNameInternal(object childID)
             {
                 ValidateChildID(ref childID);
 
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                if ((int)childID == COMBOBOX_ACC_ITEM_INDEX)
                 {
                     return Name;
                 }
@@ -123,10 +121,10 @@ namespace System.Windows.Forms
                 return base.get_accNameInternal(childID);
             }
 
-            internal override string get_accKeyboardShortcutInternal(object childID)
+            internal override string? get_accKeyboardShortcutInternal(object childID)
             {
                 ValidateChildID(ref childID);
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                if ((int)childID == COMBOBOX_ACC_ITEM_INDEX)
                 {
                     return KeyboardShortcut;
                 }
@@ -160,7 +158,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (direction == UiaCore.NavigateDirection.FirstChild)
                 {
@@ -186,7 +184,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
+            internal override UiaCore.IRawElementProviderSimple? GetOverrideProviderForHwnd(IntPtr hwnd)
             {
                 if (hwnd == _owningComboBox._childEdit.Handle)
                 {
@@ -210,7 +208,7 @@ namespace System.Windows.Forms
             /// <remarks>
             ///  GetChild method should be unchanged to not break the MSAA scenarios.
             /// </remarks>
-            internal AccessibleObject GetChildFragment(int index)
+            internal AccessibleObject? GetChildFragment(int index)
             {
                 if (_owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList)
                 {
@@ -259,7 +257,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
