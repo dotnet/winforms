@@ -4,10 +4,12 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -2467,6 +2469,85 @@ namespace System.Windows.Forms.Tests
             Assert.Null(iAccessible.get_accValue(varChild));
             Assert.Empty(childAccesibleObject1.Value);
             Assert.Empty(childAccesibleObject2.Value);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_AsIAccessible_Invoke_DoesntReturnWrapper()
+        {
+            using Panel panel = new Panel();
+            panel.CreateControl();
+            using Button button = new Button();
+            button.CreateControl();
+            panel.Controls.Add(button);
+
+            IAccessible iAccessible = panel.AccessibilityObject.Navigate(AccessibleNavigation.FirstChild);
+            var wrapper = ((AccessibleObject)iAccessible).TestAccessor().Dynamic.systemIAccessible;
+            var child = iAccessible.get_accChild(0);
+
+            Assert.NotSame(wrapper, child);
+            Assert.Same(((AccessibleObject)iAccessible).GetSystemIAccessibleInternal(), child);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_GetSystemIAccessibleInternal_Invoke_DoesntReturnWrapper()
+        {
+            using Button button = new Button();
+            button.CreateControl();
+            var accessibleObject = button.AccessibilityObject;
+            var wrapper = accessibleObject.TestAccessor().Dynamic.systemIAccessible;
+            Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_WrapIAccessible_Invoke_DoesntReturnWrapper()
+        {
+            using Button button = new Button();
+            button.CreateControl();
+            var accessibleObject = button.AccessibilityObject;
+            var wrapper = accessibleObject.TestAccessor().Dynamic.systemIAccessible;
+            var wrapIAccessibleResult = accessibleObject.TestAccessor().Dynamic.WrapIAccessible(accessibleObject.GetSystemIAccessibleInternal());
+
+            Assert.Same(accessibleObject, wrapIAccessibleResult);
+            Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
+        }
+
+        [DllImport("Oleacc.dll")]
+        internal unsafe static extern HRESULT AccessibleObjectFromPoint(
+            Point ptScreen,
+            [MarshalAs(UnmanagedType.Interface)]
+            out object ppacc,
+            out object pvarChild
+        );
+
+        [WinFormsFact(Skip = "This test needs to be run manually as it depends on the form being unobstructed.")]
+        public unsafe void TestAccessibleObjectFromPoint()
+        {
+            using Form form = new Form();
+            using Button button = new Button
+            {
+                Text = "MSAA Button"
+            };
+
+            form.Controls.Add(button);
+            form.Show();
+            var bounds = button.Bounds;
+            Point point = button.Location;
+            point.Offset(bounds.Width / 2, bounds.Height / 2);
+            point = button.PointToScreen(point);
+            var result = AccessibleObjectFromPoint(
+                point,
+                out object ppacc,
+                out object varItem);
+
+            Assert.Equal(HRESULT.S_OK, result);
+            Assert.NotNull(ppacc);
+
+            IAccessible accessible = ppacc as IAccessible;
+            Assert.NotNull(accessible);
+            Assert.Equal("MSAA Button", accessible.accName);
+            Assert.Equal(0x100004, accessible.accState);        // STATE_SYSTEM_FOCUSABLE | STATE_SYSTEM_FOCUSED
+            Assert.Equal(0x2b, accessible.accRole);             // ROLE_SYSTEM_PUSHBUTTON
+            Assert.Equal("Press", accessible.accDefaultAction);
         }
 
         private class SubAccessibleObject : AccessibleObject
