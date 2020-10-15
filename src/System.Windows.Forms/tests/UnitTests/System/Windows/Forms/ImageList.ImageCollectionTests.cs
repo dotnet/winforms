@@ -14,6 +14,7 @@ namespace System.Windows.Forms.Tests
 {
     using Size = System.Drawing.Size;
 
+    [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
     public class ImageCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
