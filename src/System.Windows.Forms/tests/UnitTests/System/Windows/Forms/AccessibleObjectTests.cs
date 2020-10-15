@@ -2469,6 +2469,46 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(childAccesibleObject2.Value);
         }
 
+        [WinFormsFact]
+        public void AccessibleObject_AsIAccessible_Invoke_DoesntReturnWrapper()
+        {
+            using Panel panel = new Panel();
+            panel.CreateControl();
+            using Button button = new Button();
+            button.CreateControl();
+            panel.Controls.Add(button);
+
+            IAccessible iAccessible = panel.AccessibilityObject.Navigate(AccessibleNavigation.FirstChild);
+            var wrapper = ((AccessibleObject)iAccessible).TestAccessor().Dynamic.systemIAccessible;
+            var child = iAccessible.get_accChild(0);
+
+            Assert.NotSame(wrapper, child);
+            Assert.Same(((AccessibleObject)iAccessible).GetSystemIAccessibleInternal(), child);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_GetSystemIAccessibleInternal_Invoke_DoesntReturnWrapper()
+        {
+            using Button button = new Button();
+            button.CreateControl();
+            var accessibleObject = button.AccessibilityObject;
+            var wrapper = accessibleObject.TestAccessor().Dynamic.systemIAccessible;
+            Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_WrapIAccessible_Invoke_DoesntReturnWrapper()
+        {
+            using Button button = new Button();
+            button.CreateControl();
+            var accessibleObject = button.AccessibilityObject;
+            var wrapper = accessibleObject.TestAccessor().Dynamic.systemIAccessible;
+            var wrapIAccessibleResult = accessibleObject.TestAccessor().Dynamic.WrapIAccessible(accessibleObject.GetSystemIAccessibleInternal());
+
+            Assert.Same(accessibleObject, wrapIAccessibleResult);
+            Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
+        }
+
         private class SubAccessibleObject : AccessibleObject
         {
             public new void UseStdAccessibleObjects(IntPtr handle) => base.UseStdAccessibleObjects(handle);
