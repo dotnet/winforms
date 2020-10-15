@@ -990,7 +990,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible is null || systemIAccessible.accChildCount == 0)
+            if (systemIAccessible.accChildCount == 0)
             {
                 return null;
             }
@@ -1290,7 +1290,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (systemIAccessible is null || systemIAccessible.accChildCount == 0)
+            if (systemIAccessible.accChildCount == 0)
             {
                 return null;
             }
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return systemIAccessible?.get_accState(childID);
+            return systemIAccessible.get_accState(childID);
         }
 
         /// <summary>
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            systemIAccessible?.set_accName(childID, newName);
+            systemIAccessible.set_accName(childID, newName);
         }
 
         /// <summary>
@@ -1431,7 +1431,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            systemIAccessible?.set_accValue(childID, newValue);
+            systemIAccessible.set_accValue(childID, newValue);
         }
 
         /// <summary>

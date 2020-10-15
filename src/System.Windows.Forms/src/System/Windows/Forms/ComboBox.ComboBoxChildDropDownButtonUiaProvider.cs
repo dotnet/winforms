@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Drawing;
+using Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -18,6 +19,7 @@ namespace System.Windows.Forms
         {
             private const int COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX = 2;
             private readonly ComboBox _owner;
+            private IAccessible _systemIAccessible;
 
             /// <summary>
             ///  Initializes new instance of ComboBoxChildDropDownButtonUiaProvider.
@@ -28,6 +30,7 @@ namespace System.Windows.Forms
             {
                 _owner = owner;
                 UseStdAccessibleObjects(comboBoxControlhandle);
+                _systemIAccessible = GetSystemIAccessibleInternal();
             }
 
             /// <summary>
@@ -41,8 +44,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    systemIAccessible.set_accName(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX, value);
+                    _systemIAccessible?.set_accName(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX, value);
                 }
             }
 
@@ -57,8 +59,7 @@ namespace System.Windows.Forms
                     int top = 0;
                     int width = 0;
                     int height = 0;
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    systemIAccessible.accLocation(out left, out top, out width, out height, COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
+                    _systemIAccessible?.accLocation(out left, out top, out width, out height, COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
                     return new Rectangle(left, top, width, height);
                 }
             }
@@ -70,8 +71,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return systemIAccessible.accDefaultAction[COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX];
+                    return _systemIAccessible?.accDefaultAction[COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX];
                 }
             }
 
@@ -166,8 +166,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return systemIAccessible.accHelp[COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX];
+                    return _systemIAccessible?.accHelp[COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX];
                 }
             }
 
@@ -178,8 +177,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    return systemIAccessible.get_accKeyboardShortcut(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
+                    return _systemIAccessible?.get_accKeyboardShortcut(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
                 }
             }
 
@@ -206,8 +204,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    var accRole = systemIAccessible.get_accRole(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
+                    var accRole = _systemIAccessible?.get_accRole(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
                     return accRole != null
                         ? (AccessibleRole)accRole
                         : AccessibleRole.None;
@@ -242,8 +239,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    var accState = systemIAccessible.get_accState(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
+                    var accState = _systemIAccessible?.get_accState(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
                     return accState != null
                         ? (AccessibleStates)accState
                         : AccessibleStates.None;
