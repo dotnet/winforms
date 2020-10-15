@@ -2520,7 +2520,7 @@ namespace System.Windows.Forms.Tests
         );
 
         [WinFormsFact(Skip = "This test needs to be run manually as it depends on the form being unobstructed.")]
-        public unsafe void TestAccessibleObjectFromPoint()
+        public unsafe void TestAccessibleObjectFromPoint_Button()
         {
             using Form form = new Form();
             using Button button = new Button
@@ -2541,13 +2541,49 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(HRESULT.S_OK, result);
             Assert.NotNull(ppacc);
+            Assert.True(varItem is int);
 
             IAccessible accessible = ppacc as IAccessible;
             Assert.NotNull(accessible);
             Assert.Equal("MSAA Button", accessible.accName);
-            Assert.Equal(0x100004, accessible.accState);        // STATE_SYSTEM_FOCUSABLE | STATE_SYSTEM_FOCUSED
-            Assert.Equal(0x2b, accessible.accRole);             // ROLE_SYSTEM_PUSHBUTTON
+            Assert.True(((int)accessible.accState & 0x100000) != 0);    // STATE_SYSTEM_FOCUSABLE
+            Assert.Equal(0x2b, accessible.accRole);                     // ROLE_SYSTEM_PUSHBUTTON
             Assert.Equal("Press", accessible.accDefaultAction);
+        }
+
+        [WinFormsFact(Skip = "This test needs to be run manually as it depends on the form being unobstructed.")]
+        public unsafe void TestAccessibleObjectFromPoint_ComboBox()
+        {
+            using Form form = new Form();
+            using ComboBox comboBox = new ComboBox();
+            comboBox.Items.Add("Item One");
+            comboBox.Items.Add("Item Two");
+
+            form.Controls.Add(comboBox);
+            form.Show();
+            var bounds = comboBox.Bounds;
+            Point point = comboBox.Location;
+            point.Offset(bounds.Width / 2, bounds.Height / 2);
+            point = comboBox.PointToScreen(point);
+            var result = AccessibleObjectFromPoint(
+                point,
+                out object ppacc,
+                out object varItem);
+
+            Assert.Equal(HRESULT.S_OK, result);
+            Assert.NotNull(ppacc);
+            Assert.True(varItem is int);
+
+            IAccessible accessible = ppacc as IAccessible;
+            Assert.NotNull(accessible);
+            Assert.Null(accessible.accName);
+            Assert.True(((int)accessible.accState & 0x100000) != 0);    // STATE_SYSTEM_FOCUSABLE
+            Assert.Equal(0x2a, accessible.accRole);                     // ROLE_SYSTEM_TEXT
+            Assert.Null(accessible.accDefaultAction);
+
+            var parent = accessible.accParent as IAccessible;
+            Assert.Equal(0x09, parent.accRole);                         // ROLE_SYSTEM_WINDOW
+            Assert.Equal(7, parent.accChildCount);
         }
 
         private class SubAccessibleObject : AccessibleObject
