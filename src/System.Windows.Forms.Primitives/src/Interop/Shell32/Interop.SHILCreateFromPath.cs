@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class Shell32
     {
-        [DllImport(Libraries.Shell32, ExactSpelling = true)]
+        [DllImport(Libraries.Shell32, ExactSpelling = true, CharSet = CharSet.Unicode)]
         public static extern HRESULT SHILCreateFromPath(string pszPath, out IntPtr ppidl, ref uint rgflnOut);
     }
 }
