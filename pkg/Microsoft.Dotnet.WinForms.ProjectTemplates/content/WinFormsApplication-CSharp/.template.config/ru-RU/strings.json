@@ -1,7 +1,7 @@
 {
   "version": "1.0.0.0",
   "strings": {
-    "name": "Windows Forms Control Library",
-    "description": "A project template for creating a control library that targets .NET Windows Forms (WinForms)."
+    "name": "Приложение Windows Forms",
+    "description": "Шаблон проекта для создания приложения .NET Windows Forms (WinForms)."
   }
 }

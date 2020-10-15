@@ -1,7 +1,7 @@
 ﻿{
   "version": "1.0.0.0",
   "strings": {
-    "name": "Windows Forms Class Library",
-    "description": "A project template for creating a class library that targets .NET Windows Forms (WinForms)."
+    "name": "Knihovna tříd pro Windows Forms",
+    "description": "Šablona projektu pro vytvoření knihovny tříd, která cílí na .NET Windows Forms (WinForms)"
   }
 }
