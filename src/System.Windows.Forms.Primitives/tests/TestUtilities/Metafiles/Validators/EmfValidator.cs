@@ -42,16 +42,16 @@ namespace System.Windows.Forms.Metafiles
                                     : null;
                             }
                         }
-                        catch (XunitException e)
+                        catch (XunitException ex)
                         {
                             throw new WrappedXunitException(
-                                $"\nValidator index {currentIndex}: {currentValidator!.GetType().Name} failed",
-                                e);
+                                $"\nValidator index {currentIndex}: {currentValidator!.GetType().Name} failed\n\n{emf.RecordsToString()}",
+                                ex);
                         }
                     }
                     else
                     {
-                        Assert.False(IsRenderingRecord(record.Type), $"Got unexpected {record.Type}");
+                        Assert.False(IsRenderingRecord(record.Type), $"Got unexpected {record.Type}\n\n{emf.RecordsToString()}");
                     }
 
                     return true;
@@ -62,61 +62,62 @@ namespace System.Windows.Forms.Metafiles
             {
                 Assert.False(
                     currentValidator.FailIfIncomplete,
-                    $"{currentValidator.GetType().Name} did not receive expected records");
+                    $"{currentValidator.GetType().Name} did not receive expected records\n\n{emf.RecordsToString()}");
             }
         }
 
-        private static bool IsRenderingRecord(Gdi32.EMR recordType) => recordType switch
-        {
-            Gdi32.EMR.POLYBEZIER               => true,
-            Gdi32.EMR.POLYGON                  => true,
-            Gdi32.EMR.POLYLINE                 => true,
-            Gdi32.EMR.POLYBEZIERTO             => true,
-            Gdi32.EMR.POLYLINETO               => true,
-            Gdi32.EMR.POLYPOLYLINE             => true,
-            Gdi32.EMR.POLYPOLYGON              => true,
-            Gdi32.EMR.SETPIXELV                => true,
-            Gdi32.EMR.ANGLEARC                 => true,
-            Gdi32.EMR.ELLIPSE                  => true,
-            Gdi32.EMR.RECTANGLE                => true,
-            Gdi32.EMR.ROUNDRECT                => true,
-            Gdi32.EMR.ARC                      => true,
-            Gdi32.EMR.CHORD                    => true,
-            Gdi32.EMR.PIE                      => true,
-            Gdi32.EMR.EXTFLOODFILL             => true,
-            Gdi32.EMR.LINETO                   => true,
-            Gdi32.EMR.ARCTO                    => true,
-            Gdi32.EMR.POLYDRAW                 => true,
-            Gdi32.EMR.CLOSEFIGURE              => true,
-            Gdi32.EMR.FILLPATH                 => true,
-            Gdi32.EMR.STROKEANDFILLPATH        => true,
-            Gdi32.EMR.STROKEPATH               => true,
-            Gdi32.EMR.FILLRGN                  => true,
-            Gdi32.EMR.FRAMERGN                 => true,
-            Gdi32.EMR.INVERTRGN                => true,
-            Gdi32.EMR.PAINTRGN                 => true,
-            Gdi32.EMR.BITBLT                   => true,
-            Gdi32.EMR.STRETCHBLT               => true,
-            Gdi32.EMR.MASKBLT                  => true,
-            Gdi32.EMR.PLGBLT                   => true,
-            Gdi32.EMR.SETDIBITSTODEVICE        => true,
-            Gdi32.EMR.STRETCHDIBITS            => true,
-            Gdi32.EMR.EXTTEXTOUTA              => true,
-            Gdi32.EMR.EXTTEXTOUTW              => true,
-            Gdi32.EMR.POLYBEZIER16             => true,
-            Gdi32.EMR.POLYGON16                => true,
-            Gdi32.EMR.POLYLINE16               => true,
-            Gdi32.EMR.POLYBEZIERTO16           => true,
-            Gdi32.EMR.POLYLINETO16             => true,
-            Gdi32.EMR.POLYPOLYLINE16           => true,
-            Gdi32.EMR.POLYPOLYGON16            => true,
-            Gdi32.EMR.POLYDRAW16               => true,
-            Gdi32.EMR.POLYTEXTOUTA             => true,
-            Gdi32.EMR.POLYTEXTOUTW             => true,
-            Gdi32.EMR.ALPHABLEND               => true,
-            Gdi32.EMR.TRANSPARENTBLT           => true,
-            Gdi32.EMR.GRADIENTFILL             => true,
-            _ => false
-        };
+        private static bool IsRenderingRecord(Gdi32.EMR recordType)
+            => recordType switch
+            {
+                Gdi32.EMR.POLYBEZIER               => true,
+                Gdi32.EMR.POLYGON                  => true,
+                Gdi32.EMR.POLYLINE                 => true,
+                Gdi32.EMR.POLYBEZIERTO             => true,
+                Gdi32.EMR.POLYLINETO               => true,
+                Gdi32.EMR.POLYPOLYLINE             => true,
+                Gdi32.EMR.POLYPOLYGON              => true,
+                Gdi32.EMR.SETPIXELV                => true,
+                Gdi32.EMR.ANGLEARC                 => true,
+                Gdi32.EMR.ELLIPSE                  => true,
+                Gdi32.EMR.RECTANGLE                => true,
+                Gdi32.EMR.ROUNDRECT                => true,
+                Gdi32.EMR.ARC                      => true,
+                Gdi32.EMR.CHORD                    => true,
+                Gdi32.EMR.PIE                      => true,
+                Gdi32.EMR.EXTFLOODFILL             => true,
+                Gdi32.EMR.LINETO                   => true,
+                Gdi32.EMR.ARCTO                    => true,
+                Gdi32.EMR.POLYDRAW                 => true,
+                Gdi32.EMR.CLOSEFIGURE              => true,
+                Gdi32.EMR.FILLPATH                 => true,
+                Gdi32.EMR.STROKEANDFILLPATH        => true,
+                Gdi32.EMR.STROKEPATH               => true,
+                Gdi32.EMR.FILLRGN                  => true,
+                Gdi32.EMR.FRAMERGN                 => true,
+                Gdi32.EMR.INVERTRGN                => true,
+                Gdi32.EMR.PAINTRGN                 => true,
+                Gdi32.EMR.BITBLT                   => true,
+                Gdi32.EMR.STRETCHBLT               => true,
+                Gdi32.EMR.MASKBLT                  => true,
+                Gdi32.EMR.PLGBLT                   => true,
+                Gdi32.EMR.SETDIBITSTODEVICE        => true,
+                Gdi32.EMR.STRETCHDIBITS            => true,
+                Gdi32.EMR.EXTTEXTOUTA              => true,
+                Gdi32.EMR.EXTTEXTOUTW              => true,
+                Gdi32.EMR.POLYBEZIER16             => true,
+                Gdi32.EMR.POLYGON16                => true,
+                Gdi32.EMR.POLYLINE16               => true,
+                Gdi32.EMR.POLYBEZIERTO16           => true,
+                Gdi32.EMR.POLYLINETO16             => true,
+                Gdi32.EMR.POLYPOLYLINE16           => true,
+                Gdi32.EMR.POLYPOLYGON16            => true,
+                Gdi32.EMR.POLYDRAW16               => true,
+                Gdi32.EMR.POLYTEXTOUTA             => true,
+                Gdi32.EMR.POLYTEXTOUTW             => true,
+                Gdi32.EMR.ALPHABLEND               => true,
+                Gdi32.EMR.TRANSPARENTBLT           => true,
+                Gdi32.EMR.GRADIENTFILL             => true,
+                _ => false
+            };
     }
 }
