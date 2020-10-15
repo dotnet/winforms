@@ -30,6 +30,8 @@ namespace System.Windows.Forms
 
             public bool IsIAccessibleCreated { get; }
 
+            internal IAccessible? SystemIAccessibleInternal => _systemIAccessible;
+
             public void accSelect(int flagsSelect, object varChild)
                 => Execute(systemIAccessible => systemIAccessible.accSelect(flagsSelect, varChild));
 
