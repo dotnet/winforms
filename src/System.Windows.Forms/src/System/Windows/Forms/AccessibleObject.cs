@@ -1582,7 +1582,7 @@ namespace System.Windows.Forms
         {
             if (obj != null && obj.systemWrapper)
             {
-                return obj.systemIAccessible;
+                return obj.systemIAccessible.SystemIAccessibleInternal;
             }
 
             return obj;
@@ -1617,7 +1617,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsNonClientObject => AccessibleObjectId == User32.OBJID.WINDOW;
 
-        internal IAccessible? GetSystemIAccessibleInternal() => systemIAccessible;
+        internal IAccessible? GetSystemIAccessibleInternal() => systemIAccessible.SystemIAccessibleInternal;
 
         protected void UseStdAccessibleObjects(IntPtr handle)
         {
@@ -1720,7 +1720,7 @@ namespace System.Windows.Forms
             }
 
             // Check to see if this object already wraps iacc
-            if (systemIAccessible == iacc)
+            if (systemIAccessible.SystemIAccessibleInternal == iacc)
             {
                 return this;
             }
