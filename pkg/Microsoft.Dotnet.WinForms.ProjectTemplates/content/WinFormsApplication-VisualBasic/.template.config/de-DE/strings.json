@@ -2,6 +2,6 @@
   "version": "1.0.0.0",
   "strings": {
     "name": "Windows Forms-App",
-    "description": "Eine Projektvorlage zum Erstellen einer Windows Forms-App (WinForms) in .NET."
+    "description": "Eine Projektvorlage zum Erstellen einer .NET Windows Forms-App (WinForms)."
   }
 }
