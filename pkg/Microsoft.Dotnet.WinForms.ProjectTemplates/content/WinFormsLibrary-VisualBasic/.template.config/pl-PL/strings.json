@@ -1,7 +1,7 @@
 ﻿{
   "version": "1.0.0.0",
   "strings": {
-    "name": "Windows Forms Class Library",
-    "description": "A project template for creating a class library that targets .NET Windows Forms (WinForms)."
+    "name": "Biblioteka klas Windows Forms",
+    "description": "Szablon projektu służący do tworzenia biblioteki klas przeznaczonej dla środowiska .NET Windows Forms (WinForms)."
   }
 }
