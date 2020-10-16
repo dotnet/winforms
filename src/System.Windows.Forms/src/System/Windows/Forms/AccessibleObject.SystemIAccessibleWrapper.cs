@@ -28,6 +28,8 @@ namespace System.Windows.Forms
                 IsIAccessibleCreated = systemIAccessible != null;
             }
 
+            internal IAccessible? SystemIAccessibleInternal => _systemIAccessible;
+
             public bool IsIAccessibleCreated { get; }
 
             public void accSelect(int flagsSelect, object varChild)
