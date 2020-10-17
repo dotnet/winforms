@@ -143,6 +143,13 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void DateTimePicker_GetAutoSizeMode_Invoke_ReturnsExpected()
+        {
+            using var control = new SubDateTimePicker();
+            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
+        }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DateTimePickerFormat))]
         public void DateTimePicker_Format_Set_GetReturnsExpected(DateTimePickerFormat value)
@@ -211,13 +218,6 @@ namespace System.Windows.Forms.Tests
                 DateTime dateTime = DateTimePicker.SysTimeToDateTime(systemTime);
                 Assert.Equal(DateTime.MinValue, dateTime);
             }
-        }
-
-        [WinFormsFact]
-        public void DateTimePicker_GetAutoSizeMode_Invoke_ReturnsExpected()
-        {
-            using var control = new SubDateTimePicker();
-            Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
         public class SubDateTimePicker : DateTimePicker
