@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
-            EnumValidation.EnumValidator.Validate(navigator, nameof(navigator));
+            SourceGenerated.EnumValidator.Validate(navigator, nameof(navigator));
 
             _navigators[ctl] = navigator;
             SetShowHelp(ctl, true);

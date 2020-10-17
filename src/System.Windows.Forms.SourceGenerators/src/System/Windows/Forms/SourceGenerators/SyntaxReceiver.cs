@@ -32,7 +32,7 @@ namespace System.Windows.Forms.SourceGenerators
                                 ValueText: "Validate"
                             }
                         },
-                        Expression: MemberAccessExpressionSyntax  // For: EnumValidation.EnumValidator.Validate(..)
+                        Expression: MemberAccessExpressionSyntax  // For: SourceGenerated.EnumValidator.Validate(..)
                         {
                             Name:
                             {

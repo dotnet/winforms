@@ -626,7 +626,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are -1 to 0x40
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 Properties.SetInteger(s_accessibleRoleProperty, (int)value);
             }
         }
@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms
                 if (BackgroundImageLayout != value)
                 {
                     // Valid values are 0x0 to 0x4
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     // Check if the value is either center, strech or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch)
@@ -3232,7 +3232,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2.
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 RightToLeft oldValue = RightToLeft;
 

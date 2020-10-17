@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using EnumValidation;
+using SourceGenerated;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.ComCtl32;
@@ -553,7 +553,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 SetStyleBit(value == LeftRightAlignment.Right, DTS.RIGHTALIGN);
             }

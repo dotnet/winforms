@@ -104,7 +104,7 @@ namespace System.Windows.Forms
             {
                 if (_style != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _style = value;
                     if (IsHandleCreated)

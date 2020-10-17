@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                 Debug.Indent();
 
                 //valid values are -1 to 0xb
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 ImeMode oldImeMode = CachedImeMode;
                 CachedImeMode = value;

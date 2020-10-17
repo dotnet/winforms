@@ -73,7 +73,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x6
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 _borderStyle = value;
                 //set the CellBorderWidth according to the current CellBorderStyle.
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 if (containerInfo.GrowStyle != value)

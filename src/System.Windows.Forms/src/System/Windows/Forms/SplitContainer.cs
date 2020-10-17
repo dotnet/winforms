@@ -249,7 +249,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_borderStyle != value)
                 {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_fixedPanel != value)
                 {
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_orientation != value)
                 {
                     _orientation = value;

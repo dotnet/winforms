@@ -246,7 +246,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (HotTracking && value != ItemActivation.OneClick)
                 {
@@ -278,7 +278,7 @@ namespace System.Windows.Forms
 
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (alignStyle != value)
                 {
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
             get => borderStyle;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (headerStyle != value)
                 {
                     // We can switch between NONE and either *one* of the other styles without
@@ -1557,7 +1557,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (sorting != value)
                 {
                     sorting = value;
@@ -1877,7 +1877,7 @@ namespace System.Windows.Forms
                 FlipViewToLargeIconAndSmallIcon = false;
 
                 //valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == View.Tile && VirtualMode)
                 {
@@ -3608,7 +3608,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             //valid values are 0x0 to 0x3
-            EnumValidation.EnumValidator.Validate(portion, nameof(portion));
+            SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
             if (View == View.Details && Columns.Count == 0)
             {
@@ -3681,7 +3681,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(subItemIndex), subItemIndex, string.Format(SR.InvalidArgument, nameof(subItemIndex), subItemIndex));
             }
             //valid values are 0x0 to 0x3
-            EnumValidation.EnumValidator.Validate(portion, nameof(portion));
+            SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
             if (Columns.Count == 0)
             {
@@ -5237,7 +5237,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x2
-            EnumValidation.EnumValidator.Validate(headerAutoResize, nameof(headerAutoResize));
+            SourceGenerated.EnumValidator.Validate(headerAutoResize, nameof(headerAutoResize));
 
             int width = 0;
             int compensate = 0;

@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             get => GetAutoSizeMode();
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             {
                 if (_borderStyle != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _borderStyle = value;
                     UpdateStyles();

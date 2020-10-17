@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 bool resetAutoComplete = false;
                 if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
                 {
@@ -229,7 +229,7 @@ namespace System.Windows.Forms
             {
                 if (characterCasing != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     characterCasing = value;
                     RecreateHandle();
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
             {
                 if (scrollBars != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     scrollBars = value;
                     RecreateHandle();
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
             {
                 if (textAlign != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     textAlign = value;
                     RecreateHandle();

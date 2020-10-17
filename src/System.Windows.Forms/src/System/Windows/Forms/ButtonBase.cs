@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 _flatStyle = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
             get => _textImageRelation;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == TextImageRelation)
                 {

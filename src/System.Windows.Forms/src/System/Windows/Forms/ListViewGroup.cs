@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             get => _headerAlignment;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_headerAlignment == value)
                 {
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
             get => _footerAlignment;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_footerAlignment == value)
                 {
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
             get => _collapsedState;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_collapsedState == value)
                 {

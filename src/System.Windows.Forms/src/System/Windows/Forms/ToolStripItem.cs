@@ -272,7 +272,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 Properties.SetInteger(s_accessibleRoleProperty, (int)value);
                 OnAccessibleRoleChanged(EventArgs.Empty);
             }
@@ -289,7 +289,7 @@ namespace System.Windows.Forms
             get => _alignment;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_alignment != value)
                 {
@@ -434,7 +434,7 @@ namespace System.Windows.Forms
             {
                 if (BackgroundImageLayout != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     Properties.SetObject(s_backgroundImageLayoutProperty, value);
                     Invalidate();
@@ -578,7 +578,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != Dock)
                 {
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
             {
                 if (_displayStyle != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _displayStyle = value;
                     if (!_state[s_stateContstructing])
@@ -1151,7 +1151,7 @@ namespace System.Windows.Forms
             get => _imageScaling;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_imageScaling != value)
                 {
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 Properties.SetInteger(s_mergeActionProperty, (int)value);
             }
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms
             get => _overflow;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_overflow != value)
                 {
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
 
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 RightToLeft oldValue = RightToLeft;
 
@@ -1920,7 +1920,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 Properties.SetObject(ToolStripItem.s_textDirectionProperty, value);
                 InvalidateItemLayout("TextDirection");
@@ -1936,7 +1936,7 @@ namespace System.Windows.Forms
             get => _textImageRelation;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != TextImageRelation)
                 {

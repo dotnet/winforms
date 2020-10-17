@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Layout
 
         public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
         {
-            EnumValidation.EnumValidator.Validate(value);
+            SourceGenerated.EnumValidator.Validate(value);
 
             container.Properties.SetInteger(s_flowDirectionProperty, (int)value);
             LayoutTransaction.DoLayout(container, container, PropertyNames.FlowDirection);

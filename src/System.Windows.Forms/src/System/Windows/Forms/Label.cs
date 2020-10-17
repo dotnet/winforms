@@ -213,7 +213,7 @@ namespace System.Windows.Forms
             get => (BorderStyle)_labelState[s_stateBorderStyle];
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (BorderStyle != value)
                 {
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_labelState[s_stateFlatStyle] != (int)value)
                 {
@@ -587,7 +587,7 @@ namespace System.Windows.Forms
             get => _liveSetting;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 _liveSetting = value;
             }
         }

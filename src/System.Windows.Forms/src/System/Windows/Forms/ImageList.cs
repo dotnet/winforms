@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             get => _colorDepth;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_colorDepth == value)
                 {

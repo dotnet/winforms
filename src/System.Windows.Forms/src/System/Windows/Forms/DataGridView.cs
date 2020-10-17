@@ -1133,7 +1133,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_borderStyle != value)
                 {
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle))
@@ -1287,7 +1287,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0xa
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != CellBorderStyle)
                 {
@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 _clipboardCopyMode = value;
             }
         }
@@ -1532,7 +1532,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != ColumnHeadersBorderStyle)
                 {
                     if (value == DataGridViewHeaderBorderStyle.Custom)
@@ -1702,7 +1702,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_columnHeadersHeightSizeMode != value)
                 {
                     DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(_columnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize);
@@ -2270,7 +2270,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_editMode != value)
                 {
@@ -3400,7 +3400,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != RowHeadersBorderStyle)
                 {
@@ -3616,7 +3616,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_rowHeadersWidthSizeMode != value)
                 {
                     DataGridViewAutoSizeModeEventArgs dgvasme = new DataGridViewAutoSizeModeEventArgs(_rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
@@ -3750,7 +3750,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_scrollBars != value)
                 {
@@ -3897,7 +3897,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (SelectionMode != value)
                 {

@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&
                     AutoCompleteSource != AutoCompleteSource.ListItems &&
                     value != AutoCompleteMode.None)
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&
                     AutoCompleteMode != AutoCompleteMode.None &&
@@ -441,7 +441,7 @@ namespace System.Windows.Forms
                 if (DrawMode != value)
                 {
                     //valid values are 0x0 to 0x2.
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
                     ResetHeightCache();
                     Properties.SetInteger(PropDrawMode, (int)value);
                     RecreateHandle();
@@ -572,7 +572,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 _flatStyle = value;
                 Invalidate();
             }
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms
                 {
                     // verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     if (value == ComboBoxStyle.DropDownList &&
                         AutoCompleteSource != AutoCompleteSource.ListItems &&

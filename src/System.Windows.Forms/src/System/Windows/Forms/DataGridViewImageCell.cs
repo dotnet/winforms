@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (ImageLayout != value)
                 {
                     Properties.SetInteger(s_propImageCellLayout, (int)value);

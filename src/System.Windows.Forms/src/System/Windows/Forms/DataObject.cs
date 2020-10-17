@@ -280,7 +280,7 @@ namespace System.Windows.Forms
         public virtual bool ContainsText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
-            EnumValidation.EnumValidator.Validate(format, nameof(format));
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             return GetDataPresent(ConvertToDataFormats(format), false);
         }
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
         public virtual string GetText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
-            EnumValidation.EnumValidator.Validate(format, nameof(format));
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             if (GetData(ConvertToDataFormats(format), false) is string text)
             {
@@ -374,7 +374,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x4
-            EnumValidation.EnumValidator.Validate(format, nameof(format));
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             SetData(ConvertToDataFormats(format), false, textData);
         }

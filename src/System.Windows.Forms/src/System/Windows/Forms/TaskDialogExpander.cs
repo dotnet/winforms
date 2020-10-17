@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             get => _expanderPosition;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 DenyIfBound();
 

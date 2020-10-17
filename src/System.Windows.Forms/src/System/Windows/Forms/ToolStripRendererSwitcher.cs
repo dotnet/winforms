@@ -100,7 +100,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == ToolStripRenderMode.Custom)
                 {
                     throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);

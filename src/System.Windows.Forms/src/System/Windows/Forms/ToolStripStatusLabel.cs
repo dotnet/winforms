@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {
@@ -182,7 +182,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 liveSetting = value;
             }
         }

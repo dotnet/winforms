@@ -75,7 +75,7 @@ namespace System.Windows.Forms
             get => _state;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 DenyIfBoundAndNotCreated();
 

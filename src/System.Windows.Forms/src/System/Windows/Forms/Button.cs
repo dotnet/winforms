@@ -64,7 +64,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
@@ -174,7 +174,7 @@ namespace System.Windows.Forms
 
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 _dialogResult = value;
             }

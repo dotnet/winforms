@@ -134,7 +134,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_borderStyle != value)
                 {
@@ -800,7 +800,7 @@ namespace System.Windows.Forms
             get => _sizeMode;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_sizeMode != value)
                 {

@@ -108,7 +108,7 @@ namespace System.Windows.Forms
                 if (appearance != value)
                 {
                     //valid values are 0x0 to 0x1
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {

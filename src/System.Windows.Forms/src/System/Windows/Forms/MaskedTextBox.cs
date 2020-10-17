@@ -413,7 +413,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == MaskFormat.IncludePrompt)
                 {
@@ -529,7 +529,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (insertMode != value)
                 {
@@ -1257,7 +1257,7 @@ namespace System.Windows.Forms
                 {
                     //verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     textAlign = value;
                     RecreateHandle();
@@ -1317,7 +1317,7 @@ namespace System.Windows.Forms
                 }
 
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
                 // verify it against the new value and raise OnTextChange if needed.

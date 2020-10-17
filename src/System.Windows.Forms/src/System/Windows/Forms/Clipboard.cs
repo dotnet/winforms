@@ -236,7 +236,7 @@ namespace System.Windows.Forms
 
         public static bool ContainsText(TextDataFormat format)
         {
-            EnumValidation.EnumValidator.Validate(format, nameof(format));
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
 
         public static string GetText(TextDataFormat format)
         {
-            EnumValidation.EnumValidator.Validate(format, nameof(format));
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
-            EnumValidation.EnumValidator.Validate(format, nameof(format));
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(ConvertToDataFormats(format), false, text);

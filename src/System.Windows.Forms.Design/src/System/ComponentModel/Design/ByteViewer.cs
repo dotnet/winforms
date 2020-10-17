@@ -669,7 +669,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetDisplayMode(DisplayMode mode)
         {
-            EnumValidation.EnumValidator.Validate(mode, nameof(mode));
+            SourceGenerated.EnumValidator.Validate(mode, nameof(mode));
 
             _displayMode = mode;
             _realDisplayMode = (mode == DisplayMode.Auto) ? GetAutoDisplayMode() : mode;

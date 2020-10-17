@@ -551,7 +551,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
@@ -673,7 +673,7 @@ namespace System.Windows.Forms
             get => (FormBorderStyle)formState[FormStateBorderStyle];
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 formState[FormStateBorderStyle] = (int)value;
                 if (formState[FormStateSetClientSize] == 1 && !IsHandleCreated)
@@ -989,7 +989,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x7
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 dialogResult = value;
             }
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms
                     //do some bounds checking here
                     //
                     //valid values are 0x0 to 0x2
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     formState[FormStateSizeGripStyle] = (int)value;
                     UpdateRenderSizeGrip();
@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 formState[FormStateStartPos] = (int)value;
             }
         }
@@ -2315,7 +2315,7 @@ namespace System.Windows.Forms
             get => (FormWindowState)formState[FormStateWindowState];
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 switch (value)
                 {

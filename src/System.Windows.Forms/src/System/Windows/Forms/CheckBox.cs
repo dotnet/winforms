@@ -81,7 +81,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_appearance != value)
                 {
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
             set
             {
                 // valid values are 0-2 inclusive.
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_checkState != value)
                 {

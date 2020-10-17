@@ -304,9 +304,9 @@ namespace System.Windows.Forms.VisualStyles
 
         internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            EnumValidation.EnumValidator.Validate(edges, nameof(edges));
-            EnumValidation.EnumValidator.Validate(style, nameof(style));
-            EnumValidation.EnumValidator.Validate(effects, nameof(effects));
+            SourceGenerated.EnumValidator.Validate(edges, nameof(edges));
+            SourceGenerated.EnumValidator.Validate(style, nameof(style));
+            SourceGenerated.EnumValidator.Validate(effects, nameof(effects));
 
             RECT destRect = bounds;
             var contentRect = new RECT();
@@ -505,7 +505,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool GetBoolean(BooleanProperty prop)
         {
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             BOOL val = BOOL.FALSE;
             _lastHResult = GetThemeBool(this, Part, State, (int)prop, ref val);
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.VisualStyles
         public Color GetColor(ColorProperty prop)
         {
             // Valid values are 0xed9 to 0xeef
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int color = 0;
             _lastHResult = GetThemeColor(this, Part, State, (int)prop, ref color);
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.VisualStyles
         public int GetEnumValue(EnumProperty prop)
         {
             // Valid values are 0xfa1 to 0xfaf
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int val = 0;
             _lastHResult = GetThemeEnumValue(this, Part, State, (int)prop, ref val);
@@ -544,7 +544,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe string GetFilename(FilenameProperty prop)
         {
             // Valid values are 0xbb9 to 0xbc0
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             Span<char> filename = stackalloc char[512];
             fixed (char* pFilename = filename)
@@ -563,7 +563,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
@@ -596,7 +596,7 @@ namespace System.Windows.Forms.VisualStyles
         public int GetInteger(IntegerProperty prop)
         {
             // Valid values are 0x961 to 0x978
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int val = 0;
             _lastHResult = GetThemeInt(this, Part, State, (int)prop, ref val);
@@ -618,7 +618,7 @@ namespace System.Windows.Forms.VisualStyles
         internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
         {
             // Valid values are 0x0 to 0x2
-            EnumValidation.EnumValidator.Validate(type, nameof(type));
+            SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             if (DpiHelper.IsPerMonitorV2Awareness && hwnd != IntPtr.Zero)
             {
@@ -644,7 +644,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
 
             // Valid values are 0x0 to 0x2
-            EnumValidation.EnumValidator.Validate(type, nameof(type));
+            SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
@@ -658,7 +658,7 @@ namespace System.Windows.Forms.VisualStyles
         public Point GetPoint(PointProperty prop)
         {
             //valid values are 0xd49 to 0xd50
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             _lastHResult = GetThemePosition(this, Part, State, (int)prop, out Point point);
             return point;
@@ -673,7 +673,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
 
             // Valid values are 0xe11 to 0xe13
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeMargins(this, hdc, Part, State, (int)prop, null, out MARGINS margins);
@@ -687,7 +687,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe string GetString(StringProperty prop)
         {
             // Valid values are 0xc81 to 0xc81
-            EnumValidation.EnumValidator.Validate(prop, nameof(prop));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             Span<char> aString = stackalloc char[512];
             fixed (char* pString = aString)

@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (OwningColumn is null || DataGridView is null)
                 {
                     throw new InvalidOperationException(SR.DataGridView_CellDoesNotYetBelongToDataGridView);

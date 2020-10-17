@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             get => _autoScaleMode;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 bool scalingNeeded = false;
                 if (value != _autoScaleMode)

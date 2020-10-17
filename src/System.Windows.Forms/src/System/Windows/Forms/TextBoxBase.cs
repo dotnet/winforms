@@ -353,7 +353,7 @@ namespace System.Windows.Forms
             {
                 if (borderStyle != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     borderStyle = value;
                     UpdateStyles();

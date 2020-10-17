@@ -194,7 +194,7 @@ namespace System.Windows.Forms
             get => borderStyle;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {

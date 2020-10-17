@@ -722,7 +722,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != ScrollBars)
                 {
@@ -781,7 +781,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 ForceHandleCreate();
                 var pf = new PARAFORMAT
@@ -2384,7 +2384,7 @@ namespace System.Windows.Forms
         public void LoadFile(string path, RichTextBoxStreamType fileType)
         {
             //valid values are 0x0 to 0x4
-            EnumValidation.EnumValidator.Validate(fileType, nameof(fileType));
+            SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
@@ -2406,7 +2406,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            EnumValidation.EnumValidator.Validate(fileType, nameof(fileType));
+            SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             SF flags;
             switch (fileType)
@@ -2696,7 +2696,7 @@ namespace System.Windows.Forms
         public void SaveFile(string path, RichTextBoxStreamType fileType)
         {
             //valid values are 0x0 to 0x4
-            EnumValidation.EnumValidator.Validate(fileType, nameof(fileType));
+            SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             Stream file = File.Create(path);
             try

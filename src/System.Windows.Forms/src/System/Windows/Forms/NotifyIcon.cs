@@ -121,7 +121,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != balloonTipIcon)
                 {
                     balloonTipIcon = value;
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x3
-            EnumValidation.EnumValidator.Validate(tipIcon, nameof(tipIcon));
+            SourceGenerated.EnumValidator.Validate(tipIcon, nameof(tipIcon));
 
             if (added)
             {

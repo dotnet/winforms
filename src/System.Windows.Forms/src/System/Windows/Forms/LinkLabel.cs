@@ -272,7 +272,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != _linkBehavior)
                 {
                     _linkBehavior = value;
@@ -893,7 +893,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x7
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 _dialogResult = value;
             }

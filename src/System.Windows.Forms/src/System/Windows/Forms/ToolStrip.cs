@@ -877,7 +877,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_toolStripGripStyle != value)
                 {
                     _toolStripGripStyle = value;
@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x4
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_layoutStyle != value)
                 {
                     _layoutStyle = value;
@@ -1660,7 +1660,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == ToolStripRenderMode.Custom)
                 {
                     throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
@@ -1808,7 +1808,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 Properties.SetObject(ToolStrip.s_propTextDirection, value);
 
                 using (new LayoutTransaction(this, this, "TextDirection"))

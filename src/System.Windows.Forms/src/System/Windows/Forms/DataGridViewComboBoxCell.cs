@@ -298,7 +298,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != DisplayStyle)
                 {
                     Properties.SetInteger(s_propComboBoxCellDisplayStyle, (int)value);
@@ -467,7 +467,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != FlatStyle)
                 {
                     Properties.SetInteger(s_propComboBoxCellFlatStyle, (int)value);

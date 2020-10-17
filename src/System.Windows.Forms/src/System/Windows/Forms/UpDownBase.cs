@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_borderStyle != value)
                 {
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
             get => _upDownEdit.TextAlign;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 _upDownEdit.TextAlign = value;
             }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
             get => _upDownAlign;
             set
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_upDownAlign != value)
                 {

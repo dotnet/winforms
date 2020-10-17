@@ -434,7 +434,7 @@ namespace System.Windows.Forms
             {
                 if (_toolTipIcon != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _toolTipIcon = value;
                     if (_toolTipIcon > 0 && GetHandleCreated())

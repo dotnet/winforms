@@ -258,7 +258,7 @@ namespace System.Windows.Forms
             {
                 if (borderStyle != value)
                 {
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     borderStyle = value;
                     UpdateStyles();
@@ -955,7 +955,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (drawMode != value)
                 {

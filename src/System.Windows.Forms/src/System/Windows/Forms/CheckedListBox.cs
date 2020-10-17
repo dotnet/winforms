@@ -230,7 +230,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != SelectionMode.One
                     && value != SelectionMode.None)
                 {
@@ -901,7 +901,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             // valid values are 0-2 inclusive.
-            EnumValidation.EnumValidator.Validate(value);
+            SourceGenerated.EnumValidator.Validate(value);
             CheckState currentValue = CheckedItems.GetCheckedState(index);
 
             if (value != currentValue)
@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms
                 //validate the enum that's passed in here
                 //
                 // Valid values are 0-2 inclusive.
-                EnumValidation.EnumValidator.Validate(check, nameof(check));
+                SourceGenerated.EnumValidator.Validate(check, nameof(check));
 
                 int index = base.Add(item);
                 _owner.SetItemCheckState(index, check);

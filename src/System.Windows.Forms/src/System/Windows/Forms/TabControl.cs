@@ -117,7 +117,7 @@ namespace System.Windows.Forms
                 if (_alignment != value)
                 {
                     //valid values are 0x0 to 0x3
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _alignment = value;
                     if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
                 if (_appearance != value)
                 {
                     //valid values are 0x0 to 0x2
-                    EnumValidation.EnumValidator.Validate(value);
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _appearance = value;
                     RecreateHandle();
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_drawMode != value)
                 {
@@ -777,7 +777,7 @@ namespace System.Windows.Forms
                 }
 
                 //valid values are 0x0 to 0x2
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 _sizeMode = value;
                 RecreateHandle();

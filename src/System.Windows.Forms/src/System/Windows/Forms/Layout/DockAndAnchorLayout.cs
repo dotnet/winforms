@@ -757,7 +757,7 @@ namespace System.Windows.Forms.Layout
 
             if (GetDock(element) != value)
             {
-                EnumValidation.EnumValidator.Validate(value);
+                SourceGenerated.EnumValidator.Validate(value);
 
                 bool dockNeedsLayout = CommonProperties.GetNeedsDockLayout(element);
                 CommonProperties.xSetDock(element, value);
