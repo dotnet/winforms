@@ -320,6 +320,7 @@ namespace Paint
             AssertFirstLineAndRemove(lines, "{");
             AssertFirstLineAndRemove(lines, "internal static partial class EnumValidator");
             AssertFirstLineAndRemove(lines, "{");
+
             AssertFirstLineAndRemove(lines, "/// <summary>Validates that the enum value passed in is valid for the enum type.</summary>");
             AssertFirstLineAndRemove(lines, $"public static void Validate({expectedEnumName} enumToValidate, string parameterName = \"value\")");
             AssertFirstLineAndRemove(lines, "{");
@@ -330,13 +331,9 @@ namespace Paint
                 AssertFirstLineAndRemove(lines, line.Trim());
             }
 
-            AssertFirstLineAndRemove(lines, $"throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, intValue, typeof({expectedEnumName}));");
+            AssertFirstLineAndRemove(lines, $"ReportEnumValidationError(parameterName, intValue, typeof({expectedEnumName}));");
 
             AssertFirstLineAndRemove(lines, "}");
-            AssertFirstLineAndRemove(lines, "");
-            AssertFirstLineAndRemove(lines, "}");
-            AssertFirstLineAndRemove(lines, "}");
-            AssertFirstLineAndRemove(lines, "");
 
             static void AssertFirstLineAndRemove(List<string> lines, string expected)
             {

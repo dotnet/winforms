@@ -28,6 +28,11 @@ namespace EnumValidation
     }
 }
 ";
+        private const string ReportErrorMethod = @"
+        private static void ReportEnumValidationError(string parameterName, int value, System.Type enumType)
+        {
+            throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, value, enumType);
+        }";
 
         public void Initialize(GeneratorInitializationContext context)
         {
@@ -93,8 +98,8 @@ namespace EnumValidation
                 sb.AppendLine();
             }
 
-            sb.AppendLine(
-@"    }
+            sb.AppendLine(ReportErrorMethod);
+            sb.AppendLine(@"    }
 }");
         }
 
@@ -109,7 +114,7 @@ namespace EnumValidation
             {
                 GenerateSequenceValidationMethodBody(context, sb, info, indent);
             }
-            sb.AppendLine($"{indent}throw new System.ComponentModel.InvalidEnumArgumentException(parameterName, intValue, typeof({info.EnumType}));");
+            sb.AppendLine($"{indent}ReportEnumValidationError(parameterName, intValue, typeof({info.EnumType}));");
         }
 
         private static void GenerateFlagsValidationMethodBody(GeneratorExecutionContext context, StringBuilder sb, EnumValidationInfo info, string indent)
