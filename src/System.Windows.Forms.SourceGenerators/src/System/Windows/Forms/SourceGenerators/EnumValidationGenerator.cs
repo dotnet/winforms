@@ -41,10 +41,20 @@ namespace EnumValidation
 
             List<EnumValidationInfo> enumsToValidate = GetEnumValidationInfo(context.Compilation, syntaxReceiver.ArgumentsToValidate, context.CancellationToken).ToList();
 
+            if (context.CancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (enumsToValidate.Count > 0)
             {
                 var sb = new StringBuilder();
                 GenerateValidator(context, sb, enumsToValidate);
+
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
 
                 context.AddSource("Validation.cs", sb.ToString());
             }
@@ -67,6 +77,11 @@ namespace EnumValidation
 
             foreach (EnumValidationInfo info in infos)
             {
+                if (context.CancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 sb.AppendLine($"{indent}/// <summary>Validates that the enum value passed in is valid for the enum type.</summary>");
                 sb.AppendLine($"{indent}public static void Validate({info.EnumType} enumToValidate, string parameterName = \"value\")");
                 sb.AppendLine($"{indent}{{");
@@ -149,7 +164,7 @@ namespace EnumValidation
             yield return (min, max.Value);
         }
 
-        private static IEnumerable<EnumValidationInfo> GetEnumValidationInfo(Compilation compilation, List<SyntaxNode> argumentsToValidate)
+        private static IEnumerable<EnumValidationInfo> GetEnumValidationInfo(Compilation compilation, List<SyntaxNode> argumentsToValidate, CancellationToken cancellationToken)
         {
             INamedTypeSymbol? flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
 
@@ -157,9 +172,14 @@ namespace EnumValidation
 
             foreach (SyntaxNode argument in argumentsToValidate)
             {
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    yield break;
+                }
+
                 SemanticModel semanticModel = compilation.GetSemanticModel(argument.SyntaxTree);
 
-                ITypeSymbol? enumType = semanticModel.GetTypeInfo(argument).Type;
+                ITypeSymbol? enumType = semanticModel.GetTypeInfo(argument, cancellationToken).Type;
                 if (enumType is null || foundTypes.Contains(enumType))
                 {
                     continue;
