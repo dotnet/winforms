@@ -39,9 +39,9 @@ namespace EnumValidation
                 throw new InvalidOperationException("We were given the wrong syntax receiver.");
             }
 
-            IEnumerable<EnumValidationInfo> enumsToValidate = GetEnumValidationInfo(context.Compilation, syntaxReceiver.ArgumentsToValidate);
+            List<EnumValidationInfo> enumsToValidate = GetEnumValidationInfo(context.Compilation, syntaxReceiver.ArgumentsToValidate, context.CancellationToken).ToList();
 
-            if (enumsToValidate.Any())
+            if (enumsToValidate.Count > 0)
             {
                 var sb = new StringBuilder();
                 GenerateValidator(context, sb, enumsToValidate);
