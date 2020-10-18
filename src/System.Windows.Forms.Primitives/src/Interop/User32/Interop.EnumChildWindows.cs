@@ -11,22 +11,18 @@ internal static partial class Interop
     {
         public delegate BOOL EnumChildWindowsCallback(IntPtr hWnd);
 
-        private delegate BOOL EnumChildWindowsNativeCallback(IntPtr hWnd, IntPtr lParam);
-
-        private static readonly EnumChildWindowsNativeCallback s_enumChildWindowsNativeCallback = HandleEnumChildWindowsNativeCallback;
-
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        private static extern BOOL EnumChildWindows(IntPtr hwndParent, EnumChildWindowsNativeCallback lpEnumFunc, IntPtr lParam);
+        private static extern unsafe BOOL EnumChildWindows(IntPtr hwndParent, delegate* unmanaged<IntPtr, IntPtr, BOOL> lpEnumFunc, IntPtr lParam);
 
-        public static BOOL EnumChildWindows(IntPtr hwndParent, EnumChildWindowsCallback lpEnumFunc)
+        public static unsafe BOOL EnumChildWindows(IntPtr hwndParent, EnumChildWindowsCallback lpEnumFunc)
         {
-            // We pass a static delegate to the native function and supply the callback as
+            // We pass a function pointer to the native function and supply the callback as
             // reference data, so that the CLR doesn't need to generate a native code block for
             // each callback delegate instance (for storing the closure pointer).
             var gcHandle = GCHandle.Alloc(lpEnumFunc);
             try
             {
-                return EnumChildWindows(hwndParent, s_enumChildWindowsNativeCallback, GCHandle.ToIntPtr(gcHandle));
+                return EnumChildWindows(hwndParent, &HandleEnumChildWindowsNativeCallback, (IntPtr)gcHandle);
             }
             finally
             {
@@ -48,9 +44,10 @@ internal static partial class Interop
             return result;
         }
 
+        [UnmanagedCallersOnly]
         private static BOOL HandleEnumChildWindowsNativeCallback(IntPtr hWnd, IntPtr lParam)
         {
-            return ((EnumChildWindowsCallback)GCHandle.FromIntPtr(lParam).Target!)(hWnd);
+            return ((EnumChildWindowsCallback)((GCHandle)lParam).Target!)(hWnd);
         }
     }
 }
