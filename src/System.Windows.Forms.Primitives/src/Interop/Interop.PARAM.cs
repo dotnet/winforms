@@ -31,19 +31,17 @@ internal partial class Interop
         public static int LOWORD(int n)
             => n & 0xffff;
 
-#pragma warning disable IDE0004 // (nint) cast is not actually redundant
-        public static int LOWORD(IntPtr n)
-            => LOWORD(unchecked((int)(nint)n));
+        public static int LOWORD(nint n)
+            => LOWORD(unchecked((int)n));
 
-        public static int HIWORD(IntPtr n)
-            => HIWORD(unchecked((int)(nint)n));
+        public static int HIWORD(nint n)
+            => HIWORD(unchecked((int)n));
 
-        public static int SignedHIWORD(IntPtr n)
-            => SignedHIWORD(unchecked((int)(nint)n));
+        public static int SignedHIWORD(nint n)
+            => SignedHIWORD(unchecked((int)n));
 
-        public static int SignedLOWORD(IntPtr n)
-            => SignedLOWORD(unchecked((int)(nint)n));
-#pragma warning restore IDE0004
+        public static int SignedLOWORD(nint n)
+            => SignedLOWORD(unchecked((int)n));
 
         public static int SignedHIWORD(int n)
             => (int)(short)HIWORD(n);
@@ -57,17 +55,15 @@ internal partial class Interop
         public static IntPtr FromColor(Color color)
             => (IntPtr)ColorTranslator.ToWin32(color);
 
-#pragma warning disable IDE0004 // (nint) cast is not actually redundant
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
         /// </summary>
-        public static int ToInt(IntPtr param) => (int)(nint)param;
+        public static int ToInt(nint param) => (int)param;
 
         /// <summary>
         ///  Hard casts to <see langword="uint" /> without bounds checks.
         /// </summary>
-        public static uint ToUInt(IntPtr param) => (uint)(nint)param;
-#pragma warning restore IDE0004
+        public static uint ToUInt(nint param) => (uint)param;
 
         /// <summary>
         ///  Hard casts to <see langword="long" /> without bounds checks.
@@ -75,11 +71,11 @@ internal partial class Interop
         /// <remarks>
         ///  Technically not needed, but here for completeness.
         /// </remarks>
-        public static long ToLong(IntPtr param) => (long)param;
+        public static long ToLong(nint param) => param;
 
         /// <summary>
         ///  Hard casts to <see langword="ulong" /> without bounds checks.
         /// </summary>
-        public static ulong ToULong(IntPtr param) => (ulong)(long)param;
+        public static ulong ToULong(nint param) => (ulong)param;
     }
 }
