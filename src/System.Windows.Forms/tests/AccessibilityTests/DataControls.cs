@@ -42,5 +42,13 @@ namespace AccessibilityTests
             if (cbox != null)
                 cbox.DroppedDown = true;
         }
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            dataGridView2.Focus();
+            this.bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(
+                System.Windows.Forms.Automation.AutomationNotificationKind.Other,
+              System.Windows.Forms.Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+              "Please enter first name now");
+        }
     }
 }
