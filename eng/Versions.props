@@ -79,6 +79,11 @@
   <PropertyGroup>
     <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
   </PropertyGroup>
+  <!-- Intellisense docs -->
+  <PropertyGroup>
+    <MicrosoftPrivateIntellisense>Microsoft.Private.Intellisense</MicrosoftPrivateIntellisense>
+    <MicrosoftPrivateIntellisenseVersion>5.0.0-preview-20201009.2</MicrosoftPrivateIntellisenseVersion>
+  </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>

@@ -1,5 +1,13 @@
 ﻿<Project>
 
+  <!-- 
+    Download the intellisense package specified in Versions.props.
+    Note that `[xxx]` specifies an EXACT version, and is required when using PackageDownload.
+  -->
+  <ItemGroup>
+    <PackageDownload Include="$(MicrosoftPrivateIntellisense)" Version="[$(MicrosoftPrivateIntellisenseVersion)]" />
+  </ItemGroup>
+
   <Target Name="GetPackageContent"
           DependsOnTargets="SatelliteDllsProjectOutputGroup"
           Returns="@(PackageFile)">
@@ -16,15 +24,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-      <!-- Also in global.json -->
-      <DotNetApiDocsNet50>0.0.0.3</DotNetApiDocsNet50>
-
-      <!-- 
-        The xml file should ALWAYS come from the dotnet-api-docs artifact.
-        This blob lives in Azure storage at https://netcorenativeassets.blob.core.windows.net/resource-packages/external/windows/dotnet-api-docs_net5.0/
-        Instructions for updating these artifacts are at https://github.com/dotnet/winforms/blob/master/docs/intellisense.md
-      -->
-      <IntellisenseXmlDir>$(CommonLibrary_NativeInstallDir)\bin\dotnet-api-docs_net5.0\$(DotNetApiDocsNet50)\_intellisense\net-5.0\</IntellisenseXmlDir>
+      <IntellisenseXmlDir>$([MSBuild]::NormalizeDirectory('$(NuGetPackageRoot)', '$(MicrosoftPrivateIntellisense)', '$(MicrosoftPrivateIntellisenseVersion)', 'IntellisenseFiles', 'net', '1033'))</IntellisenseXmlDir>
       <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
 
       <!-- Set the xml destination (for a later step that copies files from the dotnet-api-docs to local build artifacts) -->
