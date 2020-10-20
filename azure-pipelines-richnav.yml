@@ -22,6 +22,7 @@ stages:
       jobs:
       - job: Windows
         enableRichCodeNavigation: true
+        richCodeNavigationEnvironment: 'production'
         _BuildConfig: Debug
         pool:
           ${{ if eq(variables['System.TeamProject'], 'public') }}:
