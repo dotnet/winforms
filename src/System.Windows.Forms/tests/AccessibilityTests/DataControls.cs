@@ -5,6 +5,7 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Windows.Forms.Automation;
 
 namespace AccessibilityTests
 {
@@ -42,13 +43,11 @@ namespace AccessibilityTests
             if (cbox != null)
                 cbox.DroppedDown = true;
         }
+
         private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
         {
             dataGridView2.Focus();
-            this.bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(
-                System.Windows.Forms.Automation.AutomationNotificationKind.Other,
-              System.Windows.Forms.Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
-              "Please enter first name now");
+            bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(AutomationNotificationKind.Other, AutomationNotificationProcessing.CurrentThenMostRecent, "Please enter first name now");
         }
     }
 }
