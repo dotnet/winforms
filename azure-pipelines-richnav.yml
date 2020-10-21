@@ -1,9 +1,5 @@
-parameters:
-  # parameters should default to values for running in the External / Public
-  # be read from a user-defined variable (Azure DevOps limitation)
-  agentPoolName: NetCorePublic-Pool
-  agentPool: 'BuildPool.Windows.10.Amd64.VS2019.Open'
-  repoName: dotnet/winforms
+trigger:
+- master
 
 stages:
 - stage: build
@@ -12,27 +8,15 @@ stages:
   - template: /eng/common/templates/jobs/jobs.yml
     parameters:
       enableMicrobuild: true
-      enablePublishBuildArtifacts: true
-      enablePublishTestResults: true
-      enablePublishBuildAssets: true
-      enablePublishUsingPipelines: true
       enableTelemetry: true
-      helixRepo: ${{ parameters.repoName }}
 
       jobs:
       - job: Windows
         enableRichCodeNavigation: true
         richCodeNavigationEnvironment: 'production'
-        _BuildConfig: Debug
         pool:
-          ${{ if eq(variables['System.TeamProject'], 'public') }}:
-            name: NetCorePublic-Pool
-            queue: BuildPool.Windows.10.Amd64.VS2019.Open
-          ${{ if ne(variables['System.TeamProject'], 'public') }}:
-            name: NetCoreInternal-Pool
-            queue: BuildPool.Windows.10.Amd64.VS2019.Pre
-
-        variables:
+          name: NetCorePublic-Pool
+          queue: BuildPool.Windows.10.Amd64.VS2019.Open
 
         steps:
         - checkout: self
@@ -45,6 +29,6 @@ stages:
         - script: eng\cibuild.cmd
             -restore
             -build
-            -configuration $(_BuildConfig)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog
+            -configuration Debug
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\Debug\BuildSrc.binlog
           displayName: Build
