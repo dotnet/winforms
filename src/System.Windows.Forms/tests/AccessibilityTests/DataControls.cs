@@ -5,6 +5,7 @@
 using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Windows.Forms.Automation;
 
 namespace AccessibilityTests
 {
@@ -41,6 +42,12 @@ namespace AccessibilityTests
             DataGridViewComboBoxEditingControl cbox = dataGridView1.EditingControl as DataGridViewComboBoxEditingControl;
             if (cbox != null)
                 cbox.DroppedDown = true;
+        }
+
+        private void bindingNavigatorAddNewItem_Click(object sender, EventArgs e)
+        {
+            dataGridView2.Focus();
+            bindingNavigator1.AccessibilityObject.RaiseAutomationNotification(AutomationNotificationKind.Other, AutomationNotificationProcessing.CurrentThenMostRecent, "Please enter first name now");
         }
     }
 }
