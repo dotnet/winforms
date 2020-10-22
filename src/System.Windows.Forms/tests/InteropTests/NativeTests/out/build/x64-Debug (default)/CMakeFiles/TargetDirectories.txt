@@ -1,6 +1,0 @@
-C:/Users/v-jiaol/source/repos/Amy/winforms/src/System.Windows.Forms/tests/InteropTests/NativeTests/out/build/x64-Debug (default)/CMakeFiles/NativeTests.dir
-C:/Users/v-jiaol/source/repos/Amy/winforms/src/System.Windows.Forms/tests/InteropTests/NativeTests/out/build/x64-Debug (default)/CMakeFiles/install/local.dir
-C:/Users/v-jiaol/source/repos/Amy/winforms/src/System.Windows.Forms/tests/InteropTests/NativeTests/out/build/x64-Debug (default)/CMakeFiles/install.dir
-C:/Users/v-jiaol/source/repos/Amy/winforms/src/System.Windows.Forms/tests/InteropTests/NativeTests/out/build/x64-Debug (default)/CMakeFiles/edit_cache.dir
-C:/Users/v-jiaol/source/repos/Amy/winforms/src/System.Windows.Forms/tests/InteropTests/NativeTests/out/build/x64-Debug (default)/CMakeFiles/rebuild_cache.dir
-C:/Users/v-jiaol/source/repos/Amy/winforms/src/System.Windows.Forms/tests/InteropTests/NativeTests/out/build/x64-Debug (default)/CMakeFiles/list_install_components.dir
