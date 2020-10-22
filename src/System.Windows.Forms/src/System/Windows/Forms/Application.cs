@@ -820,15 +820,27 @@ namespace System.Windows.Forms
         public static void EnableVisualStyles()
         {
             // Pull manifest from our resources
-            string assemblyLoc = typeof(Application).Assembly.Location;
-            if (assemblyLoc != null)
-            {
-                // CSC embeds DLL manifests as resource ID 2
-                UseVisualStyles = ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
-                Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
+            string manifestDllName = typeof(Application).Module.Name;
+            IntPtr moduleHandle = Kernel32.GetModuleHandleW(manifestDllName);
 
-                s_comCtlSupportsVisualStylesInitialized = false;
+            if (moduleHandle != IntPtr.Zero)
+            {
+                // We have a native module, point to our native embedded manifest resource.
+                // CSC embeds DLL manifests as native resource ID 2
+                UseVisualStyles = ThemingScope.CreateActivationContext(moduleHandle, nativeResourceManifestID: 2);
             }
+            else
+            {
+                // We couldn't grab the module handle, likely we're running from a single file package.
+                // Extract the manifest from managed resources.
+                Stream stream = typeof(Application).Module.Assembly.GetManifestResourceStream(
+                    "System.Windows.Forms.XPThemes.manifest");
+                UseVisualStyles = ThemingScope.CreateActivationContext(stream);
+            }
+
+            Debug.Assert(UseVisualStyles, "Enable Visual Styles failed");
+
+            s_comCtlSupportsVisualStylesInitialized = false;
         }
 
         /// <summary>
