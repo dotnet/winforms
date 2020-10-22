@@ -669,10 +669,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetDisplayMode(DisplayMode mode)
         {
-            if (!ClientUtils.IsEnumValid(mode, (int)mode, (int)DisplayMode.Hexdump, (int)DisplayMode.Auto))
-            {
-                throw new InvalidEnumArgumentException("mode", (int)mode, typeof(DisplayMode));
-            }
+            SourceGenerated.EnumValidator.Validate(mode, nameof(mode));
 
             _displayMode = mode;
             _realDisplayMode = (mode == DisplayMode.Auto) ? GetAutoDisplayMode() : mode;

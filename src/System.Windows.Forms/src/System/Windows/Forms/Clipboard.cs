@@ -236,10 +236,7 @@ namespace System.Windows.Forms
 
         public static bool ContainsText(TextDataFormat format)
         {
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
@@ -308,10 +305,7 @@ namespace System.Windows.Forms
 
         public static string GetText(TextDataFormat format)
         {
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = Clipboard.GetDataObject();
             if (dataObject != null)
@@ -419,10 +413,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(ConvertToDataFormats(format), false, text);

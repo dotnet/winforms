@@ -49,6 +49,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.SourceGenerators\src\System.Windows.Forms.SourceGenerators.csproj" 
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+      
+  <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="$(SystemCodeDomPackageVersion)" />
   </ItemGroup>
 

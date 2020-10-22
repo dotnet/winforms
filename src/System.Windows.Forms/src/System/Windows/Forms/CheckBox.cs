@@ -81,10 +81,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_appearance != value)
                 {
@@ -209,10 +206,7 @@ namespace System.Windows.Forms
             set
             {
                 // valid values are 0-2 inclusive.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_checkState != value)
                 {

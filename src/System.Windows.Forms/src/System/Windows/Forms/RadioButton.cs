@@ -108,10 +108,7 @@ namespace System.Windows.Forms
                 if (appearance != value)
                 {
                     //valid values are 0x0 to 0x1
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {

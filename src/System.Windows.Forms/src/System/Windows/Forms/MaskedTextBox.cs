@@ -413,10 +413,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == MaskFormat.IncludePrompt)
                 {
@@ -532,10 +529,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)InsertKeyMode.Default, (int)InsertKeyMode.Overwrite))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(InsertKeyMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (insertMode != value)
                 {
@@ -1263,10 +1257,7 @@ namespace System.Windows.Forms
                 {
                     //verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     textAlign = value;
                     RecreateHandle();
@@ -1326,10 +1317,7 @@ namespace System.Windows.Forms
                 }
 
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
                 // verify it against the new value and raise OnTextChange if needed.

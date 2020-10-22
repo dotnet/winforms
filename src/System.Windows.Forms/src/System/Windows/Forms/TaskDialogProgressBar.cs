@@ -75,17 +75,7 @@ namespace System.Windows.Forms
             get => _state;
             set
             {
-                if (!ClientUtils.IsEnumValid(
-                    value,
-                    (int)value,
-                    (int)TaskDialogProgressBarState.Normal,
-                    (int)TaskDialogProgressBarState.None))
-                {
-                    throw new InvalidEnumArgumentException(
-                        nameof(value),
-                        (int)value,
-                        typeof(TaskDialogProgressBarState));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 DenyIfBoundAndNotCreated();
 

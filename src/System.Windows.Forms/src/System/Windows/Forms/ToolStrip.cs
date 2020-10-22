@@ -877,10 +877,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripGripStyle.Hidden, (int)ToolStripGripStyle.Visible))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripGripStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_toolStripGripStyle != value)
                 {
                     _toolStripGripStyle = value;
@@ -1265,10 +1262,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x4
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripLayoutStyle.StackWithOverflow, (int)ToolStripLayoutStyle.Table))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripLayoutStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_layoutStyle != value)
                 {
                     _layoutStyle = value;
@@ -1666,10 +1660,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripRenderMode.Custom, (int)ToolStripRenderMode.ManagerRenderMode))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripRenderMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == ToolStripRenderMode.Custom)
                 {
                     throw new NotSupportedException(SR.ToolStripRenderModeUseRendererPropertyInstead);
@@ -1817,10 +1808,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripTextDirection.Inherit, (int)ToolStripTextDirection.Vertical270))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolStripTextDirection));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 Properties.SetObject(ToolStrip.s_propTextDirection, value);
 
                 using (new LayoutTransaction(this, this, "TextDirection"))

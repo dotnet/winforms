@@ -104,10 +104,7 @@ namespace System.Windows.Forms
             {
                 if (_style != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ProgressBarStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _style = value;
                     if (IsHandleCreated)

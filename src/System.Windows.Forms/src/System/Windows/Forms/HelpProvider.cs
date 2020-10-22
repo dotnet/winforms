@@ -231,10 +231,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(ctl));
             }
-            if (!ClientUtils.IsEnumValid(navigator, (int)navigator, (int)HelpNavigator.Topic, (int)HelpNavigator.TopicId))
-            {
-                throw new InvalidEnumArgumentException(nameof(navigator), (int)navigator, typeof(HelpNavigator));
-            }
+            SourceGenerated.EnumValidator.Validate(navigator, nameof(navigator));
 
             _navigators[ctl] = navigator;
             SetShowHelp(ctl, true);

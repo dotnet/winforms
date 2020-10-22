@@ -189,17 +189,7 @@ namespace System.Windows.Forms
             get => _expanderPosition;
             set
             {
-                if (!ClientUtils.IsEnumValid(
-                    value,
-                    (int)value,
-                    (int)TaskDialogExpanderPosition.AfterText,
-                    (int)TaskDialogExpanderPosition.AfterFootnote))
-                {
-                    throw new InvalidEnumArgumentException(
-                        nameof(value),
-                        (int)value,
-                        typeof(TaskDialogExpanderPosition));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 DenyIfBound();
 

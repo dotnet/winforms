@@ -96,22 +96,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                             (int)value,
-                                             (int)Border3DStyle.Adjust,
-                                             (int)Border3DStyle.Bump,
-                                             (int)Border3DStyle.Etched,
-                                             (int)Border3DStyle.Flat,
-                                             (int)Border3DStyle.Raised,
-                                             (int)Border3DStyle.RaisedInner,
-                                             (int)Border3DStyle.RaisedOuter,
-                                             (int)Border3DStyle.Sunken,
-                                             (int)Border3DStyle.SunkenInner,
-                                             (int)Border3DStyle.SunkenOuter
-                                                ))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Border3DStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {
@@ -197,10 +182,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 liveSetting = value;
             }
         }

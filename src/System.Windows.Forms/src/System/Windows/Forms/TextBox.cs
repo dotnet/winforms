@@ -122,10 +122,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 bool resetAutoComplete = false;
                 if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
                 {
@@ -232,10 +229,7 @@ namespace System.Windows.Forms
             {
                 if (characterCasing != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)CharacterCasing.Normal, (int)CharacterCasing.Lower))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CharacterCasing));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     characterCasing = value;
                     RecreateHandle();
@@ -391,10 +385,7 @@ namespace System.Windows.Forms
             {
                 if (scrollBars != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     scrollBars = value;
                     RecreateHandle();
@@ -454,10 +445,7 @@ namespace System.Windows.Forms
             {
                 if (textAlign != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     textAlign = value;
                     RecreateHandle();

@@ -577,5 +577,16 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
             Assert.NotNull(font);
         }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FontProperty))]
+        public void VisualStyleRenderer_GetFont_for_InvalidFontProperty(FontProperty value)
+        {
+            var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+
+            Assert.Throws<InvalidEnumArgumentException>("prop", () => renderer.GetFont(graphics, value));
+        }
     }
 }

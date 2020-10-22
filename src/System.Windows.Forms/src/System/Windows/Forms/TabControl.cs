@@ -117,10 +117,7 @@ namespace System.Windows.Forms
                 if (_alignment != value)
                 {
                     //valid values are 0x0 to 0x3
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAlignment.Top, (int)TabAlignment.Right))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAlignment));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _alignment = value;
                     if (_alignment == TabAlignment.Left || _alignment == TabAlignment.Right)
@@ -162,10 +159,7 @@ namespace System.Windows.Forms
                 if (_appearance != value)
                 {
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabAppearance.Normal, (int)TabAppearance.FlatButtons))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabAppearance));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _appearance = value;
                     RecreateHandle();
@@ -419,10 +413,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabDrawMode.Normal, (int)TabDrawMode.OwnerDrawFixed))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabDrawMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_drawMode != value)
                 {
@@ -786,10 +777,7 @@ namespace System.Windows.Forms
                 }
 
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TabSizeMode.Normal, (int)TabSizeMode.Fixed))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TabSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 _sizeMode = value;
                 RecreateHandle();

@@ -549,6 +549,23 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoCompleteSource))]
+        public void ComboBox_AutoCompleteSource_Set_GetReturnsExpected(AutoCompleteSource value)
+        {
+            using var control = new ComboBox();
+            control.AutoCompleteSource = value;
+            Assert.Equal(value, control.AutoCompleteSource);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoCompleteSource))]
+        public void ComboBox_AutoCompleteSource_InvalidAutoCompleteSource_ThrowsInvalidEnumArgumentException(AutoCompleteSource source)
+        {
+            using var control = new ComboBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoCompleteSource = source);
+        }
+
         [WinFormsFact]
         public void ComboBox_DropDownStyle_SetWithPreferredHeight_ResetsPreferredHeight()
         {

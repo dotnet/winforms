@@ -434,10 +434,7 @@ namespace System.Windows.Forms
             {
                 if (_toolTipIcon != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolTipIcon));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _toolTipIcon = value;
                     if (_toolTipIcon > 0 && GetHandleCreated())

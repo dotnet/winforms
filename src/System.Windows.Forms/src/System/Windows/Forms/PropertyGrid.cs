@@ -1041,10 +1041,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)PropertySort.NoSort, (int)PropertySort.CategorizedAlphabetical))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PropertySort));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 ToolStripButton newButton;
 
                 if ((value & PropertySort.Categorized) != 0)

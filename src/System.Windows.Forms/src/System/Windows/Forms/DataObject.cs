@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -280,10 +280,7 @@ namespace System.Windows.Forms
         public virtual bool ContainsText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             return GetDataPresent(ConvertToDataFormats(format), false);
         }
@@ -316,10 +313,7 @@ namespace System.Windows.Forms
         public virtual string GetText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             if (GetData(ConvertToDataFormats(format), false) is string text)
             {
@@ -380,10 +374,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             SetData(ConvertToDataFormats(format), false, textData);
         }

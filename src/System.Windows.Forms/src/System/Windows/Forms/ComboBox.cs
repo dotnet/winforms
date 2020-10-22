@@ -148,10 +148,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&
                     AutoCompleteSource != AutoCompleteSource.ListItems &&
                     value != AutoCompleteMode.None)
@@ -189,19 +186,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid_NotSequential(value, (int)value,
-                                                    (int)AutoCompleteSource.None,
-                                                    (int)AutoCompleteSource.AllSystemSources,
-                                                    (int)AutoCompleteSource.AllUrl,
-                                                    (int)AutoCompleteSource.CustomSource,
-                                                    (int)AutoCompleteSource.FileSystem,
-                                                    (int)AutoCompleteSource.FileSystemDirectories,
-                                                    (int)AutoCompleteSource.HistoryList,
-                                                    (int)AutoCompleteSource.ListItems,
-                                                    (int)AutoCompleteSource.RecentlyUsedList))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteSource));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (DropDownStyle == ComboBoxStyle.DropDownList &&
                     AutoCompleteMode != AutoCompleteMode.None &&
@@ -453,10 +438,7 @@ namespace System.Windows.Forms
                 if (DrawMode != value)
                 {
                     //valid values are 0x0 to 0x2.
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)DrawMode.Normal, (int)DrawMode.OwnerDrawVariable))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DrawMode));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
                     ResetHeightCache();
                     Properties.SetInteger(PropDrawMode, (int)value);
                     RecreateHandle();
@@ -587,10 +569,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 _flatStyle = value;
                 Invalidate();
             }
@@ -1217,10 +1196,7 @@ namespace System.Windows.Forms
                 {
                     // verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ComboBoxStyle.Simple, (int)ComboBoxStyle.DropDownList))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ComboBoxStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     if (value == ComboBoxStyle.DropDownList &&
                         AutoCompleteSource != AutoCompleteSource.ListItems &&

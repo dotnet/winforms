@@ -298,7 +298,7 @@ namespace System.Windows.Forms.Tests
         public void TableLayoutPanel_CellBorderStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelCellBorderStyle value)
         {
             using var control = new TableLayoutPanel();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.CellBorderStyle = value);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.CellBorderStyle = value);
         }
 
         [WinFormsTheory]
@@ -408,7 +408,7 @@ namespace System.Windows.Forms.Tests
         public void TableLayoutPanel_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             using var control = new TableLayoutPanel();
-            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.GrowStyle = value);
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.GrowStyle = value);
         }
 
         [WinFormsFact]

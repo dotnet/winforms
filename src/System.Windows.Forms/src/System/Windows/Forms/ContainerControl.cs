@@ -160,10 +160,7 @@ namespace System.Windows.Forms
             get => _autoScaleMode;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoScaleMode.None, (int)AutoScaleMode.Inherit))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoScaleMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 bool scalingNeeded = false;
                 if (value != _autoScaleMode)
