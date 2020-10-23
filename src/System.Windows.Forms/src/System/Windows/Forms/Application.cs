@@ -820,8 +820,8 @@ namespace System.Windows.Forms
         public static void EnableVisualStyles()
         {
             // Pull manifest from our resources
-            string manifestDllName = typeof(Application).Module.Name;
-            IntPtr moduleHandle = Kernel32.GetModuleHandleW(manifestDllName);
+            Module module = typeof(Application).Module;
+            IntPtr moduleHandle = Kernel32.GetModuleHandleW(module.Name);
 
             if (moduleHandle != IntPtr.Zero)
             {
@@ -833,7 +833,7 @@ namespace System.Windows.Forms
             {
                 // We couldn't grab the module handle, likely we're running from a single file package.
                 // Extract the manifest from managed resources.
-                Stream stream = typeof(Application).Module.Assembly.GetManifestResourceStream(
+                using Stream stream = module.Assembly.GetManifestResourceStream(
                     "System.Windows.Forms.XPThemes.manifest");
                 UseVisualStyles = ThemingScope.CreateActivationContext(stream);
             }
