@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <RootNamespace>Company.ClassLibrary1</RootNamespace>
-    <TargetFramework Condition="'$(TargetFrameworkOverride)' == ''">FrameworkParameter-windows</TargetFramework>
-    <TargetFramework Condition="'$(TargetFrameworkOverride)' != ''">TargetFrameworkOverride-windows</TargetFramework>
+    <TargetFramework Condition="'$(TargetFrameworkOverride)' == ''">FrameworkParameter</TargetFramework>
+    <TargetFramework Condition="'$(TargetFrameworkOverride)' != ''">TargetFrameworkOverride</TargetFramework>
     <LangVersion Condition="'$(langVersion)' != ''">$(ProjectLanguageVersion)</LangVersion>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>

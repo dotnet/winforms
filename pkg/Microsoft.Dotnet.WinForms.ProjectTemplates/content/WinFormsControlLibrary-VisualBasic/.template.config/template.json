@@ -33,16 +33,16 @@
           "description": "Target netcoreapp3.1"
         },
         {
-          "choice": "net5.0",
+          "choice": "net5.0-windows",
           "description": "Target net5.0"
         },
         {
-          "choice": "net6.0",
+          "choice": "net6.0-windows",
           "description": "Target net6.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net6.0"
+      "defaultValue": "net6.0-windows"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",
