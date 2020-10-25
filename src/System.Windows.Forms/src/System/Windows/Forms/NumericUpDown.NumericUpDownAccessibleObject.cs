@@ -57,8 +57,6 @@ namespace System.Windows.Forms
                         return State;
                     case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
                         return Role;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return true;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
