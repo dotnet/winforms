@@ -18,9 +18,6 @@ stages:
       enablePublishUsingPipelines: true
       enableTelemetry: true
       helixRepo: ${{ parameters.repoName }}
-      ${{ if eq(variables['System.TeamProject'], 'public') }}:
-        enableRichCodeNavigation: true
-        richCodeNavigationEnvironment: 'production'
 
       jobs:
       - job: Windows

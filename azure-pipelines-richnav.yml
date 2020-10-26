@@ -30,5 +30,4 @@ stages:
             -restore
             -build
             -configuration Debug
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\Debug\BuildSrc.binlog
           displayName: Build
