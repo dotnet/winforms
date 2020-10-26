@@ -1,6 +1,6 @@
 # Contributing Guide
 
-> :warning: Pease note, this document is a subset of [Contribution to .NET Runtime][net-contributing], make sure to read it first.
+> :warning: Please note, this document is a subset of [Contribution to .NET Runtime][net-contributing], make sure to read it first.
 
 You can contribute to Windows Forms with issues, pull-requests, and general reviews of both issues and pull-requests. Simply filing issues for problems you encounter is a great way to contribute. Contributing implementations is greatly appreciated.
 
