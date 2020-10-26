@@ -11,9 +11,31 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         [WinFormsFact]
         public void DomainUpDownAccessibleObject_Ctor_Default()
         {
-            using DomainUpDown numericUpDown = new DomainUpDown();
-            AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
+            using DomainUpDown domainUpDown = new DomainUpDown();
+            AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
             Assert.NotNull(accessibleObject);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_ReturnsTrue()
+        {
+            using DomainUpDown domainUpDown = new DomainUpDown();
+            AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
+
+            bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
+            Assert.True(isKeyboardFocusable);
+        }
+
+        [WinFormsFact]
+        public void DomainUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_WhenDisabled_ReturnsFalse()
+        {
+            using DomainUpDown domainUpDown = new DomainUpDown();
+            AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
+
+            domainUpDown.Enabled = false;
+
+            bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
+            Assert.False(isKeyboardFocusable);
         }
     }
 }
