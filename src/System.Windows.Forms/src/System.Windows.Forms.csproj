@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms</AssemblyName>
@@ -12,6 +12,10 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\System\Windows\Forms\XPThemes.manifest" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.SourceGenerators\src\System.Windows.Forms.SourceGenerators.csproj" 
@@ -633,6 +637,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\BlankToolstrip.ico">
       <LogicalName>System.Windows.Forms.blank</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\XPThemes.manifest">
+      <LogicalName>System.Windows.Forms.XPThemes.manifest</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
