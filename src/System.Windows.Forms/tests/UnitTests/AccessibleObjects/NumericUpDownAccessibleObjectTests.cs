@@ -15,5 +15,27 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
             Assert.NotNull(accessibleObject);
         }
+
+        [WinFormsFact]
+        public void NumericUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_ReturnsTrue()
+        {
+            using NumericUpDown numericUpDown = new NumericUpDown();
+            AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
+
+            bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
+            Assert.True(isKeyboardFocusable);
+        }
+
+        [WinFormsFact]
+        public void NumericUpDownAccessibleObject_GetPropertyValue_IsKeyboardFocusable_WhenDisabled_ReturnsFalse()
+        {
+            using NumericUpDown numericUpDown = new NumericUpDown();
+            AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
+
+            numericUpDown.Enabled = false;
+
+            bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
+            Assert.False(isKeyboardFocusable);
+        }
     }
 }
