@@ -30,6 +30,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { SR.toStringDefault, - 1, };
             yield return new object[] { SR.toStringDefault, ImageList.Indexer.DefaultIndex };
             yield return new object[] { SR.toStringNone, -2 };
+            yield return new object[] { SR.toStringNone, ImageList.Indexer.NoneIndex };
         }
 
         [WinFormsTheory]
@@ -48,6 +49,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { -1, SR.toStringDefault };
             yield return new object[] { ImageList.Indexer.DefaultIndex, SR.toStringDefault };
             yield return new object[] { -2, SR.toStringNone };
+            yield return new object[] { ImageList.Indexer.NoneIndex, SR.toStringNone };
         }
 
         [WinFormsTheory]
@@ -70,7 +72,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(2, result.Count);
             Assert.Equal(ImageList.Indexer.DefaultIndex, result[0]);
-            Assert.Equal(-2, result[1]);
+            Assert.Equal(ImageList.Indexer.NoneIndex, result[1]);
         }
     }
 }
