@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-2)]
+        [InlineData(-3)]
         public void TreeNode_Ctor_InvalidImageIndex_ThrowsArgumentOutOfRangeException(int imageIndex)
         {
             Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", imageIndex, 0));
@@ -258,7 +258,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-2)]
+        [InlineData(-3)]
         public void TreeNode_Ctor_InvalidSelectedImageIndex_ThrowsArgumentOutOfRangeException(int selectedImageIndex)
         {
             Assert.Throws<ArgumentOutOfRangeException>("value", () => new TreeNode("text", 0, selectedImageIndex));
@@ -962,13 +962,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(handle, node.Handle);
             Assert.False(control.IsHandleCreated);
         }
+        public static IEnumerable<object[]> TreeNode_ImageIndex_TestData()
+        {
+            // { image index, expected index without image, expected index with image }
+            yield return new object[] { -2, -2, -2 };
+            yield return new object[] { -1, -1, -1 };
+            yield return new object[] { 0, -1, 0 };
+            yield return new object[] { 1, -1, 0 };
+            yield return new object[] { 2, -1, 0 };
+        }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_ImageIndex_SetWithoutTreeView_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_ImageIndex_SetWithoutTreeView_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             var node = new TreeNode
             {
@@ -992,7 +998,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.ImageIndex);
+            Assert.Equal(expectedWithoutImage, node.ImageIndex);
             Assert.Empty(node.ImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -1005,11 +1011,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_ImageIndex_SetWithImageKey_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_ImageIndex_SetWithImageKey_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             var node = new TreeNode
             {
@@ -1034,7 +1037,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.ImageIndex);
+            Assert.Equal(expectedWithoutImage, node.ImageIndex);
             Assert.Equal(ImageList.Indexer.DefaultKey, node.ImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -1047,11 +1050,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_ImageIndex_SetWithTreeView_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_ImageIndex_SetWithTreeView_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             using var control = new TreeView();
             var node = new TreeNode();
@@ -1071,7 +1071,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.ImageIndex);
+            Assert.Equal(expectedWithoutImage, node.ImageIndex);
             Assert.Empty(node.ImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -1084,10 +1084,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        public void TreeNode_ImageIndex_SetWithTreeViewWithEmptyList_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_ImageIndex_SetWithTreeViewWithEmptyList_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             using var imageList = new ImageList();
             using var control = new TreeView
@@ -1098,13 +1096,13 @@ namespace System.Windows.Forms.Tests
             control.Nodes.Add(node);
 
             node.ImageIndex = value;
-            Assert.Equal(-1, node.ImageIndex);
+            Assert.Equal(expectedWithoutImage, node.ImageIndex);
             Assert.Empty(node.ImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             node.ImageIndex = value;
-            Assert.Equal(-1, node.ImageIndex);
+            Assert.Equal(expectedWithoutImage, node.ImageIndex);
             Assert.Empty(node.ImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -1117,6 +1115,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, -2)]
         [InlineData(-1, -1)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -1148,11 +1147,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_ImageIndex_SetWithTreeViewWithHandle_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_ImageIndex_SetWithTreeViewWithHandle_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             using var control = new TreeView();
             var node = new TreeNode();
@@ -1185,7 +1181,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.ImageIndex);
+            Assert.Equal(expectedWithoutImage, node.ImageIndex);
             Assert.Empty(node.ImageKey);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1204,6 +1200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -1225,6 +1222,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -1251,6 +1249,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -1281,6 +1280,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2)]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
@@ -1303,7 +1303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-2)]
+        [InlineData(-3)]
         public void TreeNode_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var node = new TreeNode();
@@ -2993,11 +2993,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_SelectedImageIndex_SetWithSelectedImageKey_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_SelectedImageIndex_SetWithSelectedImageKey_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             var node = new TreeNode
             {
@@ -3022,7 +3019,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.SelectedImageIndex);
+            Assert.Equal(expectedWithoutImage, node.SelectedImageIndex);
             Assert.Equal(ImageList.Indexer.DefaultKey, node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -3035,11 +3032,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_SelectedImageIndex_SetWithTreeView_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_SelectedImageIndex_SetWithTreeView_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             using var control = new TreeView();
             var node = new TreeNode();
@@ -3059,7 +3053,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.SelectedImageIndex);
+            Assert.Equal(expectedWithoutImage, node.SelectedImageIndex);
             Assert.Empty(node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -3072,10 +3066,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        public void TreeNode_SelectedImageIndex_SetWithTreeViewWithEmptyList_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_SelectedImageIndex_SetWithTreeViewWithEmptyList_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             using var imageList = new ImageList();
             using var control = new TreeView
@@ -3086,13 +3078,13 @@ namespace System.Windows.Forms.Tests
             control.Nodes.Add(node);
 
             node.SelectedImageIndex = value;
-            Assert.Equal(-1, node.SelectedImageIndex);
+            Assert.Equal(expectedWithoutImage, node.SelectedImageIndex);
             Assert.Empty(node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             node.SelectedImageIndex = value;
-            Assert.Equal(-1, node.SelectedImageIndex);
+            Assert.Equal(expectedWithoutImage, node.SelectedImageIndex);
             Assert.Empty(node.SelectedImageKey);
             Assert.False(control.IsHandleCreated);
 
@@ -3105,6 +3097,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, -2)]
         [InlineData(-1, -1)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -3136,11 +3129,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-1, -1)]
-        [InlineData(0, 0)]
-        [InlineData(1, 0)]
-        [InlineData(2, 0)]
-        public void TreeNode_SelectedImageIndex_SetWithTreeViewWithHandle_GetReturnsExpected(int value, int expectedWithImage)
+        [MemberData(nameof(TreeNode_ImageIndex_TestData))]
+        public void TreeNode_SelectedImageIndex_SetWithTreeViewWithHandle_GetReturnsExpected(int value, int expectedWithoutImage, int expectedWithImage)
         {
             using var control = new TreeView();
             var node = new TreeNode();
@@ -3173,7 +3163,7 @@ namespace System.Windows.Forms.Tests
             // Add image list.
             using var imageList = new ImageList();
             control.ImageList = imageList;
-            Assert.Equal(-1, node.SelectedImageIndex);
+            Assert.Equal(expectedWithoutImage, node.SelectedImageIndex);
             Assert.Empty(node.SelectedImageKey);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -3192,6 +3182,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 0)]
@@ -3213,6 +3204,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -3241,6 +3233,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2, 0)]
         [InlineData(-1, 0)]
         [InlineData(0, 0)]
         [InlineData(1, 1)]
@@ -3271,6 +3264,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(-2)]
         [InlineData(-1)]
         [InlineData(0)]
         [InlineData(1)]
@@ -3293,7 +3287,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(-2)]
+        [InlineData(-3)]
         public void TreeNode_SelectedImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var node = new TreeNode();

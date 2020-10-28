@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                 }
                 else if (string.Compare(strValue, SR.toStringNone, true, culture) == 0)
                 {
-                    return -2;
+                    return ImageList.Indexer.NoneIndex;
                 }
             }
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                 {
                     return SR.toStringDefault;
                 }
-                else if (index == -2)
+                else if (index == ImageList.Indexer.NoneIndex)
                 {
                     return SR.toStringNone;
                 }
@@ -140,7 +140,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            return new StandardValuesCollection(new object[] { ImageList.Indexer.DefaultIndex, -2 });
+            return new StandardValuesCollection(new object[]
+                                                {
+                                                    ImageList.Indexer.DefaultIndex,
+                                                    ImageList.Indexer.NoneIndex
+                                                });
         }
     }
 }
