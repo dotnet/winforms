@@ -32,13 +32,14 @@ namespace System.Windows.Forms
             {
                 if (string.Compare(strValue, SR.toStringDefault, true, culture) == 0)
                 {
-                    return -1;
+                    return ImageList.Indexer.DefaultIndex;
                 }
                 else if (string.Compare(strValue, SR.toStringNone, true, culture) == 0)
                 {
-                    return -2;
+                    return ImageList.Indexer.NoneIndex;
                 }
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -56,14 +57,13 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value is int)
+            if (destinationType == typeof(string) && value is int index)
             {
-                int intValue = (int)value;
-                if (intValue == -1)
+                if (index == ImageList.Indexer.DefaultIndex)
                 {
                     return SR.toStringDefault;
                 }
-                else if (intValue == -2)
+                else if (index == ImageList.Indexer.NoneIndex)
                 {
                     return SR.toStringNone;
                 }
@@ -103,7 +103,6 @@ namespace System.Windows.Forms
                     {
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
-                        //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
                         if (parentProp != null)
                         {
@@ -112,7 +111,6 @@ namespace System.Windows.Forms
                         else
                         {
                             // Stick a fork in us, we're done.
-                            //
                             instance = null;
                         }
                     }
@@ -129,11 +127,10 @@ namespace System.Windows.Forms
                         object[] values;
                         int nImages = imageList.Images.Count + 2;
                         values = new object[nImages];
-                        values[nImages - 2] = -1;
+                        values[nImages - 2] = ImageList.Indexer.DefaultIndex;
                         values[nImages - 1] = -2;
 
                         // Fill in the array
-                        //
                         for (int i = 0; i < nImages - 2; i++)
                         {
                             values[i] = i;
@@ -143,7 +140,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            return new StandardValuesCollection(new object[] { -1, -2 });
+            return new StandardValuesCollection(new object[]
+                                                {
+                                                    ImageList.Indexer.DefaultIndex,
+                                                    ImageList.Indexer.NoneIndex
+                                                });
         }
     }
-} // Namespace system.windows.forms
+}
