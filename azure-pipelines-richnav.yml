@@ -22,10 +22,6 @@ stages:
         - checkout: self
           clean: true
 
-        # Build and rename binlog
-        # The /p:Coverage argument is passed here since some build properties change to accommodate running with
-        # coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
-        # https://github.com/tonerdo/coverlet/issues/363.
         - script: eng\cibuild.cmd
             -restore
             -build
