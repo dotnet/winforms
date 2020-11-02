@@ -81,21 +81,24 @@ namespace System.Windows.Forms.Tests
         [InlineData(ComboBoxStyle.DropDownList, false)]
         public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_NotNull(ComboBoxStyle comboBoxStyle, bool createControl)
         {
-            using var control = new ComboBox
+            using (new NoAssertContext())
             {
-                DropDownStyle = comboBoxStyle
-            };
+                using var control = new ComboBox
+                {
+                    DropDownStyle = comboBoxStyle
+                };
 
-            if (createControl)
-            {
-                control.CreateControl();
+                if (createControl)
+                {
+                    control.CreateControl();
+                }
+
+                var accessibleObject = control.AccessibilityObject;
+
+                UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+                Assert.NotNull(firstChild);
+                Assert.Equal(createControl, control.IsHandleCreated);
             }
-
-            var accessibleObject = control.AccessibilityObject;
-
-            UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-            Assert.NotNull(firstChild);
-            Assert.Equal(createControl, control.IsHandleCreated);
         }
 
         [WinFormsTheory]

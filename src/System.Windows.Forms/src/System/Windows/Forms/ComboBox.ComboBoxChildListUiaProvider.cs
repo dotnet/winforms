@@ -61,6 +61,8 @@ namespace System.Windows.Forms
             {
                 switch (direction)
                 {
+                    case UiaCore.NavigateDirection.Parent:
+                        return _owningComboBox.AccessibilityObject;
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetChildFragment(0);
                     case UiaCore.NavigateDirection.LastChild:
@@ -71,6 +73,14 @@ namespace System.Windows.Forms
                         }
 
                         return null;
+                    case UiaCore.NavigateDirection.NextSibling:
+                        return _owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList
+                            ? _owningComboBox.ChildTextAccessibleObject
+                            : _owningComboBox.ChildEditAccessibleObject;
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
+                            ? _owningComboBox.ChildListAccessibleObject
+                            : null;
                     default:
                         return base.FragmentNavigate(direction);
                 }

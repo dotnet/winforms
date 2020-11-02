@@ -160,20 +160,21 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UiaCore.NavigateDirection.FirstChild)
+                switch (direction)
                 {
-                    return GetChildFragment(0);
+                    case UiaCore.NavigateDirection.FirstChild:
+                        return _owningComboBox.DroppedDown
+                            ? _owningComboBox.ChildListAccessibleObject
+                            : _owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList
+                                ? _owningComboBox.ChildTextAccessibleObject
+                                : _owningComboBox.ChildEditAccessibleObject;
+                    case UiaCore.NavigateDirection.LastChild:
+                        return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
+                            ? _owningComboBox.ChildEditAccessibleObject
+                            : DropDownButtonUiaProvider;
+                    default:
+                        return base.FragmentNavigate(direction);
                 }
-                else if (direction == UiaCore.NavigateDirection.LastChild)
-                {
-                    var childFragmentCount = GetChildFragmentCount();
-                    if (childFragmentCount > 0)
-                    {
-                        return GetChildFragment(childFragmentCount - 1);
-                    }
-                }
-
-                return base.FragmentNavigate(direction);
             }
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot

@@ -88,16 +88,9 @@ namespace System.Windows.Forms
                 }
                 else if (direction == UiaCore.NavigateDirection.PreviousSibling)
                 {
-                    if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
-                    {
-                        int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
-                        if (comboBoxChildFragmentCount > 1)
-                        { // Text or edit is previous;
-                            return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
-                        }
-                    }
-
-                    return null;
+                    return _owner.DropDownStyle == ComboBoxStyle.DropDownList
+                            ? _owner.ChildTextAccessibleObject
+                            : _owner.ChildEditAccessibleObject;
                 }
 
                 return base.FragmentNavigate(direction);
