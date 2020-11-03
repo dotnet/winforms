@@ -69,6 +69,7 @@ namespace System.Windows.Forms
         ///   using the given text and, optionally, a description text.
         /// </summary>
         /// <param name="text">The text of the control.</param>
+        /// <param name="enabled">A value that indicates if the button should be enabled.</param>
         /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
         ///   when this button is clicked.
         /// </param>
