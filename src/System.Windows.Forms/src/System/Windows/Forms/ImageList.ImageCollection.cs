@@ -185,8 +185,6 @@ namespace System.Windows.Forms
                             bitmap.Dispose();
                         }
                     }
-
-                    _owner.OnRecreateHandle(EventArgs.Empty);
                 }
             }
 
@@ -380,7 +378,6 @@ namespace System.Windows.Forms
                 if (!_isBatchAdd)
                 {
                     _owner.OnChangeHandle(EventArgs.Empty);
-                    _owner.OnRecreateHandle(EventArgs.Empty);
                 }
 
                 return index;
@@ -401,7 +398,6 @@ namespace System.Windows.Forms
 
                 _isBatchAdd = false;
                 _owner.OnChangeHandle(EventArgs.Empty);
-                _owner.OnRecreateHandle(EventArgs.Empty);
             }
 
             /// <summary>
@@ -452,7 +448,6 @@ namespace System.Windows.Forms
                 }
 
                 _owner.OnChangeHandle(EventArgs.Empty);
-                _owner.OnRecreateHandle(EventArgs.Empty);
             }
 
             [EditorBrowsable(EditorBrowsableState.Never)]
@@ -564,7 +559,6 @@ namespace System.Windows.Forms
                     Remove(image);
 
                     _owner.OnChangeHandle(EventArgs.Empty);
-                    _owner.OnRecreateHandle(EventArgs.Empty);
                 }
             }
 
@@ -587,7 +581,6 @@ namespace System.Windows.Forms
                     _imageInfoCollection.RemoveAt(index);
 
                     _owner.OnChangeHandle(EventArgs.Empty);
-                    _owner.OnRecreateHandle(EventArgs.Empty);
                 }
             }
 

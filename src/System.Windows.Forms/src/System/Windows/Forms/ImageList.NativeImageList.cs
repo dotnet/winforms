@@ -71,8 +71,7 @@ namespace System.Windows.Forms
                         return;
                     }
 
-                    var result = ComCtl32.ImageList.Destroy(Handle);
-                    Debug.Assert(result.IsTrue());
+                    ComCtl32.ImageList.Destroy(Handle);
                     Handle = IntPtr.Zero;
                 }
             }
@@ -90,13 +89,6 @@ namespace System.Windows.Forms
                 return;
             }
 #endif
-
-            internal IntPtr TransferOwnership()
-            {
-                var handle = Handle;
-                Handle = IntPtr.Zero;
-                return handle;
-            }
 
             internal NativeImageList Duplicate()
             {
