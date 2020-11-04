@@ -152,7 +152,14 @@ namespace System.Windows.Forms.Layout
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
             // Container can not be null since we AschorControls takes a non-null container.
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t'" + element + "' is anchored at " + GetCachedBounds(element).ToString());
+            //
+            // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
+            // because it WILL execute GetCachedBounds(element).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
+            // This in turn will lead to a cascade of native calls and callbacks
+            if (CompModSwitches.RichLayout.TraceInfo)
+            {
+                Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element).ToString()}");
+            }
 
             AnchorInfo layout = GetAnchorInfo(element);
 
