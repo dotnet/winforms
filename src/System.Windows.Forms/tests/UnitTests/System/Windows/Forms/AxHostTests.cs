@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using Moq;
 using WinForms.Common.Tests;
@@ -16,8 +15,8 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     [Collection("Sequential")] // workaround for WebBrowser control corrupting memory when run on multiple UI threads (instantiated via GUID)
     public class AxHostTests : IClassFixture<ThreadExceptionFixture>
@@ -1444,7 +1443,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(iFont.Italic.IsTrue());
             Assert.False(iFont.Underline.IsTrue());
             Assert.False(iFont.Strikethrough.IsTrue());
-            Assert.Equal(0, iFont.Charset);
+            // Charset is locale specific
+            // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
             Ole32.IFontDisp iFontDisp = (Ole32.IFontDisp)disp;
@@ -1454,7 +1454,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(iFontDisp.Italic);
             Assert.False(iFontDisp.Underline);
             Assert.False(iFontDisp.Strikethrough);
-            Assert.Equal(0, iFontDisp.Charset);
+            // Charset is locale specific
+            // Assert.Equal(0, iFontDisp.Charset);
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
             Assert.Equal(font.Name, result.Name);
@@ -1536,7 +1537,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(iFont.Italic.IsTrue());
             Assert.False(iFont.Underline.IsTrue());
             Assert.False(iFont.Strikethrough.IsTrue());
-            Assert.Equal(0, iFont.Charset);
+            // Charset is locale specific
+            // Assert.Equal(0, iFont.Charset);
             Assert.NotEqual(IntPtr.Zero, iFont.hFont);
 
             Font result = SubAxHost.GetFontFromIFont(iFont);
