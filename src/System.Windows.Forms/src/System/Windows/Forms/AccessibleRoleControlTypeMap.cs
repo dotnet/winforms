@@ -7,6 +7,9 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms
 {
+    /// <summary>
+    ///  For details see [root]\docs\accessibility\accessible-role-controltype.md
+    /// </summary>
     internal static class AccessibleRoleControlTypeMap
     {
         private static readonly Dictionary<AccessibleRole, UIA> s_map = new Dictionary<AccessibleRole, UIA>
