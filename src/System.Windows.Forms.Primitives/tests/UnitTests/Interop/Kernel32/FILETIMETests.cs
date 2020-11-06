@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
         [Fact]
         public void FILETIME_Ctor_DateTime()
         {
-            var dt = new DateTime(2020, 05, 13, 13, 3, 12);
+            var dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
             var ft = new FILETIME(dt);
             Assert.Equal(3680495616u, ft.dwLowDateTime);
             Assert.Equal(30812454u, ft.dwHighDateTime);
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests.Interop.Kernel32
                 dwLowDateTime = 3680495616u,
                 dwHighDateTime = 30812454u
             };
-            Assert.Equal(new DateTime(2020, 05, 13, 13, 3, 12), ft.ToDateTime());
+            Assert.Equal(new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime(), ft.ToDateTime());
         }
     }
 }

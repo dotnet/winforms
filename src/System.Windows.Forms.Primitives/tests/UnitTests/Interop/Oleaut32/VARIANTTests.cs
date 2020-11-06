@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
@@ -885,13 +884,13 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_DateFromFILETIME_Success()
         {
             using var variant = new VARIANT();
-            var dt = new DateTime(2020, 05, 13, 13, 3, 12);
+            var dt = new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToLocalTime();
             var ft = new FILETIME(dt);
             HRESULT hr = InitVariantFromFileTime(&ft, &variant);
             Assert.Equal(HRESULT.S_OK, hr);
             Assert.Equal(VARENUM.DATE, variant.Type);
 
-            AssertToObjectEqual(new DateTime(2020, 05, 13, 13, 3, 12), variant);
+            AssertToObjectEqual(new DateTime(2020, 05, 13, 13, 3, 12, DateTimeKind.Utc).ToUniversalTime(), variant);
         }
 
         [StaFact]
