@@ -5,6 +5,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
+using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 using static Interop.User32;
 
@@ -18,7 +19,7 @@ namespace System.Windows.Forms
         internal class ComboBoxItemAccessibleObject : AccessibleObject
         {
             private readonly ComboBox _owningComboBox;
-            private readonly object _owningItem;
+            private readonly Entry _owningItem;
             private IAccessible? _systemIAccessible;
 
             /// <summary>
@@ -26,7 +27,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox.</param>
             /// <param name="owningItem">The owning ComboBox item.</param>
-            public ComboBoxItemAccessibleObject(ComboBox owningComboBox, object owningItem)
+            public ComboBoxItemAccessibleObject(ComboBox owningComboBox, Entry owningItem)
             {
                 _owningComboBox = owningComboBox ?? throw new ArgumentNullException(nameof(owningComboBox));
                 _owningItem = owningItem;
@@ -97,23 +98,12 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _owningComboBox.AccessibilityObject;
-                }
-            }
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningComboBox.AccessibilityObject;
 
-            private int GetCurrentIndex()
-            {
-                return _owningComboBox.Items.IndexOf(_owningItem);
-            }
+            private int GetCurrentIndex() => _owningComboBox.Items.InnerList.IndexOf(_owningItem);
 
-            internal override int GetChildId()
-            {
-                return GetCurrentIndex() + 1; // Index is zero-based, Child ID is 1-based.
-            }
+            // Index is zero-based, Child ID is 1-based.
+            internal override int GetChildId() => GetCurrentIndex() + 1;
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
@@ -184,15 +174,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override string? Name
             {
-                get
-                {
-                    if (_owningComboBox != null)
-                    {
-                        return _owningComboBox.GetItemText(_owningItem);
-                    }
-
-                    return base.Name;
-                }
+                get => _owningComboBox is null ? base.Name : _owningComboBox.GetItemText(_owningItem.Item);
                 set => base.Name = value;
             }
 
@@ -226,7 +208,7 @@ namespace System.Windows.Forms
                     runtimeId[0] = RuntimeIDFirstItem;
                     runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
                     runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
-                    runtimeId[3] = comboBoxAccessibleObject.ItemAccessibleObjects.GetId(_owningItem);
+                    runtimeId[3] = _owningItem.GetHashCode();
 
                     return runtimeId;
                 }
@@ -279,21 +261,9 @@ namespace System.Windows.Forms
                 // Do nothing, C++ implementation returns UIA_E_INVALIDOPERATION 0x80131509
             }
 
-            internal override bool IsItemSelected
-            {
-                get
-                {
-                    return (State & AccessibleStates.Selected) != 0;
-                }
-            }
+            internal override bool IsItemSelected => (State & AccessibleStates.Selected) != 0;
 
-            internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
-            {
-                get
-                {
-                    return _owningComboBox.ChildListAccessibleObject;
-                }
-            }
+            internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer => _owningComboBox.ChildListAccessibleObject;
         }
     }
 }

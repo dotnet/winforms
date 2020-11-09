@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -110,9 +111,14 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                var item = _owningComboBox.Items[index];
-                var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
-                return comboBoxAccessibleObject.ItemAccessibleObjects[item] as AccessibleObject;
+                if (_owningComboBox.AccessibilityObject is not  ComboBoxAccessibleObject comboBoxAccessibleObject)
+                {
+                    return null;
+                }
+
+                Entry item = _owningComboBox.Entries[index];
+
+                return item is null ? null : comboBoxAccessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(item);
             }
 
             public int GetChildFragmentCount()

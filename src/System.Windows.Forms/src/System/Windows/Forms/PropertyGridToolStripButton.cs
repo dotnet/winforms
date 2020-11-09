@@ -55,7 +55,7 @@ namespace System.Windows.Forms
                 leftColor: Color.Black, leftWidth: 1, leftStyle: ButtonBorderStyle.Dashed, // left
                 topColor: Color.Black, topWidth: 1, topStyle: ButtonBorderStyle.Dashed, // top
                 rightColor: Color.Black, rightWidth: 1, rightStyle: ButtonBorderStyle.Dashed, // right
-                bottomColor: Color.Black, bottomWidth: 1, bottomStyle: ButtonBorderStyle.Dashed); // bottom;*/
+                bottomColor: Color.Black, bottomWidth: 1, bottomStyle: ButtonBorderStyle.Dashed); // bottom;
         }
 
         private void DrawHightContrastDashedBorer(Graphics graphics)
