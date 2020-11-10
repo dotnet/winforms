@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,8 +13,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal class Indexer
         {
+            // Used by TreeViewImageIndexConverter to show "(none)"
+            internal const int NoneIndex = -2;
+
+            // Used by generally across the board to indicate unset image
             internal const string DefaultKey = "";
             internal const int DefaultIndex = -1;
+
             private string _key = DefaultKey;
             private int _index = DefaultIndex;
             private bool _useIntegerIndex = true;

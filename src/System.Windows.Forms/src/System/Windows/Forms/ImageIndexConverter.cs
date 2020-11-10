@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         {
             if (value is string stringValue && string.Compare(stringValue, SR.toStringNone, true, culture) == 0)
             {
-                return -1;
+                return ImageList.Indexer.DefaultIndex;
             }
 
             return base.ConvertFrom(context, culture, value);
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string) && value is int && ((int)value) == -1)
+            if (destinationType == typeof(string) && value is int index && index == ImageList.Indexer.DefaultIndex)
             {
                 return SR.toStringNone;
             }
@@ -116,7 +116,6 @@ namespace System.Windows.Forms
                     {
                         // We didn't find the image list in this component.  See if the
                         // component has a "parent" property.  If so, walk the tree...
-                        //
                         PropertyDescriptor parentProp = props[ParentImageListProperty];
                         if (parentProp != null)
                         {
@@ -125,7 +124,6 @@ namespace System.Windows.Forms
                         else
                         {
                             // Stick a fork in us, we're done.
-                            //
                             instance = null;
                         }
                     }
@@ -138,13 +136,12 @@ namespace System.Windows.Forms
                     if (imageList != null)
                     {
                         // Create array to contain standard values
-                        //
                         object[] values;
                         int nImages = imageList.Images.Count;
                         if (IncludeNoneAsStandardValue)
                         {
                             values = new object[nImages + 1];
-                            values[nImages] = -1;
+                            values[nImages] = ImageList.Indexer.DefaultIndex;
                         }
                         else
                         {
@@ -152,7 +149,6 @@ namespace System.Windows.Forms
                         }
 
                         // Fill in the array
-                        //
                         for (int i = 0; i < nImages; i++)
                         {
                             values[i] = i;
@@ -165,7 +161,7 @@ namespace System.Windows.Forms
 
             if (IncludeNoneAsStandardValue)
             {
-                return new StandardValuesCollection(new object[] { -1 });
+                return new StandardValuesCollection(new object[] { ImageList.Indexer.DefaultIndex });
             }
             else
             {

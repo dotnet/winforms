@@ -73,13 +73,12 @@ namespace System.Windows.Forms
                 if (imageList != null)
                 {
                     // Create array to contain standard values
-                    //
                     object[] values;
                     int nImages = imageList.Images.Count;
                     if (IncludeNoneAsStandardValue)
                     {
                         values = new object[nImages + 1];
-                        values[nImages] = -1;
+                        values[nImages] = ImageList.Indexer.DefaultIndex;
                     }
                     else
                     {
@@ -87,7 +86,6 @@ namespace System.Windows.Forms
                     }
 
                     // Fill in the array
-                    //
                     for (int i = 0; i < nImages; i++)
                     {
                         values[i] = i;
@@ -96,9 +94,10 @@ namespace System.Windows.Forms
                     return new StandardValuesCollection(values);
                 }
             }
+
             if (IncludeNoneAsStandardValue)
             {
-                return new StandardValuesCollection(new object[] { -1 });
+                return new StandardValuesCollection(new object[] { ImageList.Indexer.DefaultIndex });
             }
             else
             {

@@ -570,7 +570,10 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (ImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv != null && tv.ImageList != null && ImageIndexer.Index >= tv.ImageList.Images.Count)
+                if (ImageIndexer.Index != ImageList.Indexer.NoneIndex
+                    && ImageIndexer.Index != ImageList.Indexer.DefaultIndex
+                    && tv?.ImageList != null
+                    && ImageIndexer.Index >= tv.ImageList.Images.Count)
                 {
                     return tv.ImageList.Images.Count - 1;
                 }
@@ -579,12 +582,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value < ImageList.Indexer.DefaultIndex)
+                if (value < ImageList.Indexer.NoneIndex)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
-                if (ImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
+                if (ImageIndexer.Index == value
+                    && value != ImageList.Indexer.NoneIndex
+                    && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
@@ -974,7 +979,10 @@ namespace System.Windows.Forms
             get
             {
                 TreeView tv = TreeView;
-                if (SelectedImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv != null && tv.ImageList != null && SelectedImageIndexer.Index >= tv.ImageList.Images.Count)
+                if (SelectedImageIndexer.Index != ImageList.Indexer.NoneIndex
+                    && SelectedImageIndexer.Index != ImageList.Indexer.DefaultIndex
+                    && tv?.ImageList != null
+                    && SelectedImageIndexer.Index >= tv.ImageList.Images.Count)
                 {
                     return tv.ImageList.Images.Count - 1;
                 }
@@ -983,12 +991,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value < ImageList.Indexer.DefaultIndex)
+                if (value < ImageList.Indexer.NoneIndex)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
-                if (SelectedImageIndexer.Index == value && value != ImageList.Indexer.DefaultIndex)
+                if (SelectedImageIndexer.Index == value
+                    && value != ImageList.Indexer.NoneIndex
+                    && value != ImageList.Indexer.DefaultIndex)
                 {
                     return;
                 }
@@ -2211,25 +2221,31 @@ namespace System.Windows.Forms
 
             if ((mask & TVIF.IMAGE) != 0)
             {
-                item.iImage = (ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
+                item.iImage = IsSpecialImageIndex(ImageIndexer.ActualIndex)
+                                ? tv.ImageIndexer.ActualIndex
+                                : ImageIndexer.ActualIndex;
             }
 
             if ((mask & TVIF.SELECTEDIMAGE) != 0)
             {
-                item.iSelectedImage = (SelectedImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
+                item.iSelectedImage = IsSpecialImageIndex(SelectedImageIndexer.ActualIndex)
+                                ? tv.SelectedImageIndexer.ActualIndex
+                                : SelectedImageIndexer.ActualIndex;
             }
 
             if ((mask & TVIF.STATE) != 0)
             {
                 item.stateMask = TVIS.STATEIMAGEMASK;
+
+                // ActualIndex == -1 means "don't use custom image list"
+                // so just leave item.state set to zero, that tells the unmanaged control
+                // to use no state image for this node.
                 if (StateImageIndexer.ActualIndex != ImageList.Indexer.DefaultIndex)
                 {
                     item.state = (TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
                 }
-                // ActualIndex == -1 means "don't use custom image list"
-                // so just leave item.state set to zero, that tells the unmanaged control
-                // to use no state image for this node.
             }
+
             if ((mask & TVIF.PARAM) != 0)
             {
                 item.lParam = handle;
@@ -2244,6 +2260,11 @@ namespace System.Windows.Forms
                     tv.ForceScrollbarUpdate(false);
                 }
             }
+
+            return;
+
+            static bool IsSpecialImageIndex(int actualIndex)
+                => actualIndex == ImageList.Indexer.NoneIndex || actualIndex == ImageList.Indexer.DefaultIndex;
         }
 
         internal unsafe void UpdateImage()
