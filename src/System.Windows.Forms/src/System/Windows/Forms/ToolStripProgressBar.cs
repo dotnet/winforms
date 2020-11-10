@@ -442,14 +442,18 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && Owner is ToolStripProgressBarControl toolStripProgressBarControl)
+            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
                 {
-                    return toolStripProgressBarControl.Owner.Placement != ToolStripItemPlacement.Main || Bounds.Height <= 0 || Bounds.Width <= 0;
-                }
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(),
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
-                return base.GetPropertyValue(propertyID);
+            private object GetIsOffscreenPropertyValue()
+            {
+                return Owner is ToolStripProgressBarControl toolStripProgressBarControl
+                    ? toolStripProgressBarControl.Owner.Placement != ToolStripItemPlacement.Main || Bounds.Height <= 0 || Bounds.Width <= 0
+                    : base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
             }
         }
     }

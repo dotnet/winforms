@@ -27,14 +27,11 @@ namespace System.Windows.Forms.Tests
             item.Size = new Size(0, 0);
             toolStrip.Items.Add(item);
 
-            AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
-            AccessibleObject toolStripItemControlAccessibleObject = item.Control.AccessibilityObject;
-
-            Assert.True((bool)toolStripItemAccessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId)
-                || (toolStripItemAccessibleObject.Bounds.Width > 0 && toolStripItemAccessibleObject.Bounds.Height > 0));
-
-            Assert.True((bool)toolStripItemControlAccessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId)
-                || (toolStripItemControlAccessibleObject.Bounds.Width > 0 && toolStripItemControlAccessibleObject.Bounds.Height > 0));
+            Assert.True(GetIsOffscreenPropertyValue(item.AccessibilityObject));
+            Assert.True(GetIsOffscreenPropertyValue(item.Control.AccessibilityObject));
         }
+
+        private bool GetIsOffscreenPropertyValue(AccessibleObject accessibleObject) =>
+            (bool)accessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId) || (accessibleObject.Bounds.Width > 0 && accessibleObject.Bounds.Height > 0);
     }
 }
