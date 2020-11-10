@@ -172,6 +172,11 @@ namespace SourceGenerated
 
         private static IEnumerable<EnumValidationInfo> GetEnumValidationInfo(Compilation compilation, List<SyntaxNode> argumentsToValidate, CancellationToken cancellationToken)
         {
+            // The compiler doesn't necessarily cache semantic models for a single syntax tree
+            // so we will do that here, ensuring we only do the expensive work once per tree.
+            // We can't cache this at a higher level because generator lifetime is not to be relied on.
+            var semanticModelCache = new Dictionary<SyntaxTree, SemanticModel>();
+
             INamedTypeSymbol? flagsAttributeType = compilation.GetTypeByMetadataName("System.FlagsAttribute");
 
             var foundTypes = new HashSet<ITypeSymbol>();
@@ -183,7 +188,7 @@ namespace SourceGenerated
                     yield break;
                 }
 
-                SemanticModel semanticModel = compilation.GetSemanticModel(argument.SyntaxTree);
+                SemanticModel semanticModel = GetSemanticModel(compilation, argument.SyntaxTree);
 
                 ITypeSymbol? enumType = semanticModel.GetTypeInfo(argument, cancellationToken).Type;
                 if (enumType is null || foundTypes.Contains(enumType))
@@ -198,6 +203,17 @@ namespace SourceGenerated
                 var info = new EnumValidationInfo(enumType, isFlags);
 
                 yield return info;
+            }
+
+            SemanticModel GetSemanticModel(Compilation compilation, SyntaxTree syntaxTree)
+            {
+                if (!semanticModelCache.TryGetValue(syntaxTree, out SemanticModel model))
+                {
+                    model = compilation.GetSemanticModel(syntaxTree);
+                    semanticModelCache.Add(syntaxTree, model);
+                }
+
+                return model;
             }
         }
     }
