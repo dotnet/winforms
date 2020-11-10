@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
@@ -138,6 +139,15 @@ namespace System.Windows.Forms.Tests
                     Application.VisualStyleState = state;
                 }
             }, valueParam.ToString());
+        }
+
+        [Fact]
+        public void Application_EnableVisualStyles_ManifestResourceExists()
+        {
+            // Check to make sure the manifest we use for single file publishing is present
+            using Stream stream = typeof(Application).Module.Assembly.GetManifestResourceStream(
+                "System.Windows.Forms.XPThemes.manifest");
+            Assert.NotNull(stream);
         }
 
         private class CustomLCIDCultureInfo : CultureInfo
