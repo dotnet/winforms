@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
 using static Interop;
 
@@ -111,6 +112,85 @@ namespace System.Windows.Forms.Tests
             control.CreateControl(false);
             object editAccessibleName = control.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
             Assert.NotNull(editAccessibleName);
+        }
+
+        public static IEnumerable<object[]> ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected_TestData()
+        {
+            foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
+            {
+                foreach (bool createControl in new[] { true, false })
+                {
+                    foreach (bool droppedDown in new[] { true, false })
+                    {
+                        bool childListDisplayed = droppedDown || comboBoxStyle == ComboBoxStyle.Simple;
+                        yield return new object[] { comboBoxStyle, createControl, droppedDown, childListDisplayed };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected_TestData))]
+        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected(ComboBoxStyle comboBoxStyle, bool createControl, bool droppedDown, bool childListDisplayed)
+        {
+            using ComboBox comboBox = new ComboBox
+            {
+                DropDownStyle = comboBoxStyle
+            };
+
+            if (createControl)
+            {
+                comboBox.CreateControl();
+            }
+
+            comboBox.DroppedDown = droppedDown;
+            AccessibleObject firstChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+
+            Assert.NotNull(firstChild);
+            Assert.Equal(childListDisplayed, firstChild == comboBox.ChildListAccessibleObject);
+            Assert.True(comboBox.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ComboBoxAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected_TestData()
+        {
+            foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
+            {
+                foreach (bool createControl in new[] { true, false })
+                {
+                    foreach (bool droppedDown in new[] { true, false })
+                    {
+                        yield return new object[] { comboBoxStyle, createControl, droppedDown };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected_TestData))]
+        public void ComboBoxAccessibleObject_FragmentNavigate_LastChild_ReturnsExpected(ComboBoxStyle comboBoxStyle, bool createControl, bool droppedDown)
+        {
+            using ComboBox comboBox = new ComboBox
+            {
+                DropDownStyle = comboBoxStyle
+            };
+
+            if (createControl)
+            {
+                comboBox.CreateControl();
+            }
+
+            comboBox.DroppedDown = droppedDown;
+            AccessibleObject lastChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+            AccessibleObject expectedLastChild = comboBoxStyle == ComboBoxStyle.Simple ? comboBox.ChildEditAccessibleObject : GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider;
+
+            Assert.NotNull(lastChild);
+            Assert.Equal(expectedLastChild, lastChild);
+            Assert.True(comboBox.IsHandleCreated);
+        }
+
+        private ComboBox.ComboBoxAccessibleObject GetComboBoxAccessibleObject(ComboBox comboBox)
+        {
+            return comboBox.AccessibilityObject as ComboBox.ComboBoxAccessibleObject;
         }
     }
 }
