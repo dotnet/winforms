@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>System.Windows.Forms.Primitives.TestUtilities.Tests</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>$(NoWarn);618</NoWarn>
+    <Nullable>enable</Nullable>
+    <RootNamespace>System.Windows.Forms.Primitives.TestUtilities.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
+    <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
+    <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestUtilities\System.Windows.Forms.Primitives.TestUtilities.csproj" />
+  </ItemGroup>
+
+</Project>

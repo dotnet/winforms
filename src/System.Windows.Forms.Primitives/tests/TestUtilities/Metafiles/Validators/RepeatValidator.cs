@@ -23,9 +23,11 @@ namespace System.Windows.Forms.Metafiles
 
         public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {
+            // TODO: should we throw if we're at a negative count?
+
             _validator.Validate(ref record, state, out _);
             _count--;
-            complete = _count > 0;
+            complete = _count <= 0;
         }
     }
 }

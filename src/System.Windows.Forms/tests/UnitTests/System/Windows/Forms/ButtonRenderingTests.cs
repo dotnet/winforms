@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
 
             emf.Validate(
                 state,
-                Validate.Repeat(Validate.SkipType(Gdi32.EMR.BITBLT), 2),
+                Validate.Repeat(Validate.SkipType(Gdi32.EMR.BITBLT), 1),
                 Validate.LineTo(
                     (bounds.Right - 1, 0), (0, 0),
                     State.PenColor(SystemColors.ControlLightLight)),
