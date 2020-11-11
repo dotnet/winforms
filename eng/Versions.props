@@ -10,7 +10,7 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>6.0.0-alpha.1.20557.2</MicrosoftNETCoreAppPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>6.0.0-alpha.1.20557.2</VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>
     <SystemDiagnosticsEventLogPackageVersion>6.0.0-alpha.1.20557.2</SystemDiagnosticsEventLogPackageVersion>
     <SystemDirectoryServicesPackageVersion>6.0.0-alpha.1.20557.2</SystemDirectoryServicesPackageVersion>
     <SystemReflectionMetadataLoadContextPackageVersion>6.0.0-alpha.1.20557.2</SystemReflectionMetadataLoadContextPackageVersion>
