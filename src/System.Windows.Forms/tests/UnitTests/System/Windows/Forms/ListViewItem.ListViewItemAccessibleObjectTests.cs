@@ -160,24 +160,41 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
             Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
 
-            // TODO: Sergei Smirnov to fix
-            //Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            //Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            //Assert.Equal(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
-            //AccessibleObject firstChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
-            //AccessibleObject lastChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            //Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem3);
-            //Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem3);
-            //Assert.Equal(firstChildItem3, lastChildItem3);
+            if (Application.UseVisualStyles && showGroups)
+            {
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+                Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+                Assert.Equal(listView.DefaultGroup.AccessibilityObject, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
 
-            //Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            //Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            //Assert.Equal(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
-            //AccessibleObject firstChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
-            //AccessibleObject lastChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            //Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem2);
-            //Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem2);
-            //Assert.NotEqual(firstChildItem2, lastChildItem2);
+                Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+                Assert.Equal(listView.DefaultGroup.AccessibilityObject, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            }
+            else
+            {
+                // Behavior in this block should be fixed in scope of https://github.com/dotnet/winforms/issues/4205
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+                Assert.Equal(listView.AccessibilityObject, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                AccessibleObject firstChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+                AccessibleObject lastChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+                Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem3);
+                Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem3);
+                Assert.Equal(firstChildItem3, lastChildItem3);
+
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+                Assert.Equal(listView.AccessibilityObject, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                AccessibleObject firstChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+                AccessibleObject lastChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+                Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem2);
+                Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem2);
+                Assert.NotEqual(firstChildItem2, lastChildItem2);
+            }
 
             Assert.True(listView.IsHandleCreated);
         }
@@ -221,22 +238,35 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
 
-            // TODO: Sergei Smirnov to fix
-            //Assert.Equal(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
-            //AccessibleObject firstChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
-            //AccessibleObject lastChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            //Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem3);
-            //Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem3);
-            //Assert.Equal(firstChildItem3, lastChildItem3);
+            if (Application.UseVisualStyles && showGroups)
+            {
+                Assert.Equal(listView.DefaultGroup.AccessibilityObject, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+                Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
 
-            //Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            //Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            //Assert.Equal(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.Parent), listView.AccessibilityObject);
-            //AccessibleObject firstChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
-            //AccessibleObject lastChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            //Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem2);
-            //Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem2);
-            //Assert.NotEqual(firstChildItem2, lastChildItem2);
+                Assert.Equal(listView.DefaultGroup.AccessibilityObject, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            }
+            else
+            {
+                // Behavior in this block should be fixed in scope of https://github.com/dotnet/winforms/issues/4205
+                Assert.Equal(listView.AccessibilityObject, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                AccessibleObject firstChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+                AccessibleObject lastChildItem3 = accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+                Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem3);
+                Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem3);
+                Assert.Equal(firstChildItem3, lastChildItem3);
+
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+                Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+                Assert.Equal(listView.AccessibilityObject, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+                AccessibleObject firstChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+                AccessibleObject lastChildItem2 = accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+                Assert.IsType<ListViewSubItemAccessibleObject>(firstChildItem2);
+                Assert.IsType<ListViewSubItemAccessibleObject>(lastChildItem2);
+                Assert.NotEqual(firstChildItem2, lastChildItem2);
+            }
 
             Assert.False(listView.IsHandleCreated);
         }
