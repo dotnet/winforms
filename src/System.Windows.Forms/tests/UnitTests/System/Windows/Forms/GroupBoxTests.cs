@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using WinForms.Common.Tests;
@@ -863,12 +862,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) =>
-            {
-                Debugger.Launch();
-                Debugger.Break();
-                invalidatedCallCount++;
-            };
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
 
             int styleChangedCallCount = 0;
             control.StyleChanged += (sender, e) => styleChangedCallCount++;
