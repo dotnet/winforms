@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,10 +8,10 @@ using System.Drawing;
 using System.Linq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
+    using static Interop;
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
@@ -45,8 +45,20 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.False(control.ChangingText);
-            Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.ClientRectangle);
-            Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7), control.DisplayRectangle);
+                Assert.Equal(new Size(120, Control.DefaultFont.Height + 7), control.ClientSize);
+                Assert.Equal(new Size(16, control.PreferredHeight), control.PreferredSize);
+            }
+            else
+            {
+                Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.DisplayRectangle);
+                Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
+                Assert.Equal(new Size(20, control.PreferredHeight), control.PreferredSize);
+            }
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -63,7 +75,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(new Size(120, control.PreferredHeight), control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -102,7 +113,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal(Control.DefaultFont.Height + 7, control.PreferredHeight);
-            Assert.Equal(new Size(control.PreferredHeight - 3, 23), control.PreferredSize);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.ReadOnly);
             Assert.False(control.RecreatingHandle);
@@ -142,12 +152,22 @@ namespace System.Windows.Forms.Tests
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
-            Assert.Equal(0x8, createParams.ClassStyle);
-            Assert.Equal(0x10200, createParams.ExStyle);
+
+            Assert.Equal(User32.CS.DBLCLKS, (User32.CS)createParams.ClassStyle);
+            Assert.Equal(User32.WS.MAXIMIZEBOX | User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS | User32.WS.VISIBLE | User32.WS.CHILD, (User32.WS)createParams.Style);
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(User32.WS_EX.CONTROLPARENT, (User32.WS_EX)createParams.ExStyle);
+            }
+            else
+            {
+                Assert.Equal(User32.WS_EX.CLIENTEDGE | User32.WS_EX.CONTROLPARENT, (User32.WS_EX)createParams.ExStyle);
+            }
+
             Assert.Equal(control.PreferredHeight, createParams.Height);
             Assert.Equal(IntPtr.Zero, createParams.Parent);
             Assert.Null(createParams.Param);
-            Assert.Equal(0x56010000, createParams.Style);
             Assert.Equal(120, createParams.Width);
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);

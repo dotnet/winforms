@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
 using Moq;
 using WinForms.Common.Tests;
@@ -562,12 +561,18 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, TabAppearance.Buttons)]
         [InlineData(true, TabAppearance.FlatButtons)]
-        [InlineData(true, TabAppearance.Normal)]
+        // Has different behaviour with VisualStyles on, see: TabPage_BackColor_TabAppearance_Normal_GetWithParent_ReturnsExpected
+        // [InlineData(true, TabAppearance.Normal)]
         [InlineData(false, TabAppearance.Buttons)]
         [InlineData(false, TabAppearance.FlatButtons)]
         [InlineData(false, TabAppearance.Normal)]
         public static void TabPage_BackColor_GetWithParent_ReturnsExpected(bool useVisualStyleBackColor, TabAppearance parentAppearance)
         {
+            if (Application.UseVisualStyles)
+            {
+                return;
+            }
+
             using var parent = new TabControl
             {
                 Appearance = parentAppearance
@@ -577,7 +582,31 @@ namespace System.Windows.Forms.Tests
                 UseVisualStyleBackColor = useVisualStyleBackColor,
                 Parent = parent
             };
+
             Assert.Equal(Control.DefaultBackColor, control.BackColor);
+        }
+
+        [WinFormsFact]
+        public static void TabPage_BackColor_TabAppearance_Normal_GetWithParent_ReturnsExpected()
+        {
+            using var parent = new TabControl
+            {
+                Appearance = TabAppearance.Normal
+            };
+            using var control = new TabPage
+            {
+                UseVisualStyleBackColor = true,
+                Parent = parent
+            };
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(Color.Transparent, control.BackColor);
+            }
+            else
+            {
+                Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            }
         }
 
         public static IEnumerable<object[]> BackColor_GetVisualStylesWithParent_TestData()

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -3884,7 +3883,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> OnPaintBackground_WithParent_TestData()
+        // TODO: unify
+        // Correct the implementation as per ScrollableControlTests.OnPaintBackground_VisualStyles_off_WithParent_TestData
+
+        public static IEnumerable<object[]> OnPaintBackground_VisualStyles_off_WithParent_TestData()
         {
             var control = new Control
             {
@@ -3925,8 +3927,52 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        public static IEnumerable<object[]> OnPaintBackground_VisualStyles_on_WithParent_TestData()
+        {
+            var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            var tabPage = new TabPage
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            foreach (Control parent in new Control[] { control, tabPage })
+            {
+                int expected1 = parent == tabPage ? 0 : 1;
+                int expected2 = parent == tabPage ? 0 : 2;
+
+                foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                {
+                    foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                    {
+                        yield return new object[] { parent, true, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                        yield return new object[] { parent, true, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                        yield return new object[] { parent, false, Color.Empty, backgroundImage, backgroundImageLayout, 0 };
+                        yield return new object[] { parent, false, Color.Red, backgroundImage, backgroundImageLayout, 0 };
+                        yield return new object[] { parent, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected1 };
+                        yield return new object[] { parent, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected1 };
+                    }
+                }
+
+                yield return new object[] { parent, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                yield return new object[] { parent, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                yield return new object[] { parent, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                yield return new object[] { parent, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, 0 };
+                yield return new object[] { parent, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                yield return new object[] { parent, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+
+                yield return new object[] { parent, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
+                yield return new object[] { parent, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
+                yield return new object[] { parent, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
+                yield return new object[] { parent, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected1 };
+                yield return new object[] { parent, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                yield return new object[] { parent, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+            }
+        }
+
         [WinFormsTheory]
-        [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
+        [MemberData(nameof(OnPaintBackground_VisualStyles_on_WithParent_TestData))]
         public void Control_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
         {
             using var image = new Bitmap(10, 10);

@@ -1678,8 +1678,10 @@ namespace System.Windows.Forms.Tests
         public void TreeView_Handle_GetVersion_ReturnsExpected()
         {
             using var control = new TreeView();
+
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+            int version = Application.UseVisualStyles ? 6 : 5;
+            Assert.Equal((IntPtr)version, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
         }
 
         public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()

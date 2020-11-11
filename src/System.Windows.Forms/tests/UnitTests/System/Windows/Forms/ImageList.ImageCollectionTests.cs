@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(list.HandleCreated);
         }
 
-        public static IEnumerable<object[]> ImageCollection_Item_Get32bppColorDepth_TestData()
+        public static IEnumerable<object[]> ImageCollection_VisualStyles_off_Item_Get32bppColorDepth_TestData()
         {
             var pixelFormats = new[]
             {
@@ -161,9 +161,31 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        public static IEnumerable<object[]> ImageCollection_VisualStyles_on_Item_Get32bppColorDepth_TestData()
+        {
+            // SetPixel is not supported for images with indexed pixel formats.
+            yield return new object[] { PixelFormat.Format1bppIndexed, Color.Empty, Color.Empty, Color.FromArgb(255, 0, 0, 0) };
+
+            // The actual colours are visually close to the originals, but no colour fidelity
+            if (ArchitectureDetection.Is64bit)
+            {
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
+                yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
+                yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+                yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+            }
+            else
+            {
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
+                yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
+                yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
+                yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
+            }
+        }
+
         [WinFormsTheory]
-        [MemberData(nameof(ImageCollection_Item_Get32bppColorDepth_TestData))]
-        public void ImageCollection_Item_Get32bppColorDepth_Success(PixelFormat pixelFormat, Color pixel00Color, Color pixel10Color)
+        [MemberData(nameof(ImageCollection_VisualStyles_on_Item_Get32bppColorDepth_TestData))]
+        public void ImageCollection_Item_Get32bppColorDepth_Success(PixelFormat pixelFormat, Color pixel00Color, Color givenPixel10Color, Color expectedPixel10Color)
         {
             using var imageFiller1 = new Bitmap(16, 16, pixelFormat);
             using var imageFiller2 = new Bitmap(16, 16, pixelFormat);
@@ -171,8 +193,8 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(16, 16, pixelFormat);
             if (pixel00Color != Color.Empty)
                 image.SetPixel(0, 0, pixel00Color);
-            if (pixel10Color != Color.Empty)
-                image.SetPixel(1, 0, pixel10Color);
+            if (givenPixel10Color != Color.Empty)
+                image.SetPixel(1, 0, givenPixel10Color);
 
             using var list = new ImageList
             {
@@ -191,7 +213,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(image.Size, resultImage.Size);
             Assert.Equal(PixelFormat.Format32bppArgb, resultImage.PixelFormat);
             Assert.Equal(image.GetPixel(0, 0), resultImage.GetPixel(0, 0));
-            Assert.Equal(image.GetPixel(1, 0), resultImage.GetPixel(1, 0));
+            Assert.Equal(expectedPixel10Color, resultImage.GetPixel(1, 0));
         }
 
         [WinFormsTheory]
