@@ -166,25 +166,16 @@ namespace System.Windows.Forms.Tests
             // SetPixel is not supported for images with indexed pixel formats.
             yield return new object[] { PixelFormat.Format1bppIndexed, Color.Empty, Color.Empty, Color.FromArgb(255, 0, 0, 0) };
 
+            // The actual colours are visually close to the originals, but no colour fidelity
             if (ArchitectureDetection.Is64bit)
             {
-                var pixelFormats = new[]
-                {
-                    PixelFormat.Format24bppRgb,
-                    PixelFormat.Format32bppRgb,
-                    PixelFormat.Format32bppArgb,
-                    PixelFormat.Format32bppPArgb,
-                };
-
-                foreach (PixelFormat pixelFormat in pixelFormats)
-                {
-                    yield return new object[] { pixelFormat, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 50, 75, 100) };
-                }
+                yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
+                yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 50, 75, 100) };
+                yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
+                yield return new object[] { PixelFormat.Format32bppPArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 67, 81, 96) };
             }
             else
             {
-                // On the x86 there is no colour fidelity...The actual colours are visually close to the originals
-
                 yield return new object[] { PixelFormat.Format24bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
                 yield return new object[] { PixelFormat.Format32bppRgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(255, 49, 74, 99) };
                 yield return new object[] { PixelFormat.Format32bppArgb, Color.Red, Color.FromArgb(200, 50, 75, 100), Color.FromArgb(200, 66, 81, 95) };
