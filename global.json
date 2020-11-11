@@ -3,10 +3,10 @@
     "dotnet": "5.0.100-rc.2.20479.15",
     "runtimes": {
       "dotnet/x64": [
-        "$(MicrosoftNETCoreAppPackageVersion)"
+        "$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)"
       ],
       "dotnet/x86": [
-        "$(MicrosoftNETCoreAppPackageVersion)"
+        "$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)"
       ]
     }
   },
