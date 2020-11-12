@@ -12,6 +12,8 @@ namespace System
     {
         public ThreadExceptionFixture()
         {
+            Application.EnableVisualStyles();
+
             Application.ThreadException += OnThreadException;
         }
 
