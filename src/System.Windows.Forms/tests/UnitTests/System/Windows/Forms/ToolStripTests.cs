@@ -74,7 +74,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.DesignMode);
             Assert.Single(control.DisplayedItems);
             Assert.Same(control.DisplayedItems, control.DisplayedItems);
-            Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Rectangle(9, 0, 90, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(90, 25), control.MaxItemSize);
+            }
+            else
+            {
+                Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(92, 25), control.MaxItemSize);
+            }
+
             Assert.Equal(DockStyle.Top, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -120,7 +131,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Margin);
             Assert.Equal(Size.Empty, control.MaximumSize);
-            Assert.Equal(new Size(92, 25), control.MaxItemSize);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Orientation.Horizontal, control.Orientation);
             Assert.NotNull(control.OverflowButton);
@@ -219,7 +229,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(new Size(100, 25), control.DefaultSize);
             Assert.True(control.DefaultShowItemToolTips);
             Assert.False(control.DesignMode);
-            Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Rectangle(9, 0, 90, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(90, 25), control.MaxItemSize);
+            }
+            else
+            {
+                Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
+                Assert.Equal(new Size(92, 25), control.MaxItemSize);
+            }
             Assert.Equal(DockStyle.Top, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -266,7 +285,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Point.Empty, control.Location);
             Assert.Equal(Padding.Empty, control.Margin);
             Assert.Equal(Size.Empty, control.MaximumSize);
-            Assert.Equal(new Size(92, 25), control.MaxItemSize);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Orientation.Horizontal, control.Orientation);
             Assert.NotNull(control.OverflowButton);
@@ -2227,6 +2245,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DisplayRectangle_TestData()
         {
+            int x = Application.UseVisualStyles ? 9 : 7;
+            int width = Application.UseVisualStyles ? 90 : 92;
+            int height = Application.UseVisualStyles ? 16 : 18;
+
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
@@ -2234,16 +2256,16 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Flow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
 
-            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(7, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(7, 0, 92, 25) };
+            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(x, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(x, 0, width, 25) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.HorizontalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
 
-            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(7, 0, 92, 25) };
-            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(7, 0, 92, 25) };
+            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(x, 0, width, 25) };
+            yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(x, 0, width, 25) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.StackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
@@ -2255,9 +2277,9 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { ToolStripLayoutStyle.Table, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.Table, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
 
-            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, 7, 99, 18) };
-            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(0, 7, 99, 18) };
-            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(0, 7, 99, 18) };
+            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Yes, new Rectangle(0, x, 99, height) };
+            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.No, new Rectangle(0, x, 99, height) };
+            yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Visible, RightToLeft.Inherit, new Rectangle(0, x, 99, height) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Yes, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.No, new Rectangle(0, 0, 99, 25) };
             yield return new object[] { ToolStripLayoutStyle.VerticalStackWithOverflow, ToolStripGripStyle.Hidden, RightToLeft.Inherit, new Rectangle(0, 0, 99, 25) };
@@ -5725,7 +5747,10 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> OnPaintBackground_WithParent_TestData()
+        // TODO: unify
+        // Correct the implementation as per ScrollableControlTests.OnPaintBackground_VisualStyles_off_WithParent_TestData
+
+        public static IEnumerable<object[]> OnPaintBackground_VisualStyles_off_WithParent_TestData()
         {
             var control = new Control
             {
@@ -5773,8 +5798,67 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        public static IEnumerable<object[]> OnPaintBackground_VisualStyles_on_WithParent_TestData()
+        {
+            var control = new Control
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            var tabPage = new TabPage
+            {
+                Bounds = new Rectangle(1, 2, 30, 40)
+            };
+            foreach (Control parent in new Control[] { control, tabPage })
+            {
+                int expected1 = parent == tabPage ? 0 : 1;
+                int expected2 = parent == tabPage ? 0 : 2;
+                int expected3 = parent == tabPage ? 0 : 3;
+
+                foreach (bool hScroll in new bool[] { true, false })
+                {
+                    foreach (bool vScroll in new bool[] { true, false })
+                    {
+                        foreach (Image backgroundImage in new Image[] { null, new Bitmap(10, 10, PixelFormat.Format32bppRgb) })
+                        {
+                            foreach (ImageLayout backgroundImageLayout in Enum.GetValues(typeof(ImageLayout)))
+                            {
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, backgroundImage, backgroundImageLayout, expected1 };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.Red, backgroundImage, backgroundImageLayout, expected1 };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, backgroundImage, backgroundImageLayout, expected1 };
+                                yield return new object[] { parent, hScroll, vScroll, false, Color.Red, backgroundImage, backgroundImageLayout, expected1 };
+
+                                int expected = parent == tabPage
+                                    ? 0
+                                    : backgroundImage != null
+                                        && (backgroundImageLayout == ImageLayout.Zoom || backgroundImageLayout == ImageLayout.Stretch || backgroundImageLayout == ImageLayout.Center)
+                                        && (hScroll || vScroll)
+                                            ? 1
+                                            : 2;
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                                yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), backgroundImage, backgroundImageLayout, expected };
+                            }
+                        }
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected1 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.None, expected2 };
+
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Empty, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, false, Color.Red, new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected2 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(100, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected3 };
+                        yield return new object[] { parent, hScroll, vScroll, true, Color.FromArgb(0, 50, 100, 150), new Bitmap(10, 10, PixelFormat.Format32bppArgb), ImageLayout.Tile, expected3 };
+                    }
+                }
+            }
+        }
+
         [WinFormsTheory]
-        [MemberData(nameof(OnPaintBackground_WithParent_TestData))]
+        [MemberData(nameof(OnPaintBackground_VisualStyles_on_WithParent_TestData))]
         public void ToolStrip_OnPaintBackground_InvokeWithParent_CallsPaint(Control parent, bool hScroll, bool vScroll, bool supportsTransparentBackColor, Color backColor, Image backgroundImage, ImageLayout backgroundImageLayout, int expectedPaintCallCount)
         {
             using var image = new Bitmap(10, 10);
@@ -5812,7 +5896,7 @@ namespace System.Windows.Forms.Tests
             parent.Paint += parentHandler;
             control.OnPaintBackground(eventArgs);
             Assert.Equal(0, callCount);
-            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
             Assert.False(control.IsHandleCreated);
 
             // Remove handler.
@@ -5820,7 +5904,7 @@ namespace System.Windows.Forms.Tests
             parent.Paint -= parentHandler;
             control.OnPaintBackground(eventArgs);
             Assert.Equal(0, callCount);
-            Assert.Equal(expectedPaintCallCount + 1, parentCallCount);
+            Assert.Equal(expectedPaintCallCount, parentCallCount);
             Assert.False(control.IsHandleCreated);
         }
 
@@ -6427,6 +6511,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnScroll_WithItems_TestData()
         {
+            int x = Application.UseVisualStyles ? 9 : 7;
+
             foreach (ScrollEventType scrollEventType in Enum.GetValues(typeof(ScrollEventType)))
             {
                 if (scrollEventType == ScrollEventType.ThumbTrack)
@@ -6434,14 +6520,14 @@ namespace System.Windows.Forms.Tests
                     break;
                 }
 
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(7, 101), new Point(0, 100) };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(7, -99), new Point(0, -100) };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(7, 1), new Point(0, 0) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(x, 101), new Point(0, 100) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(x, -99), new Point(0, -100) };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(x, 1), new Point(0, 0) };
             }
 
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(7, 1), new Point(0, 0) };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(7, 1), new Point(0, 0) };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(7, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(x, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(x, 1), new Point(0, 0) };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(x, 1), new Point(0, 0) };
         }
 
         [WinFormsTheory]
@@ -6470,6 +6556,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnScroll_WithItemsWithHandle_TestData()
         {
+            int x = Application.UseVisualStyles ? 9 : 7;
+
             foreach (ScrollEventType scrollEventType in Enum.GetValues(typeof(ScrollEventType)))
             {
                 if (scrollEventType == ScrollEventType.ThumbTrack)
@@ -6477,14 +6565,14 @@ namespace System.Windows.Forms.Tests
                     break;
                 }
 
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(7, 101), new Point(0, 100), 1 };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(7, -99), new Point(0, -100), 1 };
-                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(7, 1), new Point(0, 0), 0 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 200), new Point(x, 101), new Point(0, 100), 1 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 200, 100), new Point(x, -99), new Point(0, -100), 1 };
+                yield return new object[] { new ScrollEventArgs(scrollEventType, 100, 100), new Point(x, 1), new Point(0, 0), 0 };
             }
 
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(7, 1), new Point(0, 0), 0 };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(7, 1), new Point(0, 0), 0 };
-            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(7, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 100, 200), new Point(x, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 200, 100), new Point(x, 1), new Point(0, 0), 0 };
+            yield return new object[] { new ScrollEventArgs(ScrollEventType.ThumbTrack, 0, 0), new Point(x, 1), new Point(0, 0), 0 };
         }
 
         [WinFormsTheory]

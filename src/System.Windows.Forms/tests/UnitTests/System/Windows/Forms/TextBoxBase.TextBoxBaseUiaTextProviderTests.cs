@@ -6,10 +6,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Xunit;
-using Xunit.Abstractions;
 using static System.Windows.Forms.TextBoxBase;
 using static Interop;
-using static Interop.Gdi32;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Tests
@@ -471,8 +469,17 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { false, new Size(50, 50), new Rectangle(1, 1, 44, 15) };
             yield return new object[] { false, new Size(250, 100), new Rectangle(1, 1, 244, 15) };
             yield return new object[] { true, new Size(0, 0), new Rectangle(4, 0, 72, 16) };
-            yield return new object[] { true, new Size(50, 50), new Rectangle(4, 1, 38, 30) };
-            yield return new object[] { true, new Size(250, 100), new Rectangle(4, 1, 238, 90) };
+
+            if (Application.UseVisualStyles)
+            {
+                yield return new object[] { true, new Size(50, 50), new Rectangle(4, 1, 38, 44) };
+                yield return new object[] { true, new Size(250, 100), new Rectangle(4, 1, 238, 94) };
+            }
+            else
+            {
+                yield return new object[] { true, new Size(50, 50), new Rectangle(4, 1, 38, 30) };
+                yield return new object[] { true, new Size(250, 100), new Rectangle(4, 1, 238, 90) };
+            }
         }
 
         [WinFormsTheory]
@@ -647,12 +654,24 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> TextBoxBaseUiaTextProvider_GetVisibleRangePoints_ForMultilineTextBox_TestData()
         {
-            yield return new object[] { new Size(0, 0), 0, 0 };
-            yield return new object[] { new Size(0, 20), 0, 0 };
-            yield return new object[] { new Size(30, 30), 0, 3 };
-            yield return new object[] { new Size(50, 20), 0, 6 };
-            yield return new object[] { new Size(120, 20), 0, 20 };
-            yield return new object[] { new Size(50, 80), 0, 26 };
+            if (Application.UseVisualStyles)
+            {
+                yield return new object[] { new Size(0, 0), 0, 0 };
+                yield return new object[] { new Size(0, 20), 0, 0 };
+                yield return new object[] { new Size(30, 30), 0, 5 };
+                yield return new object[] { new Size(50, 20), 0, 11 };
+                yield return new object[] { new Size(120, 20), 0, 26 };
+                yield return new object[] { new Size(50, 80), 0, 26 };
+            }
+            else
+            {
+                yield return new object[] { new Size(0, 0), 0, 0 };
+                yield return new object[] { new Size(0, 20), 0, 0 };
+                yield return new object[] { new Size(30, 30), 0, 3 };
+                yield return new object[] { new Size(50, 20), 0, 6 };
+                yield return new object[] { new Size(120, 20), 0, 20 };
+                yield return new object[] { new Size(50, 80), 0, 26 };
+            }
         }
 
         [WinFormsTheory]

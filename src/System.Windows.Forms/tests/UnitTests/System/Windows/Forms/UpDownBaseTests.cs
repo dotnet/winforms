@@ -44,8 +44,20 @@ namespace System.Windows.Forms.Tests
             Assert.True(control.CanRaiseEvents);
             Assert.True(control.CausesValidation);
             Assert.False(control.ChangingText);
-            Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.ClientRectangle);
-            Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, 120, Control.DefaultFont.Height + 7), control.DisplayRectangle);
+                Assert.Equal(new Size(120, Control.DefaultFont.Height + 7), control.ClientSize);
+                Assert.Equal(new Size(122, control.PreferredHeight), control.PreferredSize);
+            }
+            else
+            {
+                Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.DisplayRectangle);
+                Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
+                Assert.Equal(new Size(123, control.PreferredHeight), control.PreferredSize);
+            }
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -62,7 +74,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.DefaultPadding);
             Assert.Equal(new Size(120, control.PreferredHeight), control.DefaultSize);
             Assert.False(control.DesignMode);
-            Assert.Equal(new Rectangle(0, 0, 116, Control.DefaultFont.Height + 3), control.DisplayRectangle);
             Assert.Equal(DockStyle.None, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -99,7 +110,6 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Padding.Empty, control.Padding);
             Assert.Null(control.Parent);
             Assert.Equal(Control.DefaultFont.Height + 7, control.PreferredHeight);
-            Assert.Equal(new Size(123, control.PreferredHeight), control.PreferredSize);
             Assert.Equal("Microsoft\u00AE .NET", control.ProductName);
             Assert.False(control.ReadOnly);
             Assert.False(control.RecreatingHandle);
@@ -136,12 +146,22 @@ namespace System.Windows.Forms.Tests
             CreateParams createParams = control.CreateParams;
             Assert.Null(createParams.Caption);
             Assert.Null(createParams.ClassName);
-            Assert.Equal(0x8, createParams.ClassStyle);
-            Assert.Equal(0x10200, createParams.ExStyle);
+
+            Assert.Equal(User32.CS.DBLCLKS, (User32.CS)createParams.ClassStyle);
+            Assert.Equal(User32.WS.MAXIMIZEBOX | User32.WS.CLIPCHILDREN | User32.WS.CLIPSIBLINGS | User32.WS.VISIBLE | User32.WS.CHILD, (User32.WS)createParams.Style);
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(User32.WS_EX.CONTROLPARENT, (User32.WS_EX)createParams.ExStyle);
+            }
+            else
+            {
+                Assert.Equal(User32.WS_EX.CLIENTEDGE | User32.WS_EX.CONTROLPARENT, (User32.WS_EX)createParams.ExStyle);
+            }
+
             Assert.Equal(control.PreferredHeight, createParams.Height);
             Assert.Equal(IntPtr.Zero, createParams.Parent);
             Assert.Null(createParams.Param);
-            Assert.Equal(0x56010000, createParams.Style);
             Assert.Equal(120, createParams.Width);
             Assert.Equal(0, createParams.X);
             Assert.Equal(0, createParams.Y);
@@ -155,7 +175,11 @@ namespace System.Windows.Forms.Tests
         [InlineData(BorderStyle.FixedSingle, 0x56810000, 0x10000)]
         public void UpDownSubUpDownBase_CreateParams_GetBorderStyleNoVisualStyles_ReturnsExpected(BorderStyle borderStyle, int expectedStyle, int expectedExStyle)
         {
-            Assert.False(Application.RenderWithVisualStyles);
+            if (Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
             using var control = new SubUpDownBase
             {
                 BorderStyle = borderStyle
@@ -691,9 +715,18 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> BorderStyle_Set_TestData()
         {
-            yield return new object[] { BorderStyle.Fixed3D, new Size(123, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
-            yield return new object[] { BorderStyle.FixedSingle, new Size(121, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
-            yield return new object[] { BorderStyle.None, new Size(119, Control.DefaultFont.Height + 3) };
+            if (Application.UseVisualStyles)
+            {
+                yield return new object[] { BorderStyle.Fixed3D, new Size(122, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.FixedSingle, new Size(122, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.None, new Size(122, Control.DefaultFont.Height + 3) };
+            }
+            else
+            {
+                yield return new object[] { BorderStyle.Fixed3D, new Size(123, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.FixedSingle, new Size(121, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.None, new Size(119, Control.DefaultFont.Height + 3) };
+            }
         }
 
         [WinFormsTheory]
@@ -719,9 +752,18 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> BorderStyle_SetWithHandle_TestData()
         {
-            yield return new object[] { BorderStyle.Fixed3D, 0, 0, new Size(123, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
-            yield return new object[] { BorderStyle.FixedSingle, 1, 1, new Size(123, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
-            yield return new object[] { BorderStyle.None, 2, 1, new Size(123, Control.DefaultFont.Height + 3) };
+            if (Application.UseVisualStyles)
+            {
+                yield return new object[] { BorderStyle.Fixed3D, 0, 0, new Size(122, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.FixedSingle, 0, 1, new Size(122, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.None, 1, 1, new Size(123, Control.DefaultFont.Height + 3) };
+            }
+            else
+            {
+                yield return new object[] { BorderStyle.Fixed3D, 0, 0, new Size(123, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.FixedSingle, 1, 1, new Size(123, Control.DefaultFont.Height + SystemInformation.BorderSize.Height * 4 + 3) };
+                yield return new object[] { BorderStyle.None, 2, 1, new Size(123, Control.DefaultFont.Height + 3) };
+            }
         }
 
         [WinFormsTheory]
@@ -1547,11 +1589,15 @@ namespace System.Windows.Forms.Tests
         public void UpDownBase_GetPreferredSize_Invoke_ReturnsExpected(Size proposedSize)
         {
             using var control = new SubUpDownBase();
-            Assert.Equal(new Size(123, control.PreferredHeight), control.GetPreferredSize(proposedSize));
-            Assert.False(control.IsHandleCreated);
+
+            int expectedWidth = Application.UseVisualStyles ? 122 : 123;
+            Size preferredSize = control.GetPreferredSize(proposedSize);
+            Assert.Equal(new Size(expectedWidth, control.PreferredHeight), preferredSize);
 
             // Call again.
-            Assert.Equal(new Size(123, control.PreferredHeight), control.GetPreferredSize(proposedSize));
+            preferredSize = control.GetPreferredSize(proposedSize);
+            Assert.Equal(new Size(expectedWidth, control.PreferredHeight), preferredSize);
+
             Assert.False(control.IsHandleCreated);
         }
 
@@ -1563,22 +1609,28 @@ namespace System.Windows.Forms.Tests
             {
                 Bounds = new Rectangle(1, 2, 30, 40)
             };
-            Assert.Equal(new Size(33, control.PreferredHeight), control.GetPreferredSize(proposedSize));
+
+            int expectedWidth = Application.UseVisualStyles ? 32 : 33;
+
+            Assert.Equal(new Size(expectedWidth, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
 
             // Call again.
-            Assert.Equal(new Size(33, control.PreferredHeight), control.GetPreferredSize(proposedSize));
+            Assert.Equal(new Size(expectedWidth, control.PreferredHeight), control.GetPreferredSize(proposedSize));
             Assert.False(control.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> GetPreferredSize_WithConstrainedSize_TestData()
         {
-            yield return new object[] { Size.Empty, Size.Empty, new Size(30, 40), 123 };
-            yield return new object[] { new Size(10, 20), Size.Empty, new Size(30, 40), 123 };
-            yield return new object[] { new Size(30, 40), Size.Empty, new Size(30, 40), 123 };
-            yield return new object[] { new Size(31, 40), Size.Empty, new Size(30, 40), 123 };
-            yield return new object[] { new Size(30, 41), Size.Empty, new Size(30, 40), 123 };
-            yield return new object[] { new Size(40, 50), Size.Empty, new Size(30, 40), 123 };
+            int expectedWidth = Application.UseVisualStyles ? 122 : 123;
+
+            yield return new object[] { Size.Empty, Size.Empty, new Size(30, 40), expectedWidth };
+            yield return new object[] { new Size(10, 20), Size.Empty, new Size(30, 40), expectedWidth };
+            yield return new object[] { new Size(30, 40), Size.Empty, new Size(30, 40), expectedWidth };
+            yield return new object[] { new Size(31, 40), Size.Empty, new Size(30, 40), expectedWidth };
+            yield return new object[] { new Size(30, 41), Size.Empty, new Size(30, 40), expectedWidth };
+            yield return new object[] { new Size(40, 50), Size.Empty, new Size(30, 40), expectedWidth };
+
             yield return new object[] { Size.Empty, new Size(20, 10), new Size(30, 40), 20 };
             yield return new object[] { Size.Empty, new Size(30, 40), new Size(30, 40), 30 };
             yield return new object[] { Size.Empty, new Size(31, 40), new Size(30, 40), 31 };
@@ -2177,11 +2229,11 @@ namespace System.Windows.Forms.Tests
                 {
                     foreach (Color backColor in new Color[] { Color.Red, Color.Empty })
                     {
-                        yield return new object [] { new Size(100, 200), enabled, borderStlye, backColor };
-                        yield return new object [] { new Size(10, 10), enabled, borderStlye, backColor };
-                        yield return new object [] { new Size(9, 10), enabled, borderStlye, backColor };
-                        yield return new object [] { new Size(10, 9), enabled, borderStlye, backColor };
-                        yield return new object [] { new Size(9, 9), enabled, borderStlye, backColor };
+                        yield return new object[] { new Size(100, 200), enabled, borderStlye, backColor };
+                        yield return new object[] { new Size(10, 10), enabled, borderStlye, backColor };
+                        yield return new object[] { new Size(9, 10), enabled, borderStlye, backColor };
+                        yield return new object[] { new Size(10, 9), enabled, borderStlye, backColor };
+                        yield return new object[] { new Size(9, 9), enabled, borderStlye, backColor };
                     }
                 }
             }
@@ -2274,8 +2326,25 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void UpDownBase_OnPaint_NullE_ThrowsArgumentNullException()
+        public void UpDownBase_OnPaint_VisualStyles_on_NullE_ThrowsNullReferenceException()
         {
+            if (!Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
+            using var control = new SubUpDownBase();
+            Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
+        }
+
+        [WinFormsFact]
+        public void UpDownBase_OnPaint_VisualStyles_off_NullE_ThrowsArgumentNullException()
+        {
+            if (Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
             using var control = new SubUpDownBase();
             Assert.Throws<ArgumentNullException>(() => control.OnPaint(null));
         }
@@ -2681,9 +2750,20 @@ namespace System.Windows.Forms.Tests
             };
 
             control.SetBoundsCore(x, y, width, height, specified);
-            Assert.Equal(new Size(width - 4, Control.DefaultFont.Height + 3), control.ClientSize);
-            Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.ClientRectangle);
-            Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.DisplayRectangle);
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Size(width, Control.DefaultFont.Height + 7), control.ClientSize);
+                Assert.Equal(new Rectangle(0, 0, width, Control.DefaultFont.Height + 7), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, width, Control.DefaultFont.Height + 7), control.DisplayRectangle);
+            }
+            else
+            {
+                Assert.Equal(new Size(width - 4, Control.DefaultFont.Height + 3), control.ClientSize);
+                Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.DisplayRectangle);
+            }
+
             Assert.Equal(new Size(width, preferredHeight), control.Size);
             Assert.Equal(x, control.Left);
             Assert.Equal(x + width, control.Right);
@@ -2702,9 +2782,20 @@ namespace System.Windows.Forms.Tests
 
             // Call again.
             control.SetBoundsCore(x, y, width, height, specified);
-            Assert.Equal(new Size(width - 4, Control.DefaultFont.Height + 3), control.ClientSize);
-            Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.ClientRectangle);
-            Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.DisplayRectangle);
+
+            if (Application.UseVisualStyles)
+            {
+                Assert.Equal(new Size(width, Control.DefaultFont.Height + 7), control.ClientSize);
+                Assert.Equal(new Rectangle(0, 0, width, Control.DefaultFont.Height + 7), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, width, Control.DefaultFont.Height + 7), control.DisplayRectangle);
+            }
+            else
+            {
+                Assert.Equal(new Size(width - 4, Control.DefaultFont.Height + 3), control.ClientSize);
+                Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.ClientRectangle);
+                Assert.Equal(new Rectangle(0, 0, width - 4, Control.DefaultFont.Height + 3), control.DisplayRectangle);
+            }
+
             Assert.Equal(new Size(width, preferredHeight), control.Size);
             Assert.Equal(x, control.Left);
             Assert.Equal(x + width, control.Right);
