@@ -163,14 +163,10 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.FirstChild:
-                        return _owningComboBox.DroppedDown
-                            ? _owningComboBox.ChildListAccessibleObject
-                            : _owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList
-                                ? _owningComboBox.ChildTextAccessibleObject
-                                : _owningComboBox.ChildEditAccessibleObject;
+                        return GetFirstChild();
                     case UiaCore.NavigateDirection.LastChild:
                         return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
-                            ? _owningComboBox.ChildEditAccessibleObject
+                            ? _owningComboBox.IsHandleCreated ? _owningComboBox.ChildEditAccessibleObject : null
                             : DropDownButtonUiaProvider;
                     default:
                         return base.FragmentNavigate(direction);
@@ -333,6 +329,26 @@ namespace System.Windows.Forms
                 base.SetFocus();
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
+
+            private AccessibleObject? GetFirstChild()
+            {
+                if (_owningComboBox.DroppedDown)
+                {
+                    return _owningComboBox.ChildListAccessibleObject;
+                }
+
+                switch (_owningComboBox.DropDownStyle)
+                {
+                    case ComboBoxStyle.DropDown:
+                        return _owningComboBox.IsHandleCreated ? _owningComboBox.ChildEditAccessibleObject : DropDownButtonUiaProvider;
+                    case ComboBoxStyle.DropDownList:
+                        return _owningComboBox.ChildTextAccessibleObject;
+                    case ComboBoxStyle.Simple:
+                        return null;
+                }
+
+                return null;
             }
         }
     }

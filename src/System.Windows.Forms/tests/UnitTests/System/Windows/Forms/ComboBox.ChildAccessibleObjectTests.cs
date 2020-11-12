@@ -182,10 +182,28 @@ namespace System.Windows.Forms.Tests
             }
 
             comboBox.DroppedDown = droppedDown;
-            AccessibleObject nextItem = GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
+            AccessibleObject previousItem = GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
 
-            Assert.Equal(GetTextEditAccessibleObject(comboBox), nextItem);
+            Assert.Equal(GetTextEditAccessibleObject(comboBox), previousItem);
             Assert.True(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.Simple)]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        [InlineData(ComboBoxStyle.DropDown)]
+        public void DropDownButtonUiaProvider_FragmentNavigate_PreviousSibling_ReturnsExpected_IfHanleIsNotCreated(ComboBoxStyle comboBoxStyle)
+        {
+            using ComboBox comboBox = new ComboBox
+            {
+                DropDownStyle = comboBoxStyle
+            };
+
+            AccessibleObject previousItem = GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
+            var expectedItem = comboBoxStyle == ComboBoxStyle.DropDownList ? comboBox.ChildTextAccessibleObject : null;
+
+            Assert.Equal(expectedItem, previousItem);
+            Assert.False(comboBox.IsHandleCreated);
         }
 
         private AccessibleObject GetTextEditAccessibleObject(ComboBox comboBox)

@@ -90,7 +90,9 @@ namespace System.Windows.Forms
                 {
                     return _owner.DropDownStyle == ComboBoxStyle.DropDownList
                             ? _owner.ChildTextAccessibleObject
-                            : _owner.ChildEditAccessibleObject;
+                            : _owner.IsHandleCreated
+                                ?  _owner.ChildEditAccessibleObject
+                                : null;
                 }
 
                 return base.FragmentNavigate(direction);
