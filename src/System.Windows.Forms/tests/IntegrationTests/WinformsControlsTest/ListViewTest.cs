@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -222,6 +223,61 @@ namespace WinformsControlsTest
 
             var random = new Random();
             listView2.Columns[random.Next(0, listView2.Columns.Count)].ImageIndex = random.Next(0, 2);
+        }
+
+        private void btnClearListView1_Click(object sender, EventArgs e)
+        {
+            listView1.Clear();
+            LargeImageList.Images.Clear();
+
+            listView1.LargeImageList = LargeImageList;
+            listView1.View = View.LargeIcon;
+        }
+
+        private void btnLoadImagesListView1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            foreach (string file in openFileDialog1.FileNames)
+            {
+                Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+                LargeImageList.Images.Add(file, bitmap);
+
+                ListViewItem item = new ListViewItem
+                {
+                    Text = Path.GetFileName(file),
+                    Name = file,
+                    ImageKey = file,
+                    Checked = true
+                };
+                listView1.Items.Add(item);
+            }
+        }
+
+        private void btnReplaceImageListView1_Click(object sender, EventArgs e)
+        {
+            if (listView1.SelectedIndices.Count != 1)
+            {
+                return;
+            }
+
+            openFileDialog1.Multiselect = false;
+            DialogResult result = openFileDialog1.ShowDialog();
+            openFileDialog1.Multiselect = true;
+
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+
+            string file = openFileDialog1.FileName;
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(file);
+            LargeImageList.Images[listView1.SelectedIndices[0]] = bitmap;
+
+            listView1.Refresh();
         }
     }
 }
