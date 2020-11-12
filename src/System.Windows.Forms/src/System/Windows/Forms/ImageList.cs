@@ -53,8 +53,6 @@ namespace System.Windows.Forms
         private EventHandler _recreateHandler;
         private EventHandler _changeHandler;
 
-        private bool _inAddRange;
-
         /// <summary>
         ///  Creates a new ImageList Control with a default image size of 16x16
         ///  pixels
