@@ -5025,22 +5025,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd)
-            {
-                if (hwnd == _owningComboBox._childEdit.Handle)
-                {
-                    return _owningComboBox.ChildEditAccessibleObject;
-                }
-                else if (
-                    hwnd == _owningComboBox._childListBox.Handle ||
-                    hwnd == _owningComboBox._dropDownHandle)
-                {
-                    return _owningComboBox.ChildListAccessibleObject;
-                }
-
-                return null;
-            }
-
             /// <summary>
             ///  Gets the accessible child corresponding to the specified index.
             /// </summary>
