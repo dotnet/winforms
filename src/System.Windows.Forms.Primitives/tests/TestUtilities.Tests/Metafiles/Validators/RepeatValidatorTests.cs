@@ -23,10 +23,19 @@ namespace System.Windows.Forms.Metafiles.Tests
             // call again - we'll be at zero now
             repeatValidator.Validate(ref emfRecord, state: null!, out complete);
             Assert.True(complete);
+        }
 
-            // call again - this will put us at negative count
-            repeatValidator.Validate(ref emfRecord, state: null!, out complete);
-            Assert.True(complete);
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public unsafe void RepeatValidator_Validate_should_throw_IOE_if_count_not_positive(int count)
+        {
+            Mock<IEmfValidator> emfValidator = new();
+            RepeatValidator repeatValidator = new(emfValidator.Object, count);
+
+            EmfRecord emfRecord = new();
+
+            Assert.Throws<InvalidOperationException>(() => repeatValidator.Validate(ref emfRecord, state: null!, out bool complete));
         }
     }
 }
