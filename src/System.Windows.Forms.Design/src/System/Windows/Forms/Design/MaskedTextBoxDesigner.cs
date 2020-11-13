@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Design
         /// Obsolete ComponentDesigner method which sets component default properties.  Overriden to avoid setting
         /// the Mask improperly.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public override void OnSetComponentDefaults()
         {
             // do nothing.

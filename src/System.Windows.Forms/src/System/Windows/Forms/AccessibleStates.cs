@@ -216,7 +216,7 @@ namespace System.Windows.Forms
         /// </summary>
         HasPopup = 0x40000000,
 
-        [Obsolete("This enumeration value has been deprecated. There is no replacement. http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This enumeration value has been deprecated. There is no replacement. https://go.microsoft.com/fwlink/?linkid=14202")]
         Valid = 0x3fffffff,
     }
 }

@@ -847,7 +847,7 @@ namespace System.Windows.Forms
 #pragma warning disable 0809
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This property has been deprecated. Use the AutoScaleDimensions property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This property has been deprecated. Use the AutoScaleDimensions property instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public override Size AutoScaleBaseSize
         {
             get => base.AutoScaleBaseSize;

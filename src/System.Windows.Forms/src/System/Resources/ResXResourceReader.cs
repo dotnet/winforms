@@ -630,7 +630,7 @@ namespace System.Resources
                             WhitespaceHandling oldValue = reader.WhitespaceHandling;
                             try
                             {
-                                // based on the documentation at http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmltextreaderclasswhitespacehandlingtopic.asp
+                                // based on the documentation at https://docs.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
                                 // this is ok because:
                                 // "Because the XmlTextReader does not have DTD information available to it,
                                 // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope."

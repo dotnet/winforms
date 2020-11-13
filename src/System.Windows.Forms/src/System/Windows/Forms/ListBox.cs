@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Performs the work of adding the specified items to the Listbox
         /// </summary>
-        [Obsolete("This method has been deprecated.  There is no replacement.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated.  There is no replacement.  https://go.microsoft.com/fwlink/?linkid=14202")]
         protected virtual void AddItemsCore(object[] value)
         {
             int count = value is null ? 0 : value.Length;

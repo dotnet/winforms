@@ -357,7 +357,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  when you expect the resulting expression to be used as a parameter or target
         ///  of a statement.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         protected CodeExpression SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;

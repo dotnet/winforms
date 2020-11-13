@@ -3118,7 +3118,7 @@ namespace System.Windows.Forms
         }
 
         // Helper function for Rtl
-        [Obsolete("This property has been deprecated. Please use RightToLeft instead. http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This property has been deprecated. Please use RightToLeft instead. https://go.microsoft.com/fwlink/?linkid=14202")]
         protected internal bool RenderRightToLeft => true;
 
         /// <summary>
@@ -9922,7 +9922,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Scales to entire control and any child controls.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use the Scale(SizeF ratio) method instead. http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use the Scale(SizeF ratio) method instead. https://go.microsoft.com/fwlink/?linkid=14202")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Scale(float ratio)
         {
@@ -9932,7 +9932,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Scales the entire control and any child controls.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use the Scale(SizeF ratio) method instead. http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use the Scale(SizeF ratio) method instead. https://go.microsoft.com/fwlink/?linkid=14202")]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Scale(float dx, float dy)
         {
