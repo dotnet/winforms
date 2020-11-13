@@ -128,7 +128,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerItem.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
-                        return _ownerItem.Placement != ToolStripItemPlacement.Main || Bounds.Height <= 0 || Bounds.Width <= 0;
+                        return GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds);
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerItem.CanSelect;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:

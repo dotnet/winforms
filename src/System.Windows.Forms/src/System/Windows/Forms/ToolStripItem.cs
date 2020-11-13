@@ -3384,6 +3384,11 @@ namespace System.Windows.Forms
             return toPoint;
         }
 
+        internal static bool GetIsOffscreenPropertyValue(ToolStripItemPlacement? toolStripItemPlacement, Rectangle bounds)
+        {
+            return toolStripItemPlacement != ToolStripItemPlacement.Main || bounds.Height <= 0 || bounds.Width <= 0;
+        }
+
         internal ToolStrip RootToolStrip
         {
             get

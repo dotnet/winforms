@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -69,7 +68,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
                     case UiaCore.UIA.IsOffscreenPropertyId:
-                        return _toolStripControlHost?.Placement != ToolStripItemPlacement.Main || Bounds.Height <= 0 || Bounds.Width <= 0;
+                        return GetIsOffscreenPropertyValue(_toolStripControlHost?.Placement, Bounds);
                 }
 
                 return base.GetPropertyValue(propertyID);
