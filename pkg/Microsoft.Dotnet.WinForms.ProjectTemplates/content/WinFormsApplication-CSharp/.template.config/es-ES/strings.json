@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Aplicación de Windows Forms",
+    "description": "Plantilla de proyecto para crear una aplicación de Windows Forms (WinForms) de .NET."
+  }
+}

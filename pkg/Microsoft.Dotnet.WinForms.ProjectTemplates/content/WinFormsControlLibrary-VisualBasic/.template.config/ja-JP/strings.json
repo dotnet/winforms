@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows フォーム コントロール ライブラリ",
+    "description": ".NET Windows フォーム (WinForms) を対象とするコントロール ライブラリを作成するためのプロジェクト テンプレート。"
+  }
+}

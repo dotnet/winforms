@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows Forms Uygulaması",
+    "description": ".NET Windows Forms (WinForms) Uygulaması oluşturmak için proje şablonu."
+  }
+}

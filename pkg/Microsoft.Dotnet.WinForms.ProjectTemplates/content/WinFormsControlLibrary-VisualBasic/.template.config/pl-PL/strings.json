@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Biblioteka kontrolek Windows Forms",
+    "description": "Szablon projektu służący do tworzenia biblioteki kontrolek przeznaczonej dla środowiska .NET Windows Forms (WinForms)."
+  }
+}

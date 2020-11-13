@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Библиотека классов Windows Forms",
+    "description": "Шаблон проекта для создания библиотеки классов, предназначенной для платформы .NET Windows Forms (WinForms)."
+  }
+}

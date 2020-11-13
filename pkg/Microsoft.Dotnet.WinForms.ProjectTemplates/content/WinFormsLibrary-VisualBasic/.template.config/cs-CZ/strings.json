@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Knihovna tříd pro Windows Forms",
+    "description": "Šablona projektu pro vytvoření knihovny tříd, která cílí na .NET Windows Forms (WinForms)"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows Forms 控制項程式庫",
+    "description": "用於建立以 .NET Windows Forms (WinForms) 為目標之控制項程式庫的專案範本。"
+  }
+}

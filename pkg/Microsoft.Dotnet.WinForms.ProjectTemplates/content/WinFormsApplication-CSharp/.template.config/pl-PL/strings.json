@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Aplikacja Windows Forms",
+    "description": "Szablon projektu służący do tworzenia aplikacji .NET Windows Forms (WinForms)."
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows 窗体控件库",
+    "description": "用于创建面向 .NET Windows 窗体(WinForms)的控件库的项目模板。"
+  }
+}
