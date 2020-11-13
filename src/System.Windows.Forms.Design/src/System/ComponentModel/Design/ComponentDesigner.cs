@@ -508,7 +508,7 @@ namespace System.ComponentModel.Design
         ///
         ///  This is called after the other initialize functions.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use InitializeExistingComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use InitializeExistingComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public virtual void InitializeNonDefault()
         {
         }
@@ -541,7 +541,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Raises the SetComponentDefault event.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public virtual void OnSetComponentDefaults()
         {
             ISite site = Component?.Site;

@@ -405,7 +405,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.FormAutoScaleDescr)),
-        Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        Obsolete("This property has been deprecated. Use the AutoScaleMode property instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -2761,7 +2761,7 @@ namespace System.Windows.Forms
         ///  This auto scales the form based on the AutoScaleBaseSize.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This method has been deprecated. Use the ApplyAutoScaling method instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use the ApplyAutoScaling method instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         protected void ApplyAutoScaling()
         {
             Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "ApplyAutoScaling... ");
@@ -3509,7 +3509,7 @@ namespace System.Windows.Forms
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("This method has been deprecated. Use the AutoScaleDimensions property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use the AutoScaleDimensions property instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public static SizeF GetAutoScaleSize(Font font)
         {
             float height = font.Height;

@@ -924,7 +924,7 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Attempting to terminate message loop");
 
-                // Per http://support.microsoft.com/support/kb/articles/Q183/1/16.ASP
+                // Per KB 183116 (contents no longer available)
                 //
                 // WM_QUIT may be consumed by another message pump under very specific circumstances.
                 // When that occurs, we rely on the STATE_POSTEDQUIT to be caught in the next

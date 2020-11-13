@@ -2495,7 +2495,7 @@ namespace System.Windows.Forms
                 // Custom recursive QuickSort needed because of the notion of shared rows.
                 // The indexes of the compared rows are required to do the comparisons.
                 // For a study comparing the iterative and recursive versions of the QuickSort
-                // see http://www.mathcs.carleton.edu/courses/course_resources/cs227_w96/wightmaj/data.html
+                // see https://web.archive.org/web/20051125015050/http://www.mathcs.carleton.edu/courses/course_resources/cs227_w96/wightmaj/data.html
                 // Is the recursive version going to cause trouble with large dataGridViews?
                 do
                 {

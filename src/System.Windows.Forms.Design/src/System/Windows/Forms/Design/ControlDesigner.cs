@@ -1152,7 +1152,7 @@ namespace System.Windows.Forms.Design
         ///  values in the component.  The default implementation of this sets the components's default property to
         ///  it's name, if that property is a string.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public override void OnSetComponentDefaults()
         {
             ISite site = Component.Site;

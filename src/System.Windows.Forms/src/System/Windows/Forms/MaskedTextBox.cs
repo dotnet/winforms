@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  MaskedTextBox control definition class.
     ///  Uses the services from the System.ComponentModel.MaskedTextBoxProvider class.
-    ///  See spec at http://dotnetclient/whidbey/Specs/MaskEdit.doc
+    ///  Search Microsoft SPO for "MaskEdit.doc" to see spec
     /// </summary>
     [DefaultEvent(nameof(MaskInputRejected))]
     [DefaultBindingProperty(nameof(Text))]
@@ -34,8 +34,8 @@ namespace System.Windows.Forms
         // class.  This means that the underlying Edit control won't enable Undo operations and the context
         // menu behavior will be a bit different (for instance Copy option is enabled when PasswordChar is set).
         // To provide Undo functionality and make the context menu behave like the Edit control, we would have
-        // to implement our own.  See http://msdn.microsoft.com/msdnmag/issues/1100/c/default.aspx for more info
-        // about how to do this. See postponed
+        // to implement our own.  For more info about how to do this, see:
+        // https://docs.microsoft.com/en-us/archive/msdn-magazine/2000/november/c-q-a-filetype-icon-detector-app-custom-context-menus-unreferenced-variables-and-string-conversions
 
         private const bool forward = true;
         private const bool backward = false;

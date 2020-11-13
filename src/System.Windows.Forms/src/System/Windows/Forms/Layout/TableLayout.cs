@@ -168,7 +168,6 @@ namespace System.Windows.Forms.Layout
 
         private static readonly string[] _propertiesWhichInvalidateCache = new string[] {
            //suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
-           //for more information, see http://wiki/default.aspx/Microsoft.Projects.DotNetClient.LayoutEventArgs
 
            null,
            PropertyNames.ChildIndex,   // Changing Z-order changes the row/column assignments

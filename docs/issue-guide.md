@@ -71,7 +71,7 @@ Feel free to use other labels if it helps your triage efforts (for example, **ne
     * Motivation: Observation is that contributors are less likely to grab assigned issues, no matter what the repository rules say.
 
 1. Use **up-for-grabs** as much as possible, ideally with a quick note about next steps / complexity of the issue.<br />
-    NB: Per [http://up-for-grabs.net][up-for-grabs-net], such issues should be no longer than few nights' worth of work. They should be actionable (that is, no mysterious CI failures that can't be tested in the open).
+    NB: Per [https://up-for-grabs.net][up-for-grabs-net], such issues should be no longer than few nights' worth of work. They should be actionable (that is, no mysterious CI failures that can't be tested in the open).
 
 1. Set milestone to **Future**, unless you can 95%-commit you can fund the issue in specific milestone.
     * Motivation: Helps communicate desire/timeline to community. Can spark further priority/impact discussion.
@@ -120,5 +120,5 @@ Each PR has to have reviewer approval from at least one Windows Forms team membe
 [milestones]: https://github.com/dotnet/winforms/milestones
 [up-votes]: #upvotes-on-issues
 [sort issues by number of up-votes]: https://github.com/dotnet/winforms/issues?q=is%3Aissue+is%3Aopen+sort%3Areactions-%2B1-desc
-[up-for-grabs-net]: http://up-for-grabs.net
+[up-for-grabs-net]: https://up-for-grabs.net
 [auto-closing]: https://help.github.com/articles/closing-issues-via-commit-messages/

@@ -65,5 +65,5 @@ To create the Microsoft.Private.Winforms package, run `.\build -pack`
 
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
 [latest-core-build]: https://github.com/dotnet/core/blob/master/daily-builds.md
-[msbuild-log-viewer]: http://msbuildlog.com/
+[msbuild-log-viewer]: https://msbuildlog.com/
 [VS-download]: https://visualstudio.microsoft.com/downloads/
