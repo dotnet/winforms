@@ -8,5 +8,5 @@ namespace System.Windows.Forms
     ///  Represents a method that will handle the <see cref='TreeView.OnNodeMouseClick'/> or
     /// <see cref='TreeView.OnNodeMouseDoubleClick'/> event.
     /// </summary>
-    public delegate void TreeNodeMouseClickEventHandler(object sender, TreeNodeMouseClickEventArgs e);
+    public delegate void TreeNodeMouseClickEventHandler(object? sender, TreeNodeMouseClickEventArgs e);
 }
