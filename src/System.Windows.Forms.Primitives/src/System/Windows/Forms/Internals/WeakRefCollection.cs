@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
             internal WeakRefObject(object obj)
             {
-                Debug.Assert(obj != null, "Unexpected null object!");
+                Debug.Assert(obj is not null, "Unexpected null object!");
                 weakHolder = new WeakReference(obj);
                 _hash = obj.GetHashCode();
             }

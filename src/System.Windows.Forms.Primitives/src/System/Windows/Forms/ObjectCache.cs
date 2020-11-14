@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < _itemsCache.Length; i++)
             {
                 item = Interlocked.Exchange(ref _itemsCache[i], null);
-                if (item != null && Accept(item))
+                if (item is not null && Accept(item))
                 {
                     return item;
                 }

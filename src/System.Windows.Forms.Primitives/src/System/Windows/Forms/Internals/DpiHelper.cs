@@ -284,7 +284,7 @@ namespace System.Windows.Forms
                 return;
             }
             Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap, deviceDpi);
-            if (deviceBitmap != null)
+            if (deviceBitmap is not null)
             {
                 logicalBitmap.Dispose();
                 logicalBitmap = deviceBitmap;
