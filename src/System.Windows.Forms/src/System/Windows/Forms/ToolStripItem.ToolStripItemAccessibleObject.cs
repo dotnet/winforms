@@ -245,13 +245,7 @@ namespace System.Windows.Forms
 
                     fileName = args.HelpNamespace;
 
-                    try
-                    {
-                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
-                    }
-                    catch
-                    {
-                    }
+                    int.TryParse(args.HelpKeyword, NumberStyles.Integer, CultureInfo.InvariantCulture, out topic);
 
                     return topic;
                 }

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,7 +10,7 @@ namespace System.Windows.Forms
     public sealed class HtmlElementErrorEventArgs : EventArgs
     {
         private readonly string _urlString;
-        private Uri _url;
+        private Uri? _url;
 
         internal HtmlElementErrorEventArgs(string description, string urlString, int lineNumber)
         {

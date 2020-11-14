@@ -2,10 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Runtime.InteropServices;
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -18,17 +14,17 @@ namespace System.Windows.Forms
         {
         }
 
-        public QueryAccessibilityHelpEventArgs(string helpNamespace, string helpString, string helpKeyword)
+        public QueryAccessibilityHelpEventArgs(string? helpNamespace, string? helpString, string? helpKeyword)
         {
             HelpNamespace = helpNamespace;
             HelpString = helpString;
             HelpKeyword = helpKeyword;
         }
 
-        public string HelpNamespace { get; set; }
+        public string? HelpNamespace { get; set; }
 
-        public string HelpString { get; set; }
+        public string? HelpString { get; set; }
 
-        public string HelpKeyword { get; set; }
+        public string? HelpKeyword { get; set; }
     }
 }
