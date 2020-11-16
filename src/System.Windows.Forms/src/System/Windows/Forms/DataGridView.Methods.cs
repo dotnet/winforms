@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
@@ -73,6 +74,11 @@ namespace System.Windows.Forms
             {
                 DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(Rows[NewRowIndex]);
                 OnUserAddedRow(dgvre);
+
+                AccessibilityObject.InternalRaiseAutomationNotification(
+                    AutomationNotificationKind.ItemAdded,
+                    AutomationNotificationProcessing.ImportantMostRecent,
+                    string.Format(SR.DataGridView_RowAddedNotification, NewRowIndex));
             }
         }
 

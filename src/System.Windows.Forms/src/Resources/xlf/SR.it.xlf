@@ -3709,6 +3709,11 @@ Per sostituire questa finestra di dialogo predefinita, gestire l'evento DataErro
         <target state="translated">Indica se l'utente può modificare le celle del controllo DataGridView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="new">Row {0} is added</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">La riga specificata appartiene già a un controllo DataGridView.</target>

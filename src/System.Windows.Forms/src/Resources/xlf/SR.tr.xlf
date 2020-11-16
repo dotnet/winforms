@@ -3709,6 +3709,11 @@ Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayın
         <target state="translated">Kullanıcının DataGridView denetiminin hücrelerini düzenleyip düzenleyemeyeceğini gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="new">Row {0} is added</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Sağlanan satır zaten bir DataGridView denetimine ait.</target>

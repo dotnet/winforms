@@ -3709,6 +3709,11 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
         <target state="translated">Gibt an, ob der Benutzer die Zellen des DataGridView-Steuerelements bearbeiten kann.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="new">Row {0} is added</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Die angegebene Zeile gehört bereits zu einem DataGridView-Steuerelement.</target>
