@@ -3709,6 +3709,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Označuje, zda uživatel může upravovat buňky ovládacího prvku DataGridView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="new">Row {0} is added</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Zadaný řádek již patří do ovládacího prvku DataGridView.</target>

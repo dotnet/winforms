@@ -3709,6 +3709,11 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
         <target state="translated">Wskazuje, czy użytkownik może edytować komórki formantu DataGridView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="new">Row {0} is added</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Podany wiersz już należy do formantu DataGridView.</target>
