@@ -38,7 +38,7 @@ Namespace My
         ' For more about using WinForms without the Application Framework 
         ' see: https://aka.ms/visualbasic-appframework-net5
         Protected Overrides Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
-            Dim eventArgs = New ApplyHighDpiModeEventArgs(
+            Dim eventArgs As New ApplyHighDpiModeEventArgs(
                 If(
                     _highDpiMode Is Nothing,
                     HighDpiMode.SystemAware,
