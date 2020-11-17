@@ -128,7 +128,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerItem.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
-                        return _ownerItem.Placement != ToolStripItemPlacement.Main;
+                        return GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds);
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerItem.CanSelect;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -328,6 +328,7 @@ namespace System.Windows.Forms
                 get
                 {
                     Rectangle bounds = Owner.Bounds;
+
                     if (Owner.ParentInternal != null && Owner.ParentInternal.Visible)
                     {
                         return new Rectangle(Owner.ParentInternal.PointToScreen(bounds.Location), bounds.Size);

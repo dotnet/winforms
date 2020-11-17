@@ -408,20 +408,18 @@ namespace System.Windows.Forms
 
         internal class ToolStripProgressBarControlAccessibleObject : ProgressBar.ProgressBarAccessibleObject
         {
+            private readonly ToolStripProgressBarControl _ownerToolStripProgressBarControl;
+
             public ToolStripProgressBarControlAccessibleObject(ToolStripProgressBarControl toolStripProgressBarControl) : base(toolStripProgressBarControl)
             {
+                _ownerToolStripProgressBarControl = toolStripProgressBarControl;
             }
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
                 {
-                    if (Owner is ToolStripProgressBarControl toolStripProgressBarControl)
-                    {
-                        return toolStripProgressBarControl.Owner.Owner.AccessibilityObject;
-                    }
-
-                    return base.FragmentRoot;
+                    return _ownerToolStripProgressBarControl.Owner.Owner.AccessibilityObject;
                 }
             }
 
@@ -432,20 +430,18 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.Parent:
                     case UiaCore.NavigateDirection.PreviousSibling:
                     case UiaCore.NavigateDirection.NextSibling:
-                        if (Owner is ToolStripProgressBarControl toolStripProgressBarControl)
-                        {
-                            return toolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
-                        }
-                        break;
+                        return _ownerToolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                return base.GetPropertyValue(propertyID);
-            }
+            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
+                {
+                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerToolStripProgressBarControl.Owner.Placement, Bounds),
+                    _ => base.GetPropertyValue(propertyID)
+                };
         }
     }
 }

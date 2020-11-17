@@ -67,6 +67,8 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return (State & AccessibleStates.Focused) == AccessibleStates.Focused;
+                    case UiaCore.UIA.IsOffscreenPropertyId:
+                        return GetIsOffscreenPropertyValue(_toolStripControlHost?.Placement, Bounds);
                 }
 
                 return base.GetPropertyValue(propertyID);
