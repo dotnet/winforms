@@ -40,6 +40,14 @@ stages:
           - _OfficialBuildIdArgs: ''
           - _InternalRuntimeDownloadArgs: ''
 
+          # needed for helix
+          - _HelixSource: official/winforms
+          - ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
+            - _HelixSource: pr/winforms
+          - _HelixTargetQueues: Windows.10.Amd64.Open # see helix.dot.net for a list of possible queues
+          - _HelixCreator: winforms                   # public helix jobs must have a creator
+          - _HelixAccessToken: ""                     # public helix jobs can't use an access token
+
           # Override some values if we're building internally (not public)
           - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
 
@@ -49,6 +57,11 @@ stages:
             - group: DotNet-Blob-Feed
             - group: DotNet-Symbol-Server-Pats
             - _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
+            - group: DotNet-HelixApi-Access
+
+            - _HelixTargetQueues: Windows.10.Amd64      # see helix.dot.net for a list of possible queues
+            - _HelixCreator: ""                         # internal helix jobs can't have a creator
+            - _HelixAccessToken: $(HelixApiAccessToken) # internal helix jobs must use an access token
 
             # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
             # are not resolved until the agent is running on the machine. They can be overridden any 
@@ -109,21 +122,25 @@ stages:
             /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog
           displayName: Build
 
-        # Run Unit Tests
-        # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
-        - script: eng\cibuild.cmd
-            -test
-            -configuration $(_BuildConfig)
-            $(_OfficialBuildIdArgs)
-            $(_InternalRuntimeDownloadArgs)
-            /p:Coverage=$(_Coverage)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
-            /m:1
-          displayName: Run Unit Tests
+        # Run Unit tests in helix
+        # Platform is required by the Interop.Tests project because CMake needs it
+        - script: powershell -ExecutionPolicy ByPass -NoProfile eng\common\msbuild.ps1
+            -ci
+            $(Build.SourcesDirectory)/eng/SendToHelix.proj
+            /p:Platform=x64 
+            /p:HelixSource=$(_HelixSource)
+            /p:HelixTargetQueues=$(_HelixTargetQueues)
+            /p:Creator=$(_HelixCreator)
+            /p:HelixAccessToken=$(_HelixAccessToken)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\SendToHelix.binlog
+          displayName: Run Unit Tests in Helix
+          env:
+            SYSTEM_ACCESSTOKEN: $(System.AccessToken) # needed to publish helix results to Azure Dev Ops
 
         # Run Integration Tests
         # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
         # UI race conditions
+        # TODO: Move these to helix once you figure out how. Tracked by https://github.com/dotnet/winforms-designer/issues/1732
         - script: eng\cibuild.cmd
             -integrationTest
             -configuration $(_BuildConfig)
