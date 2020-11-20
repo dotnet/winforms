@@ -15,14 +15,14 @@ namespace System.Windows.Forms.Tests
         [InlineData(false, AccessibleRole.None)]
         public void ComboBoxAccessibleObject_Ctor_Default(bool createControl, AccessibleRole expectedAccessibleRole)
         {
-            using var control = new ComboBox();
+            using ComboBox control = new ComboBox();
             if (createControl)
             {
                 control.CreateControl();
             }
 
             Assert.Equal(createControl, control.IsHandleCreated);
-            var accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
+            ComboBox.ComboBoxAccessibleObject accessibleObject = new ComboBox.ComboBoxAccessibleObject(control);
             Assert.Equal(createControl, control.IsHandleCreated);
             Assert.NotNull(accessibleObject.Owner);
             Assert.Equal(expectedAccessibleRole, accessibleObject.Role);
@@ -33,12 +33,12 @@ namespace System.Windows.Forms.Tests
         [InlineData(ComboBoxStyle.DropDownList)]
         public void ComboBoxAccessibleObject_ExpandCollapse_Set_CollapsedState_IfControlIsCreated(ComboBoxStyle comboBoxStyle)
         {
-            using var control = new ComboBox
+            using ComboBox control = new ComboBox
             {
                 DropDownStyle = comboBoxStyle
             };
             control.CreateControl();
-            var accessibleObject = control.AccessibilityObject;
+            AccessibleObject accessibleObject = control.AccessibilityObject;
 
             accessibleObject.Expand();
             Assert.NotEqual(AccessibleStates.Collapsed, accessibleObject.State & AccessibleStates.Collapsed);
@@ -56,11 +56,12 @@ namespace System.Windows.Forms.Tests
         [InlineData(ComboBoxStyle.DropDownList)]
         public void ComboBoxAccessibleObject_ExpandCollapse_Set_CollapsedState_IfControlIsNotCreated(ComboBoxStyle comboBoxStyle)
         {
-            using var control = new ComboBox
+            using ComboBox control = new ComboBox
             {
                 DropDownStyle = comboBoxStyle
             };
-            var accessibleObject = control.AccessibilityObject;
+
+            AccessibleObject accessibleObject = control.AccessibilityObject;
             Assert.False(control.IsHandleCreated);
 
             accessibleObject.Expand();
@@ -75,45 +76,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_DropDown_ReturnExpected_IfHandleNotCreated()
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDown)]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        [InlineData(ComboBoxStyle.Simple)]
+        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnNull_IfHandleNotCreated(ComboBoxStyle comboBoxStyle)
         {
-            using var comboBox = new ComboBox
+            using ComboBox comboBox = new ComboBox
             {
-                DropDownStyle = ComboBoxStyle.DropDown
+                DropDownStyle = comboBoxStyle
             };
 
-            var accessibleObject = comboBox.AccessibilityObject;
-            UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-
-            Assert.Equal(GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider, firstChild);
-            Assert.False(comboBox.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_DropDownList_ReturnExpected_IfHandleNotCreated()
-        {
-            using var comboBox = new ComboBox
-            {
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-
-            var accessibleObject = comboBox.AccessibilityObject;
-            UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-
-            Assert.Equal(comboBox.ChildTextAccessibleObject, firstChild);
-            Assert.False(comboBox.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_Simple_ReturnExpected_IfHandleNotCreated()
-        {
-            using var comboBox = new ComboBox
-            {
-                DropDownStyle = ComboBoxStyle.Simple
-            };
-
-            var accessibleObject = comboBox.AccessibilityObject;
+            AccessibleObject accessibleObject = comboBox.AccessibilityObject;
             UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
 
             Assert.Null(firstChild);
@@ -125,7 +99,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(null)]
         public void ComboBoxEditAccessibleObject_NameNotNull(string name)
         {
-            using var control = new ComboBox();
+            using ComboBox control = new ComboBox();
             control.AccessibleName = name;
             control.CreateControl(false);
             object editAccessibleName = control.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
@@ -149,7 +123,11 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected_TestData))]
-        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected(ComboBoxStyle comboBoxStyle, bool createControl, bool droppedDown, bool childListDisplayed)
+        public void ComboBoxAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected(
+            ComboBoxStyle comboBoxStyle,
+            bool createControl,
+            bool droppedDown,
+            bool childListDisplayed)
         {
             using ComboBox comboBox = new ComboBox
             {
@@ -199,7 +177,9 @@ namespace System.Windows.Forms.Tests
 
             comboBox.DroppedDown = droppedDown;
             AccessibleObject lastChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            AccessibleObject expectedLastChild = comboBoxStyle == ComboBoxStyle.Simple ? comboBox.ChildEditAccessibleObject : GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider;
+            AccessibleObject expectedLastChild = comboBoxStyle == ComboBoxStyle.Simple
+                ? comboBox.ChildEditAccessibleObject
+                : GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider;
 
             Assert.NotNull(lastChild);
             Assert.Equal(expectedLastChild, lastChild);
@@ -209,32 +189,18 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(ComboBoxStyle.DropDown)]
         [InlineData(ComboBoxStyle.DropDownList)]
-        public void ComboBoxAccessibleObject_FragmentNavigate_LastChild_ReturnExpected_IfHandleNotCreated(ComboBoxStyle comboBoxStyle)
+        [InlineData(ComboBoxStyle.Simple)]
+        public void ComboBoxAccessibleObject_FragmentNavigate_LastChild_ReturnNull_IfHandleNotCreated(ComboBoxStyle comboBoxStyle)
         {
-            using var comboBox = new ComboBox
+            using ComboBox comboBox = new ComboBox
             {
                 DropDownStyle = comboBoxStyle
             };
 
-            var accessibleObject = comboBox.AccessibilityObject;
+            AccessibleObject accessibleObject = comboBox.AccessibilityObject;
             UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
 
-            Assert.Equal(GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider, lastChild);
-            Assert.False(comboBox.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void ComboBoxAccessibleObject_FragmentNavigate_LastChild_Simple_ReturnExpected_IfHandleNotCreated()
-        {
-            using var comboBox = new ComboBox
-            {
-                DropDownStyle = ComboBoxStyle.Simple
-            };
-
-            var accessibleObject = comboBox.AccessibilityObject;
-            UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-
-            Assert.Null(firstChild);
+            Assert.Null(lastChild);
             Assert.False(comboBox.IsHandleCreated);
         }
 

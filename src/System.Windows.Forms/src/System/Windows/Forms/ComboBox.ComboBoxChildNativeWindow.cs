@@ -78,9 +78,9 @@ namespace System.Windows.Forms
                 return new ChildAccessibleObject(_owner, Handle);
             }
 
-            internal void WmGetObject(ref Message m)
+            private void WmGetObject(ref Message m)
             {
-               if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
+                if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
                 {
                     AccessibleObject uiaProvider = GetChildAccessibleObject(_childWindowType);
 

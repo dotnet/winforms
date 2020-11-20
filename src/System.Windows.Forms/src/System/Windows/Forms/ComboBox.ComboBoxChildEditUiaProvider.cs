@@ -40,6 +40,11 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
@@ -51,10 +56,9 @@ namespace System.Windows.Forms
                             : null;
                     case UiaCore.NavigateDirection.NextSibling:
                         return _owner.DropDownStyle != ComboBoxStyle.Simple
-                            ? _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
+                            && _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
                                 ? comboBoxAccessibleObject.DropDownButtonUiaProvider
-                                : null
-                            : null;
+                                : null;
                     default:
                         return base.FragmentNavigate(direction);
                 }

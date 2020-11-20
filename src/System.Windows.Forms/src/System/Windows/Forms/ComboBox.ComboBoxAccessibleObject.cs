@@ -160,14 +160,17 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetFirstChild();
                     case UiaCore.NavigateDirection.LastChild:
-                        return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
-                            ? _owningComboBox.IsHandleCreated ? _owningComboBox.ChildEditAccessibleObject : null
-                            : DropDownButtonUiaProvider;
+                        return GetLastChild();
                     default:
                         return base.FragmentNavigate(direction);
                 }
@@ -195,58 +198,6 @@ namespace System.Windows.Forms
                 }
 
                 return null;
-            }
-
-            /// <summary>
-            ///  Gets the accessible child corresponding to the specified index.
-            /// </summary>
-            /// <param name="index">The child index.</param>
-            /// <returns>The accessible child.</returns>
-            /// <remarks>
-            ///  GetChild method should be unchanged to not break the MSAA scenarios.
-            /// </remarks>
-            internal AccessibleObject? GetChildFragment(int index)
-            {
-                if (_owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList)
-                {
-                    if (index == 0)
-                    {
-                        return _owningComboBox.ChildTextAccessibleObject;
-                    }
-
-                    index--;
-                }
-
-                if (index == 0 && _owningComboBox.DropDownStyle != ComboBoxStyle.Simple)
-                {
-                    return DropDownButtonUiaProvider;
-                }
-
-                return null;
-            }
-
-            /// <summary>
-            ///  Gets the number of children belonging to an accessible object.
-            /// </summary>
-            /// <returns>The number of children.</returns>
-            /// <remarks>
-            ///  GetChildCount method should be unchanged to not break the MSAA scenarios.
-            /// </remarks>
-            internal int GetChildFragmentCount()
-            {
-                int childFragmentCount = 0;
-
-                if (_owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList)
-                {
-                    childFragmentCount++; // Text instead of edit for style is DropDownList but not DropDown.
-                }
-
-                if (_owningComboBox.DropDownStyle != ComboBoxStyle.Simple)
-                {
-                    childFragmentCount++; // DropDown button.
-                }
-
-                return childFragmentCount;
             }
 
             /// <summary>
@@ -338,18 +289,19 @@ namespace System.Windows.Forms
                     return _owningComboBox.ChildListAccessibleObject;
                 }
 
-                switch (_owningComboBox.DropDownStyle)
+                return _owningComboBox.DropDownStyle switch
                 {
-                    case ComboBoxStyle.DropDown:
-                        return _owningComboBox.IsHandleCreated ? _owningComboBox.ChildEditAccessibleObject : DropDownButtonUiaProvider;
-                    case ComboBoxStyle.DropDownList:
-                        return _owningComboBox.ChildTextAccessibleObject;
-                    case ComboBoxStyle.Simple:
-                        return null;
-                }
-
-                return null;
+                    ComboBoxStyle.DropDown => _owningComboBox.ChildEditAccessibleObject,
+                    ComboBoxStyle.DropDownList => _owningComboBox.ChildTextAccessibleObject,
+                    ComboBoxStyle.Simple => null,
+                    _ => null
+                };
             }
+
+            private AccessibleObject? GetLastChild() =>
+                _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
+                    ? _owningComboBox.ChildEditAccessibleObject
+                    : DropDownButtonUiaProvider;
         }
     }
 }
