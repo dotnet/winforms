@@ -8,6 +8,8 @@ variables:
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
+  - name: PostBuildSign
+    value: true
 
   # used for post-build phases, internal builds only
   - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
