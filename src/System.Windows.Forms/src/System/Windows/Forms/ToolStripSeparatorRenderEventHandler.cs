@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
     ///  Called when the background of a ToolStrip item is being rendered
     /// </summary>
-    public delegate void ToolStripSeparatorRenderEventHandler(object sender, ToolStripSeparatorRenderEventArgs e);
+    public delegate void ToolStripSeparatorRenderEventHandler(object? sender, ToolStripSeparatorRenderEventArgs e);
 }

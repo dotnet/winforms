@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -11,5 +9,5 @@ namespace System.Windows.Forms
     /// <see cref='TreeView.OnBeforeCollapse'/>, <see cref='TreeView.BeforeExpand'/>,
     ///  or <see cref='TreeView.BeforeSelect'/> event.
     /// </summary>
-    public delegate void TreeViewCancelEventHandler(object sender, TreeViewCancelEventArgs e);
+    public delegate void TreeViewCancelEventHandler(object? sender, TreeViewCancelEventArgs e);
 }
