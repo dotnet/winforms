@@ -7,9 +7,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="Microsoft.NETCore.App" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="Microsoft.NETCore.App" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
     <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -51,21 +51,21 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>cf258a14b70ad9069470a108f13765e0e5988f51</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
     <Dependency Name="System.Diagnostics.EventLog" Version="5.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -95,13 +95,13 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>cf258a14b70ad9069470a108f13765e0e5988f51</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App.Internal" Version="5.0.1-servicing.20574.14">
+    <Dependency Name="Microsoft.NETCore.App.Internal" Version="5.0.1-servicing.20575.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
     <Dependency Name="Microsoft.NETCore.Targets" Version="5.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -121,7 +121,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Security.Cryptography.Pkcs" Version="5.0.1">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
     <Dependency Name="System.Security.Cryptography.ProtectedData" Version="5.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
@@ -149,7 +149,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="Microsoft.NETCore.App.Runtime.win-x64" Version="5.0.1">
       <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65a4f7139fd0450cdcb3a714b3cdb3d35b0c47f5</Sha>
+      <Sha>5660c4a8b121680f6965416fb5f37a6fd49e0976</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
