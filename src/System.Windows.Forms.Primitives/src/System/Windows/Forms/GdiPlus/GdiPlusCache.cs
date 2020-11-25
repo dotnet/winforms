@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                     ? SystemPens.FromSystemColor(color)
                     : PenFromKnownColor(color.ToKnownColor());
 
-                if (pen != null)
+                if (pen is not null)
                 {
                     return new PenCache.Scope(pen);
                 }
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
                     ? (SolidBrush?)SystemBrushes.FromSystemColor(color)
                     : (SolidBrush?)BrushFromKnownColor(color.ToKnownColor());
 
-                if (solidBrush != null)
+                if (solidBrush is not null)
                 {
                     return new SolidBrushCache.Scope(solidBrush);
                 }
