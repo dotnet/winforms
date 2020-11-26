@@ -71,33 +71,23 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (!_owner.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
                     case UiaCore.NavigateDirection.NextSibling:
-                        if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
-                        {
-                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
-                            if (comboBoxChildFragmentCount > 1)
-                            { // DropDown button is next;
-                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
-                            }
-                        }
-
-                        return null;
+                        return _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
+                            ? comboBoxAccessibleObject.DropDownButtonUiaProvider
+                            : null;
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
-                        if (comboBoxAccessibleObject != null)
-                        {
-                            AccessibleObject firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
-                            if (RuntimeId != firstComboBoxChildFragment.RuntimeId)
-                            {
-                                return firstComboBoxChildFragment;
-                            }
-                        }
-
-                        return null;
+                        return _owner.DroppedDown
+                            ? _owner.ChildListAccessibleObject
+                            : null;
                     default:
                         return base.FragmentNavigate(direction);
                 }

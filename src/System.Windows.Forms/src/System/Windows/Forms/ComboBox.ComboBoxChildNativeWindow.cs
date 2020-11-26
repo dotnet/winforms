@@ -80,14 +80,7 @@ namespace System.Windows.Forms
 
             private void WmGetObject(ref Message m)
             {
-                if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId &&
-                    // Managed UIAutomation providers are supplied for child list windows but not for the child edit window.
-                    // Child list accessibility object provides all necessary patterns and UIAutomation notifications,
-                    // so there is no need to native provider supplement.
-                    // Child edit accessibility object has only partial support of edit box accessibility, most of the patterns
-                    // and notifications for child edit window are supplied by native providers, so here is no need to
-                    // override root UIA object for child edit window.
-                    (_childWindowType == ChildWindowType.ListBox || _childWindowType == ChildWindowType.DropDownList))
+                if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
                 {
                     AccessibleObject uiaProvider = GetChildAccessibleObject(_childWindowType);
 

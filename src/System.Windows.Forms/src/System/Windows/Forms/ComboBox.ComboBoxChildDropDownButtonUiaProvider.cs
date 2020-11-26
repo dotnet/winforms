@@ -82,25 +82,22 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UiaCore.NavigateDirection.Parent)
+                if (!_owner.IsHandleCreated)
                 {
-                    return _owner.AccessibilityObject;
-                }
-                else if (direction == UiaCore.NavigateDirection.PreviousSibling)
-                {
-                    if (_owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
-                    {
-                        int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
-                        if (comboBoxChildFragmentCount > 1)
-                        { // Text or edit is previous;
-                            return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
-                        }
-                    }
-
                     return null;
                 }
 
-                return base.FragmentNavigate(direction);
+                return direction switch
+                {
+                    UiaCore.NavigateDirection.Parent => _owner.AccessibilityObject,
+                    UiaCore.NavigateDirection.PreviousSibling =>
+                        _owner.DropDownStyle == ComboBoxStyle.DropDownList
+                            ? _owner.ChildTextAccessibleObject
+                            : _owner.ChildEditAccessibleObject,
+                    // We should return null for NextSibling because it is always the last item in the tree
+                    UiaCore.NavigateDirection.NextSibling => null,
+                    _ => base.FragmentNavigate(direction)
+                };
             }
 
             /// <summary>

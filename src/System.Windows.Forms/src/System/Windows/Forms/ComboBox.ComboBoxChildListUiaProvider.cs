@@ -59,8 +59,15 @@ namespace System.Windows.Forms
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (!_owningComboBox.IsHandleCreated)
+                {
+                    return null;
+                }
+
                 switch (direction)
                 {
+                    case UiaCore.NavigateDirection.Parent:
+                        return _owningComboBox.AccessibilityObject;
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetChildFragment(0);
                     case UiaCore.NavigateDirection.LastChild:
@@ -71,6 +78,15 @@ namespace System.Windows.Forms
                         }
 
                         return null;
+                    case UiaCore.NavigateDirection.NextSibling:
+                        return _owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList
+                            ? _owningComboBox.ChildTextAccessibleObject
+                            : _owningComboBox.ChildEditAccessibleObject;
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        // A workaround for issue with hanging inspector. It also simulates native control behavior.
+                        return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
+                            ? _owningComboBox.ChildListAccessibleObject
+                            : null;
                     default:
                         return base.FragmentNavigate(direction);
                 }
