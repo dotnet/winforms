@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -210,26 +211,17 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
-                ArrayList foundControls = FindInternal(key, searchAllChildren, this, new ArrayList());
-
-                // Make this a stongly typed collection.
-                Control[] stronglyTypedFoundControls = new Control[foundControls.Count];
-                foundControls.CopyTo(stronglyTypedFoundControls, 0);
-
-                return stronglyTypedFoundControls;
+                List<Control> foundControls = new();
+                FindInternal(key, searchAllChildren, this, foundControls);
+                return foundControls.ToArray();
             }
 
             /// <summary>
-            ///  Searches for Controls by their Name property, builds up an array list
+            ///  Searches for Controls by their Name property, builds up a list
             ///  of all the controls that match.
             /// </summary>
-            private ArrayList FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, ArrayList foundControls)
+            private void FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, List<Control> foundControls)
             {
-                if ((controlsToLookIn is null) || (foundControls is null))
-                {
-                    return null;
-                }
-
                 try
                 {
                     // Perform breadth first search - as it's likely people will want controls belonging
@@ -241,14 +233,13 @@ namespace System.Windows.Forms
                             continue;
                         }
 
-                        if (WindowsFormsUtils.SafeCompareStrings(controlsToLookIn[i].Name, key, /* ignoreCase = */ true))
+                        if (WindowsFormsUtils.SafeCompareStrings(controlsToLookIn[i].Name, key, ignoreCase: true))
                         {
                             foundControls.Add(controlsToLookIn[i]);
                         }
                     }
 
-                    // Optional recurive search for controls in child collections.
-
+                    // Optional recursive search for controls in child collections.
                     if (searchAllChildren)
                     {
                         for (int i = 0; i < controlsToLookIn.Count; i++)
@@ -257,10 +248,11 @@ namespace System.Windows.Forms
                             {
                                 continue;
                             }
-                            if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
+
+                            if (controlsToLookIn[i].Controls.Count > 0)
                             {
-                                // if it has a valid child collecion, append those results to our collection
-                                foundControls = FindInternal(key, searchAllChildren, controlsToLookIn[i].Controls, foundControls);
+                                // If it has a valid child collection, append those results to our collection.
+                                FindInternal(key, true, controlsToLookIn[i].Controls, foundControls);
                             }
                         }
                     }
@@ -268,7 +260,6 @@ namespace System.Windows.Forms
                 catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
                 }
-                return foundControls;
             }
 
             public override IEnumerator GetEnumerator()
