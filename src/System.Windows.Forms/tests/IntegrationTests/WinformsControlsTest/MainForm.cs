@@ -87,6 +87,10 @@ namespace WinformsControlsTest
                 new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show())
             },
             {
+                MainFormControlsTabOrder.DataGridViewInVirtualModeButton,
+                new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show())
+            },
+            {
                 MainFormControlsTabOrder.TreeViewButton,
                 new InitInfo("TreeView, ImageList", (obj, e) => new TreeViewTest().Show())
             },
