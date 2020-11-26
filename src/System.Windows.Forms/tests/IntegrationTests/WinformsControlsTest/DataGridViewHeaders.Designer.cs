@@ -34,17 +34,16 @@ namespace WinformsControlsTest
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.column3 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.column4 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.currentDPILabel1 = new WinformsControlsTest.CurrentDPILabel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.changeFontButton = new System.Windows.Forms.Button();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.resetFontButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -61,10 +60,10 @@ namespace WinformsControlsTest
             this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2,
-            this.Column3,
-            this.Column4});
+            this.column1,
+            this.column2,
+            this.column3,
+            this.column4});
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Info;
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -73,31 +72,32 @@ namespace WinformsControlsTest
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(492, 150);
             this.dataGridView1.TabIndex = 0;
             // 
-            // Column1
+            // column1
             // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
+            this.column1.HeaderText = "Column1";
+            this.column1.Name = "column1";
             // 
-            // Column2
+            // column2
             // 
-            this.Column2.HeaderText = "Column2";
-            this.Column2.Name = "Column2";
+            this.column2.HeaderText = "Column2";
+            this.column2.Name = "column2";
             // 
-            // Column3
+            // column3
             // 
-            this.Column3.HeaderText = "Column3";
-            this.Column3.Name = "Column3";
+            this.column3.HeaderText = "Column3";
+            this.column3.Name = "column3";
             // 
-            // Column4
+            // column4
             // 
-            this.Column4.HeaderText = "Column4";
-            this.Column4.Name = "Column4";
+            this.column4.HeaderText = "Column4";
+            this.column4.Name = "column4";
             // 
             // currentDPILabel1
             // 
@@ -108,22 +108,22 @@ namespace WinformsControlsTest
             this.currentDPILabel1.TabIndex = 1;
             this.currentDPILabel1.Text = "Current scaling is 100%";
             // 
-            // button1
+            // changeFontButton
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.AutoSize = true;
-            this.button1.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.Location = new System.Drawing.Point(12, 234);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(154, 29);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Change DGV font";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.changeFontButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            this.changeFontButton.AutoSize = true;
+            this.changeFontButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.changeFontButton.Location = new System.Drawing.Point(12, 234);
+            this.changeFontButton.Name = "button1";
+            this.changeFontButton.Size = new System.Drawing.Size(154, 29);
+            this.changeFontButton.TabIndex = 1;
+            this.changeFontButton.Text = "Change DGV font";
+            this.changeFontButton.UseVisualStyleBackColor = true;
+            this.changeFontButton.Click += new System.EventHandler(this.changeFontButton_Click);
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             this.numericUpDown1.Location = new System.Drawing.Point(89, 208);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             14,
@@ -148,7 +148,7 @@ namespace WinformsControlsTest
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 210);
             this.label1.Name = "label1";
@@ -156,30 +156,29 @@ namespace WinformsControlsTest
             this.label1.TabIndex = 3;
             this.label1.Text = "Form font";
             // 
-            // button2
+            // resetFontButton
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button2.AutoSize = true;
-            this.button2.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.Location = new System.Drawing.Point(192, 234);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(154, 29);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Reset DGV font";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.resetFontButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)));
+            this.resetFontButton.AutoSize = true;
+            this.resetFontButton.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.resetFontButton.Location = new System.Drawing.Point(192, 234);
+            this.resetFontButton.Name = "button2";
+            this.resetFontButton.Size = new System.Drawing.Size(154, 29);
+            this.resetFontButton.TabIndex = 4;
+            this.resetFontButton.Text = "Reset DGV font";
+            this.resetFontButton.UseVisualStyleBackColor = true;
+            this.resetFontButton.Click += new System.EventHandler(this.resetFontButton_Click);
             // 
             // DataGridViewHeaders
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(492, 272);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.resetFontButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.currentDPILabel1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.changeFontButton);
             this.Controls.Add(this.dataGridView1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Name = "DataGridViewHeaders";
@@ -194,14 +193,14 @@ namespace WinformsControlsTest
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn column2;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn column3;
+        private System.Windows.Forms.DataGridViewComboBoxColumn column4;
         private WinformsControlsTest.CurrentDPILabel currentDPILabel1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button changeFontButton;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button resetFontButton;
     }
 }

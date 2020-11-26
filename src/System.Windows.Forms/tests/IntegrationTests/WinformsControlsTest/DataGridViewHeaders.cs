@@ -10,14 +10,10 @@ namespace WinformsControlsTest
 {
     public partial class DataGridViewHeaders : Form
     {
-        private static readonly Font[] s_fonts = new Font[]
-            {
-                new Font("Tahoma", 12F, FontStyle.Regular),
-                new Font("Fira Code", 10F, FontStyle.Bold),
-                new Font("Consolas", 14F, FontStyle.Italic),
-                new Font("Arial", 9F, FontStyle.Bold),
-                new Font("Microsoft Sans Serif", 11F, FontStyle.Regular),
-            };
+        private static readonly Font[] s_fonts = new Font[] { new Font("Tahoma", 12F, FontStyle.Regular),
+                                                              new Font("Consolas", 14F, FontStyle.Italic),
+                                                              new Font("Arial", 9F, FontStyle.Bold),
+                                                              new Font("Microsoft Sans Serif", 11F, FontStyle.Regular)};
         private int _cellFontIndex;
         private int _columnHeaderFontIndex;
         private int _rowHeaderFontIndex;
@@ -48,7 +44,7 @@ namespace WinformsControlsTest
             currentDPILabel1.Text = DeviceDpi.ToString();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void changeFontButton_Click(object sender, EventArgs e)
         {
             _cellFontIndex++;
             if (_cellFontIndex >= s_fonts.Length)
@@ -78,7 +74,7 @@ namespace WinformsControlsTest
             dataGridView1.Rows[2].Cells[1].Value = s_fonts[_rowHeaderFontIndex];
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void resetFontButton_Click(object sender, EventArgs e)
         {
             dataGridView1.DefaultCellStyle.Font = null;
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = null;
