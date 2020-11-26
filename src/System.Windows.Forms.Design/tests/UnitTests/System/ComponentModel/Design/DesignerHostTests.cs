@@ -1666,8 +1666,8 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            Assert.Throws<Exception>(() => host.Container.Add(component));
-            Assert.Throws<Exception>(() => host.Container.Add(component, "name"));
+            Assert.Throws<NotImplementedException>(() => host.Container.Add(component));
+            Assert.Throws<NotImplementedException>(() => host.Container.Add(component, "name"));
             Assert.Empty(host.Container.Components);
         }
 
