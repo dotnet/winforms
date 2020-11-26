@@ -4,7 +4,7 @@
 
 namespace WinformsControlsTest
 {
-    partial class DataGridViewHeaders
+    partial class DataGridViewTest
     {
         /// <summary>
         ///  Required designer variable.
@@ -169,7 +169,7 @@ namespace WinformsControlsTest
             this.resetFontButton.UseVisualStyleBackColor = true;
             this.resetFontButton.Click += new System.EventHandler(this.resetFontButton_Click);
             // 
-            // DataGridViewHeaders
+            // DataGridViewTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -181,7 +181,7 @@ namespace WinformsControlsTest
             this.Controls.Add(this.changeFontButton);
             this.Controls.Add(this.dataGridView1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Name = "DataGridViewHeaders";
+            this.Name = "DataGridViewTest";
             this.Text = "DataGridView";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();

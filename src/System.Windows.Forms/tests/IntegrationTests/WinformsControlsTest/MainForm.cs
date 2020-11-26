@@ -84,7 +84,7 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.DataGridViewButton,
-                new InitInfo("DataGridView", (obj, e) => new DataGridViewHeaders().Show())
+                new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show())
             },
             {
                 MainFormControlsTabOrder.TreeViewButton,

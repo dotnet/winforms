@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace WinformsControlsTest
 {
-    public partial class DataGridViewHeaders : Form
+    public partial class DataGridViewTest : Form
     {
         private static readonly Font[] s_fonts = new Font[] { new Font("Tahoma", 12F, FontStyle.Regular),
                                                               new Font("Consolas", 14F, FontStyle.Italic),
@@ -18,7 +18,7 @@ namespace WinformsControlsTest
         private int _columnHeaderFontIndex;
         private int _rowHeaderFontIndex;
 
-        public DataGridViewHeaders()
+        public DataGridViewTest()
         {
             InitializeComponent();
 
