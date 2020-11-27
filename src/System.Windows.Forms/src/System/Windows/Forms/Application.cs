@@ -124,7 +124,7 @@ namespace System.Windows.Forms
             }
 
             // Load comctl since GetModuleHandle failed to find it
-            hModule = Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Comctl32);
+            hModule = Kernel32.LoadComctl32(StartupPath);
             if (hModule == IntPtr.Zero)
             {
                 return false;
