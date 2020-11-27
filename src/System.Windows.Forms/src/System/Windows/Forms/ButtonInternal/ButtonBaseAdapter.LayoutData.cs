@@ -24,7 +24,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             internal LayoutData(LayoutOptions options)
             {
-                Debug.Assert(options != null, "must have options");
+                Debug.Assert(options is not null, "must have options");
                 Options = options;
             }
         }

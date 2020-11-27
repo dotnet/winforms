@@ -89,7 +89,7 @@ namespace System.Windows.Forms.ButtonInternal
         internal static double GetDpiScaleRatio(Control control)
         {
             if (DpiHelper.IsPerMonitorV2Awareness
-                && control != null && control.IsHandleCreated)
+                && control is not null && control.IsHandleCreated)
             {
                 return control._deviceDpi / DpiHelper.LogicalDpi;
             }
