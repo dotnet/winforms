@@ -1459,10 +1459,8 @@ namespace System.Windows.Forms
 
                 // Align the pointer to the next align size. If not specified,
                 // we will use the pointer (register) size.
-                // TODO: Use nuint (System.UIntN) once available instead of
-                // ulong to avoid the overhead for 32-bit platforms.
-                ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
-                currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
+                nuint add = (nuint)(alignment ?? IntPtr.Size) - 1;
+                currentPtr = (byte*)(((nuint)currentPtr + add) & ~add);
             }
 
             static long SizeOfString(string? str)
