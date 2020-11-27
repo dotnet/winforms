@@ -5830,7 +5830,7 @@ namespace System.Windows.Forms
             // If we're checked, hittest to see if we're
             // on the item
 
-            if (!CheckBoxes)
+            if (!CheckBoxes || VirtualMode)
             {
                 return;
             }
