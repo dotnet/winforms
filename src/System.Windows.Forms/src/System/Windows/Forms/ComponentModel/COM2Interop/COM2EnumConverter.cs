@@ -69,7 +69,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (destinationType == typeof(string))
             {
-                if (value != null)
+                if (value is not null)
                 {
                     string str = com2Enum.ToString(value);
                     return (str ?? "");
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (values is null)
             {
                 object[] objValues = com2Enum.Values;
-                if (objValues != null)
+                if (objValues is not null)
                 {
                     values = new StandardValuesCollection(objValues);
                 }
@@ -130,7 +130,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         public override bool IsValid(ITypeDescriptorContext context, object value)
         {
             string strValue = com2Enum.ToString(value);
-            return strValue != null && strValue.Length > 0;
+            return strValue is not null && strValue.Length > 0;
         }
 
         public void RefreshValues()

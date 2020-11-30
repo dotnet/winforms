@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IntPtr fontHandle = nativeFont.hFont;
 
             // see if we have this guy cached
-            if (fontHandle == _lastHandle && _lastFont != null)
+            if (fontHandle == _lastHandle && _lastFont is not null)
             {
                 return _lastFont;
             }
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             cancelSet = true;
 
-            if (_lastFont != null && _lastFont.Equals(managedValue))
+            if (_lastFont is not null && _lastFont.Equals(managedValue))
             {
                 // don't do anything here.
                 return null;
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             IFont nativeFont = (IFont)pd.GetNativeValue(pd.TargetObject);
 
             // now, push all the values into the native side
-            if (nativeFont != null)
+            if (nativeFont is not null)
             {
                 bool changed = ControlPaint.FontToIFont(_lastFont, nativeFont);
 

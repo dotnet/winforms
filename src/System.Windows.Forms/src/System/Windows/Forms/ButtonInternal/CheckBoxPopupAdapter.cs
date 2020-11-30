@@ -83,7 +83,7 @@ namespace System.Windows.Forms.ButtonInternal
                 AdjustFocusRectangle(layout);
                 PaintField(e, layout, colors, colors.WindowText, drawFocus: true);
 
-                if (originalClip != null)
+                if (originalClip is not null)
                 {
                     e.GraphicsInternal.Clip = originalClip;
                 }

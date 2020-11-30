@@ -49,18 +49,18 @@ namespace System.Resources
             if (result is null)
             {
                 result = Assembly.Load(name.FullName);
-                if (result != null)
+                if (result is not null)
                 {
                     _cachedAssemblies[name] = result;
                 }
-                else if (_names != null)
+                else if (_names is not null)
                 {
                     foreach (AssemblyName asmName in _names.Where(an => an.Equals(name)))
                     {
                         try
                         {
                             result = Assembly.LoadFrom(GetPathOfAssembly(asmName));
-                            if (result != null)
+                            if (result is not null)
                             {
                                 _cachedAssemblies[asmName] = result;
                             }
@@ -116,7 +116,7 @@ namespace System.Resources
                 result = Type.GetType(name, false, ignoreCase);
             }
 
-            if (result is null && _names != null)
+            if (result is null && _names is not null)
             {
                 // If the type is assembly qualified name, we sort the assembly names
                 // to put assemblies with same name in the front so that they can
@@ -134,7 +134,7 @@ namespace System.Resources
                     {
                     }
 
-                    if (assemblyName != null)
+                    if (assemblyName is not null)
                     {
                         List<AssemblyName> assemblyList = new List<AssemblyName>(_names.Length);
                         foreach (AssemblyName asmName in _names)
@@ -156,7 +156,7 @@ namespace System.Resources
                 foreach (AssemblyName asmName in _names)
                 {
                     Assembly asm = GetAssembly(asmName, false);
-                    if (asm != null)
+                    if (asm is not null)
                     {
                         result = asm.GetType(name, false, ignoreCase);
                         if (result is null)
@@ -170,7 +170,7 @@ namespace System.Resources
                         }
                     }
 
-                    if (result != null)
+                    if (result is not null)
                     {
                         break;
                     }
@@ -182,7 +182,7 @@ namespace System.Resources
                 throw new ArgumentException(string.Format(SR.InvalidResXNoType, name));
             }
 
-            if (result != null)
+            if (result is not null)
             {
                 // Only cache types from the shared framework  because they don't need to update.
                 // For simplicity, don't cache custom types
@@ -200,7 +200,7 @@ namespace System.Resources
         /// </summary>
         private bool IsDotNetAssembly(string assemblyPath)
         {
-            return assemblyPath != null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
+            return assemblyPath is not null && (assemblyPath.StartsWith(s_dotNetPath, StringComparison.OrdinalIgnoreCase) || assemblyPath.StartsWith(s_dotNetPathX86, StringComparison.OrdinalIgnoreCase));
         }
 
         public void ReferenceAssembly(AssemblyName name)
