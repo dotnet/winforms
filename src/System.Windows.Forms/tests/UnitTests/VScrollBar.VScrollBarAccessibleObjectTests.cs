@@ -17,8 +17,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>(() => new VScrollBar.VScrollBarAccessibleObject(null));
         }
 
-        [WinFormsTheory(Skip = "Crash with an unexpected result. See: https://github.com/dotnet/winforms/issues/3856")]
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/3856")]
+        [WinFormsTheory]
         [InlineData(true, AccessibleRole.ScrollBar)]
         [InlineData(false, AccessibleRole.None)]
         public void VScrollBarAccessibleObject_Ctor_Default(bool createControl, AccessibleRole accessibleRole)
