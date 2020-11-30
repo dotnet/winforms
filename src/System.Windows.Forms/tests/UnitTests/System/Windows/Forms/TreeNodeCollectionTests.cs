@@ -80,6 +80,26 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("index", () => collection[index] = new TreeNode());
         }
 
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_AddExistentTreeNode_ThrowsArgumentException()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            TreeNode node = new TreeNode("Node 0");
+            collection.Add(node);
+            Assert.Throws<ArgumentException>(() => collection[0] = node);
+        }
+        
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_AddSameTreeNode_ThrowsArgumentException()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 0");
+            TreeNode node = collection[0];
+            Assert.Throws<ArgumentException>(() => collection[0] = node);
+        }
+
         [WinFormsTheory]
         [InlineData("name2")]
         [InlineData("NAME2")]

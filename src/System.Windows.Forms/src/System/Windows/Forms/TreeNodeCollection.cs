@@ -62,6 +62,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
+                if(value.Handle != IntPtr.Zero)
+                {
+                    throw new ArgumentException(string.Format(SR.OnlyOneControl, value.Text), nameof(value));
+                }
+
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
