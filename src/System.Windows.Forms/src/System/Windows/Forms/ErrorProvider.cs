@@ -785,6 +785,14 @@ namespace System.Windows.Forms
         public void SetError(Control control, string value)
         {
             EnsureControlItem(control).Error = value;
+
+            if (UiaCore.UiaClientsAreListening().IsTrue())
+            {
+                control.AccessibilityObject.RaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionAborted,
+                    Automation.AutomationNotificationProcessing.All,
+                    value);
+            }
         }
 
         /// <summary>

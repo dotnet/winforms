@@ -145,6 +145,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.FileDialogButton,
                 new InitInfo("FileDialog", (obj, e) => new FileDialog().Show())
+            },
+            {
+                MainFormControlsTabOrder.ErrorProviderButton,
+                new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show())
             }
         };
 
