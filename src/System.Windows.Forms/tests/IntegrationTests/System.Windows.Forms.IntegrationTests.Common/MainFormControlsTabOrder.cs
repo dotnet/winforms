@@ -15,6 +15,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ThreadExceptionDialogButton,
         PrintDialogButton,
         DataGridViewButton,
+        DataGridViewInVirtualModeButton,
         TreeViewButton,
         ContentAlignmentButton,
         MenusButton,
