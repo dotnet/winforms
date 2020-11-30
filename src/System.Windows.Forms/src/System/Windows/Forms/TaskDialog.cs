@@ -68,24 +68,6 @@ namespace System.Windows.Forms
         /// </remarks>
         private const User32.WM ContinueButtonClickHandlingMessage = User32.WM.APP + 0x3FFF;
 
-        /// <summary>
-        ///   The delegate for <see cref="HandleTaskDialogNativeCallback"/> which is
-        ///   marshaled as native callback.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   This delegate must be kept alive (protecting it from garbage collection)
-        ///   to ensure the native function pointer doesn't become invalid.
-        /// </para>
-        /// </remarks>
-        // Because marshaling a delegate this will allocate some memory required
-        // to store the native code for the function pointer, we only do this
-        // once by using a static function, and then identify the actual TaskDialog
-        // instance by using a GCHandle in the reference data field (like an
-        // object pointer).
-        private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate =
-            HandleTaskDialogNativeCallback;
-
         private TaskDialogPage? _boundPage;
 
         /// <summary>
@@ -282,6 +264,7 @@ namespace System.Windows.Forms
 
         private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
+        [UnmanagedCallersOnly]
         private static HRESULT HandleTaskDialogNativeCallback(
             IntPtr hwnd,
             ComCtl32.TDN msg,
@@ -578,21 +561,6 @@ namespace System.Windows.Forms
                     }
 
                     _waitingNavigationPages.Clear();
-
-                    // We need to ensure the callback delegate is not garbage-collected
-                    // as long as TaskDialogIndirect doesn't return, by calling
-                    // GC.KeepAlive().
-                    //
-                    // This is not an exaggeration, as the comment for GC.KeepAlive()
-                    // says the following:
-                    // The JIT is very aggressive about keeping an
-                    // object's lifetime to as small a window as possible, to the point
-                    // where a 'this' pointer isn't considered live in an instance method
-                    // unless you read a value from the instance.
-                    //
-                    // Note: As this is a static field, the call to GC.KeepAlive() might be
-                    // superfluous here, but we still do it to be safe.
-                    GC.KeepAlive(s_callbackProcDelegate);
                 }
             }
             finally
@@ -1387,7 +1355,7 @@ namespace System.Windows.Forms
                             pszFooter = MarshalString(page.Footnote?.Text),
                             nDefaultButton = defaultButtonID,
                             nDefaultRadioButton = defaultRadioButtonID,
-                            pfCallback = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate),
+                            pfCallback = &HandleTaskDialogNativeCallback,
                             lpCallbackData = _instanceHandlePtr
                         };
 
@@ -1491,10 +1459,8 @@ namespace System.Windows.Forms
 
                 // Align the pointer to the next align size. If not specified,
                 // we will use the pointer (register) size.
-                // TODO: Use nuint (System.UIntN) once available instead of
-                // ulong to avoid the overhead for 32-bit platforms.
-                ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
-                currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
+                nuint add = (nuint)(alignment ?? IntPtr.Size) - 1;
+                currentPtr = (byte*)(((nuint)currentPtr + add) & ~add);
             }
 
             static long SizeOfString(string? str)

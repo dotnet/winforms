@@ -108,13 +108,13 @@ namespace System.Windows.Forms
                 // Graphics object available.
                 needToApplyProperties = false;
             }
-            else if (provider != null && provider.IsGraphicsStateClean)
+            else if (provider is not null && provider.IsGraphicsStateClean)
             {
                 // We have IGraphicsHdcProvider and it is telling us we have no properties to apply (case 1 above)
                 needToApplyProperties = false;
             }
 
-            if (provider != null)
+            if (provider is not null)
             {
                 // We have a provider, grab the underlying HDC if possible unless we know we've created and
                 // modified a Graphics object around it.
@@ -153,9 +153,9 @@ namespace System.Windows.Forms
 
             // elements (XFORM) = [eM11, eM12, eM21, eM22, eDx, eDy], eDx/eDy specify the translation offset.
             float[]? elements = applyTransform ? worldTransform?.Elements : null;
-            int dx = elements != null ? (int)elements[4] : 0;
-            int dy = elements != null ? (int)elements[5] : 0;
-            applyTransform = applyTransform && elements != null && (dx != 0 || dy != 0);
+            int dx = elements is not null ? (int)elements[4] : 0;
+            int dy = elements is not null ? (int)elements[5] : 0;
+            applyTransform = applyTransform && elements is not null && (dx != 0 || dy != 0);
 
             using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
             applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
