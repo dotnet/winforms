@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
@@ -43,7 +41,7 @@ namespace System.Windows.Forms.Layout
 
         // Returns the size of the largest string in the given collection. Non-string objects are converted
         // with ToString(). Uses OldMeasureString, not GDI+. Does not support multiline.
-        public static Size OldGetLargestStringSizeInCollection(Font font, ICollection objects)
+        public static Size OldGetLargestStringSizeInCollection(Font? font, ICollection? objects)
         {
             Size largestSize = Size.Empty;
             if (objects != null)
@@ -604,7 +602,7 @@ namespace System.Windows.Forms.Layout
             private const int MaxCacheSize = 6;           // the number of preferred sizes to store
             private int nextCacheEntry = -1;              // the next place in the ring buffer to store a preferred size
 
-            private PreferredSizeCache[] sizeCacheList;   // MRU of size MaxCacheSize
+            private PreferredSizeCache[]? sizeCacheList;   // MRU of size MaxCacheSize
 
             ///  InvalidateCache
             ///  Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
@@ -619,7 +617,7 @@ namespace System.Windows.Forms.Layout
             ///  employs an MRU of the last several constraints passed in via a ring-buffer of size MaxCacheSize.
             ///  Assumes Text and TextFormatFlags are the same, if either were to change, a call to
             ///  InvalidateCache should be made
-            public Size GetTextSize(string text, Font font, Size proposedConstraints, TextFormatFlags flags)
+            public Size GetTextSize(string? text, Font? font, Size proposedConstraints, TextFormatFlags flags)
             {
                 if (!TextRequiresWordBreak(text, font, proposedConstraints, flags))
                 {
@@ -680,15 +678,15 @@ namespace System.Windows.Forms.Layout
 
             ///  GetUnconstrainedSize
             ///  Gets the unconstrained (Int32.MaxValue, Int32.MaxValue) size for a piece of text
-            private Size GetUnconstrainedSize(string text, Font font, TextFormatFlags flags)
+            private Size GetUnconstrainedSize(string? text, Font? font, TextFormatFlags flags)
             {
-                if (unconstrainedPreferredSize == LayoutUtils.InvalidSize)
+                if (unconstrainedPreferredSize == InvalidSize)
                 {
                     // we also investigated setting the SingleLine flag, however this did not yield as much benefit as the word break
                     // and had possibility of causing internationalization issues.
 
                     flags = (flags & ~TextFormatFlags.WordBreak); // rip out the wordbreak flag
-                    unconstrainedPreferredSize = TextRenderer.MeasureText(text, font, LayoutUtils.MaxSize, flags);
+                    unconstrainedPreferredSize = TextRenderer.MeasureText(text, font, MaxSize, flags);
                 }
                 return unconstrainedPreferredSize;
             }
@@ -698,7 +696,7 @@ namespace System.Windows.Forms.Layout
             ///  for it to break on a word.  So we find out what the unconstrained size is (Int32.MaxValue, Int32.MaxValue)
             ///  for a string - eg. 35, 13.  If the size passed in has a larger width than 35, then we know that
             ///  the WordBreak flag is not necessary.
-            public bool TextRequiresWordBreak(string text, Font font, Size size, TextFormatFlags flags)
+            public bool TextRequiresWordBreak(string? text, Font? font, Size size, TextFormatFlags flags)
             {
                 // if the unconstrained size of the string is larger than the proposed width
                 // we need the word break flag, otherwise we dont, its a perf hit to use it.
@@ -738,18 +736,18 @@ namespace System.Windows.Forms.Layout
     // it didn't seem significant (we were spinning off more from LayoutEventArgs.)
     internal sealed class LayoutTransaction : IDisposable
     {
-        readonly Control _controlToLayout;
+        readonly Control? _controlToLayout;
         readonly bool _resumeLayout;
 
 #if DEBUG
         readonly int _layoutSuspendCount;
 #endif
-        public LayoutTransaction(Control controlToLayout, IArrangedElement controlCausingLayout, string property) :
+        public LayoutTransaction(Control? controlToLayout, IArrangedElement? controlCausingLayout, string? property) :
             this(controlToLayout, controlCausingLayout, property, true)
         {
         }
 
-        public LayoutTransaction(Control controlToLayout, IArrangedElement controlCausingLayout, string property, bool resumeLayout)
+        public LayoutTransaction(Control? controlToLayout, IArrangedElement? controlCausingLayout, string? property, bool resumeLayout)
         {
             CommonProperties.xClearPreferredSizeCache(controlCausingLayout);
             _controlToLayout = controlToLayout;
@@ -787,7 +785,7 @@ namespace System.Windows.Forms.Layout
         // This overload should be used when a property has changed that affects preferred size,
         // but you only want to layout if a certain condition exists (say you want to layout your
         // parent because your preferred size has changed).
-        public static IDisposable CreateTransactionIf(bool condition, Control controlToLayout, IArrangedElement elementCausingLayout, string property)
+        public static IDisposable CreateTransactionIf(bool condition, Control? controlToLayout, IArrangedElement? elementCausingLayout, string? property)
         {
             if (condition)
             {
@@ -800,7 +798,7 @@ namespace System.Windows.Forms.Layout
             }
         }
 
-        public static void DoLayout(IArrangedElement elementToLayout, IArrangedElement elementCausingLayout, string property)
+        public static void DoLayout(IArrangedElement? elementToLayout, IArrangedElement? elementCausingLayout, string? property)
         {
             if (elementCausingLayout != null)
             {
@@ -817,7 +815,7 @@ namespace System.Windows.Forms.Layout
         // This overload should be used when a property has changed that affects preferred size,
         // but you only want to layout if a certain condition exists (say you want to layout your
         // parent because your preferred size has changed).
-        public static void DoLayoutIf(bool condition, IArrangedElement elementToLayout, IArrangedElement elementCausingLayout, string property)
+        public static void DoLayoutIf(bool condition, IArrangedElement? elementToLayout, IArrangedElement? elementCausingLayout, string? property)
         {
             if (!condition)
             {
