@@ -194,7 +194,12 @@ namespace System.Windows.Forms
                 switch (propertyID)
                 {
                     case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ComboBoxControlTypeId;
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        return _owningComboBox.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.ComboBoxControlTypeId
+                               : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:

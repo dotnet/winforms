@@ -1285,6 +1285,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedName, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
         }
 
+        public static IEnumerable<object[]> ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue(AccessibleRole role)
+        {
+            using Control control = new Control();
+            control.AccessibleRole = role;
+
+            UiaCore.UIA actual = (UiaCore.UIA)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            // Check if the method returns an exist UIA_ControlTypeId
+            Assert.True(actual >= UiaCore.UIA.ButtonControlTypeId && actual <= UiaCore.UIA.AppBarControlTypeId);
+        }
+
         private class AutomationLiveRegionControl : Control, IAutomationLiveRegion
         {
             public AutomationLiveSetting LiveSetting { get; set; }

@@ -362,8 +362,6 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ToolBarControlTypeId;
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                 }

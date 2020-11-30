@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -146,6 +148,61 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             IAccessible iAccessible = accessibilityObject;
             Assert.Equal(expectedChildACount, iAccessible.accChildCount);
             Assert.Equal(-1, accessibilityObject.GetChildCount());
+        }
+
+        [WinFormsFact]
+        public void TrackBarAccessibilityObject_ControlType_IsSlider_IfAccessibleRoleIsDefault()
+        {
+            using TrackBar trackBar = new TrackBar();
+            trackBar.CreateControl();
+            // AccessibleRole is not set = Default
+
+            object actual = trackBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.SliderControlTypeId, actual);
+            Assert.True(trackBar.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TrackBarAccessibilityObject_Role_IsStatusBar_ByDefault()
+        {
+            using TrackBar trackBar = new TrackBar();
+            trackBar.CreateControl();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = trackBar.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.Slider, actual);
+            Assert.True(trackBar.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> TrackBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TrackBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void TrackBarAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using TrackBar trackBar = new TrackBar();
+            trackBar.AccessibleRole = role;
+
+            object actual = trackBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(trackBar.IsHandleCreated);
         }
     }
 }

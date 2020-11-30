@@ -249,7 +249,12 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
                     UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListControlTypeId,
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    UiaCore.UIA.ControlTypePropertyId => _owningListView.AccessibleRole == AccessibleRole.Default
+                                                         ? UiaCore.UIA.ListControlTypeId
+                                                         : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.MultipleViewPatternId),
                     UiaCore.UIA.ItemStatusPropertyId => GetItemStatus(),
                     _ => base.GetPropertyValue(propertyID)

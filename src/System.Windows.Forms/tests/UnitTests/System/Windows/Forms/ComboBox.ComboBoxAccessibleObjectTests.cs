@@ -208,5 +208,46 @@ namespace System.Windows.Forms.Tests
         {
             return comboBox.AccessibilityObject as ComboBox.ComboBoxAccessibleObject;
         }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_ControlType_IsComboBox_IfAccessibeRoleIsDefault()
+        {
+            using ComboBox control = new ComboBox();
+            // AccessibleRole is not set = Default
+
+            object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ComboBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ComboBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ComboBox comboBox = new ComboBox();
+            comboBox.AccessibleRole = role;
+
+            object actual = comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(comboBox.IsHandleCreated);
+        }
     }
 }

@@ -29,16 +29,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.StatusBarControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (!(Owner is StatusStrip statusStrip) || statusStrip.Items.Count == 0)

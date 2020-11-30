@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
+using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
@@ -61,6 +63,59 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             var accessibleObjectDescription = statusStripAccessibleObject.Description;
 
             Assert.Equal("Test Description", accessibleObjectDescription);
+        }
+
+        [WinFormsFact]
+        public void StatusStripAccessibleObject_ControlType_IsStatusBar_IfAccessibleRoleIsDefault()
+        {
+            using StatusStrip statusStrip = new StatusStrip();
+            // AccessibleRole is not set = Default
+
+            object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+
+            Assert.Equal(UIA.StatusBarControlTypeId, actual);
+            Assert.False(statusStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void StatusStripAccessibleObject_Role_IsStatusBar_ByDefault()
+        {
+            using StatusStrip statusStrip = new StatusStrip();
+            // AccessibleRole is not set = Default
+
+            AccessibleRole actual = statusStrip.AccessibilityObject.Role;
+
+            Assert.Equal(AccessibleRole.StatusBar, actual);
+            Assert.False(statusStrip.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> StatusStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(StatusStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void StatusStripAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using StatusStrip statusStrip = new StatusStrip();
+            statusStrip.AccessibleRole = role;
+
+            object actual = statusStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(statusStrip.IsHandleCreated);
         }
     }
 }

@@ -502,7 +502,7 @@ namespace System.Windows.Forms.Tests
                 .Setup(a => a.Navigate(navdir))
                 .CallBase();
             Assert.Null(mockAccessibleObject.Object.Navigate(navdir));
-            mockAccessibleObject.Verify(a => a.Parent, Times.Once());;
+            mockAccessibleObject.Verify(a => a.Parent, Times.Once());
             mockParentAccessibleObject.Verify(a => a.GetChildCount(), Times.Once());
         }
 
@@ -2584,6 +2584,14 @@ namespace System.Windows.Forms.Tests
             var parent = accessible.accParent as IAccessible;
             Assert.Equal(0x09, parent.accRole);                         // ROLE_SYSTEM_WINDOW
             Assert.Equal(7, parent.accChildCount);
+        }
+
+        [WinFormsFact]
+        public void AccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsNull()
+        {
+            AccessibleObject accessibleObject = new AccessibleObject();
+
+            Assert.Null(accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId));
         }
 
         private class SubAccessibleObject : AccessibleObject

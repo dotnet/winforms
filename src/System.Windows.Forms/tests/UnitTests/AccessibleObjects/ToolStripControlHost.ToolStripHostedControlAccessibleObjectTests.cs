@@ -10,7 +10,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripHostedControlAccessibleObject : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripControlHost_ToolStripHostedControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> ToolStripItemAccessibleObject_TestData()
         {

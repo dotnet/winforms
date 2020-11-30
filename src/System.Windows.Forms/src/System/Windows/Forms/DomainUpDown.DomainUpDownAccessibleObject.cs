@@ -30,8 +30,6 @@ namespace System.Windows.Forms
                         return RuntimeId;
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.SpinnerControlTypeId;
                     case UiaCore.UIA.BoundingRectanglePropertyId:
                         return Bounds;
                     case UiaCore.UIA.LegacyIAccessibleStatePropertyId:

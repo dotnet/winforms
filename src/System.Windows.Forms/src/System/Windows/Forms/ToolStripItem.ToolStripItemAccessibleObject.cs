@@ -121,6 +121,10 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
+                    // "ControlType" value depends on owner's AccessibleRole value.
+                    // See: docs/accessibility/accessible-role-controltype.md
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return AccessibleRoleControlTypeMap.GetControlType(Role);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:

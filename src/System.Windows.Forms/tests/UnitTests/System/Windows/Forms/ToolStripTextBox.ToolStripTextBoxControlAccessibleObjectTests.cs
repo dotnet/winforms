@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.Control;
@@ -66,6 +67,78 @@ namespace System.Windows.Forms.Tests
             TextBox textBox = toolStripTextBox.TextBox;
             AccessibleObject accessibleObject = textBox.AccessibilityObject;
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, (int)UiaCore.UIA.EditControlTypeId)]
+        [InlineData(false, (int)UiaCore.UIA.PaneControlTypeId)]
+        public void ToolStripTextBoxControlAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
+        {
+            using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+            // AccessibleRole is not set = Default
+            TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
+
+            if (createControl)
+            {
+                toolStripTextBoxControl.CreateControl();
+            }
+
+            object actual = toolStripTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal((UiaCore.UIA)expectedType, actual);
+            Assert.Equal(createControl, toolStripTextBoxControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text)]
+        [InlineData(false, AccessibleRole.None)]
+        public void ToolStripTextBoxControlAccessibleObject_Default_Role_IsExpected(bool createControl, AccessibleRole expectedRole)
+        {
+            using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+            // AccessibleRole is not set = Default
+            TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
+
+            if (createControl)
+            {
+                toolStripTextBoxControl.CreateControl();
+            }
+
+            object actual = toolStripTextBox.AccessibilityObject.Role;
+
+            Assert.Equal(expectedRole, actual);
+            Assert.Equal(createControl, toolStripTextBoxControl.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ToolStripTextBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripTextBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ToolStripTextBoxControlAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
+            toolStripTextBox.AccessibleRole = role;
+
+            TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
+            AccessibleObject accessibleObject = toolStripTextBox.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(role, accessibleObject.Role);
+            Assert.Equal(expected, actual);
+            Assert.False(toolStripTextBoxControl.IsHandleCreated);
         }
     }
 }

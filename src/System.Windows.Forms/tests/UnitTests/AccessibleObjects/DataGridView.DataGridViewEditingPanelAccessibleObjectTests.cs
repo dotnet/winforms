@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
 using static Interop;
 
@@ -41,6 +42,70 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
             Assert.NotNull(lastChild);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewEditingPanelAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            Panel editingPanel = dataGridView.EditingPanel;
+            // AccessibleRole is not set = Default
+
+            object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+            Assert.False(editingPanel.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Client)]
+        [InlineData(false, AccessibleRole.None)]
+        public void DataGridViewEditingPanelAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+        {
+            using DataGridView dataGridView = new DataGridView();
+            Panel editingPanel = dataGridView.EditingPanel;
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                editingPanel.CreateControl();
+            }
+
+            object actual = editingPanel.AccessibilityObject.Role;
+
+            Assert.Equal(expectedRole, actual);
+            Assert.Equal(createControl, editingPanel.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void DataGridViewEditingPanelAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using DataGridView dataGridView = new DataGridView();
+            Panel editingPanel = dataGridView.EditingPanel;
+            editingPanel.AccessibleRole = role;
+
+            object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(editingPanel.IsHandleCreated);
         }
     }
 }

@@ -44,11 +44,7 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.TextControlTypeId;
-                }
-                else if (propertyID == UiaCore.UIA.LegacyIAccessibleStatePropertyId)
+                if (propertyID == UiaCore.UIA.LegacyIAccessibleStatePropertyId)
                 {
                     return State;
                 }
