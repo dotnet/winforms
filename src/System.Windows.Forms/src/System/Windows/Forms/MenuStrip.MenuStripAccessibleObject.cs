@@ -33,8 +33,6 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.MenuBarControlTypeId;
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                 }

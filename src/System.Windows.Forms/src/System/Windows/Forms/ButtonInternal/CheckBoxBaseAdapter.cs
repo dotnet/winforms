@@ -308,7 +308,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap cacheCheckImage)
         {
-            if (cacheCheckImage != null &&
+            if (cacheCheckImage is not null &&
                 cacheCheckColor.Equals(checkColor) &&
                 cacheCheckImage.Width == fullSize.Width &&
                 cacheCheckImage.Height == fullSize.Height)

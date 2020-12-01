@@ -84,7 +84,11 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.DataGridViewButton,
-                new InitInfo("DataGridView", (obj, e) => new DataGridViewHeaders().Show())
+                new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show())
+            },
+            {
+                MainFormControlsTabOrder.DataGridViewInVirtualModeButton,
+                new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show())
             },
             {
                 MainFormControlsTabOrder.TreeViewButton,
@@ -145,6 +149,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.FileDialogButton,
                 new InitInfo("FileDialog", (obj, e) => new FileDialog().Show())
+            },
+            {
+                MainFormControlsTabOrder.ErrorProviderButton,
+                new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show())
             }
         };
 

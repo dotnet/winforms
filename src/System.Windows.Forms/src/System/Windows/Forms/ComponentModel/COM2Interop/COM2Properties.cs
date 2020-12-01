@@ -322,7 +322,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 #endif
 
-            if (props != null)
+            if (props is not null)
             {
                 Disposed?.Invoke(this, EventArgs.Empty);
 
@@ -390,7 +390,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 return true;
             }
 
-            bool valid = weakObjRef != null && weakObjRef.IsAlive;
+            bool valid = weakObjRef is not null && weakObjRef.IsAlive;
 
             // check the version information for each ITypeInfo the object exposes.
             if (valid && checkVersions)
@@ -445,7 +445,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         internal void SetProps(Com2PropertyDescriptor[] props)
         {
             this.props = props;
-            if (props != null)
+            if (props is not null)
             {
                 for (int i = 0; i < props.Length; i++)
                 {

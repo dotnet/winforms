@@ -424,7 +424,7 @@ namespace System.Windows.Forms.ButtonInternal
             if (color.HasTransparency())
             {
                 Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                if (graphics != null)
+                if (graphics is not null)
                 {
                     using var pen = color.GetCachedPenScope();
                     graphics.DrawRectangle(pen, r.X, r.Y, r.Width - 1, r.Height - 1);
@@ -537,7 +537,7 @@ namespace System.Windows.Forms.ButtonInternal
         /// </summary>
         internal void PaintImage(PaintEventArgs e, LayoutData layout)
         {
-            if (Control.Image != null)
+            if (Control.Image is not null)
             {
                 // Setup new clip region & draw
                 DrawImageCore(e.GraphicsInternal, Control.Image, layout.ImageBounds, layout.ImageStart, layout);

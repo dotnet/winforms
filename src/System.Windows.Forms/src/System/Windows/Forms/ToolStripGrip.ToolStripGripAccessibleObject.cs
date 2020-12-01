@@ -41,8 +41,6 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ThumbControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

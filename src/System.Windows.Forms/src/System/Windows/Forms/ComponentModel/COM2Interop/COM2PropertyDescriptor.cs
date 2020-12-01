@@ -156,7 +156,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             this.dispid = dispid;
 
-            if (typeData != null)
+            if (typeData is not null)
             {
                 this.typeData = typeData;
                 if (typeData is Com2Enum)
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             // check if this thing is hidden from metadata
             canShow = true;
 
-            if (attrs != null)
+            if (attrs is not null)
             {
                 for (int i = 0; i < attrs.Length; i++)
                 {
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         baseAttrs = new Attribute[attrList.Count];
                     }
 
-                    if (baseAttrs != null)
+                    if (baseAttrs is not null)
                     {
                         attrList.CopyTo(baseAttrs, 0);
                     }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     // check to see if the get still fails
                     object target = TargetObject;
-                    if (target != null)
+                    if (target is not null)
                     {
                         HRESULT hr = new ComNativeDescriptor().GetPropertyValue(target, dispid, new object[1]);
 
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                 // If we reconfigured attributes, then poke the new set back in.
                 //
-                if (newAttributes != null)
+                if (newAttributes is not null)
                 {
                     Attribute[] temp = new Attribute[newAttributes.Count];
                     newAttributes.CopyTo(temp, 0);
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                return (valueConverter != null);
+                return (valueConverter is not null);
             }
         }
 
@@ -505,7 +505,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             get
             {
                 // replace the type with the mapped converter type
-                if (valueConverter != null)
+                if (valueConverter is not null)
                 {
                     return valueConverter.ManagedType;
                 }
@@ -543,7 +543,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (com2props != null)
+                if (com2props is not null)
                 {
                     return com2props.TargetObject;
                 }
@@ -667,7 +667,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             ConstructorInfo ctor = t.GetConstructor(new Type[] { typeof(Com2PropertyDescriptor) });
             Com2DataTypeToManagedDataTypeConverter converter;
-            if (ctor != null)
+            if (ctor is not null)
             {
                 converter = (Com2DataTypeToManagedDataTypeConverter)ctor.Invoke(new object[] { this });
             }
@@ -697,18 +697,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             TypeConverter localConverter = null;
 
             TypeConverterAttribute attr = (TypeConverterAttribute)Attributes[typeof(TypeConverterAttribute)];
-            if (attr != null)
+            if (attr is not null)
             {
                 string converterTypeName = attr.ConverterTypeName;
-                if (converterTypeName != null && converterTypeName.Length > 0)
+                if (converterTypeName is not null && converterTypeName.Length > 0)
                 {
                     Type converterType = Type.GetType(converterTypeName);
-                    if (converterType != null && typeof(TypeConverter).IsAssignableFrom(converterType))
+                    if (converterType is not null && typeof(TypeConverter).IsAssignableFrom(converterType))
                     {
                         try
                         {
                             localConverter = (TypeConverter)Activator.CreateInstance(converterType);
-                            if (localConverter != null)
+                            if (localConverter is not null)
                             {
                                 refreshState |= Com2PropertyDescriptorRefresh.TypeConverterAttr;
                             }
@@ -753,22 +753,22 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             object localEditor = null;
             EditorAttribute attr = (EditorAttribute)Attributes[typeof(EditorAttribute)];
-            if (attr != null)
+            if (attr is not null)
             {
                 string editorTypeName = attr.EditorBaseTypeName;
 
-                if (editorTypeName != null && editorTypeName.Length > 0)
+                if (editorTypeName is not null && editorTypeName.Length > 0)
                 {
                     Type attrEditorBaseType = Type.GetType(editorTypeName);
-                    if (attrEditorBaseType != null && attrEditorBaseType == editorBaseType)
+                    if (attrEditorBaseType is not null && attrEditorBaseType == editorBaseType)
                     {
                         Type type = Type.GetType(attr.EditorTypeName);
-                        if (type != null)
+                        if (type is not null)
                         {
                             try
                             {
                                 localEditor = Activator.CreateInstance(type);
-                                if (localEditor != null)
+                                if (localEditor is not null)
                                 {
                                     refreshState |= Com2PropertyDescriptorRefresh.TypeEditorAttr;
                                 }
@@ -911,11 +911,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             lastValue = GetNativeValue(component);
             // do we need to convert the type?
-            if (ConvertingNativeType && lastValue != null)
+            if (ConvertingNativeType && lastValue is not null)
             {
                 lastValue = valueConverter.ConvertNativeToManaged(lastValue, this);
             }
-            else if (lastValue != null && propertyType != null && propertyType.IsEnum && lastValue.GetType().IsPrimitive)
+            else if (lastValue is not null && propertyType is not null && propertyType.IsEnum && lastValue.GetType().IsPrimitive)
             {
                 // we've got to convert the value here -- we built the enum but the native object returns
                 // us values as integers
@@ -962,7 +962,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 Type editorType = PropertyType;
                 object value = GetValue(TargetObject);
-                if (value != null)
+                if (value is not null)
                 {
                     editorType = value.GetType();
                 }
@@ -1014,7 +1014,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public bool IsCurrentValue(object value)
         {
-            return (value == lastValue || (lastValue != null && lastValue.Equals(value)));
+            return (value == lastValue || (lastValue is not null && lastValue.Equals(value)));
         }
 
         /// <summary>
@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // do we need to convert the type?
-            if (valueConverter != null)
+            if (valueConverter is not null)
             {
                 bool cancel = false;
                 value = valueConverter.ConvertManagedToNative(value, this, ref cancel);
@@ -1293,7 +1293,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             Oleaut32.GetErrorInfo(0, ref pErrorInfo);
 
                             string info = null;
-                            if (pErrorInfo != null && pErrorInfo.GetDescription(ref info).Succeeded())
+                            if (pErrorInfo is not null && pErrorInfo.GetDescription(ref info).Succeeded())
                             {
                                 errorInfo = info;
                             }
@@ -1405,7 +1405,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value, attributes);
 
-                if (props != null && props.Count > 0)
+                if (props is not null && props.Count > 0)
                 {
                     // Return sorted read-only collection (can't sort original because its read-only)
                     props = props.Sort();
@@ -1429,7 +1429,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         // special case the font converter here.
                         //
-                        if ((pd.valueConverter != null && pd.valueConverter.AllowExpand) || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(pd))
+                        if ((pd.valueConverter is not null && pd.valueConverter.AllowExpand) || Com2IVsPerPropertyBrowsingHandler.AllowChildProperties(pd))
                         {
                             subprops = AllowSubprops;
                         }
@@ -1484,7 +1484,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             get
             {
-                if (nameItem != null)
+                if (nameItem is not null)
                 {
                     return nameItem.ToString();
                 }

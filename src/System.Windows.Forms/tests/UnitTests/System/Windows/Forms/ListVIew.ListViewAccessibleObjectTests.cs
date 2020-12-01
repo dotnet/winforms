@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -245,7 +245,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("List", automationId);
 
             object accessibleControlType = listAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            Assert.Equal(UiaCore.UIA.ListControlTypeId, accessibleControlType);
+            Assert.Equal(UiaCore.UIA.ListControlTypeId, accessibleControlType); // If AccessibleRole is Default
 
             object controlType = listAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
             UiaCore.UIA expected = UiaCore.UIA.ListControlTypeId;
@@ -658,6 +658,35 @@ namespace System.Windows.Forms.Tests
             var listSelection = listView.AccessibilityObject.GetSelection();
             Assert.Equal(0, listSelection.Length);
 
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ListViewAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void ListViewAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using ListView listView = new ListView();
+            listView.AccessibleRole = role;
+
+            object actual = listView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
             Assert.False(listView.IsHandleCreated);
         }
     }

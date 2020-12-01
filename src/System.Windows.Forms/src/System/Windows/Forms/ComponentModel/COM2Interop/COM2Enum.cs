@@ -134,7 +134,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 this.names[i] = names[i];
                 this.values[i] = values[i];
-                if (values[i] != null)
+                if (values[i] is not null)
                 {
                     stringValues[i] = values[i].ToString();
                 }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public virtual string ToString(object v)
         {
-            if (v != null)
+            if (v is not null)
             {
                 // in case this is a real enum...try to convert it.
                 //

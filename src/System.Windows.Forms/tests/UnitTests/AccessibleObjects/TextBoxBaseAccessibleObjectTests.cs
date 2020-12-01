@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -95,6 +96,56 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Rectangle actual = accessibleObject.BoundingRectangle;
             Assert.Equal(expected, actual);
             Assert.True(textBoxBase.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text, (int)UiaCore.UIA.EditControlTypeId)]
+        [InlineData(false, AccessibleRole.None, (int)UiaCore.UIA.PaneControlTypeId)]
+        public void TextBoxBaseAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole, int expectedType)
+        {
+            using TextBoxBase textBoxBase = new SubTextBoxBase();
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                textBoxBase.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(expectedRole, accessibleObject.Role);
+            Assert.Equal((UiaCore.UIA)expectedType, actual);
+            Assert.Equal(createControl, textBoxBase.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> TextBoxBaseAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextBoxBaseAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void TextBoxBaseAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using TextBoxBase textBoxBase = new SubTextBoxBase();
+            textBoxBase.AccessibleRole = role;
+
+            object actual = textBoxBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            Assert.False(textBoxBase.IsHandleCreated);
         }
 
         private class SubTextBoxBase : TextBoxBase

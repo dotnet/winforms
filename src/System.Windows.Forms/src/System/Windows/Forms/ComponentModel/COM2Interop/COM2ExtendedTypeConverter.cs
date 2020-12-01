@@ -40,7 +40,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             TypeConverter converter = innerConverter;
 
-            while (converter != null)
+            while (converter is not null)
             {
                 if (t.IsInstanceOfType(converter))
                 {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.CanConvertFrom(context, sourceType);
             }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.CanConvertTo(context, destinationType);
             }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.ConvertFrom(context, culture, value);
             }
@@ -106,7 +106,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.ConvertTo(context, culture, value, destinationType);
             }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.CreateInstance(context, propertyValues);
             }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.GetCreateInstanceSupported(context);
             }
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.GetProperties(context, value, attributes);
             }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool GetPropertiesSupported(ITypeDescriptorContext context)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.GetPropertiesSupported(context);
             }
@@ -175,7 +175,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.GetStandardValues(context);
             }
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.GetStandardValuesExclusive(context);
             }
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.GetStandardValuesSupported(context);
             }
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool IsValid(ITypeDescriptorContext context, object value)
         {
-            if (innerConverter != null)
+            if (innerConverter is not null)
             {
                 return innerConverter.IsValid(context, value);
             }

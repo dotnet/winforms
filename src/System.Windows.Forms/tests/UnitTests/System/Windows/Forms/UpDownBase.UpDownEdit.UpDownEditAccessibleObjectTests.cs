@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class UpDownEditAccessibleObjectTests
+    public class UpDownEditAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void UpDownEditAccessibleObject_ctor_default()
@@ -118,6 +119,58 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
             Assert.False(upDown.IsHandleCreated);
+            Assert.False(upDownEdit.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, AccessibleRole.Text, (int)UiaCore.UIA.EditControlTypeId)]
+        [InlineData(false, AccessibleRole.None, (int)UiaCore.UIA.PaneControlTypeId)]
+        public void UpDownEditAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole, int expectedType)
+        {
+            using UpDownBase upDown = new SubUpDownBase();
+            using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
+            // AccessibleRole is not set = Default
+
+            if (createControl)
+            {
+                upDownEdit.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(expectedRole, accessibleObject.Role);
+            Assert.Equal((UiaCore.UIA)expectedType, actual);
+            Assert.Equal(createControl, upDownEdit.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> UpDownEditAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(UpDownEditAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+        public void UpDownEditAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+        {
+            using UpDownBase upDown = new SubUpDownBase();
+            using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
+            upDownEdit.AccessibleRole = role;
+
+            object actual = upDownEdit.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
             Assert.False(upDownEdit.IsHandleCreated);
         }
 

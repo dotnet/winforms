@@ -123,6 +123,51 @@ namespace System.Windows.Forms.Tests
                 (toolStripItemAccessibleObject.Bounds.Width > 0 && toolStripItemAccessibleObject.Bounds.Height > 0));
         }
 
+        [WinFormsFact]
+        public void ToolStripItemAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
+        {
+            // Test the Default role case separatelly because ToolStripItemAccessibleObject
+            // has default Role property value as "PushButton"
+
+            using ToolStripItem toolStripItem = new SubToolStripItem();
+            // AccessibleRole is not set = Default
+
+            UIA actual = (UIA)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+
+            Assert.Equal(UIA.ButtonControlTypeId, actual);
+        }
+
+        [WinFormsFact]
+        public static IEnumerable<object[]> ToolStripItemAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData()
+        {
+            Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+            foreach (AccessibleRole role in roles)
+            {
+                if (role == AccessibleRole.Default)
+                {
+                    continue; // The test checks custom roles
+                }
+
+                yield return new object[] { role };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ToolStripItemAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData))]
+        public void ToolStripItemAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue(AccessibleRole role)
+        {
+            using ToolStripItem toolStripItem = new SubToolStripItem();
+            toolStripItem.AccessibleRole = role;
+
+            UIA actual = (UIA)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+            UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+            Assert.Equal(expected, actual);
+            // Check if the method returns an exist UIA_ControlTypeId
+            Assert.True(actual >= UIA.ButtonControlTypeId && actual <= UIA.AppBarControlTypeId);
+        }
+
         private class SubToolStripItem : ToolStripItem
         {
             public SubToolStripItem() : base()

@@ -79,13 +79,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string text = _ownerLink.Owner.Text;
-                    string name;
+                    string? name = _ownerLink.Owner.Text;
 
-                    // return the full name of the link label
+                    // Return the full name of the link label
                     // as sometimes the link name in isolation
-                    // is unusable when using a screen reader
-                    name = text;
+                    // is unusable when using a screen reader.
                     if (_ownerLink.Owner.UseMnemonic)
                     {
                         name = WindowsFormsUtils.TextWithoutMnemonics(name);

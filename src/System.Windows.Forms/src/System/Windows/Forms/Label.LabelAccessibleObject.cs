@@ -38,7 +38,6 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.AutomationIdPropertyId => _owningLabel.Name,
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

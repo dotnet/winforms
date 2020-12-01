@@ -25,7 +25,10 @@ namespace System.Windows.Forms
                         return Name;
                     }
 
-                    if (propertyID == UiaCore.UIA.ControlTypePropertyId)
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    if (propertyID == UiaCore.UIA.ControlTypePropertyId && Owner.AccessibleRole == AccessibleRole.Default)
                     {
                         return UiaCore.UIA.SpinnerControlTypeId;
                     }

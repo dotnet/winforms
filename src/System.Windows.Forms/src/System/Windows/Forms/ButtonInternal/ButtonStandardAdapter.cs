@@ -104,7 +104,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
 
             // This code is mostly taken from the non-themed rendering code path.
-            if (Control.BackgroundImage != null && !DisplayInformation.HighContrast)
+            if (Control.BackgroundImage is not null && !DisplayInformation.HighContrast)
             {
                 ControlPaint.DrawBackgroundImage(
                     e.GraphicsInternal,

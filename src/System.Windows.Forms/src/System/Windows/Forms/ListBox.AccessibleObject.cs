@@ -132,7 +132,12 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
                     case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ListControlTypeId;
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        return _owningListBox.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.ListControlTypeId
+                               : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:

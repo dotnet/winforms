@@ -467,7 +467,6 @@ namespace System.Windows.Forms
                 {
                     UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.SpinnerControlTypeId,
                     UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
                     UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                     UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,

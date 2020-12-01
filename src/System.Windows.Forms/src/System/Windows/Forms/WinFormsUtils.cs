@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -42,7 +40,7 @@ namespace System.Windows.Forms
         ///  this is your function. If you have a character "t" and want match it to &amp;Text
         ///  Control.IsMnemonic is a better bet.
         /// </summary>
-        public static bool ContainsMnemonic(string text)
+        public static bool ContainsMnemonic(string? text)
         {
             if (text != null)
             {
@@ -124,7 +122,7 @@ namespace System.Windows.Forms
         ///  without underlining anything.
         ///  Fish &amp; Chips --> Fish &amp;&amp; Chips
         /// </summary>
-        internal static string EscapeTextWithAmpersands(string text)
+        internal static string? EscapeTextWithAmpersands(string? text)
         {
             if (text is null)
             {
@@ -209,7 +207,7 @@ namespace System.Windows.Forms
         ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
         ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
         /// </summary>
-        public static char GetMnemonic(string text, bool convertToUpperCase)
+        public static char GetMnemonic(string? text, bool convertToUpperCase)
         {
             char mnemonic = '\0';
             if (text != null)
@@ -249,7 +247,7 @@ namespace System.Windows.Forms
         ///  something like "Fi&amp;sh &amp;&amp; Chips" into "Fish &amp; Chips" on the first call, and then "Fish Chips"
         ///  on the second call.
         /// </remarks>
-        public static string TextWithoutMnemonics(string text)
+        public static string? TextWithoutMnemonics(string? text)
         {
             if (text is null)
             {
@@ -301,7 +299,7 @@ namespace System.Windows.Forms
         ///  String.Equals(s1, s2, StringComparison.Ordinal)
         ///  String.Equals(s1, s2, StringComparison.OrdinalIgnoreCase)
         /// </summary>
-        public static bool SafeCompareStrings(string string1, string string2, bool ignoreCase)
+        public static bool SafeCompareStrings(string? string1, string? string2, bool ignoreCase)
         {
             if ((string1 is null) || (string2 is null))
             {
