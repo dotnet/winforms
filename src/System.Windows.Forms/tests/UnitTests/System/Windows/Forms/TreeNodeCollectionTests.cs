@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(node);
             Assert.Throws<ArgumentException>(() => collection[0] = node);
         }
-        
+
         [WinFormsFact]
         public void TreeNodeCollection_Item_AddSameTreeNode_ThrowsArgumentException()
         {
