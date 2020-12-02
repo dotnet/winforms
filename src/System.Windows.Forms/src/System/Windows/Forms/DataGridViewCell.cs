@@ -452,7 +452,13 @@ namespace System.Windows.Forms
                 return ErrorText;
             }
 
-            return ToolTipText;
+            // If the "isInternalOrDefaultToolTip" flag is true, then the current tooltip text is the value from the
+            // "ToolTipText" property or the default value. We should always display tooltips with such text
+            string toolTipText = GetToolTipText(RowIndex, out bool isInternalOrDefaultToolTip);
+
+            // We should display the tooltip only if the "isInternalOrDefaultToolTip" flag is true
+            // or the value in the cell is truncated
+            return (isInternalOrDefaultToolTip || ShowToolTip(RowIndex)) ? toolTipText : string.Empty;
         }
 
         bool IKeyboardToolTip.ShowsOwnToolTip() => true;
@@ -784,7 +790,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return GetToolTipText(RowIndex);
+                return GetToolTipText(RowIndex, out _);
             }
             set
             {
@@ -2476,27 +2482,37 @@ namespace System.Windows.Forms
             return toolTipText;
         }
 
-        private string GetToolTipText(int rowIndex)
+        /// <summary>
+        /// This method gets the tooltip text for cells.
+        /// </summary>
+        /// <param name="rowIndex"> Index of row</param>
+        /// <param name="isInternalOrDefaultToolTip"> The "isInternalOrDefaultToolTip" flag returns "true"
+        /// if the "ToolTipText" property or the default value is used as tooltip text. If the DataGridViewCell
+        /// value is used as the tooltip text, "false" is returned.</param>
+        private string GetToolTipText(int rowIndex, out bool isInternalOrDefaultToolTip)
         {
+            isInternalOrDefaultToolTip = true;
             string toolTipText = GetInternalToolTipText(rowIndex);
 
-            if (ColumnIndex < 0 || RowIndex < 0)
+            if (ColumnIndex < 0 || RowIndex < 0 || !string.IsNullOrEmpty(toolTipText))
             {
                 return toolTipText;  //  Cells in the Unit tests have ColumnIndex & RowIndex < 0 and
                                      //  we should return an expected result. It doesn't have an impact on UI cells.
             }
 
-            if (string.IsNullOrEmpty(toolTipText))
+            if (!_useDefaultToolTipText)
             {
-                if (!_useDefaultToolTipText)
-                {
-                    return string.Empty;
-                }
-
-                return GetDefaultToolTipText() ?? GetToolTipTextWithoutMnemonic(Value?.ToString());
+                return string.Empty;
             }
 
-            return toolTipText;
+            string defaulToolTip = GetDefaultToolTipText();
+            if (defaulToolTip is not null)
+            {
+                return defaulToolTip;
+            }
+
+            isInternalOrDefaultToolTip = false;
+            return GetToolTipTextWithoutMnemonic(Value?.ToString());
         }
 
         private protected string GetToolTipTextWithoutMnemonic(string toolTipText)
@@ -2595,6 +2611,42 @@ namespace System.Windows.Forms
                 dgv.EditingControlAccessibleObject.SetParent(AccessibilityObject);
                 AccessibilityObject.SetDetachableChild(dgv.EditingControlAccessibleObject);
             }
+        }
+
+        /// <summary>
+        /// The method checks that the string value of the cell is greater than its visible area
+        /// </summary>
+        /// <param name="rowIndex"> Index of row</param>
+        /// <param name="stringValue">String value of the cell</param>
+        private bool IsTextTruncated(int rowIndex, string stringValue)
+        {
+            if (string.IsNullOrEmpty(stringValue))
+            {
+                return false;
+            }
+
+            DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
+            using var screen = GdiCache.GetScreenDCGraphics();
+            Rectangle contentBounds = GetContentBounds(screen, dataGridViewCellStyle, rowIndex);
+
+            bool widthTruncated = false;
+            int preferredHeight = 0;
+            if (contentBounds.Width > 0)
+            {
+                preferredHeight = GetPreferredTextHeight(
+                    screen,
+                    DataGridView.RightToLeftInternal,
+                    stringValue,
+                    dataGridViewCellStyle,
+                    contentBounds.Width,
+                    out widthTruncated);
+            }
+            else
+            {
+                widthTruncated = true;
+            }
+
+            return preferredHeight > contentBounds.Height || widthTruncated;
         }
 
         protected virtual bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
@@ -2880,9 +2932,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // get the tool tip string
-            string toolTipText = GetToolTipText(rowIndex);
-
+            // If the "isInternalOrDefaultToolTip" flag is true, then the current tooltip text is the value from the
+            // "ToolTipText" property or the default value. We should always display tooltips with such text
+            string toolTipText = GetToolTipText(rowIndex, out bool isInternalOrDefaultToolTip);
             if (string.IsNullOrEmpty(toolTipText))
             {
                 if (FormattedValueType == s_stringType)
@@ -2911,43 +2963,20 @@ namespace System.Windows.Forms
                         // we are on a header cell.
                         Debug.Assert(this is DataGridViewHeaderCell);
                         string stringValue = GetValue(rowIndex) as string;
-                        if (!string.IsNullOrEmpty(stringValue))
+                        if (IsTextTruncated(rowIndex, stringValue))
                         {
-                            DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
-
-                            using var screen = GdiCache.GetScreenDCGraphics();
-                            Rectangle contentBounds = GetContentBounds(screen, dataGridViewCellStyle, rowIndex);
-
-                            bool widthTruncated = false;
-                            int preferredHeight = 0;
-                            if (contentBounds.Width > 0)
-                            {
-                                preferredHeight = GetPreferredTextHeight(
-                                    screen,
-                                    DataGridView.RightToLeftInternal,
-                                    stringValue,
-                                    dataGridViewCellStyle,
-                                    contentBounds.Width,
-                                    out widthTruncated);
-                            }
-                            else
-                            {
-                                widthTruncated = true;
-                            }
-
-                            if (preferredHeight > contentBounds.Height || widthTruncated)
-                            {
-                                toolTipText = TruncateToolTipText(stringValue);
-                            }
+                            toolTipText = TruncateToolTipText(stringValue);
                         }
                     }
                 }
             }
 
-            if (!string.IsNullOrEmpty(toolTipText))
+            // We should display the tooltip only if the "isInternalOrDefaultToolTip" flag is true
+            // or the value in the cell is truncated
+            if (!string.IsNullOrEmpty(toolTipText) && (isInternalOrDefaultToolTip || ShowToolTip(rowIndex)))
             {
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                DataGridView.ActivateToolTip(true /*activate*/, toolTipText, ColumnIndex, rowIndex);
+                DataGridView.ActivateToolTip(activate: true, toolTipText, ColumnIndex, rowIndex);
             }
 
             // for debugging
@@ -4060,6 +4089,16 @@ namespace System.Windows.Forms
         internal bool SetValueInternal(int rowIndex, object value)
         {
             return SetValue(rowIndex, value);
+        }
+
+        private bool ShowToolTip(int rowIndex)
+        {
+            if (this is not DataGridViewTextBoxCell)
+            {
+                return true;
+            }
+
+            return IsTextTruncated(rowIndex, GetValue(rowIndex) as string);
         }
 
         internal static bool TextFitsInBounds(Graphics graphics, string text, Font font, Size maxBounds, TextFormatFlags flags)
