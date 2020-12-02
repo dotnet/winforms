@@ -63,9 +63,14 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (value.Handle != IntPtr.Zero)
+                TreeView tv = owner.treeView;
+                TreeNode actual = owner.children[index];
+
+                if (value.index == index
+                    && tv.nodeTable.ContainsKey(value.Handle)
+                    && value.Handle == actual.Handle)
                 {
-                    throw new ArgumentException(string.Format(SR.OnlyOneControl, value.Text), nameof(value));
+                    return;
                 }
 
                 value.parent = owner;

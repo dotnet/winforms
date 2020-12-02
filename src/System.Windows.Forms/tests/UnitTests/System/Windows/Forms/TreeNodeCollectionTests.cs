@@ -87,7 +87,8 @@ namespace System.Windows.Forms.Tests
             TreeNodeCollection collection = treeView.Nodes;
             TreeNode node = new TreeNode("Node 0");
             collection.Add(node);
-            Assert.Throws<ArgumentException>(() => collection[0] = node);
+            collection[0] = node;
+            Assert.Equal(1, collection.Count);
         }
 
         [WinFormsFact]
@@ -97,7 +98,8 @@ namespace System.Windows.Forms.Tests
             TreeNodeCollection collection = treeView.Nodes;
             collection.Add("Node 0");
             TreeNode node = collection[0];
-            Assert.Throws<ArgumentException>(() => collection[0] = node);
+            collection[0] = node;
+            Assert.Equal(1, collection.Count);
         }
 
         [WinFormsTheory]
