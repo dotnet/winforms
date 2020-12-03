@@ -258,7 +258,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             calendar.AnnuallyBoldedDates = value;
@@ -276,7 +276,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(2, createdCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> BackColor_Set_TestData()
@@ -586,7 +586,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             calendar.BoldedDates = value;
@@ -604,7 +604,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(2, createdCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> CalendarDimensions_Set_TestData()
@@ -1611,7 +1611,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(1, createdCallCount);
+            Assert.Equal(0, createdCallCount);
 
             // Set same.
             calendar.MonthlyBoldedDates = value;
@@ -1629,7 +1629,7 @@ namespace System.Windows.Forms.Tests
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(2, createdCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsTheory]

@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
@@ -198,7 +199,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                RecreateHandle();
+                UpdateBoldedDates();
             }
         }
 
@@ -270,7 +271,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                RecreateHandle();
+                UpdateBoldedDates();
             }
         }
 
@@ -526,14 +527,14 @@ namespace System.Windows.Forms
                 if (value != null && value.Length > 0)
                 {
                     // Add each bolded date to our List.
-                    foreach (var  dateTime in value)
+                    foreach (var dateTime in value)
                     {
                         _monthlyArrayOfDates.Add(dateTime);
                         _datesToBoldMonthly |= 0x00000001 << (dateTime.Day - 1);
                     }
                 }
 
-                RecreateHandle();
+                UpdateBoldedDates();
             }
         }
 
@@ -1564,7 +1565,6 @@ namespace System.Windows.Forms
                 if (DateTime.Compare(_arrayOfDates[i].Date, date.Date) == 0)
                 {
                     _arrayOfDates.RemoveAt(i);
-                    Invalidate();
                     return;
                 }
             }
@@ -1828,6 +1828,56 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Update states of displayed dates. Make the native control redraw bolded dates.
+        /// </summary>
+        private unsafe void SetMonthViewBoldedDates()
+        {
+            Debug.Assert(_mcCurView == MCMV.MONTH, "This logic should work only in the Month view.");
+
+            // Get the first and the last visible dates even they are in not fully displayed months
+            SelectionRange displayRange = GetDisplayRange(false);
+
+            // Calculate the number of visible months, even though they may be partially visible.
+            // It is necessary to send to Windows correct info about all bolded dates that are visible.
+            int monthsCount = (displayRange.End.Year - displayRange.Start.Year) * 12 + displayRange.End.Month - displayRange.Start.Month + 1;
+
+            // Create a special collection for storage states of dates of some displayed month.
+            // This collection will be send to Windows to update displayed dates states - bolded/unbolded.
+            Span<uint> monthDayStates = stackalloc uint[monthsCount];
+
+            // Run through all displayed dates to set a binary marker that the date is bolded
+            // if BoldedDates, AnnualArrayOfDates, or MonthlyArrayOfDates contain this date.
+            DateTime currentDate = displayRange.Start;
+            while (currentDate <= displayRange.End)
+            {
+                bool currentDateIsBolded = _arrayOfDates.Contains(currentDate)
+                    || _annualArrayOfDates.Any(d => d.Month == currentDate.Month && d.Day == currentDate.Day)
+                    || _monthlyArrayOfDates.Any(d => d.Day == currentDate.Day);
+
+                if (currentDateIsBolded)
+                {
+                    // Calculate an index of a month of the current date in the display range.
+                    // It works as an array, indexes start from 0.
+                    int currentMonthIndex = (12 - displayRange.Start.Month + currentDate.Month) % 12;
+
+                    // Set bolded state for the current date of the current month
+                    // to prepare the states array before sending to Windows
+                    monthDayStates[currentMonthIndex] |= 1U << currentDate.Day - 1;
+                }
+
+                // Set the next day for check
+                currentDate = currentDate.AddDays(1);
+            }
+
+            fixed (uint* arr = monthDayStates)
+            {
+                // Update display dates states.
+                // For more info see docs: https://docs.microsoft.com/windows/win32/controls/mcm-setdaystate
+                User32.SendMessageW(Handle, (User32.WM)ComCtl32.MCM.SETDAYSTATE, (IntPtr)(void*)monthsCount, (IntPtr)arr);
+            }
+        }
+
+        /// <summary>
         ///  Sets the selection for a month calendar control to a given date range.
         ///  The selection range will not be set if the selection range exceeds the
         ///  maximum selection count.
@@ -1964,7 +2014,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Forces month calendar to display the current set of bolded dates.
         /// </summary>
-        public void UpdateBoldedDates() => RecreateHandle();
+        public void UpdateBoldedDates()
+        {
+            if (IsHandleCreated && _mcCurView == MCMV.MONTH)
+            {
+                // Use a specific implementation in the Month view
+                // to avoid MonthCalendar display dates range resets
+                // and flickers when a MonthCalendar shows several months.
+                SetMonthViewBoldedDates();
+            }
+        }
 
         /// <summary>
         ///  Updates the current setting for "TODAY" in the MonthCalendar control
