@@ -214,7 +214,7 @@ namespace System.Windows.Forms
 
                     if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
                     {
-                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
+                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Oleacc);
                         freeLib = (s_oleAccAvailable != IntPtr.Zero);
                     }
 
