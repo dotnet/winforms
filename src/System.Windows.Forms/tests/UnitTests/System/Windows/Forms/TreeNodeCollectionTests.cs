@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeNodeCollection_Item_AddExistentTreeNode_ThrowsArgumentException()
+        public void TreeNodeCollection_Item_SetExistentTreeNodeSameIndex_ThrowsArgumentException()
         {
             using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeNodeCollection_Item_AddSameTreeNode_ThrowsArgumentException()
+        public void TreeNodeCollection_Item_SetSameTreeNodeSameIndex_ThrowsArgumentException()
         {
             using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
@@ -100,6 +100,30 @@ namespace System.Windows.Forms.Tests
             TreeNode node = collection[0];
             collection[0] = node;
             Assert.Equal(1, collection.Count);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetExistentTreeNodeDifferentIndex_ThrowsArgumentException()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 0");
+            collection.Add("Node 1");
+            TreeNode node = collection[0];
+            Assert.Throws<ArgumentException>(() => collection[1] = node);
+        }
+
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetTreeNodeBoundToAnotherTreeView_ThrowsArgumentException()
+        {
+            using var anotherTreeView = new TreeView();
+            anotherTreeView.Nodes.Add("Node 0");
+
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 1");
+            TreeNode nodeOfAnotherTreeView = anotherTreeView.Nodes[0];
+            Assert.Throws<ArgumentException>(() => collection[0] = nodeOfAnotherTreeView);
         }
 
         [WinFormsTheory]

@@ -10426,6 +10426,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Fehler bei BeginEdit, da die LabelEdit-Eigenschaft auf "false" festgelegt ist.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
         <source>Indicates whether the tree node is in a checked state.</source>
         <target state="translated">Zeigt an, ob sich der Strukturknoten in einem aktivierten Zustand befindet.</target>

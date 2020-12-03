@@ -66,9 +66,19 @@ namespace System.Windows.Forms
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
 
-                if (value.index == index
-                    && tv.nodeTable.ContainsKey(value.Handle)
-                    && value.Handle == actual.Handle)
+                if (value.treeView != null && value.treeView.Handle != tv.Handle)
+                {
+                    throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
+                }
+
+                if (tv.nodeTable.ContainsKey(value.Handle) && value.index != index)
+                {
+                    throw new ArgumentException(string.Format(SR.OnlyOneControl, value.Text), nameof(value));
+                }
+
+                if (tv.nodeTable.ContainsKey(value.Handle)
+                    && value.Handle == actual.Handle
+                    && value.index == index)
                 {
                     return;
                 }

@@ -10436,6 +10436,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Se ha realizado una referencia circular. No se puede agregar un elemento TreeNode como descendiente de sí mismo.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">El TreeNode ya está asociado a otro TreeView. Debe quitarlo primero de su ubicación actual o clonarlo.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">El parámetro debe ser de tipo TreeNode.</target>
