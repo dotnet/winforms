@@ -189,6 +189,15 @@ namespace System.Windows.Forms.Tests
         public void CursorConverter_GetStandardValues_Invoke_ReturnsExpected()
         {
             var converter = new CursorConverter();
+
+            // The static accessors only provide a weak guarantee about their return values, when multiple threads
+            // are involved it is possible that return values differ between calls. We need a dry run and memory barrier
+            // to ensure the fields backing the property are all initialized and visible to the current thread,
+            // failing to do so means that the very first call to a static cursor accessor may return a different
+            // cursor instance than subsequent calls.
+            converter.GetStandardValues();
+            Threading.Thread.MemoryBarrier();
+
             ICollection<Cursor> values = converter.GetStandardValues().Cast<Cursor>().ToArray();
             Assert.Equal(28, values.Count);
             Assert.Contains(Cursors.AppStarting, values);
