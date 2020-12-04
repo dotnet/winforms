@@ -265,6 +265,7 @@ namespace System.Windows.Forms
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
+        [RelatedImageList("ListView.GroupImageList")]
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
         public int TitleImageIndex
@@ -305,6 +306,7 @@ namespace System.Windows.Forms
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [RefreshProperties(RefreshProperties.Repaint)]
+        [RelatedImageList("ListView.GroupImageList")]
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
         public string TitleImageKey

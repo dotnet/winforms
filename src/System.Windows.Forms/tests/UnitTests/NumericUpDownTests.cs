@@ -21,8 +21,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/4211")]
-        public void NumericUpDown_VisualStyles_off_BasicRendering()
+        public void NumericUpDown_VisualStyles_off_BasicRendering_ControlEnabled()
         {
             if (Application.RenderWithVisualStyles)
             {
@@ -50,7 +49,6 @@ namespace System.Windows.Forms.Tests
 
             // Printing the main control doesn't get the redraw for the child controls on the first render,
             // directly hitting the up/down button subcontrol.
-
             using var emfButtons = new EmfScope();
             state = new DeviceContextState(emfButtons);
             upDown.Controls[0].PrintToMetafile(emfButtons);
@@ -63,13 +61,26 @@ namespace System.Windows.Forms.Tests
                 Validate.LineTo(
                     (0, 18), (16, 18),
                     State.Pen(1, upDown.BackColor, Gdi32.PS.SOLID)));
+        }
 
-            // Now check the disabled state
+        [WinFormsFact]
+        public void NumericUpDown_VisualStyles_off_BasicRendering_ControlDisabled()
+        {
+            if (Application.RenderWithVisualStyles)
+            {
+                return;
+            }
 
+            using var form = new Form();
+            using var upDown = new NumericUpDown();
+
+            form.Controls.Add(upDown);
+
+            // Check the disabled state
             upDown.Enabled = false;
 
             using var emfDisabled = new EmfScope();
-            state = new DeviceContextState(emfDisabled);
+            DeviceContextState state = new DeviceContextState(emfDisabled);
             upDown.PrintToMetafile(emfDisabled);
 
             emfDisabled.Validate(
