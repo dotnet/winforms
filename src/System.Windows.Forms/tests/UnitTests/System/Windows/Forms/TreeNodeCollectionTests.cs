@@ -81,7 +81,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeNodeCollection_Item_SetExistentTreeNodeSameIndex_ThrowsArgumentException()
+        public void TreeNodeCollection_Item_SetTreeNodeAlreadyAdded_ThrowsArgumentException()
         {
             using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeNodeCollection_Item_SetSameTreeNodeSameIndex_ThrowsArgumentException()
+        public void TreeNodeCollection_Item_SetExistentTreeNodeInSamePosition_ThrowsArgumentException()
         {
             using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
