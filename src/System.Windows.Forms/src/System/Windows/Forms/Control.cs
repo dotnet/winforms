@@ -1473,7 +1473,7 @@ namespace System.Windows.Forms
                 if (s_needToLoadComCtl)
                 {
                     if ((Kernel32.GetModuleHandleW(Libraries.Comctl32) != IntPtr.Zero)
-                        || (Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Comctl32) != IntPtr.Zero))
+                     || (Kernel32.LoadComctl32(Application.StartupPath) != IntPtr.Zero))
                     {
                         s_needToLoadComCtl = false;
                     }
