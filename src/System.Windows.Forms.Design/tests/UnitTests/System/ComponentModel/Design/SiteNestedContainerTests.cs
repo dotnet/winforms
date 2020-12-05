@@ -576,8 +576,9 @@ namespace System.ComponentModel.Design.Tests
             using var surface = new DesignSurface();
             using var owningComponent = new Component();
             using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-            Assert.Throws<Exception>(() => container.Add(component));
-            Assert.Throws<Exception>(() => container.Add(component, "name"));
+
+            Assert.Throws<NotImplementedException>(() => container.Add(component));
+            Assert.Throws<NotImplementedException>(() => container.Add(component, "name"));
             Assert.Empty(container.Components);
         }
 
