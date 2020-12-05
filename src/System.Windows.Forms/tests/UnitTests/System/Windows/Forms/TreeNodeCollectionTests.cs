@@ -81,23 +81,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeNodeCollection_Item_SetTreeNodeAlreadyAdded_ThrowsArgumentException()
+        public void TreeNodeCollection_Item_SetTreeNodeAlreadyAdded_Noop()
         {
             using var treeView = new TreeView();
             TreeNodeCollection collection = treeView.Nodes;
             TreeNode node = new TreeNode("Node 0");
             collection.Add(node);
-            collection[0] = node;
-            Assert.Equal(1, collection.Count);
-        }
-
-        [WinFormsFact]
-        public void TreeNodeCollection_Item_SetExistentTreeNodeInSamePosition_ThrowsArgumentException()
-        {
-            using var treeView = new TreeView();
-            TreeNodeCollection collection = treeView.Nodes;
-            collection.Add("Node 0");
-            TreeNode node = collection[0];
             collection[0] = node;
             Assert.Equal(1, collection.Count);
         }
