@@ -29,7 +29,7 @@ It does not contain either:
 We welcome contributions! Many people all over the world have helped make this project better.
 
 * [Contributing][contributing] explains what kinds of changes we welcome
-* [Deverloper Guide][developer-guide] explains how to build and test
+* [Developer Guide][developer-guide] explains how to build and test
 * [Get Up and Running with Windows Forms .NET][getting-started] explains how to get started building Windows Forms applications.
 
 
