@@ -10426,6 +10426,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">BeginEdit não teve êxito porque a propriedade LabelEdit é falsa.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
         <source>Indicates whether the tree node is in a checked state.</source>
         <target state="translated">Indica se o nó de árvore está no estado de ativação.</target>

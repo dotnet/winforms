@@ -10426,6 +10426,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">LabelEdit özelliği False olduğundan BeginEdit özelliği başarılı olmadı.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
         <source>Indicates whether the tree node is in a checked state.</source>
         <target state="translated">Ağaç düğümünün işaretli durumda olup olmadığını gösterir.</target>

@@ -10426,6 +10426,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">因為 LabelEdit 屬性為 false，所以 BeginEdit 失敗。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
         <source>Indicates whether the tree node is in a checked state.</source>
         <target state="translated">表示樹狀節點是否為選取狀態。</target>

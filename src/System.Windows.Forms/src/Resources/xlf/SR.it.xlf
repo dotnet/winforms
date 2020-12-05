@@ -10426,6 +10426,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">BeginEdit non riuscito. La proprietà LabelEdit è false.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
         <source>Indicates whether the tree node is in a checked state.</source>
         <target state="translated">Indica se il nodo della struttura ad albero è selezionato.</target>

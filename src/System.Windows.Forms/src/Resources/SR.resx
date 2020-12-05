@@ -6737,4 +6737,7 @@ Stack trace where the illegal operation occurred was:
   <data name="DataGridView_RowAddedNotification" xml:space="preserve">
     <value>Row {0} is added</value>
   </data>
+  <data name="TreeNodeBoundToAnotherTreeView" xml:space="preserve">
+    <value>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</value>
+  </data>
 </root>
