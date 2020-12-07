@@ -3711,7 +3711,7 @@ Behandeln Sie das DataError-Ereignis, um dieses Standarddialogfeld zu ersetzen.<
       </trans-unit>
       <trans-unit id="DataGridView_RowAddedNotification">
         <source>Row {0} is added</source>
-        <target state="new">Row {0} is added</target>
+        <target state="translated">Zeile "{0}" hinzugefügt</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">

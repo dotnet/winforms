@@ -3711,7 +3711,7 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
       </trans-unit>
       <trans-unit id="DataGridView_RowAddedNotification">
         <source>Row {0} is added</source>
-        <target state="new">Row {0} is added</target>
+        <target state="translated">Řádek {0} se přidal.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -4730,7 +4730,7 @@ nikoli v tomto dialogovém okně.
         <target state="translated">{0}
     Verze sestavení: {1}
     Verze Win32: {2}
-    Základ kódu (CodeBase): {3}
+    Kódová báze (CodeBase): {3}
 </target>
         <note />
       </trans-unit>

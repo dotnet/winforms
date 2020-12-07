@@ -3711,7 +3711,7 @@ Para reemplazar este cuadro de diálogo predeterminado controle el evento DataEr
       </trans-unit>
       <trans-unit id="DataGridView_RowAddedNotification">
         <source>Row {0} is added</source>
-        <target state="new">Row {0} is added</target>
+        <target state="translated">La fila {0} se ha agregado</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
