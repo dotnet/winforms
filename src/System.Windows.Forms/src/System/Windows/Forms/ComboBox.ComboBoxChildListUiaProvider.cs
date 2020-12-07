@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                             ? _owningComboBox.ChildTextAccessibleObject
                             : _owningComboBox.ChildEditAccessibleObject;
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        // A workaround for issue with hanging inspector. It also simulates native control behavior.
+                        // A workaround for an issue with an Inspect not responding. It also simulates native control behavior.
                         return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
                             ? _owningComboBox.ChildListAccessibleObject
                             : null;
