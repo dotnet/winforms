@@ -5923,7 +5923,12 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                         parray = psa
                     }
                 };
-                AssertToObjectThrows<DivideByZeroException>(variant);
+
+                VARIANT copy = variant;
+                IntPtr pv = (IntPtr)(&copy);
+                Assert.Throws<ArgumentException>(() => Marshal.GetObjectForNativeVariant(pv));
+
+                Assert.Throws<DivideByZeroException>(() => variant.ToObject());
             }
             finally
             {

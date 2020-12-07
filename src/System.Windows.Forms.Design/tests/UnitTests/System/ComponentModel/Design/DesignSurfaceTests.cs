@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
+using System.Windows.Forms.Design;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
@@ -981,7 +982,8 @@ namespace System.ComponentModel.Design.Tests
         {
             using var surface = new SubDesignSurface();
             using var component = new Component();
-            Assert.Equal(rootDesigner, surface.CreateDesigner(component, rootDesigner) is null);
+
+            Assert.NotNull(surface.CreateDesigner(component, rootDesigner));
         }
 
         [WinFormsFact]
@@ -989,7 +991,8 @@ namespace System.ComponentModel.Design.Tests
         {
             using var surface = new SubDesignSurface();
             using var component = new DesignerComponent();
-            Assert.Null(surface.CreateDesigner(component, rootDesigner: true));
+
+            Assert.IsType<ComponentDocumentDesigner>(surface.CreateDesigner(component, rootDesigner: true));
             Assert.IsType<ComponentDesigner>(surface.CreateDesigner(component, rootDesigner: false));
         }
 
