@@ -232,7 +232,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                if (_owningListBox.Items.InnerArray.Entries is null)
+                if (_owningListBox.Items.InnerArray.Count == 0)
                 {
                     return null;
                 }

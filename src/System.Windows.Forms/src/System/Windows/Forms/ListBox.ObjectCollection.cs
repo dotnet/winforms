@@ -7,6 +7,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 
+using static System.Windows.Forms.ItemArray;
+
 namespace System.Windows.Forms
 {
     public partial class ListBox
@@ -112,9 +114,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
+                    Entry entry = InnerArray.GetEntry(item);
                     if (Count > 0)
                     {
-                        index = InnerArray.BinarySearch(item);
+                        index = InnerArray.BinarySearch(entry);
                         if (index < 0)
                         {
                             // getting the index of the first element that is larger than the search value
@@ -128,7 +131,7 @@ namespace System.Windows.Forms
                     }
 
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
-                    InnerArray.Insert(index, item);
+                    InnerArray.InsertEntry(index, entry);
                 }
                 bool successful = false;
 
@@ -338,7 +341,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                return InnerArray.IndexOfIdentifier(value, 0);
+                return InnerArray.IndexOf(value);
             }
 
             /// <summary>

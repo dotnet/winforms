@@ -11,14 +11,16 @@ namespace System.Windows.Forms
         /// </summary>
         internal class Entry
         {
-            public object item;
-            public int state;
-
             public Entry(object item)
             {
-                this.item = item;
-                state = 0;
+                Item = item;
+                State = 0;
             }
+
+            public object Item { get; set; }
+
+            // This field is used by a CheckList to store data that an item is checked or indeterminate
+            public int State { get; set; }
         }
     }
 }

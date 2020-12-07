@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using static System.Windows.Forms.ItemArray;
 
 namespace System.Windows.Forms
 {
@@ -21,20 +22,20 @@ namespace System.Windows.Forms
     ///  collection and serveral read-only collections based
     ///  on masks.  ItemArray supports up to 31 masks.
     /// </summary>
-    internal partial class ItemArray : IComparer
+    internal partial class ItemArray : IComparer<Entry>
     {
         private static int s_lastMask = 1;
 
         private readonly ListControl _listControl;
-        private Entry?[]? _entries;
-        private int _count;
+        private List<Entry> _entries;
 
         public ItemArray(ListControl listControl)
         {
             _listControl = listControl;
+            _entries = new List<Entry>();
         }
 
-        internal IReadOnlyList<Entry?>? Entries => _entries;
+        internal IReadOnlyList<Entry?> Entries => _entries;
 
         /// <summary>
         ///  The version of this array.  This number changes with each
@@ -48,41 +49,10 @@ namespace System.Windows.Forms
         /// </summary>
         public object? Add(object item)
         {
-            EnsureSpace(1);
-
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
+            Entry entry = new Entry(item);
+            _entries.Add(entry);
             Version++;
-            _entries[_count] = new Entry(item);
-            return _entries[_count++];
-        }
-
-        /// <summary>
-        ///  Adds the given collection of items to the array.
-        /// </summary>
-        public void AddRange(ICollection items)
-        {
-            if (items is null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            EnsureSpace(items.Count);
-
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            foreach (object i in items)
-            {
-                _entries[_count++] = new Entry(i);
-            }
-
-            Version++;
+            return entry;
         }
 
         /// <summary>
@@ -90,12 +60,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Clear()
         {
-            if (_count > 0 && _entries != null)
-            {
-                Array.Clear(_entries, 0, _count);
-            }
-
-            _count = 0;
+            _entries.Clear();
             Version++;
         }
 
@@ -111,25 +76,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Ensures that our internal array has space for
-        ///  the requested # of elements.
-        /// </summary>
-        private void EnsureSpace(int elements)
-        {
-            if (_entries is null)
-            {
-                _entries = new Entry[Math.Max(elements, 4)];
-            }
-            else if (_count + elements >= _entries.Length)
-            {
-                int newLength = Math.Max(_entries.Length * 2, _entries.Length + elements);
-                Entry[] newEntries = new Entry[newLength];
-                _entries.CopyTo(newEntries, 0);
-                _entries = newEntries;
-            }
-        }
-
-        /// <summary>
         ///  Turns a virtual index into an actual index.
         /// </summary>
         public int GetActualIndex(int virtualIndex, int stateMask)
@@ -140,23 +86,11 @@ namespace System.Windows.Forms
             }
 
             // More complex; we must compute this index.
-
-            if (_entries is null)
-            {
-                return -1;
-            }
-
             int calcIndex = -1;
-            for (int i = 0; i < _count; i++)
+
+            for (int i = 0; i < Count; i++)
             {
-                Entry? entry = _entries[i];
-
-                if (entry is null)
-                {
-                    continue;
-                }
-
-                if ((entry.state & stateMask) != 0)
+                if ((_entries[i].State & stateMask) != 0)
                 {
                     calcIndex++;
                     if (calcIndex == virtualIndex)
@@ -172,39 +106,26 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the main count
         /// </summary>
-        public int Count => _count;
+        public int Count => _entries.Count;
 
         /// <summary>
         ///  Gets the count of items matching the given mask.
         /// </summary>
-        public int GetCount(int stateMask)
+        public int GetCount(int stateMask = 0)
         {
             // If mask is zero, then just give the main count
             if (stateMask == 0)
             {
-                return _count;
+                return Count;
             }
 
             // more complex:  must provide a count of items
             // based on a mask.
-
-            if (_entries is null)
-            {
-                return 0;
-            }
-
             int filteredCount = 0;
 
-            for (int i = 0; i < _count; i++)
+            foreach (Entry entry in _entries)
             {
-                Entry? entry = _entries[i];
-
-                if (entry is null)
-                {
-                    continue;
-                }
-
-                if ((entry.state & stateMask) != 0)
+                if ((entry.State & stateMask) != 0)
                 {
                     filteredCount++;
                 }
@@ -217,9 +138,9 @@ namespace System.Windows.Forms
         ///  Retrieves an enumerator that will enumerate based on
         ///  the given mask.
         /// </summary>
-        public IEnumerator GetEnumerator(int stateMask)
+        public IEnumerator GetEnumerator(int stateMask = 0)
         {
-            return GetEnumerator(stateMask, false);
+            return GetEnumerator(stateMask, anyBit: false);
         }
 
         /// <summary>
@@ -231,51 +152,31 @@ namespace System.Windows.Forms
             return new EntryEnumerator(this, stateMask, anyBit);
         }
 
-        public object GetItem(int virtualIndex) => GetItem(virtualIndex, 0);
-
         /// <summary>
         ///  Gets the item at the given index.  The index is
         ///  virtualized against the given mask value.
         /// </summary>
-        public object GetItem(int virtualIndex, int stateMask)
+        public object GetItem(int virtualIndex, int stateMask = 0)
         {
             int actualIndex = GetActualIndex(virtualIndex, stateMask);
-
             if (actualIndex == -1)
             {
                 throw new IndexOutOfRangeException();
             }
 
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            Entry? entry = _entries[actualIndex];
-
-            if (entry is null)
-            {
-                throw new ArgumentNullException(nameof(entry));
-            }
-
-            return entry.item;
+            return _entries[actualIndex].Item;
         }
+
         /// <summary>
         ///  Gets the item at the given index.  The index is
         ///  virtualized against the given mask value.
         /// </summary>
-        internal object? GetEntryObject(int virtualIndex, int stateMask)
+        internal Entry GetEntryObject(int virtualIndex, int stateMask = 0)
         {
             int actualIndex = GetActualIndex(virtualIndex, stateMask);
-
             if (actualIndex == -1)
             {
                 throw new IndexOutOfRangeException();
-            }
-
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
             }
 
             return _entries[actualIndex];
@@ -286,85 +187,23 @@ namespace System.Windows.Forms
         /// </summary>
         public bool GetState(int index, int stateMask)
         {
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            Entry? entry = _entries[index];
-
-            if (entry is null)
-            {
-                throw new ArgumentNullException(nameof(entry));
-            }
-
-            return (entry.state & stateMask) == stateMask;
+            return (_entries[index].State & stateMask) == stateMask;
         }
-
-        public int IndexOf(object item) => IndexOf(item, 0);
 
         /// <summary>
         ///  Returns the virtual index of the item based on the
         ///  state mask.
         /// </summary>
-        public int IndexOf(object item, int stateMask)
+        public int IndexOf(object item, int stateMask = 0)
         {
-            if (_entries is null)
-            {
-                return -1;
-            }
-
             int virtualIndex = -1;
 
-            for (int i = 0; i < _count; i++)
+            foreach (Entry entry in _entries)
             {
-                Entry? entry = _entries[i];
-
-                if (entry is null)
-                {
-                    continue;
-                }
-
-                if (stateMask == 0 || (entry.state & stateMask) != 0)
+                if (stateMask == 0 || (entry.State & stateMask) != 0)
                 {
                     virtualIndex++;
-                    if (entry.item.Equals(item))
-                    {
-                        return virtualIndex;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        /// <summary>
-        ///  Returns the virtual index of the item based on the
-        ///  state mask. Uses reference equality to identify the
-        ///  given object in the list.
-        /// </summary>
-        public int IndexOfIdentifier(object identifier, int stateMask)
-        {
-            if (_entries is null)
-            {
-                return -1;
-            }
-
-            int virtualIndex = -1;
-
-            for (int i = 0; i < _count; i++)
-            {
-                Entry? entry = _entries[i];
-
-                if (entry is null)
-                {
-                    continue;
-                }
-
-                if (stateMask == 0 || (entry.state & stateMask) != 0)
-                {
-                    virtualIndex++;
-                    if (_entries[i] == identifier)
+                    if ((item is Entry itemEntry && entry == itemEntry) || entry.Item.Equals(item))
                     {
                         return virtualIndex;
                     }
@@ -380,20 +219,17 @@ namespace System.Windows.Forms
         /// </summary>
         public void Insert(int index, object item)
         {
-            EnsureSpace(1);
+            InsertEntry(index, new Entry(item));
+        }
 
-            if (_entries is null)
+        public void InsertEntry(int index, Entry item)
+        {
+            if (item is null)
             {
-                throw new ArgumentNullException(nameof(_entries));
+                throw new ArgumentNullException(nameof(item));
             }
 
-            if (index < _count)
-            {
-                System.Array.Copy(_entries, index, _entries, index + 1, _count - index);
-            }
-
-            _entries[index] = new Entry(item);
-            _count++;
+            _entries.Insert(index, item);
             Version++;
         }
 
@@ -404,7 +240,6 @@ namespace System.Windows.Forms
         public void Remove(object item)
         {
             int index = IndexOf(item);
-
             if (index != -1)
             {
                 RemoveAt(index);
@@ -416,17 +251,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAt(int index)
         {
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            _count--;
-            for (int i = index; i < _count; i++)
-            {
-                _entries[i] = _entries[i + 1];
-            }
-            _entries[_count] = null;
+            _entries.RemoveAt(index);
             Version++;
         }
 
@@ -435,19 +260,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetItem(int index, object item)
         {
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            Entry? entry = _entries[index];
-
-            if (entry is null)
-            {
-                throw new ArgumentNullException(nameof(entry));
-            }
-
-            entry.item = item;
+            _entries[index].Item = item;
         }
 
         /// <summary>
@@ -455,37 +268,28 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetState(int index, int stateMask, bool value)
         {
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            Entry? entry = _entries[index];
-
-            if (entry is null)
-            {
-                throw new ArgumentNullException(nameof(entry));
-            }
-
             if (value)
             {
-                entry.state |= stateMask;
+                _entries[index].State |= stateMask;
             }
             else
             {
-                entry.state &= ~stateMask;
+                _entries[index].State &= ~stateMask;
             }
             Version++;
+        }
+
+        public Entry GetEntry(object element)
+        {
+            return element is Entry entryElement ? entryElement : new Entry(element);
         }
 
         /// <summary>
         ///  Find element in sorted array. If element is not found returns a binary complement of index for inserting
         /// </summary>
-        public int BinarySearch(object element)
+        public int BinarySearch(Entry element)
         {
-            return _entries is null
-                ? -1
-                : Array.BinarySearch(_entries, 0, _count, element, this);
+            return _entries.BinarySearch(index: 0, Count, element, this);
         }
 
         /// <summary>
@@ -493,47 +297,27 @@ namespace System.Windows.Forms
         /// </summary>
         public void Sort()
         {
-            if (_entries is null)
-            {
-                throw new ArgumentNullException(nameof(_entries));
-            }
-
-            Array.Sort(_entries, 0, _count, this);
+            _entries.Sort(this);
         }
 
-        public void Sort(Array externalArray)
+        int IComparer<Entry>.Compare(Entry? entry1, Entry? entry2)
         {
-            Array.Sort(externalArray, this);
-        }
-
-        int IComparer.Compare(object? item1, object? item2)
-        {
-            if (item1 is null)
+            if (entry1 is null)
             {
-                if (item2 is null)
+                if (entry2 is null)
                 {
                     return 0; //both null, then they are equal
                 }
 
                 return -1; //item1 is null, but item2 is valid (greater)
             }
-            if (item2 is null)
+            if (entry2 is null)
             {
                 return 1; //item2 is null, so item 1 is greater
             }
 
-            if (item1 is Entry entry1)
-            {
-                item1 = entry1.item;
-            }
-
-            if (item2 is Entry entry2)
-            {
-                item2 = entry2.item;
-            }
-
-            string itemName1 = _listControl.GetItemText(item1);
-            string itemName2 = _listControl.GetItemText(item2);
+            string itemName1 = _listControl.GetItemText(entry1.Item);
+            string itemName2 = _listControl.GetItemText(entry2.Item);
 
             CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
             return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);

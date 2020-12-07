@@ -44,32 +44,22 @@ namespace System.Windows.Forms
 
                 while (true)
                 {
-                    if (_current < _items._count - 1)
+                    if (_current < _items.Count - 1)
                     {
                         _current++;
 
-                        if (_items._entries is null)
-                        {
-                            throw new ArgumentNullException(nameof(_entries));
-                        }
-
                         var entry = _items._entries[_current];
-
-                        if (entry is null)
-                        {
-                            throw new ArgumentNullException(nameof(entry));
-                        }
 
                         if (_anyBit)
                         {
-                            if ((entry.state & _state) != 0)
+                            if ((entry.State & _state) != 0)
                             {
                                 return true;
                             }
                         }
                         else
                         {
-                            if ((entry.state & _state) == _state)
+                            if ((entry.State & _state) == _state)
                             {
                                 return true;
                             }
@@ -77,7 +67,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        _current = _items._count;
+                        _current = _items.Count;
                         return false;
                     }
                 }
@@ -103,24 +93,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_current == -1 || _current == _items._count)
+                    if (_current == -1 || _current == _items.Count)
                     {
                         throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                     }
 
-                    if (_items._entries is null)
-                    {
-                        throw new ArgumentNullException(nameof(_entries));
-                    }
-
-                    Entry? entry = _items._entries[_current];
-
-                    if (entry is null)
-                    {
-                        throw new ArgumentNullException(nameof(entry));
-                    }
-
-                    return entry.item;
+                    return _items._entries[_current].Item;
                 }
             }
         }

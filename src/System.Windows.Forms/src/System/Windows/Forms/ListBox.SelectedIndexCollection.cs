@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                 get
                 {
                     object identifier = InnerArray.GetEntryObject(index, SelectedObjectCollection.SelectedObjectMask);
-                    return InnerArray.IndexOfIdentifier(identifier, 0);
+                    return InnerArray.IndexOf(identifier);
                 }
             }
 
