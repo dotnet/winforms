@@ -30,7 +30,9 @@ namespace System.Windows.Forms
             }
 
             private int CurrentIndex
-                => Array.IndexOf((Array)_owningListBox.Items.InnerArray.Entries, _itemEntry);
+                => _owningListBox.Items.InnerArray.Entries is null
+                    ? throw new ArgumentNullException(nameof(_owningListBox.Items.InnerArray.Entries))
+                    : Array.IndexOf((Array)_owningListBox.Items.InnerArray.Entries, _itemEntry);
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
 

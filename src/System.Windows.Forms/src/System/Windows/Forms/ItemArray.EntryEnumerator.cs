@@ -47,16 +47,29 @@ namespace System.Windows.Forms
                     if (_current < _items._count - 1)
                     {
                         _current++;
+
+                        if (_items._entries is null)
+                        {
+                            throw new ArgumentNullException(nameof(_entries));
+                        }
+
+                        var entry = _items._entries[_current];
+
+                        if (entry is null)
+                        {
+                            throw new ArgumentNullException(nameof(entry));
+                        }
+
                         if (_anyBit)
                         {
-                            if ((_items._entries[_current].state & _state) != 0)
+                            if ((entry.state & _state) != 0)
                             {
                                 return true;
                             }
                         }
                         else
                         {
-                            if ((_items._entries[_current].state & _state) == _state)
+                            if ((entry.state & _state) == _state)
                             {
                                 return true;
                             }
@@ -95,7 +108,19 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                     }
 
-                    return _items._entries[_current].item;
+                    if (_items._entries is null)
+                    {
+                        throw new ArgumentNullException(nameof(_entries));
+                    }
+
+                    Entry? entry = _items._entries[_current];
+
+                    if (entry is null)
+                    {
+                        throw new ArgumentNullException(nameof(entry));
+                    }
+
+                    return entry.item;
                 }
             }
         }
