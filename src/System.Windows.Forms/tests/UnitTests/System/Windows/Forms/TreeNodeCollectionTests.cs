@@ -115,6 +115,18 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>(() => collection[0] = nodeOfAnotherTreeView);
         }
 
+        [WinFormsFact]
+        public void TreeNodeCollection_Item_SetTreeNodeReplacesExistingOne()
+        {
+            using var treeView = new TreeView();
+            IntPtr forcedHandle = treeView.Handle;
+            TreeNodeCollection collection = treeView.Nodes;
+            collection.Add("Node 1");
+            collection[0] = new TreeNode("New node 1");
+            Assert.Equal(1, treeView.nodeTable.Count);
+            Assert.Equal(1, collection.Count);
+        }
+
         [WinFormsTheory]
         [InlineData("name2")]
         [InlineData("NAME2")]

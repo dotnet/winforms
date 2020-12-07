@@ -83,6 +83,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
+                tv.nodeTable.Remove(actual.handle);
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
