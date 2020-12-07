@@ -3711,7 +3711,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataGridView_RowAddedNotification">
         <source>Row {0} is added</source>
-        <target state="new">Row {0} is added</target>
+        <target state="translated">Добавлена строка {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -4731,7 +4731,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">{0}
     Версия сборки: {1}
     Версия Win32: {2}
-    CodeBase: {3}
+    CodeBase (база кода): {3}
 </target>
         <note />
       </trans-unit>
@@ -8234,7 +8234,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
-        <target state="translated">&lt;невозможно найти строку ресурса "PropertyGridRemoveStaticTabs"&gt;</target>
+        <target state="translated">невозможно найти строку ресурса "PropertyGridRemoveStaticTabs"</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridResetValue">

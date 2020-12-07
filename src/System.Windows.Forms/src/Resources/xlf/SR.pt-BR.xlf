@@ -3711,7 +3711,7 @@ Para substituir a caixa de diálogo padrão, manipule o evento DataError.</targe
       </trans-unit>
       <trans-unit id="DataGridView_RowAddedNotification">
         <source>Row {0} is added</source>
-        <target state="new">Row {0} is added</target>
+        <target state="translated">A linha {0} foi adicionada</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">

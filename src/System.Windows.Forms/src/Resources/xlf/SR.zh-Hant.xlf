@@ -3711,7 +3711,7 @@ To replace this default dialog please handle the DataError event.</source>
       </trans-unit>
       <trans-unit id="DataGridView_RowAddedNotification">
         <source>Row {0} is added</source>
-        <target state="new">Row {0} is added</target>
+        <target state="translated">資料列 {0} 已新增</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -4730,7 +4730,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">{0}
     組件版本: {1}
     Win32 版本: {2}
-    程式碼庫: {3}
+    程式碼基底: {3}
 </target>
         <note />
       </trans-unit>
