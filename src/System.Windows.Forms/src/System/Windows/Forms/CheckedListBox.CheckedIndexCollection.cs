@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 get
                 {
                     object identifier = InnerArray.GetEntryObject(index, CheckedItemCollection.s_anyMask);
-                    return InnerArray.IndexOfIdentifier(identifier, 0);
+                    return InnerArray.IndexOf(identifier, stateMask: 0);
                 }
             }
 

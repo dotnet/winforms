@@ -7,6 +7,8 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 
+using static System.Windows.Forms.ItemArray;
+
 namespace System.Windows.Forms
 {
     public partial class ListBox
@@ -56,7 +58,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the number of items.
             /// </summary>
-            public int Count => InnerArray.GetCount(0);
+            public int Count => InnerArray.Count;
 
             /// <summary>
             ///  Internal access to the actual data store.
@@ -112,9 +114,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
+                    Entry entry = InnerArray.GetEntry(item);
                     if (Count > 0)
                     {
-                        index = InnerArray.BinarySearch(item);
+                        index = InnerArray.BinarySearch(entry);
                         if (index < 0)
                         {
                             // getting the index of the first element that is larger than the search value
@@ -128,7 +131,7 @@ namespace System.Windows.Forms
                     }
 
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
-                    InnerArray.Insert(index, item);
+                    InnerArray.InsertEntry(index, entry);
                 }
                 bool successful = false;
 
@@ -224,12 +227,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (index < 0 || index >= InnerArray.GetCount(0))
+                    if (index < 0 || index >= InnerArray.Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return InnerArray.GetItem(index, 0);
+                    return InnerArray.GetItem(index);
                 }
                 set
                 {
@@ -264,7 +267,7 @@ namespace System.Windows.Forms
                 int cnt = _owner.Items.Count;
                 for (int i = 0; i < cnt; i++)
                 {
-                    _owner.UpdateMaxItemWidth(InnerArray.GetItem(i, 0), true);
+                    _owner.UpdateMaxItemWidth(InnerArray.GetItem(i), true);
                 }
 
                 if (_owner.IsHandleCreated)
@@ -293,10 +296,10 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(destination));
                 }
 
-                int count = InnerArray.GetCount(0);
+                int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    destination[i + arrayIndex] = InnerArray.GetItem(i, 0);
+                    destination[i + arrayIndex] = InnerArray.GetItem(i);
                 }
             }
 
@@ -307,10 +310,10 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(destination));
                 }
 
-                int count = InnerArray.GetCount(0);
+                int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    destination.SetValue(InnerArray.GetItem(i, 0), i + index);
+                    destination.SetValue(InnerArray.GetItem(i), i + index);
                 }
             }
 
@@ -326,7 +329,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                return InnerArray.IndexOf(value, 0);
+                return InnerArray.IndexOf(value);
             }
 
             int IList.IndexOf(object? value) => IndexOf(value!);
@@ -338,7 +341,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                return InnerArray.IndexOfIdentifier(value, 0);
+                return InnerArray.IndexOf(value);
             }
 
             /// <summary>
@@ -354,7 +357,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (index < 0 || index > InnerArray.GetCount(0))
+                if (index < 0 || index > InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
@@ -407,7 +410,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                int index = InnerArray.IndexOf(value, 0);
+                int index = InnerArray.IndexOf(value);
                 if (index != -1)
                 {
                     RemoveAt(index);
@@ -423,12 +426,12 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (index < 0 || index >= InnerArray.GetCount(0))
+                if (index < 0 || index >= InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
+                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index), true);
 
                 // Update InnerArray before calling NativeRemoveAt to ensure that when
                 // SelectedIndexChanged is raised (by NativeRemoveAt), InnerArray's state matches wrapped LB state.
@@ -449,12 +452,12 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                if (index < 0 || index >= InnerArray.GetCount(0))
+                if (index < 0 || index >= InnerArray.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
+                _owner.UpdateMaxItemWidth(InnerArray.GetItem(index), true);
                 InnerArray.SetItem(index, value);
 
                 // If the native control has been created, and the display text of the new list item object

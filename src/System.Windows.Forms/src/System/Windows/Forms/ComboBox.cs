@@ -3060,7 +3060,7 @@ namespace System.Windows.Forms
             else if (savedItems != null)
             {
                 newItems = new object[savedItems.Count];
-                savedItems.CopyTo(newItems, 0);
+                savedItems.CopyTo(newItems, arrayIndex: 0);
             }
             BeginUpdate();
             try

@@ -109,7 +109,7 @@ namespace System.Windows.Forms
 
             internal int IndexOfIdentifier(object item)
             {
-                return InnerArray.IndexOfIdentifier(item, s_anyMask);
+                return InnerArray.IndexOf(item, s_anyMask);
             }
 
             int IList.Add(object value)

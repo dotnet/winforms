@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             }
 
             private int CurrentIndex
-                => Array.IndexOf((Array)_owningListBox.Items.InnerArray.Entries, _itemEntry);
+                => _owningListBox.Items.InnerArray.IndexOf(_itemEntry);
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _owningListBox.GetItemText(_itemEntry.item);
+                    return _owningListBox.GetItemText(_itemEntry.Item);
                 }
                 set => base.Name = value;
             }

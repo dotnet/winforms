@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -88,10 +88,10 @@ namespace System.Windows.Forms
                 // that it is selected, we get back the virtualized index into this collection.  Indexes on
                 // this collection match those on the SelectedObjectCollection.
                 if (selectedIndex >= 0 &&
-                    selectedIndex < InnerArray.GetCount(0) &&
+                    selectedIndex < InnerArray.Count &&
                     InnerArray.GetState(selectedIndex, SelectedObjectCollection.SelectedObjectMask))
                 {
-                    return InnerArray.IndexOf(InnerArray.GetItem(selectedIndex, 0), SelectedObjectCollection.SelectedObjectMask);
+                    return InnerArray.IndexOf(InnerArray.GetItem(selectedIndex), SelectedObjectCollection.SelectedObjectMask);
                 }
 
                 return -1;
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                 get
                 {
                     object identifier = InnerArray.GetEntryObject(index, SelectedObjectCollection.SelectedObjectMask);
-                    return InnerArray.IndexOfIdentifier(identifier, 0);
+                    return InnerArray.IndexOf(identifier);
                 }
             }
 
