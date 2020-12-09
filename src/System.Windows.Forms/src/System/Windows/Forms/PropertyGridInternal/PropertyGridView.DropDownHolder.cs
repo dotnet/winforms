@@ -32,9 +32,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             private Rectangle dragBaseRect = Rectangle.Empty; // the original bounds of our control.
             private int currentMoveType = MoveTypeNone; // what type of move are we processing? left, bottom, or both?
 
+            private readonly static int ResizeGripSize = SystemInformation.HorizontalScrollBarHeight; // the size of the 4-way resize grip at outermost corner of the resize bar
             private readonly static int ResizeBarSize = ResizeGripSize + 1; // the thickness of the resize bar
             private readonly static int ResizeBorderSize = ResizeBarSize / 2; // the thickness of the 2-way resize area along the outer edge of the resize bar
-            private readonly static int ResizeGripSize = SystemInformation.HorizontalScrollBarHeight; // the size of the 4-way resize grip at outermost corner of the resize bar
             private readonly static Size MinDropDownSize =
                 new Size(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4); // the minimum size for the control.
             private Bitmap sizeGripGlyph; // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
@@ -223,8 +223,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return sizeGripGlyph;
                 }
 
-                // create our drawing surface based on the current graphics context.
-                //
+                // Create our drawing surface based on the current graphics context.
                 sizeGripGlyph = new Bitmap(ResizeGripSize, ResizeGripSize, g);
 
                 using (Graphics glyphGraphics = Graphics.FromImage(sizeGripGlyph))
@@ -246,6 +245,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ControlPaint.DrawSizeGrip(glyphGraphics, BackColor, 0, 0, ResizeGripSize, ResizeGripSize);
                     glyphGraphics.ResetTransform();
                 }
+
                 sizeGripGlyph.MakeTransparent(BackColor);
                 return sizeGripGlyph;
             }
