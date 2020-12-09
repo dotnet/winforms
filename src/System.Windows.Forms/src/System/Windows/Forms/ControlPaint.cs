@@ -1903,8 +1903,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws a size grip at the given location. The color of the size grip is based
-        ///  on the given background color.
+        ///  Draws a size grip at the given location. The color of the size grip is based on the given background color.
         /// </summary>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, Rectangle bounds)
             => DrawSizeGrip(graphics, backColor, bounds.X, bounds.Y, bounds.Width, bounds.Height);
@@ -1917,7 +1916,19 @@ namespace System.Windows.Forms
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
 
-            DrawSizeGrip((IDeviceContext)graphics, backColor, x, y, width, height);
+            using var bright = GdiPlusCache.GetCachedPenScope(LightLight(backColor));
+            using var dark = GdiPlusCache.GetCachedPenScope(Dark(backColor));
+
+            int minDim = Math.Min(width, height);
+            int right = x + width - 1;
+            int bottom = y + height - 2;
+
+            for (int i = 0; i < minDim - 4; i += 4)
+            {
+                graphics.DrawLine(dark, right - (i + 1) - 2, bottom, right, bottom - (i + 1) - 2);
+                graphics.DrawLine(dark, right - (i + 2) - 2, bottom, right, bottom - (i + 2) - 2);
+                graphics.DrawLine(bright, right - (i + 3) - 2, bottom, right, bottom - (i + 3) - 2);
+            }
         }
 
         internal static void DrawSizeGrip(
