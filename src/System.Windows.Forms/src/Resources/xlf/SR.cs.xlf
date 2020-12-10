@@ -10428,7 +10428,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="TreeNodeBoundToAnotherTreeView">
         <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <target state="translated">Uzel TreeNode je už svázaný s jiným zobrazením TreeView. Nejdříve je nutné ho klonovat nebo odebrat z aktuálního umístění.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">

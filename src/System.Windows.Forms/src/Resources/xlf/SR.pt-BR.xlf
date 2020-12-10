@@ -10428,7 +10428,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TreeNodeBoundToAnotherTreeView">
         <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <target state="translated">O TreeNode já está associado a outra TreeView. Primeiro você precisa removê-lo do local atual ou cloná-lo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">

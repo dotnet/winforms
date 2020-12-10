@@ -10428,7 +10428,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TreeNodeBoundToAnotherTreeView">
         <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <target state="translated">L'elemento TreeNode è già collegato a un altro elemento TreeView. È prima necessario rimuoverlo dalla posizione corrente o clonarlo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">

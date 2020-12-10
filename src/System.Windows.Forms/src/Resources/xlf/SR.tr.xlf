@@ -10428,7 +10428,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="TreeNodeBoundToAnotherTreeView">
         <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <target state="translated">TreeNode zaten başka bir TreeView'a bağlı. Önce onu geçerli konumundan kaldırmalı ya da kopyalamalısınız.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
