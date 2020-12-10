@@ -81,6 +81,16 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TreeNodeCollection_Item_SetNullTreeNode_ThrowsArgumentNullException()
+        {
+            using var treeView = new TreeView();
+            TreeNodeCollection collection = treeView.Nodes;
+            TreeNode node = new TreeNode("Node 0");
+            collection.Add(node);
+            Assert.Throws<ArgumentNullException>(() => collection[0] = null);
+        }
+
+        [WinFormsFact]
         public void TreeNodeCollection_Item_SetTreeNodeAlreadyAdded_Noop()
         {
             using var treeView = new TreeView();
