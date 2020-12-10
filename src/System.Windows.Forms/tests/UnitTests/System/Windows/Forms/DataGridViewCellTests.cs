@@ -584,6 +584,34 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void DataGridViewCell_InitializeEditingControl_Set_Parent()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            dataGridView.CreateControl();
+            using DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
+            dataGridView.Columns.Add(column1);
+            dataGridView.Rows.Add();
+            var cell = dataGridView.Rows[0].Cells[0];
+            cell.Selected = true;
+
+            // Attach EditingControl.AccessibilityObject to cell
+            dataGridView.BeginEdit(false);
+            Assert.NotNull(dataGridView.EditingControl.AccessibilityObject.Parent);
+            Assert.Same(cell.AccessibilityObject, dataGridView.EditingControl.AccessibilityObject.Parent);
+
+            // Detach EditingControl.AccessibilityObject
+            dataGridView.EndEdit();
+            Assert.Null(dataGridView.EditingControlAccessibleObject);
+
+            // Reattach EditingControl.AccessibilityObject to cell
+            dataGridView.BeginEdit(false);
+            Assert.NotNull(dataGridView.EditingControl.AccessibilityObject.Parent);
+            Assert.Same(cell.AccessibilityObject, dataGridView.EditingControl.AccessibilityObject.Parent);
+
+            dataGridView.EndEdit();
+        }
+
+        [Fact]
         public void DataGridViewCell_IsInEditMode_GetSharedRow_ThrowsInvalidOperationExceptio()
         {
             var dataGridView = new DataGridView { ColumnCount = 1 };
