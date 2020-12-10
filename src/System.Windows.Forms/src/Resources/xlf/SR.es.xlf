@@ -10426,6 +10426,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Error en BeginEdit debido a que la propiedad LabelEdit es False.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">El elemento TreeNode ya está enlazado a otro elemento TreeView. Debe quitarlo primero de la ubicación actual o clonarlo.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
         <source>Indicates whether the tree node is in a checked state.</source>
         <target state="translated">Indica si el nodo de árbol se encuentra en el estado de activación.</target>
@@ -10434,11 +10439,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
         <target state="translated">Se ha realizado una referencia circular. No se puede agregar un elemento TreeNode como descendiente de sí mismo.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TreeNodeBoundToAnotherTreeView">
-        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="translated">El TreeNode ya está asociado a otro TreeView. Debe quitarlo primero de su ubicación actual o clonarlo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

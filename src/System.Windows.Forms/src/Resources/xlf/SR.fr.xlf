@@ -10428,7 +10428,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TreeNodeBoundToAnotherTreeView">
         <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <target state="translated">TreeNode est déjà lié à un autre TreeView. Vous devez d'abord le supprimer de son emplacement actuel ou le cloner.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">

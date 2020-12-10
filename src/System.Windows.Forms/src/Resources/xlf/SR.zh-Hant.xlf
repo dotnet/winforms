@@ -10428,7 +10428,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TreeNodeBoundToAnotherTreeView">
         <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
-        <target state="new">The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</target>
+        <target state="translated">TreeNode 已繫結到另一個 TreeView。您必須先將其從目前的位置移除，或加以複製。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
