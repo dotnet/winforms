@@ -66,6 +66,11 @@ namespace System.Windows.Forms
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
 
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 if (value.treeView != null && value.treeView.Handle != tv.Handle)
                 {
                     throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
