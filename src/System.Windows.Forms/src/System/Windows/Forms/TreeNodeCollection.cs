@@ -63,13 +63,13 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                TreeView tv = owner.treeView;
-                TreeNode actual = owner.children[index];
-
                 if (value is null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
+                TreeView tv = owner.treeView;
+                TreeNode actual = owner.children[index];
 
                 if (value.treeView != null && value.treeView.Handle != tv.Handle)
                 {
