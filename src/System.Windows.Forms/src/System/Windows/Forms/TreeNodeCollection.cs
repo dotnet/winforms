@@ -63,6 +63,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
+                if (value is null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
 
@@ -83,6 +88,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
+                tv.nodeTable.Remove(actual.handle);
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
