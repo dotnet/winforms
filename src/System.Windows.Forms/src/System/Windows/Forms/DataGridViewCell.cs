@@ -2589,6 +2589,12 @@ namespace System.Windows.Forms
 
             Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
             Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
+
+            if (AccessibleRestructuringNeeded)
+            {
+                dgv.EditingControlAccessibleObject.SetParent(AccessibilityObject);
+                AccessibilityObject.SetDetachableChild(dgv.EditingControlAccessibleObject);
+            }
         }
 
         protected virtual bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
