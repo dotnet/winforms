@@ -5,45 +5,42 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using static System.Windows.Forms.ComboBox.ObjectCollection;
 
 namespace System.Windows.Forms
 {
     public partial class ComboBox
     {
         [ListBindable(false)]
-        public class ObjectCollection : IList
+        public partial class ObjectCollection : IList, IComparer<Entry>
         {
             private readonly ComboBox _owner;
-            private ArrayList _innerList;
-            private IComparer _comparer;
+            private readonly ComboBoxAccessibleObject _ownerComboBoxAccessibleObject;
+            private List<Entry> _innerList;
 
             public ObjectCollection(ComboBox owner)
             {
                 _owner = owner;
-            }
 
-            private IComparer Comparer
-            {
-                get
+                if (_owner.AccessibilityObject is null)
                 {
-                    if (_comparer is null)
-                    {
-                        _comparer = new ItemComparer(_owner);
-                    }
-                    return _comparer;
+                    throw new ArgumentException(nameof(owner));
                 }
+
+                _ownerComboBoxAccessibleObject = (ComboBoxAccessibleObject)_owner.AccessibilityObject;
             }
 
-            private ArrayList InnerList
+            internal List<Entry> InnerList
             {
                 get
                 {
                     if (_innerList is null)
                     {
-                        _innerList = new ArrayList();
+                        _innerList = new List<Entry>();
                     }
                     return _innerList;
                 }
@@ -52,13 +49,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Retrieves the number of items.
             /// </summary>
-            public int Count
-            {
-                get
-                {
-                    return InnerList.Count;
-                }
-            }
+            public int Count => InnerList.Count;
 
             object ICollection.SyncRoot
             {
@@ -121,18 +112,19 @@ namespace System.Windows.Forms
                 int index = -1;
                 if (!_owner._sorted)
                 {
-                    InnerList.Add(item);
+                    InnerList.Add(new Entry(item));
                 }
                 else
                 {
-                    index = InnerList.BinarySearch(item, Comparer);
+                    Entry entry = item is Entry entryItem ? entryItem : new Entry(item);
+                    index = InnerList.BinarySearch(index: 0, Count, entry, this);
                     if (index < 0)
                     {
                         index = ~index; // getting the index of the first element that is larger than the search value
                     }
 
-                    Debug.Assert(index >= 0 && index <= InnerList.Count, "Wrong index for insert");
-                    InnerList.Insert(index, item);
+                    Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
+                    InnerList.Insert(index, entry);
                 }
                 bool successful = false;
 
@@ -147,7 +139,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        index = InnerList.Count - 1;
+                        index = Count - 1;
                         if (_owner.IsHandleCreated)
                         {
                             _owner.NativeAdd(item);
@@ -159,7 +151,8 @@ namespace System.Windows.Forms
                 {
                     if (!successful)
                     {
-                        InnerList.Remove(item);
+                        _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Remove(InnerList[index]);
+                        Remove(item);
                     }
                 }
 
@@ -213,12 +206,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (index < 0 || index >= InnerList.Count)
+                    if (index < 0 || index >= Count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return InnerList[index];
+                    return InnerList[index].Item;
                 }
                 set
                 {
@@ -244,6 +237,9 @@ namespace System.Windows.Forms
                 }
 
                 InnerList.Clear();
+
+                _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Clear();
+
                 _owner._selectedIndex = -1;
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
@@ -261,31 +257,48 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                InnerList.CopyTo(destination, arrayIndex);
+                if (destination is null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
+                int count = InnerList.Count;
+
+                if (arrayIndex < 0 || count + arrayIndex > destination.Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, string.Format(SR.InvalidArgument, nameof(arrayIndex), arrayIndex));
+                }
+
+                for (int i = 0; i < count; i++)
+                {
+                    destination[i + arrayIndex] = InnerList[i].Item;
+                }
             }
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                InnerList.CopyTo(destination, index);
+                if (destination is null)
+                {
+                    throw new ArgumentNullException(nameof(destination));
+                }
+
+                int count = InnerList.Count;
+
+                if (index < 0 || count + index > destination.Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                }
+
+                for (int i = 0; i < count; i++)
+                {
+                    destination.SetValue(InnerList[i], i + index);
+                }
             }
 
             /// <summary>
             ///  Returns an enumerator for the ComboBox Items collection.
             /// </summary>
-            public IEnumerator GetEnumerator()
-            {
-                return InnerList.GetEnumerator();
-            }
-
-            public int IndexOf(object value)
-            {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                return InnerList.IndexOf(value);
-            }
+            public IEnumerator GetEnumerator() => new EntryEnumerator(InnerList);
 
             /// <summary>
             ///  Adds an item to the combo box. For an unsorted combo box, the item is
@@ -305,7 +318,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(item));
                 }
 
-                if (index < 0 || index > InnerList.Count)
+                if (index < 0 || index > Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
@@ -319,7 +332,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    InnerList.Insert(index, item);
+                    InnerList.Insert(index, new Entry(item));
                     if (_owner.IsHandleCreated)
                     {
                         bool successful = false;
@@ -340,6 +353,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
+                                _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Remove(InnerList[index]);
                                 InnerList.RemoveAt(index);
                             }
                         }
@@ -354,7 +368,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (index < 0 || index >= InnerList.Count)
+                if (index < 0 || index >= Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
@@ -364,7 +378,9 @@ namespace System.Windows.Forms
                     _owner.NativeRemoveAt(index);
                 }
 
+                _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Remove(InnerList[index]);
                 InnerList.RemoveAt(index);
+
                 if (!_owner.IsHandleCreated && index < _owner._selectedIndex)
                 {
                     _owner._selectedIndex--;
@@ -381,7 +397,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Remove(object value)
             {
-                int index = InnerList.IndexOf(value);
+                int index = IndexOf(value);
 
                 if (index != -1)
                 {
@@ -391,12 +407,12 @@ namespace System.Windows.Forms
 
             internal void SetItemInternal(int index, object value)
             {
-                if (index < 0 || index >= InnerList.Count)
+                if (index < 0 || index >= Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                InnerList[index] = value ?? throw new ArgumentNullException(nameof(value));
+                InnerList[index].Item = value ?? throw new ArgumentNullException(nameof(value));
 
                 // If the native control has been created, and the display text of the new list item object
                 // is different to the current text in the native list item, recreate the native list item...
@@ -429,6 +445,31 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+            }
+
+            public int IndexOf(object value)
+            {
+                int virtualIndex = -1;
+
+                foreach (Entry entry in InnerList)
+                {
+                    virtualIndex++;
+                    if ((value is Entry itemEntry && entry == itemEntry) || entry.Item.Equals(value))
+                    {
+                        return virtualIndex;
+                    }
+                }
+
+                return -1;
+            }
+
+            int IComparer<Entry>.Compare(Entry entry1, Entry entry2)
+            {
+                string itemName1 = _owner.GetItemText(entry1.Item);
+                string itemName2 = _owner.GetItemText(entry2.Item);
+
+                CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
+                return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
             }
         } // end ObjectCollection
     }

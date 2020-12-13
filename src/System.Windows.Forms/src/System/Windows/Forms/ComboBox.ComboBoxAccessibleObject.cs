@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -228,16 +229,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var selectedItem = _owningComboBox.SelectedItem;
-                if (selectedItem is null)
-                {
-                    return;
-                }
-
-                if (ItemAccessibleObjects[selectedItem] is ComboBoxItemAccessibleObject itemAccessibleObject)
-                {
-                    itemAccessibleObject.SetFocus();
-                }
+                GetSelectedComboBoxItemAccessibleObject()?.SetFocus();
             }
 
             internal void SetComboBoxItemSelection()
@@ -247,16 +239,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                var selectedItem = _owningComboBox.SelectedItem;
-                if (selectedItem is null)
-                {
-                    return;
-                }
-
-                if (ItemAccessibleObjects[selectedItem] is ComboBoxItemAccessibleObject itemAccessibleObject)
-                {
-                    itemAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
-                }
+                GetSelectedComboBoxItemAccessibleObject()?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
             }
 
             internal override void SetFocus()
@@ -269,6 +252,21 @@ namespace System.Windows.Forms
                 base.SetFocus();
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
+
+            private ComboBoxItemAccessibleObject? GetSelectedComboBoxItemAccessibleObject()
+            {
+                // We should use the SelectedIndex property instead of the SelectedItem to avoid the problem of getting
+                // the incorrect item when the list contains duplicate items https://github.com/dotnet/winforms/issues/3590
+                int selectedIndex = _owningComboBox.SelectedIndex;
+
+                if (selectedIndex < 0 || selectedIndex > _owningComboBox.Items.Count - 1)
+                {
+                    return null;
+                }
+
+                Entry selectedItem = _owningComboBox.Entries[selectedIndex];
+                return ItemAccessibleObjects.GetComboBoxItemAccessibleObject(selectedItem);
             }
 
             private AccessibleObject? GetFirstChild()

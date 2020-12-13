@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -33,7 +32,7 @@ namespace System.Windows.Forms
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 var systemIAccessible = GetSystemIAccessibleInternal();
                 if (systemIAccessible != null)
@@ -57,7 +56,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (!_owningComboBox.IsHandleCreated)
                 {
@@ -103,16 +102,21 @@ namespace System.Windows.Forms
                 }
             }
 
-            public AccessibleObject GetChildFragment(int index)
+            public AccessibleObject? GetChildFragment(int index)
             {
                 if (index < 0 || index >= _owningComboBox.Items.Count)
                 {
                     return null;
                 }
 
-                var item = _owningComboBox.Items[index];
-                var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
-                return comboBoxAccessibleObject.ItemAccessibleObjects[item] as AccessibleObject;
+                if (_owningComboBox.AccessibilityObject is not  ComboBoxAccessibleObject comboBoxAccessibleObject)
+                {
+                    return null;
+                }
+
+                Entry item = _owningComboBox.Entries[index];
+
+                return item is null ? null : comboBoxAccessibleObject.ItemAccessibleObjects.GetComboBoxItemAccessibleObject(item);
             }
 
             public int GetChildFragmentCount()
@@ -125,7 +129,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -167,12 +171,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment GetFocus()
+            internal override UiaCore.IRawElementProviderFragment? GetFocus()
             {
                 return GetFocused();
             }
 
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
                 if (!_owningComboBox.IsHandleCreated)
                 {
@@ -192,7 +196,7 @@ namespace System.Windows.Forms
 
                 int selectedIndex = _owningComboBox.SelectedIndex;
 
-                AccessibleObject itemAccessibleObject = GetChildFragment(selectedIndex);
+                AccessibleObject? itemAccessibleObject = GetChildFragment(selectedIndex);
 
                 if (itemAccessibleObject != null)
                 {
