@@ -44,6 +44,13 @@ namespace System.Windows.Forms
                 {
                     ChildAccessibleObject listAccessibleObject = _owningComboBox.ChildListAccessibleObject;
                     int currentIndex = GetCurrentIndex();
+                    if (_owningComboBox.IsHandleCreated)
+                    {
+                        int firstVisibleIndex = (int)(long)User32.SendMessageW(_owningComboBox, (User32.WM)User32.CB.GETTOPINDEX);
+
+                        // Using the first visible index, we make an index shift, which helps to draw a rectangle with the correct position
+                        currentIndex -= firstVisibleIndex;
+                    }
 
                     Rectangle parentRect = listAccessibleObject.BoundingRectangle;
                     int left = parentRect.Left;
