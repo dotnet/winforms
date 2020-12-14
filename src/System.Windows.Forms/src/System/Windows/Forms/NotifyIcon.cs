@@ -251,7 +251,7 @@ namespace System.Windows.Forms
 
                 if (value != null && !value.Equals(text))
                 {
-                    if (value != null && value.Length > 63)
+                    if (value != null && value.Length > 127)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }

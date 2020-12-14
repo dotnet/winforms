@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { visible, icon, null, string.Empty };
                     yield return new object[] { visible, icon, string.Empty, string.Empty };
                     yield return new object[] { visible, icon, "text", "text" };
-                    yield return new object[] { visible, icon, new string('a', 63), new string('a', 63) };
+                    yield return new object[] { visible, icon, new string('a', 127), new string('a', 127) };
                 }
             }
         }
@@ -390,13 +390,13 @@ namespace System.Windows.Forms.Tests
                 }
 
                 yield return new object[] { visible, null, "text", "text", 0 };
-                yield return new object[] { visible, null, new string('a', 63), new string('a', 63), 0 };
+                yield return new object[] { visible, null, new string('a', 127), new string('a', 127), 0 };
             }
 
             yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 0 };
-            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 63), new string('a', 63), 0 };
+            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 127), new string('a', 127), 0 };
             yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 1 };
-            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 63), new string('a', 63), 1 };
+            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 127), new string('a', 127), 1 };
         }
 
         [WinFormsTheory]
