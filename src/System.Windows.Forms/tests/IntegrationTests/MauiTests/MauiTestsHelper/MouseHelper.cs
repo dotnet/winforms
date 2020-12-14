@@ -12,6 +12,11 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
     public static class MouseHelper
     {
+        public static void ChangeMousePosition(int x, int y)
+        {
+            SendMouseInput(x, y, MOUSEEVENTF.MOVE | MOUSEEVENTF.ABSOLUTE);
+        }
+
         public static void SendClick(int x, int y)
         {
             var previousPosition = new Point();
@@ -20,8 +25,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             bool mouseSwapped = GetSystemMetrics(SystemMetric.SM_SWAPBUTTON) != 0;
 
             SendMouseInput(x, y, MOUSEEVENTF.MOVE | MOUSEEVENTF.ABSOLUTE);
-            SendMouseInput(0, 0, mouseSwapped ? MOUSEEVENTF.RIGHTDOWN : MOUSEEVENTF.LEFTDOWN);
-            SendMouseInput(0, 0, mouseSwapped ? MOUSEEVENTF.RIGHTUP : MOUSEEVENTF.LEFTUP);
+            SendMouseInput(x: 0, y: 0, mouseSwapped ? MOUSEEVENTF.RIGHTDOWN : MOUSEEVENTF.LEFTDOWN);
+            SendMouseInput(x: 0, y: 0, mouseSwapped ? MOUSEEVENTF.RIGHTUP : MOUSEEVENTF.LEFTUP);
 
             Thread.Sleep(50);
 
@@ -30,6 +35,19 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             {
                 SendMouseInput(previousPosition.X, previousPosition.Y, MOUSEEVENTF.MOVE | MOUSEEVENTF.ABSOLUTE);
             }
+        }
+
+        public static void SendDoubleClick(int x, int y)
+        {
+            bool mouseSwapped = GetSystemMetrics(SystemMetric.SM_SWAPBUTTON) != 0;
+            SendMouseInput(x, y, MOUSEEVENTF.MOVE | MOUSEEVENTF.ABSOLUTE);
+            SendMouseInput(x: 0, y: 0, mouseSwapped ? MOUSEEVENTF.RIGHTDOWN : MOUSEEVENTF.LEFTDOWN);
+            SendMouseInput(x: 0, y: 0, mouseSwapped ? MOUSEEVENTF.RIGHTUP : MOUSEEVENTF.LEFTUP);
+
+            Thread.Sleep(100);
+
+            SendMouseInput(x: 0, y: 0, mouseSwapped ? MOUSEEVENTF.RIGHTDOWN : MOUSEEVENTF.LEFTDOWN);
+            SendMouseInput(x: 0, y: 0, mouseSwapped ? MOUSEEVENTF.RIGHTUP : MOUSEEVENTF.LEFTUP);
         }
 
         private unsafe static void SendMouseInput(int x, int y, MOUSEEVENTF flags)
@@ -81,11 +99,11 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             SendInput(1, &mouseInput, Marshal.SizeOf(mouseInput));
         }
 
-        public static (int x, int y) GetCenter(System.Drawing.Rectangle rect)
+        public static Point GetCenter(System.Drawing.Rectangle rect)
         {
             int x = rect.Left + ((rect.Right - rect.Left) / 2);
             int y = rect.Top + ((rect.Bottom - rect.Top) / 2);
-            return (x, y);
+            return new Point(x, y);
         }
     }
 }
