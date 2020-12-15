@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -6138,7 +6138,7 @@ Stack trace where the illegal operation occurred was:
     <value>Control does not support transparent background colors.</value>
   </data>
   <data name="TrayIcon_TextTooLong" xml:space="preserve">
-    <value>Text length must be less than 64 characters long.</value>
+    <value>Text length must be less than 128 characters long.</value>
   </data>
   <data name="TreeNodeBackColorDescr" xml:space="preserve">
     <value>The background color of tree node.</value>

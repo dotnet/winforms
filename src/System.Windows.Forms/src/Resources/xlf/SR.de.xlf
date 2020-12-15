@@ -10412,8 +10412,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Der Text muss kürzer als 64 Zeichen sein.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Der Text muss kürzer als 128 Zeichen sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">

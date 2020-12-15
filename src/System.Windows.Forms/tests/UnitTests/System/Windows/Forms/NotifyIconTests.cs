@@ -13,6 +13,8 @@ namespace System.Windows.Forms.Tests
 {
     public class NotifyIconTests : IClassFixture<ThreadExceptionFixture>
     {
+        private const int MaxNotifyIconTextSize = 127;
+
         [WinFormsFact]
         public void NotifyIcon_Ctor_Default()
         {
@@ -338,7 +340,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { visible, icon, null, string.Empty };
                     yield return new object[] { visible, icon, string.Empty, string.Empty };
                     yield return new object[] { visible, icon, "text", "text" };
-                    yield return new object[] { visible, icon, new string('a', 127), new string('a', 127) };
+                    yield return new object[] { visible, icon, new string('a', MaxNotifyIconTextSize), new string('a', MaxNotifyIconTextSize) };
                 }
             }
         }
@@ -390,13 +392,13 @@ namespace System.Windows.Forms.Tests
                 }
 
                 yield return new object[] { visible, null, "text", "text", 0 };
-                yield return new object[] { visible, null, new string('a', 127), new string('a', 127), 0 };
+                yield return new object[] { visible, null, new string('a', MaxNotifyIconTextSize), new string('a', MaxNotifyIconTextSize), 0 };
             }
 
             yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 0 };
-            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 127), new string('a', 127), 0 };
+            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', MaxNotifyIconTextSize), new string('a', MaxNotifyIconTextSize), 0 };
             yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 1 };
-            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 127), new string('a', 127), 1 };
+            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', MaxNotifyIconTextSize), new string('a', MaxNotifyIconTextSize), 1 };
         }
 
         [WinFormsTheory]
@@ -430,7 +432,7 @@ namespace System.Windows.Forms.Tests
         public void NotifyIcon_Text_SetLongValue_ThrowsArgumentOutOfRangeException()
         {
             using var notifyIcon = new NotifyIcon();
-            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', 128));
+            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', MaxNotifyIconTextSize + 1));
         }
 
         [WinFormsTheory]

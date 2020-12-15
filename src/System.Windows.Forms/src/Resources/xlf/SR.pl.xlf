@@ -10412,8 +10412,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Długość tekstu musi być mniejsza niż 64 znaki.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Długość tekstu musi być mniejsza niż 128 znaki.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
