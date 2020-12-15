@@ -430,7 +430,7 @@ namespace System.Windows.Forms.Tests
         public void NotifyIcon_Text_SetLongValue_ThrowsArgumentOutOfRangeException()
         {
             using var notifyIcon = new NotifyIcon();
-            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', 64));
+            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', 128));
         }
 
         [WinFormsTheory]
