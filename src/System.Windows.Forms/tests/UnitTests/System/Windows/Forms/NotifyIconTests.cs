@@ -13,7 +13,6 @@ namespace System.Windows.Forms.Tests
 {
     public class NotifyIconTests : IClassFixture<ThreadExceptionFixture>
     {
-        private const int MaxNotifyIconTextSize = 127;
 
         [WinFormsFact]
         public void NotifyIcon_Ctor_Default()
