@@ -1195,6 +1195,17 @@ namespace System.Windows.Forms
             base.OnHandleDestroyed(e);
         }
 
+        /// <inheritdoc />
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+
+            if (IsHandleCreated)
+            {
+                RecreateHandle();
+            }
+        }
+
         /// <summary>
         ///  Raises the <see cref='ValueChanged'/> event.
         /// </summary>
