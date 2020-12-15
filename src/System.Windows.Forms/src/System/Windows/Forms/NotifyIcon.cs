@@ -13,7 +13,6 @@ using static Interop.Shell32;
 
 namespace System.Windows.Forms
 {
-
     /// <summary>
     ///  Specifies a component that creates
     ///  an icon in the Windows System Tray. This class cannot be inherited.
