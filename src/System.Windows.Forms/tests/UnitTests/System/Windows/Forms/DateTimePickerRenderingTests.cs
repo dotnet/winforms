@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests
             [EMRINTERSECTCLIPRECT] RECT: {0, 0, 200, 23 (LTRB)}
             [EMRBITBLT] Bounds: {0, 0, 199, 22 (LTRB)} Destination: {0, 0, 200, 23 (LTRB)} Rop: SRCCOPY Source DC Color: [R=0, G=120, B=215] (COLOR_HIGHLIGHT)
             [EMREXTSELECTCLIPRGN] Mode: COPY Bounds: {0, 0, 200, 23 (LTRB)} Rects: 1
-	            Rect index 0: {0, 0, 200, 23 (LTRB)}
+               Rect index 0: {0, 0, 200, 23 (LTRB)}
             [EMREOF]
              */
         }
