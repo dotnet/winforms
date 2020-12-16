@@ -10413,8 +10413,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Длина текста должна быть меньше 64 символов.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Длина текста должна быть меньше 128 символов.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">

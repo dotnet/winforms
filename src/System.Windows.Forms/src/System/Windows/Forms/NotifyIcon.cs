@@ -24,6 +24,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionNotifyIcon))]
     public sealed class NotifyIcon : Component
     {
+        internal const int MaxTextSize = 127;
         private static readonly object EVENT_MOUSEDOWN = new object();
         private static readonly object EVENT_MOUSEMOVE = new object();
         private static readonly object EVENT_MOUSEUP = new object();
@@ -251,7 +252,7 @@ namespace System.Windows.Forms
 
                 if (value != null && !value.Equals(text))
                 {
-                    if (value != null && value.Length > 63)
+                    if (value != null && value.Length > MaxTextSize)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }

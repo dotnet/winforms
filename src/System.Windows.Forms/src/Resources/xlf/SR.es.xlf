@@ -10412,8 +10412,8 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">La longitud del texto debe ser inferior a 64 caracteres.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">La longitud del texto debe ser inferior a 128 caracteres.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
