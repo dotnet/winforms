@@ -535,6 +535,8 @@ namespace System.Windows.Forms
                 Properties.SetInteger(s_propComboBoxCellMaxDropDownItems, (int)value);
                 if (OwnsEditingComboBox(RowIndex))
                 {
+                    // The "MaxDropDownItems" property will not work when the "IntegralHeight" property is True (default value)
+                    EditingComboBox.IntegralHeight = false;
                     EditingComboBox.MaxDropDownItems = value;
                 }
             }
@@ -1385,6 +1387,15 @@ namespace System.Windows.Forms
                 h = comboBox.Handle; // make sure that assigning the DataSource property does not assert.
                 comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox.FormattingEnabled = true;
+
+                // If the Properties contain the "s_propComboBoxCellMaxDropDownItems" key, then the user has manually
+                // updated the "MaxDropDownItems" property and we should set the "IntegralHeight" property to False.
+                // The "MaxDropDownItems" property will not work when the "IntegralHeight" property is True (default value)
+                if (Properties.ContainsInteger(s_propComboBoxCellMaxDropDownItems))
+                {
+                    comboBox.IntegralHeight = false;
+                }
+
                 comboBox.MaxDropDownItems = MaxDropDownItems;
                 comboBox.DropDownWidth = DropDownWidth;
                 comboBox.DataSource = null;
