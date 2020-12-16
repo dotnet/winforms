@@ -193,7 +193,6 @@ namespace System.Windows.Forms.Tests
             #endregion
         }
 
-
         [WinFormsFact]
         public unsafe void DateTimePicker_VisualStyles_On_Enabled_Border()
         {
