@@ -211,10 +211,10 @@ namespace System.Windows.Forms.Tests
             control.PrintToMetafile(emf);
 
             DeviceContextState state = new DeviceContextState(emf);
-            emf.Validate(
-                state
-                // TODO Add validation
-            );
+            //emf.Validate(
+            //    state
+            //    // TODO Add validation
+            //);
         }
     }
 }
