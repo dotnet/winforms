@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Reflection;
 
@@ -13,10 +11,10 @@ namespace System.Windows.Forms
     {
         private class ControlVersionInfo
         {
-            private string _companyName;
-            private string _productName;
-            private string _productVersion;
-            private FileVersionInfo _versionInfo;
+            private string? _companyName;
+            private string? _productName;
+            private string? _productVersion;
+            private FileVersionInfo? _versionInfo;
             private readonly Control _owner;
 
             internal ControlVersionInfo(Control owner)
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
 
                         if (_companyName is null || _companyName.Length == 0)
                         {
-                            string ns = _owner.GetType().Namespace;
+                            string? ns = _owner.GetType().Namespace;
 
                             if (ns is null)
                             {
@@ -98,7 +96,7 @@ namespace System.Windows.Forms
 
                         if (_productName is null || _productName.Length == 0)
                         {
-                            string ns = _owner.GetType().Namespace;
+                            string? ns = _owner.GetType().Namespace;
 
                             if (ns is null)
                             {
