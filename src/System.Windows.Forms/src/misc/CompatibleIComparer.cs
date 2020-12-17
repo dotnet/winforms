@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Collections.Specialized
 {
     using System.Collections;
@@ -17,7 +15,7 @@ namespace System.Collections.Specialized
         }
 
         //For backcompat
-        public static int GetHashCode(string obj)
+        public static int GetHashCode(string? obj)
         {
             unsafe
             {
@@ -37,14 +35,14 @@ namespace System.Collections.Specialized
             }
         }
 
-        bool IEqualityComparer.Equals(object a, object b)
+        bool IEqualityComparer.Equals(object? a, object? b)
         {
             return Object.Equals(a, b);
         }
 
         public virtual int GetHashCode(object o)
         {
-            if (!(o is string obj))
+            if (o is not string obj)
             {
                 return o.GetHashCode();
             }
