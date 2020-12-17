@@ -9501,10 +9501,10 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control control) -> void
-~System.Windows.Forms.ConvertEventArgs.ConvertEventArgs(object value, System.Type desiredType) -> void
-~System.Windows.Forms.ConvertEventArgs.DesiredType.get -> System.Type
-~System.Windows.Forms.ConvertEventArgs.Value.get -> object
-~System.Windows.Forms.ConvertEventArgs.Value.set -> void
+System.Windows.Forms.ConvertEventArgs.ConvertEventArgs(object? value, System.Type? desiredType) -> void
+System.Windows.Forms.ConvertEventArgs.DesiredType.get -> System.Type?
+System.Windows.Forms.ConvertEventArgs.Value.get -> object?
+System.Windows.Forms.ConvertEventArgs.Value.set -> void
 ~System.Windows.Forms.CreateParams.Caption.get -> string
 ~System.Windows.Forms.CreateParams.Caption.set -> void
 ~System.Windows.Forms.CreateParams.ClassName.get -> string
@@ -10201,8 +10201,8 @@ System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 ~System.Windows.Forms.ListControl.SelectedValue.set -> void
 ~System.Windows.Forms.ListControl.ValueMember.get -> string
 ~System.Windows.Forms.ListControl.ValueMember.set -> void
-~System.Windows.Forms.ListControlConvertEventArgs.ListControlConvertEventArgs(object value, System.Type desiredType, object listItem) -> void
-~System.Windows.Forms.ListControlConvertEventArgs.ListItem.get -> object
+System.Windows.Forms.ListControlConvertEventArgs.ListControlConvertEventArgs(object? value, System.Type? desiredType, object? listItem) -> void
+System.Windows.Forms.ListControlConvertEventArgs.ListItem.get -> object?
 ~System.Windows.Forms.ListView.CheckedIndexCollection.CheckedIndexCollection(System.Windows.Forms.ListView owner) -> void
 ~System.Windows.Forms.ListView.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListView.CheckedIndices.get -> System.Windows.Forms.ListView.CheckedIndexCollection
