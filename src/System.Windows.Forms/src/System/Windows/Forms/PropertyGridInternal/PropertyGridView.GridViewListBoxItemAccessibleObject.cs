@@ -62,7 +62,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (_owningGridViewListBox != null)
+                    if (_owningGridViewListBox is not null)
                     {
                         return _owningItem.ToString();
                     }

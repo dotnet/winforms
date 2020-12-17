@@ -133,7 +133,7 @@ namespace System.Windows.Forms
 
         private void EnsureNotOwned(TableLayoutStyle style)
         {
-            if (style.Owner != null)
+            if (style.Owner is not null)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, style.GetType().Name), nameof(style));
             }
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         }
         private void PerformLayoutIfOwned()
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyName);
             }

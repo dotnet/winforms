@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                         for (int i = 0; i < GetChildCount(); i++)
                         {
                             firstChild = GetChild(i);
-                            if (firstChild != null && !(firstChild is ControlAccessibleObject))
+                            if (firstChild is not null && !(firstChild is ControlAccessibleObject))
                             {
                                 return firstChild;
                             }
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
                         for (int i = GetChildCount() - 1; i >= 0; i--)
                         {
                             lastChild = GetChild(i);
-                            if (lastChild != null && !(lastChild is ControlAccessibleObject))
+                            if (lastChild is not null && !(lastChild is ControlAccessibleObject))
                             {
                                 return lastChild;
                             }

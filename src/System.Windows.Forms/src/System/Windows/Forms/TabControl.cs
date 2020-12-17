@@ -466,14 +466,14 @@ namespace System.Windows.Forms
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
                     EventHandler disposedHandler = new EventHandler(DetachImageList);
 
-                    if (_imageList != null)
+                    if (_imageList is not null)
                     {
                         _imageList.RecreateHandle -= recreateHandler;
                         _imageList.Disposed -= disposedHandler;
                     }
 
                     _imageList = value;
-                    IntPtr handle = (value != null) ? value.Handle : IntPtr.Zero;
+                    IntPtr handle = (value is not null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                     {
                         User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, handle);
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
                         tabPage.ImageIndexer.ImageList = value;
                     }
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.RecreateHandle += recreateHandler;
                         value.Disposed += disposedHandler;
@@ -1041,7 +1041,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_imageList != null)
+                if (_imageList is not null)
                 {
                     _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
 
         internal int FindTabPage(TabPage tabPage)
         {
-            if (_tabPages != null)
+            if (_tabPages is not null)
             {
                 for (int i = 0; i < _tabPageCount; i++)
                 {
@@ -1202,7 +1202,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InsertItem(int index, TabPage tabPage)
         {
-            if (index < 0 || ((_tabPages != null) && index > _tabPageCount))
+            if (index < 0 || ((_tabPages is not null) && index > _tabPageCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             _cachedDisplayRect = Rectangle.Empty;
             ApplyItemSize();
-            if (_imageList != null)
+            if (_imageList is not null)
             {
                 User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, _imageList.Handle);
             }
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms
         protected override void OnEnter(EventArgs e)
         {
             base.OnEnter(e);
-            if (SelectedTab != null)
+            if (SelectedTab is not null)
             {
                 SelectedTab.FireEnter(e);
             }
@@ -1385,7 +1385,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnLeave(EventArgs e)
         {
-            if (SelectedTab != null)
+            if (SelectedTab is not null)
             {
                 SelectedTab.FireLeave(e);
             }
@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms
             ((TabControlEventHandler)Events[s_selectedEvent])?.Invoke(this, e);
 
             // Raise the enter event for this tab.
-            if (SelectedTab != null)
+            if (SelectedTab is not null)
             {
                 SelectedTab.FireEnter(EventArgs.Empty);
             }
@@ -1510,7 +1510,7 @@ namespace System.Windows.Forms
             ((TabControlEventHandler)Events[s_deselectedEvent])?.Invoke(this, e);
 
             // Raise the Leave event for this tab.
-            if (SelectedTab != null)
+            if (SelectedTab is not null)
             {
                 SelectedTab.FireLeave(EventArgs.Empty);
             }
@@ -1685,7 +1685,7 @@ namespace System.Windows.Forms
         public void SelectTab(int index)
         {
             TabPage t = GetTabPage(index);
-            if (t != null)
+            if (t is not null)
             {
                 SelectedTab = t;
             }
@@ -1806,7 +1806,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (TabPages != null)
+            if (TabPages is not null)
             {
                 s += ", TabPages.Count: " + TabPages.Count.ToString(CultureInfo.CurrentCulture);
                 if (TabPages.Count > 0)
@@ -1872,13 +1872,13 @@ namespace System.Windows.Forms
                                 if (!ContainsFocus)
                                 {
                                     IContainerControl c = GetContainerControl();
-                                    if (c != null)
+                                    if (c is not null)
                                     {
                                         while (c.ActiveControl is ContainerControl)
                                         {
                                             c = (IContainerControl)c.ActiveControl;
                                         }
-                                        if (c.ActiveControl != null)
+                                        if (c.ActiveControl is not null)
                                         {
                                             c.ActiveControl.Focus();
                                         }
@@ -1888,7 +1888,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 IContainerControl c = GetContainerControl();
-                                if (c != null && !DesignMode)
+                                if (c is not null && !DesignMode)
                                 {
                                     if (c is ContainerControl)
                                     {
@@ -1992,7 +1992,7 @@ namespace System.Windows.Forms
         private bool WmSelChanging()
         {
             IContainerControl c = GetContainerControl();
-            if (c != null && !DesignMode)
+            if (c is not null && !DesignMode)
             {
                 if (c is ContainerControl)
                 {
@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms
             var tcitem = new ComCtl32.TCITEMW();
             string text = tabPage.Text;
             PrefixAmpersands(ref text);
-            if (text != null)
+            if (text is not null)
             {
                 tcitem.mask |= ComCtl32.TCIF.TEXT;
                 tcitem.cchTextMax = text.Length;

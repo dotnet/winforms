@@ -200,7 +200,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Instance descriptors provide full fidelity unless
                     // they are marked as incomplete.
                     InstanceDescriptor desc = (InstanceDescriptor)converter.ConvertTo(null, CultureInfo.InvariantCulture, value, typeof(InstanceDescriptor));
-                    if (desc != null && desc.IsComplete)
+                    if (desc is not null && desc.IsComplete)
                     {
                         clonedValue = desc.Invoke();
                     }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
 
-            if (clonedValue != null)
+            if (clonedValue is not null)
             {
                 return clonedValue;
             }
@@ -299,7 +299,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 object objCur = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
 
-                if (collection != null)
+                if (collection is not null)
                 {
                     if (!collection.MergeCollection((ICollection)objCur))
                     {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
                 else if ((obj is null && objCur is null) ||
-                         (obj != null && obj.Equals(objCur)))
+                         (obj is not null && obj.Equals(objCur)))
                 {
                     continue;
                 }
@@ -319,7 +319,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            if (allEqual && collection != null && collection.Count == 0)
+            if (allEqual && collection is not null && collection.Count == 0)
             {
                 return null;
             }
@@ -358,7 +358,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (collection != null)
+                if (collection is not null)
                 {
                     collection.Locked = true;
                 }
@@ -384,7 +384,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             finally
             {
-                if (collection != null)
+                if (collection is not null)
                 {
                     collection.Locked = false;
                 }
@@ -449,7 +449,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (items != null)
+                    if (items is not null)
                     {
                         return items.Length;
                     }
@@ -503,7 +503,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public IEnumerator GetEnumerator()
             {
-                if (items != null)
+                if (items is not null)
                 {
                     return items.GetEnumerator();
                 }
@@ -535,7 +535,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 for (int i = 0; i < newItems.Length; i++)
                 {
                     if (((newItems[i] is null) != (items[i] is null)) ||
-                        (items[i] != null && !items[i].Equals(newItems[i])))
+                        (items[i] is not null && !items[i].Equals(newItems[i])))
                     {
                         items = Array.Empty<object>();
                         return false;
@@ -592,10 +592,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 Attribute value;
-                if (foundAttributes != null)
+                if (foundAttributes is not null)
                 {
                     value = foundAttributes[attributeType] as Attribute;
-                    if (value != null)
+                    if (value is not null)
                     {
                         return value;
                     }

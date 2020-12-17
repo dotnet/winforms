@@ -69,7 +69,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                     cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                     cp.ClassStyle |= (int)User32.CS.DROPSHADOW;
-                    if (gridView != null)
+                    if (gridView is not null)
                     {
                         cp.Parent = gridView.ParentInternal.Handle;
                     }
@@ -148,7 +148,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void Dispose(bool disposing)
             {
-                if (disposing && createNewLink != null)
+                if (disposing && createNewLink is not null)
                 {
                     createNewLink.Dispose();
                     createNewLink = null;
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // check the property type itself.  this is the default path.
                 //
                 PropertyDescriptor pd = entry.PropertyDescriptor;
-                if (pd != null)
+                if (pd is not null)
                 {
                     editor = pd.GetEditor(typeof(InstanceCreationEditor)) as InstanceCreationEditor;
                 }
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (editor is null)
                 {
                     UITypeEditor ute = entry.UITypeEditor;
-                    if (ute != null && ute.GetEditStyle() == UITypeEditorEditStyle.DropDown)
+                    if (ute is not null && ute.GetEditStyle() == UITypeEditorEditStyle.DropDown)
                     {
                         editor = (InstanceCreationEditor)TypeDescriptor.GetEditor(ute, typeof(InstanceCreationEditor));
                     }
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             private Bitmap GetSizeGripGlyph(Graphics g)
             {
-                if (sizeGripGlyph != null)
+                if (sizeGripGlyph is not null)
                 {
                     return sizeGripGlyph;
                 }
@@ -252,13 +252,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public virtual bool GetUsed()
             {
-                return (currentControl != null);
+                return (currentControl is not null);
             }
 
             public virtual void FocusComponent()
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:FocusComponent()");
-                if (currentControl != null && Visible)
+                if (currentControl is not null && Visible)
                 {
                     currentControl.Focus();
                 }
@@ -297,7 +297,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void OnCurrentControlResize(object o, EventArgs e)
             {
-                if (currentControl != null && !resizing)
+                if (currentControl is not null && !resizing)
                 {
                     int oldWidth = Width;
                     Size newSize = new Size(2 * DropDownHolderBorder + currentControl.Width, 2 * DropDownHolderBorder + currentControl.Height);
@@ -337,17 +337,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 InstanceCreationEditor ice = e.Link.LinkData as InstanceCreationEditor;
 
-                Debug.Assert(ice != null, "How do we have a link without the InstanceCreationEditor?");
-                if (ice != null && gridView?.SelectedGridEntry != null)
+                Debug.Assert(ice is not null, "How do we have a link without the InstanceCreationEditor?");
+                if (ice is not null && gridView?.SelectedGridEntry is not null)
                 {
                     Type createType = gridView.SelectedGridEntry.PropertyType;
-                    if (createType != null)
+                    if (createType is not null)
                     {
                         gridView.CloseDropDown();
 
                         object newValue = ice.CreateInstance(gridView.SelectedGridEntry, createType);
 
-                        if (newValue != null)
+                        if (newValue is not null)
                         {
                             // make sure we got what we asked for.
                             //
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         case Keys.Return:
                             // make sure the return gets forwarded to the control that
                             // is being displayed
-                            if (gridView.UnfocusSelection() && gridView.SelectedGridEntry != null)
+                            if (gridView.UnfocusSelection() && gridView.SelectedGridEntry is not null)
                             {
                                 gridView.SelectedGridEntry.OnValueReturnKey();
                             }
@@ -579,7 +579,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // clear any existing control we have
                 //
-                if (currentControl != null)
+                if (currentControl is not null)
                 {
                     currentControl.Resize -= new EventHandler(OnCurrentControlResize);
                     Controls.Remove(currentControl);
@@ -588,14 +588,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // remove the InstanceCreationEditor link
                 //
-                if (createNewLink != null && createNewLink.Parent == this)
+                if (createNewLink is not null && createNewLink.Parent == this)
                 {
                     Controls.Remove(createNewLink);
                 }
 
                 // now set up the new control, top to bottom
                 //
-                if (ctl != null)
+                if (ctl is not null)
                 {
                     currentControl = ctl;
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:SetComponent(" + (ctl.GetType().Name) + ")");
@@ -626,7 +626,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         // now check for an editor, and show the link if there is one.
                         //
-                        if (editor != null)
+                        if (editor is not null)
                         {
                             // set up the link.
                             //
@@ -673,7 +673,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         ctl.Dock = DockStyle.Fill;
                         ctl.Visible = true;
 
-                        if (editor != null)
+                        if (editor is not null)
                         {
                             CreateNewLink.Dock = DockStyle.Bottom;
                             Controls.Add(CreateNewLink);
@@ -688,7 +688,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     currentControl.Resize += new EventHandler(OnCurrentControlResize);
                 }
-                Enabled = currentControl != null;
+                Enabled = currentControl is not null;
             }
 
             protected override void WndProc(ref Message m)

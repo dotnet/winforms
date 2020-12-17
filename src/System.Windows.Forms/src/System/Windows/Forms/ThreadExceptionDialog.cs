@@ -189,7 +189,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (name.EscapedCodeBase != null && name.EscapedCodeBase.Length > 0)
+                    if (name.EscapedCodeBase is not null && name.EscapedCodeBase.Length > 0)
                     {
                         Uri codeBase = new Uri(name.EscapedCodeBase);
                         if (codeBase.Scheme == "file")
@@ -357,13 +357,13 @@ namespace System.Windows.Forms
 
         private void ThreadExceptionDialog_DpiChanged(object sender, DpiChangedEventArgs e)
         {
-            if (expandImage != null)
+            if (expandImage is not null)
             {
                 expandImage.Dispose();
             }
             expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
-            if (collapseImage != null)
+            if (collapseImage is not null)
             {
                 collapseImage.Dispose();
             }

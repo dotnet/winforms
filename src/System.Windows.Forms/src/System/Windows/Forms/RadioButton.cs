@@ -465,7 +465,7 @@ namespace System.Windows.Forms
                 if (isChecked)
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         ControlCollection children = parent.Controls;
                         for (int i = 0; i < children.Count; i++)
@@ -492,7 +492,7 @@ namespace System.Windows.Forms
         private void WipeTabStops(bool tabbedInto)
         {
             Control parent = ParentInternal;
-            if (parent != null)
+            if (parent is not null)
             {
                 ControlCollection children = parent.Controls;
                 for (int i = 0; i < children.Count; i++)

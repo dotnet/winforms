@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.IsStub)
+                if (value is not null && value.IsStub)
                 {
                     // WINRES only scenario.
                     // we only support table layout settings that have been created from a type converter.
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeControls()
         {
             TableLayoutControlCollection collection = Controls;
-            return collection != null && collection.Count > 0;
+            return collection is not null && collection.Count > 0;
         }
 
         #region Extended Properties

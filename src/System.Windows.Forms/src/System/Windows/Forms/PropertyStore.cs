@@ -353,7 +353,7 @@ namespace System.Windows.Forms
         [MemberNotNullWhen(true, nameof(_objEntries))]
         private bool LocateObjectEntry(short entryKey, out int index)
         {
-            if (_objEntries != null)
+            if (_objEntries is not null)
             {
                 int length = _objEntries.Length;
                 Debug.Assert(length > 0);
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
             if (!LocateIntegerEntry(entryKey, out int index))
             {
                 // We must allocate a new entry.
-                if (_intEntries != null)
+                if (_intEntries is not null)
                 {
                     IntegerEntry[] newEntries = new IntegerEntry[_intEntries.Length + 1];
 
@@ -756,7 +756,7 @@ namespace System.Windows.Forms
             if (!LocateObjectEntry(entryKey, out int index))
             {
                 // We must allocate a new entry.
-                if (_objEntries != null)
+                if (_objEntries is not null)
                 {
                     ObjectEntry[] newEntries = new ObjectEntry[_objEntries.Length + 1];
 
