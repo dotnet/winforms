@@ -357,7 +357,7 @@ namespace System.Windows.Forms
                 // things.)
                 _scrollMargin = _requestedScrollMargin;
 
-                if (dockPadding != null)
+                if (dockPadding is not null)
                 {
                     _scrollMargin.Height += Padding.Bottom;
                     _scrollMargin.Width += Padding.Right;
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
                     // In addition, this is the more correct thing, because
                     // we want to layout the children with respect to their
                     // "local" visibility, not the hierarchy.
-                    if (current != null && current.DesiredVisibility)
+                    if (current is not null && current.DesiredVisibility)
                     {
                         switch (((Control)current).Dock)
                         {
@@ -427,7 +427,7 @@ namespace System.Windows.Forms
 
                     // Same logic as the margin calc - you need to see if the
                     // control *will* be visible...
-                    if (current != null && current.DesiredVisibility)
+                    if (current is not null && current.DesiredVisibility)
                     {
                         if (defaultLayoutEngine)
                         {
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
             // thus require a new layout. The result is that when you
             // affect a control's layout, we are forced to layout twice. There
             // isn't any noticible flicker, but this could be a perf problem...
-            if (levent != null && levent.AffectedControl != null && AutoScroll)
+            if (levent is not null && levent.AffectedControl is not null && AutoScroll)
             {
                 base.OnLayout(levent);
             }
@@ -674,7 +674,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(e));
 
             if ((HScroll || VScroll) &&
-                BackgroundImage != null &&
+                BackgroundImage is not null &&
                 (BackgroundImageLayout == ImageLayout.Zoom || BackgroundImageLayout == ImageLayout.Stretch || BackgroundImageLayout == ImageLayout.Center))
             {
                 if (ControlPaint.IsImageTransparent(BackgroundImage))
@@ -806,7 +806,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < Controls.Count; i++)
             {
                 Control ctl = Controls[i];
-                if (ctl != null && ctl.IsHandleCreated)
+                if (ctl is not null && ctl.IsHandleCreated)
                 {
                     ctl.UpdateBounds();
                 }

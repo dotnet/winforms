@@ -53,7 +53,7 @@ namespace System.Windows.Forms
 
                 // Site the tabPage if necessary.
                 ISite site = _owner.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     ISite siteTab = tabPage.Site;
                     if (siteTab is null)

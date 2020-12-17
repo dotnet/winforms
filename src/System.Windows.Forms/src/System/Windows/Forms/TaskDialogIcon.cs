@@ -182,9 +182,9 @@ namespace System.Windows.Forms
 
         internal TaskDialogStandardIcon StandardIcon => _standardIcon ?? throw new InvalidOperationException();
 
-        internal bool IsStandardIcon => _standardIcon != null;
+        internal bool IsStandardIcon => _standardIcon is not null;
 
-        internal bool IsHandleIcon => _iconHandle != null;
+        internal bool IsHandleIcon => _iconHandle is not null;
 
         private static Icon BitmapToIcon(Bitmap bitmap)
         {

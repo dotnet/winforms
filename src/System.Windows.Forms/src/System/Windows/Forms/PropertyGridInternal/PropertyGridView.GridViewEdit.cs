@@ -221,7 +221,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (!Focused)
                 {
                     Graphics g = CreateGraphics();
-                    if (psheet.SelectedGridEntry != null &&
+                    if (psheet.SelectedGridEntry is not null &&
                         ClientRectangle.Width <= psheet.SelectedGridEntry.GetValueTextWidth(Text, g, Font))
                     {
                         psheet.ToolTip.ToolTip = PasswordProtect ? "" : Text;
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             // if this is just the delete key and we're on a non-text editable property that is resettable,
                             // reset it now.
                             //
-                            if (psheet.SelectedGridEntry != null && !psheet.SelectedGridEntry.Enumerable && !psheet.SelectedGridEntry.IsTextEditable && psheet.SelectedGridEntry.CanResetPropertyValue())
+                            if (psheet.SelectedGridEntry is not null && !psheet.SelectedGridEntry.Enumerable && !psheet.SelectedGridEntry.IsTextEditable && psheet.SelectedGridEntry.CanResetPropertyValue())
                             {
                                 object oldValue = psheet.SelectedGridEntry.PropertyValue;
                                 psheet.SelectedGridEntry.ResetPropertyValue();
@@ -314,7 +314,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         case Keys.Return:
                             bool fwdReturn = !psheet.NeedsCommit;
-                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry != null)
+                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry is not null)
                             {
                                 psheet.SelectedGridEntry.OnValueReturnKey();
                             }

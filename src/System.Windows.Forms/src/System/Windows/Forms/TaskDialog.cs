@@ -811,7 +811,7 @@ namespace System.Windows.Forms
             ComCtl32.TDN notification,
             IntPtr wParam)
         {
-            Debug.Assert(_boundPage != null);
+            Debug.Assert(_boundPage is not null);
 
             // Set the hWnd as this may be the first time that we get it.
             bool isFirstNotification = _handle == IntPtr.Zero;
@@ -1010,7 +1010,7 @@ namespace System.Windows.Forms
                             // override the previously set result, which would mean the
                             // button returned from Show() would not match one specified
                             // in the "Closing" event's args.
-                            if (_resultButton != null)
+                            if (_resultButton is not null)
                             {
                                 applyButtonResult = false;
                             }
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
             // the dialog was closed abnormally without a prior TDN_BUTTON_CLICKED
             // notification (e.g. when closing the main application window while a modeless
             // task dialog is showing).
-            if (_resultButton != null || _receivedDestroyedNotification)
+            if (_resultButton is not null || _receivedDestroyedNotification)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
             }
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms
                     // button click that closed the dialog.
                     // TODO: Another option would be to disallow button clicks while
                     // within the event handler.
-                    if (_resultButton != null)
+                    if (_resultButton is not null)
                     {
                         throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
                     }
@@ -1471,7 +1471,7 @@ namespace System.Windows.Forms
 
         private void SubclassWindow()
         {
-            if (_windowSubclassHandler != null)
+            if (_windowSubclassHandler is not null)
             {
                 throw new InvalidOperationException();
             }
@@ -1483,7 +1483,7 @@ namespace System.Windows.Forms
 
         private void UnsubclassWindow()
         {
-            if (_windowSubclassHandler != null)
+            if (_windowSubclassHandler is not null)
             {
                 try
                 {
@@ -1503,7 +1503,7 @@ namespace System.Windows.Forms
 
         private void DenyIfBound()
         {
-            if (_boundPage != null)
+            if (_boundPage is not null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfShownDialog);
             }

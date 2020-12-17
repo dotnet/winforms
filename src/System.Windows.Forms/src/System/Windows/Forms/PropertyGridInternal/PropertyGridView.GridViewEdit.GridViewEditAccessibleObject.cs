@@ -50,7 +50,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 /// <returns>Returns the element in the specified direction.</returns>
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
-                    if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry != null)
+                    if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry is not null)
                     {
                         return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
                     }
@@ -137,14 +137,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     get
                     {
                         string name = Owner.AccessibleName;
-                        if (name != null)
+                        if (name is not null)
                         {
                             return name;
                         }
                         else
                         {
                             GridEntry selectedGridEntry = _owningPropertyGridView.SelectedGridEntry;
-                            if (selectedGridEntry != null)
+                            if (selectedGridEntry is not null)
                             {
                                 return selectedGridEntry.AccessibilityObject.Name;
                             }

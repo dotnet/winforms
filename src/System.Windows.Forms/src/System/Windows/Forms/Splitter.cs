@@ -632,7 +632,7 @@ namespace System.Windows.Forms
             SplitData spd = new SplitData();
             Control target = FindTarget();
             spd.target = target;
-            if (target != null)
+            if (target is not null)
             {
                 switch (target.Dock)
                 {
@@ -797,7 +797,7 @@ namespace System.Windows.Forms
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            if (splitTarget != null && e.KeyCode == Keys.Escape)
+            if (splitTarget is not null && e.KeyCode == Keys.Escape)
             {
                 SplitEnd(false);
             }
@@ -815,7 +815,7 @@ namespace System.Windows.Forms
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 int x = e.X + Left;
                 int y = e.Y + Top;
@@ -829,7 +829,7 @@ namespace System.Windows.Forms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 int x = e.X + Left;
                 int y = e.Y + Top;
@@ -849,7 +849,7 @@ namespace System.Windows.Forms
         {
             ((SplitterEventHandler)Events[EVENT_MOVING])?.Invoke(this, sevent);
 
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 SplitMove(sevent.SplitX, sevent.SplitY);
             }
@@ -864,7 +864,7 @@ namespace System.Windows.Forms
         {
             ((SplitterEventHandler)Events[EVENT_MOVED])?.Invoke(this, sevent);
 
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 SplitMove(sevent.SplitX, sevent.SplitY);
             }
@@ -897,13 +897,13 @@ namespace System.Windows.Forms
         private void SplitBegin(int x, int y)
         {
             SplitData spd = CalcSplitBounds();
-            if (spd.target != null && (minSize < maxSize))
+            if (spd.target is not null && (minSize < maxSize))
             {
                 anchor = new Point(x, y);
                 splitTarget = spd.target;
                 splitSize = GetSplitSize(x, y);
 
-                if (splitterMessageFilter != null)
+                if (splitterMessageFilter is not null)
                 {
                     splitterMessageFilter = new SplitterMessageFilter(this);
                 }
@@ -922,7 +922,7 @@ namespace System.Windows.Forms
             DrawSplitBar(DRAW_END);
             splitTarget = null;
             Capture = false;
-            if (splitterMessageFilter != null)
+            if (splitterMessageFilter is not null)
             {
                 Application.RemoveMessageFilter(splitterMessageFilter);
                 splitterMessageFilter = null;
