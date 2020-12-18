@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Text
@@ -48,10 +47,10 @@ Namespace Microsoft.VisualBasic
                 If ok = 0 Then
                     ErrorCode = Marshal.GetLastWin32Error()
                 End If
-                If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.INVALID_HANDLE Then
+                If ProcessInfo.hProcess <> IntPtr.Zero AndAlso ProcessInfo.hProcess <> NativeTypes.s_invalidHandle Then
                     safeProcessHandle.InitialSetHandle(ProcessInfo.hProcess)
                 End If
-                If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.INVALID_HANDLE Then
+                If ProcessInfo.hThread <> IntPtr.Zero AndAlso ProcessInfo.hThread <> NativeTypes.s_invalidHandle Then
                     safeThreadHandle.InitialSetHandle(ProcessInfo.hThread)
                 End If
 
