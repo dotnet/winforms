@@ -357,7 +357,7 @@ Namespace Microsoft.VisualBasic
             Dim ParentWindow As Windows.Forms.IWin32Window = Nothing
 
             vbhost = CompilerServices.HostServices.VBHost
-            If Not vbhost Is Nothing Then
+            If vbhost IsNot Nothing Then
                 ParentWindow = vbhost.GetParentWindow()
             End If
 
@@ -372,7 +372,7 @@ Namespace Microsoft.VisualBasic
             End If
 
             Try
-                If Not Prompt Is Nothing Then
+                If Prompt IsNot Nothing Then
                     sPrompt = DirectCast(Conversions.ChangeType(Prompt, GetType(String)), String)
                 End If
             Catch ex As StackOverflowException

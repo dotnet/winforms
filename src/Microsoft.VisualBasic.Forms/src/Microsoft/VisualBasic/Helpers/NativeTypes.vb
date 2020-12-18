@@ -156,6 +156,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Class
 
         ' Handle Values
+        <Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification:="Came from Framework")>
         Friend Shared ReadOnly INVALID_HANDLE As IntPtr = New IntPtr(-1)
 
         ' GetWindow() Constants
