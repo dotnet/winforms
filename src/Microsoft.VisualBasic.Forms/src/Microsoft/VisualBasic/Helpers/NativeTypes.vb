@@ -17,7 +17,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Implements IDisposable
 
             Friend Sub New()
-                nLength = System.Runtime.InteropServices.Marshal.SizeOf(GetType(SECURITY_ATTRIBUTES))
+                nLength = Marshal.SizeOf(GetType(SECURITY_ATTRIBUTES))
             End Sub
 
             Public nLength As Integer
@@ -127,19 +127,19 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
                         Const STARTF_USESTDHANDLES As Integer = 256 'Defined in windows.h
                         If (dwFlags And STARTF_USESTDHANDLES) <> 0 Then
-                            If hStdInput <> IntPtr.Zero AndAlso hStdInput <> NativeTypes.INVALID_HANDLE Then
+                            If hStdInput <> IntPtr.Zero AndAlso hStdInput <> s_invalidHandle Then
                                 NativeMethods.CloseHandle(hStdInput)
-                                hStdInput = NativeTypes.INVALID_HANDLE
+                                hStdInput = s_invalidHandle
                             End If
 
-                            If hStdOutput <> IntPtr.Zero AndAlso hStdOutput <> NativeTypes.INVALID_HANDLE Then
+                            If hStdOutput <> IntPtr.Zero AndAlso hStdOutput <> s_invalidHandle Then
                                 NativeMethods.CloseHandle(hStdOutput)
-                                hStdOutput = NativeTypes.INVALID_HANDLE
+                                hStdOutput = s_invalidHandle
                             End If
 
-                            If hStdError <> IntPtr.Zero AndAlso hStdError <> NativeTypes.INVALID_HANDLE Then
+                            If hStdError <> IntPtr.Zero AndAlso hStdError <> s_invalidHandle Then
                                 NativeMethods.CloseHandle(hStdError)
-                                hStdError = NativeTypes.INVALID_HANDLE
+                                hStdError = s_invalidHandle
                             End If
                         End If 'Me.dwFlags and STARTF_USESTDHANDLES
 
@@ -156,7 +156,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Class
 
         ' Handle Values
-        Friend Shared ReadOnly INVALID_HANDLE As IntPtr = New IntPtr(-1)
+        Friend Shared ReadOnly s_invalidHandle As IntPtr = New IntPtr(-1)
 
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
