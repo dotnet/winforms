@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -60,7 +58,7 @@ namespace System.Windows.Forms
                 //
                 if (cachedImeMode == ImeMode.Inherit)
                 {
-                    Control parent = ParentInternal;
+                    Control? parent = ParentInternal;
                     if (parent is not null)
                     {
                         cachedImeMode = parent.CachedImeMode;
@@ -248,7 +246,7 @@ namespace System.Windows.Forms
                 if (oldImeMode != value)
                 {
                     // Cache current value to determine whether we need to raise the ImeModeChanged.
-                    Control ctl = null;
+                    Control? ctl = null;
 
                     if (!DesignMode && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable)
                     {
@@ -637,7 +635,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ImeSupported, "ImeModeChanged should not be raised on an Ime-Unaware control.");
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside OnImeModeChanged(), this = " + this);
-            ((EventHandler)Events[s_imeModeChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_imeModeChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -827,7 +825,7 @@ namespace System.Windows.Forms
             Debug.Indent();
 
             Control topMostWinformsParent = TopMostParent;
-            Form appForm = topMostWinformsParent as Form;
+            Form? appForm = topMostWinformsParent as Form;
 
             if ((appForm is null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
             {
@@ -1292,7 +1290,7 @@ namespace System.Windows.Forms
     /// </summary>
     public struct ImeModeConversion
     {
-        private static Dictionary<ImeMode, ImeModeConversion> imeModeConversionBits;
+        private static Dictionary<ImeMode, ImeModeConversion>? imeModeConversionBits;
 
         internal Imm32.IME_CMODE setBits;
         internal Imm32.IME_CMODE clearBits;

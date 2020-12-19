@@ -839,7 +839,7 @@ System.Windows.Forms.Control.HelpRequested -> System.Windows.Forms.HelpEventHand
 System.Windows.Forms.Control.Hide() -> void
 System.Windows.Forms.Control.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.Control.ImeMode.set -> void
-System.Windows.Forms.Control.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.Control.ImeModeChanged -> System.EventHandler!
 System.Windows.Forms.Control.Invalidate() -> void
 System.Windows.Forms.Control.Invalidate(System.Drawing.Rectangle rc) -> void
 System.Windows.Forms.Control.Invalidate(System.Drawing.Rectangle rc, bool invalidateChildren) -> void
@@ -12341,7 +12341,7 @@ override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Form
 ~static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
-~static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>
+static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>!
 static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
 static System.Windows.Forms.InputLanguage.CurrentInputLanguage.set -> void
 static System.Windows.Forms.InputLanguage.DefaultInputLanguage.get -> System.Windows.Forms.InputLanguage!
@@ -12635,7 +12635,7 @@ static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> s
 ~virtual System.Windows.Forms.Control.OnHandleCreated(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnHandleDestroyed(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnHelpRequested(System.Windows.Forms.HelpEventArgs hevent) -> void
-~virtual System.Windows.Forms.Control.OnImeModeChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.Control.OnImeModeChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnInvalidated(System.Windows.Forms.InvalidateEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
