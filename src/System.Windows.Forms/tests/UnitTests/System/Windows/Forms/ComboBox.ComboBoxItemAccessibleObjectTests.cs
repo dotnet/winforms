@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
 using static System.Windows.Forms.ComboBox;
@@ -198,7 +199,7 @@ namespace System.Windows.Forms.Tests
 
             if (comboBoxStyle == ComboBoxStyle.Simple)
             {
-                comboBox.Size = new Drawing.Size(100, 132);
+                comboBox.Size = new Size(100, 132);
             }
             else
             {
@@ -250,7 +251,7 @@ namespace System.Windows.Forms.Tests
 
             if (comboBoxStyle == ComboBoxStyle.Simple)
             {
-                comboBox.Size = new Drawing.Size(100, 132);
+                comboBox.Size = new Size(100, 132);
             }
             else
             {
@@ -306,6 +307,150 @@ namespace System.Windows.Forms.Tests
             int actual = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX));
 
             Assert.Equal(expected, actual);
+        }
+
+        public static IEnumerable<object[]> ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_IfComboBoxIsScrollable_TestData()
+        {
+            foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
+            {
+                // The tested combobox contains 11 items
+                for (int index = 0; index < 11; index++)
+                {
+                    int y = index * 15;
+                    int initialYPosition = comboBoxStyle == ComboBoxStyle.Simple ? 56 : 55;
+                    int x = comboBoxStyle == ComboBoxStyle.Simple ? 10 : 9;
+                    Point point = new Point(x, y + initialYPosition);
+
+                    yield return new object[] { comboBoxStyle, index, point };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_IfComboBoxIsScrollable_TestData))]
+        public void ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_IfComboBoxIsScrollable(ComboBoxStyle comboBoxStyle, int itemIndex, Point expectedPosition)
+        {
+            using ComboBox comboBox = new ComboBox();
+            comboBox.IntegralHeight = false;
+            comboBox.DropDownStyle = comboBoxStyle;
+            comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+            comboBox.CreateControl();
+
+            if (comboBoxStyle == ComboBoxStyle.Simple)
+            {
+                comboBox.Size = new Size(100, 132);
+            }
+            else
+            {
+                comboBox.Size = new Size(100, comboBox.Size.Height);
+                comboBox.DropDownHeight = 105;
+                comboBox.DroppedDown = true;
+            }
+
+            ComboBoxAccessibleObject comboBoxAccessibleObject = (ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+            ComboBoxItemAccessibleObjectCollection itemsCollection = comboBoxAccessibleObject.ItemAccessibleObjects;
+            Entry itemEntry = comboBox.Items.InnerList[itemIndex];
+            ComboBoxItemAccessibleObject itemAccessibleObject = itemsCollection.GetComboBoxItemAccessibleObject(itemEntry);
+            Rectangle actual = itemAccessibleObject.Bounds;
+            Rectangle dropdownRect = comboBox.ChildListAccessibleObject.Bounds;
+
+            // We get items rectangles from Windows
+            // It returns to us different expected widths values depending on a combobox drop-down style
+            int itemWidth = comboBoxStyle == ComboBoxStyle.Simple ? 79 : 81;
+
+            Assert.Equal(expectedPosition.X, actual.X);
+            Assert.Equal(expectedPosition.Y, actual.Y);
+            Assert.Equal(itemWidth, actual.Width); // All items are the same width
+            Assert.Equal(15, actual.Height); // All items are the same height
+        }
+
+        public static IEnumerable<object[]> ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_ForDifferentHeightItems_TestData()
+        {
+            foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
+            {
+                // The tested combobox contains 11 items
+                for (int index = 0; index < 11; index++)
+                {
+                    int height = DifferentHeightComboBox.GetCustomItemHeight(index);
+
+                    // We get items rectangles from Windows
+                    // It returns to us different expected bounds values depending on a combobox drop-down style
+                    int width = comboBoxStyle == ComboBoxStyle.Simple ? 96 : 81;
+                    int x = comboBoxStyle == ComboBoxStyle.Simple ? 10 : 9;
+                    int y = comboBoxStyle == ComboBoxStyle.Simple ? 57 : 56;
+
+                    for (int i = 0; i < index; i++)
+                    {
+                        y += DifferentHeightComboBox.GetCustomItemHeight(i); // Calculate the sum of heights of all items before the current
+                    }
+
+                    yield return new object[] { comboBoxStyle, index, new Rectangle(x, y, width, height) };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_ForDifferentHeightItems_TestData))]
+        public void ComboBoxItemAccessibleObject_Bounds_ReturnsCorrect_ForDifferentHeightItems(ComboBoxStyle comboBoxStyle, int itemIndex, Rectangle expectedRect)
+        {
+            using DifferentHeightComboBox comboBox = new DifferentHeightComboBox();
+            comboBox.DropDownStyle = comboBoxStyle;
+            comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
+            comboBox.CreateControl();
+
+            if (comboBoxStyle == ComboBoxStyle.Simple)
+            {
+                comboBox.Size = new Size(100, 400);
+            }
+            else
+            {
+                comboBox.Size = new Size(100, comboBox.Size.Height);
+                comboBox.DropDownHeight = 400;
+                comboBox.DroppedDown = true;
+            }
+
+            ComboBoxAccessibleObject comboBoxAccessibleObject = (ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+            ComboBoxItemAccessibleObjectCollection itemsCollection = comboBoxAccessibleObject.ItemAccessibleObjects;
+            Entry itemEntry = comboBox.Items.InnerList[itemIndex];
+            ComboBoxItemAccessibleObject itemAccessibleObject = itemsCollection.GetComboBoxItemAccessibleObject(itemEntry);
+            Rectangle actual = itemAccessibleObject.Bounds;
+            Rectangle dropdownRect = comboBox.ChildListAccessibleObject.Bounds;
+
+            Assert.Equal(expectedRect, actual);
+        }
+
+        private class DifferentHeightComboBox : ComboBox
+        {
+            public DifferentHeightComboBox() : base()
+            {
+                DrawMode = DrawMode.OwnerDrawVariable;
+            }
+
+            public static int GetCustomItemHeight(int index) => 15 + (index % 5) * 5;
+
+            protected override void OnMeasureItem(MeasureItemEventArgs e)
+            {
+                e.ItemHeight = GetCustomItemHeight(e.Index);
+                base.OnMeasureItem(e);
+            }
+
+            protected override void OnDrawItem(DrawItemEventArgs e)
+            {
+                if (e.Index < 0 || e.Index >= Items.Count)
+                {
+                    return;
+                }
+
+                e.DrawBackground();
+                using var brush = new SolidBrush(e.ForeColor);
+                e.Graphics.DrawString(
+                    Items[e.Index].ToString(),
+                    e.Font,
+                    brush,
+                    e.Bounds);
+                e.DrawFocusRectangle();
+                base.OnDrawItem(e);
+            }
         }
     }
 }
