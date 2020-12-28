@@ -663,6 +663,11 @@ namespace System.Windows.Forms
                 tabControl.SetToolTip(this, GetToolTip(associatedControl));
             }
 
+            if (associatedControl is TabPage tabPage)
+            {
+                tabPage.OnToolTipSet(this);
+            }
+
             if (associatedControl is ListView listView)
             {
                 listView.SetToolTip(this, GetToolTip(associatedControl));
@@ -923,6 +928,11 @@ namespace System.Windows.Forms
             {
                 new ToolInfoWrapper<Control>(ctl).SendMessage(this, (User32.WM)TTM.DELTOOLW);
                 _created.Remove(ctl);
+
+                if (ctl is TabPage tabPage)
+                {
+                    tabPage.OnToolTipRemoved(this);
+                }
             }
         }
 

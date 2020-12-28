@@ -1243,6 +1243,29 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
+        private void NotifyAboutFocusState(TabPage selectedTab, bool focused)
+        {
+            if (selectedTab is null)
+            {
+                return;
+            }
+
+            if (focused)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(selectedTab);
+            }
+            else
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(selectedTab);
+            }
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            NotifyAboutFocusState(SelectedTab, focused: true);
+            base.OnGotFocus(e);
+        }
+
         /// <summary>
         ///  This is a notification that the handle has been created.
         ///  We do some work here to configure the handle.
@@ -1392,6 +1415,12 @@ namespace System.Windows.Forms
             base.OnLeave(e);
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            NotifyAboutFocusState(SelectedTab, focused: false);
+            base.OnLostFocus(e);
+        }
+
         /// <summary>
         ///  We override this to get tabbing functionality.
         ///  If overriding this, remember to call base.onKeyDown.
@@ -1470,6 +1499,8 @@ namespace System.Windows.Forms
             UpdateTabSelection(GetState(State.UISelection));
             SetState(State.UISelection, false);
             _onSelectedIndexChanged?.Invoke(this, e);
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+            NotifyAboutFocusState(SelectedTab, focused: true);
         }
 
         /// <summary>
@@ -1512,6 +1543,7 @@ namespace System.Windows.Forms
             // Raise the Leave event for this tab.
             if (SelectedTab is not null)
             {
+                NotifyAboutFocusState(SelectedTab, focused: false);
                 SelectedTab.FireLeave(EventArgs.Empty);
             }
         }
