@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                     ToolTip.Active = true;
                     ToolTip.Show(_dataGridView.ToolTipPrivate, _dataGridView);
                 }
-                else if (ToolTip != null)
+                else if (ToolTip is not null)
                 {
                     ToolTip.Hide(_dataGridView);
                     ToolTip.Active = false;
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
 
             public void Dispose()
             {
-                if (ToolTip != null)
+                if (ToolTip is not null)
                 {
                     ToolTip.Dispose();
                     ToolTip = null;

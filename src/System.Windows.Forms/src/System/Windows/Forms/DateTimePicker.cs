@@ -237,7 +237,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if ((value is null && calendarFont != null) || (value != null && !value.Equals(calendarFont)))
+                if ((value is null && calendarFont is not null) || (value is not null && !value.Equals(calendarFont)))
                 {
                     calendarFont = value;
                     calendarFontHandleWrapper = null;
@@ -486,8 +486,8 @@ namespace System.Windows.Forms
 
             set
             {
-                if ((value != null && !value.Equals(customFormat)) ||
-                    (value is null && customFormat != null))
+                if ((value is not null && !value.Equals(customFormat)) ||
+                    (value is null && customFormat is not null))
                 {
                     customFormat = value;
 
@@ -1406,7 +1406,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeCalendarFont()
         {
-            return calendarFont != null;
+            return calendarFont is not null;
         }
 
         /// <summary>

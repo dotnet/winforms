@@ -30,13 +30,13 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
 
-                    if (Owner.OwningColumn != null)
+                    if (Owner.OwningColumn is not null)
                     {
                         if (Owner.OwningColumn.SortMode == DataGridViewColumnSortMode.Automatic)
                         {
                             return SR.DataGridView_AccColumnHeaderCellDefaultAction;
                         }
-                        else if (Owner.DataGridView != null && (
+                        else if (Owner.DataGridView is not null && (
                                 Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                                 Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
                         {
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                         resultState |= AccessibleStates.Offscreen;
                     }
 
-                    if (Owner.DataGridView != null && Owner.OwningColumn != null && Owner.OwningColumn.Selected)
+                    if (Owner.DataGridView is not null && Owner.OwningColumn is not null && Owner.OwningColumn.Selected)
                     {
                         if (Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         Owner.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
 
             private AccessibleObject? NavigateBackward()
             {
-                Debug.Assert(Owner != null);
+                Debug.Assert(Owner is not null);
 
                 // This method is called after _owner and its properties are validated
                 if (Owner.OwningColumn is null || Owner.DataGridView is null)
@@ -188,7 +188,7 @@ namespace System.Windows.Forms
 
             private AccessibleObject? NavigateForward()
             {
-                Debug.Assert(Owner != null);
+                Debug.Assert(Owner is not null);
 
                 // This method is called after _owner and its properties are validated
                 if (Owner.OwningColumn is null ||
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
                     dataGridView.Focus();
                 }
 
-                if (dataGridViewCell.OwningColumn != null &&
+                if (dataGridViewCell.OwningColumn is not null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                      dataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect))
                 {

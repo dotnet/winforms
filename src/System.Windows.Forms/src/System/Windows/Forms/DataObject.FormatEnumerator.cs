@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
                 _parent = parent;
 
-                if (formats != null)
+                if (formats is not null)
                 {
                     for (int i = 0; i < formats.Length; i++)
                     {
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                     rgelt[0].ptd = IntPtr.Zero;
                     rgelt[0].lindex = -1;
 
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         pceltFetched[0] = 1;
                     }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         pceltFetched[0] = 0;
                     }

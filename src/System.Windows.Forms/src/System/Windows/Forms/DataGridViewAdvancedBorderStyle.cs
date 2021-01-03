@@ -68,7 +68,7 @@ namespace System.Windows.Forms
                 {
                     all = true;
                     top = left = right = bottom = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
                     }
                     all = false;
                     bottom = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
             {
                 if ((all && top != value) || (!all && left != value))
                 {
-                    if ((owner != null && owner.RightToLeftInternal) &&
+                    if ((owner is not null && owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
                     }
                     all = false;
                     left = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
             {
                 if ((all && top != value) || (!all && right != value))
                 {
-                    if ((owner != null && !owner.RightToLeftInternal) &&
+                    if ((owner is not null && !owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
                     }
                     all = false;
                     right = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
                     }
                     all = false;
                     top = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }

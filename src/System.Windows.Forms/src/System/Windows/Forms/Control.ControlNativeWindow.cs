@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             // non-released controls will show what control wasn't released.
             public override string ToString()
             {
-                if (_control != null)
+                if (_control is not null)
                 {
                     return _control.GetType().FullName;
                 }

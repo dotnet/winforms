@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                     // This code was copied from the Everett sources.
                     Label previousLabel = PreviousLabel;
 
-                    if (previousLabel != null)
+                    if (previousLabel is not null)
                     {
                         char previousLabelMnemonic = WindowsFormsUtils.GetMnemonic(previousLabel.Text, false /*convertToUpperCase*/);
                         if (previousLabelMnemonic != (char)0)

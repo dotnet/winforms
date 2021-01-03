@@ -68,7 +68,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(ActiveLinkColor))
                 {
                     Properties.SetObject(s_propLinkCellActiveLinkColor, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                 if (value != LinkBehavior)
                 {
                     Properties.SetInteger(s_propLinkCellLinkBehavior, (int)value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(LinkColor))
                 {
                     Properties.SetObject(s_propLinkCellLinkColor, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 if (value != LinkVisited)
                 {
                     _linkVisited = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
                 if (value != TrackVisitedState)
                 {
                     Properties.SetInteger(s_propLinkCellTrackVisitedState, value ? 1 : 0);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(VisitedLinkColor))
                 {
                     Properties.SetObject(s_propLinkCellVisitedLinkColor, value);
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         if (RowIndex != -1)
                         {
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
             get
             {
                 Type valueType = base.ValueType;
-                if (valueType != null)
+                if (valueType is not null)
                 {
                     return valueType;
                 }
@@ -726,9 +726,9 @@ namespace System.Windows.Forms
         protected override object GetValue(int rowIndex)
         {
             if (UseColumnTextForLinkValue &&
-                DataGridView != null &&
+                DataGridView is not null &&
                 DataGridView.NewRowIndex != rowIndex &&
-                OwningColumn != null &&
+                OwningColumn is not null &&
                 OwningColumn is DataGridViewLinkColumn)
             {
                 return ((DataGridViewLinkColumn)OwningColumn).Text;
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
             if (e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift)
             {
                 RaiseCellClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
-                if (DataGridView != null &&
+                if (DataGridView is not null &&
                     ColumnIndex < DataGridView.Columns.Count &&
                     rowIndex < DataGridView.Rows.Count)
                 {
@@ -826,7 +826,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
-            if (s_dataGridViewCursor != null)
+            if (s_dataGridViewCursor is not null)
             {
                 DataGridView.Cursor = s_dataGridViewCursor;
                 s_dataGridViewCursor = null;
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             if (paint && PaintBorder(paintParts))
             {

@@ -49,14 +49,14 @@ namespace System.Windows.Forms
             set
             {
                 EventHandler onClose = OnMainFormDestroy;
-                if (_mainForm != null)
+                if (_mainForm is not null)
                 {
                     _mainForm.HandleDestroyed -= onClose;
                 }
 
                 _mainForm = value;
 
-                if (_mainForm != null)
+                if (_mainForm is not null)
                 {
                     _mainForm.HandleDestroyed += onClose;
                 }
@@ -92,7 +92,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_mainForm != null)
+                if (_mainForm is not null)
                 {
                     if (!_mainForm.IsDisposed)
                     {

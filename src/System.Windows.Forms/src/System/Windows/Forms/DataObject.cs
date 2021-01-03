@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IDataObject");
             innerData = data;
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IComDataObject");
                 innerData = new OleConverter(data);
             }
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject standalone");
             innerData = new DataStore();
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
                 innerData = new DataStore();
                 SetData(data);
             }
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         public DataObject(string format, object data) : this()
         {
             SetData(format, data);
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         private Gdi32.HBITMAP GetCompatibleBitmap(Bitmap bm)
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
         public virtual object GetData(string format, bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format + ", " + autoConvert.ToString());
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             return innerData.GetData(format, autoConvert);
         }
 
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
         public virtual bool GetDataPresent(string format, bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format + ", " + autoConvert.ToString());
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             bool b = innerData.GetDataPresent(format, autoConvert);
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
             return b;
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
         public virtual string[] GetFormats(bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats: " + autoConvert.ToString());
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             return innerData.GetFormats(autoConvert);
         }
 
@@ -486,7 +486,7 @@ namespace System.Windows.Forms
                     else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
                     {
                         if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
-                            && bm != null)
+                            && bm is not null)
                         {
                             // save bitmap
                             medium.unionmember = (IntPtr)GetCompatibleBitmap(bm);
@@ -771,7 +771,7 @@ namespace System.Windows.Forms
             }
             else if (format.Equals(DataFormats.Serializable)
                      || data is ISerializable
-                     || (data != null && data.GetType().IsSerializable))
+                     || (data is not null && data.GetType().IsSerializable))
             {
                 hr = SaveObjectToHandle(ref medium.unionmember, data, DataObject.RestrictDeserializationToSafeTypes(format));
             }
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms
         public virtual void SetData(string format, bool autoConvert, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, autoConvert, data);
         }
 
@@ -1030,7 +1030,7 @@ namespace System.Windows.Forms
         public virtual void SetData(string format, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
 
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms
         public virtual void SetData(Type format, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
 
@@ -1053,7 +1053,7 @@ namespace System.Windows.Forms
         public virtual void SetData(object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(data);
         }
     }

@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value != null && !(value is DataGridViewImageCell))
+                if (value is not null && !(value is DataGridViewImageCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewImageCell"));
                 }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
                 ImageCellTemplate.Description = value;
-                if (DataGridView != null)
+                if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                     int rowCount = dataGridViewRows.Count;
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
             set
             {
                 _icon = value;
-                if (DataGridView != null)
+                if (DataGridView is not null)
                 {
                     DataGridView.OnColumnCommonChange(Index);
                 }
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             set
             {
                 _image = value;
-                if (DataGridView != null)
+                if (DataGridView is not null)
                 {
                     DataGridView.OnColumnCommonChange(Index);
                 }
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 if (ImageLayout != value)
                 {
                     ImageCellTemplate.ImageLayout = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
                 if (ValuesAreIcons != value)
                 {
                     ImageCellTemplate.ValueIsIconInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
 
                 dataGridViewColumn = (DataGridViewImageColumn)System.Activator.CreateInstance(thisType);
             }
-            if (dataGridViewColumn != null)
+            if (dataGridViewColumn is not null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 dataGridViewColumn.Icon = _icon;
@@ -289,14 +289,14 @@ namespace System.Windows.Forms
                     !defaultCellStyle.ForeColor.IsEmpty ||
                     !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
-                    defaultCellStyle.Font != null ||
+                    defaultCellStyle.Font is not null ||
                     !defaultNullValue.Equals(defaultCellStyle.NullValue) ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
                     !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag != null ||
+                    defaultCellStyle.Tag is not null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 

@@ -46,11 +46,11 @@ namespace System.Windows.Forms
                 }
 
                 DataGridView? dataGridView = dataGridViewCell.DataGridView;
-                if (dataGridView != null &&
+                if (dataGridView is not null &&
                     dataGridView.IsHandleCreated &&
                     dataGridViewCell.RowIndex != -1 &&
-                    dataGridViewCell.OwningColumn != null &&
-                    dataGridViewCell.OwningRow != null)
+                    dataGridViewCell.OwningColumn is not null &&
+                    dataGridViewCell.OwningRow is not null)
                 {
                     dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                 }

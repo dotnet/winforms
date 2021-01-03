@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.NavigateDirection.Parent:
                         DataGridViewCell currentCell = _ownerDataGridView.CurrentCell;
-                        if (currentCell != null && _ownerDataGridView.IsCurrentCellInEditMode)
+                        if (currentCell is not null && _ownerDataGridView.IsCurrentCellInEditMode)
                         {
                             return currentCell.AccessibilityObject;
                         }
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return true;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _ownerDataGridView.CurrentCell != null;
+                        return _ownerDataGridView.CurrentCell is not null;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerDataGridView.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:

@@ -494,7 +494,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_accessibilityProperty, accessibleObject);
                 }
 
-                Debug.Assert(accessibleObject != null, "Failed to create accessibility object");
+                Debug.Assert(accessibleObject is not null, "Failed to create accessibility object");
                 return accessibleObject;
             }
         }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_ncAccessibilityProperty, ncAccessibleObject);
                 }
 
-                Debug.Assert(ncAccessibleObject != null, "Failed to create NON-CLIENT accessibility object");
+                Debug.Assert(ncAccessibleObject is not null, "Failed to create NON-CLIENT accessibility object");
                 return ncAccessibleObject;
             }
         }
@@ -718,7 +718,7 @@ namespace System.Windows.Forms
                 AmbientProperties props = (AmbientProperties)Properties.GetObject(s_ambientPropertiesServiceProperty, out bool contains);
                 if (!contains)
                 {
-                    if (Site != null)
+                    if (Site is not null)
                     {
                         props = Site.GetService(typeof(AmbientProperties)) as AmbientProperties;
                     }
@@ -727,7 +727,7 @@ namespace System.Windows.Forms
                         props = (AmbientProperties)GetService(typeof(AmbientProperties));
                     }
 
-                    if (props != null)
+                    if (props is not null)
                     {
                         Properties.SetObject(s_ambientPropertiesServiceProperty, props);
                     }
@@ -768,7 +768,7 @@ namespace System.Windows.Forms
                 if (value != AutoSize)
                 {
                     CommonProperties.SetAutoSize(this, value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -840,7 +840,7 @@ namespace System.Windows.Forms
             get
             {
                 object customBackBrush = Properties.GetObject(s_backBrushProperty);
-                if (customBackBrush != null)
+                if (customBackBrush is not null)
                 {
                     // We already have a valid brush.  Unbox, and return.
                     return (Gdi32.HBRUSH)customBackBrush;
@@ -851,7 +851,7 @@ namespace System.Windows.Forms
                     // No custom back color.  See if we can get to our parent.
                     // The color check here is to account for parents and children who
                     // override the BackColor property.
-                    if (_parent != null && _parent.BackColor == BackColor)
+                    if (_parent is not null && _parent.BackColor == BackColor)
                     {
                         return _parent.BackColorBrush;
                     }
@@ -898,7 +898,7 @@ namespace System.Windows.Forms
                 }
 
                 Control p = ParentInternal;
-                if (p != null && p.CanAccessProperties)
+                if (p is not null && p.CanAccessProperties)
                 {
                     c = p.BackColor;
                     if (IsValidBackColor(c))
@@ -915,7 +915,7 @@ namespace System.Windows.Forms
                 if (c.IsEmpty)
                 {
                     AmbientProperties ambient = AmbientPropertiesService;
-                    if (ambient != null)
+                    if (ambient is not null)
                     {
                         c = ambient.BackColor;
                     }
@@ -1065,7 +1065,7 @@ namespace System.Windows.Forms
         public void ResetBindings()
         {
             ControlBindingsCollection bindings = (ControlBindingsCollection)Properties.GetObject(s_bindingsProperty);
-            if (bindings != null)
+            if (bindings is not null)
             {
                 bindings.Clear();
             }
@@ -1082,14 +1082,14 @@ namespace System.Windows.Forms
             {
                 // See if we have locally overridden the binding manager.
                 BindingContext context = (BindingContext)Properties.GetObject(s_bindingManagerProperty);
-                if (context != null)
+                if (context is not null)
                 {
                     return context;
                 }
 
                 // Otherwise, see if the parent has one for us.
                 Control p = ParentInternal;
-                if (p != null && p.CanAccessProperties)
+                if (p is not null && p.CanAccessProperties)
                 {
                     return p.BindingContext;
                 }
@@ -1405,14 +1405,14 @@ namespace System.Windows.Forms
                 {
                     EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
 
-                    if (oldValue != null)
+                    if (oldValue is not null)
                     {
                         oldValue.Disposed -= disposedHandler;
                     }
 
                     Properties.SetObject(s_contextMenuStripProperty, value);
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.Disposed += disposedHandler;
                     }
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms
             bool valid = true;
             validatedControlAllowsFocusChange = false;
             IContainerControl c = GetContainerControl();
-            if (c != null && CausesValidation)
+            if (c is not null && CausesValidation)
             {
                 if (c is ContainerControl container)
                 {
@@ -1587,10 +1587,10 @@ namespace System.Windows.Forms
                     {
                         ContainerControl cc;
                         Control parent = container.ParentInternal;
-                        if (parent != null)
+                        if (parent is not null)
                         {
                             cc = parent.GetContainerControl() as ContainerControl;
-                            if (cc != null)
+                            if (cc is not null)
                             {
                                 container = cc;
                             }
@@ -1624,7 +1624,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         return parent.ValidationCancelled;
                     }
@@ -1681,7 +1681,7 @@ namespace System.Windows.Forms
                 }
 
                 Cursor cursor = (Cursor)Properties.GetObject(s_cursorProperty);
-                if (cursor != null)
+                if (cursor is not null)
                 {
                     return cursor;
                 }
@@ -1695,13 +1695,13 @@ namespace System.Windows.Forms
                 }
 
                 Control p = ParentInternal;
-                if (p != null)
+                if (p is not null)
                 {
                     return p.Cursor;
                 }
 
                 AmbientProperties ambient = AmbientPropertiesService;
-                if (ambient != null && ambient.Cursor != null)
+                if (ambient is not null && ambient.Cursor is not null)
                 {
                     return ambient.Cursor;
                 }
@@ -1793,7 +1793,7 @@ namespace System.Windows.Forms
                 if (s_defaultFont is null)
                 {
                     s_defaultFont = SystemFonts.MessageBoxFont;
-                    Debug.Assert(s_defaultFont != null, "defaultFont wasn't set!");
+                    Debug.Assert(s_defaultFont is not null, "defaultFont wasn't set!");
                 }
 
                 return s_defaultFont;
@@ -2059,13 +2059,13 @@ namespace System.Windows.Forms
             get
             {
                 Font font = (Font)Properties.GetObject(s_fontProperty);
-                if (font != null)
+                if (font is not null)
                 {
                     return font;
                 }
 
                 Font f = GetParentFont();
-                if (f != null)
+                if (f is not null)
                 {
                     return f;
                 }
@@ -2073,14 +2073,14 @@ namespace System.Windows.Forms
                 if (IsActiveX)
                 {
                     f = ActiveXAmbientFont;
-                    if (f != null)
+                    if (f is not null)
                     {
                         return f;
                     }
                 }
 
                 AmbientProperties ambient = AmbientPropertiesService;
-                if (ambient != null && ambient.Font != null)
+                if (ambient is not null && ambient.Font is not null)
                 {
                     return ambient.Font;
                 }
@@ -2096,7 +2096,7 @@ namespace System.Windows.Forms
                 bool localChanged = false;
                 if (value is null)
                 {
-                    if (local != null)
+                    if (local is not null)
                     {
                         localChanged = true;
                     }
@@ -2187,7 +2187,7 @@ namespace System.Windows.Forms
             {
                 Font font = (Font)Properties.GetObject(s_fontProperty);
 
-                if (font != null)
+                if (font is not null)
                 {
                     FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle is null)
@@ -2200,20 +2200,20 @@ namespace System.Windows.Forms
                     return fontHandle.Handle;
                 }
 
-                if (_parent != null)
+                if (_parent is not null)
                 {
                     return _parent.FontHandle;
                 }
 
                 AmbientProperties ambient = AmbientPropertiesService;
 
-                if (ambient != null && ambient.Font != null)
+                if (ambient is not null && ambient.Font is not null)
                 {
                     FontHandleWrapper fontHandle = null;
 
                     Font currentAmbient = (Font)Properties.GetObject(s_currentAmbientFontProperty);
 
-                    if (currentAmbient != null && currentAmbient == ambient.Font)
+                    if (currentAmbient is not null && currentAmbient == ambient.Font)
                     {
                         fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     }
@@ -2249,7 +2249,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Font font = (Font)Properties.GetObject(s_fontProperty);
-                    if (font != null)
+                    if (font is not null)
                     {
                         fontHeight = font.Height;
                         Properties.SetInteger(s_fontHeightProperty, fontHeight);
@@ -2260,7 +2260,7 @@ namespace System.Windows.Forms
                 //ask the parent if it has the font height
                 int localFontHeight = -1;
 
-                if (ParentInternal != null && ParentInternal.CanAccessProperties)
+                if (ParentInternal is not null && ParentInternal.CanAccessProperties)
                 {
                     localFontHeight = ParentInternal.FontHeight;
                 }
@@ -2297,7 +2297,7 @@ namespace System.Windows.Forms
                 }
 
                 Control p = ParentInternal;
-                if (p != null && p.CanAccessProperties)
+                if (p is not null && p.CanAccessProperties)
                 {
                     return p.ForeColor;
                 }
@@ -2312,7 +2312,7 @@ namespace System.Windows.Forms
                 if (c.IsEmpty)
                 {
                     AmbientProperties ambient = AmbientPropertiesService;
-                    if (ambient != null)
+                    if (ambient is not null)
                     {
                         c = ambient.ForeColor;
                     }
@@ -2352,7 +2352,7 @@ namespace System.Windows.Forms
 
         private Font GetParentFont()
         {
-            if (ParentInternal != null && ParentInternal.CanAccessProperties)
+            if (ParentInternal is not null && ParentInternal.CanAccessProperties)
             {
                 return ParentInternal.Font;
             }
@@ -2466,7 +2466,7 @@ namespace System.Windows.Forms
             get
             {
                 ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-                return controls != null && controls.Count > 0;
+                return controls is not null && controls.Count > 0;
             }
         }
 
@@ -2559,9 +2559,9 @@ namespace System.Windows.Forms
                 RECT temp = new RECT();
                 Region working;
                 Control parent = ParentInternal;
-                if (parent != null)
+                if (parent is not null)
                 {
-                    while (parent.ParentInternal != null)
+                    while (parent.ParentInternal is not null)
                     {
                         parent = parent.ParentInternal;
                     }
@@ -2575,7 +2575,7 @@ namespace System.Windows.Forms
                     IntPtr prev;
                     IntPtr next;
                     IntPtr start;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         start = parent.Handle;
                     }
@@ -2934,7 +2934,7 @@ namespace System.Windows.Forms
                 string name = (string)Properties.GetObject(s_namePropertyProperty);
                 if (string.IsNullOrEmpty(name))
                 {
-                    if (Site != null)
+                    if (Site is not null)
                     {
                         name = Site.Name;
                     }
@@ -2980,7 +2980,7 @@ namespace System.Windows.Forms
             {
                 if (_parent != value)
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.Controls.Add(this);
                     }
@@ -3044,7 +3044,7 @@ namespace System.Windows.Forms
             get => _reflectParent;
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     value.AddReflectChild();
                 }
@@ -3218,7 +3218,7 @@ namespace System.Windows.Forms
                 if (((RightToLeft)rightToLeft) == RightToLeft.Inherit)
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         rightToLeft = (int)parent.RightToLeft;
                     }
@@ -3279,7 +3279,7 @@ namespace System.Windows.Forms
                 AmbientProperties oldAmbients = AmbientPropertiesService;
                 AmbientProperties newAmbients = null;
 
-                if (value != null)
+                if (value is not null)
                 {
                     newAmbients = value.GetService(typeof(AmbientProperties)) as AmbientProperties;
                 }
@@ -3490,10 +3490,10 @@ namespace System.Windows.Forms
 
                 if (IsMnemonicsListenerAxSourced)
                 {
-                    for (Control ctl = this; ctl != null; ctl = ctl.ParentInternal)
+                    for (Control ctl = this; ctl is not null; ctl = ctl.ParentInternal)
                     {
                         ActiveXImpl activeXImpl = (ActiveXImpl)ctl.Properties.GetObject(s_activeXImplProperty);
-                        if (activeXImpl != null)
+                        if (activeXImpl is not null)
                         {
                             activeXImpl.UpdateAccelTable();
                             break;
@@ -3542,7 +3542,7 @@ namespace System.Windows.Forms
             get
             {
                 Control control = this;
-                while (control != null && !control.GetTopLevel())
+                while (control is not null && !control.GetTopLevel())
                 {
                     control = control.ParentInternal;
                 }
@@ -3555,7 +3555,7 @@ namespace System.Windows.Forms
             get
             {
                 Control control = this;
-                while (control.ParentInternal != null)
+                while (control.ParentInternal is not null)
                 {
                     control = control.ParentInternal;
                 }
@@ -3702,7 +3702,7 @@ namespace System.Windows.Forms
                     SetState(States.UseWaitCursor, value);
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
-                    if (controlsCollection != null)
+                    if (controlsCollection is not null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
                         // forces the creation of an array subset enum each time we
@@ -3845,7 +3845,7 @@ namespace System.Windows.Forms
                     throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
                 }
 
-                if (IsDisposed && _threadCallbackList != null && _threadCallbackList.Count > 0)
+                if (IsDisposed && _threadCallbackList is not null && _threadCallbackList.Count > 0)
                 {
                     lock (_threadCallbackList)
                     {
@@ -4541,7 +4541,7 @@ namespace System.Windows.Forms
         internal virtual void AssignParent(Control value)
         {
             // Adopt the parent's required scaling bits
-            if (value != null)
+            if (value is not null)
             {
                 RequiredScalingEnabled = value.RequiredScalingEnabled;
             }
@@ -4613,7 +4613,7 @@ namespace System.Windows.Forms
             }
 
             SetState(States.CheckedHost, false);
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.All);
             }
@@ -4692,7 +4692,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void BringToFront()
         {
-            if (_parent != null)
+            if (_parent is not null)
             {
                 _parent.Controls.SetChildIndex(this, 0);
             }
@@ -4720,7 +4720,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (_parent != null)
+            if (_parent is not null)
             {
                 return _parent.CanProcessMnemonic();
             }
@@ -4736,7 +4736,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            for (Control ctl = this; ctl != null; ctl = ctl._parent)
+            for (Control ctl = this; ctl is not null; ctl = ctl._parent)
             {
                 if (!ctl.Enabled || !ctl.Visible)
                 {
@@ -4756,7 +4756,7 @@ namespace System.Windows.Forms
             Form lastOwner = null;
             Control lastParent = null;
 
-            for (Control ctl = bottom; ctl != null; ctl = ctl.ParentInternal)
+            for (Control ctl = bottom; ctl is not null; ctl = ctl.ParentInternal)
             {
                 lastParent = ctl;
                 if (ctl == toFind)
@@ -4765,11 +4765,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (lastParent != null)
+            if (lastParent is not null)
             {
                 if (lastParent is Form f)
                 {
-                    for (Form form = f; form != null; form = form.OwnerInternal)
+                    for (Form form = f; form is not null; form = form.OwnerInternal)
                     {
                         lastOwner = form;
                         if (form == toFind)
@@ -4780,9 +4780,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (lastOwner != null)
+            if (lastOwner is not null)
             {
-                if (lastOwner.ParentInternal != null)
+                if (lastOwner.ParentInternal is not null)
                 {
                     CheckParentingCycle(lastOwner.ParentInternal, toFind);
                 }
@@ -4795,7 +4795,7 @@ namespace System.Windows.Forms
             {
                 ActiveXOnFocus(true);
             }
-            if (_parent != null)
+            if (_parent is not null)
             {
                 _parent.ChildGotFocus(child);
             }
@@ -4806,7 +4806,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Contains(Control ctl)
         {
-            while (ctl != null)
+            while (ctl is not null)
             {
                 ctl = ctl.ParentInternal;
                 if (ctl is null)
@@ -4898,7 +4898,7 @@ namespace System.Windows.Forms
                 SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
 
                 // Adjust for scrolling of parent...
-                if (_parent != null)
+                if (_parent is not null)
                 {
                     Rectangle parentClient = _parent.ClientRectangle;
 
@@ -4950,7 +4950,7 @@ namespace System.Windows.Forms
             bool controlIsAlreadyCreated = Created;
             CreateControl(false);
 
-            if (Properties.GetObject(s_bindingManagerProperty) is null && ParentInternal != null && !controlIsAlreadyCreated)
+            if (Properties.GetObject(s_bindingManagerProperty) is null && ParentInternal is not null && !controlIsAlreadyCreated)
             {
                 // We do not want to call our parent's BindingContext property here.
                 // We have no idea if us or any of our children are using data binding,
@@ -4993,7 +4993,7 @@ namespace System.Windows.Forms
                     // z-order updates from Windows may rearrange it!
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
-                    if (controlsCollection != null)
+                    if (controlsCollection is not null)
                     {
                         Control[] controlSnapshot = new Control[controlsCollection.Count];
                         controlsCollection.CopyTo(controlSnapshot, 0);
@@ -5040,7 +5040,7 @@ namespace System.Windows.Forms
         {
             if (RecreatingHandle)
             {
-                if (_threadCallbackList != null)
+                if (_threadCallbackList is not null)
                 {
                     // See if we have a thread marshaling request pending.  If so, we will need to
                     // re-post it after recreating the handle.
@@ -5070,7 +5070,7 @@ namespace System.Windows.Forms
             // the thread callback message to the new handle for us.
             if (!RecreatingHandle)
             {
-                if (_threadCallbackList != null)
+                if (_threadCallbackList is not null)
                 {
                     lock (_threadCallbackList)
                     {
@@ -5107,7 +5107,7 @@ namespace System.Windows.Forms
             if (GetState(States.OwnCtlBrush))
             {
                 object backBrush = Properties.GetObject(s_backBrushProperty);
-                if (backBrush != null)
+                if (backBrush is not null)
                 {
                     Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
                     if (!p.IsNull)
@@ -5148,14 +5148,14 @@ namespace System.Windows.Forms
                         DestroyHandle();
                     }
 
-                    if (_parent != null)
+                    if (_parent is not null)
                     {
                         _parent.Controls.Remove(this);
                     }
 
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
-                    if (controlsCollection != null)
+                    if (controlsCollection is not null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
                         // forces the creation of an array subset enum each time we
@@ -5182,7 +5182,7 @@ namespace System.Windows.Forms
             {
                 // This same post is done in NativeWindow's finalize method, so if you change
                 // it, change it there too.
-                if (_window != null)
+                if (_window is not null)
                 {
                     _window.ForceExitMessageLoop();
                 }
@@ -5195,7 +5195,7 @@ namespace System.Windows.Forms
         {
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -5332,7 +5332,7 @@ namespace System.Windows.Forms
             }
 
             Debug.Assert(asyncResult.IsCompleted, "Why isn't this asyncResult done yet?");
-            if (entry._exception != null)
+            if (entry._exception is not null)
             {
                 throw entry._exception;
             }
@@ -5373,7 +5373,7 @@ namespace System.Windows.Forms
         public Form FindForm()
         {
             Control cur = this;
-            while (cur != null && !(cur is Form))
+            while (cur is not null && !(cur is Form))
             {
                 cur = cur.ParentInternal;
             }
@@ -5393,7 +5393,7 @@ namespace System.Windows.Forms
             {
                 Control c = this;
 
-                while (c != null && !c.IsHandleCreated)
+                while (c is not null && !c.IsHandleCreated)
                 {
                     Control p = c.ParentInternal;
                     c = p;
@@ -5473,11 +5473,11 @@ namespace System.Windows.Forms
             {
                 User32.SetFocus(new HandleRef(this, Handle));
             }
-            if (Focused && ParentInternal != null)
+            if (Focused && ParentInternal is not null)
             {
                 IContainerControl c = ParentInternal.GetContainerControl();
 
-                if (c != null)
+                if (c is not null)
                 {
                     if (c is ContainerControl)
                     {
@@ -5506,7 +5506,7 @@ namespace System.Windows.Forms
             while (handle != IntPtr.Zero)
             {
                 Control ctl = FromHandle(handle);
-                if (ctl != null)
+                if (ctl is not null)
                 {
                     return ctl;
                 }
@@ -5523,7 +5523,7 @@ namespace System.Windows.Forms
         public static Control FromHandle(IntPtr handle)
         {
             NativeWindow w = NativeWindow.FromHandle(handle);
-            while (w != null && !(w is ControlNativeWindow))
+            while (w is not null && !(w is ControlNativeWindow))
             {
                 w = w.PreviousWindow;
             }
@@ -5608,11 +5608,11 @@ namespace System.Windows.Forms
             Control c = this;
 
             // Refer to IsContainerControl property for more details.
-            if (c != null && IsContainerControl)
+            if (c is not null && IsContainerControl)
             {
                 c = c.ParentInternal;
             }
-            while (c != null && !IsFocusManagingContainerControl(c))
+            while (c is not null && !IsFocusManagingContainerControl(c))
             {
                 c = c.ParentInternal;
             }
@@ -5675,7 +5675,7 @@ namespace System.Windows.Forms
             if (scaleLoc)
             {
                 ISite site = Site;
-                if (site != null && site.DesignMode)
+                if (site is not null && site.DesignMode)
                 {
                     if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.RootComponent == this)
                     {
@@ -5737,7 +5737,7 @@ namespace System.Windows.Forms
         {
             Control up = this;
             bool isDisposing = false;
-            while (up != null)
+            while (up is not null)
             {
                 if (up.Disposing)
                 {
@@ -5816,7 +5816,7 @@ namespace System.Windows.Forms
             ControlCollection ctlControls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
             Control found = null;
-            if (ctlControls != null)
+            if (ctlControls is not null)
             {
                 if (forward)
                 {
@@ -5859,10 +5859,10 @@ namespace System.Windows.Forms
             {
                 ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
-                if (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
+                if (ctlControls is not null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
                     Control found = ctl.GetFirstChildControlInTabOrder(/*forward=*/true);
-                    if (found != null)
+                    if (found is not null)
                     {
                         return found;
                     }
@@ -5883,7 +5883,7 @@ namespace System.Windows.Forms
 
                     ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
 
-                    if (parentControls != null)
+                    if (parentControls is not null)
                     {
                         parentControlCount = parentControls.Count;
                     }
@@ -5922,7 +5922,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (found != null)
+                    if (found is not null)
                     {
                         return found;
                     }
@@ -5945,7 +5945,7 @@ namespace System.Windows.Forms
 
                     ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
 
-                    if (parentControls != null)
+                    if (parentControls is not null)
                     {
                         parentControlCount = parentControls.Count;
                     }
@@ -5986,7 +5986,7 @@ namespace System.Windows.Forms
 
                     // If we were unable to find a control we should return the control's parent.  However, if that parent is us, return
                     // NULL.
-                    if (found != null)
+                    if (found is not null)
                     {
                         ctl = found;
                     }
@@ -6006,10 +6006,10 @@ namespace System.Windows.Forms
                 // We found a control.  Walk into this control to find the proper sub control within it to select.
                 ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
 
-                while (ctlControls != null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
+                while (ctlControls is not null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
                     Control found = ctl.GetFirstChildControlInTabOrder(/*forward=*/false);
-                    if (found != null)
+                    if (found is not null)
                     {
                         ctl = found;
                         ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
@@ -6030,7 +6030,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
-            Debug.Assert(window != null, "window is null in Control.GetSafeHandle");
+            Debug.Assert(window is not null, "window is null in Control.GetSafeHandle");
             if (window is Control control)
             {
                 return control.Handle;
@@ -6326,7 +6326,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvokeMarshaledCallback(ThreadMethodEntry tme)
         {
-            if (tme._executionContext != null)
+            if (tme._executionContext is not null)
             {
                 if (s_invokeMarshaledCallbackHelperDelegate is null)
                 {
@@ -6355,7 +6355,7 @@ namespace System.Windows.Forms
         {
             ThreadMethodEntry tme = (ThreadMethodEntry)obj;
 
-            if (tme._syncContext != null)
+            if (tme._syncContext is not null)
             {
                 SynchronizationContext oldContext = SynchronizationContext.Current;
 
@@ -6427,9 +6427,9 @@ namespace System.Windows.Forms
             }
 
             // Now invoke on all the queued items.
-            while (current != null)
+            while (current is not null)
             {
-                if (current._method != null)
+                if (current._method is not null)
                 {
                     try
                     {
@@ -6460,7 +6460,7 @@ namespace System.Windows.Forms
                         // do this because the exception would have been handled above.  If we're
                         // not debugging, raise the exception here.
                         if (!NativeWindow.WndProcShouldBeDebuggable &&
-                            current._exception != null && !current._synchronous)
+                            current._exception is not null && !current._synchronous)
                         {
                             Application.OnThreadException(current._exception);
                         }
@@ -6497,7 +6497,7 @@ namespace System.Windows.Forms
         internal bool IsFontSet()
         {
             Font font = (Font)Properties.GetObject(s_fontProperty);
-            if (font != null)
+            if (font is not null)
             {
                 return true;
             }
@@ -6512,7 +6512,7 @@ namespace System.Windows.Forms
         internal bool IsDescendant(Control descendant)
         {
             Control control = descendant;
-            while (control != null)
+            while (control is not null)
             {
                 if (control == this)
                 {
@@ -6635,7 +6635,7 @@ namespace System.Windows.Forms
             {
                 Debug.Write("Control.IsMnemonic(" + charCode.ToString() + ", ");
 
-                if (text != null)
+                if (text is not null)
                 {
                     Debug.Write(text);
                 }
@@ -6654,7 +6654,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            if (text != null)
+            if (text is not null)
             {
                 int pos = -1; // start with -1 to handle double &'s
                 char c2 = char.ToUpper(charCode, CultureInfo.CurrentCulture);
@@ -6824,7 +6824,7 @@ namespace System.Windows.Forms
                 {
                     WaitForWaitHandle(tme.AsyncWaitHandle);
                 }
-                if (tme._exception != null)
+                if (tme._exception is not null)
                 {
                     throw tme._exception;
                 }
@@ -6916,7 +6916,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeOnClick(Control toInvoke, EventArgs e)
         {
-            if (toInvoke != null)
+            if (toInvoke is not null)
             {
                 toInvoke.OnClick(e);
             }
@@ -6939,7 +6939,7 @@ namespace System.Windows.Forms
             }
 
             object backBrush = Properties.GetObject(s_backBrushProperty);
-            if (backBrush != null)
+            if (backBrush is not null)
             {
                 if (GetState(States.OwnCtlBrush))
                 {
@@ -6960,7 +6960,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -6988,7 +6988,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7019,7 +7019,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnBindingContextChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_bindingsProperty) != null)
+            if (Properties.GetObject(s_bindingsProperty) is not null)
             {
                 UpdateBindings();
             }
@@ -7030,7 +7030,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7057,7 +7057,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal virtual void OnChildLayoutResuming(Control child, bool performLayout)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 ParentInternal.OnChildLayoutResuming(child, performLayout);
             }
@@ -7081,7 +7081,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7134,7 +7134,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7183,7 +7183,7 @@ namespace System.Windows.Forms
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
             using (new LayoutTransaction(this, this, PropertyNames.Font, false))
             {
-                if (controlsCollection != null)
+                if (controlsCollection is not null)
                 {
                     // This may have changed the sizes of our children.
                     // PERFNOTE: This is more efficient than using Foreach.  Foreach
@@ -7215,7 +7215,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7247,7 +7247,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7330,7 +7330,7 @@ namespace System.Windows.Forms
             // restore ourselves over to the original control.
             // use SetParent directly so as to not raise ParentChanged events
             Control parent = ParentInternal;
-            if (parent != null)
+            if (parent is not null)
             {
                 if (IsHandleCreated)
                 {
@@ -7408,7 +7408,7 @@ namespace System.Windows.Forms
             {
                 // This control became invisible too - notify its children
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-                if (controlsCollection != null)
+                if (controlsCollection is not null)
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
@@ -7497,7 +7497,7 @@ namespace System.Windows.Forms
                 _trackMouseEvent = default;
             }
 
-            if (_parent != null && visible && !Created)
+            if (_parent is not null && visible && !Created)
             {
                 bool isDisposing = GetAnyDisposingInHierarchy();
                 if (!isDisposing)
@@ -7514,7 +7514,7 @@ namespace System.Windows.Forms
             }
 
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7537,7 +7537,7 @@ namespace System.Windows.Forms
         internal virtual void OnTopMostActiveXParentChanged(EventArgs e)
         {
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -7641,7 +7641,7 @@ namespace System.Windows.Forms
                 SetAcceptDrops(AllowDrop);
 
                 Region region = Region;
-                if (region != null)
+                if (region is not null)
                 {
                     SetRegion(region);
                 }
@@ -7663,7 +7663,7 @@ namespace System.Windows.Forms
                 }
 
                 // Set the window text from the Text property.
-                if (_text != null && _text.Length != 0)
+                if (_text is not null && _text.Length != 0)
                 {
                     User32.SetWindowTextW(new HandleRef(this, Handle), _text);
                 }
@@ -7761,7 +7761,7 @@ namespace System.Windows.Forms
                 if (GetState(States.OwnCtlBrush))
                 {
                     object backBrush = Properties.GetObject(s_backBrushProperty);
-                    if (backBrush != null)
+                    if (backBrush is not null)
                     {
                         Properties.SetObject(s_backBrushProperty, null);
                         Gdi32.HBRUSH p = (Gdi32.HBRUSH)backBrush;
@@ -7784,7 +7784,7 @@ namespace System.Windows.Forms
                 if (!GetAnyDisposingInHierarchy())
                 {
                     _text = Text;
-                    if (_text != null && _text.Length == 0)
+                    if (_text is not null && _text.Length == 0)
                     {
                         _text = null;
                     }
@@ -7881,7 +7881,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeGotFocus(Control toInvoke, EventArgs e)
         {
-            if (toInvoke != null)
+            if (toInvoke is not null)
             {
                 toInvoke.OnGotFocus(e);
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
@@ -7899,7 +7899,7 @@ namespace System.Windows.Forms
                 ActiveXOnFocus(true);
             }
 
-            if (_parent != null)
+            if (_parent is not null)
             {
                 _parent.ChildGotFocus(this);
             }
@@ -7915,19 +7915,19 @@ namespace System.Windows.Forms
         protected virtual void OnHelpRequested(HelpEventArgs hevent)
         {
             HelpEventHandler handler = (HelpEventHandler)Events[s_helpRequestedEvent];
-            if (handler != null)
+            if (handler is not null)
             {
                 handler(this, hevent);
 
                 // Mark the event as handled so that the event isn't raised for the
                 // control's parent.
-                if (hevent != null)
+                if (hevent is not null)
                 {
                     hevent.Handled = true;
                 }
             }
 
-            if (hevent != null && !hevent.Handled)
+            if (hevent is not null && !hevent.Handled)
             {
                 ParentInternal?.OnHelpRequested(hevent);
             }
@@ -7948,7 +7948,7 @@ namespace System.Windows.Forms
 
             // Transparent control support
             ControlCollection controls = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controls != null)
+            if (controls is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -8007,7 +8007,7 @@ namespace System.Windows.Forms
             ((LayoutEventHandler)Events[s_layoutEvent])?.Invoke(this, levent);
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
-            if (parentRequiresLayout && ParentInternal != null)
+            if (parentRequiresLayout && ParentInternal is not null)
             {
                 // LayoutEngine.Layout can return true to request that our parent resize us because
                 // we did not have enough room for our contents. We can not just call PerformLayout
@@ -8043,7 +8043,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeLostFocus(Control toInvoke, EventArgs e)
         {
-            if (toInvoke != null)
+            if (toInvoke is not null)
             {
                 toInvoke.OnLostFocus(e);
                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
@@ -8341,7 +8341,7 @@ namespace System.Windows.Forms
         protected virtual void OnSystemColorsChanged(EventArgs e)
         {
             ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-            if (controlsCollection != null)
+            if (controlsCollection is not null)
             {
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
@@ -8414,7 +8414,7 @@ namespace System.Windows.Forms
             // The rest of this won't do much if BackColor is transparent and there is no BackgroundImage,
             // but we need to call it in the partial alpha case.
 
-            if (BackgroundImage != null && !DisplayInformation.HighContrast && !formRTL)
+            if (BackgroundImage is not null && !DisplayInformation.HighContrast && !formRTL)
             {
                 if (BackgroundImageLayout == ImageLayout.Tile)
                 {
@@ -8537,7 +8537,7 @@ namespace System.Windows.Forms
                 // we use the wrapper in ButtonRenderer - this should do the right thing for all controls,
                 // not just Buttons.
 
-                if (transparentRegion != null)
+                if (transparentRegion is not null)
                 {
                     Graphics g = e.GraphicsInternal;
                     using var saveState = new GraphicsStateScope(g);
@@ -8569,7 +8569,7 @@ namespace System.Windows.Forms
 
             using PaintEventArgs newArgs = new PaintEventArgs(hdc, newClipRect);
 
-            if (transparentRegion != null)
+            if (transparentRegion is not null)
             {
                 using var saveState = new GraphicsStateScope(newArgs.Graphics);
 
@@ -8646,7 +8646,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                for (Control c = ParentInternal; c != null; c = c.ParentInternal)
+                for (Control c = ParentInternal; c is not null; c = c.ParentInternal)
                 {
                     if (c is ContainerControl)
                     {
@@ -8664,7 +8664,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void PerformLayout()
         {
-            if (_cachedLayoutEventArgs != null)
+            if (_cachedLayoutEventArgs is not null)
             {
                 PerformLayout(_cachedLayoutEventArgs);
                 _cachedLayoutEventArgs = null;
@@ -8691,7 +8691,7 @@ namespace System.Windows.Forms
 
         internal void PerformLayout(LayoutEventArgs args)
         {
-            Debug.Assert(args != null, "This method should never be called with null args.");
+            Debug.Assert(args is not null, "This method should never be called with null args.");
             if (GetAnyDisposingInHierarchy())
             {
                 return;
@@ -8734,7 +8734,7 @@ namespace System.Windows.Forms
                 // LayoutEngine.Layout can return true to request that our parent resize us because
                 // we did not have enough room for our contents.  Now that we are unsuspended,
                 // see if this happened and layout parent if necessary.  (See also OnLayout)
-                if (ParentInternal != null && ParentInternal.GetState(States.LayoutIsDirty))
+                if (ParentInternal is not null && ParentInternal.GetState(States.LayoutIsDirty))
                 {
                     LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.PreferredSize);
                 }
@@ -9044,7 +9044,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
 
-            if (_parent != null)
+            if (_parent is not null)
             {
                 return _parent.ProcessCmdKey(ref msg, keyData);
             }
@@ -9262,7 +9262,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (kpe != null)
+            if (kpe is not null)
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + kpe.Handled);
                 m.WParam = newWParam;
@@ -9299,7 +9299,7 @@ namespace System.Windows.Forms
         protected internal virtual bool ProcessKeyMessage(ref Message m)
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
-            if (_parent != null && _parent.ProcessKeyPreview(ref m))
+            if (_parent is not null && _parent.ProcessKeyPreview(ref m))
             {
                 return true;
             }
@@ -9589,13 +9589,13 @@ namespace System.Windows.Forms
 
                     //fish out control collection w/o demand creating one.
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-                    if (controlsCollection != null && controlsCollection.Count > 0)
+                    if (controlsCollection is not null && controlsCollection.Count > 0)
                     {
                         controlSnapshot = new Control[controlsCollection.Count];
                         for (int i = 0; i < controlsCollection.Count; i++)
                         {
                             Control childControl = controlsCollection[i];
-                            if (childControl != null && childControl.IsHandleCreated)
+                            if (childControl is not null && childControl.IsHandleCreated)
                             {
                                 // SetParent to parking window
                                 childControl.OnParentHandleRecreating();
@@ -9649,12 +9649,12 @@ namespace System.Windows.Forms
                     // - or -
                     // CreateHandle is successful.
                     //      We will move the child controls to the new parent.
-                    if (controlSnapshot != null && GetState(States.Created))
+                    if (controlSnapshot is not null && GetState(States.Created))
                     {
                         for (int i = 0; i < controlSnapshot.Length; i++)
                         {
                             Control childControl = controlSnapshot[i];
-                            if (childControl != null && childControl.IsHandleCreated)
+                            if (childControl is not null && childControl.IsHandleCreated)
                             {
                                 // Re-parent the control.
                                 // If the control fails to re-parent itself,
@@ -9861,7 +9861,7 @@ namespace System.Windows.Forms
                 // PERFNOTE: This is more efficient than using Foreach.  Foreach
                 // forces the creation of an array subset enum each time we
                 // enumerate
-                if (controlsCollection != null)
+                if (controlsCollection is not null)
                 {
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
@@ -9968,7 +9968,7 @@ namespace System.Windows.Forms
                 if (ScaleChildren)
                 {
                     ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
-                    if (controlsCollection != null)
+                    if (controlsCollection is not null)
                     {
                         // PERFNOTE: This is more efficient than using Foreach.  Foreach
                         // forces the creation of an array subset enum each time we
@@ -10040,7 +10040,7 @@ namespace System.Windows.Forms
             {
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
-                if (controlsCollection != null)
+                if (controlsCollection is not null)
                 {
                     // PERFNOTE: This is more efficient than using Foreach.  Foreach
                     // forces the creation of an array subset enum each time we
@@ -10231,7 +10231,7 @@ namespace System.Windows.Forms
             Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
             scaledSize = LayoutUtils.UnionSizes(scaledSize, minSize);
 
-            if (DpiHelper.IsScalingRequirementMet && (ParentInternal != null) && (ParentInternal.LayoutEngine == DefaultLayout.Instance))
+            if (DpiHelper.IsScalingRequirementMet && (ParentInternal is not null) && (ParentInternal.LayoutEngine == DefaultLayout.Instance))
             {
                 // We need to scale AnchorInfo to update distances to container edges
                 DefaultLayout.ScaleAnchorInfo((IArrangedElement)this, factor);
@@ -10275,7 +10275,7 @@ namespace System.Windows.Forms
 
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
-                if (controlsCollection != null)
+                if (controlsCollection is not null)
                 {
                     // PERFNOTE: This is more efficient than using Foreach.  Foreach
                     // forces the creation of an array subset enum each time we
@@ -10325,7 +10325,7 @@ namespace System.Windows.Forms
         {
             IContainerControl c = GetContainerControl();
 
-            if (c != null)
+            if (c is not null)
             {
                 c.ActiveControl = this;
             }
@@ -10337,7 +10337,7 @@ namespace System.Windows.Forms
         public bool SelectNextControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
             Control nextSelectableControl = GetNextSelectableControl(ctl, forward, tabStopOnly, nested, wrap);
-            if (nextSelectableControl != null)
+            if (nextSelectableControl is not null)
             {
                 nextSelectableControl.Select(true, forward);
                 return true;
@@ -10401,11 +10401,11 @@ namespace System.Windows.Forms
             //           We want to move focus away from hidden controls, so this
             //           function was added.
             //
-            if (ContainsFocus && ParentInternal != null)
+            if (ContainsFocus && ParentInternal is not null)
             {
                 IContainerControl c = ParentInternal.GetContainerControl();
 
-                if (c != null)
+                if (c is not null)
                 {
                     ((Control)c).SelectNextControl(this, true, true, true, true);
                 }
@@ -10417,7 +10417,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SendToBack()
         {
-            if (_parent != null)
+            if (_parent is not null)
             {
                 _parent.Controls.SetChildIndex(this, -1);
             }
@@ -10515,7 +10515,7 @@ namespace System.Windows.Forms
 #if DEBUG
             int suspendCount = -44371;      // Arbitrary negative prime to surface bugs.
 #endif
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
 #if DEBUG
                 suspendCount = ParentInternal.LayoutSuspendCount;
@@ -10582,7 +10582,7 @@ namespace System.Windows.Forms
                 // Initialize the scaling engine.
                 InitScaling(specified);
 
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     // Some layout engines (DefaultLayout) base their PreferredSize on
                     // the bounds of their children.  If we change change the child bounds, we
@@ -10689,7 +10689,7 @@ namespace System.Windows.Forms
                                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                             }
 
-                            if (_parent != null)
+                            if (_parent is not null)
                             {
                                 _parent.UpdateChildZOrder(this);
                             }
@@ -10750,7 +10750,7 @@ namespace System.Windows.Forms
         {
             if (GetTopLevel() != value)
             {
-                if (_parent != null)
+                if (_parent is not null)
                 {
                     throw new ArgumentException(SR.TopLevelParentedControl, nameof(value));
                 }
@@ -10885,7 +10885,7 @@ namespace System.Windows.Forms
         internal static AutoValidate GetAutoValidateForControl(Control control)
         {
             ContainerControl parent = control.ParentContainerControl;
-            return (parent != null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
+            return (parent is not null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
         }
 
         /// <summary>
@@ -10925,7 +10925,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeCursor()
         {
             object cursor = Properties.GetObject(s_cursorProperty, out bool found);
-            return (found && cursor != null);
+            return (found && cursor is not null);
         }
 
         /// <summary>
@@ -10954,7 +10954,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeFont()
         {
             object font = Properties.GetObject(s_fontProperty, out bool found);
-            return (found && font != null);
+            return (found && font is not null);
         }
 
         /// <summary>
@@ -11315,7 +11315,7 @@ namespace System.Windows.Forms
             while ((hWnd = User32.GetWindow(hWnd, User32.GW.HWNDPREV)) != IntPtr.Zero)
             {
                 Control c = FromHandle(hWnd);
-                if (c != null)
+                if (c is not null)
                 {
                     newIndex = Controls.GetChildIndex(c, false) + 1;
                     break;
@@ -11358,7 +11358,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void UpdateZOrder()
         {
-            if (_parent != null)
+            if (_parent is not null)
             {
                 _parent.UpdateChildZOrder(this);
             }
@@ -11487,7 +11487,7 @@ namespace System.Windows.Forms
 
         private void WmClose(ref Message m)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 IntPtr parentHandle = Handle;
                 IntPtr lastParentHandle = parentHandle;
@@ -11557,7 +11557,7 @@ namespace System.Windows.Forms
         internal void WmContextMenu(ref Message m, Control sourceControl)
         {
             var contextMenuStrip = (ContextMenuStrip)Properties.GetObject(s_contextMenuStripProperty);
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 int x = PARAM.SignedLOWORD(m.LParam);
                 int y = PARAM.SignedHIWORD(m.LParam);
@@ -11598,7 +11598,7 @@ namespace System.Windows.Forms
         {
             // We could simply reflect the message, but it's faster to handle it here if possible.
             Control control = FromHandle(m.LParam);
-            if (control != null)
+            if (control is not null)
             {
                 m.Result = (IntPtr)control.InitializeDCForWmCtlColor((Gdi32.HDC)m.WParam, (User32.WM)m.Msg);
                 if (m.Result != IntPtr.Zero)
@@ -11656,7 +11656,7 @@ namespace System.Windows.Forms
         {
             string name;
 
-            if (Site != null)
+            if (Site is not null)
             {
                 name = Site.Name;
             }
@@ -11707,13 +11707,13 @@ namespace System.Windows.Forms
 
             AccessibleObject ctrlAccessibleObject = GetAccessibilityObject(unchecked((int)(long)m.LParam));
 
-            if (ctrlAccessibleObject != null)
+            if (ctrlAccessibleObject is not null)
             {
                 intAccessibleObject = new InternalAccessibleObject(ctrlAccessibleObject);
             }
 
             // See "How to Handle WM_GETOBJECT" in MSDN
-            if (intAccessibleObject != null)
+            if (intAccessibleObject is not null)
             {
                 // Get the IAccessible GUID
                 Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
@@ -11776,7 +11776,7 @@ namespace System.Windows.Forms
         {
             // if there's currently a message box open - grab the help info from it.
             HelpInfo hpi = MessageBox.HelpInfo;
-            if (hpi != null)
+            if (hpi is not null)
             {
                 switch (hpi.Option)
                 {
@@ -11812,7 +11812,7 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            if (_parent != null)
+            if (_parent is not null)
             {
                 _parent.UpdateChildZOrder(this);
             }
@@ -11990,7 +11990,7 @@ namespace System.Windows.Forms
                 {
                     // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
                     Font local = (Font)Properties.GetObject(s_fontProperty);
-                    if (local != null)
+                    if (local is not null)
                     {
                         var factor = (float)_deviceDpi / deviceDpiOld;
                         Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
@@ -12198,7 +12198,7 @@ namespace System.Windows.Forms
                 if (handle != IntPtr.Zero)
                 {
                     Control control = FromHandle(handle);
-                    if (control != null)
+                    if (control is not null)
                     {
                         m.Result = User32.SendMessageW(control, User32.WM.REFLECT | (User32.WM)m.Msg, handle, m.LParam);
                         reflectCalled = true;
@@ -12306,7 +12306,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (bufferedGraphics != null)
+            if (bufferedGraphics is not null)
             {
                 bufferedGraphics.Graphics.SetClip(clip);
                 pevent = new PaintEventArgs(
@@ -12460,7 +12460,7 @@ namespace System.Windows.Forms
             if (!HostedInWin32DialogManager)
             {
                 IContainerControl c = GetContainerControl();
-                if (c != null)
+                if (c is not null)
                 {
                     bool activateSucceed;
 
@@ -12532,7 +12532,7 @@ namespace System.Windows.Forms
 
                     // We do not want to update state if we are on the parking window.
                     bool parentVisible = GetTopLevel();
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         parentVisible = ParentInternal.Visible;
                     }
@@ -12653,7 +12653,7 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
             // Update new size / position
             UpdateBounds();
-            if (_parent != null && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
+            if (_parent is not null && User32.GetParent(new HandleRef(_window, InternalHandle)) == _parent.InternalHandle &&
                 (_state & States.NoZOrder) == 0)
             {
                 User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
@@ -13083,18 +13083,18 @@ namespace System.Windows.Forms
             bool sizeChanged = false;
             bool locationChanged = false;
 
-            if (site != null && site.DesignMode)
+            if (site is not null && site.DesignMode)
             {
                 ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                if (ccs != null)
+                if (ccs is not null)
                 {
                     sizeProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Size];
                     locationProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Location];
-                    Debug.Assert(sizeProperty != null && locationProperty != null, "Error retrieving Size/Location properties on Control.");
+                    Debug.Assert(sizeProperty is not null && locationProperty is not null, "Error retrieving Size/Location properties on Control.");
 
                     try
                     {
-                        if (sizeProperty != null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
+                        if (sizeProperty is not null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
                         {
                             if (!(site is INestedSite))
                             {
@@ -13102,7 +13102,7 @@ namespace System.Windows.Forms
                             }
                             sizeChanged = true;
                         }
-                        if (locationProperty != null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
+                        if (locationProperty is not null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
                         {
                             if (!(site is INestedSite))
                             {
@@ -13122,7 +13122,7 @@ namespace System.Windows.Forms
 
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
 
-            if (site != null && ccs != null)
+            if (site is not null && ccs is not null)
             {
                 try
                 {
@@ -13328,7 +13328,7 @@ namespace System.Windows.Forms
 
         unsafe HRESULT Ole32.IOleInPlaceObject.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
         {
-            if (lprcClipRect != null)
+            if (lprcClipRect is not null)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect->left + ", " + lprcClipRect->top + ", " + lprcClipRect->right + ", " + lprcClipRect->bottom + ")");
             }
@@ -13426,7 +13426,7 @@ namespace System.Windows.Forms
                 Debug.WriteLine("     activeSite: " + pActiveSite);
                 Debug.WriteLine("     index: " + lindex);
                 Debug.WriteLine("     hwndParent: " + hwndParent);
-                Debug.WriteLine("     posRect: " + (lprcPosRect != null ? (*lprcPosRect).ToString() : "null"));
+                Debug.WriteLine("     posRect: " + (lprcPosRect is not null ? (*lprcPosRect).ToString() : "null"));
             }
 #endif
             Debug.Indent();
@@ -13937,7 +13937,7 @@ namespace System.Windows.Forms
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
             Control topLevelControl = TopLevelControlInternal;
-            return topLevelControl != null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
+            return topLevelControl is not null && topLevelControl.RightToLeft == RightToLeft.Yes && !IsMirrored;
         }
 
         bool IKeyboardToolTip.AllowsToolTip()

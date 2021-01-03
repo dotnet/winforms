@@ -151,13 +151,13 @@ namespace System.Windows.Forms
                     {
                         list = dataSources[offset - 1] as IList;
                     }
-                    if (list != null && list.Count > 0)
+                    if (list is not null && list.Count > 0)
                     {
                         itemProps = TypeDescriptor.GetProperties(list[0]);
                     }
                 }
 
-                if (itemProps != null)
+                if (itemProps is not null)
                 {
                     for (int j = 0; j < itemProps.Count; j++)
                     {

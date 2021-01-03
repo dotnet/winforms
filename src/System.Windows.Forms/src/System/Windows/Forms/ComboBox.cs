@@ -231,14 +231,14 @@ namespace System.Windows.Forms
             {
                 if (_autoCompleteCustomSource != value)
                 {
-                    if (_autoCompleteCustomSource != null)
+                    if (_autoCompleteCustomSource is not null)
                     {
                         _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     _autoCompleteCustomSource = value;
 
-                    if (_autoCompleteCustomSource != null)
+                    if (_autoCompleteCustomSource is not null)
                     {
                         _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
@@ -590,7 +590,7 @@ namespace System.Windows.Forms
                 }
 
                 IntPtr focus = GetFocus();
-                return focus != IntPtr.Zero && ((_childEdit != null && focus == _childEdit.Handle) || (_childListBox != null && focus == _childListBox.Handle));
+                return focus != IntPtr.Zero && ((_childEdit is not null && focus == _childEdit.Handle) || (_childListBox is not null && focus == _childListBox.Handle));
             }
         }
 
@@ -733,7 +733,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null || Properties.ContainsObject(PropMatchingText))
+                if (value is not null || Properties.ContainsObject(PropMatchingText))
                 {
                     Properties.SetObject(PropMatchingText, value);
                 }
@@ -992,7 +992,7 @@ namespace System.Windows.Forms
                 if (SelectedIndex != value)
                 {
                     int itemCount = 0;
-                    if (_itemsCollection != null)
+                    if (_itemsCollection is not null)
                     {
                         itemCount = _itemsCollection.Count;
                     }
@@ -1043,10 +1043,10 @@ namespace System.Windows.Forms
             {
                 int x = -1;
 
-                if (_itemsCollection != null)
+                if (_itemsCollection is not null)
                 {
                     //
-                    if (value != null)
+                    if (value is not null)
                     {
                         x = _itemsCollection.IndexOf(value);
                     }
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms
                     //AccessViolation exception, which is bad
                     string str = (value ?? "");
                     CreateControl();
-                    if (IsHandleCreated && _childEdit != null)
+                    if (IsHandleCreated && _childEdit is not null)
                     {
                         SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.REPLACESEL, (IntPtr)(-1), str);
                     }
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms
             {
                 if (_sorted != value)
                 {
-                    if (DataSource != null && value)
+                    if (DataSource is not null && value)
                     {
                         throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                     }
@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (SelectedItem != null && !BindingFieldEmpty)
+                if (SelectedItem is not null && !BindingFieldEmpty)
                 {
                     //preserve everett behavior if "formatting enabled == false" -- just return selecteditem text.
                     if (FormattingEnabled)
@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms
                     {
                         SelectedIndex = -1;
                     }
-                    else if (value != null &&
+                    else if (value is not null &&
                         (selectedItem is null || (string.Compare(value, GetItemText(selectedItem), false, CultureInfo.CurrentCulture) != 0)))
                     {
                         int index = FindStringIgnoreCase(value);
@@ -1495,7 +1495,7 @@ namespace System.Windows.Forms
 
         private void CheckNoDataSource()
         {
-            if (DataSource != null)
+            if (DataSource is not null)
             {
                 throw new ArgumentException(SR.DataSourceLocksItems);
             }
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms
                     if (!HostedInWin32DialogManager)
                     {
                         IContainerControl c = GetContainerControl();
-                        if (c != null)
+                        if (c is not null)
                         {
                             if (c is ContainerControl container)
                             {
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms
                     // once in the combobox and once here.
                     if (_fireSetFocus)
                     {
-                        if (!DesignMode && _childEdit != null && m.HWnd == _childEdit.Handle)
+                        if (!DesignMode && _childEdit is not null && m.HWnd == _childEdit.Handle)
                         {
                             WmImeSetFocus();
                         }
@@ -1712,7 +1712,7 @@ namespace System.Windows.Forms
 
                 case WM.SETFONT:
                     DefChildWndProc(ref m);
-                    if (_childEdit != null && m.HWnd == _childEdit.Handle)
+                    if (_childEdit is not null && m.HWnd == _childEdit.Handle)
                     {
                         SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms
                     _mousePressed = true;
                     _mouseEvents = true;
 
-                    if (ContextMenuStrip != null)
+                    if (ContextMenuStrip is not null)
                     {
                         // Set the mouse capture as this is the child Wndproc.
                         Capture = true;
@@ -1874,7 +1874,7 @@ namespace System.Windows.Forms
 
                 case WM.CONTEXTMENU:
                     // Forward context menu messages to the parent control
-                    if (ContextMenuStrip != null)
+                    if (ContextMenuStrip is not null)
                     {
                         SendMessageW(this, WM.CONTEXTMENU, m.WParam, m.LParam);
                     }
@@ -1894,7 +1894,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.SETCURSOR:
-                    if (Cursor != DefaultCursor && _childEdit != null && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
+                    if (Cursor != DefaultCursor && _childEdit is not null && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
                     {
                         Cursor.Current = Cursor;
                     }
@@ -1945,7 +1945,7 @@ namespace System.Windows.Forms
 
         private void DefChildWndProc(ref Message m)
         {
-            if (_childEdit != null)
+            if (_childEdit is not null)
             {
                 NativeWindow childWindow;
                 if (m.HWnd == _childEdit.Handle)
@@ -1964,7 +1964,7 @@ namespace System.Windows.Forms
                 //childwindow could be null if the handle was recreated while within a message handler
                 // and then whoever recreated the handle allowed the message to continue to be processed
                 //we cannot really be sure the new child will properly handle this window message, so we eat it.
-                if (childWindow != null)
+                if (childWindow is not null)
                 {
                     childWindow.DefWndProc(ref m);
                 }
@@ -1975,11 +1975,11 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_autoCompleteCustomSource != null)
+                if (_autoCompleteCustomSource is not null)
                 {
                     _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                if (_stringSource != null)
+                if (_stringSource is not null)
                 {
                     _stringSource.ReleaseAutoComplete();
                     _stringSource = null;
@@ -2003,11 +2003,11 @@ namespace System.Windows.Forms
             }
             if (EndUpdateInternal())
             {
-                if (_childEdit != null && _childEdit.Handle != IntPtr.Zero)
+                if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
                 {
                     InvalidateRect(new HandleRef(this, _childEdit.Handle), null, BOOL.FALSE);
                 }
-                if (_childListBox != null && _childListBox.Handle != IntPtr.Zero)
+                if (_childListBox is not null && _childListBox.Handle != IntPtr.Zero)
                 {
                     InvalidateRect(new HandleRef(this, _childListBox.Handle), null, BOOL.FALSE);
                 }
@@ -2124,7 +2124,7 @@ namespace System.Windows.Forms
         internal int GetListNativeWindowRuntimeIdPart()
         {
             NativeWindow listNativeWindow = GetListNativeWindow();
-            return listNativeWindow != null ? listNativeWindow.GetHashCode() : 0;
+            return listNativeWindow is not null ? listNativeWindow.GetHashCode() : 0;
         }
 
         internal override Gdi32.HBRUSH InitializeDCForWmCtlColor(Gdi32.HDC dc, User32.WM msg)
@@ -2302,7 +2302,7 @@ namespace System.Windows.Forms
             }
 
             SendMessageW(this, (WM)CB.RESETCONTENT);
-            if (saved != null)
+            if (saved is not null)
             {
                 WindowText = saved;
             }
@@ -2472,7 +2472,7 @@ namespace System.Windows.Forms
                 _fromHandleCreate = false;
             }
 
-            if (_itemsCollection != null)
+            if (_itemsCollection is not null)
             {
                 foreach (object item in _itemsCollection)
                 {
@@ -2507,7 +2507,7 @@ namespace System.Windows.Forms
             {
                 _selectedIndex = SelectedIndex;
             }
-            if (_stringSource != null)
+            if (_stringSource is not null)
             {
                 _stringSource.ReleaseAutoComplete();
                 _stringSource = null;
@@ -2712,7 +2712,7 @@ namespace System.Windows.Forms
             // into the backEnd. We do not need to do that.
             //
             // don't change the position if SelectedIndex is -1 because this indicates a selection not from the list.
-            if (DataManager != null && DataManager.Position != SelectedIndex)
+            if (DataManager is not null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || SelectedIndex != -1)
@@ -2917,7 +2917,7 @@ namespace System.Windows.Forms
         {
             if (Sorted)
             {
-                if (DataSource != null && Created)
+                if (DataSource is not null && Created)
                 {
                     // we will only throw the exception when the control is already on the form.
                     Debug.Assert(DisplayMember.Equals(string.Empty), "if this list is sorted it means that dataSource was null when Sorted first became true. at that point DisplayMember had to be String.Empty");
@@ -3051,7 +3051,7 @@ namespace System.Windows.Forms
             // if we have a dataSource and a DisplayMember, then use it
             // to populate the Items collection
             //
-            if (DataManager != null && DataManager.Count != -1)
+            if (DataManager is not null && DataManager.Count != -1)
             {
                 newItems = new object[DataManager.Count];
                 for (int i = 0; i < newItems.Length; i++)
@@ -3059,7 +3059,7 @@ namespace System.Windows.Forms
                     newItems[i] = DataManager[i];
                 }
             }
-            else if (savedItems != null)
+            else if (savedItems is not null)
             {
                 newItems = new object[savedItems.Count];
                 savedItems.CopyTo(newItems, arrayIndex: 0);
@@ -3075,11 +3075,11 @@ namespace System.Windows.Forms
                 }
                 // Store the current list of items
                 //
-                if (newItems != null)
+                if (newItems is not null)
                 {
                     Items.AddRangeInternal(newItems);
                 }
-                if (DataManager != null)
+                if (DataManager is not null)
                 {
                     // put the selectedIndex in sync w/ the position in the dataManager
                     SelectedIndex = DataManager.Position;
@@ -3109,14 +3109,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void ReleaseChildWindow()
         {
-            if (_childEdit != null)
+            if (_childEdit is not null)
             {
                 // We do not use UI Automation provider for child edit, so do not need to release providers.
                 _childEdit.ReleaseHandle();
                 _childEdit = null;
             }
 
-            if (_childListBox != null)
+            if (_childListBox is not null)
             {
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
                 ReleaseUiaProvider(_childListBox.Handle);
@@ -3125,7 +3125,7 @@ namespace System.Windows.Forms
                 _childListBox = null;
             }
 
-            if (_childDropDown != null)
+            if (_childDropDown is not null)
             {
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
                 ReleaseUiaProvider(_childDropDown.Handle);
@@ -3188,7 +3188,7 @@ namespace System.Windows.Forms
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
                 {
-                    if (AutoCompleteCustomSource != null)
+                    if (AutoCompleteCustomSource is not null)
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
@@ -3215,7 +3215,7 @@ namespace System.Windows.Forms
                 {
                     if (DropDownStyle != ComboBoxStyle.DropDownList)
                     {
-                        if (_itemsCollection != null)
+                        if (_itemsCollection is not null)
                         {
                             if (_itemsCollection.Count == 0)
                             {
@@ -3326,7 +3326,7 @@ namespace System.Windows.Forms
             // if the list changed, we want to keep the same selected index
             // CurrencyManager will provide the PositionChanged event
             // it will be provided before changing the list though...
-            if (DataManager != null)
+            if (DataManager is not null)
             {
                 if (DataSource is ICurrencyManagerProvider)
                 {
@@ -3361,7 +3361,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeAutoCompleteCustomSource()
         {
-            return _autoCompleteCustomSource != null && _autoCompleteCustomSource.Count > 0;
+            return _autoCompleteCustomSource is not null && _autoCompleteCustomSource.Count > 0;
         }
 
         internal bool ShouldSerializeDropDownWidth()
@@ -3477,7 +3477,7 @@ namespace System.Windows.Forms
             if (SelectedIndex != -1)
             {
                 object item = Items[SelectedIndex];
-                if (item != null)
+                if (item is not null)
                 {
                     s = GetItemText(item);
                 }
@@ -3487,7 +3487,7 @@ namespace System.Windows.Forms
 
             if (DropDownStyle == ComboBoxStyle.DropDown)
             {
-                if (_childEdit != null && _childEdit.Handle != IntPtr.Zero)
+                if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
                 {
                     SendMessageW(new HandleRef(this, _childEdit.Handle), WM.SETTEXT, IntPtr.Zero, s);
                 }
@@ -3496,7 +3496,7 @@ namespace System.Windows.Forms
 
         private void WmEraseBkgnd(ref Message m)
         {
-            if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal != null)
+            if ((DropDownStyle == ComboBoxStyle.Simple) && ParentInternal is not null)
             {
                 RECT rect = default;
                 GetClientRect(this, ref rect);
@@ -3519,7 +3519,7 @@ namespace System.Windows.Forms
 
                 // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
                 // So release the old references here.
-                if (_childDropDown != null)
+                if (_childDropDown is not null)
                 {
                     // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
                     ReleaseUiaProvider(_childDropDown.Handle);
