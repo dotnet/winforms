@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
             ~ThreadMethodEntry()
             {
-                if (_resetEvent != null)
+                if (_resetEvent is not null)
                 {
                     _resetEvent.Close();
                 }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                 lock (_invokeSyncObject)
                 {
                     IsCompleted = true;
-                    if (_resetEvent != null)
+                    if (_resetEvent is not null)
                     {
                         _resetEvent.Set();
                     }

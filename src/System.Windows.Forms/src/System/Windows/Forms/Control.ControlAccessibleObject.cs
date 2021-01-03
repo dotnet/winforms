@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                         }
                         break;
                     case AccessibleNavigation.Previous:
-                        if (IsNonClientObject && parentControl != null)
+                        if (IsNonClientObject && parentControl is not null)
                         {
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, Owner);
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                         }
                         break;
                     case AccessibleNavigation.Next:
-                        if (IsNonClientObject && parentControl != null)
+                        if (IsNonClientObject && parentControl is not null)
                         {
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, Owner);
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
                 get
                 {
                     QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
-                    if (handler != null)
+                    if (handler is not null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
                     // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                     // even an empty string (this is the only way to *force* the accessible name to be blank).
                     string? name = Owner.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
@@ -313,7 +313,7 @@ namespace System.Windows.Forms
 
                     // Otherwise use the text of the preceding Label control, if there is one
                     Label? previousLabel = PreviousLabel;
-                    if (previousLabel != null)
+                    if (previousLabel is not null)
                     {
                         string text = previousLabel.Text;
                         if (!string.IsNullOrEmpty(text))
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
 
                     // Walk backwards through peer controls...
                     for (Control previous = container.GetNextControl(Owner, false);
-                         previous != null;
+                         previous is not null;
                          previous = container.GetNextControl(previous, false))
                     {
                         // Stop when we hit a Label (whether visible or invisible)

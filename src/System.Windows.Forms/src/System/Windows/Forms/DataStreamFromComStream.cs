@@ -175,7 +175,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (disposing && comStream != null)
+                if (disposing && comStream is not null)
                 {
                     try
                     {

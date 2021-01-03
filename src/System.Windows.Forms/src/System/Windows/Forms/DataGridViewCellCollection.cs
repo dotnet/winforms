@@ -99,7 +99,7 @@ namespace System.Windows.Forms
 
         public DataGridViewCellCollection(DataGridViewRow dataGridViewRow)
         {
-            Debug.Assert(dataGridViewRow != null);
+            Debug.Assert(dataGridViewRow is not null);
             _owner = dataGridViewRow;
         }
 
@@ -127,15 +127,15 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
-                if (dataGridViewCell.DataGridView != null)
+                if (dataGridViewCell.DataGridView is not null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridView);
                 }
-                if (dataGridViewCell.OwningRow != null)
+                if (dataGridViewCell.OwningRow is not null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
                 }
-                if (_owner.DataGridView != null)
+                if (_owner.DataGridView is not null)
                 {
                     _owner.DataGridView.OnReplacingCell(_owner, index);
                 }
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
                 _items[index] = dataGridViewCell;
                 dataGridViewCell.OwningRow = _owner;
                 dataGridViewCell.State = oldDataGridViewCell.State;
-                if (_owner.DataGridView != null)
+                if (_owner.DataGridView is not null)
                 {
                     dataGridViewCell.DataGridView = _owner.DataGridView;
                     dataGridViewCell.OwningColumn = _owner.DataGridView.Columns[index];
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
             get
             {
                 DataGridViewColumn dataGridViewColumn = null;
-                if (_owner.DataGridView != null)
+                if (_owner.DataGridView is not null)
                 {
                     dataGridViewColumn = _owner.DataGridView.Columns[columnName];
                 }
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
             set
             {
                 DataGridViewColumn dataGridViewColumn = null;
-                if (_owner.DataGridView != null)
+                if (_owner.DataGridView is not null)
                 {
                     dataGridViewColumn = _owner.DataGridView.Columns[columnName];
                 }
@@ -209,11 +209,11 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int Add(DataGridViewCell dataGridViewCell)
         {
-            if (_owner.DataGridView != null)
+            if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
-            if (dataGridViewCell.OwningRow != null)
+            if (dataGridViewCell.OwningRow is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
             }
@@ -227,7 +227,7 @@ namespace System.Windows.Forms
             int index = _items.Add(dataGridViewCell);
             dataGridViewCell.OwningRow = _owner;
             DataGridView dataGridView = _owner.DataGridView;
-            if (dataGridView != null && dataGridView.Columns.Count > index)
+            if (dataGridView is not null && dataGridView.Columns.Count > index)
             {
                 dataGridViewCell.OwningColumn = dataGridView.Columns[index];
             }
@@ -242,7 +242,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCells));
             }
-            if (_owner.DataGridView != null)
+            if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_AtLeastOneCellIsNull);
                 }
 
-                if (dataGridViewCell.OwningRow != null)
+                if (dataGridViewCell.OwningRow is not null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
                 }
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
 
         public virtual void Clear()
         {
-            if (_owner.DataGridView != null)
+            if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
@@ -316,11 +316,11 @@ namespace System.Windows.Forms
 
         public virtual void Insert(int index, DataGridViewCell dataGridViewCell)
         {
-            if (_owner.DataGridView != null)
+            if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
-            if (dataGridViewCell.OwningRow != null)
+            if (dataGridViewCell.OwningRow is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
             }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
             _items.Insert(index, dataGridViewCell);
             dataGridViewCell.OwningRow = _owner;
             DataGridView dataGridView = _owner.DataGridView;
-            if (dataGridView != null && dataGridView.Columns.Count > index)
+            if (dataGridView is not null && dataGridView.Columns.Count > index)
             {
                 dataGridViewCell.OwningColumn = dataGridView.Columns[index];
             }
@@ -351,7 +351,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(DataGridViewCell cell)
         {
-            if (_owner.DataGridView != null)
+            if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
 
         public virtual void RemoveAt(int index)
         {
-            if (_owner.DataGridView != null)
+            if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }

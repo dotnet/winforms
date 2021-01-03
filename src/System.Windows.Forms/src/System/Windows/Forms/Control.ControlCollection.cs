@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 }
 
                 // Remove the new control from its old parent (if any)
-                if (value._parent != null)
+                if (value._parent is not null)
                 {
                     value._parent.Controls.Remove(value);
                 }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
                     }
 
                     Control control = (Control)InnerList[index];
-                    Debug.Assert(control != null, "Why are we returning null controls from a valid index?");
+                    Debug.Assert(control is not null, "Why are we returning null controls from a valid index?");
                     return control;
                 }
             }

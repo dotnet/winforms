@@ -79,7 +79,7 @@ namespace System.Windows.Forms
 
             internal void StartEvents()
             {
-                if (connectionPoint != null)
+                if (connectionPoint is not null)
                 {
                     return;
                 }
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
 
             internal void StopEvents()
             {
-                if (connectionPoint != null)
+                if (connectionPoint is not null)
                 {
                     connectionPoint.Disconnect();
                     connectionPoint = null;
@@ -220,7 +220,7 @@ namespace System.Windows.Forms
                     int endIndex = name.IndexOf(']');
                     DispatchID dispid = (DispatchID)int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
                     object ambient = host.GetAmbientProperty(dispid);
-                    if (ambient != null)
+                    if (ambient is not null)
                     {
                         return ambient;
                     }
@@ -456,7 +456,7 @@ namespace System.Windows.Forms
 
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetWindow");
                 Control parent = host.ParentInternal;
-                *phwnd = parent != null ? parent.Handle : IntPtr.Zero;
+                *phwnd = parent is not null ? parent.Handle : IntPtr.Zero;
                 return HRESULT.S_OK;
             }
 
@@ -506,7 +506,7 @@ namespace System.Windows.Forms
 
                 *lprcPosRect = host.Bounds;
                 *lprcClipRect = WebBrowserHelper.GetClipRect();
-                if (lpFrameInfo != null)
+                if (lpFrameInfo is not null)
                 {
                     lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
                     lpFrameInfo->fMDIApp = BOOL.FALSE;
@@ -612,7 +612,7 @@ namespace System.Windows.Forms
                     if (dispid != DispatchID.UNKNOWN)
                     {
                         prop = host.GetPropertyDescriptorFromDispid(dispid);
-                        if (prop != null)
+                        if (prop is not null)
                         {
                             prop.OnValueChanged(host);
                             if (!prop.SettingValue)
@@ -628,7 +628,7 @@ namespace System.Windows.Forms
                         foreach (PropertyDescriptor p in props)
                         {
                             prop = p as AxPropertyDescriptor;
-                            if (prop != null && !prop.SettingValue)
+                            if (prop is not null && !prop.SettingValue)
                             {
                                 prop.UpdateTypeConverterAndTypeEditor(true);
                             }
@@ -636,11 +636,11 @@ namespace System.Windows.Forms
                     }
 
                     ISite site = host.Site;
-                    if (site != null)
+                    if (site is not null)
                     {
                         IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
 
-                        if (changeService != null)
+                        if (changeService is not null)
                         {
                             try
                             {

@@ -101,7 +101,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
+                if (!dataGridViewCell.ReadOnly && dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
                 {
                     dataGridView.CurrentCell = dataGridViewCell;
                     bool endEditMode = false;

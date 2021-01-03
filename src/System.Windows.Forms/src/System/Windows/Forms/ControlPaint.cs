@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms
                 bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
                 Graphics graphics = context.TryGetGraphics(create: true);
-                if (graphics != null)
+                if (graphics is not null)
                 {
                     if (style == ButtonBorderStyle.Solid)
                     {
@@ -1380,7 +1380,7 @@ namespace System.Windows.Forms
             {
                 if (t_checkImage is null || t_checkImage.Width != rectangle.Width || t_checkImage.Height != rectangle.Height)
                 {
-                    if (t_checkImage != null)
+                    if (t_checkImage is not null)
                     {
                         t_checkImage.Dispose();
                         t_checkImage = null;
@@ -1549,7 +1549,7 @@ namespace System.Windows.Forms
             if (t_gridBrush is null || s_gridSize.Width != pixelsBetweenDots.Width
                 || s_gridSize.Height != pixelsBetweenDots.Height || invert != s_gridInvert)
             {
-                if (t_gridBrush != null)
+                if (t_gridBrush is not null)
                 {
                     t_gridBrush.Dispose();
                     t_gridBrush = null;
@@ -1604,7 +1604,7 @@ namespace System.Windows.Forms
         }
 
         internal static bool IsImageTransparent(Image backgroundImage)
-            => backgroundImage != null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0;
+            => backgroundImage is not null && (backgroundImage.Flags & (int)ImageFlags.HasAlpha) > 0;
 
         // takes an image and replaces all the pixels of oldColor with newColor, drawing the new image into the rectangle on
         // the supplied Graphics object.
@@ -2188,7 +2188,7 @@ namespace System.Windows.Forms
 
             if (t_frameBrushActive is null || !s_frameColorActive.Equals(brushColor))
             {
-                if (t_frameBrushActive != null)
+                if (t_frameBrushActive is not null)
                 {
                     t_frameBrushActive.Dispose();
                     t_frameBrushActive = null;
@@ -2239,7 +2239,7 @@ namespace System.Windows.Forms
                 || (!highContrast && t_focusPenColor.GetBrightness() <= .5 && baseColor.GetBrightness() <= .5)
                 || t_focusPenColor.ToArgb() != baseColor.ToArgb())
             {
-                if (t_focusPen != null)
+                if (t_focusPen is not null)
                 {
                     t_focusPen.Dispose();
                     t_focusPen = null;
@@ -2314,7 +2314,7 @@ namespace System.Windows.Forms
 
             if (t_frameBrushSelected is null || !s_frameColorSelected.Equals(brushColor))
             {
-                if (t_frameBrushSelected != null)
+                if (t_frameBrushSelected is not null)
                 {
                     t_frameBrushSelected.Dispose();
                     t_frameBrushSelected = null;

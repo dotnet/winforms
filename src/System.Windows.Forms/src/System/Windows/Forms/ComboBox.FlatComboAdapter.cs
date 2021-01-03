@@ -194,7 +194,7 @@ namespace System.Windows.Forms
             /// </summary>
             public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                if (comboBox != null)
+                if (comboBox is not null)
                 {
                     return;
                 }

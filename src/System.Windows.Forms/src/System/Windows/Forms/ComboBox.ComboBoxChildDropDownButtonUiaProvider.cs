@@ -205,7 +205,7 @@ namespace System.Windows.Forms
                 {
                     var systemIAccessible = GetSystemIAccessibleInternal();
                     var accRole = systemIAccessible?.get_accRole(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
-                    return accRole != null
+                    return accRole is not null
                         ? (AccessibleRole)accRole
                         : AccessibleRole.None;
                 }
@@ -241,7 +241,7 @@ namespace System.Windows.Forms
                 {
                     var systemIAccessible = GetSystemIAccessibleInternal();
                     var accState = systemIAccessible?.get_accState(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
-                    return accState != null
+                    return accState is not null
                         ? (AccessibleStates)accState
                         : AccessibleStates.None;
                 }

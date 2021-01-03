@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningComboBox != null)
+                if (_owningComboBox is not null)
                 {
                     return true;
                 }
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owningComboBox != null)
+                    if (_owningComboBox is not null)
                     {
                         // we need to provide a unique ID
                         // others are implementing this in the same manner

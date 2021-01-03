@@ -193,7 +193,7 @@ namespace System.Windows.Forms
                 get
                 {
                     var accRole = _systemIAccessible?.get_accRole(GetChildId());
-                    return accRole != null
+                    return accRole is not null
                         ? (AccessibleRole)accRole
                         : AccessibleRole.None;
                 }
@@ -229,7 +229,7 @@ namespace System.Windows.Forms
                 get
                 {
                     var accState = _systemIAccessible?.get_accState(GetChildId());
-                    return accState != null
+                    return accState is not null
                         ? (AccessibleStates)accState
                         : AccessibleStates.None;
                 }

@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value != null && !(value is DataGridViewTextBoxCell))
+                if (value is not null && !(value is DataGridViewTextBoxCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 if (MaxInputLength != value)
                 {
                     TextBoxCellTemplate.MaxInputLength = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;

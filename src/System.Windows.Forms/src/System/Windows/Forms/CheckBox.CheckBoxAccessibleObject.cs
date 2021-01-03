@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                 {
                     string defaultAction = Owner.AccessibleDefaultActionDescription;
 
-                    if (defaultAction != null)
+                    if (defaultAction is not null)
                     {
                         return defaultAction;
                     }

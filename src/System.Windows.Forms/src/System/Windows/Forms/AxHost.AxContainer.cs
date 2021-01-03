@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "!parent || !belongs NYI");
                         AxContainer c = FindContainerForControl(ctl);
-                        if (c != null)
+                        if (c is not null)
                         {
                             rval = new ExtenderProxy(ctl, c);
                         }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
 
             internal string GetNameForControl(Control ctl)
             {
-                string name = (ctl.Site != null) ? ctl.Site.Name : ctl.Name;
+                string name = (ctl.Site is not null) ? ctl.Site.Name : ctl.Name;
                 return name ?? "";
             }
 
@@ -176,11 +176,11 @@ namespace System.Windows.Forms
                     if (assocContainer is null)
                     {
                         ISite site = ctl.Site;
-                        if (site != null)
+                        if (site is not null)
                         {
                             assocContainer = site.Container;
                             IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                            if (ccs != null)
+                            if (ccs is not null)
                             {
                                 ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                             }
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
                     {
 #if DEBUG
                         ISite site = ctl.Site;
-                        if (site != null && assocContainer != site.Container)
+                        if (site is not null && assocContainer != site.Container)
                         {
                             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "mismatch between assoc container & added control");
                         }
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
                             break;
                         case GC_WCH.SIBLING:
                             Control p = ctl.ParentInternal;
-                            if (p != null)
+                            if (p is not null)
                             {
                                 ctls = p.GetChildControlsInTabOrder(false);
                                 if (onlyPrev)
@@ -288,10 +288,10 @@ namespace System.Windows.Forms
                         case GC_WCH.CONTAINER:
                             l = new ArrayList();
                             MaybeAdd(l, ctl, selected, dwOleContF, false);
-                            while (ctl != null)
+                            while (ctl is not null)
                             {
                                 AxContainer cont = FindContainerForControl(ctl);
-                                if (cont != null)
+                                if (cont is not null)
                                 {
                                     MaybeAdd(l, cont.parent, selected, dwOleContF, true);
                                     ctl = cont.parent;
@@ -312,12 +312,12 @@ namespace System.Windows.Forms
                     if (l is null)
                     {
                         l = new ArrayList();
-                        if (last == -1 && ctls != null)
+                        if (last == -1 && ctls is not null)
                         {
                             last = ctls.Length;
                         }
 
-                        if (ctl != null)
+                        if (ctl is not null)
                         {
                             MaybeAdd(l, ctl, selected, dwOleContF, false);
                         }
@@ -368,7 +368,7 @@ namespace System.Windows.Forms
                 else if ((dwOleContF & OLECONTF.OTHERS) != 0)
                 {
                     object item = GetProxyForControl(ctl);
-                    if (item != null)
+                    if (item is not null)
                     {
                         l.Add(item);
                     }
@@ -377,15 +377,15 @@ namespace System.Windows.Forms
 
             private void FillComponentsTable(IContainer container)
             {
-                if (container != null)
+                if (container is not null)
                 {
                     ComponentCollection comps = container.Components;
-                    if (comps != null)
+                    if (comps is not null)
                     {
                         components = new Hashtable();
                         foreach (IComponent comp in comps)
                         {
-                            if (comp is Control && comp != parent && comp.Site != null)
+                            if (comp is Control && comp != parent && comp.Site is not null)
                             {
                                 components.Add(comp, comp);
                             }
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
                 bool checkHashTable = true;
                 Control[] ctls = new Control[containerCache.Values.Count];
                 containerCache.Values.CopyTo(ctls, 0);
-                if (ctls != null)
+                if (ctls is not null)
                 {
                     if (ctls.Length > 0 && components is null)
                     {
@@ -459,13 +459,13 @@ namespace System.Windows.Forms
             private bool GetControlBelongs(Control ctl)
             {
                 Hashtable comps = GetComponents();
-                return comps[ctl] != null;
+                return comps[ctl] is not null;
             }
 
             private IContainer GetParentIsDesigned()
             {
                 ISite site = parent.Site;
-                if (site != null && site.DesignMode)
+                if (site is not null && site.DesignMode)
                 {
                     return site.Container;
                 }
@@ -484,12 +484,12 @@ namespace System.Windows.Forms
             private bool RegisterControl(AxHost ctl)
             {
                 ISite site = ctl.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     IContainer cont = site.Container;
-                    if (cont != null)
+                    if (cont is not null)
                     {
-                        if (assocContainer != null)
+                        if (assocContainer is not null)
                         {
                             return cont == assocContainer;
                         }
@@ -497,7 +497,7 @@ namespace System.Windows.Forms
                         {
                             assocContainer = cont;
                             IComponentChangeService ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                            if (ccs != null)
+                            if (ccs is not null)
                             {
                                 ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                             }
@@ -520,13 +520,13 @@ namespace System.Windows.Forms
             {
                 if (ctl is AxHost axctl)
                 {
-                    if (axctl.container != null)
+                    if (axctl.container is not null)
                     {
                         return axctl.container;
                     }
 
                     ContainerControl f = axctl.ContainingControl;
-                    if (f != null)
+                    if (f is not null)
                     {
                         AxContainer container = f.CreateAxContainer();
                         if (container.RegisterControl(axctl))
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (siteUIActive != null && siteUIActive != site)
+                if (siteUIActive is not null && siteUIActive != site)
                 {
                     AxHost tempSite = siteUIActive;
                     bool ownDisposing = tempSite.GetAxState(AxHost.ownDisposing);
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "active Object is now " + site.ToString());
                 siteUIActive = site;
                 ContainerControl f = site.ContainingControl;
-                if (f != null)
+                if (f is not null)
                 {
                     f.ActiveControl = site;
                 }
@@ -611,7 +611,7 @@ namespace System.Windows.Forms
 
                 Control[] ctls = new Control[components.Keys.Count];
                 components.Keys.CopyTo(ctls, 0);
-                if (ctls != null)
+                if (ctls is not null)
                 {
                     for (int i = 0; i < ctls.Length; i++)
                     {
@@ -674,7 +674,7 @@ namespace System.Windows.Forms
             unsafe HRESULT IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint *pchEaten, IntPtr* ppmkOut)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
-                if (ppmkOut != null)
+                if (ppmkOut is not null)
                 {
                     *ppmkOut = IntPtr.Zero;
                 }
@@ -688,7 +688,7 @@ namespace System.Windows.Forms
                 ppenum = null;
                 if ((grfFlags & OLECONTF.EMBEDDINGS) != 0)
                 {
-                    Debug.Assert(parent != null, "gotta have it...");
+                    Debug.Assert(parent is not null, "gotta have it...");
                     ArrayList list = new ArrayList();
                     ListAxControls(list, true);
                     if (list.Count > 0)
@@ -761,11 +761,11 @@ namespace System.Windows.Forms
             HRESULT IOleInPlaceFrame.SetActiveObject(IOleInPlaceActiveObject pActiveObject, string pszObjName)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SetActiveObject " + (pszObjName ?? "<null>"));
-                if (siteUIActive != null)
+                if (siteUIActive is not null)
                 {
                     if (siteUIActive.iOleInPlaceActiveObjectExternal != pActiveObject)
                     {
-                        if (siteUIActive.iOleInPlaceActiveObjectExternal != null)
+                        if (siteUIActive.iOleInPlaceActiveObjectExternal is not null)
                         {
                             Marshal.ReleaseComObject(siteUIActive.iOleInPlaceActiveObjectExternal);
                         }
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
                 }
                 if (pActiveObject is null)
                 {
-                    if (ctlInEditMode != null)
+                    if (ctlInEditMode is not null)
                     {
                         ctlInEditMode.editMode = EDITM_NONE;
                         ctlInEditMode = null;
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
                         ctl = ((OleInterfaces)(clientSite)).GetAxHost();
                     }
 
-                    if (ctlInEditMode != null)
+                    if (ctlInEditMode is not null)
                     {
                         Debug.Fail("control " + ctlInEditMode.ToString() + " did not reset its edit mode to null");
                         ctlInEditMode.SetSelectionStyle(1);

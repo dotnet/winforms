@@ -35,7 +35,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 var systemIAccessible = GetSystemIAccessibleInternal();
-                if (systemIAccessible != null)
+                if (systemIAccessible is not null)
                 {
                     object result = systemIAccessible.accHitTest((int)x, (int)y);
                     if (result is int childId)
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
 
                 AccessibleObject? itemAccessibleObject = GetChildFragment(selectedIndex);
 
-                if (itemAccessibleObject != null)
+                if (itemAccessibleObject is not null)
                 {
                     return new UiaCore.IRawElementProviderSimple[] {
                         itemAccessibleObject

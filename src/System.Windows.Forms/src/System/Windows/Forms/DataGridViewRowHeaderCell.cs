@@ -172,7 +172,7 @@ namespace System.Windows.Forms
             if (DpiHelper.IsScalingRequired && (b.Size.Width != s_iconsWidth || b.Size.Height != s_iconsHeight))
             {
                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredSize);
-                if (scaledBitmap != null)
+                if (scaledBitmap is not null)
                 {
                     b.Dispose();
                     b = scaledBitmap;
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                 }
                 sb.Append("<TR>");
                 sb.Append("<TD ALIGN=\"center\">");
-                if (val != null)
+                if (val is not null)
                 {
                     sb.Append("<B>");
                     using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                     string.Equals(format, DataFormats.Text, StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(format, DataFormats.UnicodeText, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (val != null)
+                    if (val is not null)
                     {
                         bool escapeApplied = false;
                         int insertionPoint = sb.Length;
@@ -380,18 +380,18 @@ namespace System.Windows.Forms
 
         public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
         {
-            if (DataGridView != null && (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count))
+            if (DataGridView is not null && (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count))
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
 
             ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 return contextMenuStrip;
             }
 
-            if (DataGridView != null)
+            if (DataGridView is not null)
             {
                 return DataGridView.ContextMenuStrip;
             }
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
 
         public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
         {
-            Debug.Assert(DataGridView != null);
+            Debug.Assert(DataGridView is not null);
 
             DataGridViewCellStyle inheritedCellStyleTmp = inheritedCellStyle ?? new DataGridViewCellStyle();
 
@@ -411,18 +411,18 @@ namespace System.Windows.Forms
             if (HasStyle)
             {
                 cellStyle = Style;
-                Debug.Assert(cellStyle != null);
+                Debug.Assert(cellStyle is not null);
             }
 
             DataGridViewCellStyle rowHeadersStyle = DataGridView.RowHeadersDefaultCellStyle;
-            Debug.Assert(rowHeadersStyle != null);
+            Debug.Assert(rowHeadersStyle is not null);
 
             DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
-            Debug.Assert(dataGridViewStyle != null);
+            Debug.Assert(dataGridViewStyle is not null);
 
             if (includeColors)
             {
-                if (cellStyle != null && !cellStyle.BackColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.BackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.BackColor = cellStyle.BackColor;
                 }
@@ -435,7 +435,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.BackColor = dataGridViewStyle.BackColor;
                 }
 
-                if (cellStyle != null && !cellStyle.ForeColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.ForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.ForeColor = cellStyle.ForeColor;
                 }
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.ForeColor = dataGridViewStyle.ForeColor;
                 }
 
-                if (cellStyle != null && !cellStyle.SelectionBackColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.SelectionBackColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionBackColor = cellStyle.SelectionBackColor;
                 }
@@ -461,7 +461,7 @@ namespace System.Windows.Forms
                     inheritedCellStyleTmp.SelectionBackColor = dataGridViewStyle.SelectionBackColor;
                 }
 
-                if (cellStyle != null && !cellStyle.SelectionForeColor.IsEmpty)
+                if (cellStyle is not null && !cellStyle.SelectionForeColor.IsEmpty)
                 {
                     inheritedCellStyleTmp.SelectionForeColor = cellStyle.SelectionForeColor;
                 }
@@ -475,11 +475,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (cellStyle != null && cellStyle.Font != null)
+            if (cellStyle is not null && cellStyle.Font is not null)
             {
                 inheritedCellStyleTmp.Font = cellStyle.Font;
             }
-            else if (rowHeadersStyle.Font != null)
+            else if (rowHeadersStyle.Font is not null)
             {
                 inheritedCellStyleTmp.Font = rowHeadersStyle.Font;
             }
@@ -488,7 +488,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Font = dataGridViewStyle.Font;
             }
 
-            if (cellStyle != null && !cellStyle.IsNullValueDefault)
+            if (cellStyle is not null && !cellStyle.IsNullValueDefault)
             {
                 inheritedCellStyleTmp.NullValue = cellStyle.NullValue;
             }
@@ -501,7 +501,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.NullValue = dataGridViewStyle.NullValue;
             }
 
-            if (cellStyle != null && !cellStyle.IsDataSourceNullValueDefault)
+            if (cellStyle is not null && !cellStyle.IsDataSourceNullValueDefault)
             {
                 inheritedCellStyleTmp.DataSourceNullValue = cellStyle.DataSourceNullValue;
             }
@@ -514,7 +514,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.DataSourceNullValue = dataGridViewStyle.DataSourceNullValue;
             }
 
-            if (cellStyle != null && cellStyle.Format.Length != 0)
+            if (cellStyle is not null && cellStyle.Format.Length != 0)
             {
                 inheritedCellStyleTmp.Format = cellStyle.Format;
             }
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Format = dataGridViewStyle.Format;
             }
 
-            if (cellStyle != null && !cellStyle.IsFormatProviderDefault)
+            if (cellStyle is not null && !cellStyle.IsFormatProviderDefault)
             {
                 inheritedCellStyleTmp.FormatProvider = cellStyle.FormatProvider;
             }
@@ -540,7 +540,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.FormatProvider = dataGridViewStyle.FormatProvider;
             }
 
-            if (cellStyle != null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
+            if (cellStyle is not null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyleTmp.AlignmentInternal = cellStyle.Alignment;
             }
@@ -554,7 +554,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.AlignmentInternal = dataGridViewStyle.Alignment;
             }
 
-            if (cellStyle != null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
+            if (cellStyle is not null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyleTmp.WrapModeInternal = cellStyle.WrapMode;
             }
@@ -568,11 +568,11 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.WrapModeInternal = dataGridViewStyle.WrapMode;
             }
 
-            if (cellStyle != null && cellStyle.Tag != null)
+            if (cellStyle is not null && cellStyle.Tag is not null)
             {
                 inheritedCellStyleTmp.Tag = cellStyle.Tag;
             }
-            else if (rowHeadersStyle.Tag != null)
+            else if (rowHeadersStyle.Tag is not null)
             {
                 inheritedCellStyleTmp.Tag = rowHeadersStyle.Tag;
             }
@@ -581,7 +581,7 @@ namespace System.Windows.Forms
                 inheritedCellStyleTmp.Tag = dataGridViewStyle.Tag;
             }
 
-            if (cellStyle != null && cellStyle.Padding != Padding.Empty)
+            if (cellStyle is not null && cellStyle.Padding != Padding.Empty)
             {
                 inheritedCellStyleTmp.PaddingInternal = cellStyle.Padding;
             }
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
         {
             // We allow multiple rows to share the same row header value. The row header cell's cloning does this.
             // So here we need to allow rowIndex == -1.
-            if (DataGridView != null && (rowIndex < -1 || rowIndex >= DataGridView.Rows.Count))
+            if (DataGridView is not null && (rowIndex < -1 || rowIndex >= DataGridView.Rows.Count))
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
@@ -726,7 +726,7 @@ namespace System.Windows.Forms
             Debug.Assert(!paint || !computeContentBounds || !computeErrorIconBounds);
             Debug.Assert(!computeContentBounds || !computeErrorIconBounds || !paint);
             Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
-            Debug.Assert(cellStyle != null);
+            Debug.Assert(cellStyle is not null);
 
             // If computeContentBounds == TRUE then resultBounds will be the contentBounds.
             // If computeErrorIconBounds == TRUE then resultBounds will be the error icon bounds.
@@ -903,7 +903,7 @@ namespace System.Windows.Forms
                             {
                                 bmp = DataGridViewRowHeaderCell.StarBitmap;
                             }
-                            if (bmp != null)
+                            if (bmp is not null)
                             {
                                 Color iconColor;
                                 if (DataGridView.ApplyVisualStylesToHeaderCells)
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms
                             {
                                 bmp = DataGridViewRowHeaderCell.StarBitmap;
                             }
-                            if (bmp != null)
+                            if (bmp is not null)
                             {
                                 lock (bmp)
                                 {
@@ -1111,11 +1111,11 @@ namespace System.Windows.Forms
         protected override bool SetValue(int rowIndex, object value)
         {
             object originalValue = GetValue(rowIndex);
-            if (value != null || Properties.ContainsObject(s_propCellValue))
+            if (value is not null || Properties.ContainsObject(s_propCellValue))
             {
                 Properties.SetObject(s_propCellValue, value);
             }
-            if (DataGridView != null && originalValue != value)
+            if (DataGridView is not null && originalValue != value)
             {
                 RaiseCellValueChanged(new DataGridViewCellEventArgs(-1, rowIndex));
             }

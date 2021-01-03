@@ -153,7 +153,7 @@ namespace System.Windows.Forms
 
                 // We are essentially doing to the listManager what we were doing to the
                 // BindToObject: bind only when the control is created and it has a BindingContext
-                BindingContext.UpdateBinding((BindableComponent != null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
+                BindingContext.UpdateBinding((BindableComponent is not null && IsComponentCreated(BindableComponent) ? BindableComponent.BindingContext : null), this);
                 if (value is Form form)
                 {
                     form.Load += new EventHandler(FormLoaded);
@@ -367,12 +367,12 @@ namespace System.Windows.Forms
             {
                 if (IsBinding)
                 {
-                    if (_propInfo != null && BindableComponent != null)
+                    if (_propInfo is not null && BindableComponent is not null)
                     {
                         EventHandler handler = new EventHandler(Target_PropertyChanged);
                         _propInfo.AddValueChanged(BindableComponent, handler);
                     }
-                    if (_validateInfo != null)
+                    if (_validateInfo is not null)
                     {
                         CancelEventHandler handler = new CancelEventHandler(Target_Validate);
                         _validateInfo.AddEventHandler(BindableComponent, handler);
@@ -381,12 +381,12 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (_propInfo != null && BindableComponent != null)
+                if (_propInfo is not null && BindableComponent is not null)
                 {
                     EventHandler handler = new EventHandler(Target_PropertyChanged);
                     _propInfo.RemoveValueChanged(BindableComponent, handler);
                 }
-                if (_validateInfo != null)
+                if (_validateInfo is not null)
                 {
                     CancelEventHandler handler = new CancelEventHandler(Target_Validate);
                     _validateInfo.RemoveEventHandler(BindableComponent, handler);
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
         {
             _bindToObject.CheckBinding();
 
-            if (BindableComponent != null && !string.IsNullOrEmpty(PropertyName))
+            if (BindableComponent is not null && !string.IsNullOrEmpty(PropertyName))
             {
                 BindableComponent.DataBindings.CheckDuplicates(this);
 
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                 // inherited controls we don't because an inherited control should
                 // "act" like a runtime control.
                 InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];
-                if (attr != null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
+                if (attr is not null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
                     propInfos = TypeDescriptor.GetProperties(controlClass);
                 }
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
                     if (tempPropInfo is null && string.Equals(propInfos[i].Name, PropertyName, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropInfo = propInfos[i];
-                        if (tempPropIsNullInfo != null)
+                        if (tempPropIsNullInfo is not null)
                         {
                             break;
                         }
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
                     if (tempPropIsNullInfo is null && string.Equals(propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropIsNullInfo = propInfos[i];
-                        if (tempPropInfo != null)
+                        if (tempPropInfo is not null)
                         {
                             break;
                         }
@@ -466,7 +466,7 @@ namespace System.Windows.Forms
                 propType = _propInfo.PropertyType;
                 _propInfoConverter = _propInfo.Converter;
 
-                if (tempPropIsNullInfo != null && tempPropIsNullInfo.PropertyType == typeof(bool) && !tempPropIsNullInfo.IsReadOnly)
+                if (tempPropIsNullInfo is not null && tempPropIsNullInfo.PropertyType == typeof(bool) && !tempPropIsNullInfo.IsReadOnly)
                 {
                     _propIsNullInfo = tempPropIsNullInfo;
                 }
@@ -512,7 +512,7 @@ namespace System.Windows.Forms
 
         private object GetPropValue()
         {
-            if (_propIsNullInfo != null && (bool)_propIsNullInfo.GetValue(BindableComponent))
+            if (_propIsNullInfo is not null && (bool)_propIsNullInfo.GetValue(BindableComponent))
             {
                 return DataSourceNullValue;
             }
@@ -526,7 +526,7 @@ namespace System.Windows.Forms
             string errorText = string.Empty;
             BindingCompleteState state = BindingCompleteState.Success;
 
-            if (ex != null)
+            if (ex is not null)
             {
                 // If an exception was provided, report that
                 errorText = ex.Message;
@@ -563,7 +563,7 @@ namespace System.Windows.Forms
                     // User code should not be throwing exceptions from this event as a way to signal new error conditions (they should use
                     // things like the Format or Parse events for that). Exceptions thrown here can mess up currency manager behavior big time.
                     // For now, eat any non-critical exceptions and instead just cancel the current push/pull operation.
-                    if (e != null)
+                    if (e is not null)
                     {
                         e.Cancel = true;
                     }
@@ -579,9 +579,9 @@ namespace System.Windows.Forms
         {
             _onParse?.Invoke(this, cevent);
 
-            if (!_formattingEnabled && cevent != null)
+            if (!_formattingEnabled && cevent is not null)
             {
-                if (!(cevent.Value is DBNull) && cevent.Value != null && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
+                if (!(cevent.Value is DBNull) && cevent.Value is not null && cevent.DesiredType is not null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
                     cevent.Value = Convert.ChangeType(cevent.Value, cevent.DesiredType, CultureInfo.CurrentCulture);
                 }
@@ -592,9 +592,9 @@ namespace System.Windows.Forms
         {
             _onFormat?.Invoke(this, cevent);
 
-            if (!_formattingEnabled && cevent != null)
+            if (!_formattingEnabled && cevent is not null)
             {
-                if (!(cevent.Value is DBNull) && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
+                if (!(cevent.Value is DBNull) && cevent.DesiredType is not null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
                     cevent.Value = Convert.ChangeType(cevent.Value, cevent.DesiredType, CultureInfo.CurrentCulture);
                 }
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
                 {
                     // Otherwise parse the formatted value ourselves
                     TypeConverter fieldInfoConverter = null;
-                    if (_bindToObject.FieldInfo != null)
+                    if (_bindToObject.FieldInfo is not null)
                     {
                         fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                     }
@@ -633,14 +633,14 @@ namespace System.Windows.Forms
                 var e = new ConvertEventArgs(value, type);
                 // first try: use the OnParse event
                 OnParse(e);
-                if (e.Value != null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
+                if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
                 {
                     return e.Value;
                 }
 
                 // second try: use the TypeConverter
-                TypeConverter typeConverter = TypeDescriptor.GetConverter(value != null ? value.GetType() : typeof(object));
-                if (typeConverter != null && typeConverter.CanConvertTo(type))
+                TypeConverter typeConverter = TypeDescriptor.GetConverter(value is not null ? value.GetType() : typeof(object));
+                if (typeConverter is not null && typeConverter.CanConvertTo(type))
                 {
                     return typeConverter.ConvertTo(value, type);
                 }
@@ -648,7 +648,7 @@ namespace System.Windows.Forms
                 if (value is IConvertible)
                 {
                     object ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
-                    if (ret != null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
+                    if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
                     {
                         return ret;
                     }
@@ -684,7 +684,7 @@ namespace System.Windows.Forms
                 {
                     // Otherwise format the parsed value ourselves
                     TypeConverter fieldInfoConverter = null;
-                    if (_bindToObject.FieldInfo != null)
+                    if (_bindToObject.FieldInfo is not null)
                     {
                         fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                     }
@@ -706,14 +706,14 @@ namespace System.Windows.Forms
                 }
 
                 // stop now if we have a value of a compatible type
-                if (ret != null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
+                if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
                 {
                     return ret;
                 }
 
                 // second try: use type converter for the desiredType
-                TypeConverter typeConverter = TypeDescriptor.GetConverter(value != null ? value.GetType() : typeof(object));
-                if (typeConverter != null && typeConverter.CanConvertTo(type))
+                TypeConverter typeConverter = TypeDescriptor.GetConverter(value is not null ? value.GetType() : typeof(object));
+                if (typeConverter is not null && typeConverter.CanConvertTo(type))
                 {
                     return typeConverter.ConvertTo(value, type);
                 }
@@ -722,7 +722,7 @@ namespace System.Windows.Forms
                 if (value is IConvertible)
                 {
                     ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
-                    if (ret != null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
+                    if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
                     {
                         return ret;
                     }
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
             {
                 // If parse failed, reset control property value back to original data source value.
                 // An exception always indicates a parsing failure.
-                if (lastException != null || (!FormattingEnabled && parsedValue is null))
+                if (lastException is not null || (!FormattingEnabled && parsedValue is null))
                 {
                     parseFailed = true;
                     parsedValue = _bindToObject.GetValue();
@@ -967,11 +967,11 @@ namespace System.Windows.Forms
                 bool isNull = value is null || Formatter.IsNullData(value, DataSourceNullValue);
                 if (isNull)
                 {
-                    if (_propIsNullInfo != null)
+                    if (_propIsNullInfo is not null)
                     {
                         _propIsNullInfo.SetValue(BindableComponent, true);
                     }
-                    else if (_propInfo != null)
+                    else if (_propInfo is not null)
                     {
                         if (_propInfo.PropertyType == typeof(object))
                         {
@@ -996,7 +996,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeFormatString() => !string.IsNullOrEmpty(_formatString);
 
-        private bool ShouldSerializeNullValue() => _nullValue != null;
+        private bool ShouldSerializeNullValue() => _nullValue is not null;
 
         private bool ShouldSerializeDataSourceNullValue()
         {
@@ -1055,8 +1055,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (BindableComponent != null && !string.IsNullOrEmpty(PropertyName) &&
-                                DataSource != null && _bindingManagerBase != null);
+                return (BindableComponent is not null && !string.IsNullOrEmpty(PropertyName) &&
+                                DataSource is not null && _bindingManagerBase is not null);
             }
         }
 
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(_owner.DataSource != null, "how can we determine if DataSource is initialized or not if we have no data source?");
+                    Debug.Assert(_owner.DataSource is not null, "how can we determine if DataSource is initialized or not if we have no data source?");
                     if (_dataSourceInitialized)
                     {
                         return true;
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
 
             internal BindToObject(Binding owner)
             {
-                Debug.Assert(owner != null);
+                Debug.Assert(owner is not null);
                 _owner = owner;
                 CheckBinding();
             }
@@ -1158,7 +1158,7 @@ namespace System.Windows.Forms
                 }
 
                 // remove notification from the backEnd
-                if (_bindingManager != null && FieldInfo != null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
+                if (_bindingManager is not null && FieldInfo is not null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
                 {
                     FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                     FieldInfo = null;
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms
                 // this as part of the BindingCompleteEventArgs anyway.
                 DataErrorText = GetErrorText(obj);
 
-                if (FieldInfo != null)
+                if (FieldInfo is not null)
                 {
                     obj = FieldInfo.GetValue(obj);
                 }
@@ -1239,7 +1239,7 @@ namespace System.Windows.Forms
             {
                 object obj = null;
 
-                if (FieldInfo != null)
+                if (FieldInfo is not null)
                 {
                     obj = _bindingManager.Current;
                     if (obj is IEditableObject editableObject)
@@ -1269,29 +1269,29 @@ namespace System.Windows.Forms
             internal void CheckBinding()
             {
                 // At design time, don't check anything.
-                if (_owner.BindableComponent != null && _owner.ControlAtDesignTime())
+                if (_owner.BindableComponent is not null && _owner.ControlAtDesignTime())
                 {
                     return;
                 }
 
                 // Remove propertyChangedNotification when this binding is deleted
-                if (_bindingManager != null &&
-                    FieldInfo != null &&
+                if (_bindingManager is not null &&
+                    FieldInfo is not null &&
                     _bindingManager.IsBinding &&
                     !(_bindingManager is CurrencyManager))
                 {
                     FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
                 }
 
-                if (_bindingManager != null &&
-                    _owner.BindableComponent != null &&
+                if (_bindingManager is not null &&
+                    _owner.BindableComponent is not null &&
                     _owner.ComponentCreated &&
                     IsDataSourceInitialized)
                 {
                     string dataField = _owner.BindingMemberInfo.BindingField;
 
                     FieldInfo = _bindingManager.GetItemProperties().Find(dataField, true);
-                    if (_bindingManager.DataSource != null && FieldInfo is null && dataField.Length > 0)
+                    if (_bindingManager.DataSource is not null && FieldInfo is null && dataField.Length > 0)
                     {
                         throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
                     }
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms
                     // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
                     // then we want to get notification from Current.Property1.Property2 and not from DataSource
                     // when we get the backEnd notification we push the new value into the Control's property
-                    if (FieldInfo != null && _bindingManager.IsBinding &&
+                    if (FieldInfo is not null && _bindingManager.IsBinding &&
                         !(_bindingManager is CurrencyManager))
                     {
                         FieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));

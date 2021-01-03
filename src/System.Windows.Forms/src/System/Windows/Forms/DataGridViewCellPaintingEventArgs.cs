@@ -50,7 +50,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewCellPaintingEventArgs(DataGridView dataGridView)
         {
-            Debug.Assert(dataGridView != null);
+            Debug.Assert(dataGridView is not null);
             _dataGridView = dataGridView;
         }
 
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                                     DataGridViewAdvancedBorderStyle advancedBorderStyle,
                                     DataGridViewPaintParts paintParts)
         {
-            Debug.Assert(graphics != null);
+            Debug.Assert(graphics is not null);
 
             Graphics = graphics;
             ClipBounds = clipBounds;

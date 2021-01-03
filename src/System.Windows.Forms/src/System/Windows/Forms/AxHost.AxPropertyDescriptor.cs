@@ -42,7 +42,7 @@ namespace System.Windows.Forms
                 // Get the category for this dispid.
                 //
                 dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                if (dispid != null)
+                if (dispid is not null)
                 {
                     // Look to see if this property has a property page.
                     // If it does, then it needs to be Browsable(true).
@@ -59,7 +59,7 @@ namespace System.Windows.Forms
 
                     // Use the CategoryAttribute provided by the OCX.
                     CategoryAttribute cat = owner.GetCategoryForDispid((Ole32.DispatchID)dispid.Value);
-                    if (cat != null)
+                    if (cat is not null)
                     {
                         AddAttribute(cat);
                     }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (dispid != null)
+                    if (dispid is not null)
                     {
                         UpdateTypeConverterAndTypeEditorInternal(false, Dispid);
                     }
@@ -99,7 +99,7 @@ namespace System.Windows.Forms
                 get
                 {
                     DispIdAttribute dispid = (DispIdAttribute)baseProp.Attributes[typeof(DispIdAttribute)];
-                    if (dispid != null)
+                    if (dispid is not null)
                     {
                         return (Ole32.DispatchID)dispid.Value;
                     }
@@ -149,12 +149,12 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(editorBaseType));
                 }
 
-                if (dispid != null)
+                if (dispid is not null)
                 {
                     UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)dispid.Value);
                 }
 
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor != null)
+                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor is not null)
                 {
                     return editor;
                 }
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
                 try
                 {
                     SetFlag(FlagSettingValue, true);
-                    if (PropertyType.IsEnum && value != null && value.GetType() != PropertyType)
+                    if (PropertyType.IsEnum && value is not null && value.GetType() != PropertyType)
                     {
                         baseProp.SetValue(component, Enum.ToObject(PropertyType, value));
                     }
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
                 {
                     Oleaut32.IPerPropertyBrowsing ppb = owner.GetPerPropertyBrowsing();
 
-                    if (ppb != null)
+                    if (ppb is not null)
                     {
                         bool hasStrings = false;
 
@@ -472,10 +472,10 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex1)
                 {
-                    if (provider != null)
+                    if (provider is not null)
                     {
                         IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                        if (uiSvc != null)
+                        if (uiSvc is not null)
                         {
                             uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
                         }
