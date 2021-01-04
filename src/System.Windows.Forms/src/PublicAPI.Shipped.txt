@@ -9819,8 +9819,8 @@ System.Windows.Forms.DateBoldEventArgs.DaysToBold.set -> void
 ~System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
 ~System.Windows.Forms.DomainUpDown.SelectedItem.get -> object
 ~System.Windows.Forms.DomainUpDown.SelectedItem.set -> void
-~System.Windows.Forms.DragEventArgs.Data.get -> System.Windows.Forms.IDataObject
-~System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect) -> void
+System.Windows.Forms.DragEventArgs.Data.get -> System.Windows.Forms.IDataObject?
+System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect) -> void
 ~System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics graphics, System.Drawing.Font font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state) -> void
 ~System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics graphics, System.Drawing.Font font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
 ~System.Windows.Forms.DrawItemEventArgs.Font.get -> System.Drawing.Font
@@ -10102,8 +10102,8 @@ System.Windows.Forms.InputLanguageCollection.IndexOf(System.Windows.Forms.InputL
 System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windows.Forms.InputLanguage!
 ~System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem item) -> void
-~System.Windows.Forms.ItemDragEventArgs.Item.get -> object
-~System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button, object item) -> void
+System.Windows.Forms.ItemDragEventArgs.Item.get -> object?
+System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button, object? item) -> void
 ~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
 ~System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
 ~System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics g, System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
