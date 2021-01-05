@@ -1099,8 +1099,8 @@ namespace AccessibilityTests
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "CustomAccPropertyForm";
+            this.Text = "CustomAccPropertyForm";
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
