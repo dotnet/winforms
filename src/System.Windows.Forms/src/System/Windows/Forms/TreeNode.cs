@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,7 +25,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(TreeNodeConverter))]
     [Serializable]  // This class participates in resx serialization.
     [DefaultProperty(nameof(Text))]
-    public class TreeNode : MarshalByRefObject, ICloneable, ISerializable
+    public class TreeNode : MarshalByRefObject, ICloneable, ISerializable, IKeyboardToolTip
     {
         internal const int SHIFTVAL = 12;
         private const TVIS CHECKED = (TVIS)(2 << SHIFTVAL);
@@ -1895,6 +1896,10 @@ namespace System.Windows.Forms
             }
         }
 
+        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
+
+        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
+
         internal unsafe void Realize(bool insertFirst)
         {
             TreeView tv = TreeView;
@@ -2036,10 +2041,20 @@ namespace System.Windows.Forms
             // unlink our children
             //
 
+            if (TreeView is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.Unhook(this, TreeView.KeyboardToolTip);
+                for (int i = 0; i < childCount; i++)
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(children[i], TreeView.KeyboardToolTip);
+                }
+            }
+
             for (int i = 0; i < childCount; i++)
             {
                 children[i].Remove(false);
             }
+
             // children = null;
             // unlink ourself
             if (notify && parent != null)
@@ -2284,12 +2299,58 @@ namespace System.Windows.Forms
             User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
         }
 
+        bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => true;
+
+        bool IKeyboardToolTip.AllowsToolTip() => true;
+
+        bool IKeyboardToolTip.CanShowToolTipsNow() => treeView is not null;
+
+        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => treeView.ShowNodeToolTips ? ToolTipText : treeView.ControlToolTipText;
+
+        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => BoundsToScreen(Bounds);
+
+        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
+        {
+            TreeNode nextNode = NextVisibleNode;
+            TreeNode prevNode = PrevVisibleNode;
+            List<Rectangle> neighboringRectangles = new List<Rectangle>();
+
+            if (nextNode is not null)
+            {
+                neighboringRectangles.Add(BoundsToScreen(nextNode.Bounds));
+            }
+
+            if (prevNode is not null)
+            {
+                neighboringRectangles.Add(BoundsToScreen(prevNode.Bounds));
+            }
+
+            return neighboringRectangles;
+        }
+
+        IWin32Window IKeyboardToolTip.GetOwnerWindow() => treeView;
+
+        bool IKeyboardToolTip.HasRtlModeEnabled() => treeView.RightToLeft == RightToLeft.Yes;
+
+        bool IKeyboardToolTip.IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
+
+        bool IKeyboardToolTip.IsHoveredWithMouse() => treeView.AccessibilityObject.Bounds.Contains(Control.MousePosition);
+
+        void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
+
+        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
+
+        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
+
         /// <summary>
         ///  ISerializable private implementation
         /// </summary>
-        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) => Serialize(si, context);
+
+        private Rectangle BoundsToScreen(Rectangle bounds)
         {
-            Serialize(si, context);
+            bounds.Location = treeView.PointToScreen(bounds.Location);
+            return bounds;
         }
     }
 }

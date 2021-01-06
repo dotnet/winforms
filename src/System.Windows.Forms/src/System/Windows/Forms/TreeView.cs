@@ -82,6 +82,7 @@ namespace System.Windows.Forms
 
         private static bool isScalingInitialized;
         private static Size? scaledStateImageSize;
+        private static readonly int s_propToolTip = PropertyStore.CreateKey();
         private static Size? ScaledStateImageSize
         {
             get
@@ -863,6 +864,30 @@ namespace System.Windows.Forms
             }
         }
 
+        internal KeyboardToolTip KeyboardToolTip
+        {
+            get
+            {
+                KeyboardToolTip toolTip;
+                if (!Properties.ContainsObject(s_propToolTip))
+                {
+                    toolTip = new KeyboardToolTip
+                    {
+                        ReshowDelay = 500,
+                        InitialDelay = 500
+                    };
+
+                    Properties.SetObject(s_propToolTip, toolTip);
+                }
+                else
+                {
+                    toolTip = (KeyboardToolTip)Properties.GetObject(s_propToolTip);
+                }
+
+                return toolTip;
+            }
+        }
+
         /// <summary>
         ///  The LabelEdit property determines if the label text
         ///  of nodes in the tree view is editable.
@@ -1640,6 +1665,7 @@ namespace System.Windows.Forms
 
             // Dispose unmanaged resources.
             _toolTipBuffer.Dispose();
+            KeyboardToolTip.Dispose();
 
             base.Dispose(disposing);
         }
@@ -1689,6 +1715,8 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        internal string ControlToolTipText => controlToolTipText;
 
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
@@ -1803,6 +1831,22 @@ namespace System.Windows.Forms
                     UpdateImagesRecursive(node);
                 }
                 EndUpdate();
+            }
+        }
+
+        private void NotifyAboutGotFocus(TreeNode treeNode)
+        {
+            if (treeNode is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(treeNode);
+            }
+        }
+
+        private void NotifyAboutLostFocus(TreeNode treeNode)
+        {
+            if (treeNode is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(treeNode);
             }
         }
 
@@ -2130,6 +2174,7 @@ namespace System.Windows.Forms
                 {
                     OnNodeMouseHover(new TreeNodeMouseHoverEventArgs(tn));
                     prevHoveredNode = tn;
+                    NotifyAboutLostFocus(SelectedNode);
                 }
             }
 
@@ -2259,6 +2304,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            NotifyAboutLostFocus(SelectedNode);
             base.OnKeyDown(e);
             if (e.Handled)
             {
@@ -2530,18 +2576,20 @@ namespace System.Windows.Forms
 
             if (nmtv->itemNew.hItem != IntPtr.Zero)
             {
+                TreeNode node = NodeFromHandle(nmtv->itemNew.hItem);
                 TreeViewAction action = TreeViewAction.Unknown;
                 switch (nmtv->action)
                 {
                     case TVC.BYKEYBOARD:
                         action = TreeViewAction.ByKeyboard;
+                        NotifyAboutGotFocus(node);
                         break;
                     case TVC.BYMOUSE:
                         action = TreeViewAction.ByMouse;
                         break;
                 }
 
-                OnAfterSelect(new TreeViewEventArgs(NodeFromHandle(nmtv->itemNew.hItem), action));
+                OnAfterSelect(new TreeViewEventArgs(node, action));
             }
 
             // TreeView doesn't properly revert back to the unselected image
@@ -3032,6 +3080,18 @@ namespace System.Windows.Forms
                         break;
                 }
             }
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            NotifyAboutGotFocus(SelectedNode);
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            NotifyAboutLostFocus(SelectedNode);
         }
 
         /// <summary>

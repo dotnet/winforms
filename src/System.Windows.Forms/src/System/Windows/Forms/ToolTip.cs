@@ -481,7 +481,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private Control TopLevelControl
+        private protected Control TopLevelControl
         {
             get
             {
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (associatedControl is TreeView treeView && treeView.ShowNodeToolTips)
+            if (associatedControl is TreeView treeView)
             {
                 treeView.SetToolTip(this, GetToolTip(associatedControl));
             }
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified region.
         /// </summary>
-        private unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
+        private protected virtual unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
         {
             TTF flags = TTF.TRANSPARENT | TTF.SUBCLASS;
 
@@ -994,6 +994,8 @@ namespace System.Windows.Forms
             bool noText = (control is TreeView tv && tv.ShowNodeToolTips)
                 || (control is ListView lv && lv.ShowItemToolTips);
 
+            // The "noText" flag is required so that when the user hovers over the ListViewItem or TreeNode,
+            // their own tooltip is displayed, not the ListView or TreeView tooltip
             var info = new ToolInfoWrapper<Control>(control, flags, noText ? null : caption);
             if (noText)
                 info.Info.lpszText = (char*)(-1);
@@ -1993,15 +1995,6 @@ namespace System.Windows.Forms
             if (window is null || tt is null)
             {
                 return;
-            }
-
-            // Treeview handles its own ToolTips.
-            if (window is TreeView treeView)
-            {
-                if (treeView.ShowNodeToolTips)
-                {
-                    return;
-                }
             }
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
