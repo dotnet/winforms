@@ -1,7 +1,6 @@
-﻿
-namespace AccessibilityTests
+﻿namespace AccessibilityTests
 {
-    partial class CusAccNameTesting
+    partial class CustomAccessiblePropertiesForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +28,7 @@ namespace AccessibilityTests
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CusAccNameTesting));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomAccessiblePropertiesForm));
             this.button1 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
@@ -120,6 +119,7 @@ namespace AccessibilityTests
             this.Column3 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -853,7 +853,7 @@ namespace AccessibilityTests
             this.splitContainer1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.splitContainer1.Location = new System.Drawing.Point(613, 554);
             this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Size = new System.Drawing.Size(223, 116);
+            this.splitContainer1.Size = new System.Drawing.Size(179,99);
             this.splitContainer1.SplitterDistance = 69;
             this.splitContainer1.TabIndex = 34;
             // 
@@ -1056,12 +1056,27 @@ namespace AccessibilityTests
             this.toolStripContainer1.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.toolStripContainer1.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             // 
-            // Form1
+            // richTextBox1
             // 
+            this.richTextBox1.AccessibleDescription = "This is RichTextBox";
+            this.richTextBox1.AccessibleName = "TestRichTextBox";
+            this.richTextBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Border;
+            this.richTextBox1.Location = new System.Drawing.Point(799, 554);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(100, 96);
+            this.richTextBox1.TabIndex = 38;
+            this.richTextBox1.Text = "";
+            // 
+            // CustomAccessiblePropertiesForm
+            // 
+            this.AccessibleDescription = "This is customAccessiblePropertiesForm";
+            this.AccessibleName = "testForm";
+            this.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(914, 817);
+            this.ClientSize = new System.Drawing.Size(944, 817);
             this.ContextMenuStrip = this.contextMenuStrip1;
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.statusStrip1);
@@ -1099,8 +1114,8 @@ namespace AccessibilityTests
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.Name = "CustomAccPropertyForm";
-            this.Text = "CustomAccPropertyForm";
+            this.Name = "CustomAccessiblePropertiesForm";
+            this.Text = "CustomAccessiblePropertiesForm";
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -1213,6 +1228,7 @@ namespace AccessibilityTests
         private System.Windows.Forms.ToolStripTextBox toolStripTextBox3;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar2;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 

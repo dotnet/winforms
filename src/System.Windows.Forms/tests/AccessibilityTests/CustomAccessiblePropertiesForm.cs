@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace AccessibilityTests
 {
-    public partial class CusAccNameTesting : Form
+    public partial class CustomAccessiblePropertiesForm : Form
     {
-        public CusAccNameTesting()
+        public CustomAccessiblePropertiesForm()
         {
             InitializeComponent();
         }

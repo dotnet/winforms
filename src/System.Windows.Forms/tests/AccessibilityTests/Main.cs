@@ -68,9 +68,9 @@ namespace AccessibilityTests
             dataBindingExample.Show();
         }
 
-        private void btnCusAccName_Click(object sender, EventArgs e)
+        private void customAccessiblePropertiesButton_Click(object sender, EventArgs e)
         {
-            CusAccNameTesting cusAcccName = new CusAccNameTesting();
+            CustomAccessiblePropertiesForm cusAcccName = new CustomAccessiblePropertiesForm();
             cusAcccName.StartPosition = FormStartPosition.CenterParent;
             cusAcccName.Show();
         }

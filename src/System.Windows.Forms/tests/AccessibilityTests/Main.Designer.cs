@@ -37,7 +37,7 @@
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.btnDataBindingExample = new System.Windows.Forms.Button();
-            this.btnCusAccName = new System.Windows.Forms.Button();
+            this.customAccessiblePropertiesButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -130,22 +130,22 @@
             this.btnDataBindingExample.UseVisualStyleBackColor = true;
             this.btnDataBindingExample.Click += new System.EventHandler(this.btnDataBindingExample_Click);
             // 
-            // BtnCusAccName
+            // customAccessiblePropertiesButton
             // 
-            this.btnCusAccName.Location = new System.Drawing.Point(12, 410);
-            this.btnCusAccName.Name = "cusAccName";
-            this.btnCusAccName.Size = new System.Drawing.Size(455, 23);
-            this.btnCusAccName.TabIndex = 9;
-            this.btnCusAccName.Text = "Testing controls whose accessible name, role, description have been customized";
-            this.btnCusAccName.UseVisualStyleBackColor = true;
-            this.btnCusAccName.Click += new System.EventHandler(this.btnCusAccName_Click);
+            this.customAccessiblePropertiesButton.Location = new System.Drawing.Point(12, 410);
+            this.customAccessiblePropertiesButton.Name = "cusAccName";
+            this.customAccessiblePropertiesButton.Size = new System.Drawing.Size(455, 23);
+            this.customAccessiblePropertiesButton.TabIndex = 9;
+            this.customAccessiblePropertiesButton.Text = "Accessible properties: Testing controls with custom accessible name, role, and description";
+            this.customAccessiblePropertiesButton.UseVisualStyleBackColor = true;
+            this.customAccessiblePropertiesButton.Click += new System.EventHandler(this.customAccessiblePropertiesButton_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(486, 450);
-            this.Controls.Add(this.btnCusAccName);
+            this.Controls.Add(this.customAccessiblePropertiesButton);
             this.Controls.Add(this.btnDataBindingExample);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
@@ -171,7 +171,7 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button btnDataBindingExample;
-        private System.Windows.Forms.Button btnCusAccName;
+        private System.Windows.Forms.Button customAccessiblePropertiesButton;
     }
 }
 
