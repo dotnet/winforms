@@ -67,5 +67,12 @@ namespace AccessibilityTests
             DataBindingExample dataBindingExample = new DataBindingExample();
             dataBindingExample.Show();
         }
+
+        private void customAccessiblePropertiesButton_Click(object sender, EventArgs e)
+        {
+            CustomAccessiblePropertiesForm cusAcccName = new CustomAccessiblePropertiesForm();
+            cusAcccName.StartPosition = FormStartPosition.CenterParent;
+            cusAcccName.Show();
+        }
     }
 }
