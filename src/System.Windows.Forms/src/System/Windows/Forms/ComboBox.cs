@@ -4556,16 +4556,21 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    ChildAccessibleObject listAccessibleObject = _owningComboBox.ChildListAccessibleObject;
                     int currentIndex = GetCurrentIndex();
+                    IntPtr listHandle = _owningComboBox.GetListHandle();
+                    RECT itemRect = new RECT();
+                    int result = unchecked((int)(long)User32.SendMessageW(
+                        listHandle, (User32.WM)User32.LB.GETITEMRECT, (IntPtr)currentIndex, ref itemRect));
 
-                    Rectangle parentRect = listAccessibleObject.BoundingRectangle;
-                    int left = parentRect.Left;
-                    int top = parentRect.Top + _owningComboBox.ItemHeight * currentIndex;
-                    int width = parentRect.Width;
-                    int height = _owningComboBox.ItemHeight;
+                    if (result == User32.LB_ERR)
+                    {
+                        return Rectangle.Empty;
+                    }
 
-                    return new Rectangle(left, top, width, height);
+                    // Translate the item rect to screen coordinates
+                    User32.MapWindowPoints(listHandle, IntPtr.Zero, ref itemRect, 2);
+
+                    return itemRect;
                 }
             }
 
