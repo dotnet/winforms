@@ -4818,6 +4818,8 @@ namespace System.Windows.Forms
                         return false;
                     case NativeMethods.UIA_IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_IsScrollItemPatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ScrollItemPatternId);
                     case NativeMethods.UIA_IsSelectionItemPatternAvailablePropertyId:
                         return true;
                     case NativeMethods.UIA_SelectionItemIsSelectedPropertyId:
@@ -4850,6 +4852,7 @@ namespace System.Windows.Forms
             {
                 if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
                     patternId == NativeMethods.UIA_InvokePatternId ||
+                    patternId == NativeMethods.UIA_ScrollItemPatternId ||
                     patternId == NativeMethods.UIA_SelectionItemPatternId)
                 {
                     return true;
@@ -4925,6 +4928,23 @@ namespace System.Windows.Forms
                 RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
 
                 base.SetFocus();
+            }
+
+            internal override void ScrollIntoView()
+            {
+                if (!_owningComboBox.IsHandleCreated || !_owningComboBox.Enabled)
+                {
+                    return;
+                }
+
+                Rectangle listBounds = _owningComboBox.ChildListAccessibleObject.BoundingRectangle;
+                if (listBounds.IntersectsWith(Bounds))
+                {
+                    // Do nothing because the item is already visible
+                    return;
+                }
+
+                User32.SendMessageW(_owningComboBox, NativeMethods.CB_SETTOPINDEX, (IntPtr)GetCurrentIndex());
             }
 
             internal override void SelectItem()
