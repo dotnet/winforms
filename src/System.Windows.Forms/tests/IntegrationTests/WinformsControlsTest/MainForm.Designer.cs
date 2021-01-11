@@ -55,6 +55,7 @@ namespace WinformsControlsTest
             this.richTextBoxes = new System.Windows.Forms.Button();
             this.PictureBoxes = new System.Windows.Forms.Button();
             this.formBorderStyles = new System.Windows.Forms.Button();
+            this.comboBoxesWithScrollBarsButton = new System.Windows.Forms.Button();
             this.flowLayoutPanelUITypeEditors.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -235,6 +236,7 @@ namespace WinformsControlsTest
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.calendar);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.multipleControls);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.ComboBoxesButton);
+            this.flowLayoutPanelUITypeEditors.Controls.Add(this.comboBoxesWithScrollBarsButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.DateTimePickerButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.FolderBrowserDialogButton);
             this.flowLayoutPanelUITypeEditors.Controls.Add(this.ShowExceptionDialogButton);
@@ -309,6 +311,16 @@ namespace WinformsControlsTest
             this.formBorderStyles.UseVisualStyleBackColor = true;
             this.formBorderStyles.Click += new System.EventHandler(this.formBorderStyles_Click);
             // 
+            // comboBoxesWithScrollBarsButton
+            // 
+            this.comboBoxesWithScrollBarsButton.Location = new System.Drawing.Point(268, 293);
+            this.comboBoxesWithScrollBarsButton.Name = "comboBoxesWithScrollBarsButton";
+            this.comboBoxesWithScrollBarsButton.Size = new System.Drawing.Size(258, 23);
+            this.comboBoxesWithScrollBarsButton.TabIndex = 20;
+            this.comboBoxesWithScrollBarsButton.Text = "ComboBoxes with ScrollBars";
+            this.comboBoxesWithScrollBarsButton.UseVisualStyleBackColor = true;
+            this.comboBoxesWithScrollBarsButton.Click += new System.EventHandler(this.comboBoxesWithScrollBarsButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -350,6 +362,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button richTextBoxes;
         private System.Windows.Forms.Button PictureBoxes;
         private System.Windows.Forms.Button formBorderStyles;
+        private System.Windows.Forms.Button comboBoxesWithScrollBarsButton;
     }
 }
 

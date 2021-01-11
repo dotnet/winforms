@@ -95,6 +95,21 @@ namespace System.Windows.Forms.IntegrationTests
         }
 
         [Fact]
+        public void WinformsControlsTest_ComboBoxesWithScrollBarsTest()
+        {
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.PressTabsOnProcess(process, MainFormControlsTabOrder.СomboBoxesWithScrollBarsButton);
+            TestHelpers.PressEnterOnProcess(process);
+
+            Assert.False(process.HasExited);
+
+            process.Kill();
+            process.WaitForExit();
+
+            Assert.True(process.HasExited);
+        }
+
+        [Fact]
         public void WinformsControlsTest_DateTimePickerTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);

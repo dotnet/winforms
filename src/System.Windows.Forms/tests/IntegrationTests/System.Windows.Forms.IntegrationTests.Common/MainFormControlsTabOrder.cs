@@ -10,6 +10,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         Calendar,
         MultipleControls,
         ComboBoxes,
+        СomboBoxesWithScrollBarsButton,
         DateTimePickerButton,
         FolderBrowserDialog,
         ThreadExceptionDialog,
