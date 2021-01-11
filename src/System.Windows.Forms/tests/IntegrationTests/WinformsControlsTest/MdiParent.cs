@@ -18,8 +18,17 @@ namespace WinformsControlsTest
 
             Text = RuntimeInformation.FrameworkDescription;
 
+            ToolStripMenuItem menu = new() { Text = "Open new child" };
+            menu.Click += (s, e) =>
+            {
+                var child = new Form();
+                child.MdiParent = this;
+                child.WindowState = FormWindowState.Maximized;
+                child.Show();
+            };
+
             _menuStrip = new MenuStrip();
-            _menuStrip.Items.Add(new ToolStripMenuItem { Text = "Parent" });
+            _menuStrip.Items.Add(menu);
         }
 
         public MenuStrip MainMenu => _menuStrip;
@@ -30,6 +39,7 @@ namespace WinformsControlsTest
 
             MdiChild frm = new MdiChild();
             frm.MdiParent = this;
+            frm.WindowState = FormWindowState.Maximized;
             frm.Show();
         }
     }
