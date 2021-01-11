@@ -4709,16 +4709,19 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    ChildAccessibleObject listAccessibleObject = _owningComboBox.ChildListAccessibleObject;
                     int currentIndex = GetCurrentIndex();
+                    IntPtr listHandle = _owningComboBox.GetListHandle();
+                    RECT itemRect = new RECT();
+                    if (unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, listHandle),
+                        NativeMethods.LB_GETITEMRECT, currentIndex, ref itemRect)) == NativeMethods.LB_ERR)
+                    {
+                        return Rectangle.Empty;
+                    }
 
-                    Rectangle parentRect = listAccessibleObject.BoundingRectangle;
-                    int left = parentRect.Left;
-                    int top = parentRect.Top + _owningComboBox.ItemHeight * currentIndex;
-                    int width = parentRect.Width;
-                    int height = _owningComboBox.ItemHeight;
+                    // Translate the item rect to screen coordinates
+                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, listHandle), NativeMethods.NullHandleRef, ref itemRect, 2);
 
-                    return new Rectangle(left, top, width, height);
+                    return Rectangle.FromLTRB(itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
                 }
             }
 
