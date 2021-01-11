@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -18,8 +18,17 @@ namespace WinformsControlsTest
 
             Text = RuntimeInformation.FrameworkDescription;
 
+            ToolStripMenuItem menu = new() { Text = "Open new child" };
+            menu.Click += (s, e) =>
+            {
+                var child = new Form();
+                child.MdiParent = this;
+                child.WindowState = FormWindowState.Maximized;
+                child.Show();
+            };
+
             _menuStrip = new MenuStrip();
-            _menuStrip.Items.Add(new ToolStripMenuItem { Text = "Parent" });
+            _menuStrip.Items.Add(menu);
         }
 
         public MenuStrip MainMenu => _menuStrip;
@@ -30,6 +39,7 @@ namespace WinformsControlsTest
 
             MdiChild frm = new MdiChild();
             frm.MdiParent = this;
+            frm.WindowState = FormWindowState.Maximized;
             frm.Show();
         }
     }
