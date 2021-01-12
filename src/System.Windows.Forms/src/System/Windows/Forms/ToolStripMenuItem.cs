@@ -784,7 +784,7 @@ namespace System.Windows.Forms
             return text;
         }
 
-        private Image GetNativeMenuItemImage()
+        private unsafe Image GetNativeMenuItemImage()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
@@ -794,6 +794,7 @@ namespace System.Windows.Forms
 
             var info = new User32.MENUITEMINFOW
             {
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
                 fMask = User32.MIIM.BITMAP,
                 wID = nativeMenuCommandID
             };
