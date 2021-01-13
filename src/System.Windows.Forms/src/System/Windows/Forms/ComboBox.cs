@@ -4709,16 +4709,19 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    ChildAccessibleObject listAccessibleObject = _owningComboBox.ChildListAccessibleObject;
                     int currentIndex = GetCurrentIndex();
+                    IntPtr listHandle = _owningComboBox.GetListHandle();
+                    RECT itemRect = new RECT();
+                    if (unchecked((int)(long)UnsafeNativeMethods.SendMessage(new HandleRef(this, listHandle),
+                        NativeMethods.LB_GETITEMRECT, currentIndex, ref itemRect)) == NativeMethods.LB_ERR)
+                    {
+                        return Rectangle.Empty;
+                    }
 
-                    Rectangle parentRect = listAccessibleObject.BoundingRectangle;
-                    int left = parentRect.Left;
-                    int top = parentRect.Top + _owningComboBox.ItemHeight * currentIndex;
-                    int width = parentRect.Width;
-                    int height = _owningComboBox.ItemHeight;
+                    // Translate the item rect to screen coordinates
+                    UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, listHandle), NativeMethods.NullHandleRef, ref itemRect, 2);
 
-                    return new Rectangle(left, top, width, height);
+                    return Rectangle.FromLTRB(itemRect.left, itemRect.top, itemRect.right, itemRect.bottom);
                 }
             }
 
@@ -4818,6 +4821,8 @@ namespace System.Windows.Forms
                         return false;
                     case NativeMethods.UIA_IsOffscreenPropertyId:
                         return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_IsScrollItemPatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ScrollItemPatternId);
                     case NativeMethods.UIA_IsSelectionItemPatternAvailablePropertyId:
                         return true;
                     case NativeMethods.UIA_SelectionItemIsSelectedPropertyId:
@@ -4850,6 +4855,7 @@ namespace System.Windows.Forms
             {
                 if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
                     patternId == NativeMethods.UIA_InvokePatternId ||
+                    patternId == NativeMethods.UIA_ScrollItemPatternId ||
                     patternId == NativeMethods.UIA_SelectionItemPatternId)
                 {
                     return true;
@@ -4925,6 +4931,23 @@ namespace System.Windows.Forms
                 RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
 
                 base.SetFocus();
+            }
+
+            internal override void ScrollIntoView()
+            {
+                if (!_owningComboBox.IsHandleCreated || !_owningComboBox.Enabled)
+                {
+                    return;
+                }
+
+                Rectangle listBounds = _owningComboBox.ChildListAccessibleObject.BoundingRectangle;
+                if (listBounds.IntersectsWith(Bounds))
+                {
+                    // Do nothing because the item is already visible
+                    return;
+                }
+
+                User32.SendMessageW(_owningComboBox, NativeMethods.CB_SETTOPINDEX, (IntPtr)GetCurrentIndex());
             }
 
             internal override void SelectItem()

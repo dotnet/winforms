@@ -64,6 +64,11 @@ namespace WinformsControlsTest
             new ComboBoxes().Show();
         }
 
+        private void comboBoxesWithScrollBarsButton_Click(object sender, EventArgs e)
+        {
+            new ComboBoxesWithScrollBars().Show();
+        }
+
         private void splitterButton_Click(object sender, EventArgs e)
         {
             new Splitter().Show();

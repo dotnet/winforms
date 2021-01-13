@@ -130,6 +130,14 @@
     <Compile Include="..\WinformsControlsTest\ComboBoxes.Designer.cs">
       <Link>ComboBoxes.Designer.cs</Link>
       <DependentUpon>ComboBoxes.cs</DependentUpon>
+    </Compile>	
+    <Compile Include="..\WinformsControlsTest\ComboBoxesWithScrollBars.cs">
+      <Link>ComboBoxesWithScrollBars.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\WinformsControlsTest\ComboBoxesWithScrollBars.Designer.cs">
+      <Link>ComboBoxesWithScrollBars.Designer.cs</Link>
+      <DependentUpon>ComboBoxesWithScrollBars.cs</DependentUpon>
     </Compile>
     <Compile Include="..\WinformsControlsTest\CurrentDPILabel.cs">
       <Link>CurrentDPILabel.cs</Link>
@@ -297,6 +305,10 @@
     <EmbeddedResource Include="..\WinformsControlsTest\ComboBoxes.resx">
       <Link>ComboBoxes.resx</Link>
       <DependentUpon>ComboBoxes.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="..\WinformsControlsTest\ComboBoxesWithScrollBars.resx">
+      <Link>ComboBoxesWithScrollBars.resx</Link>
+      <DependentUpon>ComboBoxesWithScrollBars.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="..\WinformsControlsTest\DataGridViewHeaders.resx">
       <Link>DataGridViewHeaders.resx</Link>
