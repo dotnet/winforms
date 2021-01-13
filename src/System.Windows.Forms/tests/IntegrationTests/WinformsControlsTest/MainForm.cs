@@ -67,6 +67,10 @@ namespace WinformsControlsTest
                 new InitInfo("ComboBoxes", (obj, e) => new ComboBoxes().Show())
             },
             {
+                MainFormControlsTabOrder.ComboBoxesWithScrollBarsButton,
+                new InitInfo("ComboBoxes with ScrollBars", (obj, e) => new ComboBoxesWithScrollBars().Show())
+            },
+            {
                 MainFormControlsTabOrder.DateTimePickerButton,
                 new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show())
             },
