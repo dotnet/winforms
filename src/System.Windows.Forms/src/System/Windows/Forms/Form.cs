@@ -128,6 +128,7 @@ namespace System.Windows.Forms
         private static readonly int PropFormerlyActiveMdiChild = PropertyStore.CreateKey();
         private static readonly int PropMdiChildFocusable = PropertyStore.CreateKey();
 
+        private static readonly int PropDummyMdiMenu = PropertyStore.CreateKey();
         private static readonly int PropMainMenuStrip = PropertyStore.CreateKey();
         private static readonly int PropMdiWindowListStrip = PropertyStore.CreateKey();
         private static readonly int PropMdiControlStrip = PropertyStore.CreateKey();
@@ -1599,6 +1600,7 @@ namespace System.Windows.Forms
                         }
                     }
 
+                    InvalidateMergedMenu();
                     UpdateMenuHandles();
                 }
                 finally
@@ -2193,7 +2195,6 @@ namespace System.Windows.Forms
             }
         }
 
-        //
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
@@ -2268,6 +2269,7 @@ namespace System.Windows.Forms
 
                 if (!value)
                 {
+                    InvalidateMergedMenu();
                     SetState(States.Visible, false);
                 }
                 else
@@ -3326,6 +3328,13 @@ namespace System.Windows.Forms
 
                 base.Dispose(disposing);
                 ctlClient = null;
+
+                var dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
+                if (dummyMenu.HasValue && dummyMenu.Value != IntPtr.Zero)
+                {
+                    Properties.SetObject(PropDummyMdiMenu, null);
+                    User32.DestroyMenu(new HandleRef(this, dummyMenu.Value));
+                }
             }
             else
             {
@@ -3724,6 +3733,12 @@ namespace System.Windows.Forms
             p.Y = Math.Max(screenRect.Y, screenRect.Y + (screenRect.Height - Height) / 2);
             Location = p;
         }
+
+        /// <summary>
+        ///  Invalidates the merged menu, forcing the menu to be recreated if
+        ///  needed again.
+        /// </summary>
+        private void InvalidateMergedMenu() => ParentForm?.UpdateMenuHandles();
 
         /// <summary>
         ///  Arranges the Multiple Document Interface
@@ -5516,7 +5531,7 @@ namespace System.Windows.Forms
 
             if (ctlClient is null || !ctlClient.IsHandleCreated)
             {
-                User32.SetMenu(this, NativeMethods.NullHandleRef);
+                User32.SetMenu(this, IntPtr.Zero);
             }
             else
             {
@@ -5525,6 +5540,23 @@ namespace System.Windows.Forms
                 // the MainMenuStrip as the place to store the system menu controls for the maximized MDI child.
 
                 MenuStrip mainMenuStrip = MainMenuStrip;
+                if (mainMenuStrip is null)
+                {
+                    // We are dealing with a Win32 Menu; MenuStrip doesn't have control buttons.
+
+                    // We need to set the "dummy" menu even when a menu is being removed
+                    // (set to null) so that duplicate control buttons are not placed on the menu bar when
+                    // an ole menu is being removed.
+                    // Make MDI forget the mdi item position.
+                    IntPtr? dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
+                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero)
+                    {
+                        dummyMenu = User32.CreateMenu();
+                        Properties.SetObject(PropDummyMdiMenu, dummyMenu);
+                    }
+                    User32.SendMessageW(ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, IntPtr.Zero);
+                }
+
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
                 if (mainMenuStrip != null)
                 {
@@ -5532,10 +5564,8 @@ namespace System.Windows.Forms
                     IntPtr hMenu = User32.GetMenu(this);
                     if (hMenu != IntPtr.Zero)
                     {
-                        // We had a MainMenu and now we're switching over to MainMenuStrip
-
                         // Remove the current menu.
-                        User32.SetMenu(this, NativeMethods.NullHandleRef);
+                        User32.SetMenu(this, IntPtr.Zero);
 
                         // because we have messed with the child's system menu by shoving in our own dummy menu,
                         // once we clear the main menu we're in trouble - this eats the close, minimize, maximize gadgets
@@ -5554,7 +5584,6 @@ namespace System.Windows.Forms
             }
 
             User32.DrawMenuBar(this);
-
             formStateEx[FormStateExUpdateMenuHandlesDeferred] = 0;
         }
 
