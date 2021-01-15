@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.IntegrationTests.Common;
 using WindowsFormsApp1;
@@ -46,6 +47,8 @@ namespace WinformsControlsTest
             // Force the panel to show all buttons
             flowLayoutPanelUITypeEditors.PerformLayout();
             flowLayoutPanelUITypeEditors.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+
+            Text = RuntimeInformation.FrameworkDescription;
         }
 
         private IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> GetButtonsInitInfo() => new Dictionary<MainFormControlsTabOrder, InitInfo>
@@ -112,7 +115,7 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.MdiParentButton,
-                new InitInfo("MDI Parent", (obj, e) => new MDIParent().Show())
+                new InitInfo("MDI Parent", (obj, e) => new MdiParent().Show())
             },
             {
                 MainFormControlsTabOrder.PropertyGridButton,

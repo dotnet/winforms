@@ -160,6 +160,7 @@ namespace System.Windows.Forms
                 base.AutoHide(otherItemBeingSelected);
             }
         }
+
         private void ClearShortcutCache()
         {
             cachedShortcutSize = Size.Empty;
@@ -216,6 +217,7 @@ namespace System.Windows.Forms
                 return Padding.Empty;
             }
         }
+
         protected override Padding DefaultPadding
         {
             get
@@ -436,6 +438,7 @@ namespace System.Windows.Forms
             add => Events.AddHandler(EventCheckedChanged, value);
             remove => Events.RemoveHandler(EventCheckedChanged, value);
         }
+
         /// <summary>
         ///  Occurs when the
         ///  value of the <see cref='CheckBox.CheckState'/>
@@ -454,8 +457,7 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(ToolStripItemOverflow.Never)]
         [SRDescription(nameof(SR.ToolStripItemOverflowDescr))]
-        [SRCategory(nameof(SR.CatLayout))
-         ]
+        [SRCategory(nameof(SR.CatLayout))]
         public new ToolStripItemOverflow Overflow
         {
             get => base.Overflow;
@@ -781,7 +783,7 @@ namespace System.Windows.Forms
             return text;
         }
 
-        private Image GetNativeMenuItemImage()
+        private unsafe Image GetNativeMenuItemImage()
         {
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero)
             {
@@ -791,6 +793,7 @@ namespace System.Windows.Forms
 
             var info = new User32.MENUITEMINFOW
             {
+                cbSize = (uint)sizeof(User32.MENUITEMINFOW),
                 fMask = User32.MIIM.BITMAP,
                 wID = nativeMenuCommandID
             };
