@@ -48,7 +48,7 @@
 
   <!-- Specify XUnit test projects here -->
   <ItemGroup>
-    <XUnitProject Include="..\src\**\*.Tests.csproj"/>
+    <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.Tests.csproj"/>
     <!-- <XUnitProject Include="..\src\**\*.IntegrationTests.csproj"/> -->
   </ItemGroup>
 
