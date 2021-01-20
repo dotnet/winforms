@@ -160,6 +160,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.ErrorProviderButton,
                 new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show())
+            },
+            {
+                MainFormControlsTabOrder.TaskDialogButton,
+                new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show())
             }
         };
 
