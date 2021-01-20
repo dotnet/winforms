@@ -149,10 +149,12 @@ namespace System.Windows.Forms
             // to resize itself.
             using (new LayoutTransaction(_owner, _owner, PropertyNames.Items))
             {
-                int currentCount = toolStripItems.Count;
-                for (int i = 0; i < currentCount; i++)
+                for (int i = 0; i < toolStripItems.Count; i++)
                 {
-                    Add(toolStripItems[i]);
+                    // Items are removed from their origin when added to a different owner.
+                    // Decrement the index to always add the items from index 0 which will preserve
+                    // the original order and avoid a pesky ArgumentOutOfRangeException.
+                    Add(toolStripItems[i--]);
                 }
             }
         }
