@@ -32,6 +32,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         FormBorderStylesButton,
         ToggleIconButton,
         FileDialogButton,
-        ErrorProviderButton
+        ErrorProviderButton,
+        TaskDialogButton
     }
 }
