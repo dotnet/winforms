@@ -38,7 +38,7 @@
     <HelixAccessToken></HelixAccessToken> <!-- Must provide for internal builds, must be empty for public builds -->
     <IncludeDotNetCli>true</IncludeDotNetCli>
     <DotNetCliPackageType>runtime</DotNetCliPackageType>
-    <DotNetCliVersion>$(MicrosoftNETCoreAppPackageVersion)</DotNetCliVersion>
+    <DotNetCliVersion>$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</DotNetCliVersion>
     <EnableXUnitReporter>true</EnableXUnitReporter>
     <XUnitPublishTargetFramework>$(TargetFramework)</XUnitPublishTargetFramework>
     <XUnitRuntimeTargetFramework>netcoreapp2.0</XUnitRuntimeTargetFramework>
