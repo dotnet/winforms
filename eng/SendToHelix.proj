@@ -51,10 +51,12 @@
     <!-- Successful -->
     <!-- <XUnitProject Include="..\src\**\System.Windows.Forms.SourceGenerators.Tests.csproj"/>
     <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj"/>
-    <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.Tests.csproj"/> -->
-
+    <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.Tests.csproj"/> 
     <XUnitProject Include="..\src\**\System.Windows.Forms.Design.Tests.csproj"/>
-    <!-- <XUnitProject Include="..\src\**\Microsoft.VisualBasic.Tests.csproj"/>
+    -->
+
+    <XUnitProject Include="..\src\**\Microsoft.VisualBasic.Tests.csproj"/>
+    <!-- 
     <XUnitProject Include="..\src\**\System.Windows.Forms.Tests.csproj"/> -->
 
     <!-- <XUnitProject Include="..\src\**\*.Tests.csproj"

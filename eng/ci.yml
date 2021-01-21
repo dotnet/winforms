@@ -147,35 +147,35 @@ stages:
         # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
         # UI race conditions
         # TODO: Move these to helix once you figure out how. Tracked by https://github.com/dotnet/winforms-designer/issues/1732
-        - script: eng\cibuild.cmd
-            -integrationTest
-            -configuration $(_BuildConfig)
-            $(_OfficialBuildIdArgs)
-            $(_InternalRuntimeDownloadArgs)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
-            /m:1
-          displayName: Run Integration Tests
+        #- script: eng\cibuild.cmd
+        #    -integrationTest
+        #    -configuration $(_BuildConfig)
+        #    $(_OfficialBuildIdArgs)
+        #    $(_InternalRuntimeDownloadArgs)
+        #    /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+        #    /m:1
+        #  displayName: Run Integration Tests
 
         # Create Nuget package, sign, and publish
-        - script: eng\cibuild.cmd
-            -restore
-            -pack
-            -sign $(_SignArgs)
-            -publish $(_PublishArgs)
-            -configuration $(_BuildConfig)
-            $(_OfficialBuildIdArgs)
-            $(_InternalRuntimeDownloadArgs)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
-          displayName: Pack, Sign, and Publish
+        #- script: eng\cibuild.cmd
+        #    -restore
+        #    -pack
+        #    -sign $(_SignArgs)
+        #    -publish $(_PublishArgs)
+        #    -configuration $(_BuildConfig)
+        #    $(_OfficialBuildIdArgs)
+        #    $(_InternalRuntimeDownloadArgs)
+        #    /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
+        #  displayName: Pack, Sign, and Publish
 
         # Upload code coverage data
-        - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
-            eng/CodeCoverage.proj
-            /p:Configuration=$(_BuildConfig)
-            $(_InternalRuntimeDownloadArgs)
-            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
-          displayName: Upload coverage to codecov.io (Debug)
-          condition: and(succeeded(), eq(variables._Coverage, 'true'))
+        #- script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
+        #    eng/CodeCoverage.proj
+        #    /p:Configuration=$(_BuildConfig)
+        #    $(_InternalRuntimeDownloadArgs)
+        #    /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
+        #  displayName: Upload coverage to codecov.io (Debug)
+        #  condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
 # Copied from the arcade repo and modified for winforms
 - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
