@@ -26,14 +26,14 @@
 
     Or, to send to the internal helix queue, use the following:
 
-      msbuild .\eng\SendToHelix.proj /p:Platform=x64 /p:Creator= /p:HelixTargetQueues=Windows.10.Amd64 /p:HelixAccessToken=<get this from helix.dot.net>
+      msbuild .\eng\SendToHelix.proj /p:Platform=x64 /p:Creator= /p:HelixTargetQueues=Windows.10.Amd64.Client19H1.Xaml /p:HelixAccessToken=<get this from helix.dot.net>
 
   -->
 
   <PropertyGroup>
     <HelixSource>official/winforms</HelixSource> <!-- Change to pr/winforms for PR builds -->
     <HelixType>type/tests</HelixType>
-    <HelixTargetQueues>Windows.10.Amd64.Open</HelixTargetQueues> <!-- Change to Windows.10.Amd64 for internal builds. See helix.dot.net for a list of queues -->
+    <HelixTargetQueues>Windows.10.Amd64.Client19H1.Open</HelixTargetQueues> <!-- Change to 'Windows.10.Amd64.Client19H1.Xaml' for internal builds. See helix.dot.net for a list of queues -->
     <Creator>winforms</Creator> <!-- Must provide for public builds, must be empty for internal builds -->
     <HelixAccessToken></HelixAccessToken> <!-- Must provide for internal builds, must be empty for public builds -->
     <IncludeDotNetCli>true</IncludeDotNetCli>
@@ -48,7 +48,9 @@
 
   <!-- Specify XUnit test projects here -->
   <ItemGroup>
-    <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.Tests.csproj"/>
+    <XUnitProject Include="..\src\**\*.Tests.csproj"
+                  Exclude="..\src\**\*.Interop.Tests.csproj"
+      />
     <!-- <XUnitProject Include="..\src\**\*.IntegrationTests.csproj"/> -->
   </ItemGroup>
 

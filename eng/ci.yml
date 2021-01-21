@@ -44,9 +44,16 @@ stages:
           - _HelixSource: official/winforms
           - ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
             - _HelixSource: pr/winforms
-          - _HelixTargetQueues: Windows.10.Amd64.Open # see helix.dot.net for a list of possible queues
-          - _HelixCreator: winforms                   # public helix jobs must have a creator
-          - _HelixAccessToken: ""                     # public helix jobs can't use an access token
+          - _HelixCreator: winforms                               # public helix jobs must have a creator
+          - _HelixAccessToken: ""                                 # public helix jobs can't use an access token
+
+          # see helix.dot.net for a list of possible queues
+          # public
+          - ${{ if eq(variables['System.TeamProject'], 'public') }}:
+            - _HelixTargetQueues: Windows.10.Amd64.Client19H1.Open
+          # internal
+          - ${{ if ne(variables['System.TeamProject'], 'public') }}:
+            - _HelixTargetQueues: Windows.10.Amd64.Client19H1.Xaml
 
           # Override some values if we're building internally (not public)
           - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
@@ -59,7 +66,6 @@ stages:
             - _PublishBlobFeedUrl: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
             - group: DotNet-HelixApi-Access
 
-            - _HelixTargetQueues: Windows.10.Amd64      # see helix.dot.net for a list of possible queues
             - _HelixCreator: ""                         # internal helix jobs can't have a creator
             - _HelixAccessToken: $(HelixApiAccessToken) # internal helix jobs must use an access token
 
@@ -127,7 +133,7 @@ stages:
         - script: powershell -ExecutionPolicy ByPass -NoProfile eng\common\msbuild.ps1
             -ci
             $(Build.SourcesDirectory)/eng/SendToHelix.proj
-            /p:Platform=x64 
+            /p:Platform=x64
             /p:HelixSource=$(_HelixSource)
             /p:HelixTargetQueues=$(_HelixTargetQueues)
             /p:Creator=$(_HelixCreator)
