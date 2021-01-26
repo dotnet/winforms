@@ -6740,4 +6740,10 @@ Stack trace where the illegal operation occurred was:
   <data name="TreeNodeBoundToAnotherTreeView" xml:space="preserve">
     <value>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</value>
   </data>
+  <data name="ComboboxDropDownButtonCloseName" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ComboboxDropDownButtonOpenName" xml:space="preserve">
+    <value>Open</value>
+  </data>
 </root>

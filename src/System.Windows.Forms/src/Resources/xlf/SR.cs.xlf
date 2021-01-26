@@ -1112,6 +1112,16 @@
         <target state="translated">Počet vybraných: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="new">Close</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="new">Open</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">Nelze přidělit nový identifikátor příkazu.</target>
