@@ -11643,6 +11643,7 @@ override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.ListView.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ListView.OnBackgroundImageChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnFontChanged(System.EventArgs e) -> void
+~override System.Windows.Forms.ListView.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnHandleDestroyed(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnMouseHover(System.EventArgs e) -> void
