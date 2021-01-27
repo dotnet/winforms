@@ -33,7 +33,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ///  Should always match the TargetFramework in the .csproj
         /// </summary>
         private static string TargetFramework
-            => "netcoreapp5.0";
+            => "net6.0";
 
         /// <summary>
         ///  Get the output exe path for a specified project.

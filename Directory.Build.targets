@@ -53,17 +53,17 @@
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
     <FrameworkReference Update="Microsoft.NETCore.App" 
-      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp5.')) ">
+      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">
     <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
   <PropertyGroup>
     <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp5.')) ">$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</RuntimeFrameworkVersion>
+    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</RuntimeFrameworkVersion>
 
-    <!-- If TargetFramework is not netcoreapp5.x, then reset RuntimeFrameworkVersion -->
-    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('netcoreapp5.'))" />
+    <!-- If TargetFramework is not net6.x, then reset RuntimeFrameworkVersion -->
+    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('net6.'))" />
   </PropertyGroup>
 
 </Project>
