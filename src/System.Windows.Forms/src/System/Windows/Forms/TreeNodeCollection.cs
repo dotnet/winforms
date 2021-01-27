@@ -370,13 +370,9 @@ namespace System.Windows.Forms
 
             if (tv is not null)
             {
-                KeyboardToolTipStateMachine.Instance.Hook(node, tv.KeyboardToolTip);
-                if (node.Nodes.Count > 0)
+                foreach (TreeNode treeNode in node.GetAllNodes())
                 {
-                    foreach (TreeNode treeNode in node.Nodes)
-                    {
-                        KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
-                    }
+                    KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
                 }
             }
 
@@ -532,13 +528,9 @@ namespace System.Windows.Forms
 
             if (tv is not null)
             {
-                KeyboardToolTipStateMachine.Instance.Hook(node, tv.KeyboardToolTip);
-                if (node.Nodes.Count > 0)
+                foreach (TreeNode treeNode in node.GetAllNodes())
                 {
-                    foreach (TreeNode treeNode in node.Nodes)
-                    {
-                        KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
-                    }
+                    KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
                 }
             }
 

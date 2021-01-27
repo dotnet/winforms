@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -82,7 +83,6 @@ namespace System.Windows.Forms
 
         private static bool isScalingInitialized;
         private static Size? scaledStateImageSize;
-        private static readonly int s_propToolTip = PropertyStore.CreateKey();
         private static Size? ScaledStateImageSize
         {
             get
@@ -864,29 +864,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal KeyboardToolTip KeyboardToolTip
-        {
-            get
-            {
-                KeyboardToolTip toolTip;
-                if (!Properties.ContainsObject(s_propToolTip))
-                {
-                    toolTip = new KeyboardToolTip
-                    {
-                        ReshowDelay = 500,
-                        InitialDelay = 500
-                    };
-
-                    Properties.SetObject(s_propToolTip, toolTip);
-                }
-                else
-                {
-                    toolTip = (KeyboardToolTip)Properties.GetObject(s_propToolTip);
-                }
-
-                return toolTip;
-            }
-        }
+        internal KeyboardToolTip KeyboardToolTip = new KeyboardToolTip { ReshowDelay = 500, InitialDelay = 500 };
 
         /// <summary>
         ///  The LabelEdit property determines if the label text
@@ -1664,6 +1642,7 @@ namespace System.Windows.Forms
             }
 
             // Dispose unmanaged resources.
+            UnhookNodes();
             _toolTipBuffer.Dispose();
             KeyboardToolTip.Dispose();
 
@@ -1715,8 +1694,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        internal string ControlToolTipText => controlToolTipText;
 
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
@@ -2304,7 +2281,6 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            NotifyAboutLostFocus(SelectedNode);
             base.OnKeyDown(e);
             if (e.Handled)
             {
@@ -2554,6 +2530,7 @@ namespace System.Windows.Forms
             {
                 case TVC.BYKEYBOARD:
                     action = TreeViewAction.ByKeyboard;
+                    NotifyAboutLostFocus(SelectedNode);
                     break;
                 case TVC.BYMOUSE:
                     action = TreeViewAction.ByMouse;
@@ -3117,6 +3094,18 @@ namespace System.Windows.Forms
             // Unhook the Event.
             strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
+        }
+
+        private void UnhookNodes()
+        {
+            List<TreeNode> result = new List<TreeNode>();
+            foreach (TreeNode rootNode in Nodes)
+            {
+                foreach (TreeNode node in rootNode.GetAllNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(node, KeyboardToolTip);
+                }
+            }
         }
 
         private void WmPrint(ref Message m)

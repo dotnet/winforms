@@ -8,16 +8,16 @@ using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
-    ///<summary>
-    /// Custom class for displaying keyboard tooltips for TreeView and ListView
-    ///</summary>
-    ///<remark>
-    /// This class is required to override the standard GetTOOLINFO method. In the original implementation,
-    /// this method is designed to not use the TreeView or ListView tooltip caption for their child element
-    /// tooltips (TreeNode and TreeViewItems). Unfortunately, this one interferes with the display of the
-    /// keyboard tooltip, since it blocks the assignment of our custom value. The new implementation bypasses
-    /// this problem and helps the keyboard tooltip work properly.
-    ///</remark>
+    /// <summary>
+    ///  Custom class for displaying keyboard tooltips for TreeView and ListView
+    /// </summary>
+    /// <remark>
+    ///  This class is required to override the standard GetTOOLINFO method. In the original implementation,
+    ///  this method is designed to not use the TreeView or ListView tooltip caption for their child element
+    ///  tooltips (TreeNode and TreeViewItems). Unfortunately, this one interferes with the display of the
+    ///  keyboard tooltip, since it blocks the assignment of our custom value. The new implementation bypasses
+    ///  this problem and helps the keyboard tooltip work properly.
+    /// </remark>
     internal class KeyboardToolTip : ToolTip
     {
         private protected override unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
