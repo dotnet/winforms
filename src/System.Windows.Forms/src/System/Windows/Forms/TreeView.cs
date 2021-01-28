@@ -864,7 +864,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal KeyboardToolTip KeyboardToolTip = new KeyboardToolTip { ReshowDelay = 500, InitialDelay = 500 };
+        internal ToolTip KeyboardToolTip = new ToolTip { ReshowDelay = 500, InitialDelay = 500 };
 
         /// <summary>
         ///  The LabelEdit property determines if the label text
@@ -2919,6 +2919,14 @@ namespace System.Windows.Forms
                 }
             }
             return false;
+        }
+
+        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption)
+        {
+            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags);
+            wrapper.Info.lpszText = (char*)(-1);
+
+            return wrapper;
         }
 
         private unsafe void WmNeedText(ref Message m)

@@ -991,16 +991,7 @@ namespace System.Windows.Forms
                 flags |= TTF.RTLREADING;
             }
 
-            bool noText = (control is TreeView tv && tv.ShowNodeToolTips)
-                || (control is ListView lv && lv.ShowItemToolTips);
-
-            // The "noText" flag is required so that when the user hovers over the ListViewItem or TreeNode,
-            // their own tooltip is displayed, not the ListView or TreeView tooltip
-            var info = new ToolInfoWrapper<Control>(control, flags, noText ? null : caption);
-            if (noText)
-                info.Info.lpszText = (char*)(-1);
-
-            return info;
+            return control.GetToolInfoWrapper(flags, caption);
         }
 
         private ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window hWnd)
