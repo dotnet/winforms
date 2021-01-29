@@ -864,7 +864,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal ToolTip KeyboardToolTip = new ToolTip { ReshowDelay = 500, InitialDelay = 500 };
+        internal ToolTip KeyboardToolTip { get; } = new ToolTip();
 
         /// <summary>
         ///  The LabelEdit property determines if the label text
@@ -2887,6 +2887,20 @@ namespace System.Windows.Forms
             return retval;
         }
 
+        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption, ToolTip tooltip)
+        {
+            // The "ShowNodeToolTips" flag is required so that when the user hovers over the TreeNode,
+            // their own tooltip is displayed, not the TreeView tooltip.
+            // The second condition is necessary for the correct display of the keyboard tooltip,
+            // since the logic of the external tooltip blocks its display
+            bool isExternalTooltip = ShowNodeToolTips && tooltip != KeyboardToolTip;
+            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, isExternalTooltip ? null : caption);
+            if (isExternalTooltip)
+                wrapper.Info.lpszText = (char*)(-1);
+
+            return wrapper;
+        }
+
         private unsafe bool WmShowToolTip(ref Message m)
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
@@ -2919,14 +2933,6 @@ namespace System.Windows.Forms
                 }
             }
             return false;
-        }
-
-        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption)
-        {
-            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags);
-            wrapper.Info.lpszText = (char*)(-1);
-
-            return wrapper;
         }
 
         private unsafe void WmNeedText(ref Message m)
@@ -3109,7 +3115,10 @@ namespace System.Windows.Forms
             List<TreeNode> result = new List<TreeNode>();
             foreach (TreeNode rootNode in Nodes)
             {
-                foreach (TreeNode node in rootNode.GetAllNodes())
+                KeyboardToolTipStateMachine.Instance.Unhook(rootNode, KeyboardToolTip);
+                List<TreeNode> nodes = new List<TreeNode>();
+                rootNode.GetChildNodes(nodes);
+                foreach (TreeNode node in nodes)
                 {
                     KeyboardToolTipStateMachine.Instance.Unhook(node, KeyboardToolTip);
                 }

@@ -991,7 +991,7 @@ namespace System.Windows.Forms
                 flags |= TTF.RTLREADING;
             }
 
-            return control.GetToolInfoWrapper(flags, caption);
+            return control.GetToolInfoWrapper(flags, caption, this);
         }
 
         private ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window hWnd)

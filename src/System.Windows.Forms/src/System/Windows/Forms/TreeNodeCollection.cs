@@ -370,7 +370,10 @@ namespace System.Windows.Forms
 
             if (tv is not null)
             {
-                foreach (TreeNode treeNode in node.GetAllNodes())
+                KeyboardToolTipStateMachine.Instance.Hook(node, tv.KeyboardToolTip);
+                List<TreeNode> nodes = new List<TreeNode>();
+                node.GetChildNodes(nodes);
+                foreach (TreeNode treeNode in nodes)
                 {
                     KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
                 }
@@ -528,7 +531,10 @@ namespace System.Windows.Forms
 
             if (tv is not null)
             {
-                foreach (TreeNode treeNode in node.GetAllNodes())
+                KeyboardToolTipStateMachine.Instance.Hook(node, tv.KeyboardToolTip);
+                List<TreeNode> nodes = new List<TreeNode>();
+                node.GetChildNodes(nodes);
+                foreach (TreeNode treeNode in nodes)
                 {
                     KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
                 }

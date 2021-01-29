@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(TreeNodeConverter))]
     [Serializable]  // This class participates in resx serialization.
     [DefaultProperty(nameof(Text))]
-    public class TreeNode : MarshalByRefObject, ICloneable, ISerializable, IKeyboardToolTip
+    public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         internal const int SHIFTVAL = 12;
         private const TVIS CHECKED = (TVIS)(2 << SHIFTVAL);
@@ -1813,6 +1813,15 @@ namespace System.Windows.Forms
             return node.treeView;
         }
 
+        internal void GetChildNodes(List<TreeNode> nodes)
+        {
+            foreach (TreeNode child in Nodes)
+            {
+                nodes.Add(child);
+                child.GetChildNodes(nodes);
+            }
+        }
+
         /// <summary>
         ///  Helper function for getFullPath().
         /// </summary>
@@ -2291,65 +2300,9 @@ namespace System.Windows.Forms
             User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
         }
 
-        bool IKeyboardToolTip.AllowsChildrenToShowToolTips() => AllowToolTips;
-
-        bool IKeyboardToolTip.AllowsToolTip() => true;
-
-        bool IKeyboardToolTip.CanShowToolTipsNow() => AllowToolTips;
-
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => ToolTipText;
-
-        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => TreeView.RectangleToScreen(Bounds);
-
-        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
-        {
-            TreeNode nextNode = NextVisibleNode;
-            TreeNode prevNode = PrevVisibleNode;
-            List<Rectangle> neighboringRectangles = new List<Rectangle>();
-
-            if (nextNode is not null)
-            {
-                neighboringRectangles.Add(TreeView.RectangleToScreen(nextNode.Bounds));
-            }
-
-            if (prevNode is not null)
-            {
-                neighboringRectangles.Add(TreeView.RectangleToScreen(prevNode.Bounds));
-            }
-
-            return neighboringRectangles;
-        }
-
-        IWin32Window IKeyboardToolTip.GetOwnerWindow() => TreeView;
-
-        bool IKeyboardToolTip.HasRtlModeEnabled() => TreeView.RightToLeft == RightToLeft.Yes;
-
-        bool IKeyboardToolTip.IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
-
-        bool IKeyboardToolTip.IsHoveredWithMouse() => TreeView.AccessibilityObject.Bounds.Contains(Control.MousePosition);
-
-        void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
-
-        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
-
-        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
-
         /// <summary>
         ///  ISerializable private implementation
         /// </summary>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) => Serialize(si, context);
-
-        internal List<TreeNode> GetAllNodes()
-        {
-            List<TreeNode> result = new List<TreeNode>();
-            result.Add(this);
-            foreach (TreeNode child in Nodes)
-            {
-                result.AddRange(child.GetAllNodes());
-            }
-            return result;
-        }
-
-        private bool AllowToolTips => TreeView is not null && TreeView.ShowNodeToolTips;
     }
 }
