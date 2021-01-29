@@ -103,6 +103,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(comboBox.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        [InlineData(ComboBoxStyle.DropDown)]
+        public void DropDownButtonUiaProvider_Name_ReturnsExpected(ComboBoxStyle comboBoxStyle)
+        {
+            using ComboBox comboBox = new ComboBox
+            {
+                DropDownStyle = comboBoxStyle
+            };
+
+            Assert.Equal(SR.ComboboxDropDownButtonOpenName, GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider.Name);
+
+            // Open the dropdown list
+            comboBox.DroppedDown = true;
+
+            Assert.Equal(SR.ComboboxDropDownButtonCloseName, GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider.Name);
+        }
+
         private ComboBox.ComboBoxAccessibleObject GetComboBoxAccessibleObject(ComboBox comboBox)
         {
             return comboBox.AccessibilityObject as ComboBox.ComboBoxAccessibleObject;
