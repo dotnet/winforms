@@ -181,6 +181,9 @@
     <Rule Id="SA1651" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
+    <!-- Disable until https://github.com/dotnet/roslyn-analyzers/issues/4750 is fixed -->
+    <Rule Id="AD0001" Action="None" />
+
     <Rule Id="CA1000" Action="None" />             <!-- Do not declare static members on generic types -->
     <Rule Id="CA1001" Action="None" />             <!-- Types that own disposable fields should be disposable -->
     <Rule Id="CA1002" Action="None" />             <!-- Do not expose generic lists -->
