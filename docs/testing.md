@@ -207,7 +207,7 @@ Each test class must implement the `IClassFixture<ThreadExceptionFixture>` inter
 ##### Unit tests should be part of the same PR as code changes
 
 * Unit tests must be added for any change to public APIs. 
-* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/master/src/System.Windows.Forms.Primitives/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
+* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
 
 ##### Code Coverage
 
@@ -323,4 +323,4 @@ Functional tests are built and executed by file name convention
   
 # Testing for Accessibility
 
-Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/master/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 
+Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/main/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 

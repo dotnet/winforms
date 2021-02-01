@@ -22,7 +22,7 @@
       <!-- 
         The xml file should ALWAYS come from the dotnet-api-docs artifact.
         This blob lives in Azure storage at https://netcorenativeassets.blob.core.windows.net/resource-packages/external/windows/dotnet-api-docs_net5.0/
-        Instructions for updating these artifacts are at https://github.com/dotnet/winforms/blob/master/docs/intellisense.md
+        Instructions for updating these artifacts are at https://github.com/dotnet/winforms/blob/main/docs/intellisense.md
       -->
       <IntellisenseXmlDir>$(CommonLibrary_NativeInstallDir)\bin\dotnet-api-docs_net5.0\$(DotNetApiDocsNet50)\_intellisense\net-5.0\</IntellisenseXmlDir>
       <IntellisenseXmlFileSource>$(IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>

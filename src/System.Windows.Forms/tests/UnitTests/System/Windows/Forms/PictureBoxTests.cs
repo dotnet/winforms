@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
     public class PictureBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         private const string PathImageLocation = "bitmaps/nature24bits.jpg";
-        private const string UrlImageLocation = "https://github.com/dotnet/corefx-testdata/raw/master/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
+        private const string UrlImageLocation = "https://github.com/dotnet/runtime-assets/raw/master/src/System.Drawing.Common.TestData/bitmaps/nature24bits.jpg";
 
         [WinFormsFact]
         public void PictureBox_Ctor_Default()

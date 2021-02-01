@@ -20,7 +20,7 @@ If you run into any problems, please contact Adam Yoblick.
 
 1. If the above step fails, **STOP**.
 
-    See https://github.com/dotnet/winforms/tree/master/Documentation for more verbose instructions on how to build this repo.
+    See https://github.com/dotnet/winforms/tree/main/Documentation for more verbose instructions on how to build this repo.
 
 ## Porting the maui test
 
@@ -111,7 +111,7 @@ See the pull request at https://github.com/dotnet/winforms/pull/1240 for an exam
 
 ## Run the maui test through the CI build
 
-1. Create a pull request from your new branch (or fork) into winforms master at https://github.com/dotnet/winforms/compare
+1. Create a pull request from your new branch (or fork) to the winforms main at https://github.com/dotnet/winforms/compare
 1. Once the PR is created (and every time new files are pushed to the PR), the build will kick off
 1. You can see the result of the build by scrolling down to the checks section and clicking on Show All Checks
 1. If the build is not successful, try to investigate the failure
