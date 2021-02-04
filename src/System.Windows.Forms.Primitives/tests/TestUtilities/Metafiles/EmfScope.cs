@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Metafiles
     internal class EmfScope : DisposalTracking.Tracker, IDisposable
     {
         public Gdi32.HDC HDC { get; }
-        private Gdi32.HENHMETAFILE _hmf;
+        private Gdi32.HENHMETAFILE _hemf;
 
         public unsafe EmfScope()
             : this (Gdi32.CreateEnhMetaFileW(hdc: default, lpFilename: null, lprc: null, lpDesc: null))
@@ -24,7 +24,12 @@ namespace System.Windows.Forms.Metafiles
         public EmfScope(Gdi32.HDC hdc)
         {
             HDC = hdc;
-            _hmf = default;
+            _hemf = default;
+        }
+
+        public EmfScope(Gdi32.HENHMETAFILE hemf)
+        {
+            _hemf = hemf;
         }
 
         public unsafe static EmfScope Create() => new EmfScope();
@@ -33,17 +38,17 @@ namespace System.Windows.Forms.Metafiles
         {
             get
             {
-                if (HDC.IsNull)
+                if (_hemf.IsNull)
                 {
-                    return default;
+                    if (HDC.IsNull)
+                    {
+                        return default;
+                    }
+
+                    _hemf = Gdi32.CloseEnhMetaFile(HDC);
                 }
 
-                if (_hmf.IsNull)
-                {
-                    _hmf = Gdi32.CloseEnhMetaFile(HDC);
-                }
-
-                return _hmf;
+                return _hemf;
             }
         }
 

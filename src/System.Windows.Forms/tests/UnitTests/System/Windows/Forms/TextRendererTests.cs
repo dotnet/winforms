@@ -4,7 +4,10 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System.IO;
 using System.Windows.Forms.Metafiles;
 using Moq;
 using WinForms.Common.Tests;
@@ -828,6 +831,88 @@ namespace System.Windows.Forms.Tests
                 { TextFormatFlags.GlyphOverhangPadding, new Size(78, 13) },
                 { TextFormatFlags.LeftAndRightPadding, new Size(82, 13) },
                 { TextFormatFlags.NoPadding, new Size(71, 13) }
+            };
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextRenderer_DrawText_ApplyState_TestData))]
+        public void TextRenderer_DrawText_ApplyState(TextFormatFlags flags, Rectangle expectedBounds)
+        {
+            using var hdc = new Interop.Gdi32.CreateDcScope(default);
+            DeviceContextState state = new DeviceContextState(hdc);
+
+            using MemoryStream stream = new MemoryStream(1024);
+            using (Metafile metafileRecorder = new Metafile(stream, hdc.HDC.Handle, EmfType.EmfOnly))
+            using (Graphics graphics = Graphics.FromImage(metafileRecorder))
+            {
+                using Matrix matrix = new Matrix();
+                matrix.Translate(5, 10);
+                graphics.Transform = matrix;
+                using Region region = new(new Rectangle(1, 2, 6, 8));
+                graphics.Clip = region;
+
+                TextRenderer.DrawText(
+                    graphics,
+                    "Landshark",
+                    SystemFonts.DefaultFont,
+                    new Rectangle(0, 0, int.MaxValue, int.MaxValue),
+                    Color.Red,
+                    flags);
+            }
+
+            // Need to queue the stream back to the beginning for the reader
+            stream.Position = 0;
+            using Metafile metafile = new Metafile(stream);
+            using var emf = new EmfScope((Interop.Gdi32.HENHMETAFILE)metafile.GetHenhmetafile());
+
+            emf.Validate(
+                state,
+                Validate.TextOut(
+                    "Landshark",
+                    expectedBounds,
+                    State.FontFace(SystemFonts.DefaultFont.Name),
+                    State.TextColor(Color.Red)));
+        }
+
+        public static TheoryData<TextFormatFlags, Rectangle> TextRenderer_DrawText_ApplyState_TestData
+            => new TheoryData<TextFormatFlags, Rectangle>
+            {
+                { TextFormatFlags.Default, new Rectangle(3, 0, 49, 12) },
+                { TextFormatFlags.PreserveGraphicsTranslateTransform, new Rectangle(8, 10, 49, 12) },
+                { TextFormatFlags.PreserveGraphicsClipping, new Rectangle(6, 12, 5, 0) },
+                { TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform, new Rectangle(8, 12, 3, 7) },
+            };
+
+        [WinFormsTheory]
+        [MemberData(nameof(TextRenderer_MeasureText_ApplyState_TestData))]
+        public void TextRenderer_MeasureText_ApplyState(TextFormatFlags flags, Size expectedSize)
+        {
+            using var image = new Bitmap(200, 50);
+            using Graphics graphics = Graphics.FromImage(image);
+            using Matrix matrix = new Matrix();
+            matrix.Translate(5, 10);
+            graphics.Transform = matrix;
+            using Region region = new(new Rectangle(1, 2, 6, 8));
+            graphics.Clip = region;
+
+            Size size = TextRenderer.MeasureText(
+                graphics,
+                "Landshark",
+                SystemFonts.DefaultFont,
+                new Size(int.MaxValue, int.MaxValue),
+                flags);
+
+            Assert.Equal(expectedSize, size);
+        }
+
+        public static TheoryData<TextFormatFlags, Size> TextRenderer_MeasureText_ApplyState_TestData
+            => new TheoryData<TextFormatFlags, Size>
+            {
+                // State application doesn't practially impact size measurements, but we still want to have a regession test
+                // here in case something sneaks in.
+                { TextFormatFlags.Default, new Size(57, 13) },
+                { TextFormatFlags.PreserveGraphicsTranslateTransform, new Size(57, 13) },
+                { TextFormatFlags.PreserveGraphicsClipping, new Size(57, 13) },
+                { TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform, new Size(57, 13) },
             };
     }
 }
