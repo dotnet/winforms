@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -250,6 +250,10 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+#if DEBUG
+        internal bool IsDisposed { get; private set; }
+#endif
 
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
@@ -523,6 +527,11 @@ namespace System.Windows.Forms
 
                 DestroyHandle();
             }
+
+#if DEBUG
+            // At this stage we've released all resources, and the component is essentially disposed
+            IsDisposed = true;
+#endif
 
             base.Dispose(disposing);
         }

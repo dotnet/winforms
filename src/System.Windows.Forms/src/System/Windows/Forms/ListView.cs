@@ -2938,11 +2938,12 @@ namespace System.Windows.Forms
             try
             {
 #if DEBUG
-                if (sender != _imageListSmall && sender != _imageListState && sender != _imageListLarge && sender != _imageListGroup)
+                if (sender is ImageList imageList && !imageList.IsDisposed &&
+                    sender != _imageListSmall && sender != _imageListState && sender != _imageListLarge && sender != _imageListGroup)
                 {
                     Debug.Fail("ListView sunk dispose event from unknown component");
                 }
-#endif // DEBUG
+#endif
                 if (sender == _imageListSmall)
                 {
                     SmallImageList = null;
