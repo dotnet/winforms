@@ -2241,6 +2241,11 @@ namespace System.Windows.Forms
         // Invalidate the entire control, including child HWNDs and non-client areas
         private unsafe void InvalidateEverything()
         {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
             // Control.Invalidate(true) doesn't invalidate the non-client region
             RedrawWindow(
                 new HandleRef(this, Handle),
