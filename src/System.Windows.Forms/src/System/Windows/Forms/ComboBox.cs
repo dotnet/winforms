@@ -1927,6 +1927,16 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (_childEdit is not null && ChildEditAccessibleObject.Bounds.Contains(PointToScreen(e.Location)))
+            {
+                ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
+        }
+
         /// <summary>
         ///  Helper to handle MouseLeave.
         /// </summary>
@@ -2607,6 +2617,30 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            if (_childEdit is not null && ContainsNavigationKeyCode(e.KeyCode))
+            {
+                ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
+        }
+
+        private bool ContainsNavigationKeyCode(Keys keyCode)
+        {
+            switch (keyCode)
+            {
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Left:
+                case Keys.Right:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         /// <summary>
         ///  This is the code that actually fires the measuereItem event.  Don't
         ///  forget to call base.onMeasureItem() to ensure that measureItem
@@ -2708,6 +2742,11 @@ namespace System.Windows.Forms
                 }
 
                 accessibleObject.SetComboBoxItemSelection();
+            }
+
+            if (_childEdit is not null)
+            {
+                ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
 
             // set the position in the dataSource, if there is any
@@ -2869,6 +2908,11 @@ namespace System.Windows.Forms
                 // Call the base
                 base.OnTextChanged(e);
             }
+
+            if (_childEdit is not null)
+            {
+                ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
+            }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2911,7 +2955,7 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if (DropDownStyle == ComboBoxStyle.Simple)
+            if (DropDownStyle == ComboBoxStyle.Simple && IsHandleCreated)
             {
                 // simple style combo boxes have more painting problems than you can shake a stick at
                 InvalidateEverything();
