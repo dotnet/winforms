@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
@@ -6767,8 +6768,6 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
-            ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(s_activeXImplProperty);
-
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
             bool syncSameThread = false;
@@ -6826,7 +6825,7 @@ namespace System.Windows.Forms
                 }
                 if (tme._exception is not null)
                 {
-                    throw tme._exception;
+                    ExceptionDispatchInfo.Throw(tme._exception);
                 }
                 return tme._retVal;
             }

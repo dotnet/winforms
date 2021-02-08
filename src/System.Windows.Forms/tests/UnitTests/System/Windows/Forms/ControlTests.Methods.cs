@@ -3907,6 +3907,41 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+
+            /*
+
+            Expecting something like the following.
+            The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>g__FaultingMethod|412_1() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3945
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
+                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6348
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                        --- End of stack trace from previous location ---
+                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                           at System.Windows.Forms.Control.Invoke(Delegate method) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>b__0() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3915
+                           at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
+
+            */
+            Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+            Assert.Contains(nameof(Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace), exception.StackTrace);
+
+            static void FaultingMethod()
+            {
+                throw new DivideByZeroException();
+            }
+        }
+
+        [WinFormsFact]
         public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_Success()
         {
             using var control = new Control();
@@ -3934,6 +3969,48 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            await Task.Run(() =>
+            {
+                var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+
+                /*
+
+                Expecting something like the following.
+                The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>g__FaultingMethod|413_1() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3969
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6367
+                           at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+                        --- End of stack trace from previous location ---
+                           at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+                           at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6344
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                        --- End of stack trace from previous location ---
+                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                           at System.Windows.Forms.Control.Invoke(Delegate method) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass413_0.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>b__2() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3947
+                           at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
+
+                */
+                Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+                Assert.Contains(nameof(Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace), exception.StackTrace);
+            });
+
+            static void FaultingMethod()
+            {
+                throw new DivideByZeroException();
+            }
         }
 
         [WinFormsFact]
