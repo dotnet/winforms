@@ -481,7 +481,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected Control TopLevelControl
+        private Control TopLevelControl
         {
             get
             {
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (associatedControl is TreeView treeView)
+            if (associatedControl is TreeView treeView && treeView.ShowNodeToolTips)
             {
                 treeView.SetToolTip(this, GetToolTip(associatedControl));
             }
@@ -979,7 +979,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a detailed TOOLINFO_TOOLTIP structure that represents the specified region.
         /// </summary>
-        private protected virtual unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
+        private unsafe ToolInfoWrapper<Control> GetTOOLINFO(Control control, string caption)
         {
             TTF flags = TTF.TRANSPARENT | TTF.SUBCLASS;
 

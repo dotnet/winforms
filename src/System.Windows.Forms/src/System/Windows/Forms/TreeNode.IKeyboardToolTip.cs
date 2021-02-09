@@ -2,20 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Design;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Text;
-using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms
 {
@@ -29,7 +17,7 @@ namespace System.Windows.Forms
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => ToolTipText;
 
-        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => TreeView.RectangleToScreen(Bounds);
+        Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => RectangleToScreen(Bounds);
 
         IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
         {
@@ -39,12 +27,12 @@ namespace System.Windows.Forms
 
             if (nextNode is not null)
             {
-                neighboringRectangles.Add(TreeView.RectangleToScreen(nextNode.Bounds));
+                neighboringRectangles.Add(RectangleToScreen(nextNode.Bounds));
             }
 
             if (prevNode is not null)
             {
-                neighboringRectangles.Add(TreeView.RectangleToScreen(prevNode.Bounds));
+                neighboringRectangles.Add(RectangleToScreen(prevNode.Bounds));
             }
 
             return neighboringRectangles;
@@ -52,11 +40,11 @@ namespace System.Windows.Forms
 
         IWin32Window IKeyboardToolTip.GetOwnerWindow() => TreeView;
 
-        bool IKeyboardToolTip.HasRtlModeEnabled() => TreeView.RightToLeft == RightToLeft.Yes;
+        bool IKeyboardToolTip.HasRtlModeEnabled() => TreeView?.RightToLeft == RightToLeft.Yes;
 
         bool IKeyboardToolTip.IsBeingTabbedTo() => Control.AreCommonNavigationalKeysDown();
 
-        bool IKeyboardToolTip.IsHoveredWithMouse() => TreeView.AccessibilityObject.Bounds.Contains(Control.MousePosition);
+        bool IKeyboardToolTip.IsHoveredWithMouse() => TreeView?.AccessibilityObject.Bounds.Contains(Control.MousePosition) ?? false;
 
         void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
 
@@ -64,6 +52,15 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.ShowsOwnToolTip() => true;
 
-        private bool AllowToolTips => TreeView is not null && TreeView.ShowNodeToolTips;
+        private bool AllowToolTips => TreeView?.ShowNodeToolTips ?? false;
+
+        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
+
+        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
+
+        private Rectangle RectangleToScreen(Rectangle bounds)
+        {
+            return TreeView?.RectangleToScreen(bounds) ?? Rectangle.Empty;
+        }
     }
 }

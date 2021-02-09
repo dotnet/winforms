@@ -3112,13 +3112,9 @@ namespace System.Windows.Forms
 
         private void UnhookNodes()
         {
-            List<TreeNode> result = new List<TreeNode>();
             foreach (TreeNode rootNode in Nodes)
             {
-                KeyboardToolTipStateMachine.Instance.Unhook(rootNode, KeyboardToolTip);
-                List<TreeNode> nodes = new List<TreeNode>();
-                rootNode.GetChildNodes(nodes);
-                foreach (TreeNode node in nodes)
+                foreach (TreeNode node in rootNode.GetSelfAndChildNodes())
                 {
                     KeyboardToolTipStateMachine.Instance.Unhook(node, KeyboardToolTip);
                 }

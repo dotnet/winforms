@@ -1797,6 +1797,7 @@ namespace System.Windows.Forms
                 children[i].ExpandAll();
             }
         }
+
         /// <summary>
         ///  Locate this tree node's containing tree view control by scanning
         ///  up to the virtual root, whose treeView pointer we know to be
@@ -1813,12 +1814,19 @@ namespace System.Windows.Forms
             return node.treeView;
         }
 
-        internal void GetChildNodes(List<TreeNode> nodes)
+        internal List<TreeNode> GetSelfAndChildNodes()
         {
-            foreach (TreeNode child in Nodes)
+            List<TreeNode> nodes = new List<TreeNode>() { this };
+            AggregateChildNodesToList(this);
+            return nodes;
+
+            void AggregateChildNodesToList(TreeNode parentNode)
             {
-                nodes.Add(child);
-                child.GetChildNodes(nodes);
+                foreach (TreeNode child in parentNode.Nodes)
+                {
+                    nodes.Add(child);
+                    AggregateChildNodesToList(child);
+                }
             }
         }
 
@@ -1904,10 +1912,6 @@ namespace System.Windows.Forms
                 treeView.Invalidate();
             }
         }
-
-        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip) { }
-
-        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip) { }
 
         internal unsafe void Realize(bool insertFirst)
         {
