@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             // This MUST come before retreiving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
-            using var hdc = new DeviceContextHdcScope(dc);
+            using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
 
             DrawTextInternal(hdc, text, font, bounds, foreColor, quality, backColor, flags);
         }
@@ -533,7 +533,9 @@ namespace System.Windows.Forms
             // This MUST come before retreiving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
-            using var hdc = new DeviceContextHdcScope(dc);
+            // Applying state may not impact text size measurements. Rather than risk missing some
+            // case we'll apply as we have historically to avoid suprise regressions.
+            using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
             using var hfont = GdiCache.GetHFONT(font, quality, hdc);
             return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
         }
@@ -594,6 +596,30 @@ namespace System.Windows.Forms
             // FE_FONTSMOOTHINGCLEARTYPE = 0x0002
             return SystemInformation.FontSmoothingType == 0x0002
                 ? Gdi32.QUALITY.CLEARTYPE : Gdi32.QUALITY.ANTIALIASED;
+        }
+
+        /// <summary>
+        ///  Gets the proper <see cref="ApplyGraphicsProperties"/> flags for the given <paramref name="textFormatFlags"/>.
+        /// </summary>
+        private static ApplyGraphicsProperties GetApplyStateFlags(IDeviceContext deviceContext, TextFormatFlags textFormatFlags)
+        {
+            if (deviceContext is not Graphics)
+            {
+                return ApplyGraphicsProperties.None;
+            }
+
+            var apply = ApplyGraphicsProperties.None;
+            if (textFormatFlags.HasFlag(TextFormatFlags.PreserveGraphicsClipping))
+            {
+                apply |= ApplyGraphicsProperties.Clipping;
+            }
+
+            if (textFormatFlags.HasFlag(TextFormatFlags.PreserveGraphicsTranslateTransform))
+            {
+                apply |= ApplyGraphicsProperties.TranslateTransform;
+            }
+
+            return apply;
         }
     }
 }

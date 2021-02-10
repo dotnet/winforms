@@ -17,6 +17,7 @@ internal static partial class Interop
             public bool IsNull => Handle == IntPtr.Zero;
 
             public static explicit operator IntPtr(HENHMETAFILE hmetafile) => hmetafile.Handle;
+            public static explicit operator HENHMETAFILE(IntPtr hmetafile) => new HENHMETAFILE(hmetafile);
         }
     }
 }
