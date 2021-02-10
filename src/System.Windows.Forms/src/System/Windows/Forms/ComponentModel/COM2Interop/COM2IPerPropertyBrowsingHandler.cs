@@ -10,7 +10,6 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
-using static Interop.Ole32;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
@@ -311,7 +310,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             using var var = new Oleaut32.VARIANT();
                             HRESULT hr = ppb.GetPredefinedValue(target.DISPID, (uint)cookie, &var);
-                            if (hr == HRESULT.S_OK && var.vt != VARENUM.EMPTY)
+                            if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
                             {
                                 valueItems[i] = var.ToObject();
                                 if (valueItems[i].GetType() != targetType)

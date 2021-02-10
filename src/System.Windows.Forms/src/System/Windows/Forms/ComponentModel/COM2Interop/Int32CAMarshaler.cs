@@ -11,7 +11,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// <summary>
     ///  This class performs marshaling on a CADWORD struct given from native code.
     /// </summary>
-    internal class Int32CAMarshaler : BaseCAMarshaler
+    internal class Int32CAMarshaler : BaseCAMarshaler<int>
     {
         public Int32CAMarshaler(in Ole32.CA caStruct) : base(caStruct)
         {
@@ -23,12 +23,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override Type ItemType => typeof(int);
 
-        protected override Array CreateArray() => new int[Count];
-
-        /// <summary>
-        ///  Override this member to perform marshalling of a single item
-        ///  given it's native address.
-        /// </summary>
-        protected override object GetItemFromAddress(IntPtr addr) => addr.ToInt32();
+        protected override object GetItem(int item) => item;
     }
 }
