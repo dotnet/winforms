@@ -50,7 +50,7 @@ namespace System.Windows.Forms
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
 
-        bool IKeyboardToolTip.ShowsOwnToolTip() => true;
+        bool IKeyboardToolTip.ShowsOwnToolTip() => AllowToolTips;
 
         private bool AllowToolTips => TreeView?.ShowNodeToolTips ?? false;
 

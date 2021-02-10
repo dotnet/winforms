@@ -4609,6 +4609,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void TreeNode_InvokeGetSelfAndChildNodes_ReturnsExpected()
+        {
+            TreeNode rootNode = new TreeNode();
+            TreeNode subNodeLevel1 = new TreeNode();
+            TreeNode subNodeLevel2 = new TreeNode();
+            TreeNode subNodeLevel3 = new TreeNode();
+            subNodeLevel2.Nodes.Add(subNodeLevel3);
+            subNodeLevel1.Nodes.Add(subNodeLevel2);
+            rootNode.Nodes.Add(subNodeLevel1);
+            List<TreeNode> nodes = rootNode.GetSelfAndChildNodes();
+            Assert.Equal(4, nodes.Count);
+            Assert.Contains(rootNode, nodes);
+            Assert.Contains(subNodeLevel1, nodes);
+            Assert.Contains(subNodeLevel2, nodes);
+            Assert.Contains(subNodeLevel3, nodes);
+        }
+
+        [WinFormsFact]
+        public void TreeNode_InvokeAdd_WithoutTree_DoesNotAddNodeToTrackList()
+        {
+            TreeNode treeNode = new TreeNode();
+            TreeNode treeSubNode = new TreeNode();
+            treeNode.Nodes.Add(treeSubNode);
+
+            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
+            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNode));
+        }
+
         private class InvalidSetItemTreeView : TreeView
         {
             public bool MakeInvalid { get; set; }
