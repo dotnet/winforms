@@ -7,23 +7,23 @@ using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
+namespace System.Windows.Forms.Primitives.Ole32Tests
 {
-    public class OleStrCAMarshalerTests
+    public class CALPOLESTRTests
     {
         [Fact]
-        public void OleStrCAMarshaler_FreesMemory()
+        public void CALPOLESTR_ConvertAndFree_FreesMemory()
         {
             List<IntPtr> allocations = new();
-            Ole32.CA ca = CreateStringVector(allocations, "Sweet", "Potato");
+            Ole32.CALPOLESTR ca = CreateStringVector(allocations, "Sweet", "Potato");
 
             MallocSpy.FreeTracker tracker = new();
             using MallocSpyScope scope = new(tracker);
 
-            OleStrCAMarshaler marshaller = new(ca);
-            Assert.Equal(2, marshaller.Items.Length);
-            Assert.Equal("Sweet", (string)marshaller.Items[0]);
-            Assert.Equal("Potato", (string)marshaller.Items[1]);
+            string?[] values = ca.ConvertAndFree();
+            Assert.Equal(2, values.Length);
+            Assert.Equal("Sweet", values[0]);
+            Assert.Equal("Potato", values[1]);
 
             foreach (IntPtr allocation in allocations)
             {
@@ -32,27 +32,33 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
         }
 
         [Fact]
-        public void OleStrCAMarshaler_SingleItem()
+        public void CALPOLESTR_ConvertAndFree_SingleItem()
         {
-            Ole32.CA ca = CreateStringVector("Swizzle");
+            Ole32.CALPOLESTR ca = CreateStringVector("Swizzle");
 
-            MallocSpy.FreeTracker tracker = new();
-            using MallocSpyScope scope = new(tracker);
-
-            OleStrCAMarshaler marshaller = new(ca);
-            Assert.Equal(1, marshaller.Items.Length);
-            Assert.Equal("Swizzle", (string)marshaller.Items[0]);
+            string?[] values = ca.ConvertAndFree();
+            Assert.Equal(1, values.Length);
+            Assert.Equal("Swizzle", values[0]);
         }
 
-        private static Ole32.CA CreateStringVector(params string[] values)
+        [Fact]
+        public void CALPOLESTR_ConvertAndFree_EmptyStruct()
+        {
+            Ole32.CALPOLESTR ca = default;
+
+            string?[] values = ca.ConvertAndFree();
+            Assert.Empty(values);
+        }
+
+        private static Ole32.CALPOLESTR CreateStringVector(params string[] values)
             => CreateStringVector(null, values);
 
-        private unsafe static Ole32.CA CreateStringVector(IList<IntPtr> allocations, params string[] values)
+        private unsafe static Ole32.CALPOLESTR CreateStringVector(IList<IntPtr>? allocations, params string[] values)
         {
-            Ole32.CA ca = new()
+            Ole32.CALPOLESTR ca = new()
             {
                 cElems = (uint)values.Length,
-                pElems = (void*)Marshal.AllocCoTaskMem(IntPtr.Size * values.Length)
+                pElems = (char**)Marshal.AllocCoTaskMem(IntPtr.Size * values.Length)
             };
 
             allocations?.Add((IntPtr)ca.pElems);

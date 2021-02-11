@@ -338,11 +338,9 @@ namespace System.Windows.Forms
 
                     if (ppb is not null)
                     {
-                        bool hasStrings = false;
-
                         // Check for enums
-                        var caStrings = new Ole32.CA();
-                        var caCookies = new Ole32.CA();
+                        Ole32.CALPOLESTR caStrings = default;
+                        Ole32.CADWORD caCookies = default;
 
                         HRESULT hr = HRESULT.S_OK;
                         try
@@ -355,45 +353,40 @@ namespace System.Windows.Forms
                             Debug.Fail($"An exception occurred inside IPerPropertyBrowsing::GetPredefinedStrings(dispid={dispid}), object type={new ComNativeDescriptor().GetClassName(ppb)}");
                         }
 
-                        if (hr != HRESULT.S_OK)
+                        if (hr == HRESULT.S_OK)
                         {
-                            hasStrings = false;
+                            string[] names = caStrings.ConvertAndFree();
+                            uint[] cookies = caCookies.ConvertAndFree();
 
-                            // Destroy the existing editor if we created the current one so if the items have
-                            // disappeared, we don't hold onto the old items.
-                            if (_converter is Com2EnumConverter)
-                            {
-                                _converter = null;
-                            }
-                        }
-                        else
-                        {
-                            hasStrings = true;
-                        }
-
-                        if (hasStrings)
-                        {
-                            OleStrCAMarshaler stringMarshaler = new OleStrCAMarshaler(caStrings);
-                            Int32CAMarshaler intMarshaler = new Int32CAMarshaler(caCookies);
-
-                            if (stringMarshaler.Count > 0 && intMarshaler.Count > 0)
+                            if (names.Length > 0 && cookies.Length > 0)
                             {
                                 if (_converter is null)
                                 {
-                                    _converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(this, _owner, stringMarshaler, intMarshaler, true));
+                                    _converter = new AxEnumConverter(this, new AxPerPropertyBrowsingEnum(
+                                        this,
+                                        _owner,
+                                        names,
+                                        cookies));
                                 }
                                 else if (_converter is AxEnumConverter enumConverter)
                                 {
                                     enumConverter.RefreshValues();
-                                    if (enumConverter.com2Enum is AxPerPropertyBrowsingEnum axEnum)
+                                    if (enumConverter._com2Enum is AxPerPropertyBrowsingEnum axEnum)
                                     {
-                                        axEnum.RefreshArrays(stringMarshaler, intMarshaler);
+                                        axEnum.RefreshArrays(names, cookies);
                                     }
                                 }
                             }
                         }
                         else
                         {
+                            // Destroy the existing editor if we created the current one so if the items have
+                            // disappeared, we don't hold onto the old items.
+                            if (_converter is Com2EnumConverter)
+                            {
+                                _converter = null;
+                            }
+
                             // If we didn't get any strings, try the proppage editor
                             //
                             // Check to see if this is a property that we have already massaged to be a
@@ -411,7 +404,10 @@ namespace System.Windows.Forms
                                     // Show any non-browsable property that has an editor through a property page.
                                     if (!IsBrowsable)
                                     {
-                                        Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an editor.");
+                                        Debug.WriteLineIf(
+                                            AxPropTraceSwitch.TraceVerbose,
+                                            $"Making property: {Name} browsable because we found an editor.");
+
                                         AddAttribute(new BrowsableAttribute(true));
                                     }
                                 }

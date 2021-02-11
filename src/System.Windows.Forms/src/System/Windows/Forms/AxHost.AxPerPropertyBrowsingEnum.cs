@@ -20,20 +20,19 @@ namespace System.Windows.Forms
         {
             private readonly AxPropertyDescriptor _target;
             private readonly AxHost _owner;
-            private OleStrCAMarshaler _nameMarshaller;
-            private Int32CAMarshaler _valueMarshaller;
+            private string[] _names;
+            private uint[] _cookies;
             private bool _arraysFetched;
 
             public AxPerPropertyBrowsingEnum(
                 AxPropertyDescriptor targetObject,
                 AxHost owner,
-                OleStrCAMarshaler names,
-                Int32CAMarshaler values,
-                bool allowUnknowns) : base(Array.Empty<string>(), Array.Empty<object>(), allowUnknowns)
+                string[] names,
+                uint[] cookies)
             {
                 _target = targetObject;
-                _nameMarshaller = names;
-                _valueMarshaller = values;
+                _names = names;
+                _cookies = cookies;
                 _owner = owner;
                 _arraysFetched = false;
             }
@@ -77,36 +76,35 @@ namespace System.Windows.Forms
                 try
                 {
                     // Marshal the items.
-                    object[] nameItems = _nameMarshaller.Items;
-                    object[] cookieItems = _valueMarshaller.Items;
                     Oleaut32.IPerPropertyBrowsing ppb = _owner.GetPerPropertyBrowsing();
                     int itemCount = 0;
 
-                    Debug.Assert(cookieItems is not null && nameItems is not null, "An item array is null");
+                    Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
 
-                    if (nameItems.Length > 0)
+                    if (_names.Length > 0)
                     {
-                        object[] valueItems = new object[cookieItems.Length];
-                        int cookie;
+                        object[] values = new object[_cookies.Length];
+                        uint cookie;
 
-                        Debug.Assert(cookieItems.Length == nameItems.Length, "Got uneven names and cookies");
+                        Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
 
                         // For each name item, we ask the object for it's corresponding value.
-                        for (int i = 0; i < nameItems.Length; i++)
+                        for (int i = 0; i < _names.Length; i++)
                         {
-                            cookie = (int)cookieItems[i];
-                            if (nameItems[i] is null || !(nameItems[i] is string))
+                            cookie = _cookies[i];
+                            if (_names[i] is null || !(_names[i] is string))
                             {
-                                Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={(nameItems is null ? "(unknown)" : nameItems[i].ToString())}");
+                                Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
                                 continue;
                             }
 
                             using var var = new Oleaut32.VARIANT();
-                            HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, (uint)cookie, &var);
+                            HRESULT hr = ppb.GetPredefinedValue(_target.Dispid, cookie, &var);
                             if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
                             {
-                                valueItems[i] = var.ToObject();
+                                values[i] = var.ToObject();
                             }
+
                             itemCount++;
                         }
 
@@ -114,8 +112,8 @@ namespace System.Windows.Forms
                         if (itemCount > 0)
                         {
                             string[] strings = new string[itemCount];
-                            Array.Copy(nameItems, 0, strings, 0, itemCount);
-                            base.PopulateArrays(strings, valueItems);
+                            Array.Copy(_names, 0, strings, 0, itemCount);
+                            PopulateArrays(strings, values);
                         }
                     }
                 }
@@ -125,16 +123,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal void RefreshArrays(OleStrCAMarshaler names, Int32CAMarshaler values)
+            internal void RefreshArrays(string[] names, uint[] cookies)
             {
-                _nameMarshaller = names;
-                _valueMarshaller = values;
+                _names = names;
+                _cookies = cookies;
                 _arraysFetched = false;
-            }
-
-            protected override void PopulateArrays(string[] names, object[] values)
-            {
-                // We call base.PopulateArrays directly when we actually want to do this.
             }
 
             public override object FromString(string s)
