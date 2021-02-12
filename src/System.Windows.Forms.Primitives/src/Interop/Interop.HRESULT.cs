@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System;
 using static Interop;
 
 internal static partial class Interop
@@ -83,4 +84,9 @@ internal static class HResultExtensions
     public static bool Succeeded(this HRESULT hr) => hr >= 0;
 
     public static bool Failed(this HRESULT hr) => hr < 0;
+
+    public static string AsString(this HRESULT hr)
+        => Enum.IsDefined(typeof(HRESULT), hr)
+            ? $"HRESULT {hr} [0x{(int)hr:X} ({(int)hr:D})]"
+            : $"HRESULT [0x{(int)hr:X} ({(int)hr:D})]";
 }

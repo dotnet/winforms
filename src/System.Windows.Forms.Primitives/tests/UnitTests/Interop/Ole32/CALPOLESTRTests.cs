@@ -9,7 +9,6 @@ using static Interop;
 
 namespace System.Windows.Forms.Primitives.Ole32Tests
 {
-    [Collection(nameof(MallocSpy))]
     public class CALPOLESTRTests
     {
         [Fact]
