@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
-using System.Windows.Forms.Design;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -421,79 +420,6 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"could not get the type editor for property: {Name} Exception: {e}");
                 }
-            }
-        }
-
-        private class AxPropertyTypeEditor : UITypeEditor
-        {
-            private readonly AxPropertyDescriptor propDesc;
-            private Guid guid;
-
-            public AxPropertyTypeEditor(AxPropertyDescriptor pd, Guid guid)
-            {
-                propDesc = pd;
-                this.guid = guid;
-            }
-
-            /// <summary>
-            ///  Takes the value returned from valueAccess.getValue() and modifies or replaces
-            ///  the value, passing the result into valueAccess.setValue().  This is where
-            ///  an editor can launch a modal dialog or create a drop down editor to allow
-            ///  the user to modify the value.  Host assistance in presenting UI to the user
-            ///  can be found through the valueAccess.getService function.
-            /// </summary>
-            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
-            {
-                try
-                {
-                    object instance = context.Instance;
-                    propDesc._owner.ShowPropertyPageForDispid(propDesc.Dispid, guid);
-                }
-                catch (Exception ex1)
-                {
-                    if (provider is not null)
-                    {
-                        IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
-                        if (uiSvc is not null)
-                        {
-                            uiSvc.ShowError(ex1, SR.ErrorTypeConverterFailed);
-                        }
-                    }
-                }
-                return value;
-            }
-
-            /// <summary>
-            ///  Retrieves the editing style of the Edit method.  If the method
-            ///  is not supported, this will return None.
-            /// </summary>
-            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-            {
-                return UITypeEditorEditStyle.Modal;
-            }
-        }
-
-        /// <summary>
-        ///  simple derivation of the com2enumconverter that allows us to intercept
-        ///  the call to GetStandardValues so we can on-demand update the enum values.
-        /// </summary>
-        private class AxEnumConverter : Com2EnumConverter
-        {
-            private readonly AxPropertyDescriptor target;
-
-            public AxEnumConverter(AxPropertyDescriptor target, Com2Enum com2Enum) : base(com2Enum)
-            {
-                this.target = target;
-            }
-
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-            {
-                // make sure the converter has been properly refreshed -- calling
-                // the Converter property does this.
-                //
-                TypeConverter tc = this;
-                tc = target.Converter;
-                return base.GetStandardValues(context);
             }
         }
     }

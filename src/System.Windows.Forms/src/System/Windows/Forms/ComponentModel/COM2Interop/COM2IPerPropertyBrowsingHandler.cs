@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -167,40 +166,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return;
                 }
 
-                Guid g = GetPropertyPageGuid(ppb, sender.DISPID);
+                Guid guid = GetPropertyPageGuid(ppb, sender.DISPID);
 
-                if (!Guid.Empty.Equals(g))
+                if (!Guid.Empty.Equals(guid))
                 {
-                    gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, g, (UITypeEditor)gveevent.TypeEditor);
+                    gveevent.TypeEditor = new Com2PropertyPageUITypeEditor(sender, guid, (UITypeEditor)gveevent.TypeEditor);
                 }
-            }
-        }
-
-        // this is just here so we can identify the enums that we added
-        private class Com2IPerPropertyEnumConverter : Com2EnumConverter
-        {
-            private readonly Com2IPerPropertyBrowsingEnum itemsEnum;
-            public Com2IPerPropertyEnumConverter(Com2IPerPropertyBrowsingEnum items) : base(items)
-            {
-                itemsEnum = items;
-            }
-
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destType)
-            {
-                if (destType == typeof(string) && !itemsEnum._arraysFetched)
-                {
-                    object curValue = itemsEnum._target.GetValue(itemsEnum._target.TargetObject);
-                    if (curValue == value || (curValue is not null && curValue.Equals(value)))
-                    {
-                        bool success = false;
-                        string val = GetDisplayString((Oleaut32.IPerPropertyBrowsing)itemsEnum._target.TargetObject, itemsEnum._target.DISPID, ref success);
-                        if (success)
-                        {
-                            return val;
-                        }
-                    }
-                }
-                return base.ConvertTo(context, culture, value, destType);
             }
         }
     }

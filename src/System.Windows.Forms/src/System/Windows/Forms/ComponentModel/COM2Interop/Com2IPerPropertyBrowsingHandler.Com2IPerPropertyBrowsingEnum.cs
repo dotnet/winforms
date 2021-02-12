@@ -83,27 +83,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     if (_names.Length > 0)
                     {
                         object[] valueItems = new object[_names.Length];
-                        int cookie;
+                        uint cookie;
 
                         Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
 
-                        // for each name item, we ask the object for it's corresponding value.
-                        //
+                        // For each name item, we ask the object for it's corresponding value.
+
                         Type targetType = _target.PropertyType;
                         for (int i = _names.Length - 1; i >= 0; i--)
                         {
-                            cookie = (int)_cookies[i];
+                            cookie = _cookies[i];
                             if (_names[i] is null)
                             {
                                 Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
                                 continue;
                             }
 
-                            using var var = new Oleaut32.VARIANT();
-                            HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, (uint)cookie, &var);
-                            if (hr == HRESULT.S_OK && var.vt != Ole32.VARENUM.EMPTY)
+                            using var variant = new Oleaut32.VARIANT();
+                            HRESULT hr = ppb.GetPredefinedValue(_target.DISPID, cookie, &variant);
+                            if (hr == HRESULT.S_OK && variant.vt != Ole32.VARENUM.EMPTY)
                             {
-                                valueItems[i] = var.ToObject();
+                                valueItems[i] = variant.ToObject();
                                 if (valueItems[i].GetType() != targetType)
                                 {
                                     if (targetType.IsEnum)
@@ -147,8 +147,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 catch (Exception ex)
                 {
-                    base.PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
-                    Debug.Fail("Failed to build IPerPropertyBrowsing editor. " + ex.GetType().Name + ", " + ex.Message);
+                    PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                    Debug.Fail($"Failed to build IPerPropertyBrowsing editor. {ex.GetType().Name}, {ex.Message}");
                 }
             }
 

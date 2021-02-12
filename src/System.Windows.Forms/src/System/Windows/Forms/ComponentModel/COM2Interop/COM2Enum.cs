@@ -111,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
             }
 
-            // We have to do this to compensate for small discrepencies in a lot of objects in COM2
+            // We have to do this to compensate for small discrepancies in a lot of objects in COM2
             // (DWORD -> VT_IU4, value we get is VT_I4, which convert to Int32, UInt32 respectively)
             string stringValue = value.ToString();
             for (int i = 0; i < _values.Length; i++)

@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Primitives.Ole32Tests
         }
 
         private static Ole32.CALPOLESTR CreateStringVector(params string[] values)
-            => CreateStringVector(null, values);
+            => CreateStringVector(allocations: null, values);
 
         private unsafe static Ole32.CALPOLESTR CreateStringVector(IList<IntPtr>? allocations, params string[] values)
         {
