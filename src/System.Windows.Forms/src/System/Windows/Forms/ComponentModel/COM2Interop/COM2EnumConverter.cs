@@ -11,12 +11,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 {
     internal class Com2EnumConverter : TypeConverter
     {
-        internal readonly Com2Enum com2Enum;
-        private StandardValuesCollection values;
+        internal readonly Com2Enum _com2Enum;
+        private StandardValuesCollection _values;
 
         public Com2EnumConverter(Com2Enum enumObj)
         {
-            com2Enum = enumObj;
+            _com2Enum = enumObj;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             if (value is string)
             {
-                return com2Enum.FromString((string)value);
+                return _com2Enum.FromString((string)value);
             }
             return base.ConvertFrom(context, culture, value);
         }
@@ -71,7 +71,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 if (value is not null)
                 {
-                    string str = com2Enum.ToString(value);
+                    string str = _com2Enum.ToString(value);
                     return (str ?? "");
                 }
             }
@@ -91,15 +91,15 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (values is null)
+            if (_values is null)
             {
-                object[] objValues = com2Enum.Values;
+                object[] objValues = _com2Enum.Values;
                 if (objValues is not null)
                 {
-                    values = new StandardValuesCollection(objValues);
+                    _values = new StandardValuesCollection(objValues);
                 }
             }
-            return values;
+            return _values;
         }
 
         /// <summary>
@@ -110,10 +110,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  then there are other valid values besides the list of
         ///  standard values GetStandardValues provides.
         /// </summary>
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
-        {
-            return com2Enum.IsStrictEnum;
-        }
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) => false;
 
         /// <summary>
         ///  Determines if this object supports a standard set of values
@@ -129,13 +126,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// </summary>
         public override bool IsValid(ITypeDescriptorContext context, object value)
         {
-            string strValue = com2Enum.ToString(value);
+            string strValue = _com2Enum.ToString(value);
             return strValue is not null && strValue.Length > 0;
         }
 
         public void RefreshValues()
         {
-            values = null;
+            _values = null;
         }
     }
 }
