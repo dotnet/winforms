@@ -10,27 +10,44 @@ namespace System
     /// <summary>
     ///  Scope for registering and revoking a malloc spy class.
     /// </summary>
-    internal ref struct MallocSpyScope
+    internal ref partial struct MallocSpyScope
     {
         private static readonly object s_lock = new();
+        private static readonly MasterSpy s_masterSpy = new();
+        private static bool s_registered;
         private readonly bool _lockTaken;
 
-        public MallocSpyScope(Ole32.IMallocSpy mallocSpy)
+        public MallocSpyScope(Ole32.IMallocSpy mallocSpy, bool currentThreadOnly = true)
         {
             _lockTaken = false;
             Monitor.Enter(s_lock, ref _lockTaken);
-            HRESULT result = Ole32.CoRegisterMallocSpy(mallocSpy);
-            if (result.Failed())
+
+            if (!s_registered)
             {
-                throw new InvalidOperationException(result.AsString());
+                // If another thread allocated while we were registered and hasn't freed everything yet, we can't
+                // deregister. As such we'll keep a permanent global spy and forward to whatever our current context is.
+
+                HRESULT result = Ole32.CoRegisterMallocSpy(s_masterSpy);
+                if (result.Failed())
+                {
+                    throw new InvalidOperationException(result.AsString());
+                }
+
+                s_registered = true;
+            }
+
+            if (s_registered)
+            {
+                s_masterSpy.SetSpy(mallocSpy, currentThreadOnly);
             }
         }
 
         public void Dispose()
         {
-            Ole32.CoRevokeMallocSpy();
             if (_lockTaken)
             {
+                s_masterSpy.SetSpy(spy: null, currentThreadOnly: true);
+
                 Monitor.Exit(s_lock);
             }
         }
