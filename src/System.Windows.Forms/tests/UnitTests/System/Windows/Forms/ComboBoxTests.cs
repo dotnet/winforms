@@ -1824,6 +1824,16 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDown)]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        [InlineData(ComboBoxStyle.Simple)]
+        public void Combobox_SetCustomSize_DoesNotCreateHandle(ComboBoxStyle dropDownStyle)
+        {
+            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(100, 50) };
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
         private class SubComboBox : ComboBox
         {
             public SubComboBox()
