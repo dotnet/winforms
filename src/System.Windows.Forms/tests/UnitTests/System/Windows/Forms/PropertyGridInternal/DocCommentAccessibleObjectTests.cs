@@ -14,7 +14,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             using DocComment docComment = new DocComment(propertyGrid);
-            DocCommentAccessibleObject accessibleObject = new DocCommentAccessibleObject(docComment, propertyGrid);
+            DocComment.DocCommentAccessibleObject accessibleObject =
+                new DocComment.DocCommentAccessibleObject(docComment, propertyGrid);
 
             Assert.Equal(docComment, accessibleObject.Owner);
             Assert.False(propertyGrid.IsHandleCreated);

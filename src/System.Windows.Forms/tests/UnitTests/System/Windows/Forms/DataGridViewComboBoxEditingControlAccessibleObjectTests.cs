@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using Xunit;
+using static System.Windows.Forms.DataGridViewComboBoxEditingControl;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
@@ -15,7 +16,8 @@ namespace System.Windows.Forms.Tests
         {
             using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
 
-            DataGridViewComboBoxEditingControlAccessibleObject accessibleObject = new DataGridViewComboBoxEditingControlAccessibleObject(control);
+            DataGridViewComboBoxEditingControl.DataGridViewComboBoxEditingControlAccessibleObject accessibleObject =
+                new DataGridViewComboBoxEditingControlAccessibleObject(control);
 
             Assert.Equal(control, accessibleObject.Owner);
             Assert.False(control.IsHandleCreated);
