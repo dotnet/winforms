@@ -6608,7 +6608,7 @@ namespace System.Windows.Forms.Tests
             ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
 
             Assert.Equal("Test caption", wrapper.Text);
-            //Assert.Equal method does not work because char* cannot be used as an argument to it
+            // Assert.Equal method does not work because char* cannot be used as an argument to it
             Assert.Equal(string.Empty, new string(wrapper.Info.lpszText));
         }
 
@@ -6636,7 +6636,7 @@ namespace System.Windows.Forms.Tests
             TreeNode treeNode = new TreeNode();
             treeView.Nodes.Add(treeNode);
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
+            Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor().IsToolTracked(treeNode));
             treeView.Nodes.Remove(treeNode);
         }
 
@@ -6650,11 +6650,13 @@ namespace System.Windows.Forms.Tests
             TreeNode treeNode1 = new TreeNode();
             TreeNode treeNode2 = new TreeNode();
             TreeNode treeNode3 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+
             treeView.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode1));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode2));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode3));
+            Assert.True(accessor.IsToolTracked(treeNode1));
+            Assert.True(accessor.IsToolTracked(treeNode2));
+            Assert.True(accessor.IsToolTracked(treeNode3));
         }
 
         [WinFormsTheory]
@@ -6667,13 +6669,14 @@ namespace System.Windows.Forms.Tests
             TreeNode treeNode = new TreeNode();
             TreeNode treeSubNodeLevel1 = new TreeNode();
             TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
             treeView.Nodes.Add(treeNode);
             treeNode.Nodes.Add(treeSubNodeLevel1);
             treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel1));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel2));
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
             treeView.Nodes.Remove(treeNode);
         }
 
@@ -6687,13 +6690,14 @@ namespace System.Windows.Forms.Tests
             TreeNode treeNode = new TreeNode();
             TreeNode treeSubNodeLevel1 = new TreeNode();
             TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
             treeNode.Nodes.Add(treeSubNodeLevel1);
             treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
             treeView.Nodes.Add(treeNode);
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel1));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel2));
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
             treeView.Nodes.Remove(treeNode);
         }
 
@@ -6705,13 +6709,14 @@ namespace System.Windows.Forms.Tests
             using var treeView = new TreeView();
             treeView.ShowNodeToolTips = showNodeToolTips;
             TreeNode treeNode = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
 
             treeView.Nodes.Add(treeNode);
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeNode));
 
             treeView.Nodes.Remove(treeNode);
 
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
+            Assert.False(accessor.IsToolTracked(treeNode));
         }
 
         [WinFormsTheory]
@@ -6724,19 +6729,20 @@ namespace System.Windows.Forms.Tests
             TreeNode treeNode = new TreeNode();
             TreeNode treeSubNodeLevel1 = new TreeNode();
             TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
             treeNode.Nodes.Add(treeSubNodeLevel1);
             treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
             treeView.Nodes.Add(treeNode);
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel1));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel2));
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
 
             treeView.Nodes.Remove(treeNode);
 
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel1));
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel2));
+            Assert.False(accessor.IsToolTracked(treeNode));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel2));
         }
 
         [WinFormsTheory]
@@ -6750,7 +6756,7 @@ namespace System.Windows.Forms.Tests
 
             treeView.Nodes.Insert(0, treeNode);
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
+            Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor().IsToolTracked(treeNode));
         }
 
         [WinFormsTheory]
@@ -6763,19 +6769,20 @@ namespace System.Windows.Forms.Tests
             TreeNode treeNode = new TreeNode();
             TreeNode treeSubNodeLevel1 = new TreeNode();
             TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
             treeNode.Nodes.Add(treeSubNodeLevel1);
             treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
             treeView.Nodes.Add(treeNode);
 
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel1));
-            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel2));
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
 
             treeView.Dispose();
 
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeNode));
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel1));
-            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(treeSubNodeLevel2));
+            Assert.False(accessor.IsToolTracked(treeNode));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel2));
         }
 
         private class SubTreeView : TreeView
