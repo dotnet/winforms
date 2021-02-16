@@ -1,0 +1,78 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+#nullable disable
+
+using System.Drawing;
+using static Interop;
+
+namespace System.Windows.Forms.PropertyGridInternal
+{
+    internal partial class DocComment
+    {
+        /// <summary>
+        ///  Represents the DocComment control accessible object.
+        /// </summary>
+        internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
+        {
+            private readonly PropertyGrid _parentPropertyGrid;
+
+            /// <summary>
+            ///  Initializes new instance of DocCommentAccessibleObject.
+            /// </summary>
+            /// <param name="owningDocComment">The owning DocComment control.</param>
+            /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
+            public DocCommentAccessibleObject(DocComment owningDocComment, PropertyGrid parentPropertyGrid) : base(owningDocComment)
+            {
+                _parentPropertyGrid = parentPropertyGrid;
+            }
+
+            /// <summary>
+            ///  Request to return the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
+                {
+                    UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    if (navigationTarget is not null)
+                    {
+                        return navigationTarget;
+                    }
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            /// <summary>
+            ///  Request value of specified property from an element.
+            /// </summary>
+            /// <param name="propertyID">Identifier indicating the property to return</param>
+            /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
+                {
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
+                    UiaCore.UIA.NamePropertyId => Name,
+                    _ => base.GetPropertyValue(propertyID)
+                };
+
+            public override string Name
+            {
+                get
+                {
+                    string name = Owner?.AccessibleName;
+                    if (name is not null)
+                    {
+                        return name;
+                    }
+
+                    return string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
+                }
+            }
+        }
+    }
+}
