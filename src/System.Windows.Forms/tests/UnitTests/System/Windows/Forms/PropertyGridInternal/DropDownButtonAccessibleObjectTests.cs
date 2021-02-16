@@ -13,7 +13,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public void DropDownButtonAccessibleObject_Ctor_Default()
         {
             using DropDownButton dropDownButton = new DropDownButton();
-            DropDownButtonAccessibleObject accessibleObject = new DropDownButtonAccessibleObject(dropDownButton);
+            DropDownButton.DropDownButtonAccessibleObject accessibleObject =
+                new DropDownButton.DropDownButtonAccessibleObject(dropDownButton);
 
             Assert.Equal(dropDownButton, accessibleObject.Owner);
             Assert.False(dropDownButton.IsHandleCreated);
