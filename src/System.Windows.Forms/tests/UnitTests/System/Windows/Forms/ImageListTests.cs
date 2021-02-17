@@ -905,6 +905,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.HandleCreated);
         }
 
+#if DEBUG
+        [WinFormsFact]
+        public void ImageList_Dispose_SetsIsDisposed()
+        {
+            using var list = new ImageList();
+            Assert.False(list.IsDisposed);
+
+            list.Dispose();
+            Assert.True(list.IsDisposed);
+        }
+#endif
+
         public static IEnumerable<object[]> Draw_Point_TestData()
         {
             yield return new object[] { Point.Empty };

@@ -1125,6 +1125,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(listViewRef.IsAlive);
         }
 
+#if DEBUG
+        [WinFormsFact]
+        public void ListView_Dispose_shared_ImageList_doesnt_assert()
+        {
+            using ListView listView = new();
+            ImageList imageList = new();
+            listView.LargeImageList = imageList;
+            listView.SmallImageList = imageList;
+
+            // Initiate DetachImageList sequence
+            imageList.Dispose();
+
+            // Unless we track whether an imagelist was disposed, we would hit Debug.Fail assertion
+            // and never reach this line
+            Assert.True(true);
+        }
+#endif
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ListView_DoubleBuffered_Get_ReturnsExpected(bool value)
