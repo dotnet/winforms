@@ -15,7 +15,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             using PropertyGrid propertyGrid = new PropertyGrid();
             using GridErrorDlg gridErrorDlg = new GridErrorDlg(propertyGrid);
             using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
-            DetailsButtonAccessibleObject accessibleObject = new DetailsButtonAccessibleObject(detailsButton);
+            DetailsButton.DetailsButtonAccessibleObject accessibleObject = new DetailsButton.DetailsButtonAccessibleObject(detailsButton);
 
             Assert.Equal(detailsButton, accessibleObject.Owner);
             Assert.False(propertyGrid.IsHandleCreated);

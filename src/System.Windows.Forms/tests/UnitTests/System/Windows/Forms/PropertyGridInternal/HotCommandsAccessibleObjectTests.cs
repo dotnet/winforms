@@ -14,7 +14,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             using HotCommands hotCommands = new HotCommands(propertyGrid);
-            HotCommandsAccessibleObject accessibleObject = new HotCommandsAccessibleObject(hotCommands, propertyGrid);
+            HotCommands.HotCommandsAccessibleObject accessibleObject =
+                new HotCommands.HotCommandsAccessibleObject(hotCommands, propertyGrid);
 
             Assert.Equal(hotCommands, accessibleObject.Owner);
             Assert.False(propertyGrid.IsHandleCreated);
