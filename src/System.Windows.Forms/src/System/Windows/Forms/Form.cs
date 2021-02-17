@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -6545,128 +6544,6 @@ namespace System.Windows.Forms
                 default:
                     base.WndProc(ref m);
                     break;
-            }
-        }
-
-        /// <summary>
-        ///  Represents a collection of controls on the form.
-        /// </summary>
-        public new class ControlCollection : Control.ControlCollection
-        {
-            private readonly Form owner;
-
-            /*C#r:protected*/
-
-            /// <summary>
-            ///  Initializes a new instance of the ControlCollection class.
-            /// </summary>
-            public ControlCollection(Form owner)
-            : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            /// <summary>
-            ///  Adds a control
-            ///  to the form.
-            /// </summary>
-            public override void Add(Control value)
-            {
-                if (value is MdiClient && owner.ctlClient is null)
-                {
-                    if (!owner.TopLevel && !owner.DesignMode)
-                    {
-                        throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
-                    }
-                    owner.AutoScroll = false;
-                    if (owner.IsMdiChild)
-                    {
-                        throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
-                    }
-                    owner.ctlClient = (MdiClient)value;
-                }
-
-                // make sure we don't add a form that has a valid mdi parent
-                //
-                if (value is Form && ((Form)value).MdiParentInternal != null)
-                {
-                    throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
-                }
-
-                base.Add(value);
-
-                if (owner.ctlClient != null)
-                {
-                    owner.ctlClient.SendToBack();
-                }
-            }
-
-            /// <summary>
-            ///  Removes a control from the form.
-            /// </summary>
-            public override void Remove(Control value)
-            {
-                if (value == owner.ctlClient)
-                {
-                    owner.ctlClient = null;
-                }
-                base.Remove(value);
-            }
-        }
-
-        // Class used to temporarily reset the owners of windows owned by this Form
-        // before its handle recreation, then setting them back to the new handle
-        // after handle recreation
-        private class EnumThreadWindowsCallback
-        {
-            private List<HandleRef> ownedWindows;
-
-            private readonly IntPtr _formHandle;
-
-            internal EnumThreadWindowsCallback(IntPtr formHandle)
-            {
-                this._formHandle = formHandle;
-            }
-
-            internal BOOL Callback(IntPtr hWnd)
-            {
-                HandleRef hRef = new HandleRef(null, hWnd);
-                IntPtr parent = User32.GetWindowLong(hRef, User32.GWL.HWNDPARENT);
-                if (parent == _formHandle)
-                {
-                    // Enumerated window is owned by this Form.
-                    // Store it in a list for further treatment.
-                    if (ownedWindows is null)
-                    {
-                        ownedWindows = new List<HandleRef>();
-                    }
-                    ownedWindows.Add(hRef);
-                }
-                return BOOL.TRUE;
-            }
-
-            // Resets the owner of all the windows owned by this Form before handle recreation.
-            internal void ResetOwners()
-            {
-                if (ownedWindows != null)
-                {
-                    foreach (HandleRef hRef in ownedWindows)
-                    {
-                        User32.SetWindowLong(hRef, User32.GWL.HWNDPARENT, NativeMethods.NullHandleRef);
-                    }
-                }
-            }
-
-            // Sets the owner of the windows back to this Form after its handle recreation.
-            internal void SetOwners(HandleRef hRefOwner)
-            {
-                if (ownedWindows != null)
-                {
-                    foreach (HandleRef hRef in ownedWindows)
-                    {
-                        User32.SetWindowLong(hRef, User32.GWL.HWNDPARENT, hRefOwner);
-                    }
-                }
             }
         }
     }
