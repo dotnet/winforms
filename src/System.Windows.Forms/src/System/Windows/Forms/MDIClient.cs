@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     /// </remarks>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
-    public sealed class MdiClient : Control
+    public sealed partial class MdiClient : Control
     {
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
@@ -393,63 +393,6 @@ namespace System.Windows.Forms
         {
             Application.Idle -= new EventHandler(OnIdle);
             base.OnInvokedSetScrollPosition(sender, e);
-        }
-
-        /// <summary>
-        ///  Collection of controls...
-        /// </summary>
-        new public class ControlCollection : Control.ControlCollection
-        {
-            private readonly MdiClient owner;
-
-            /*C#r: protected*/
-
-            public ControlCollection(MdiClient owner)
-            : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            /// <summary>
-            ///  Adds a control to the MDI Container. This child must be
-            ///  a Form that is marked as an MDI Child to be added to the
-            ///  container. You should not call this directly, but rather
-            ///  set the child form's (ctl) MDIParent property:
-            /// <code>
-            ///  //     wrong
-            ///  Form child = new ChildForm();
-            ///  this.getMdiClient().add(child);
-            ///  //     right
-            ///  Form child = new ChildForm();
-            ///  child.setMdiParent(this);
-            /// </code>
-            /// </summary>
-            public override void Add(Control value)
-            {
-                if (value is null)
-                {
-                    return;
-                }
-                if (!(value is Form) || !((Form)value).IsMdiChild)
-                {
-                    throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
-                }
-                if (owner.CreateThreadId != value.CreateThreadId)
-                {
-                    throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
-                }
-                owner.children.Add((Form)value);
-                base.Add(value);
-            }
-
-            /// <summary>
-            ///  Removes a child control.
-            /// </summary>
-            public override void Remove(Control value)
-            {
-                owner.children.Remove(value);
-                base.Remove(value);
-            }
         }
     }
 }

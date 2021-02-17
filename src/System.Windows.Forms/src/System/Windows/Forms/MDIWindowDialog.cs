@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    internal sealed class MdiWindowDialog : Form
+    internal sealed partial class MdiWindowDialog : Form
     {
         private ListBox itemList;
         private Button okButton;
@@ -31,21 +31,6 @@ namespace System.Windows.Forms
                 Debug.Assert(item != null, "No item selected!");
 #endif
                 return active;
-            }
-        }
-
-        private class ListItem
-        {
-            public Form form;
-
-            public ListItem(Form f)
-            {
-                form = f;
-            }
-
-            public override string ToString()
-            {
-                return form.Text;
             }
         }
 
