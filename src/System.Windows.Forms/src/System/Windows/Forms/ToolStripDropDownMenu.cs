@@ -14,7 +14,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
-    public class ToolStripDropDownMenu : ToolStripDropDown
+    public partial class ToolStripDropDownMenu : ToolStripDropDown
     {
         private static readonly Padding ImagePadding = new Padding(2);
         private static readonly Padding TextPadding = new Padding(8, 1, 9, 1);
@@ -858,21 +858,6 @@ namespace System.Windows.Forms
 
             UpScrollButton.Enabled = !displayRectangle.Contains(displayRectangle.X, minY);
             DownScrollButton.Enabled = !displayRectangle.Contains(displayRectangle.X, maxY);
-        }
-
-        internal sealed class ToolStripDropDownLayoutEngine : FlowLayout
-        {
-            public static ToolStripDropDownLayoutEngine LayoutInstance = new ToolStripDropDownLayoutEngine();
-
-            internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
-            {
-                Size preferredSize = base.GetPreferredSize(container, proposedConstraints);
-                if (container is ToolStripDropDownMenu dropDownMenu)
-                {
-                    preferredSize.Width = dropDownMenu.MaxItemSize.Width - dropDownMenu.PaddingToTrim;
-                }
-                return preferredSize;
-            }
         }
     }
 }
