@@ -6,13 +6,12 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 
 namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.ToolStripContainerDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.ToolStripContainerDesc))]
-    public class ToolStripContainer : ContainerControl
+    public partial class ToolStripContainer : ContainerControl
     {
         private readonly ToolStripPanel topPanel;
         private readonly ToolStripPanel bottomPanel;
@@ -399,72 +398,6 @@ namespace System.Windows.Forms
         internal override bool AllowsKeyboardToolTip()
         {
             return false;
-        }
-
-        internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
-        {
-            readonly ToolStripContainer owner;
-            readonly Type contentPanelType = typeof(ToolStripContentPanel);
-            readonly Type panelType = typeof(ToolStripPanel);
-
-            public ToolStripContainerTypedControlCollection(Control c, bool isReadOnly)
-                : base(c, isReadOnly)
-            {
-                owner = c as ToolStripContainer;
-            }
-
-            public override void Add(Control value)
-            {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                if (IsReadOnly)
-                {
-                    throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
-                }
-
-                Type controlType = value.GetType();
-                if (!contentPanelType.IsAssignableFrom(controlType) && !panelType.IsAssignableFrom(controlType))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
-                }
-                base.Add(value);
-            }
-            public override void Remove(Control value)
-            {
-                if (value is ToolStripPanel || value is ToolStripContentPanel)
-                {
-                    if (!owner.DesignMode)
-                    {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
-                }
-                base.Remove(value);
-            }
-
-            internal override void SetChildIndexInternal(Control child, int newIndex)
-            {
-                if (child is ToolStripPanel || child is ToolStripContentPanel)
-                {
-                    if (!owner.DesignMode)
-                    {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
-                    else
-                    {
-                        // just no-op it at DT.
-                        return;
-                    }
-                }
-                base.SetChildIndexInternal(child, newIndex);
-            }
         }
     }
 }
