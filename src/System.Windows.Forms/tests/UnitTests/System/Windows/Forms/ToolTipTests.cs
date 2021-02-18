@@ -702,6 +702,41 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("System.Windows.Forms.ToolTip InitialDelay: 500, ShowAlways: False", toolTip.ToString());
         }
 
+        [WinFormsFact]
+        public void ToolTip_SetToolTipToControl_Invokes_SetToolTip_OfControl()
+        {
+            using ToolTip toolTip = new ToolTip();
+            SubControl control = new SubControl();
+            control.CreateControl();
+
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            toolTip.SetToolTip(control, "Some test text");
+
+            Assert.Equal(1, control.InvokeSetCount);
+        }
+
+        [WinFormsFact]
+        public void ToolTip_RemoveAll_Invokes_RemoveToolTip_OfControl()
+        {
+            using ToolTip toolTip = new ToolTip();
+            using SubControl control = new SubControl();
+
+            // Create a top level control to the toolTip consider
+            // the tested control as created when destroying regions
+            using Control topLevelControl = new Control();
+            topLevelControl.Controls.Add(control);
+            topLevelControl.CreateControl();
+            control.CreateControl();
+
+            Assert.True(toolTip.Handle != IntPtr.Zero); // A workaroung to create the toolTip native window Handle
+
+            toolTip.SetToolTip(control, "Some test text");
+            toolTip.RemoveAll();
+
+            Assert.Equal(1, control.InvokeRemoveCount);
+        }
+
         private class SubToolTip : ToolTip
         {
             public SubToolTip() : base()
@@ -719,6 +754,24 @@ namespace System.Windows.Forms.Tests
             public new bool DesignMode => base.DesignMode;
 
             public new EventHandlerList Events => base.Events;
+        }
+
+        private class SubControl : Control
+        {
+            public int InvokeSetCount { get; set; }
+            public int InvokeRemoveCount { get; set; }
+
+            internal override void SetToolTip(ToolTip toolTip)
+            {
+                InvokeSetCount++;
+                base.SetToolTip(toolTip);
+            }
+
+            internal override void RemoveToolTip(ToolTip toolTip)
+            {
+                InvokeRemoveCount++;
+                base.RemoveToolTip(toolTip);
+            }
         }
     }
 }

@@ -6785,6 +6785,27 @@ namespace System.Windows.Forms.Tests
             Assert.False(accessor.IsToolTracked(treeSubNodeLevel2));
         }
 
+        [WinFormsFact]
+        public void TreeView_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using TreeView treeView = new TreeView();
+            treeView.ShowNodeToolTips = true;
+            using ToolTip toolTip = new ToolTip();
+            treeView.CreateControl();
+
+            dynamic listViewDynamic = treeView.TestAccessor().Dynamic;
+            string actual = listViewDynamic.controlToolTipText;
+
+            Assert.Null(actual);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(treeView, text); // Invokes TreeView's SetToolTip inside
+            actual = listViewDynamic.controlToolTipText;
+
+            Assert.Equal(text, actual);
+        }
+
         private class SubTreeView : TreeView
         {
             public new bool CanEnableIme => base.CanEnableIme;

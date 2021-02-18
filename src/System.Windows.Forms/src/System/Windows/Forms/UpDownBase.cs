@@ -958,8 +958,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetToolTip(ToolTip toolTip, string caption)
+        internal override void SetToolTip(ToolTip toolTip)
         {
+            if (toolTip is null)
+            {
+                return;
+            }
+
+            string caption = toolTip.GetToolTip(this);
             toolTip.SetToolTip(_upDownEdit, caption);
             toolTip.SetToolTip(_upDownButtons, caption);
         }

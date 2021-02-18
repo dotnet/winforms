@@ -5659,6 +5659,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("System.Windows.Forms.TabControl, TabPages.Count: 2, TabPages[0]: TabPage: {text1}", control.ToString());
         }
 
+        [WinFormsFact]
+        public void TabControl_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using TabControl control = new TabControl() { ShowToolTips = true };
+            using ToolTip toolTip = new ToolTip();
+            control.CreateControl();
+
+            dynamic tabControl = control.TestAccessor().Dynamic;
+            string actual = tabControl._controlTipText;
+
+            Assert.Empty(actual);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(control, text); // Invokes TabControl's SetToolTip inside
+            actual = tabControl._controlTipText;
+
+            Assert.Equal(text, actual);
+        }
+
         private class SubTabPage : TabPage
         {
         }

@@ -3042,6 +3042,11 @@ namespace System.Windows.Forms
         {
         }
 
+        internal virtual void RemoveToolTip(ToolTip toolTip)
+        {
+            // Control doesn't have a specific logic after a toolTip is removed
+        }
+
         private Control ReflectParent
         {
             get => _reflectParent;
@@ -10744,6 +10749,11 @@ namespace System.Windows.Forms
             // WARNING: if we ever add argument checking to "flag", we will need
             // to move private styles like Layered to State.
             _controlStyle = value ? _controlStyle | flag : _controlStyle & ~flag;
+        }
+
+        internal virtual void SetToolTip(ToolTip toolTip)
+        {
+            // Control doesn't have a specific logic after a toolTip is set
         }
 
         protected void SetTopLevel(bool value)

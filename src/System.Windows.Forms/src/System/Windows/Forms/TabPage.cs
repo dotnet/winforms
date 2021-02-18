@@ -612,7 +612,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void OnToolTipRemoved(ToolTip toolTip)
+        internal override void RemoveToolTip(ToolTip toolTip)
         {
             if (toolTip is null)
             {
@@ -654,7 +654,7 @@ namespace System.Windows.Forms
         ///  in this case, we have to check all associated toolTips.
         ///  Because of that, create a new List collection to do that.
         /// </summary>
-        internal void OnToolTipSet(ToolTip toolTip)
+        internal override void SetToolTip(ToolTip toolTip)
         {
             // "_externalToolTip == toolTip" condition means a user just set a new text using a ToolTip instance
             // that was already set for this TabPage.

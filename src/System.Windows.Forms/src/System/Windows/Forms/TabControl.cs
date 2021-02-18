@@ -1680,11 +1680,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip, string controlToolTipText)
+        internal override void SetToolTip(ToolTip toolTip)
         {
+            if (toolTip is null || !ShowToolTips)
+            {
+                return;
+            }
+
             User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETTOOLTIPS, toolTip.Handle);
             GC.KeepAlive(toolTip);
-            _controlTipText = controlToolTipText;
+            _controlTipText = toolTip.GetToolTip(this);
         }
 
         private void SetTabPage(int index, TabPage value)

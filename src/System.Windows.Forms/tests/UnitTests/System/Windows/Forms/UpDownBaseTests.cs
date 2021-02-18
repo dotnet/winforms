@@ -3012,6 +3012,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void UpDownBase_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using UpDownBase upDownBase = new SubUpDownBase();
+            using ToolTip toolTip = new ToolTip();
+            upDownBase.CreateControl();
+
+            string actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+            string actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+            Assert.Empty(actualEditToolTipText);
+            Assert.Empty(actualButtonsToolTipText);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(upDownBase, text); // Invokes UpDownBase's SetToolTip inside
+            actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+            actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+            Assert.Equal(text, actualEditToolTipText);
+            Assert.Equal(text, actualButtonsToolTipText);
+        }
+
         private class CustomValidateUpDownBase : UpDownBase
         {
             public new bool ChangingText
