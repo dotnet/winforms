@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -12,12 +10,12 @@ namespace System.Windows.Forms
     public class TreeViewHitTestInfo
     {
         private readonly TreeViewHitTestLocations loc;
-        private readonly TreeNode node;
+        private readonly TreeNode? node;
 
         /// <summary>
         ///  Creates a TreeViewHitTestInfo instance.
         /// </summary>
-        public TreeViewHitTestInfo(TreeNode hitNode, TreeViewHitTestLocations hitLocation)
+        public TreeViewHitTestInfo(TreeNode? hitNode, TreeViewHitTestLocations hitLocation)
         {
             node = hitNode;
             loc = hitLocation;
@@ -37,7 +35,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This gives the node returned by hit test on treeview.
         /// </summary>
-        public TreeNode Node
+        public TreeNode? Node
         {
             get
             {
