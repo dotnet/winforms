@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Resources
 {
     /// <summary>
@@ -16,9 +14,9 @@ namespace System.Resources
         ///  This method gets assembly info for the corresponding type. If the delegate
         ///  is provided it is used to get this information.
         /// </summary>
-        public static string GetAssemblyQualifiedName(Type type, Func<Type, string> typeNameConverter)
+        public static string? GetAssemblyQualifiedName(Type? type, Func<Type, string>? typeNameConverter)
         {
-            string assemblyQualifiedName = null;
+            string? assemblyQualifiedName = null;
 
             if (type != null)
             {
