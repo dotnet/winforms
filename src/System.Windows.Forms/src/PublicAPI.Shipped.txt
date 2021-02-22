@@ -10982,8 +10982,8 @@ System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
 ~System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode node) -> void
 ~System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode node, System.Windows.Forms.TreeViewAction action) -> void
-~System.Windows.Forms.TreeViewHitTestInfo.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeViewHitTestInfo.TreeViewHitTestInfo(System.Windows.Forms.TreeNode hitNode, System.Windows.Forms.TreeViewHitTestLocations hitLocation) -> void
+System.Windows.Forms.TreeViewHitTestInfo.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewHitTestInfo.TreeViewHitTestInfo(System.Windows.Forms.TreeNode? hitNode, System.Windows.Forms.TreeViewHitTestLocations hitLocation) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.Message.get -> string
 ~System.Windows.Forms.TypeValidationEventArgs.ReturnValue.get -> object
 ~System.Windows.Forms.TypeValidationEventArgs.TypeValidationEventArgs(System.Type validatingType, bool isValidInput, object returnValue, string message) -> void
