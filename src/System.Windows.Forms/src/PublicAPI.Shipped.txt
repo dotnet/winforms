@@ -12138,11 +12138,13 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
 ~override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams
+~override System.Windows.Forms.TreeView.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
+~override System.Windows.Forms.TreeView.OnLostFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnMouseHover(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.Text.get -> string
