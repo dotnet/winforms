@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,7 +25,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(TreeNodeConverter))]
     [Serializable]  // This class participates in resx serialization.
     [DefaultProperty(nameof(Text))]
-    public class TreeNode : MarshalByRefObject, ICloneable, ISerializable
+    public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         internal const int SHIFTVAL = 12;
         private const TVIS CHECKED = (TVIS)(2 << SHIFTVAL);
@@ -1796,6 +1797,7 @@ namespace System.Windows.Forms
                 children[i].ExpandAll();
             }
         }
+
         /// <summary>
         ///  Locate this tree node's containing tree view control by scanning
         ///  up to the virtual root, whose treeView pointer we know to be
@@ -1810,6 +1812,22 @@ namespace System.Windows.Forms
             }
 
             return node.treeView;
+        }
+
+        internal List<TreeNode> GetSelfAndChildNodes()
+        {
+            List<TreeNode> nodes = new List<TreeNode>() { this };
+            AggregateChildNodesToList(this);
+            return nodes;
+
+            void AggregateChildNodesToList(TreeNode parentNode)
+            {
+                foreach (TreeNode child in parentNode.Nodes)
+                {
+                    nodes.Add(child);
+                    AggregateChildNodesToList(child);
+                }
+            }
         }
 
         /// <summary>
@@ -2035,11 +2053,11 @@ namespace System.Windows.Forms
 
             // unlink our children
             //
-
             for (int i = 0; i < childCount; i++)
             {
                 children[i].Remove(false);
             }
+
             // children = null;
             // unlink ourself
             if (notify && parent != null)
@@ -2062,6 +2080,8 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
+            KeyboardToolTipStateMachine.Instance.Unhook(this, tv.KeyboardToolTip);
 
             if (handle != IntPtr.Zero)
             {
@@ -2287,9 +2307,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  ISerializable private implementation
         /// </summary>
-        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
-        {
-            Serialize(si, context);
-        }
+        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) => Serialize(si, context);
     }
 }

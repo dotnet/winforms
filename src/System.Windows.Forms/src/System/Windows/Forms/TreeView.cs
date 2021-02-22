@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -863,6 +864,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal ToolTip KeyboardToolTip { get; } = new ToolTip();
+
         /// <summary>
         ///  The LabelEdit property determines if the label text
         ///  of nodes in the tree view is editable.
@@ -1639,7 +1642,9 @@ namespace System.Windows.Forms
             }
 
             // Dispose unmanaged resources.
+            UnhookNodes();
             _toolTipBuffer.Dispose();
+            KeyboardToolTip.Dispose();
 
             base.Dispose(disposing);
         }
@@ -1803,6 +1808,22 @@ namespace System.Windows.Forms
                     UpdateImagesRecursive(node);
                 }
                 EndUpdate();
+            }
+        }
+
+        private void NotifyAboutGotFocus(TreeNode treeNode)
+        {
+            if (treeNode is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(treeNode);
+            }
+        }
+
+        private void NotifyAboutLostFocus(TreeNode treeNode)
+        {
+            if (treeNode is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(treeNode);
             }
         }
 
@@ -2130,6 +2151,7 @@ namespace System.Windows.Forms
                 {
                     OnNodeMouseHover(new TreeNodeMouseHoverEventArgs(tn));
                     prevHoveredNode = tn;
+                    NotifyAboutLostFocus(SelectedNode);
                 }
             }
 
@@ -2508,6 +2530,7 @@ namespace System.Windows.Forms
             {
                 case TVC.BYKEYBOARD:
                     action = TreeViewAction.ByKeyboard;
+                    NotifyAboutLostFocus(SelectedNode);
                     break;
                 case TVC.BYMOUSE:
                     action = TreeViewAction.ByMouse;
@@ -2530,18 +2553,20 @@ namespace System.Windows.Forms
 
             if (nmtv->itemNew.hItem != IntPtr.Zero)
             {
+                TreeNode node = NodeFromHandle(nmtv->itemNew.hItem);
                 TreeViewAction action = TreeViewAction.Unknown;
                 switch (nmtv->action)
                 {
                     case TVC.BYKEYBOARD:
                         action = TreeViewAction.ByKeyboard;
+                        NotifyAboutGotFocus(node);
                         break;
                     case TVC.BYMOUSE:
                         action = TreeViewAction.ByMouse;
                         break;
                 }
 
-                OnAfterSelect(new TreeViewEventArgs(NodeFromHandle(nmtv->itemNew.hItem), action));
+                OnAfterSelect(new TreeViewEventArgs(node, action));
             }
 
             // TreeView doesn't properly revert back to the unselected image
@@ -2862,6 +2887,20 @@ namespace System.Windows.Forms
             return retval;
         }
 
+        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption, ToolTip tooltip)
+        {
+            // The "ShowNodeToolTips" flag is required so that when the user hovers over the TreeNode,
+            // their own tooltip is displayed, not the TreeView tooltip.
+            // The second condition is necessary for the correct display of the keyboard tooltip,
+            // since the logic of the external tooltip blocks its display
+            bool isExternalTooltip = ShowNodeToolTips && tooltip != KeyboardToolTip;
+            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, isExternalTooltip ? null : caption);
+            if (isExternalTooltip)
+                wrapper.Info.lpszText = (char*)(-1);
+
+            return wrapper;
+        }
+
         private unsafe bool WmShowToolTip(ref Message m)
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
@@ -3034,6 +3073,18 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            NotifyAboutGotFocus(SelectedNode);
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            NotifyAboutLostFocus(SelectedNode);
+        }
+
         /// <summary>
         ///  Shows the context menu for the Treenode.
         /// </summary>
@@ -3057,6 +3108,17 @@ namespace System.Windows.Forms
             // Unhook the Event.
             strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
+        }
+
+        private void UnhookNodes()
+        {
+            foreach (TreeNode rootNode in Nodes)
+            {
+                foreach (TreeNode node in rootNode.GetSelfAndChildNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(node, KeyboardToolTip);
+                }
+            }
         }
 
         private void WmPrint(ref Message m)

@@ -991,14 +991,7 @@ namespace System.Windows.Forms
                 flags |= TTF.RTLREADING;
             }
 
-            bool noText = (control is TreeView tv && tv.ShowNodeToolTips)
-                || (control is ListView lv && lv.ShowItemToolTips);
-
-            var info = new ToolInfoWrapper<Control>(control, flags, noText ? null : caption);
-            if (noText)
-                info.Info.lpszText = (char*)(-1);
-
-            return info;
+            return control.GetToolInfoWrapper(flags, caption, this);
         }
 
         private ToolInfoWrapper<IWin32WindowAdapter> GetWinTOOLINFO(IWin32Window hWnd)
@@ -1993,15 +1986,6 @@ namespace System.Windows.Forms
             if (window is null || tt is null)
             {
                 return;
-            }
-
-            // Treeview handles its own ToolTips.
-            if (window is TreeView treeView)
-            {
-                if (treeView.ShowNodeToolTips)
-                {
-                    return;
-                }
             }
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen

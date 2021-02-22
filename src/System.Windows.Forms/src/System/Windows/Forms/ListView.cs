@@ -3503,6 +3503,17 @@ namespace System.Windows.Forms
             }
         }
 
+        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption, ToolTip tooltip)
+        {
+            // The "ShowItemToolTips" flag is required so that when the user hovers over the ListViewItem,
+            // their own tooltip is displayed, not the ListViewItem tooltip.
+            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, ShowItemToolTips ? null : caption);
+            if (ShowItemToolTips)
+                wrapper.Info.lpszText = (char*)(-1);
+
+            return wrapper;
+        }
+
         internal void GetSubItemAt(int x, int y, out int iItem, out int iSubItem)
         {
             var lvhi = new LVHITTESTINFO

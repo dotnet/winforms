@@ -367,6 +367,15 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
+
+            if (tv is not null)
+            {
+                foreach (TreeNode treeNode in node.GetSelfAndChildNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
+                }
+            }
+
             if (tv != null && tv.Sorted)
             {
                 return owner.AddSorted(node);
@@ -516,6 +525,15 @@ namespace System.Windows.Forms
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
+
+            if (tv is not null)
+            {
+                foreach (TreeNode treeNode in node.GetSelfAndChildNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(treeNode, tv.KeyboardToolTip);
+                }
+            }
+
             if (tv != null && tv.Sorted)
             {
                 owner.AddSorted(node);
