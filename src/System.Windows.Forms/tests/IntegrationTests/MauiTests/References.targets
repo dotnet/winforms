@@ -1,7 +1,7 @@
 <Project>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="$(MicrosoftWindowsCompatibilityPackageVersion)" />
   </ItemGroup>
 
   <!-- Note that all relative paths in this file are relative to the CSPROJ that is being built, NOT relative to this file -->

@@ -11,7 +11,7 @@
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
     <PackageReference Include="xunit.assert" Version="$(XUnitAssertVersion)" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="$(MicrosoftWindowsCompatibilityPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>

@@ -55,7 +55,7 @@
   </ItemGroup>
       
   <ItemGroup>
-    <PackageReference Include="System.CodeDom" Version="$(SystemCodeDomPackageVersion)" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="$(MicrosoftWindowsCompatibilityPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
