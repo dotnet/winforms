@@ -4689,26 +4689,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Executes the given delegate on the thread that owns this Control's
-        ///  underlying window handle.  The delegate is called asynchronously and this
-        ///  method returns immediately.  You may call this from any thread, even the
-        ///  thread that owns the control's handle.  If the control's handle doesn't
-        ///  exist yet, this will follow up the control's parent chain until it finds a
-        ///  control or form that does have a window handle.  If no appropriate handle
-        ///  can be found, BeginInvoke will throw an exception.  Exceptions within the
-        ///  delegate method are considered untrapped and will be sent to the
-        ///  application's untrapped exception handler.
-        ///
-        ///  There are five functions on a control that are safe to call from any
-        ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
-        ///  For all other method calls, you should use one of the invoke methods to marshal
-        ///  the call to the control's thread.
+        ///  Executes the specified delegate asynchronously on the thread that the control's underlying handle was created on.
         /// </summary>
+        /// <param name="method">A delegate to a method that takes no parameters.</param>
+        /// <returns>
+        ///  An <see cref="IAsyncResult"/> that represents the result of the <see cref="BeginInvoke(Delegate)"/> operation.
+        /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public IAsyncResult BeginInvoke(Delegate method)
-        {
-            return BeginInvoke(method, null);
-        }
+        public IAsyncResult BeginInvoke(Delegate method) => BeginInvoke(method, null);
+
+        /// <summary>
+        ///  Executes the specified delegate asynchronously on the thread that the control's underlying handle was created on.
+        /// </summary>
+        /// <param name="method">A delegate to a method that takes no parameters.</param>
+        /// <returns>
+        ///  An <see cref="IAsyncResult"/> that represents the result of the <see cref="BeginInvoke(Action)"/> operation.
+        /// </returns>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public IAsyncResult BeginInvoke(Action method) => BeginInvoke(method, null);
 
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
@@ -6377,6 +6375,15 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Executes the specified delegate on the thread that owns the control's underlying window handle.
+        /// </summary>
+        /// <param name="method">A delegate that contains a method to be called in the control's thread context.</param>
+        public void Invoke(Action method)
+        {
+            _ = Invoke(method, null);
+        }
+
+        /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
         ///  underlying window handle.  It is an error to call this on the same thread that
         ///  the control belongs to.  If the control's handle doesn't exist yet, this will
@@ -6390,10 +6397,7 @@ namespace System.Windows.Forms
         ///  For all other method calls, you should use one of the invoke methods to marshal
         ///  the call to the control's thread.
         /// </summary>
-        public object Invoke(Delegate method)
-        {
-            return Invoke(method, null);
-        }
+        public object Invoke(Delegate method) => Invoke(method, null);
 
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
@@ -6415,6 +6419,14 @@ namespace System.Windows.Forms
             Control marshaler = FindMarshalingControl();
             return marshaler.MarshaledInvoke(this, method, args, true);
         }
+
+        /// <summary>
+        ///  Executes the specified delegate on the thread that owns the control's underlying window handle.
+        /// </summary>
+        /// <typeparam name="T">The return type of the <paramref name="method"/>.</typeparam>
+        /// <param name="method">A function to be called in the control's thread context.</param>
+        /// <returns>The return value from the function being invoked.</returns>
+        public T Invoke<T>(Func<T> method) => (T)Invoke(method, null);
 
         /// <summary>
         ///  Perform the callback of a particular ThreadMethodEntry - called by InvokeMarshaledCallbacks below.
@@ -6486,24 +6498,28 @@ namespace System.Windows.Forms
         private static void InvokeMarshaledCallbackDo(ThreadMethodEntry tme)
         {
             // We short-circuit a couple of common cases for speed.
-            if (tme._method is EventHandler)
+            if (tme._method is EventHandler handler)
             {
                 if (tme._args is null || tme._args.Length < 1)
                 {
-                    ((EventHandler)tme._method)(tme._caller, EventArgs.Empty);
+                    handler(tme._caller, EventArgs.Empty);
                 }
                 else if (tme._args.Length < 2)
                 {
-                    ((EventHandler)tme._method)(tme._args[0], EventArgs.Empty);
+                    handler(tme._args[0], EventArgs.Empty);
                 }
                 else
                 {
-                    ((EventHandler)tme._method)(tme._args[0], (EventArgs)tme._args[1]);
+                    handler(tme._args[0], (EventArgs)tme._args[1]);
                 }
             }
-            else if (tme._method is MethodInvoker)
+            else if (tme._method is MethodInvoker invoker)
             {
-                ((MethodInvoker)tme._method)();
+                invoker();
+            }
+            else if (tme._method is Action action)
+            {
+                action();
             }
             else if (tme._method is WaitCallback)
             {
