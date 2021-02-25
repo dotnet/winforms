@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class DocCommentAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class DocComment_DocCommentAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void DocCommentAccessibleObject_Ctor_Default()

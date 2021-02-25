@@ -4,26 +4,25 @@
 
 #nullable disable
 
-using System.Drawing;
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms
 {
-    internal partial class DocComment
+    internal partial class PropertyGridToolStrip
     {
         /// <summary>
-        ///  Represents the DocComment control accessible object.
+        ///  Represents the PropertyGridToolStrip control accessibility object.
         /// </summary>
-        internal class DocCommentAccessibleObject : Control.ControlAccessibleObject
+        internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
         {
             private readonly PropertyGrid _parentPropertyGrid;
 
             /// <summary>
-            ///  Initializes new instance of DocCommentAccessibleObject.
+            ///  Constructs new instance of PropertyGridToolStripAccessibleObject
             /// </summary>
-            /// <param name="owningDocComment">The owning DocComment control.</param>
+            /// <param name="owningPropertyGridToolStrip">The PropertyGridToolStrip owning control.</param>
             /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-            public DocCommentAccessibleObject(DocComment owningDocComment, PropertyGrid parentPropertyGrid) : base(owningDocComment)
+            public PropertyGridToolStripAccessibleObject(PropertyGridToolStrip owningPropertyGridToolStrip, PropertyGrid parentPropertyGrid) : base(owningPropertyGridToolStrip)
             {
                 _parentPropertyGrid = parentPropertyGrid;
             }
@@ -35,10 +34,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (_parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
+                if (_parentPropertyGrid.IsHandleCreated &&
+                    _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
                     UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                    if (navigationTarget is not null)
+                    if (navigationTarget != null)
                     {
                         return navigationTarget;
                     }
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ToolBarControlTypeId,
                     UiaCore.UIA.NamePropertyId => Name,
                     _ => base.GetPropertyValue(propertyID)
                 };
@@ -65,12 +65,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     string name = Owner?.AccessibleName;
-                    if (name is not null)
+                    if (name != null)
                     {
                         return name;
                     }
 
-                    return string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
+                    return _parentPropertyGrid?.AccessibilityObject.Name;
                 }
             }
         }
