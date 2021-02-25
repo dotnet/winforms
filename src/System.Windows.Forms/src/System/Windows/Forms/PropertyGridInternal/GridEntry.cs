@@ -2389,7 +2389,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 textRectangle,
                 textColor,
                 backColor,
-                (TextFormatFlags)format);
+                (TextFormatFlags)format | PropertyGrid.MeasureTextHelper.GetTextRendererFlags());
 
             ValueToolTipLocation = doToolTip ? new Point(rect.X + 2, rect.Y - 1) : InvalidPoint;
         }
