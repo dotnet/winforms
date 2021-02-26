@@ -1,0 +1,33 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+#nullable disable
+
+namespace System.Windows.Forms
+{
+    public partial class ToolStripStatusLabel
+    {
+        /// <summary>
+        ///  This class performs internal layout for the "split button button" portion of a split button.
+        ///  Its main job is to make sure the inner button has the same parent as the split button, so
+        ///  that layout can be performed using the correct graphics context.
+        /// </summary>
+        private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout
+        {
+            readonly ToolStripStatusLabel owner;
+
+            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner) : base(owner)
+            {
+                this.owner = owner;
+            }
+
+            protected override ToolStripItemLayoutOptions CommonLayoutOptions()
+            {
+                ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
+                layoutOptions.BorderSize = 0;
+                return layoutOptions;
+            }
+        }
+    }
+}
