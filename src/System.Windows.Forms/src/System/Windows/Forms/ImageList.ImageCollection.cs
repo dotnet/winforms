@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     {
         // Everything other than set_All, Add, and Clear will force handle creation.
         [Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        public sealed class ImageCollection : IList
+        public sealed partial class ImageCollection : IList
         {
             private readonly ImageList _owner;
             private readonly ArrayList _imageInfoCollection = new ArrayList();
@@ -612,11 +612,6 @@ namespace System.Windows.Forms
                 }
 
                 ((ImageInfo)_imageInfoCollection[index]).Name = name;
-            }
-
-            internal class ImageInfo
-            {
-                public string Name { get; set; }
             }
         }
     }
