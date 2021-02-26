@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -387,25 +386,6 @@ namespace System.Windows.Forms
                 return true;
             }
             return false;
-        }
-
-        /// <summary>
-        ///  This class performs internal layout for the "split button button" portion of a split button.
-        ///  Its main job is to make sure the inner button has the same parent as the split button, so
-        ///  that layout can be performed using the correct graphics context.
-        /// </summary>
-        private class ToolStripLabelLayout : ToolStripItemInternalLayout
-        {
-            public ToolStripLabelLayout(ToolStripLabel owner) : base(owner)
-            {
-            }
-
-            protected override ToolStripItemLayoutOptions CommonLayoutOptions()
-            {
-                ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
-                layoutOptions.BorderSize = 0;
-                return layoutOptions;
-            }
         }
     }
 }
