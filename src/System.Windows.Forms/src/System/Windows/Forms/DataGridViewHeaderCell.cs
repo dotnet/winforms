@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Identifies a cell in the dataGridView.
     /// </summary>
-    public class DataGridViewHeaderCell : DataGridViewCell
+    public partial class DataGridViewHeaderCell : DataGridViewCell
     {
         private const byte ThemeMargin = 100; // Used to calculate the margins required for theming rendering
 
@@ -626,28 +626,6 @@ namespace System.Windows.Forms
             Debug.Assert(DataGridView is not null);
             ButtonStatePrivate = newButtonState;
             DataGridView.InvalidateCell(ColumnIndex, rowIndex);
-        }
-
-        private class DataGridViewHeaderCellRenderer
-        {
-            private static VisualStyleRenderer visualStyleRenderer;
-
-            private DataGridViewHeaderCellRenderer()
-            {
-            }
-
-            public static VisualStyleRenderer VisualStyleRenderer
-            {
-                get
-                {
-                    if (visualStyleRenderer is null)
-                    {
-                        visualStyleRenderer = new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
-                    }
-
-                    return visualStyleRenderer;
-                }
-            }
         }
     }
 }
