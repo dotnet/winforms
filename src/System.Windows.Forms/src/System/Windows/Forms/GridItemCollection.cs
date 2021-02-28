@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -17,7 +15,7 @@ namespace System.Windows.Forms
 
         private protected GridItem[] _entries;
 
-        internal GridItemCollection(GridItem[] entries)
+        internal GridItemCollection(GridItem[]? entries)
         {
             _entries = entries ?? Array.Empty<GridItem>();
         }
@@ -36,7 +34,7 @@ namespace System.Windows.Forms
         /// </summary>
         public GridItem this[int index] => _entries[index];
 
-        public GridItem this[string label]
+        public GridItem? this[string label]
         {
             get
             {
