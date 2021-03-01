@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     ///  formats. Provides <see langword='static'/> methods to create new
     /// <see cref='Clipboard'/> formats and add them to the Windows Registry.
     /// </summary>
-    public static class DataFormats
+    public static partial class DataFormats
     {
         /// <summary>
         ///  Specifies the standard ANSI text format. This <see langword='static'/>
@@ -285,32 +285,6 @@ namespace System.Windows.Forms
 
                 s_formatCount = s_formatList.Length;
             }
-        }
-
-        /// <summary>
-        ///  Represents a format type.
-        /// </summary>
-        public class Format
-        {
-            /// <summary>
-            ///  Initializes a new instance of the <see cref='Format'/> class and
-            ///  specifies whether a Win32 handle is expected with this format.
-            /// </summary>
-            public Format(string name, int id)
-            {
-                Name = name;
-                Id = id;
-            }
-
-            /// <summary>
-            ///  Specifies the name of this format.
-            /// </summary>
-            public string Name { get; }
-
-            /// <summary>
-            ///  Specifies the ID number for this format.
-            /// </summary>
-            public int Id { get; }
         }
     }
 }
