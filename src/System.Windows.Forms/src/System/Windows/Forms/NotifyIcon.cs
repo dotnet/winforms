@@ -5,9 +5,7 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
 
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
     [Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign)]
     [ToolboxItemFilter("System.Windows.Forms")]
     [SRDescription(nameof(SR.DescriptionNotifyIcon))]
-    public sealed class NotifyIcon : Component
+    public sealed partial class NotifyIcon : Component
     {
         internal const int MaxTextSize = 127;
         private static readonly object EVENT_MOUSEDOWN = new object();
@@ -815,69 +813,6 @@ namespace System.Windows.Forms
 
                     window.DefWndProc(ref msg);
                     break;
-            }
-        }
-
-        /// <summary>
-        ///  Defines a placeholder window that the NotifyIcon is attached to.
-        /// </summary>
-        private class NotifyIconNativeWindow : NativeWindow
-        {
-            internal NotifyIcon reference;
-            private GCHandle rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
-
-            /// <summary>
-            ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.
-            /// </summary>
-            internal NotifyIconNativeWindow(NotifyIcon component)
-            {
-                reference = component;
-            }
-
-            ~NotifyIconNativeWindow()
-            {
-                // This same post is done in Control's Dispose method, so if you change
-                // it, change it there too.
-                //
-                if (Handle != IntPtr.Zero)
-                {
-                    User32.PostMessageW(this, User32.WM.CLOSE);
-                }
-
-                // This releases the handle from our window proc, re-routing it back to
-                // the system.
-            }
-
-            public void LockReference(bool locked)
-            {
-                if (locked)
-                {
-                    if (!rootRef.IsAllocated)
-                    {
-                        rootRef = GCHandle.Alloc(reference, GCHandleType.Normal);
-                    }
-                }
-                else
-                {
-                    if (rootRef.IsAllocated)
-                    {
-                        rootRef.Free();
-                    }
-                }
-            }
-
-            protected override void OnThreadException(Exception e)
-            {
-                Application.OnThreadException(e);
-            }
-
-            /// <summary>
-            ///  Pass messages on to the NotifyIcon object's wndproc handler.
-            /// </summary>
-            protected override void WndProc(ref Message m)
-            {
-                Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
-                reference.WndProc(ref m);
             }
         }
     }

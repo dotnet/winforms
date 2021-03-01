@@ -6,11 +6,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -225,28 +223,6 @@ namespace System.Windows.Forms
                 }
 
                 PaintText(e.Graphics);
-            }
-        }
-
-        /// <summary>
-        ///  This class performs internal layout for the "split button button" portion of a split button.
-        ///  Its main job is to make sure the inner button has the same parent as the split button, so
-        ///  that layout can be performed using the correct graphics context.
-        /// </summary>
-        private class ToolStripStatusLabelLayout : ToolStripItemInternalLayout
-        {
-            readonly ToolStripStatusLabel owner;
-
-            public ToolStripStatusLabelLayout(ToolStripStatusLabel owner) : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            protected override ToolStripItemLayoutOptions CommonLayoutOptions()
-            {
-                ToolStripItemLayoutOptions layoutOptions = base.CommonLayoutOptions();
-                layoutOptions.BorderSize = 0;
-                return layoutOptions;
             }
         }
     }
