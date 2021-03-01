@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.IO;
-using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
 
@@ -18,7 +17,7 @@ namespace System.Windows.Forms
     ///  cannot be inherited.
     /// </summary>
     [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
-    public sealed class OpenFileDialog : FileDialog
+    public sealed partial class OpenFileDialog : FileDialog
     {
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box displays a
@@ -183,21 +182,6 @@ namespace System.Windows.Forms
         private protected override bool SettingsSupportVistaDialog
         {
             get => base.SettingsSupportVistaDialog && !ShowReadOnly;
-        }
-
-        [ComImport]
-        [Guid("d57c7288-d4ad-4768-be02-9d969532d960")]
-        [CoClass(typeof(FileOpenDialogRCW))]
-        internal interface NativeFileOpenDialog : IFileOpenDialog
-        {
-        }
-
-        [ComImport]
-        [ClassInterface(ClassInterfaceType.None)]
-        [TypeLibType(TypeLibTypeFlags.FCanCreate)]
-        [Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7")]
-        internal class FileOpenDialogRCW
-        {
         }
     }
 }
