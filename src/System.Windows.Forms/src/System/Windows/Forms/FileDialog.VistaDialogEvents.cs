@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 using static Interop.Shell32;
 
@@ -13,16 +11,16 @@ namespace System.Windows.Forms
     {
         private class VistaDialogEvents : IFileDialogEvents
         {
-            private readonly FileDialog _dialog;
+            private readonly FileDialog _ownerDialog;
 
             public VistaDialogEvents(FileDialog dialog)
             {
-                _dialog = dialog;
+                _ownerDialog = dialog;
             }
 
             public HRESULT OnFileOk(IFileDialog pfd)
             {
-                return _dialog.HandleVistaFileOk(pfd) ? HRESULT.S_OK : HRESULT.S_FALSE;
+                return _ownerDialog.HandleVistaFileOk(pfd) ? HRESULT.S_OK : HRESULT.S_FALSE;
             }
 
             public HRESULT OnFolderChanging(IFileDialog pfd, IShellItem psiFolder)
