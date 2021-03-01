@@ -9909,11 +9909,11 @@ System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
 ~System.Windows.Forms.Form.RemoveOwnedForm(System.Windows.Forms.Form ownedForm) -> void
 ~System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window owner) -> void
 ~System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
-~System.Windows.Forms.GridItem.Tag.get -> object
-~System.Windows.Forms.GridItem.Tag.set -> void
-~System.Windows.Forms.GridItemCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.GridItemCollection.this[int index].get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.GridItemCollection.this[string label].get -> System.Windows.Forms.GridItem
+System.Windows.Forms.GridItem.Tag.get -> object?
+System.Windows.Forms.GridItem.Tag.set -> void
+System.Windows.Forms.GridItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.GridItemCollection.this[int index].get -> System.Windows.Forms.GridItem!
+System.Windows.Forms.GridItemCollection.this[string! label].get -> System.Windows.Forms.GridItem?
 System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
@@ -11027,11 +11027,11 @@ System.Windows.Forms.WebBrowserNavigatedEventArgs.WebBrowserNavigatedEventArgs(S
 ~abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
 ~abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string
 ~abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object feature) -> System.Version
-~abstract System.Windows.Forms.GridItem.GridItems.get -> System.Windows.Forms.GridItemCollection
-~abstract System.Windows.Forms.GridItem.Label.get -> string
-~abstract System.Windows.Forms.GridItem.Parent.get -> System.Windows.Forms.GridItem
-~abstract System.Windows.Forms.GridItem.PropertyDescriptor.get -> System.ComponentModel.PropertyDescriptor
-~abstract System.Windows.Forms.GridItem.Value.get -> object
+abstract System.Windows.Forms.GridItem.GridItems.get -> System.Windows.Forms.GridItemCollection!
+abstract System.Windows.Forms.GridItem.Label.get -> string?
+abstract System.Windows.Forms.GridItem.Parent.get -> System.Windows.Forms.GridItem?
+abstract System.Windows.Forms.GridItem.PropertyDescriptor.get -> System.ComponentModel.PropertyDescriptor?
+abstract System.Windows.Forms.GridItem.Value.get -> object?
 ~abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList items) -> void
 ~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
@@ -12324,7 +12324,7 @@ override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Form
 ~static System.Windows.Forms.FeatureSupport.IsPresent(string featureClassName, string featureConstName, System.Version minimumVersion) -> bool
 ~static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form
 ~static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font font) -> System.Drawing.SizeF
-~static System.Windows.Forms.GridItemCollection.Empty -> System.Windows.Forms.GridItemCollection
+static System.Windows.Forms.GridItemCollection.Empty -> System.Windows.Forms.GridItemCollection!
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
