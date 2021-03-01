@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -982,6 +983,8 @@ namespace System.Windows.Forms
             {
                 UpdateStateToListView(index);
             }
+
+            KeyboardToolTipStateMachine.Instance.Hook(this, listView.KeyboardToolTip);
         }
 
         /// <summary>
@@ -1119,6 +1122,11 @@ namespace System.Windows.Forms
             if (listView != null && (listView.Site is null || !listView.Site.DesignMode) && group != null)
             {
                 group.Items.Remove(this);
+            }
+
+            if (listView is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.Unhook(this, listView.KeyboardToolTip);
             }
 
             // Make sure you do these last, as the first several lines depends on this information
@@ -1290,9 +1298,6 @@ namespace System.Windows.Forms
             }
         }
 
-        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            Serialize(info, context);
-        }
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) => Serialize(info, context);
     }
 }

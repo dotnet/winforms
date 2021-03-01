@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1401,6 +1401,39 @@ namespace System.Windows.Forms.Tests
             ISerializable iSerializable = group;
             var context = new StreamingContext();
             Assert.Throws<ArgumentNullException>("info", () => iSerializable.GetObjectData(null, context));
+        }
+
+        [WinFormsFact]
+        public void ListViewGroup_InvokeAdd_DoesNotAddTreeViewItemToList()
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem = new ListViewItem();
+            ListViewItem listViewItemGroup = new ListViewItem();
+            ListViewGroup listViewGroup = new ListViewGroup();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Groups.Add(listViewGroup);
+            listView.Items.Add(listViewItem);
+            listViewGroup.Items.Add(listViewItemGroup);
+
+            Assert.True(accessor.IsToolTracked(listViewItem));
+            Assert.False(accessor.IsToolTracked(listViewItemGroup));
+        }
+
+        [WinFormsFact]
+        public void ListViewGroup_InvokeRemove_DoesNotRemoveTreeViewItemFromList()
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem = new ListViewItem();
+            ListViewGroup listViewGroup = new ListViewGroup();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Groups.Add(listViewGroup);
+            listView.Items.Add(listViewItem);
+            listViewGroup.Items.Add(listViewItem);
+
+            Assert.True(accessor.IsToolTracked(listViewItem));
+
+            listViewGroup.Items.Remove(listViewItem);
+            Assert.True(accessor.IsToolTracked(listViewItem));
         }
     }
 }

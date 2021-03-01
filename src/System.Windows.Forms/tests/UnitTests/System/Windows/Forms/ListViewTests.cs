@@ -4794,6 +4794,161 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(true, true)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public unsafe void ListView_InvokeGetToolInfoWrapper_ReturnsExpected(bool showItemToolTips, bool useKeyboardToolTip)
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = showItemToolTips;
+            ToolTip toolTip = useKeyboardToolTip ? listView.KeyboardToolTip : new ToolTip();
+            ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+
+            Assert.Equal("Test caption", wrapper.Text);
+            //Assert.Equal method does not work because char* cannot be used as an argument to it
+            Assert.Equal(string.Empty, new string(wrapper.Info.lpszText));
+        }
+
+        [WinFormsFact]
+        public unsafe void ListView_ShowNodesEnabled_ExternalToolTip_InvokeGetToolInfoWrapper_ReturnsExpected()
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = true;
+            ToolTip toolTip = new ToolTip();
+            ComCtl32.ToolInfoWrapper<Control> wrapper = listView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+            char* expected = (char*)(-1);
+
+            Assert.Null(wrapper.Text);
+            //Assert.Equal method does not work because char* cannot be used as an argument to it
+            Assert.True(wrapper.Info.lpszText == expected);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListView_InvokeAdd_AddListViewItemToTrackList(bool showItemToolTips)
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = showItemToolTips;
+            ListViewItem listViewItem = new ListViewItem();
+            listView.Items.Add(listViewItem);
+
+            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListView_InvokeAddRange_AddlistViewItemsToTrackList(bool showItemToolTips)
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = showItemToolTips;
+            ListViewItem listViewItem1 = new ListViewItem();
+            ListViewItem listViewItem2 = new ListViewItem();
+            ListViewItem listViewItem3 = new ListViewItem();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+
+            listView.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2, listViewItem3 });
+
+            Assert.True(accessor.IsToolTracked(listViewItem1));
+            Assert.True(accessor.IsToolTracked(listViewItem2));
+            Assert.True(accessor.IsToolTracked(listViewItem3));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListView_InvokeInsert_AddlistViewItemToTrackList(bool showItemToolTips)
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = showItemToolTips;
+            ListViewItem listViewItem = new ListViewItem();
+            listView.Items.Insert(0, listViewItem);
+
+            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListView_InvokeRemove_RemoveListViewItemFromTrackList(bool showItemToolTips)
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = showItemToolTips;
+            ListViewItem listViewItem = new ListViewItem();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Items.Add(listViewItem);
+
+            Assert.True(accessor.IsToolTracked(listViewItem));
+
+            listView.Items.Remove(listViewItem);
+            Assert.False(accessor.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListView_InvokeDispose_RemoveListViewItemFromTrackList(bool showItemToolTips)
+        {
+            using var listView = new ListView();
+            listView.ShowItemToolTips = showItemToolTips;
+            ListViewItem listViewItem = new ListViewItem();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Items.Add(listViewItem);
+
+            Assert.True(accessor.Dynamic.IsToolTracked(listViewItem));
+
+            listView.Dispose();
+            Assert.False(accessor.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsFact]
+        public void ListView_NormalMode_InvokeNotifyAboutGotFocus_DoesNotAddListViewItemToTrackList()
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem = new ListViewItem();
+            listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
+            Assert.False((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsFact]
+        public void ListView_VirtualMode_InvokeNotifyAboutGotFocus_AddListViewItemToTrackList()
+        {
+            using var listView = new ListView() { VirtualMode = true };
+            ListViewItem listViewItem = new ListViewItem();
+            listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
+            Assert.True((bool)KeyboardToolTipStateMachine.Instance.TestAccessor().Dynamic.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsFact]
+        public void ListView_NormalMode_InvokeNotifyAboutLostFocus_DoesNotRemoveListViewItemFromTrackList()
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem = new ListViewItem();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Items.Add(listViewItem);
+
+            Assert.True(accessor.IsToolTracked(listViewItem));
+
+            listView.TestAccessor().Dynamic.NotifyAboutLostFocus(listViewItem);
+            Assert.True(accessor.IsToolTracked(listViewItem));
+        }
+
+        [WinFormsFact]
+        public void ListView_VirtualMode_InvokeNotifyAboutLostFocus_RemoveListViewItemFromTrackList()
+        {
+            using var listView = new ListView() { VirtualMode = true };
+            ListViewItem listViewItem = new ListViewItem();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+
+            listView.TestAccessor().Dynamic.NotifyAboutGotFocus(listViewItem);
+            Assert.True(accessor.IsToolTracked(listViewItem));
+
+            listView.TestAccessor().Dynamic.NotifyAboutLostFocus(listViewItem);
+            Assert.False(accessor.IsToolTracked(listViewItem));
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }
