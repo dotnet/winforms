@@ -602,6 +602,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal ToolTip KeyboardToolTip { get; } = new ToolTip();
+
         /// <summary>
         ///  The currently checked list items.
         /// </summary>
@@ -3048,6 +3050,13 @@ namespace System.Windows.Forms
                     columnHeaders = null;
                 }
 
+                // We do not store data about items when the ListView is in virtual mode,
+                // so "Unhook" method is only called for normal mode
+                if (!VirtualMode)
+                {
+                    Unhook();
+                }
+
                 // Remove any items we have
                 Items.Clear();
 
@@ -3095,6 +3104,8 @@ namespace System.Windows.Forms
                     bkImgFileNames = null;
                     bkImgFileNamesCount = -1;
                 }
+
+                KeyboardToolTip.Dispose();
             }
 
             base.Dispose(disposing);
@@ -3507,8 +3518,11 @@ namespace System.Windows.Forms
         {
             // The "ShowItemToolTips" flag is required so that when the user hovers over the ListViewItem,
             // their own tooltip is displayed, not the ListViewItem tooltip.
-            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, ShowItemToolTips ? null : caption);
-            if (ShowItemToolTips)
+            // The second condition is necessary for the correct display of the keyboard tooltip,
+            // since the logic of the external tooltip blocks its display
+            bool isExternalTooltip = ShowItemToolTips && tooltip != KeyboardToolTip;
+            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, isExternalTooltip ? null : caption);
+            if (isExternalTooltip)
                 wrapper.Info.lpszText = (char*)(-1);
 
             return wrapper;
@@ -3755,6 +3769,36 @@ namespace System.Windows.Forms
             else
             {
                 return new ListViewHitTestInfo(item, null, location);
+            }
+        }
+
+        private void NotifyAboutGotFocus(ListViewItem listViewItem)
+        {
+            if (listViewItem is not null)
+            {
+                // We do not store data about items when the ListView is in virtual mode, so we need to execute
+                // the "Hook" method just before displaying the tooltip.
+                if (VirtualMode)
+                {
+                    KeyboardToolTipStateMachine.Instance.Hook(listViewItem, KeyboardToolTip);
+                }
+
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(listViewItem);
+            }
+        }
+
+        private void NotifyAboutLostFocus(ListViewItem listViewItem)
+        {
+            if (listViewItem is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(listViewItem);
+
+                // We do not store data about items when the ListView is in virtual mode, so we need to execute
+                // the "Unhook" method just after hiding the tooltip.
+                if (VirtualMode)
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(listViewItem, KeyboardToolTip);
+                }
             }
         }
 
@@ -4657,10 +4701,22 @@ namespace System.Windows.Forms
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
+
+            if (ShowItemToolTips && Items.Count > 0 && (FocusedItem ?? Items[0]) is ListViewItem focusedItem)
+            {
+                NotifyAboutGotFocus(focusedItem);
+            }
+
             if (IsHandleCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
             {
                 focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            NotifyAboutLostFocus(FocusedItem);
+            base.OnLostFocus(e);
         }
 
         /// <summary>
@@ -6165,6 +6221,14 @@ namespace System.Windows.Forms
             return lvhi;
         }
 
+        private void Unhook()
+        {
+            foreach(ListViewItem listViewItem in Items)
+            {
+                KeyboardToolTipStateMachine.Instance.Unhook(listViewItem, KeyboardToolTip);
+            }
+        }
+
         private int UpdateGroupCollapse(Interop.User32.WM clickType)
         {
             // see if the mouse event occurred on a group
@@ -6353,6 +6417,27 @@ namespace System.Windows.Forms
 
                                 AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
                                 AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
+                            }
+
+                            int indexItem = nmlv->iItem;
+
+                            // This code handles a change in the state of an item. We get here twice.
+                            // The first time the focus goes off the old item, then we hide the tooltip.
+                            // The second time the next item receives focus and we show a tooltip for it.
+                            if (indexItem >= 0 && indexItem < Items.Count)
+                            {
+                                if (ShowItemToolTips)
+                                {
+                                    ListViewItem item = Items[indexItem];
+                                    if (item.Focused)
+                                    {
+                                        NotifyAboutGotFocus(item);
+                                    }
+                                    else
+                                    {
+                                        NotifyAboutLostFocus(item);
+                                    }
+                                }
                             }
 
                             LVIS oldState = nmlv->uOldState & LVIS.SELECTED;
@@ -6578,6 +6663,10 @@ namespace System.Windows.Forms
                         {
                             NMLVGETINFOTIPW* infoTip = (NMLVGETINFOTIPW*)m.LParam;
                             ListViewItem lvi = Items[infoTip->item];
+
+                            // This code is needed to hide the keyboard tooltip before showing the mouse tooltip
+                            NotifyAboutLostFocus(FocusedItem);
+
                             if (lvi != null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
