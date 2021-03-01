@@ -6,12 +6,11 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms
 {
     [DefaultProperty(nameof(Value))]
-    public class ToolStripProgressBar : ToolStripControlHost
+    public partial class ToolStripProgressBar : ToolStripControlHost
     {
         internal static readonly object EventRightToLeftLayoutChanged = new object();
 
@@ -386,62 +385,6 @@ namespace System.Windows.Forms
         public void PerformStep()
         {
             ProgressBar.PerformStep();
-        }
-
-        internal class ToolStripProgressBarControl : ProgressBar
-        {
-            private ToolStripProgressBar ownerItem;
-
-            public ToolStripProgressBar Owner
-            {
-                get { return ownerItem; }
-                set { ownerItem = value; }
-            }
-
-            internal override bool SupportsUiaProviders => true;
-
-            protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new ToolStripProgressBarControlAccessibleObject(this);
-            }
-        }
-
-        internal class ToolStripProgressBarControlAccessibleObject : ProgressBar.ProgressBarAccessibleObject
-        {
-            private readonly ToolStripProgressBarControl _ownerToolStripProgressBarControl;
-
-            public ToolStripProgressBarControlAccessibleObject(ToolStripProgressBarControl toolStripProgressBarControl) : base(toolStripProgressBarControl)
-            {
-                _ownerToolStripProgressBarControl = toolStripProgressBarControl;
-            }
-
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _ownerToolStripProgressBarControl.Owner.Owner.AccessibilityObject;
-                }
-            }
-
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                    case UiaCore.NavigateDirection.NextSibling:
-                        return _ownerToolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerToolStripProgressBarControl.Owner.Placement, Bounds),
-                    _ => base.GetPropertyValue(propertyID)
-                };
         }
     }
 }
