@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     ///  <see cref='DataGridView'/> control.
     /// </summary>
     [ListBindable(false)]
-    public class DataGridViewColumnCollection : BaseCollection, IList
+    public partial class DataGridViewColumnCollection : BaseCollection, IList
     {
         private CollectionChangeEventHandler _onCollectionChanged;
         private readonly ArrayList _items = new ArrayList();
@@ -1204,25 +1204,5 @@ namespace System.Windows.Forms
         }
 #endif
 
-        private class ColumnOrderComparer : IComparer
-        {
-            public ColumnOrderComparer()
-            {
-            }
-
-            public int Compare(object x, object y)
-            {
-                Debug.Assert(x is not null);
-                Debug.Assert(y is not null);
-
-                DataGridViewColumn dataGridViewColumn1 = x as DataGridViewColumn;
-                DataGridViewColumn dataGridViewColumn2 = y as DataGridViewColumn;
-
-                Debug.Assert(dataGridViewColumn1 is not null);
-                Debug.Assert(dataGridViewColumn2 is not null);
-
-                return dataGridViewColumn1.DisplayIndex - dataGridViewColumn2.DisplayIndex;
-            }
-        }
     }
 }
