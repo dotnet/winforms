@@ -511,27 +511,5 @@ namespace System.Windows.Forms
         {
             return $"{nameof(ColumnHeader)}: Text: {Text}";
         }
-
-        internal class ColumnHeaderImageListIndexer : ImageList.Indexer
-        {
-            private readonly ColumnHeader _owner;
-
-            public ColumnHeaderImageListIndexer(ColumnHeader ch)
-            {
-                _owner = ch;
-            }
-
-            public override ImageList ImageList
-            {
-                get
-                {
-                    return _owner.ListView?.SmallImageList;
-                }
-                set
-                {
-                    Debug.Assert(false, "We should never set the image list");
-                }
-            }
-        }
     }
 }
