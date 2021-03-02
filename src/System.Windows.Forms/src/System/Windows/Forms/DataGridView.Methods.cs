@@ -14861,6 +14861,14 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Refresh items when the DataSource is disposed.
+        /// </summary>
+        private void OnDataSourceDisposed(object sender, EventArgs e)
+        {
+            DataSource = null;
+        }
+
         protected virtual void OnDefaultCellStyleChanged(EventArgs e)
         {
             if (e is DataGridViewCellStyleChangedEventArgs dgvcsce && !dgvcsce.ChangeAffectsPreferredSize)
