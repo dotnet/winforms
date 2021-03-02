@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class PropertyGridTests : IClassFixture<ThreadExceptionFixture>
+    public partial class PropertyGridTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void PropertyGrid_Ctor_Default()
@@ -168,6 +168,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.WindowText, control.ViewForeColor);
             Assert.False(control.VScroll);
             Assert.Equal(130, control.Width);
+
+            PropertyGridView propertyGridView = control.TestAccessor().GridView;
+            Assert.NotNull(propertyGridView);
 
             Assert.False(control.IsHandleCreated);
         }

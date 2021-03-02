@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using static Interop;
@@ -603,7 +604,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static ApplyGraphicsProperties GetApplyStateFlags(IDeviceContext deviceContext, TextFormatFlags textFormatFlags)
         {
-            if (deviceContext is not Graphics)
+            if (deviceContext is not Graphics graphics)
             {
                 return ApplyGraphicsProperties.None;
             }
@@ -618,6 +619,16 @@ namespace System.Windows.Forms
             {
                 apply |= ApplyGraphicsProperties.TranslateTransform;
             }
+
+            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
+                || graphics.Clip is null
+                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+                "Must preserve Graphics clipping region!");
+
+            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
+                || graphics.Transform is null
+                || graphics.Transform.IsIdentity,
+                "Must preserve Graphics transformation!");
 
             return apply;
         }
