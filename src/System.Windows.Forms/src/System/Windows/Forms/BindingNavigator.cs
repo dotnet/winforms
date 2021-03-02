@@ -768,6 +768,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Refresh tool strip items when the BindingSource is disposed.
+        /// </summary>
+        private void OnBindingSourceDisposed(object sender, EventArgs e)
+        {
+            BindingSource = null;
+        }
+
+        /// <summary>
         ///  Refresh tool strip items when something changes in the BindingSource's list.
         /// </summary>
         private void OnBindingSourceListChanged(object sender, ListChangedEventArgs e)
@@ -895,6 +903,7 @@ namespace System.Windows.Forms
                     oldBindingSource.DataSourceChanged -= new EventHandler(OnBindingSourceStateChanged);
                     oldBindingSource.DataMemberChanged -= new EventHandler(OnBindingSourceStateChanged);
                     oldBindingSource.ListChanged -= new ListChangedEventHandler(OnBindingSourceListChanged);
+                    oldBindingSource.Disposed -= new EventHandler(OnBindingSourceDisposed);
                 }
 
                 if (newBindingSource != null)
@@ -905,6 +914,7 @@ namespace System.Windows.Forms
                     newBindingSource.DataSourceChanged += new EventHandler(OnBindingSourceStateChanged);
                     newBindingSource.DataMemberChanged += new EventHandler(OnBindingSourceStateChanged);
                     newBindingSource.ListChanged += new ListChangedEventHandler(OnBindingSourceListChanged);
+                    newBindingSource.Disposed += new EventHandler(OnBindingSourceDisposed);
                 }
 
                 oldBindingSource = newBindingSource;
