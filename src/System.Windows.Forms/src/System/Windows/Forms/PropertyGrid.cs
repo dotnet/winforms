@@ -102,8 +102,8 @@ namespace System.Windows.Forms
 
         private const int ToolStripButtonPaddingY = 9;
         private int _toolStripButtonPaddingY = ToolStripButtonPaddingY;
-        private static readonly Size s_defaultLargeButtonSize = new Size(32, 32);
-        private static readonly Size s_defaultNormalButtonSize = new Size(16, 16);
+        private static readonly Size s_defaultLargeButtonSize = new(32, 32);
+        private static readonly Size s_defaultNormalButtonSize = new(16, 16);
         private static Size s_largeButtonSize = s_defaultLargeButtonSize;
         private static Size s_normalButtonSize = s_defaultNormalButtonSize;
         private static bool s_isScalingInitialized;
@@ -119,45 +119,45 @@ namespace System.Windows.Forms
         private const ushort BatchModeChange = 0x0100;
         private const ushort RefreshingProperties = 0x0200;
 
-        private ushort Flags;
+        private ushort _flags;
 
         private bool GetFlag(ushort flag)
         {
-            return (Flags & flag) != (ushort)0;
+            return (_flags & flag) != (ushort)0;
         }
 
         private void SetFlag(ushort flag, bool value)
         {
             if (value)
             {
-                Flags |= flag;
+                _flags |= flag;
             }
             else
             {
-                Flags &= (ushort)~flag;
+                _flags &= (ushort)~flag;
             }
         }
 
-        private readonly ComponentEventHandler onComponentAdd;
-        private readonly ComponentEventHandler onComponentRemove;
-        private readonly ComponentChangedEventHandler onComponentChanged;
+        private readonly ComponentEventHandler _onComponentAdd;
+        private readonly ComponentEventHandler _onComponentRemove;
+        private readonly ComponentChangedEventHandler _onComponentChanged;
 
         // the cookies for our connection points on objects that support IPropertyNotifySink
         //
-        private AxHost.ConnectionPointCookie[] connectionPointCookies;
+        private AxHost.ConnectionPointCookie[] _connectionPointCookies;
 
-        private static readonly object EventPropertyValueChanged = new object();
-        private static readonly object EventComComponentNameChanged = new object();
-        private static readonly object EventPropertyTabChanged = new object();
-        private static readonly object EventSelectedGridItemChanged = new object();
-        private static readonly object EventPropertySortChanged = new object();
-        private static readonly object EventSelectedObjectsChanged = new object();
+        private static readonly object EventPropertyValueChanged = new();
+        private static readonly object EventComComponentNameChanged = new();
+        private static readonly object EventPropertyTabChanged = new();
+        private static readonly object EventSelectedGridItemChanged = new();
+        private static readonly object EventPropertySortChanged = new();
+        private static readonly object EventSelectedObjectsChanged = new();
 
         public PropertyGrid()
         {
-            onComponentAdd = new ComponentEventHandler(OnComponentAdd);
-            onComponentRemove = new ComponentEventHandler(OnComponentRemove);
-            onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
+            _onComponentAdd = new ComponentEventHandler(OnComponentAdd);
+            _onComponentRemove = new ComponentEventHandler(OnComponentRemove);
+            _onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
 
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
@@ -288,9 +288,9 @@ namespace System.Windows.Forms
                         IComponentChangeService cs = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
                         if (cs != null)
                         {
-                            cs.ComponentAdded -= onComponentAdd;
-                            cs.ComponentRemoved -= onComponentRemove;
-                            cs.ComponentChanged -= onComponentChanged;
+                            cs.ComponentAdded -= _onComponentAdd;
+                            cs.ComponentRemoved -= _onComponentRemove;
+                            cs.ComponentChanged -= _onComponentChanged;
                         }
 
                         IPropertyValueUIService pvSvc = (IPropertyValueUIService)_designerHost.GetService(typeof(IPropertyValueUIService));
@@ -311,9 +311,9 @@ namespace System.Windows.Forms
                         IComponentChangeService cs = (IComponentChangeService)value.GetService(typeof(IComponentChangeService));
                         if (cs != null)
                         {
-                            cs.ComponentAdded += onComponentAdd;
-                            cs.ComponentRemoved += onComponentRemove;
-                            cs.ComponentChanged += onComponentChanged;
+                            cs.ComponentAdded += _onComponentAdd;
+                            cs.ComponentRemoved += _onComponentRemove;
+                            cs.ComponentChanged += _onComponentChanged;
                         }
 
                         value.TransactionOpened += new EventHandler(OnTransactionOpened);
@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms
 
         private ToolStripSeparator CreateSeparatorButton()
         {
-            ToolStripSeparator button = new ToolStripSeparator();
+            ToolStripSeparator button = new();
             return button;
         }
 
@@ -2466,7 +2466,7 @@ namespace System.Windows.Forms
             Bitmap largeBitmap = null;
             try
             {
-                Bitmap transparentBitmap = new Bitmap(originalBitmap);
+                Bitmap transparentBitmap = new(originalBitmap);
                 largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, s_largeButtonSize);
                 transparentBitmap.Dispose();
 
@@ -3017,7 +3017,7 @@ namespace System.Windows.Forms
                     {
                         int toolStripWidth = Width;
                         int toolStripHeight = ((LargeButtons) ? s_largeButtonSize : s_normalButtonSize).Height + _toolStripButtonPaddingY;
-                        Rectangle toolStripBounds = new Rectangle(0, 1, toolStripWidth, toolStripHeight);
+                        Rectangle toolStripBounds = new(0, 1, toolStripWidth, toolStripHeight);
                         _toolStrip.Bounds = toolStripBounds;
 
                         int oldY = _gridView.Location.Y;
@@ -3569,7 +3569,7 @@ namespace System.Windows.Forms
                     if (success)
                     {
                         if (baseObject is IComponent &&
-                            connectionPointCookies[0] is null)
+                            _connectionPointCookies[0] is null)
                         {
                             ISite site = ((IComponent)baseObject).Site;
                             if (site != null)
@@ -4376,9 +4376,9 @@ namespace System.Windows.Forms
                 }
 
                 // setup our event handlers
-                EventHandler ehViewTab = new EventHandler(OnViewTabButtonClick);
-                EventHandler ehViewType = new EventHandler(OnViewSortButtonClick);
-                EventHandler ehPP = new EventHandler(OnViewButtonClickPP);
+                EventHandler ehViewTab = new(OnViewTabButtonClick);
+                EventHandler ehViewType = new(OnViewSortButtonClick);
+                EventHandler ehPP = new(OnViewButtonClickPP);
 
                 Bitmap b;
                 int i;
@@ -4640,25 +4640,25 @@ namespace System.Windows.Forms
         private void SinkPropertyNotifyEvents()
         {
             // first clear any existing sinks.
-            for (int i = 0; connectionPointCookies != null && i < connectionPointCookies.Length; i++)
+            for (int i = 0; _connectionPointCookies != null && i < _connectionPointCookies.Length; i++)
             {
-                if (connectionPointCookies[i] != null)
+                if (_connectionPointCookies[i] != null)
                 {
-                    connectionPointCookies[i].Disconnect();
-                    connectionPointCookies[i] = null;
+                    _connectionPointCookies[i].Disconnect();
+                    _connectionPointCookies[i] = null;
                 }
             }
 
             if (_currentObjects is null || _currentObjects.Length == 0)
             {
-                connectionPointCookies = null;
+                _connectionPointCookies = null;
                 return;
             }
 
             // it's okay if our array is too big...we'll just reuse it and ignore the empty slots.
-            if (connectionPointCookies is null || (_currentObjects.Length > connectionPointCookies.Length))
+            if (_connectionPointCookies is null || (_currentObjects.Length > _connectionPointCookies.Length))
             {
-                connectionPointCookies = new AxHost.ConnectionPointCookie[_currentObjects.Length];
+                _connectionPointCookies = new AxHost.ConnectionPointCookie[_currentObjects.Length];
             }
 
             for (int i = 0; i < _currentObjects.Length; i++)
@@ -4671,7 +4671,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
+                    _connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
                 }
                 catch
                 {
@@ -4840,8 +4840,8 @@ namespace System.Windows.Forms
             }
         }
 
-        private string propName;
-        private int dwMsg;
+        private string _propName;
+        private int _dwMsg;
 
         private unsafe void GetDataFromCopyData(IntPtr lparam)
         {
@@ -4849,8 +4849,8 @@ namespace System.Windows.Forms
 
             if (cds != null && cds->lpData != IntPtr.Zero)
             {
-                propName = Marshal.PtrToStringAuto(cds->lpData);
-                dwMsg = (int)cds->dwData;
+                _propName = Marshal.PtrToStringAuto(cds->lpData);
+                _dwMsg = (int)cds->dwData;
             }
         }
 
@@ -5036,9 +5036,9 @@ namespace System.Windows.Forms
                     }
 
                 case AutomationMessages.PGM_GETROWCOORDS:
-                    if (m.Msg == dwMsg)
+                    if (m.Msg == _dwMsg)
                     {
-                        m.Result = (IntPtr)_gridView.GetPropertyLocation(propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
+                        m.Result = (IntPtr)_gridView.GetPropertyLocation(_propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
                         return;
                     }
                     break;

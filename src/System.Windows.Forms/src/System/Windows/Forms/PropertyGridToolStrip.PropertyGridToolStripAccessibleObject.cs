@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ToolBarControlTypeId,
@@ -60,19 +58,7 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            public override string Name
-            {
-                get
-                {
-                    string name = Owner?.AccessibleName;
-                    if (name != null)
-                    {
-                        return name;
-                    }
-
-                    return _parentPropertyGrid?.AccessibilityObject.Name;
-                }
-            }
+            public override string? Name => Owner?.AccessibleName ?? _parentPropertyGrid?.AccessibilityObject.Name;
         }
     }
 }

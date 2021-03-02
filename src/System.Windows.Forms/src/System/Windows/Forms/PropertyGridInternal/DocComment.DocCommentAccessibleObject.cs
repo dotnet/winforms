@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -33,7 +31,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
@@ -52,7 +50,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="propertyID">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
@@ -60,19 +58,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            public override string Name
-            {
-                get
-                {
-                    string name = Owner?.AccessibleName;
-                    if (name is not null)
-                    {
-                        return name;
-                    }
-
-                    return string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
-                }
-            }
+            public override string Name => Owner?.AccessibleName
+                ?? string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
         }
     }
 }

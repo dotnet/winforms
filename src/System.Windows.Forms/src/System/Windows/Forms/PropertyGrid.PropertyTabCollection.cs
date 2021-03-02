@@ -14,11 +14,13 @@ namespace System.Windows.Forms
     {
         public class PropertyTabCollection : ICollection
         {
-            private readonly PropertyGrid _owner;
+            private readonly PropertyGrid _ownerPropertyGrid;
 
-            internal PropertyTabCollection(PropertyGrid owner)
+            internal PropertyTabCollection(PropertyGrid ownerPropertyGrid)
             {
-                _owner = owner;
+                // Probably we should throw an ArgumentNullException(nameof(ownerPropertyGrid))
+                // to make sure _ownerPropertyGrid never be null
+                _ownerPropertyGrid = ownerPropertyGrid;
             }
 
             /// <summary>
@@ -28,11 +30,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner is null)
+                    if (_ownerPropertyGrid is null)
                     {
                         return 0;
                     }
-                    return _owner._viewTabs.Length;
+                    return _ownerPropertyGrid._viewTabs.Length;
                 }
             }
 
@@ -59,30 +61,30 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner is null)
+                    if (_ownerPropertyGrid is null)
                     {
                         throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                     }
-                    return _owner._viewTabs[index];
+                    return _ownerPropertyGrid._viewTabs[index];
                 }
             }
 
             public void AddTabType(Type propertyTabType)
             {
-                if (_owner is null)
+                if (_ownerPropertyGrid is null)
                 {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
-                _owner.AddTab(propertyTabType, PropertyTabScope.Global);
+                _ownerPropertyGrid.AddTab(propertyTabType, PropertyTabScope.Global);
             }
 
             public void AddTabType(Type propertyTabType, PropertyTabScope tabScope)
             {
-                if (_owner is null)
+                if (_ownerPropertyGrid is null)
                 {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
-                _owner.AddTab(propertyTabType, tabScope);
+                _ownerPropertyGrid.AddTab(propertyTabType, tabScope);
             }
 
             /// <summary>
@@ -91,22 +93,22 @@ namespace System.Windows.Forms
             /// </summary>
             public void Clear(PropertyTabScope tabScope)
             {
-                if (_owner is null)
+                if (_ownerPropertyGrid is null)
                 {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
-                _owner.ClearTabs(tabScope);
+                _ownerPropertyGrid.ClearTabs(tabScope);
             }
 
             void ICollection.CopyTo(Array dest, int index)
             {
-                if (_owner is null)
+                if (_ownerPropertyGrid is null)
                 {
                     return;
                 }
-                if (_owner._viewTabs.Length > 0)
+                if (_ownerPropertyGrid._viewTabs.Length > 0)
                 {
-                    System.Array.Copy(_owner._viewTabs, 0, dest, index, _owner._viewTabs.Length);
+                    System.Array.Copy(_ownerPropertyGrid._viewTabs, 0, dest, index, _ownerPropertyGrid._viewTabs.Length);
                 }
             }
             /// <summary>
@@ -114,21 +116,21 @@ namespace System.Windows.Forms
             /// </summary>
             public IEnumerator GetEnumerator()
             {
-                if (_owner is null)
+                if (_ownerPropertyGrid is null)
                 {
                     return Array.Empty<PropertyTab>().GetEnumerator();
                 }
 
-                return _owner._viewTabs.GetEnumerator();
+                return _ownerPropertyGrid._viewTabs.GetEnumerator();
             }
 
             public void RemoveTabType(Type propertyTabType)
             {
-                if (_owner is null)
+                if (_ownerPropertyGrid is null)
                 {
                     throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                 }
-                _owner.RemoveTab(propertyTabType);
+                _ownerPropertyGrid.RemoveTab(propertyTabType);
             }
         }
     }

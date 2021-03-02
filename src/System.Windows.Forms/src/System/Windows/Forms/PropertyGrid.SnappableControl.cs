@@ -12,15 +12,15 @@ namespace System.Windows.Forms
     {
         internal abstract class SnappableControl : Control
         {
-            protected PropertyGrid ownerGrid;
+            protected PropertyGrid ownerPropertyGrid;
             internal bool userSized;
 
             public abstract int GetOptimalHeight(int width);
             public abstract int SnapHeightRequest(int request);
 
-            public SnappableControl(PropertyGrid ownerGrid)
+            public SnappableControl(PropertyGrid ownerPropertyGrid)
             {
-                this.ownerGrid = ownerGrid;
+                this.ownerPropertyGrid = ownerPropertyGrid;
                 SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             }
 
