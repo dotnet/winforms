@@ -4949,6 +4949,77 @@ namespace System.Windows.Forms.Tests
             Assert.False(accessor.IsToolTracked(listViewItem));
         }
 
+
+        public static IEnumerable<object[]> ListView_FindNearestItem_Invoke_TestData()
+        {
+            yield return new object[] { "1", null, null, "2", "4" };
+            yield return new object[] { "2", "1", null, "3", "5" };
+            yield return new object[] { "3", "2", null, null, "6" };
+            yield return new object[] { "4", null, "1", "5", "7" };
+            yield return new object[] { "5", "4", "2", "6", "8" };
+            yield return new object[] { "6", "5", "3", null, "9" };
+            yield return new object[] { "7", null, "4", "8", null };
+            yield return new object[] { "8", "7", "5", "9", null };
+            yield return new object[] { "9", "8", "6", null, null };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
+        public void ListView_FindNearestItem(string item, string leftitem, string upitem, string rightitem, string downitem)
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem1 = new ListViewItem("1");
+            ListViewItem listViewItem2 = new ListViewItem("2");
+            ListViewItem listViewItem3 = new ListViewItem("3");
+            ListViewItem listViewItem4 = new ListViewItem("4");
+            ListViewItem listViewItem5 = new ListViewItem("5");
+            ListViewItem listViewItem6 = new ListViewItem("6");
+            ListViewItem listViewItem7 = new ListViewItem("7");
+            ListViewItem listViewItem8 = new ListViewItem("8");
+            ListViewItem listViewItem9 = new ListViewItem("9");
+
+            using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
+
+            listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            columnHeader1,
+            columnHeader2});
+            listView.HideSelection = false;
+            var listItems = new System.Windows.Forms.ListViewItem[] {
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8,
+            listViewItem9};
+            listView.Items.AddRange(listItems);
+            listView.View = System.Windows.Forms.View.SmallIcon;
+            listView.Size = new System.Drawing.Size(200, 200);
+
+            Func<string, ListViewItem> getItem = (itemText) => listItems.Single(item => item.Text == itemText);
+            Action<ListViewItem, SearchDirectionHint, string> testTheItem = (item, direction, resultText) =>
+             {
+                 if (resultText == null)
+                 {
+                     Assert.Null(item.FindNearestItem(direction));
+                 }
+                 else
+                 {
+                     Assert.Equal(getItem(resultText),item.FindNearestItem(direction) );
+                 }
+             };
+
+            var listViewItemToTest = getItem(item);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Left, leftitem);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Down, downitem);
+
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }

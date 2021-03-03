@@ -921,20 +921,10 @@ namespace System.Windows.Forms
         public ListViewItem FindNearestItem(SearchDirectionHint searchDirection)
         {
             Rectangle r = Bounds;
-            switch (searchDirection)
-            {
-                case SearchDirectionHint.Up:
-                    return ListView.FindNearestItem(searchDirection, r.Left, r.Top);
-                case SearchDirectionHint.Down:
-                    return ListView.FindNearestItem(searchDirection, r.Left, r.Bottom);
-                case SearchDirectionHint.Left:
-                    return ListView.FindNearestItem(searchDirection, r.Left, r.Top);
-                case SearchDirectionHint.Right:
-                    return ListView.FindNearestItem(searchDirection, r.Right, r.Top);
-                default:
-                    Debug.Fail("we handled all the 4 directions");
-                    return null;
-            }
+            int xCenter = r.Left + (r.Right - r.Left) / 2;
+            int yCenter = r.Top + (r.Bottom - r.Top) / 2;
+
+            return ListView.FindNearestItem(searchDirection, xCenter, yCenter);
         }
 
         /// <summary>
