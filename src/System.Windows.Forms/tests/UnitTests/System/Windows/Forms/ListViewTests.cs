@@ -4949,7 +4949,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(accessor.IsToolTracked(listViewItem));
         }
 
-
         public static IEnumerable<object[]> ListView_FindNearestItem_Invoke_TestData()
         {
             yield return new object[] { "1", null, null, "2", "4" };
@@ -5017,7 +5016,6 @@ namespace System.Windows.Forms.Tests
             testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Down, downitem);
-
         }
 
         private class SubListViewItem : ListViewItem
