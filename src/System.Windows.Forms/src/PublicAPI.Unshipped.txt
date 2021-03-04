@@ -1,1 +1,5 @@
+System.Windows.Forms.FolderBrowserDialog.ClientGuid.get -> System.Guid?
+System.Windows.Forms.FolderBrowserDialog.ClientGuid.set -> void
+~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string
+~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
 ~override System.Windows.Forms.ListView.OnLostFocus(System.EventArgs e) -> void

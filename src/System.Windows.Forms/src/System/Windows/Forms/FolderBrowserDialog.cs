@@ -34,6 +34,9 @@ namespace System.Windows.Forms
         // Folder picked by the user.
         private string _selectedPath;
 
+        // Initial folder.
+        private string _initialDir;
+
         /// <summary>
         ///  Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
         /// </summary>
@@ -68,6 +71,24 @@ namespace System.Windows.Forms
         public bool ShowNewFolderButton { get; set; }
 
         /// <summary>
+        /// <para>
+        /// Gets or sets the GUID to associate with this dialog state. Typically, state such
+        /// as the last visited folder and the position and size of the dialog is persisted
+        /// based on the name of the executable file. By specifying a GUID, an application can
+        /// have different persisted states for different versions of the dialog within the
+        /// same application (for example, an import dialog and an open dialog).
+        /// </para>
+        /// <para>
+        /// This functionality is not available if an application is not using visual styles
+        /// or if <see cref="FolderBrowserDialog.AutoUpgradeEnabled"/> is set to <see langword="false"/>.
+        /// </para>
+        /// </summary>
+        [Localizable(false)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public Guid? ClientGuid { get; set; }
+
+        /// <summary>
         ///  Gets the directory path of the folder the user picked.
         ///  Sets the directory path of the initial folder shown in the dialog box.
         /// </summary>
@@ -81,6 +102,18 @@ namespace System.Windows.Forms
         {
             get => _selectedPath;
             set => _selectedPath = value ?? string.Empty;
+        }
+
+        /// <summary>
+        ///  Gets or sets the initial directory displayed by the folder browser dialog.
+        /// </summary>
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.FDinitialDirDescr))]
+        public string InitialDirectory
+        {
+            get => _initialDir;
+            set => _initialDir = value ?? string.Empty;
         }
 
         /// <summary>
@@ -147,7 +180,9 @@ namespace System.Windows.Forms
             _rootFolder = Environment.SpecialFolder.Desktop;
             _descriptionText = string.Empty;
             _selectedPath = string.Empty;
+            _initialDir = string.Empty;
             ShowNewFolderButton = true;
+            ClientGuid = null;
         }
 
         /// <summary>
@@ -212,6 +247,13 @@ namespace System.Windows.Forms
 
         private void SetDialogProperties(IFileDialog dialog)
         {
+            if (ClientGuid is { } clientGuid)
+            {
+                // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
+                // https://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+                dialog.SetClientGuid(clientGuid);
+            }
+
             // Description
             if (!string.IsNullOrEmpty(_descriptionText))
             {
@@ -228,10 +270,24 @@ namespace System.Windows.Forms
 
             dialog.SetOptions(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
 
+            if (!string.IsNullOrEmpty(InitialDirectory))
+            {
+                try
+                {
+                    IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
+
+                    dialog.SetDefaultFolder(initialDirectory);
+                    dialog.SetFolder(initialDirectory);
+                }
+                catch (FileNotFoundException)
+                {
+                }
+            }
+
             if (!string.IsNullOrEmpty(_selectedPath))
             {
                 string parent = Path.GetDirectoryName(_selectedPath);
-                if (parent is null || !Directory.Exists(parent))
+                if (parent is null || !Directory.Exists(parent) || !string.IsNullOrEmpty(InitialDirectory))
                 {
                     dialog.SetFileName(_selectedPath);
                 }
@@ -345,6 +401,13 @@ namespace System.Windows.Forms
             {
                 case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
+
+                    if (_initialDir.Length != 0)
+                    {
+                        // Try to expand the folder specified by initialDir
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, PARAM.FromBool(true), _initialDir);
+                    }
+
                     if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
