@@ -5017,6 +5017,70 @@ namespace System.Windows.Forms.Tests
             testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Down, downitem);
         }
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
+        public void ListView_FindNearestItem_With_Images(string item, string leftitem, string upitem, string rightitem, string downitem)
+        {
+            using var imagecollection = new ImageList();
+            imagecollection.Images.Add(Bitmap.FromFile("bitmaps\\SmallA.bmp"));
+            imagecollection.Images.Add(Bitmap.FromFile("bitmaps\\SmallABlue.bmp"));
+
+            imagecollection.TransparentColor = System.Drawing.Color.Transparent;
+            imagecollection.Images.SetKeyName(0, "SmallA.bmp");
+            imagecollection.Images.SetKeyName(1, "SmallABlue.bmp");
+
+            using var listView = new ListView();
+            listView.SmallImageList = imagecollection;
+            ListViewItem listViewItem1 = new ListViewItem("Item1");
+            ListViewItem listViewItem2 = new ListViewItem("item2") {ImageKey= "SmallABlue.bmp" };
+            ListViewItem listViewItem3 = new ListViewItem("item3");
+            ListViewItem listViewItem4 = new ListViewItem("Items 4") { ImageKey = "SmallA.bmp" };
+            ListViewItem listViewItem5 = new ListViewItem("Items 5");
+            ListViewItem listViewItem6 = new ListViewItem("Items 6") { ImageKey = "SmallABlue.bmp" };
+            ListViewItem listViewItem7 = new ListViewItem("Items 7") { ImageKey = "SmallA.bmp" };
+            ListViewItem listViewItem8 = new ListViewItem("Items 8");
+            ListViewItem listViewItem9 = new ListViewItem("Items 9");
+
+            using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
+
+            listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            columnHeader1,
+            columnHeader2});
+            listView.HideSelection = false;
+            var listItems = new System.Windows.Forms.ListViewItem[] {
+            listViewItem1,
+            listViewItem2,
+            listViewItem3,
+            listViewItem4,
+            listViewItem5,
+            listViewItem6,
+            listViewItem7,
+            listViewItem8,
+            listViewItem9};
+            listView.Items.AddRange(listItems);
+            listView.View = System.Windows.Forms.View.SmallIcon;
+            listView.Size = new System.Drawing.Size(200, 200);
+
+            Func<string, ListViewItem> getItem = (itemText) => listItems[Int32.Parse(itemText)-1];
+            Action<ListViewItem, SearchDirectionHint, string> testTheItem = (item, direction, resultText) =>
+            {
+                if (resultText == null)
+                {
+                    Assert.Null(item.FindNearestItem(direction));
+                }
+                else
+                {
+                    Assert.Equal(getItem(resultText), item.FindNearestItem(direction));
+                }
+            };
+
+            var listViewItemToTest = getItem(item);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Left, leftitem);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
+            testTheItem(listViewItemToTest, SearchDirectionHint.Down, downitem);
+        }
 
         private class SubListViewItem : ListViewItem
         {
