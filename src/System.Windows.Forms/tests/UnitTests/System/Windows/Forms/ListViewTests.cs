@@ -4951,20 +4951,20 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ListView_FindNearestItem_Invoke_TestData()
         {
-            yield return new object[] { "1", null, null, "2", "4" };
-            yield return new object[] { "2", "1", null, "3", "5" };
-            yield return new object[] { "3", "2", null, null, "6" };
-            yield return new object[] { "4", null, "1", "5", "7" };
-            yield return new object[] { "5", "4", "2", "6", "8" };
-            yield return new object[] { "6", "5", "3", null, "9" };
-            yield return new object[] { "7", null, "4", "8", null };
-            yield return new object[] { "8", "7", "5", "9", null };
-            yield return new object[] { "9", "8", "6", null, null };
+            yield return new object[] { 0, null, null, 1,3 };
+            yield return new object[] { 1, 0, null, 2, 4};
+            yield return new object[] { 2, 1, null, null, 5 };
+            yield return new object[] { 3, null, 0, 4, 6 };
+            yield return new object[] { 4, 3, 1, 5, 7 };
+            yield return new object[] { 5, 4, 2, null, 8 };
+            yield return new object[] { 6, null, 3, 7, null };
+            yield return new object[] { 7, 6, 4, 8, null };
+            yield return new object[] { 8, 7, 5, null, null };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
-        public void ListView_FindNearestItem(string item, string leftitem, string upitem, string rightitem, string downitem)
+        public void ListView_FindNearestItem(int item, int? leftitem, int? upitem, int? rightitem, int? downitem)
         {
             using var listView = new ListView();
             ListViewItem listViewItem1 = new ListViewItem("1");
@@ -4998,20 +4998,19 @@ namespace System.Windows.Forms.Tests
             listView.View = System.Windows.Forms.View.SmallIcon;
             listView.Size = new System.Drawing.Size(200, 200);
 
-            Func<string, ListViewItem> getItem = (itemText) => listItems.Single(item => item.Text == itemText);
-            Action<ListViewItem, SearchDirectionHint, string> testTheItem = (item, direction, resultText) =>
+            Action<ListViewItem, SearchDirectionHint, int?> testTheItem = (item, direction, resultItem) =>
              {
-                 if (resultText == null)
+                 if (!resultItem.HasValue)
                  {
                      Assert.Null(item.FindNearestItem(direction));
                  }
                  else
                  {
-                     Assert.Equal(getItem(resultText),item.FindNearestItem(direction) );
+                     Assert.Equal(listItems[resultItem.Value],item.FindNearestItem(direction) );
                  }
              };
 
-            var listViewItemToTest = getItem(item);
+            var listViewItemToTest = listItems[item];
             testTheItem(listViewItemToTest, SearchDirectionHint.Left, leftitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
@@ -5019,11 +5018,11 @@ namespace System.Windows.Forms.Tests
         }
         [WinFormsTheory]
         [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
-        public void ListView_FindNearestItem_With_Images(string item, string leftitem, string upitem, string rightitem, string downitem)
+        public void ListView_FindNearestItem_With_Images(int item, int? leftitem, int? upitem, int? rightitem, int? downitem)
         {
             using var imagecollection = new ImageList();
-            imagecollection.Images.Add(Bitmap.FromFile("bitmaps\\SmallA.bmp"));
-            imagecollection.Images.Add(Bitmap.FromFile("bitmaps\\SmallABlue.bmp"));
+            imagecollection.Images.Add(Form.DefaultIcon);
+            imagecollection.Images.Add(Form.DefaultIcon);
 
             imagecollection.TransparentColor = System.Drawing.Color.Transparent;
             imagecollection.Images.SetKeyName(0, "SmallA.bmp");
@@ -5063,19 +5062,19 @@ namespace System.Windows.Forms.Tests
             listView.Size = new System.Drawing.Size(200, 200);
 
             Func<string, ListViewItem> getItem = (itemText) => listItems[Int32.Parse(itemText)-1];
-            Action<ListViewItem, SearchDirectionHint, string> testTheItem = (item, direction, resultText) =>
+            Action<ListViewItem, SearchDirectionHint, int?> testTheItem = (item, direction, resultItem) =>
             {
-                if (resultText == null)
+                if (!resultItem.HasValue)
                 {
                     Assert.Null(item.FindNearestItem(direction));
                 }
                 else
                 {
-                    Assert.Equal(getItem(resultText), item.FindNearestItem(direction));
+                    Assert.Equal(listItems[resultItem.Value], item.FindNearestItem(direction));
                 }
             };
 
-            var listViewItemToTest = getItem(item);
+            var listViewItemToTest = listItems[item];
             testTheItem(listViewItemToTest, SearchDirectionHint.Left, leftitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
             testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
