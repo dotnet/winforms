@@ -4951,8 +4951,8 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> ListView_FindNearestItem_Invoke_TestData()
         {
-            yield return new object[] { 0, null, null, 1,3 };
-            yield return new object[] { 1, 0, null, 2, 4};
+            yield return new object[] { 0, null, null, 1, 3 };
+            yield return new object[] { 1, 0, null, 2, 4 };
             yield return new object[] { 2, 1, null, null, 5 };
             yield return new object[] { 3, null, 0, 4, 6 };
             yield return new object[] { 4, 3, 1, 5, 7 };
@@ -4998,23 +4998,11 @@ namespace System.Windows.Forms.Tests
             listView.View = System.Windows.Forms.View.SmallIcon;
             listView.Size = new System.Drawing.Size(200, 200);
 
-            Action<ListViewItem, SearchDirectionHint, int?> testTheItem = (item, direction, resultItem) =>
-             {
-                 if (!resultItem.HasValue)
-                 {
-                     Assert.Null(item.FindNearestItem(direction));
-                 }
-                 else
-                 {
-                     Assert.Equal(listItems[resultItem.Value],item.FindNearestItem(direction) );
-                 }
-             };
-
             var listViewItemToTest = listItems[item];
-            testTheItem(listViewItemToTest, SearchDirectionHint.Left, leftitem);
-            testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
-            testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
-            testTheItem(listViewItemToTest, SearchDirectionHint.Down, downitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Up, upitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Right, rightitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Down, downitem);
         }
         [WinFormsTheory]
         [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
@@ -5031,7 +5019,7 @@ namespace System.Windows.Forms.Tests
             using var listView = new ListView();
             listView.SmallImageList = imagecollection;
             ListViewItem listViewItem1 = new ListViewItem("Item1");
-            ListViewItem listViewItem2 = new ListViewItem("item2") {ImageKey= "SmallABlue.bmp" };
+            ListViewItem listViewItem2 = new ListViewItem("item2") { ImageKey = "SmallABlue.bmp" };
             ListViewItem listViewItem3 = new ListViewItem("item3");
             ListViewItem listViewItem4 = new ListViewItem("Items 4") { ImageKey = "SmallA.bmp" };
             ListViewItem listViewItem5 = new ListViewItem("Items 5");
@@ -5061,24 +5049,23 @@ namespace System.Windows.Forms.Tests
             listView.View = System.Windows.Forms.View.SmallIcon;
             listView.Size = new System.Drawing.Size(200, 200);
 
-            Func<string, ListViewItem> getItem = (itemText) => listItems[Int32.Parse(itemText)-1];
-            Action<ListViewItem, SearchDirectionHint, int?> testTheItem = (item, direction, resultItem) =>
-            {
-                if (!resultItem.HasValue)
-                {
-                    Assert.Null(item.FindNearestItem(direction));
-                }
-                else
-                {
-                    Assert.Equal(listItems[resultItem.Value], item.FindNearestItem(direction));
-                }
-            };
-
             var listViewItemToTest = listItems[item];
-            testTheItem(listViewItemToTest, SearchDirectionHint.Left, leftitem);
-            testTheItem(listViewItemToTest, SearchDirectionHint.Up, upitem);
-            testTheItem(listViewItemToTest, SearchDirectionHint.Right, rightitem);
-            testTheItem(listViewItemToTest, SearchDirectionHint.Down, downitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Up, upitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Right, rightitem);
+            ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Down, downitem);
+        }
+
+        private void ListView_FindNearestItem_Check_Result(ListViewItem[] listItems, ListViewItem item, SearchDirectionHint direction, int? resultItem)
+        {
+            if (!resultItem.HasValue)
+            {
+                Assert.Null(item.FindNearestItem(direction));
+            }
+            else
+            {
+                Assert.Equal(listItems[resultItem.Value], item.FindNearestItem(direction));
+            }
         }
 
         private class SubListViewItem : ListViewItem
