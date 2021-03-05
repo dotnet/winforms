@@ -68,7 +68,7 @@ Review the following resources that describe breaking changes between Windows Fo
 ### Automated porting
 
 1. Try porting your project using [`try-convert` tool](https://github.com/dotnet/try-convert), which we built to help migrations. <br />
-NB: The tool may not for all possible projects, in that case please read on.
+NB: The tool may not work for all possible projects, in that case please read on.
 
 ### Manual porting
 
