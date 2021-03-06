@@ -68,6 +68,7 @@ namespace System.Windows.Forms
             // set up the sytem menu
 
             _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
             _system.Alignment = ToolStripItemAlignment.Left;
             _system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
             _system.ImageScaling = ToolStripItemImageScaling.None;
@@ -75,7 +76,7 @@ namespace System.Windows.Forms
             _system.DoubleClick += new EventHandler(OnSystemMenuDoubleClick);
             _system.Padding = Padding.Empty;
             _system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
-            ResumeLayout(false);
+                ResumeLayout(false);
         }
 
         public ToolStripMenuItem Close
@@ -105,6 +106,23 @@ namespace System.Windows.Forms
             smallIcon.Dispose();
 
             return systemIcon;
+        }
+        private bool GetTargetWindowIconVisibility()
+        {
+            if (_target is Form formTarget)
+            {
+                return formTarget.ShowIcon;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void updateIcon()
+        {
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
@@ -144,6 +162,7 @@ namespace System.Windows.Forms
             }
 
             _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)

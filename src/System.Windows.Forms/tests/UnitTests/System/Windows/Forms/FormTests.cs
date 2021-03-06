@@ -1170,6 +1170,46 @@ namespace System.Windows.Forms.Tests
             Assert.Same(oldParent, control.MdiParent);
         }
 
+        [WinFormsFact]
+        public void Form_Parent_ShowIconInMaximized()
+        {
+            using var parent = new Form();
+            using var menuStrip = new MenuStrip();
+            menuStrip.Location = new System.Drawing.Point(0, 0);
+            menuStrip.Size = new System.Drawing.Size(parent.Width, 24);
+            parent.Controls.Add(menuStrip);
+            parent.IsMdiContainer = true;
+            parent.MainMenuStrip = menuStrip;
+            parent.Show();
+            Assert.True(parent.Handle != IntPtr.Zero);
+            using var control = new Form();
+            control.MdiParent = parent;
+            control.Icon = Form.DefaultIcon;
+            Assert.True(control.Handle != IntPtr.Zero);
+            control.Show();
+
+            control.ShowIcon = false;
+            IntPtr hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon == IntPtr.Zero);
+            IntPtr hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon == IntPtr.Zero);
+
+            control.WindowState = FormWindowState.Maximized;
+            control.ShowIcon = false;
+            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon == IntPtr.Zero);
+            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon == IntPtr.Zero);
+            Assert.True(!menuStrip.Items[0].Visible);
+
+            control.ShowIcon = true;
+            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon != IntPtr.Zero);
+            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon != IntPtr.Zero);
+            Assert.True(menuStrip.Items[0].Visible);
+        }
+
         public static IEnumerable<object[]> TransparencyKey_Set_TestData()
         {
             foreach (bool allowTransparency in new bool[] { true, false })

@@ -5815,6 +5815,11 @@ namespace System.Windows.Forms
                     User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
                 }
 
+                if (WindowState == FormWindowState.Maximized && MdiParent != null && MdiParent.MdiControlStrip != null)
+                {
+                    MdiParent.MdiControlStrip.updateIcon();
+                }
+
                 if (redrawFrame)
                 {
                     User32.RedrawWindow(new HandleRef(this, Handle), null, IntPtr.Zero, User32.RDW.INVALIDATE | User32.RDW.FRAME);
