@@ -4917,6 +4917,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(page2, TabControl.TabPages[2]);
             Assert.Equal(page2, TabControl.Controls[2]);
         }
+        [WinFormsFact]
+        public void TabPageCollection_Insert_First_item()
+        {
+            using var TabControl = new TabControl();
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            using var page3 = new TabPage();
+
+            page1.Text = "First works";
+            TabControl.TabPages.Insert(0, page1);
+            Assert.Equal(1, TabControl.TabPages.Count);
+            Assert.Equal(page1, TabControl.TabPages[0]);
+            Assert.Equal(page1, TabControl.Controls[0]);
+
+            page2.Text = "Second fails";
+            TabControl.TabPages.Insert(1, page2);
+            Assert.Equal(2, TabControl.TabPages.Count);
+            Assert.Equal(page2, TabControl.TabPages[1]);
+            Assert.Equal(page2, TabControl.Controls[1]);
+
+            page3.Text = "Third works";
+            TabControl.TabPages.Insert(1, page3);
+            Assert.Equal(3, TabControl.TabPages.Count);
+            Assert.Equal(page3, TabControl.TabPages[1]);
+            Assert.Equal(page3, TabControl.Controls[1]);
+            Assert.Equal(page2, TabControl.TabPages[2]);
+            Assert.Equal(page2, TabControl.Controls[2]);
+        }
 
         private class NullGetItemsTabControl : TabControl
         {
