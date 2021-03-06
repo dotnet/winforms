@@ -1220,6 +1220,10 @@ namespace System.Windows.Forms
                     Insert(retIndex, tabPage);
                 }
             }
+            else
+            {
+                Insert(index, tabPage);
+            }
         }
 
         /// <summary>
