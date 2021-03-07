@@ -118,10 +118,11 @@ namespace System.Windows.Forms
 
         public virtual bool EditingControlWantsInputKey(Keys keyData, bool dataGridViewWantsInputKey)
         {
-            if ((keyData & Keys.KeyCode) == Keys.Down ||
-                (keyData & Keys.KeyCode) == Keys.Up ||
-                (DroppedDown && ((keyData & Keys.KeyCode) == Keys.Escape)) ||
-                (keyData & Keys.KeyCode) == Keys.Enter)
+            var maskedKeyData = keyData & Keys.KeyCode;
+            if (maskedKeyData == Keys.Down ||
+                maskedKeyData == Keys.Up ||
+                (DroppedDown && (maskedKeyData == Keys.Escape)) ||
+                maskedKeyData == Keys.Enter)
             {
                 return true;
             }
