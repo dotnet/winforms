@@ -807,9 +807,7 @@ namespace System.Windows.Forms
                     int state = (int)HeaderItemState.Normal;
 
                     // Set the state to Pressed/Hot only if the column can be sorted or selected
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                    if (OwningColumn is not null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable ||
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                    if ((OwningColumn is not null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable) ||
                         DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
