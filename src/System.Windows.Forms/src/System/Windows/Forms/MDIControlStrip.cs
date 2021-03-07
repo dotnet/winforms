@@ -107,17 +107,7 @@ namespace System.Windows.Forms
 
             return systemIcon;
         }
-        private bool GetTargetWindowIconVisibility()
-        {
-            if (_target is Form formTarget)
-            {
-                return formTarget.ShowIcon;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
 
         public void updateIcon()
         {
