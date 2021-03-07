@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             _system.DoubleClick += new EventHandler(OnSystemMenuDoubleClick);
             _system.Padding = Padding.Empty;
             _system.ShortcutKeys = Keys.Alt | Keys.OemMinus;
-                ResumeLayout(false);
+            ResumeLayout(false);
         }
 
         public ToolStripMenuItem Close

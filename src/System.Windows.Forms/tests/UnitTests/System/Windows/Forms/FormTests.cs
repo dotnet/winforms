@@ -1175,8 +1175,6 @@ namespace System.Windows.Forms.Tests
         {
             using var parent = new Form();
             using var menuStrip = new MenuStrip();
-            menuStrip.Location = new System.Drawing.Point(0, 0);
-            menuStrip.Size = new System.Drawing.Size(parent.Width, 24);
             parent.Controls.Add(menuStrip);
             parent.IsMdiContainer = true;
             parent.MainMenuStrip = menuStrip;
