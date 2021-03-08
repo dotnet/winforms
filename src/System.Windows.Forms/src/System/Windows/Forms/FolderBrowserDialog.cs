@@ -250,7 +250,7 @@ namespace System.Windows.Forms
             if (ClientGuid is { } clientGuid)
             {
                 // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
-                // https://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+                // https://docs.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
                 dialog.SetClientGuid(clientGuid);
             }
 
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
             if (!string.IsNullOrEmpty(_selectedPath))
             {
                 string parent = Path.GetDirectoryName(_selectedPath);
-                if (parent is null || !Directory.Exists(parent) || !string.IsNullOrEmpty(InitialDirectory))
+                if (parent is null || !string.IsNullOrEmpty(InitialDirectory) || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
                 }
