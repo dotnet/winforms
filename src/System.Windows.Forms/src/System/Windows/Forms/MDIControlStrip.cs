@@ -96,28 +96,31 @@ namespace System.Windows.Forms
 
         private (Image Image,bool Visible) GetTargetWindowIcon()
         {
-            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(_target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
-            Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
-            Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
+            if (_target is not Form formTarget || formTarget.ShowIcon)
+            {
+                IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(_target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+                Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
+                Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
-            Image systemIcon = smallIcon.ToBitmap();
-            smallIcon.Dispose();
+                Image systemIcon = smallIcon.ToBitmap();
+                smallIcon.Dispose();
 
-            return (systemIcon, _target is not Form formTarget || formTarget.ShowIcon);
+                return (systemIcon, true);
+            }
+            else
+            {
+                return (null, false);
+            }
         }
 
         public void UpdateIcon()
         {
             var imageInfo = GetTargetWindowIcon();
+            if (_system.Image is not null) {
+                _system.Image.Dispose();
+            }
             _system.Image = imageInfo.Image;
             _system.Visible = imageInfo.Visible;
-        }
-        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
-
-        public void updateIcon()
-        {
-            _system.Image = GetTargetWindowIcon();
-            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
@@ -155,8 +158,8 @@ namespace System.Windows.Forms
                 _system.DropDown.Items.Clear();
                 _system.DropDown.Dispose();
             }
-            UpdateIcon();
 
+            UpdateIcon();
         }
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
