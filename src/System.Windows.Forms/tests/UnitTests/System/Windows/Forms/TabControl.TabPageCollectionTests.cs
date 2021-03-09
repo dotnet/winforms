@@ -4903,7 +4903,7 @@ namespace System.Windows.Forms.Tests
             page1.Text = "First works";
             TabControl.TabPages.Add(page1);
 
-            page2.Text = "Second fails";
+            page2.Text = "Second works";
             TabControl.TabPages.Insert(1, page2);
             Assert.Equal(2, TabControl.TabPages.Count);
             Assert.Equal(page2, TabControl.TabPages[1]);
@@ -4932,7 +4932,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(page1, TabControl.TabPages[0]);
             Assert.Equal(page1, TabControl.Controls[0]);
 
-            page2.Text = "Second fails";
+            page2.Text = "Second works";
             TabControl.TabPages.Insert(1, page2);
             Assert.Equal(2, TabControl.TabPages.Count);
             Assert.Equal(page2, TabControl.TabPages[1]);

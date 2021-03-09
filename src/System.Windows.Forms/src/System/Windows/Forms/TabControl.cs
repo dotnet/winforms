@@ -1212,17 +1212,12 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(tabPage));
             }
 
-            if (IsHandleCreated)
+            int retIndex = IsHandleCreated
+                             ? (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage)
+                             : index;
+            if (retIndex >= 0)
             {
-                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage);
-                if (retIndex >= 0)
-                {
-                    Insert(retIndex, tabPage);
-                }
-            }
-            else
-            {
-                Insert(index, tabPage);
+                Insert(retIndex, tabPage);
             }
         }
 
