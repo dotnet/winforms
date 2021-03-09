@@ -112,6 +112,13 @@ namespace System.Windows.Forms
             _system.Image = imageInfo.Image;
             _system.Visible = imageInfo.Visible;
         }
+        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
+
+        public void updateIcon()
+        {
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
+        }
 
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
         {

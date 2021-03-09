@@ -203,9 +203,8 @@ namespace System.Windows.Forms
                     owner.ItemCollectionChangedInMouseDown = true;
                 }
 
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                if (comparer != null || (owner.Sorting != SortOrder.None) && !owner.VirtualMode)
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                if (comparer != null ||
+                    ((owner.Sorting != SortOrder.None) && !owner.VirtualMode))
                 {
                     owner.Sort();
                 }
