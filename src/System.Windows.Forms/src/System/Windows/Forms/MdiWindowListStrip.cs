@@ -111,10 +111,8 @@ namespace System.Windows.Forms
                         {
                             visibleChildren++;
                             if ((activeFormAdded && (formsAddedToMenu < maxMenuForms)) ||   // don't exceed max
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                                (!activeFormAdded && (formsAddedToMenu < (maxMenuForms - 1)) ||   // save room for active if it's not in yet
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
-                                (forms[i].Equals(activeMdiChild))))
+                                (!activeFormAdded && (formsAddedToMenu < (maxMenuForms - 1))) ||   // save room for active if it's not in yet
+                                forms[i].Equals(activeMdiChild))
                             {
                                 // there's always room for activeMdiChild
                                 string text = WindowsFormsUtils.EscapeTextWithAmpersands(mdiParent.MdiChildren[i].Text);

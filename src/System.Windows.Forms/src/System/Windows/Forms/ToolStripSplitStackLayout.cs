@@ -424,9 +424,8 @@ namespace System.Windows.Forms
 
             Size toolStripPreferredSize = displayRectangle.Size;
             DockStyle dock = toolStrip.Dock;
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-            if (toolStrip.AutoSize && (!toolStrip.IsInToolStripPanel && (dock == DockStyle.Left) || (dock == DockStyle.Right)))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            var IsNotInToolStripPanelWithLeftDockstyle = !toolStrip.IsInToolStripPanel && dock == DockStyle.Left;
+            if (toolStrip.AutoSize && (IsNotInToolStripPanelWithLeftDockstyle || dock == DockStyle.Right))
             {
                 // if we're autosizing, make sure we pad out items to the preferred width, not the
                 // width of the display rectangle.

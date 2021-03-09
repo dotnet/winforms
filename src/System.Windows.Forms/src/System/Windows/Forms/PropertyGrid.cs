@@ -1189,9 +1189,7 @@ namespace System.Windows.Forms
                             // or Guid.Emtpy, assume the classes are different.
                             //
                             if (classesSame &&
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                                (oldType != newType || oldType.IsCOMObject && newType.IsCOMObject))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                                (oldType != newType || (oldType.IsCOMObject && newType.IsCOMObject)))
                             {
                                 classesSame = false;
                             }

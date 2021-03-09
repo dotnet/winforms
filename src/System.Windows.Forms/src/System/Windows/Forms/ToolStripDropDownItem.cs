@@ -124,9 +124,8 @@ namespace System.Windows.Forms
                     if (parent != null)
                     {
                         ToolStripDropDownDirection dropDownDirection = parent.DefaultDropDownDirection;
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                        if (OppositeDropDownAlign || RightToLeft != parent.RightToLeft && (RightToLeft != RightToLeft.Inherit))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                        if (OppositeDropDownAlign ||
+                            (RightToLeft != parent.RightToLeft && (RightToLeft != RightToLeft.Inherit)))
                         {
                             dropDownDirection = RTLTranslateDropDownDirection(dropDownDirection, RightToLeft);
                         }

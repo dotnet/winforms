@@ -453,11 +453,8 @@ namespace System.Windows.Forms
             get
             {
                 int ocState = GetOcState();
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                return (axState[fOwnWindow] &&
-                       (ocState > OC_RUNNING || (IsUserMode() && ocState >= OC_RUNNING)) ||
-                       ocState >= OC_INPLACE);
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                return (axState[fOwnWindow] && (ocState > OC_RUNNING || (IsUserMode() && ocState >= OC_RUNNING))) ||
+                       ocState >= OC_INPLACE;
             }
         }
 
