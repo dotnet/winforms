@@ -3,17 +3,18 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using WinForms.Common.Tests;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class PropertyGridViewTests
+    public partial class PropertyGridViewTests
     {
         [WinFormsFact]
-        public void PropertyGridView_created_for_PropertyGrid()
+        public void PropertyGridView_Ctor_Default()
         {
-            using PropertyGrid propertyGrid = new PropertyGrid();
+            using PropertyGrid propertyGrid = new();
             PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+
+            // TODO: validate properties
 
             Assert.NotNull(propertyGridView);
         }

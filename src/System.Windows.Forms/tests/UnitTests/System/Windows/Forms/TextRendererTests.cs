@@ -850,6 +850,10 @@ namespace System.Windows.Forms.Tests
                 using Region region = new(new Rectangle(1, 2, 6, 8));
                 graphics.Clip = region;
 
+                // We have modified graphics, but several tests don't set all the flags
+                // TextRenderer asserts for to ensure integrity.
+                using NoAssertContext noAssertContext = new();
+
                 TextRenderer.DrawText(
                     graphics,
                     "Landshark",
@@ -893,6 +897,10 @@ namespace System.Windows.Forms.Tests
             graphics.Transform = matrix;
             using Region region = new(new Rectangle(1, 2, 6, 8));
             graphics.Clip = region;
+
+            // We have modified graphics, but several tests don't set all the flags
+            // TextRenderer asserts for to ensure integrity.
+            using NoAssertContext noAssertContext = new();
 
             Size size = TextRenderer.MeasureText(
                 graphics,
