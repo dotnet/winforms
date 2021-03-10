@@ -4,9 +4,9 @@
 
 #nullable disable
 
+using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
-using System.Collections;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
 {

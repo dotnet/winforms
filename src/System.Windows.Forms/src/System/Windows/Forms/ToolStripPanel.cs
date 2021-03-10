@@ -113,8 +113,8 @@ namespace System.Windows.Forms
             set => base.AutoScrollMinSize = value;
         }
 
-        [    DefaultValue(true)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get => base.AutoSize;

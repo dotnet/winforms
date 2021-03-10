@@ -249,7 +249,7 @@ namespace System.Windows.Forms.VisualStyles
             }
             else
             {
-                RECT rect  = bounds;
+                RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(this, dc, Part, State, ref rect, null);
             }
         }

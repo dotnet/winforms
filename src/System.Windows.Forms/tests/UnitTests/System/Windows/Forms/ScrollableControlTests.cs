@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { false, null, 1, null };
             yield return new object[] { false, new LayoutEventArgs(null, null), 1, null };
-            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1 , affectedControl };
+            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1, affectedControl };
         }
 
         [WinFormsTheory]

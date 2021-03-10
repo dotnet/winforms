@@ -30,9 +30,9 @@ internal static partial class Interop
         }
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern BOOL RedrawWindow(IntPtr hWnd, RECT *lprcUpdate, IntPtr hrgnUpdate, RDW flags);
+        public unsafe static extern BOOL RedrawWindow(IntPtr hWnd, RECT* lprcUpdate, IntPtr hrgnUpdate, RDW flags);
 
-        public unsafe static BOOL RedrawWindow(HandleRef hWnd, RECT *lprcUpdate, IntPtr hrgnUpdate, RDW flags)
+        public unsafe static BOOL RedrawWindow(HandleRef hWnd, RECT* lprcUpdate, IntPtr hrgnUpdate, RDW flags)
         {
             BOOL result = RedrawWindow(hWnd.Handle, lprcUpdate, hrgnUpdate, flags);
             GC.KeepAlive(hWnd.Wrapper);

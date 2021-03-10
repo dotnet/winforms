@@ -4,14 +4,14 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using Xunit;
-using WinForms.Common.Tests;
+using System.Data;
 using System.Drawing;
-using System.Windows.Forms.Metafiles;
 using System.Numerics;
+using System.Windows.Forms.Metafiles;
+using WinForms.Common.Tests;
+using Xunit;
 using static System.Windows.Forms.Metafiles.DataHelpers;
 using static Interop;
-using System.Data;
 
 namespace System.Windows.Forms.Tests
 {

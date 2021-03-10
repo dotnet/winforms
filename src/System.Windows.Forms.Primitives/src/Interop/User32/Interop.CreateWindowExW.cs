@@ -38,7 +38,7 @@ internal static partial class Interop
             IntPtr hInst,
             object lpParam)
         {
-            fixed(char* c = lpClassName)
+            fixed (char* c = lpClassName)
             {
                 return CreateWindowExW(dwExStyle, c, lpWindowName, dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInst, lpParam);
             }

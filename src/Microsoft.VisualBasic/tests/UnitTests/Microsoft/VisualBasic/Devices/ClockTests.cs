@@ -52,7 +52,7 @@ namespace Microsoft.VisualBasic.Devices.Tests
             System.Threading.Thread.Sleep(10);
 
             var after = clock.TickCount;
-            Assert.True(before <=  after);
+            Assert.True(before <= after);
         }
     }
 }

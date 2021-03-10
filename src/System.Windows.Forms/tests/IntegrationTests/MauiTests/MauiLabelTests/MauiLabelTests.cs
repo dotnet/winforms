@@ -5,12 +5,12 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.IntegrationTests.Common;
-using System.Windows.Forms;
-using WFCTestLib.Util;
-using WFCTestLib.Log;
-using ReflectTools;
 using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Forms.IntegrationTests.Common;
+using ReflectTools;
+using WFCTestLib.Log;
+using WFCTestLib.Util;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {

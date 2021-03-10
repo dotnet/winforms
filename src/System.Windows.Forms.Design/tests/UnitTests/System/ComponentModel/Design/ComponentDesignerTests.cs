@@ -147,7 +147,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> Children_GetInvalidService_TestData()
         {
-            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() }})
+            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() } })
             {
                 yield return new object[] { associatedComponents, null };
                 yield return new object[] { associatedComponents, new object() };
@@ -2418,7 +2418,7 @@ namespace System.ComponentModel.Design.Tests
         public void ComponentDesigner_PostFilterEvents_InvokeWithInvalidEvents_ThrowsArrayTypeMismatchException()
         {
             using var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
-            Assert.Throws<ArrayTypeMismatchException>(() => designer.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } } ));
+            Assert.Throws<ArrayTypeMismatchException>(() => designer.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } }));
         }
 
         public static IEnumerable<object[]> RaiseComponentChanged_TestData()
@@ -2844,7 +2844,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
             IDesignerFilter filter = designer;
-            Assert.Throws<ArrayTypeMismatchException>(() => filter.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } } ));
+            Assert.Throws<ArrayTypeMismatchException>(() => filter.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } }));
         }
 
         [Fact]

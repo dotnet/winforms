@@ -150,7 +150,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool ReadOnly
         {
             get
@@ -187,7 +187,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool Selected
         {
             get

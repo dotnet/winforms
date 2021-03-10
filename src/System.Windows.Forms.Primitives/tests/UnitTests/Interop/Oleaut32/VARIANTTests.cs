@@ -513,7 +513,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             yield return new object[] { 0 };
             yield return new object[] { 10 };
             yield return new object[] { byte.MaxValue };
-            yield return new object[] { ushort.MaxValue};
+            yield return new object[] { ushort.MaxValue };
             yield return new object[] { uint.MaxValue };
             yield return new object[] { ulong.MaxValue };
         }
@@ -811,10 +811,10 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             yield return new object[] { (IntPtr)int.MaxValue, int.MaxValue };
             if (IntPtr.Size == 8)
             {
-                            if (IntPtr.Size == 8)
-                            {
-                yield return new object[] { (IntPtr)long.MinValue, 0 };
-            }
+                if (IntPtr.Size == 8)
+                {
+                    yield return new object[] { (IntPtr)long.MinValue, 0 };
+                }
                 if (IntPtr.Size == 8)
                 {
                     yield return new object[] { (IntPtr)long.MaxValue, -1 };
@@ -1961,7 +1961,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> VectorCY_TestData()
         {
             yield return new object[] { Array.Empty<long>(), Array.Empty<decimal>() };
-            yield return new object[] { new long[] { 11000, 22000, 30000 } , new decimal[] { 1.1m, 2.2m, 3 } };
+            yield return new object[] { new long[] { 11000, 22000, 30000 }, new decimal[] { 1.1m, 2.2m, 3 } };
         }
 
         [StaTheory]
@@ -2354,7 +2354,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI1_TestData))]
         public void VARIANT_ToObject_ARRAYUI1SingleDimension_ReturnsExpected(byte[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI1, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI1, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI1,
@@ -2378,7 +2378,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI1_TestData))]
         public void VARIANT_ToObject_ARRAYUI1SingleDimensionNonZeroLowerBounds_ReturnsExpected(byte[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI1, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI1, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI1,
@@ -2400,15 +2400,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionUI1_TestData()
         {
-            yield return new object[] { new byte[0,0] };
-            yield return new object[] { new byte[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new byte[0, 0] };
+            yield return new object[] { new byte[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionUI1_TestData))]
         public void VARIANT_ToObject_ARRAYUI1MultiDimension_ReturnsExpected(byte[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI1, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI1, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI1,
@@ -2434,7 +2434,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUI1_TestData))]
         public void VARIANT_ToObject_ARRAYUI1MultiDimensionNonZeroLowerBound_ReturnsExpected(byte[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI1, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI1, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI1,
@@ -2460,7 +2460,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI1_TestData))]
         public void VARIANT_ToObject_ARRAYI1SingleDimension_ReturnsExpected(sbyte[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I1, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I1, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I1,
@@ -2484,7 +2484,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI1_TestData))]
         public void VARIANT_ToObject_ARRAYI1SingleDimensionNonZeroLowerBounds_ReturnsExpected(sbyte[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I1, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I1, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I1,
@@ -2506,15 +2506,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionI1_TestData()
         {
-            yield return new object[] { new sbyte[0,0] };
-            yield return new object[] { new sbyte[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new sbyte[0, 0] };
+            yield return new object[] { new sbyte[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionI1_TestData))]
         public void VARIANT_ToObject_ARRAYI1MultiDimension_ReturnsExpected(sbyte[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I1, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I1, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I1,
@@ -2540,7 +2540,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionI1_TestData))]
         public void VARIANT_ToObject_ARRAYI1MultiDimensionNonZeroLowerBound_ReturnsExpected(sbyte[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I1, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I1, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I1,
@@ -2566,7 +2566,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI2_TestData))]
         public void VARIANT_ToObject_ARRAYI2SingleDimension_ReturnsExpected(short[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I2, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I2, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I2,
@@ -2590,7 +2590,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI2_TestData))]
         public void VARIANT_ToObject_ARRAYI2SingleDimensionNonZeroLowerBounds_ReturnsExpected(short[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I2, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I2, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I2,
@@ -2612,15 +2612,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionI2_TestData()
         {
-            yield return new object[] { new short[0,0] };
-            yield return new object[] { new short[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new short[0, 0] };
+            yield return new object[] { new short[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionI2_TestData))]
         public void VARIANT_ToObject_ARRAYI2MultiDimension_ReturnsExpected(short[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I2, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I2, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I2,
@@ -2646,7 +2646,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionI2_TestData))]
         public void VARIANT_ToObject_ARRAYI2MultiDimensionNonZeroLowerBound_ReturnsExpected(short[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I2, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I2, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I2,
@@ -2672,7 +2672,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI2_TestData))]
         public void VARIANT_ToObject_ARRAYUI2SingleDimension_ReturnsExpected(ushort[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI2, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI2, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI2,
@@ -2696,7 +2696,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI2_TestData))]
         public void VARIANT_ToObject_ARRAYUI2SingleDimensionNonZeroLowerBounds_ReturnsExpected(ushort[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI2, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI2, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI2,
@@ -2718,15 +2718,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionUI2_TestData()
         {
-            yield return new object[] { new ushort[0,0] };
-            yield return new object[] { new ushort[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new ushort[0, 0] };
+            yield return new object[] { new ushort[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionUI2_TestData))]
         public void VARIANT_ToObject_ARRAYUI2MultiDimension_ReturnsExpected(ushort[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI2, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI2, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI2,
@@ -2752,7 +2752,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUI2_TestData))]
         public void VARIANT_ToObject_ARRAYUI2MultiDimensionNonZeroLowerBound_ReturnsExpected(ushort[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI2, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI2, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI2,
@@ -2778,7 +2778,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI4_TestData))]
         public void VARIANT_ToObject_ARRAYI4SingleDimension_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2802,7 +2802,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI4_TestData))]
         public void VARIANT_ToObject_ARRAYI4SingleDimensionNonZeroLowerBounds_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2824,15 +2824,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionI4_TestData()
         {
-            yield return new object[] { new int[0,0] };
-            yield return new object[] { new int[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new int[0, 0] };
+            yield return new object[] { new int[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionI4_TestData))]
         public void VARIANT_ToObject_ARRAYI4MultiDimension_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2858,7 +2858,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionI4_TestData))]
         public void VARIANT_ToObject_ARRAYI4MultiDimensionNonZeroLowerBound_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2884,7 +2884,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI4_TestData))]
         public void VARIANT_ToObject_INTArrayI4SingleDimension_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2908,7 +2908,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI4_TestData))]
         public void VARIANT_ToObject_INTArrayI4SingleDimensionNonZeroLowerBounds_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2932,7 +2932,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionI4_TestData))]
         public void VARIANT_ToObject_INTArrayI4MultiDimension_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2958,7 +2958,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionI4_TestData))]
         public void VARIANT_ToObject_INTArrayI4MultiDimensionNonZeroLowerBound_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -2984,7 +2984,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI4_TestData))]
         public void VARIANT_ToObject_ARRAYUI4SingleDimension_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3008,7 +3008,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI4_TestData))]
         public void VARIANT_ToObject_ARRAYUI4SingleDimensionNonZeroLowerBounds_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3030,15 +3030,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionUI4_TestData()
         {
-            yield return new object[] { new uint[0,0] };
-            yield return new object[] { new uint[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new uint[0, 0] };
+            yield return new object[] { new uint[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionUI4_TestData))]
         public void VARIANT_ToObject_ARRAYUI4MultiDimension_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3064,7 +3064,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUI4_TestData))]
         public void VARIANT_ToObject_ARRAYUI4MultiDimensionNonZeroLowerBound_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3090,7 +3090,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI4_TestData))]
         public void VARIANT_ToObject_UINTArrayUI4SingleDimension_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3114,7 +3114,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI4_TestData))]
         public void VARIANT_ToObject_UINTArrayUI4SingleDimensionNonZeroLowerBounds_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3138,7 +3138,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUI4_TestData))]
         public void VARIANT_ToObject_UINTArrayUI4MultiDimension_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3164,7 +3164,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUI4_TestData))]
         public void VARIANT_ToObject_UINTArrayUI4MultiDimensionNonZeroLowerBound_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI4,
@@ -3190,7 +3190,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorINT_TestData))]
         public void VARIANT_ToObject_ARRAYINTSingleDimension_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3214,7 +3214,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorINT_TestData))]
         public void VARIANT_ToObject_ARRAYINTSingleDimensionNonZeroLowerBounds_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3236,15 +3236,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionINT_TestData()
         {
-            yield return new object[] { new int[0,0] };
-            yield return new object[] { new int[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new int[0, 0] };
+            yield return new object[] { new int[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionINT_TestData))]
         public void VARIANT_ToObject_ARRAYINTMultiDimension_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3270,7 +3270,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionINT_TestData))]
         public void VARIANT_ToObject_ARRAYINTMultiDimensionNonZeroLowerBound_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.INT, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.INT, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3296,7 +3296,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorINT_TestData))]
         public void VARIANT_ToObject_I4ArrayINTSingleDimension_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3320,7 +3320,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorINT_TestData))]
         public void VARIANT_ToObject_I4ArrayINTSingleDimensionNonZeroLowerBounds_ReturnsExpected(int[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3344,7 +3344,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionINT_TestData))]
         public void VARIANT_ToObject_I4ArrayINTMultiDimension_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3370,7 +3370,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionINT_TestData))]
         public void VARIANT_ToObject_I4ArrayINTMultiDimensionNonZeroLowerBound_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I4, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I4, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.INT,
@@ -3396,7 +3396,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUINT_TestData))]
         public void VARIANT_ToObject_ARRAYUINTSingleDimension_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3420,7 +3420,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUINT_TestData))]
         public void VARIANT_ToObject_ARRAYUINTSingleDimensionNonZeroLowerBounds_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3442,15 +3442,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionUINT_TestData()
         {
-            yield return new object[] { new uint[0,0] };
-            yield return new object[] { new uint[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new uint[0, 0] };
+            yield return new object[] { new uint[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionUINT_TestData))]
         public void VARIANT_ToObject_ARRAYUINTMultiDimension_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3476,7 +3476,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUINT_TestData))]
         public void VARIANT_ToObject_ARRAYUINTMultiDimensionNonZeroLowerBound_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UINT, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UINT, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3502,7 +3502,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUINT_TestData))]
         public void VARIANT_ToObject_UI4ArrayUINTSingleDimension_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3526,7 +3526,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUINT_TestData))]
         public void VARIANT_ToObject_UI4ArrayUINTSingleDimensionNonZeroLowerBounds_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3550,7 +3550,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUINT_TestData))]
         public void VARIANT_ToObject_UI4ArrayUINTMultiDimension_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3576,7 +3576,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUINT_TestData))]
         public void VARIANT_ToObject_UI4ArrayUINTMultiDimensionNonZeroLowerBound_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI4, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI4, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UINT,
@@ -3602,7 +3602,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI8_TestData))]
         public void VARIANT_ToObject_ARRAYI8SingleDimension_ReturnsExpected(long[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I8, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I8, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I8,
@@ -3626,7 +3626,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorI8_TestData))]
         public void VARIANT_ToObject_ARRAYI8SingleDimensionNonZeroLowerBounds_ReturnsExpected(long[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I8, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I8, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I8,
@@ -3648,15 +3648,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionI8_TestData()
         {
-            yield return new object[] { new long[0,0] };
-            yield return new object[] { new long[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new long[0, 0] };
+            yield return new object[] { new long[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionI8_TestData))]
         public void VARIANT_ToObject_ARRAYI8MultiDimension_ReturnsExpected(long[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I8, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I8, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I8,
@@ -3682,7 +3682,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionI8_TestData))]
         public void VARIANT_ToObject_ARRAYI8MultiDimensionNonZeroLowerBound_ReturnsExpected(long[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.I8, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.I8, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I8,
@@ -3708,7 +3708,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI8_TestData))]
         public void VARIANT_ToObject_ARRAYUI8SingleDimension_ReturnsExpected(ulong[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI8, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI8, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI8,
@@ -3732,7 +3732,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorUI8_TestData))]
         public void VARIANT_ToObject_ARRAYUI8SingleDimensionNonZeroLowerBounds_ReturnsExpected(ulong[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI8, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI8, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI8,
@@ -3754,15 +3754,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionUI8_TestData()
         {
-            yield return new object[] { new ulong[0,0] };
-            yield return new object[] { new ulong[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new ulong[0, 0] };
+            yield return new object[] { new ulong[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionUI8_TestData))]
         public void VARIANT_ToObject_ARRAYUI8MultiDimension_ReturnsExpected(ulong[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI8, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI8, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI8,
@@ -3788,7 +3788,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionUI8_TestData))]
         public void VARIANT_ToObject_ARRAYUI8MultiDimensionNonZeroLowerBound_ReturnsExpected(ulong[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.UI8, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.UI8, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.UI8,
@@ -3814,7 +3814,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorR4_TestData))]
         public void VARIANT_ToObject_ARRAYR4SingleDimension_ReturnsExpected(float[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R4,
@@ -3838,7 +3838,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorR4_TestData))]
         public void VARIANT_ToObject_ARRAYR4SingleDimensionNonZeroLowerBounds_ReturnsExpected(float[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R4, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R4, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R4,
@@ -3860,15 +3860,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionR4_TestData()
         {
-            yield return new object[] { new float[0,0] };
-            yield return new object[] { new float[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new float[0, 0] };
+            yield return new object[] { new float[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionR4_TestData))]
         public void VARIANT_ToObject_ARRAYR4MultiDimension_ReturnsExpected(float[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R4, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R4, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R4,
@@ -3894,7 +3894,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionR4_TestData))]
         public void VARIANT_ToObject_ARRAYR4MultiDimensionNonZeroLowerBound_ReturnsExpected(float[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R4, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R4, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R4,
@@ -3920,7 +3920,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorR8_TestData))]
         public void VARIANT_ToObject_ARRAYR8SingleDimension_ReturnsExpected(double[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R8, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R8, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R8,
@@ -3944,7 +3944,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorR8_TestData))]
         public void VARIANT_ToObject_ARRAYR8SingleDimensionNonZeroLowerBounds_ReturnsExpected(double[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R8, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R8, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R8,
@@ -3966,15 +3966,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionR8_TestData()
         {
-            yield return new object[] { new double[0,0] };
-            yield return new object[] { new double[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new double[0, 0] };
+            yield return new object[] { new double[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionR8_TestData))]
         public void VARIANT_ToObject_ARRAYR8MultiDimension_ReturnsExpected(double[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R8, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R8, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R8,
@@ -4000,7 +4000,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionR8_TestData))]
         public void VARIANT_ToObject_ARRAYR8MultiDimensionNonZeroLowerBound_ReturnsExpected(double[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.R8, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.R8, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.R8,
@@ -4026,7 +4026,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorERROR_TestData))]
         public void VARIANT_ToObject_ARRAYERRORSingleDimension_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.ERROR, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.ERROR, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.ERROR,
@@ -4050,7 +4050,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorERROR_TestData))]
         public void VARIANT_ToObject_ARRAYERRORSingleDimensionNonZeroLowerBounds_ReturnsExpected(uint[] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.ERROR, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.ERROR, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.ERROR,
@@ -4072,15 +4072,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionERROR_TestData()
         {
-            yield return new object[] { new uint[0,0] };
-            yield return new object[] { new uint[2,3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[] { new uint[0, 0] };
+            yield return new object[] { new uint[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionERROR_TestData))]
         public void VARIANT_ToObject_ARRAYERRORMultiDimension_ReturnsExpected(uint[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.ERROR, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.ERROR, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.ERROR,
@@ -4106,7 +4106,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionERROR_TestData))]
         public void VARIANT_ToObject_ARRAYERRORMultiDimensionNonZeroLowerBound_ReturnsExpected(int[,] result)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.ERROR, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.ERROR, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.ERROR,
@@ -4139,7 +4139,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYBOOLSingleDimension_ReturnsExpected(object result, bool[] expected)
         {
             VARIANT_BOOL[] boolResult = (VARIANT_BOOL[])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.BOOL, boolResult);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.BOOL, boolResult);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.BOOL,
@@ -4164,7 +4164,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYBOOLSingleDimensionNonZeroLowerBounds_ReturnsExpected(object result, bool[] expected)
         {
             VARIANT_BOOL[] boolResult = (VARIANT_BOOL[])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.BOOL, boolResult, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.BOOL, boolResult, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.BOOL,
@@ -4186,8 +4186,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionBOOL_TestData()
         {
-            yield return new object[] { new VARIANT_BOOL[0,0], new bool[0,0] };
-            yield return new object[] { new VARIANT_BOOL[2, 3] { { VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE }, { VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE } }, new bool[2,3] { { true, false, true }, { false, true, false } } };
+            yield return new object[] { new VARIANT_BOOL[0, 0], new bool[0, 0] };
+            yield return new object[] { new VARIANT_BOOL[2, 3] { { VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE }, { VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE } }, new bool[2, 3] { { true, false, true }, { false, true, false } } };
         }
 
         [StaTheory]
@@ -4195,7 +4195,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYBOOLMultiDimension_ReturnsExpected(object result, bool[,] expected)
         {
             VARIANT_BOOL[,] boolResult = (VARIANT_BOOL[,])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.BOOL, boolResult);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.BOOL, boolResult);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.BOOL,
@@ -4222,7 +4222,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYBOOLMultiDimensionNonZeroLowerBound_ReturnsExpected(object result, bool[,] expected)
         {
             VARIANT_BOOL[,] boolResult = (VARIANT_BOOL[,])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.BOOL, boolResult, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.BOOL, boolResult, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.BOOL,
@@ -4259,7 +4259,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYDECIMALSingleDimension_ReturnsExpected(object result, decimal[] expected)
         {
             DECIMAL[] decimalResult = (DECIMAL[])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DECIMAL,
@@ -4284,7 +4284,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYDECIMALSingleDimensionNonZeroLowerBounds_ReturnsExpected(object result, decimal[] expected)
         {
             DECIMAL[] decimalResult = (DECIMAL[])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DECIMAL,
@@ -4306,14 +4306,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionDECIMAL_TestData()
         {
-            yield return new object[] { new DECIMAL[0,0], new decimal[0,0] };
+            yield return new object[] { new DECIMAL[0, 0], new decimal[0, 0] };
             VarDecFromR8(1.1, out DECIMAL d1);
             VarDecFromR8(2.2, out DECIMAL d2);
             VarDecFromR8(3.3, out DECIMAL d3);
             VarDecFromR8(3.1, out DECIMAL d4);
             VarDecFromR8(2.2, out DECIMAL d5);
             VarDecFromR8(1.3, out DECIMAL d6);
-            yield return new object[] { new DECIMAL[2, 3] { { d1, d2, d3 }, { d4, d5, d6 } }, new decimal[2,3] { { 1.1m, 2.2m, 3.3m }, { 3.1m, 2.2m, 1.3m } } };
+            yield return new object[] { new DECIMAL[2, 3] { { d1, d2, d3 }, { d4, d5, d6 } }, new decimal[2, 3] { { 1.1m, 2.2m, 3.3m }, { 3.1m, 2.2m, 1.3m } } };
         }
 
         [StaTheory]
@@ -4321,7 +4321,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYDECIMALMultiDimension_ReturnsExpected(object result, decimal[,] expected)
         {
             DECIMAL[,] decimalResult = (DECIMAL[,])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DECIMAL,
@@ -4348,7 +4348,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public void VARIANT_ToObject_ARRAYDECIMALMultiDimensionNonZeroLowerBound_ReturnsExpected(object result, decimal[,] expected)
         {
             DECIMAL[,] decimalResult = (DECIMAL[,])result;
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DECIMAL, decimalResult, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DECIMAL,
@@ -4374,7 +4374,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorCY_TestData))]
         public void VARIANT_ToObject_ARRAYCYSingleDimension_ReturnsExpected(long[] result, decimal[] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.CY, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.CY, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.CY,
@@ -4398,7 +4398,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorCY_TestData))]
         public void VARIANT_ToObject_ARRAYCYSingleDimensionNonZeroLowerBounds_ReturnsExpected(long[] result, decimal[] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.CY, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.CY, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.CY,
@@ -4420,15 +4420,15 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionCY_TestData()
         {
-            yield return new object[] { new long[0,0], new decimal[0,0] };
-            yield return new object[] { new long[2, 3] { { 11000, 22000, 33000 }, { 31000, 22000, 13000 } }, new decimal[2,3] { { 1.1m, 2.2m, 3.3m }, { 3.1m, 2.2m, 1.3m } } };
+            yield return new object[] { new long[0, 0], new decimal[0, 0] };
+            yield return new object[] { new long[2, 3] { { 11000, 22000, 33000 }, { 31000, 22000, 13000 } }, new decimal[2, 3] { { 1.1m, 2.2m, 3.3m }, { 3.1m, 2.2m, 1.3m } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionCY_TestData))]
         public void VARIANT_ToObject_ARRAYCYMultiDimension_ReturnsExpected(long[,] result, decimal[,] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.CY, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.CY, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.CY,
@@ -4454,7 +4454,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionCY_TestData))]
         public void VARIANT_ToObject_ARRAYCYMultiDimensionNonZeroLowerBound_ReturnsExpected(long[,] result, decimal[,] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.CY, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.CY, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.CY,
@@ -4480,7 +4480,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorDATE_TestData))]
         public void VARIANT_ToObject_ARRAYDATESingleDimension_ReturnsExpected(double[] result, DateTime[] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DATE, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DATE, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DATE,
@@ -4504,7 +4504,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(VectorDATE_TestData))]
         public void VARIANT_ToObject_ARRAYDATESingleDimensionNonZeroLowerBounds_ReturnsExpected(double[] result, DateTime[] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DATE, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DATE, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DATE,
@@ -4526,7 +4526,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         public static IEnumerable<object[]> MultiDimensionDATE_TestData()
         {
-            yield return new object[] { new double[0,0], new DateTime[0,0] };
+            yield return new object[] { new double[0, 0], new DateTime[0, 0] };
 
             var d1 = new DateTime(2020, 05, 13, 13, 3, 12);
             var d2 = new DateTime(2020, 05, 13, 13, 3, 11);
@@ -4534,14 +4534,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var d4 = new DateTime(1892, 1, 2, 3, 4, 5, 6);
             var d5 = new DateTime(2010, 2, 3, 4, 5, 6);
             var d6 = new DateTime(8000, 10, 11, 12, 13, 14);
-            yield return new object[] { new double[2, 3] { { d1.ToOADate(), d2.ToOADate(), d3.ToOADate() }, { d4.ToOADate(), d5.ToOADate(), d6.ToOADate() } }, new DateTime[2,3] { { d1, d2, d3 }, { d4, d5, d6 } } };
+            yield return new object[] { new double[2, 3] { { d1.ToOADate(), d2.ToOADate(), d3.ToOADate() }, { d4.ToOADate(), d5.ToOADate(), d6.ToOADate() } }, new DateTime[2, 3] { { d1, d2, d3 }, { d4, d5, d6 } } };
         }
 
         [StaTheory]
         [MemberData(nameof(MultiDimensionDATE_TestData))]
         public void VARIANT_ToObject_ARRAYDATEMultiDimension_ReturnsExpected(double[,] result, DateTime[,] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DATE, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DATE, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DATE,
@@ -4567,7 +4567,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         [MemberData(nameof(MultiDimensionDATE_TestData))]
         public void VARIANT_ToObject_ARRAYDATEMultiDimensionNonZeroLowerBound_ReturnsExpected(double[,] result, DateTime[,] expected)
         {
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.DATE, result, 1, 2);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.DATE, result, 1, 2);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.DATE,
@@ -4597,7 +4597,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.BSTR, result);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.BSTR, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.BSTR,
@@ -4631,7 +4631,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.BSTR, result, 1);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.BSTR, result, 1);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.BSTR,
@@ -4667,8 +4667,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.StringToBSTR("text5");
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.BSTR, result);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.BSTR, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.BSTR,
@@ -4709,8 +4709,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.StringToBSTR("text5");
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.BSTR, result, 1, 2);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.BSTR, result, 1, 2);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.BSTR,
@@ -4751,7 +4751,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.UNKNOWN, result);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.UNKNOWN, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -4787,7 +4787,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.UNKNOWN, result, 1);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.UNKNOWN, result, 1);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -4828,8 +4828,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.UNKNOWN, result);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.UNKNOWN, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -4875,8 +4875,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.UNKNOWN, result, 1, 2);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.UNKNOWN, result, 1, 2);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -4917,7 +4917,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -4953,7 +4953,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result, 1);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result, 1);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -4994,8 +4994,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -5041,8 +5041,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result, 1, 2);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result, 1, 2);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.UNKNOWN,
@@ -5083,7 +5083,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.DISPATCH,
@@ -5119,7 +5119,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             try
             {
                 var result = new IntPtr[] { IntPtr.Zero, ptr1, ptr2 };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result, 1);
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result, 1);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.DISPATCH,
@@ -5160,8 +5160,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.DISPATCH,
@@ -5207,8 +5207,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2,3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
-                SAFEARRAY *psa = CreateSafeArray(VARENUM.DISPATCH, result, 1, 2);
+                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result, 1, 2);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.DISPATCH,
@@ -5267,7 +5267,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 }
             };
             var result = new VARIANT[] { v1, v2, v3 };
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.VARIANT, result);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.VARIANT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.VARIANT,
@@ -5315,7 +5315,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 }
             };
             var result = new VARIANT[] { v1, v2, v3 };
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.VARIANT, result, 1);
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.VARIANT, result, 1);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.VARIANT,
@@ -5387,8 +5387,8 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 }
             };
 
-            var result = new VARIANT[2,3] { { v1, v2, v3 }, { v4, v5, v6 } };
-            SAFEARRAY *psa = CreateSafeArray(VARENUM.VARIANT, result);
+            var result = new VARIANT[2, 3] { { v1, v2, v3 }, { v4, v5, v6 } };
+            SAFEARRAY* psa = CreateSafeArray(VARENUM.VARIANT, result);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.VARIANT,
@@ -5560,7 +5560,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 };
             }
 
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, (uint)rank, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, (uint)rank, saBounds);
             using var variant = new VARIANT
             {
                 vt = VARENUM.ARRAY | VARENUM.I4,
@@ -5579,7 +5579,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = (uint)result.Length,
                 lLbound = lbound
             };
-            SAFEARRAY *psa = SafeArrayCreate(vt, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(vt, 1, &saBound);
             Assert.True(psa != null);
 
             VARENUM arrayVt = VARENUM.EMPTY;
@@ -5619,7 +5619,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = (uint)multiDimArray.GetLength(1),
                 lLbound = lbound2
             };
-            SAFEARRAY *psa = SafeArrayCreate(vt, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(vt, 2, saBounds);
             Assert.True(psa != null);
 
             VARENUM arrayVt = VARENUM.EMPTY;
@@ -5849,7 +5849,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(recordInfo);
             try
             {
-                SAFEARRAY *psa = CreateRecordSafeArray(result, pRecordInfo);
+                SAFEARRAY* psa = CreateRecordSafeArray(result, pRecordInfo);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.RECORD,
@@ -5877,7 +5877,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
             {
-                SAFEARRAY *psa = CreateRecordSafeArray(result, pRecordInfo);
+                SAFEARRAY* psa = CreateRecordSafeArray(result, pRecordInfo);
                 psa->fFeatures &= ~FADF.RECORD;
                 try
                 {
@@ -5914,7 +5914,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
             {
-                SAFEARRAY *psa = CreateRecordSafeArray(result, pRecordInfo);
+                SAFEARRAY* psa = CreateRecordSafeArray(result, pRecordInfo);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.RECORD,
@@ -5954,7 +5954,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecordInfo = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
             {
-                SAFEARRAY *psa = CreateRecordSafeArray(result, pRecordInfo);
+                SAFEARRAY* psa = CreateRecordSafeArray(result, pRecordInfo);
                 using var variant = new VARIANT
                 {
                     vt = VARENUM.ARRAY | VARENUM.RECORD,
@@ -6024,7 +6024,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = (uint)result.Length,
                 lLbound = lbound
             };
-            SAFEARRAY *psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, recordInfo);
+            SAFEARRAY* psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, recordInfo);
             Assert.True(psa != null);
 
             VARENUM arrayVt = VARENUM.EMPTY;

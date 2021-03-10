@@ -10,8 +10,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using SourceGenerated;
 using Microsoft.Win32;
+using SourceGenerated;
 using static Interop;
 using static Interop.ComCtl32;
 

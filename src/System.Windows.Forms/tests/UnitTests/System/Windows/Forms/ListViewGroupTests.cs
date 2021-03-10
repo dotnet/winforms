@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Tests
             // Run this from another thread as we call Application.EnableVisualStyles.
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
-                var data = new (int, int)[] { (-1, -1), (0 , 0), (1, 1), (2, -1) };
+                var data = new (int, int)[] { (-1, -1), (0, 0), (1, 1), (2, -1) };
                 foreach ((int Index, int Expected) value in data)
                 {
                     Application.EnableVisualStyles();

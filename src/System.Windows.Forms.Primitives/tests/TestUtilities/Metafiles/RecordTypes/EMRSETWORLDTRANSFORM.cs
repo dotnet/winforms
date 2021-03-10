@@ -4,8 +4,8 @@
 
 #nullable enable
 
-using System.Runtime.InteropServices;
 using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Metafiles
 {

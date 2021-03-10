@@ -6,8 +6,8 @@
 
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
     using System;
+    using System.Diagnostics;
     using System.Drawing;
 
     /// <summary>

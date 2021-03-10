@@ -1284,7 +1284,7 @@ namespace System.Windows.Forms.Tests
         public void TabControl_ImageList_Set_CreatesImageHandle()
         {
             using var control = new TabControl();
-            using var imageList =  new ImageList();
+            using var imageList = new ImageList();
             control.ImageList = imageList;
             Assert.True(imageList.HandleCreated);
             Assert.False(control.IsHandleCreated);
@@ -1297,7 +1297,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             // Set non-null.
-            using var imageList =  new ImageList();
+            using var imageList = new ImageList();
             control.ImageList = imageList;
             Assert.True(imageList.HandleCreated);
             Assert.Equal(imageList.Handle, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.TCM.GETIMAGELIST, IntPtr.Zero, IntPtr.Zero));

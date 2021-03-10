@@ -3,11 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Threading;
-using WFCTestLib.Log;
-using ReflectTools;
-using System.Windows.Forms.IntegrationTests.Common;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms.IntegrationTests.Common;
+using ReflectTools;
+using WFCTestLib.Log;
 using static Interop;
 using static Interop.User32;
 

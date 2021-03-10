@@ -221,7 +221,9 @@ namespace System.Windows.Forms
         public Padding Margin
         {
             get { return CommonProperties.GetMargin(this); }
-            set { if (Margin != value)
+            set
+            {
+                if (Margin != value)
                 {
                     CommonProperties.SetMargin(this, value);
                 }

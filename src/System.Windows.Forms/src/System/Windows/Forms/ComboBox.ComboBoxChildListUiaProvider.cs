@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                if (_owningComboBox.AccessibilityObject is not  ComboBoxAccessibleObject comboBoxAccessibleObject)
+                if (_owningComboBox.AccessibilityObject is not ComboBoxAccessibleObject comboBoxAccessibleObject)
                 {
                     return null;
                 }

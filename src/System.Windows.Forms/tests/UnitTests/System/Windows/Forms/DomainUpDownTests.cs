@@ -1195,10 +1195,10 @@ namespace System.Windows.Forms.Tests
             control.OnSelectedItemChanged(source, eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.SelectedItemChanged -= handler;
-           control.OnSelectedItemChanged(source, eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.SelectedItemChanged -= handler;
+            control.OnSelectedItemChanged(source, eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -1219,10 +1219,10 @@ namespace System.Windows.Forms.Tests
             control.OnSelectedItemChanged(source, eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.SelectedItemChanged -= handler;
-           control.OnSelectedItemChanged(source, eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.SelectedItemChanged -= handler;
+            control.OnSelectedItemChanged(source, eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> UpButton_TestData()

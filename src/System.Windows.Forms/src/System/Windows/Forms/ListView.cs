@@ -6223,7 +6223,7 @@ namespace System.Windows.Forms
 
         private void Unhook()
         {
-            foreach(ListViewItem listViewItem in Items)
+            foreach (ListViewItem listViewItem in Items)
             {
                 KeyboardToolTipStateMachine.Instance.Unhook(listViewItem, KeyboardToolTip);
             }
