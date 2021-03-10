@@ -129,7 +129,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="System.Text.Encodings.Web" Version="5.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>e6b30911ce808668d81d926b0744f1dd02a43840</Sha>
+      <Sha>f27d33729518f5aa478aa818b7b4f54a4d50bef1</Sha>
     </Dependency>
     <Dependency Name="System.Text.Json" Version="5.0.1">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
