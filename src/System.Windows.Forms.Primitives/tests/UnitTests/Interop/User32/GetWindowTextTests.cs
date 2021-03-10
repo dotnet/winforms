@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                             SetWindowTextW(hWnd, text);
                         }
                         break;
-                   case WM.GETTEXT:
+                    case WM.GETTEXT:
                         text = BeforeGetTextCallback?.Invoke();
                         if (text != null)
                         {

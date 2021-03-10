@@ -154,10 +154,12 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
+        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
+        {
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
-            if (RendererOverride != null) {
+            if (RendererOverride != null)
+            {
                 base.OnRenderOverflowButtonBackground(e);
                 return;
             }
@@ -555,7 +557,8 @@ namespace System.Windows.Forms
                 return; // no highlights are painted behind a system menu item
             }
 
-            if (item.IsOnDropDown) {
+            if (item.IsOnDropDown)
+            {
                 ScaleObjectSizesIfNeeded(item.DeviceDpi);
 
                 bounds = LayoutUtils.DeflateRect(bounds, scaledDropDownMenuItemPaintPadding);

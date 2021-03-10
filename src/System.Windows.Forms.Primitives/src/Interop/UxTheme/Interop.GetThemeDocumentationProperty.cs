@@ -11,12 +11,12 @@ internal static partial class Interop
     public static partial class UxTheme
     {
         [DllImport(Libraries.UxTheme, CharSet = CharSet.Unicode, EntryPoint = "GetThemeDocumentationProperty")]
-        private static unsafe extern int GetThemeDocumentationPropertyInternal(string pszThemeName, string pszPropertyName, char *pszValueBuff, int cchMaxValChars);
+        private static unsafe extern int GetThemeDocumentationPropertyInternal(string pszThemeName, string pszPropertyName, char* pszValueBuff, int cchMaxValChars);
 
         public static unsafe string GetThemeDocumentationProperty(string pszThemeName, string pszPropertyName)
         {
             Span<char> buffer = stackalloc char[512];
-            fixed (char *pBuffer = buffer)
+            fixed (char* pBuffer = buffer)
             {
                 GetThemeDocumentationPropertyInternal(pszThemeName, pszPropertyName, pBuffer, buffer.Length);
             }

@@ -1,14 +1,14 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Globalization;
+using System.Linq;
 using WinForms.Common.Tests;
 using Xunit;
-using System.ComponentModel;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1915,7 +1915,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Height_SetWithDataGridView_TestData()
         {
-            foreach (DataGridViewAutoSizeRowsMode autoSizeRowsMode  in Enum.GetValues(typeof(DataGridViewAutoSizeRowsMode)))
+            foreach (DataGridViewAutoSizeRowsMode autoSizeRowsMode in Enum.GetValues(typeof(DataGridViewAutoSizeRowsMode)))
             {
                 if (autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
                 {
@@ -2357,7 +2357,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> MinimumHeight_SetWithDataGridView_TestData()
         {
-            foreach (DataGridViewAutoSizeRowsMode autoSizeRowsMode  in Enum.GetValues(typeof(DataGridViewAutoSizeRowsMode)))
+            foreach (DataGridViewAutoSizeRowsMode autoSizeRowsMode in Enum.GetValues(typeof(DataGridViewAutoSizeRowsMode)))
             {
                 if (autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
                 {
@@ -2551,12 +2551,12 @@ namespace System.Windows.Forms.Tests
 
             // Set same.
             row.ReadOnly = value;
-            Assert.Equal(dataGridViewReadOnly ||value, row.ReadOnly);
+            Assert.Equal(dataGridViewReadOnly || value, row.ReadOnly);
             Assert.False(control.IsHandleCreated);
 
             // Set different.
             row.ReadOnly = !value;
-            Assert.Equal(dataGridViewReadOnly ||!value, row.ReadOnly);
+            Assert.Equal(dataGridViewReadOnly || !value, row.ReadOnly);
             Assert.False(control.IsHandleCreated);
         }
 

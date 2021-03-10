@@ -402,7 +402,7 @@ namespace System.Windows.Forms.Layout
             /// </summary>
             protected virtual bool IsVertical => false;
 
-            protected bool IsContainerRTL =>  _isContainerRTL;
+            protected bool IsContainerRTL => _isContainerRTL;
 
             /// <summary>
             ///  Returns the display rectangle of the container - this will be flipped if the layout

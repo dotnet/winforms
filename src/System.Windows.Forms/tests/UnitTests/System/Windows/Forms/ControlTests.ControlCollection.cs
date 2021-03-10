@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, control1.TabIndex);
                 Assert.Same(owner, control2.Parent);
                 Assert.Equal(1, control2.TabIndex);
-                Assert.Equal(new Control[] { control2, control1}, owner.Controls.Cast<Control>());
+                Assert.Equal(new Control[] { control2, control1 }, owner.Controls.Cast<Control>());
                 Assert.Equal(0, layoutCallCount1);
                 Assert.Equal(0, layoutCallCount2);
                 Assert.Equal(3, parentLayoutCallCount);
@@ -3400,7 +3400,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, control1.TabIndex);
                 Assert.Same(owner, control2.Parent);
                 Assert.Equal(1, control2.TabIndex);
-                Assert.Equal(new Control[] { control2, control1}, owner.Controls.Cast<Control>());
+                Assert.Equal(new Control[] { control2, control1 }, owner.Controls.Cast<Control>());
                 Assert.Equal(0, layoutCallCount1);
                 Assert.Equal(0, layoutCallCount2);
                 Assert.Equal(3, parentLayoutCallCount);

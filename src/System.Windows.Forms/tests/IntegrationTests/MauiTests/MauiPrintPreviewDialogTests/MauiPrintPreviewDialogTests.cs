@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Threading;
-using WFCTestLib.Log;
-using ReflectTools;
 using System.Windows.Forms.IntegrationTests.Common;
+using ReflectTools;
+using WFCTestLib.Log;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {

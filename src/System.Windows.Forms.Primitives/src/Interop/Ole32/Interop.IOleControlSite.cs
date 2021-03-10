@@ -28,8 +28,8 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT TransformCoords(
-                Point *pPtlHimetric,
-                PointF *pPtfContainer,
+                Point* pPtlHimetric,
+                PointF* pPtfContainer,
                 XFORMCOORDS dwFlags);
 
             [PreserveSig]

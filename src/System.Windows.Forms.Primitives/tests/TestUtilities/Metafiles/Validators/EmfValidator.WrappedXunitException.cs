@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Metafiles
         private class WrappedXunitException : XunitException
         {
             public WrappedXunitException(string userMessage, XunitException innerException)
-                : base (userMessage, innerException)
+                : base(userMessage, innerException)
             {
             }
         }

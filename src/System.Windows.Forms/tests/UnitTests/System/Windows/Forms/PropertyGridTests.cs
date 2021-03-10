@@ -3252,7 +3252,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { Color.Empty, SystemColors.ControlText };
             yield return new object[] { Color.Red, Color.Red };
-            yield return new object[] { Color.FromArgb(254, 1, 2, 3),Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
         }
 
         [WinFormsTheory]

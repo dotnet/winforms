@@ -627,7 +627,7 @@ namespace System.Windows.Forms
 
                 return lines;
             }
-            set{ }
+            set { }
         }
 
         /// <summary>

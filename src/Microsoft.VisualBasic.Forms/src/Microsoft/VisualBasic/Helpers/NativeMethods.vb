@@ -4,8 +4,8 @@
 Option Strict On
 Option Explicit On
 
-Imports System.Text
 Imports System.Runtime.InteropServices
+Imports System.Text
 
 Namespace Microsoft.VisualBasic.CompilerServices
 

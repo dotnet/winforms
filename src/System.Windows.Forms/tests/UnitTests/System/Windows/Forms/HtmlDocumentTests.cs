@@ -8,8 +8,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Xunit;
 using WinForms.Common.Tests;
+using Xunit;
 using static Interop;
 using static Interop.Mshtml;
 

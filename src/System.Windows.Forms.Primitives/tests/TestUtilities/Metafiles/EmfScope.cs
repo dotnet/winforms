@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Metafiles
         private Gdi32.HENHMETAFILE _hemf;
 
         public unsafe EmfScope()
-            : this (CreateEnhMetaFile())
+            : this(CreateEnhMetaFile())
         {
         }
 

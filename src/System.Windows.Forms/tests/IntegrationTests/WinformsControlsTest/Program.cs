@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Windows.Forms;
-using System.Threading;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace WinformsControlsTest
 {

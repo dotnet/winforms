@@ -70,9 +70,9 @@ namespace System.Windows.Forms
         internal object activeXInstance;
 
         /// <summary>
-            ///  Creates a new instance of a WinForms control which wraps an ActiveX control
+        ///  Creates a new instance of a WinForms control which wraps an ActiveX control
         ///  given by the clsid parameter.
-            /// </summary>
+        /// </summary>
         internal WebBrowserBase(string clsidString) : base()
         {
             if (Application.OleRequired() != ApartmentState.STA)
@@ -132,35 +132,35 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  This will be called when the native ActiveX control has just been created.
+        ///  This will be called when the native ActiveX control has just been created.
         ///  Inheritors of this class can override this method to cast the nativeActiveXObject
         ///  parameter to the appropriate interface. They can then cache this interface
         ///  value in a member variable. However, they must release this value when
         ///  DetachInterfaces is called (by setting the cached interface variable to null).
-            /// </summary>
+        /// </summary>
         protected virtual void AttachInterfaces(object nativeActiveXObject)
         {
         }
 
         /// <summary>
-            ///  See AttachInterfaces for a description of when to override DetachInterfaces.
-            /// </summary>
+        ///  See AttachInterfaces for a description of when to override DetachInterfaces.
+        /// </summary>
         protected virtual void DetachInterfaces()
         {
         }
 
         /// <summary>
-            ///  This will be called when we are ready to start listening to events.
+        ///  This will be called when we are ready to start listening to events.
         ///  Inheritors can override this method to hook their own connection points.
-            /// </summary>
+        /// </summary>
         protected virtual void CreateSink()
         {
         }
 
         /// <summary>
-            ///  This will be called when it is time to stop listening to events.
+        ///  This will be called when it is time to stop listening to events.
         ///  This is where inheritors have to disconnect their connection points.
-            /// </summary>
+        /// </summary>
         protected virtual void DetachSink()
         {
         }
@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-//Everett
+        //Everett
         new public event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));

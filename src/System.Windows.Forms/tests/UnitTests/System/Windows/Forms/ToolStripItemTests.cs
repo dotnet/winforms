@@ -12640,7 +12640,7 @@ namespace System.Windows.Forms.Tests
         public void ToolStripItem_QueryAccessibilityHelp_AddRemove_Success()
         {
             using var item = new SubToolStripItem();
-            QueryAccessibilityHelpEventHandler handler = (sender, e) => {};
+            QueryAccessibilityHelpEventHandler handler = (sender, e) => { };
             item.QueryAccessibilityHelp += handler;
             item.QueryAccessibilityHelp -= handler;
         }

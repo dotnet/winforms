@@ -29,7 +29,7 @@ namespace System.ComponentModel.Design.Tests
                 return mockSite.Object;
             }
 
-            foreach (ISite site in new ISite[] { null, CreateSite(null )})
+            foreach (ISite site in new ISite[] { null, CreateSite(null) })
             {
                 yield return new object[] { site, null, null, null };
                 yield return new object[] { site, null, string.Empty, string.Empty };
@@ -649,9 +649,9 @@ namespace System.ComponentModel.Design.Tests
             Assert.Null(component.Site.Name);
         }
 
-         [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
-         public void SiteNestedContainer_Add_Unloading_Nop()
-         {
+        [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
+        public void SiteNestedContainer_Add_Unloading_Nop()
+        {
             using var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
             surface.BeginLoad(typeof(RootDesignerComponent));

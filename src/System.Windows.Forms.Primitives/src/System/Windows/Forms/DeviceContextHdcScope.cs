@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         public DeviceContextHdcScope(
             IDeviceContext deviceContext,
             bool applyGraphicsState = true,
-            bool saveHdcState = false) : this (
+            bool saveHdcState = false) : this(
                 deviceContext,
                 applyGraphicsState ? ApplyGraphicsProperties.All : ApplyGraphicsProperties.None,
                 saveHdcState)
