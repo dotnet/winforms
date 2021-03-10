@@ -2029,6 +2029,16 @@ namespace System.Windows.Forms
             {
                 if (value != DataSource)
                 {
+                    if (DataSource is Component oldDataSource)
+                    {
+                        oldDataSource.Disposed -= OnDataSourceDisposed;
+                    }
+
+                    if (value is Component newDataSource)
+                    {
+                        newDataSource.Disposed += OnDataSourceDisposed;
+                    }
+
                     CurrentCell = null;
                     if (DataConnection is null)
                     {
