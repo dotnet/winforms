@@ -11,6 +11,7 @@ using System.Windows.Forms.Metafiles;
 using System.Numerics;
 using static System.Windows.Forms.Metafiles.DataHelpers;
 using static Interop;
+using System.Data;
 
 namespace System.Windows.Forms.Tests
 {
@@ -2799,6 +2800,92 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubDataGridView();
             Assert.Throws<NullReferenceException>(() => control.OnRowHeadersWidthSizeModeChanged(null));
+        }
+
+        [WinFormsFact]
+        public void DataGridView_UpdatesItsItems_AfterDataSourceDisposing()
+        {
+            using DataGridView control = new DataGridView();
+            int rowsCount = 5;
+            BindingSource bindingSource = GetTestBindingSource(rowsCount);
+            BindingContext context = new BindingContext();
+            context.Add(bindingSource, bindingSource.CurrencyManager);
+            control.BindingContext = context;
+            control.DataSource = bindingSource;
+
+            // The TestBindingSource table contains 2 columns
+            Assert.Equal(2, control.Columns.Count);
+            // The TestBindingSource table contains some rows + 1 new DGV row (because AllowUserToAddRows is true)
+            Assert.Equal(rowsCount + 1, control.Rows.Count);
+
+            bindingSource.Dispose();
+
+            // The DataGridView updates its Rows and Columns collections after its DataSource is disposed
+            Assert.Empty(control.Columns);
+            Assert.Empty(control.Rows);
+        }
+
+        [WinFormsFact]
+        public void DataGridView_DataSource_IsNull_AfterDisposing()
+        {
+            using DataGridView control = new DataGridView();
+            BindingSource bindingSource = GetTestBindingSource(5);
+            control.DataSource = bindingSource;
+
+            Assert.Equal(bindingSource, control.DataSource);
+
+            bindingSource.Dispose();
+
+            Assert.Null(control.DataSource);
+        }
+
+        [WinFormsFact]
+        public void DataGridView_DataSource_IsActual_AfterOldOneIsDisposed()
+        {
+            using DataGridView control = new DataGridView();
+            int rowsCount1 = 3;
+            BindingSource bindingSource1 = GetTestBindingSource(rowsCount1);
+            int rowsCount2 = 5;
+            BindingSource bindingSource2 = GetTestBindingSource(rowsCount2);
+            BindingContext context = new BindingContext();
+            context.Add(bindingSource1, bindingSource1.CurrencyManager);
+            control.BindingContext = context;
+            control.DataSource = bindingSource1;
+
+            Assert.Equal(bindingSource1, control.DataSource);
+            Assert.Equal(2, control.Columns.Count);
+            Assert.Equal(rowsCount1 + 1, control.Rows.Count); // + 1 is the new DGV row
+
+            control.DataSource = bindingSource2;
+
+            Assert.Equal(bindingSource2, control.DataSource);
+            Assert.Equal(2, control.Columns.Count);
+            Assert.Equal(rowsCount2 + 1, control.Rows.Count); // + 1 is the new DGV row
+
+            bindingSource1.Dispose();
+
+            // bindingSource2 is actual for the DataGridView so it will contain correct Rows and Columns counts
+            // even after bindingSource1 is disposed. This test checks that Disposed events unsubscribed correctly
+            Assert.Equal(bindingSource2, control.DataSource);
+            Assert.Equal(2, control.Columns.Count);
+            Assert.Equal(rowsCount2 + 1, control.Rows.Count); // + 1 is the new DGV row
+        }
+
+        private BindingSource GetTestBindingSource(int rowsCount)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Name");
+            dt.Columns.Add("Age");
+
+            for (int i = 0; i < rowsCount; i++)
+            {
+                DataRow dr = dt.NewRow();
+                dr[0] = $"User{i}";
+                dr[1] = i * 3;
+                dt.Rows.Add(dr);
+            }
+
+            return new() { DataSource = dt };
         }
 
         private class SubDataGridViewCell : DataGridViewCell
