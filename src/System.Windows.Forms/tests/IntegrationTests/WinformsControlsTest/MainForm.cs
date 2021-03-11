@@ -78,16 +78,8 @@ namespace WinformsControlsTest
                 new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show())
             },
             {
-                MainFormControlsTabOrder.FolderBrowserDialogButton,
-                new InitInfo("FolderBrowserDialog", (obj, e) => new FolderBrowserDialog().ShowDialog())
-            },
-            {
-                MainFormControlsTabOrder.ThreadExceptionDialogButton,
-                new InitInfo("ThreadExceptionDialog", (obj, e) => new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated.")).ShowDialog())
-            },
-            {
-                MainFormControlsTabOrder.PrintDialogButton,
-                new InitInfo("PrintDialog", (obj, e) => new PrintDialog().ShowDialog())
+                MainFormControlsTabOrder.DialogsButton,
+                new InitInfo("Dialogs", (obj, e) => new Dialogs().ShowDialog())
             },
             {
                 MainFormControlsTabOrder.DataGridViewButton,
