@@ -10590,10 +10590,10 @@ System.Windows.Forms.SearchForVirtualItemEventArgs.Text.get -> string?
 ~System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage value) -> void
 ~System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
-~System.Windows.Forms.TabControlCancelEventArgs.TabControlCancelEventArgs(System.Windows.Forms.TabPage tabPage, int tabPageIndex, bool cancel, System.Windows.Forms.TabControlAction action) -> void
-~System.Windows.Forms.TabControlCancelEventArgs.TabPage.get -> System.Windows.Forms.TabPage
-~System.Windows.Forms.TabControlEventArgs.TabControlEventArgs(System.Windows.Forms.TabPage tabPage, int tabPageIndex, System.Windows.Forms.TabControlAction action) -> void
-~System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.TabPage
+System.Windows.Forms.TabControlCancelEventArgs.TabControlCancelEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, bool cancel, System.Windows.Forms.TabControlAction action) -> void
+System.Windows.Forms.TabControlCancelEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
+System.Windows.Forms.TabControlEventArgs.TabControlEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, System.Windows.Forms.TabControlAction action) -> void
+System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
 ~System.Windows.Forms.TabPage.ImageKey.get -> string
 ~System.Windows.Forms.TabPage.ImageKey.set -> void
 ~System.Windows.Forms.TabPage.TabPage(string text) -> void

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -14,7 +12,12 @@ namespace System.Windows.Forms
     /// </summary>
     public class TabControlCancelEventArgs : CancelEventArgs
     {
-        public TabControlCancelEventArgs(TabPage tabPage, int tabPageIndex, bool cancel, TabControlAction action) : base(cancel)
+        public TabControlCancelEventArgs(
+            TabPage? tabPage,
+            int tabPageIndex,
+            bool cancel,
+            TabControlAction action)
+            : base(cancel)
         {
             TabPage = tabPage;
             TabPageIndex = tabPageIndex;
@@ -24,7 +27,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Stores the referemce to the tabpage that is undergoing the TabControl event.
         /// </summary>
-        public TabPage TabPage { get; }
+        public TabPage? TabPage { get; }
 
         /// <summary>
         ///  Stores the index to the tabpage that is undergoing the TabControl event.
