@@ -10977,11 +10977,11 @@ System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~System.Windows.Forms.TreeViewCancelEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeViewCancelEventArgs.TreeViewCancelEventArgs(System.Windows.Forms.TreeNode node, bool cancel, System.Windows.Forms.TreeViewAction action) -> void
-~System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode node) -> void
-~System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode node, System.Windows.Forms.TreeViewAction action) -> void
+System.Windows.Forms.TreeViewCancelEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewCancelEventArgs.TreeViewCancelEventArgs(System.Windows.Forms.TreeNode? node, bool cancel, System.Windows.Forms.TreeViewAction action) -> void
+System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node) -> void
+System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node, System.Windows.Forms.TreeViewAction action) -> void
 System.Windows.Forms.TreeViewHitTestInfo.Node.get -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeViewHitTestInfo.TreeViewHitTestInfo(System.Windows.Forms.TreeNode? hitNode, System.Windows.Forms.TreeViewHitTestLocations hitLocation) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.Message.get -> string
