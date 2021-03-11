@@ -52,7 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new HotCommandsAccessibleObject(this, ownerGrid);
+            return new HotCommandsAccessibleObject(this, ownerPropertyGrid);
         }
 
         public override Rectangle DisplayRectangle

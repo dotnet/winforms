@@ -9,13 +9,15 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class PropertyGridAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGrid_PropertyGridAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void PropertyGridAccessibleObject_Ctor_Default()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            PropertyGridAccessibleObject accessibleObject = new PropertyGridAccessibleObject(propertyGrid);
+            PropertyGrid.PropertyGridAccessibleObject accessibleObject =
+                new PropertyGrid.PropertyGridAccessibleObject(propertyGrid);
+
             Assert.NotNull(accessibleObject.Owner);
             Assert.Equal(propertyGrid, accessibleObject.Owner);
         }
@@ -43,7 +45,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             propertyGrid.CreateControl();
             using ComboBox comboBox = new ComboBox();
             propertyGrid.SelectedObject = comboBox;
-            PropertyGridAccessibleObject propertyGridAccessibleObject = new PropertyGridAccessibleObject(propertyGrid);
+            PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject =
+                new PropertyGrid.PropertyGridAccessibleObject(propertyGrid);
 
             // First child should be PropertyGrid toolbox.
             AccessibleObject firstChild = (AccessibleObject)propertyGridAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);

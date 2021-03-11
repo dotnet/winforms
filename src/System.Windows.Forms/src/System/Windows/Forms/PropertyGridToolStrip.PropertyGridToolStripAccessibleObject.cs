@@ -4,23 +4,23 @@
 
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal
+namespace System.Windows.Forms
 {
-    internal partial class HotCommands
+    internal partial class PropertyGridToolStrip
     {
         /// <summary>
-        ///  Represents the hot commands control accessible object.
+        ///  Represents the PropertyGridToolStrip control accessibility object.
         /// </summary>
-        internal class HotCommandsAccessibleObject : Control.ControlAccessibleObject
+        internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
         {
             private readonly PropertyGrid _parentPropertyGrid;
 
             /// <summary>
-            ///  Initializes new instance of DocCommentAccessibleObject.
+            ///  Constructs new instance of PropertyGridToolStripAccessibleObject
             /// </summary>
-            /// <param name="owningHotCommands">The owning HotCommands control.</param>
+            /// <param name="owningPropertyGridToolStrip">The PropertyGridToolStrip owning control.</param>
             /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-            public HotCommandsAccessibleObject(HotCommands owningHotCommands, PropertyGrid parentPropertyGrid) : base(owningHotCommands)
+            public PropertyGridToolStripAccessibleObject(PropertyGridToolStrip owningPropertyGridToolStrip, PropertyGrid parentPropertyGrid) : base(owningPropertyGridToolStrip)
             {
                 _parentPropertyGrid = parentPropertyGrid;
             }
@@ -30,12 +30,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (_parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
+                if (_parentPropertyGrid.IsHandleCreated &&
+                    _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
                     UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                    if (navigationTarget is not null)
+                    if (navigationTarget != null)
                     {
                         return navigationTarget;
                     }
@@ -52,7 +53,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ToolBarControlTypeId,
                     UiaCore.UIA.NamePropertyId => Name,
                     _ => base.GetPropertyValue(propertyID)
                 };
