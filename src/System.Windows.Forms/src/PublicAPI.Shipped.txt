@@ -9866,7 +9866,7 @@ System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
 ~System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control control, int padding) -> void
 ~System.Windows.Forms.ErrorProvider.Tag.get -> object
 ~System.Windows.Forms.ErrorProvider.Tag.set -> void
-~System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection
+System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection!
 ~System.Windows.Forms.FileDialog.DefaultExt.get -> string
 ~System.Windows.Forms.FileDialog.DefaultExt.set -> void
 ~System.Windows.Forms.FileDialog.FileName.get -> string
