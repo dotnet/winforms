@@ -3215,16 +3215,20 @@ namespace System.Windows.Forms
                 switch (searchDirection)
                 {
                     case SearchDirectionHint.Up:
+                        x = Math.Max(itemBounds.Left, iconBounds.Left);
                         y = Math.Max(itemBounds.Top, iconBounds.Top) - 1;
                         break;
                     case SearchDirectionHint.Down:
+                        x = Math.Max(itemBounds.Left, iconBounds.Left);
                         y = Math.Max(itemBounds.Top, iconBounds.Top) + 1;
                         break;
                     case SearchDirectionHint.Left:
                         x = Math.Max(itemBounds.Left, iconBounds.Left) - 1;
+                        y = Math.Max(itemBounds.Top, iconBounds.Top);
                         break;
                     case SearchDirectionHint.Right:
                         x = Math.Max(itemBounds.Left, iconBounds.Left) + 1;
+                        y = Math.Max(itemBounds.Top, iconBounds.Top);
                         break;
                     default:
                         Debug.Assert(false, "these are all the search directions");
@@ -3232,7 +3236,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return FindItem(false, string.Empty, false, new Point(x, y), searchDirection, -1, false);
+            return FindItem(false, string.Empty, false, new Point(x, y), searchDirection, 0, false);
         }
 
         private unsafe ListViewItem FindItem(bool isTextSearch, string text, bool isPrefixSearch, Point pt, SearchDirectionHint dir, int startIndex, bool includeSubItemsInSearch)
