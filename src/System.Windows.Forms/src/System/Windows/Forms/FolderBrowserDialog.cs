@@ -107,7 +107,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the initial directory displayed by the folder browser dialog.
         /// </summary>
-        [SRCategory(nameof(SR.CatData))]
+        [SRCategory(nameof(SR.CatFolderBrowsing))]
         [DefaultValue("")]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
         public string InitialDirectory
