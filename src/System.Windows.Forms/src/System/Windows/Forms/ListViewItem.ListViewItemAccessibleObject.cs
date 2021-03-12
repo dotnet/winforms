@@ -32,7 +32,7 @@ namespace System.Windows.Forms
                 => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
 
             public override Rectangle Bounds
-                => _owningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                => ShowGroupAccessibleObject && _owningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
                     ? Rectangle.Empty
                     : new Rectangle(
                         _owningListView.AccessibilityObject.Bounds.X + _owningItem.Bounds.X,
@@ -71,6 +71,9 @@ namespace System.Windows.Forms
             public override AccessibleRole Role
                 => AccessibleRole.ListItem;
 
+            // ListViewGroup are not displayed when the ListView is in "List" view
+            private bool ShowGroupAccessibleObject => _owningListView.View != View.List && _owningListView.GroupsEnabled;
+
             /// <summary>
             ///  Gets the accessible state.
             /// </summary>
@@ -106,7 +109,9 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                ListViewGroupAccessibleObject? owningGroupAccessibleObject = (ListViewGroupAccessibleObject?)_owningGroup?.AccessibilityObject;
+                ListViewGroupAccessibleObject? owningGroupAccessibleObject = ShowGroupAccessibleObject && _owningGroup is not null
+                    ? (ListViewGroupAccessibleObject)_owningGroup.AccessibilityObject
+                    : null;
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
@@ -149,7 +154,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (index < 0 || index >= _owningItem.SubItems.Count || _owningGroup != null)
+                if (index < 0 || index >= _owningItem.SubItems.Count)
                 {
                     return null;
                 }

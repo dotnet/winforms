@@ -3156,7 +3156,7 @@ namespace System.Windows.Forms
 
         private void EnsureDefaultGroup()
         {
-            if (IsHandleCreated && Application.ComCtlSupportsVisualStyles && GroupsEnabled)
+            if (IsHandleCreated && GroupsEnabled)
             {
                 if (User32.SendMessageW(this, (User32.WM)LVM.HASGROUP, (IntPtr)DefaultGroup.ID) == IntPtr.Zero)
                 {

@@ -51,7 +51,7 @@ namespace System.Windows.Forms
             }
 
             private bool OwnerHasGroups
-                => _owningListView.IsHandleCreated && _owningListView.Groups.Count > 0;
+                => _owningListView.IsHandleCreated && ShowGroupAccessibleObject;
 
             internal override int RowCount
                 => _owningListView.Items.Count;
@@ -74,6 +74,9 @@ namespace System.Windows.Forms
                     return runtimeId;
                 }
             }
+
+            // ListViewGroup are not displayed when the ListView is in "List" view
+            private bool ShowGroupAccessibleObject => _owningListView.View != View.List && _owningListView.GroupsEnabled;
 
             internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
@@ -136,7 +139,7 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
-                if (_owningListView.Groups.Count > 0)
+                if (ShowGroupAccessibleObject)
                 {
                     return OwnerHasDefaultGroup ? _owningListView.Groups.Count + 1 : _owningListView.Groups.Count;
                 }

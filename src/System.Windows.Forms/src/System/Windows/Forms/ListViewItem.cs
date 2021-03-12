@@ -238,7 +238,6 @@ namespace System.Windows.Forms
                 if (_accessibilityObject is null)
                 {
                     bool inDefaultGroup = listView?.GroupsEnabled == true && Group is null;
-
                     _accessibilityObject = new ListViewItemAccessibleObject(
                         this, inDefaultGroup ? listView.DefaultGroup : Group);
                 }
