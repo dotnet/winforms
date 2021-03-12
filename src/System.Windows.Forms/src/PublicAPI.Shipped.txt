@@ -9825,18 +9825,18 @@ System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics
 System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Font? font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
 System.Windows.Forms.DrawItemEventArgs.Font.get -> System.Drawing.Font?
 System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds, int columnIndex, System.Windows.Forms.ColumnHeader header, System.Windows.Forms.ListViewItemStates state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Font.get -> System.Drawing.Font
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Header.get -> System.Windows.Forms.ColumnHeader
-~System.Windows.Forms.DrawListViewItemEventArgs.DrawListViewItemEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.ListViewItem item, System.Drawing.Rectangle bounds, int itemIndex, System.Windows.Forms.ListViewItemStates state) -> void
-~System.Windows.Forms.DrawListViewItemEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawListViewItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewItem item, System.Windows.Forms.ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex, System.Windows.Forms.ColumnHeader header, System.Windows.Forms.ListViewItemStates itemState) -> void
-~System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader
-~System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Font.get -> System.Drawing.Font?
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
+System.Windows.Forms.DrawListViewItemEventArgs.DrawListViewItemEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.ListViewItem! item, System.Drawing.Rectangle bounds, int itemIndex, System.Windows.Forms.ListViewItemStates state) -> void
+System.Windows.Forms.DrawListViewItemEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewItem? item, System.Windows.Forms.ListViewItem.ListViewSubItem? subItem, int itemIndex, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates itemState) -> void
+System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
+System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 ~System.Windows.Forms.DrawToolTipEventArgs.AssociatedControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.DrawToolTipEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window
 ~System.Windows.Forms.DrawToolTipEventArgs.DrawToolTipEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.IWin32Window associatedWindow, System.Windows.Forms.Control associatedControl, System.Drawing.Rectangle bounds, string toolTipText, System.Drawing.Color backColor, System.Drawing.Color foreColor, System.Drawing.Font font) -> void
