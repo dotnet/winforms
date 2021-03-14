@@ -10493,12 +10493,12 @@ System.Windows.Forms.PaintEventArgs.PaintEventArgs(System.Drawing.Graphics! grap
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
 ~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
 ~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
-~System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab
-~System.Windows.Forms.PropertyTabChangedEventArgs.OldTab.get -> System.Windows.Forms.Design.PropertyTab
-~System.Windows.Forms.PropertyTabChangedEventArgs.PropertyTabChangedEventArgs(System.Windows.Forms.Design.PropertyTab oldTab, System.Windows.Forms.Design.PropertyTab newTab) -> void
-~System.Windows.Forms.PropertyValueChangedEventArgs.ChangedItem.get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.PropertyValueChangedEventArgs.OldValue.get -> object
-~System.Windows.Forms.PropertyValueChangedEventArgs.PropertyValueChangedEventArgs(System.Windows.Forms.GridItem changedItem, object oldValue) -> void
+System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab?
+System.Windows.Forms.PropertyTabChangedEventArgs.OldTab.get -> System.Windows.Forms.Design.PropertyTab?
+System.Windows.Forms.PropertyTabChangedEventArgs.PropertyTabChangedEventArgs(System.Windows.Forms.Design.PropertyTab? oldTab, System.Windows.Forms.Design.PropertyTab? newTab) -> void
+System.Windows.Forms.PropertyValueChangedEventArgs.ChangedItem.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.PropertyValueChangedEventArgs.OldValue.get -> object?
+System.Windows.Forms.PropertyValueChangedEventArgs.PropertyValueChangedEventArgs(System.Windows.Forms.GridItem? changedItem, object? oldValue) -> void
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.get -> string?
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.set -> void
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpNamespace.get -> string?
