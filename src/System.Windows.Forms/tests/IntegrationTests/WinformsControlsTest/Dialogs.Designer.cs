@@ -34,6 +34,7 @@ namespace WinformsControlsTest
         {
             this.resources = new System.ComponentModel.ComponentResourceManager(typeof(Dialogs));
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.btnSaveFileDialog = new System.Windows.Forms.Button();
             this.btnOpenFileDialog = new System.Windows.Forms.Button();
             this.btnThreadExceptionDialog = new System.Windows.Forms.Button();
             this.btnPrintDialog = new System.Windows.Forms.Button();
@@ -97,12 +98,23 @@ namespace WinformsControlsTest
             this.btnFolderBrowserDialog.UseVisualStyleBackColor = true;
             this.btnFolderBrowserDialog.Click += new System.EventHandler(this.btnFolderBrowserDialog_Click);
             // 
+            // btnSaveFileDialog
+            // 
+            this.btnSaveFileDialog.Location = new System.Drawing.Point(3, 3);
+            this.btnSaveFileDialog.Name = "btnSaveFileDialog";
+            this.btnSaveFileDialog.Size = new System.Drawing.Size(163, 23);
+            this.btnSaveFileDialog.TabIndex = 5;
+            this.btnSaveFileDialog.Text = "Save file dialog";
+            this.btnSaveFileDialog.UseVisualStyleBackColor = true;
+            this.btnSaveFileDialog.Click += new System.EventHandler(this.btnSaveFileDialog_Click);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.btnThreadExceptionDialog);
             this.flowLayoutPanel1.Controls.Add(this.btnPrintDialog);
             this.flowLayoutPanel1.Controls.Add(this.btnFolderBrowserDialog);
             this.flowLayoutPanel1.Controls.Add(this.btnOpenFileDialog);
+            this.flowLayoutPanel1.Controls.Add(this.btnSaveFileDialog);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -129,6 +141,7 @@ namespace WinformsControlsTest
 
         #endregion
         private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.Button btnSaveFileDialog;
         private System.Windows.Forms.Button btnOpenFileDialog;
         private System.Windows.Forms.Button btnThreadExceptionDialog;
         private System.Windows.Forms.Button btnPrintDialog;

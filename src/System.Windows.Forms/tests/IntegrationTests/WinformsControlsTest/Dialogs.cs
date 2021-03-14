@@ -109,6 +109,11 @@ namespace WinformsControlsTest
             propertyGrid1.SelectedObject = openFileDialog1;
         }
 
+        private void btnSaveFileDialog_Click(object sender, EventArgs e)
+        {
+            propertyGrid1.SelectedObject = saveFileDialog1;
+        }
+
         private void btnFolderBrowserDialog_Click(object sender, EventArgs e)
         {
             propertyGrid1.SelectedObject = folderBrowserDialog1;
