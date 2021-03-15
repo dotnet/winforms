@@ -225,7 +225,12 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.NextSibling:
                         if (Parent.GetChildCount() > 1)
                         {
-                            return Parent.GetChild(1);
+                            if (_ownerDataGridView is null)
+                            {
+                                throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
+                            }
+
+                            return _ownerDataGridView.Rows.Count == 0 ? null : Parent.GetChild(1);
                         }
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
