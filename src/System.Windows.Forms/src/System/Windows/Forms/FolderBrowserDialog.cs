@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private string _selectedPath;
 
         // Initial folder.
-        private string _initialDir;
+        private string _initialDirectory;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
@@ -112,8 +112,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDinitialDirDescr))]
         public string InitialDirectory
         {
-            get => _initialDir;
-            set => _initialDir = value ?? string.Empty;
+            get => _initialDirectory;
+            set => _initialDirectory = value ?? string.Empty;
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
             _rootFolder = Environment.SpecialFolder.Desktop;
             _descriptionText = string.Empty;
             _selectedPath = string.Empty;
-            _initialDir = string.Empty;
+            _initialDirectory = string.Empty;
             ShowNewFolderButton = true;
             ClientGuid = null;
         }
@@ -402,10 +402,10 @@ namespace System.Windows.Forms
                 case BFFM.INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
 
-                    if (_initialDir.Length != 0)
+                    if (_initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, PARAM.FromBool(true), _initialDir);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, PARAM.FromBool(true), _initialDirectory);
                     }
 
                     if (_selectedPath.Length != 0)
