@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Design;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -271,6 +272,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
+        [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, " + AssemblyRef.SystemWindowsFormsDesign, typeof(UITypeEditor))]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
         public string InitialDirectory
         {

@@ -945,6 +945,11 @@
         <target state="translated">Salt Okunur</target>
         <note />
       </trans-unit>
+      <trans-unit id="InitialDirectoryEditorLabel">
+        <source>Select the directory that will initially be opened in the dialog.</source>
+        <target state="new">Select the directory that will initially be opened in the dialog.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
         <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil.</target>

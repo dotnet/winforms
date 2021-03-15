@@ -109,6 +109,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatFolderBrowsing))]
         [DefaultValue("")]
+        [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, " + AssemblyRef.SystemWindowsFormsDesign, typeof(UITypeEditor))]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
         public string InitialDirectory
         {
