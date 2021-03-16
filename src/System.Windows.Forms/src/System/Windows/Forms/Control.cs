@@ -2541,6 +2541,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlHandleCreatedDescr))]
         public bool IsHandleCreated => _window.Handle != IntPtr.Zero;
 
+        private protected virtual bool IsHoveredWithMouse() => ClientRectangle.Contains(PointToClient(MousePosition));
+
         /// <summary>
         ///  Determines if layout is currently suspended.
         /// </summary>
@@ -3038,6 +3040,11 @@ namespace System.Windows.Forms
 
         internal virtual void RemoveReflectChild()
         {
+        }
+
+        internal virtual void RemoveToolTip(ToolTip toolTip)
+        {
+            // Control doesn't have a specific logic after a toolTip is removed
         }
 
         private Control ReflectParent
@@ -5591,6 +5598,15 @@ namespace System.Windows.Forms
             return (ctl == this) ? null : ctl;
         }
 
+        private protected virtual string GetCaptionForTool(ToolTip toolTip)
+        {
+            IKeyboardToolTip host = ToolStripControlHost;
+
+            return host is null
+                ? toolTip.GetCaptionForTool(this)
+                : host.GetCaptionForTool(toolTip);
+        }
+
         /// <summary>
         ///  Retrieves the child control that is located at the specified client
         ///  coordinates.
@@ -5845,6 +5861,9 @@ namespace System.Windows.Forms
 
             return found;
         }
+
+        private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
+            => ((IKeyboardToolTip)ToolStripControlHost)?.GetNeighboringToolsRectangles() ?? GetOwnNeighboringToolsRectangles();
 
         /// <summary>
         ///  Retrieves the next control in the tab order of child controls.
@@ -10732,6 +10751,11 @@ namespace System.Windows.Forms
             _controlStyle = value ? _controlStyle | flag : _controlStyle & ~flag;
         }
 
+        internal virtual void SetToolTip(ToolTip toolTip)
+        {
+            // Control doesn't have a specific logic after a toolTip is set
+        }
+
         protected void SetTopLevel(bool value)
         {
             if (value && IsActiveX)
@@ -13917,20 +13941,9 @@ namespace System.Windows.Forms
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => GetToolNativeScreenRectangle();
 
-        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
-        {
-            IKeyboardToolTip host = ToolStripControlHost;
-            if (host is null)
-            {
-                return GetOwnNeighboringToolsRectangles();
-            }
-            else
-            {
-                return host.GetNeighboringToolsRectangles();
-            }
-        }
+        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles() => GetNeighboringToolsRectangles();
 
-        bool IKeyboardToolTip.IsHoveredWithMouse() => ClientRectangle.Contains(PointToClient(MousePosition));
+        bool IKeyboardToolTip.IsHoveredWithMouse() => IsHoveredWithMouse();
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
@@ -13950,18 +13963,7 @@ namespace System.Windows.Forms
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
 
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
-        {
-            IKeyboardToolTip host = ToolStripControlHost;
-            if (host is null)
-            {
-                return toolTip.GetCaptionForTool(this);
-            }
-            else
-            {
-                return host.GetCaptionForTool(toolTip);
-            }
-        }
+        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {

@@ -639,51 +639,9 @@ namespace System.Windows.Forms
 
             Control control = (Control)sender;
             CreateRegion(control);
-            CheckNativeToolTip(control);
-            CheckCompositeControls(control);
+            SetToolTipToControl(control);
 
             KeyboardToolTipStateMachine.Instance.Hook(control, this);
-        }
-
-        private void CheckNativeToolTip(Control associatedControl)
-        {
-            // Wait for the Handle Creation.
-            if (!GetHandleCreated())
-            {
-                return;
-            }
-
-            if (associatedControl is TreeView treeView && treeView.ShowNodeToolTips)
-            {
-                treeView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is TabControl tabControl && tabControl.ShowToolTips)
-            {
-                tabControl.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is ListView listView)
-            {
-                listView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            // Label now has its own Tooltip for AutoEllipsis.
-            // So this control too falls in special casing.
-            // We need to disable the LABEL AutoEllipsis tooltip and show
-            // this tooltip always.
-            if (associatedControl is Label label)
-            {
-                label.SetToolTip(this);
-            }
-        }
-
-        private void CheckCompositeControls(Control associatedControl)
-        {
-            if (associatedControl is UpDownBase upDownBase)
-            {
-                upDownBase.SetToolTip(this, GetToolTip(associatedControl));
-            }
         }
 
         private void HandleDestroyed(object sender, EventArgs eventargs)
@@ -923,6 +881,7 @@ namespace System.Windows.Forms
             {
                 new ToolInfoWrapper<Control>(ctl).SendMessage(this, (User32.WM)TTM.DELTOOLW);
                 _created.Remove(ctl);
+                ctl.RemoveToolTip(this);
             }
         }
 
@@ -1252,8 +1211,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
                     toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                    CheckNativeToolTip(control);
-                    CheckCompositeControls(control);
+                    SetToolTipToControl(control);
                 }
                 else if (empty && exists && !DesignMode)
                 {
@@ -1267,6 +1225,14 @@ namespace System.Windows.Forms
 
                     _created.Remove(control);
                 }
+            }
+        }
+
+        private void SetToolTipToControl(Control associatedControl)
+        {
+            if (GetHandleCreated())
+            {
+                associatedControl.SetToolTip(this);
             }
         }
 

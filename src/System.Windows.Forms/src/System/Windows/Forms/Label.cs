@@ -1453,12 +1453,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip)
+        internal override void SetToolTip(ToolTip toolTip)
         {
-            if (toolTip != null && !_controlToolTip)
+            if (toolTip is null || _controlToolTip)
             {
-                _controlToolTip = true;
+                return;
             }
+
+            // Label now has its own Tooltip for AutoEllipsis.
+            // So this control too falls in special casing.
+            // We need to disable the LABEL AutoEllipsis tooltip and show
+            // this tooltip always.
+            _controlToolTip = true;
         }
 
         internal override bool SupportsUiaProviders => true;

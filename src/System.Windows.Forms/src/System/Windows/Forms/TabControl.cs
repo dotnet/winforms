@@ -1243,6 +1243,29 @@ namespace System.Windows.Forms
             return base.IsInputKey(keyData);
         }
 
+        private void NotifyAboutFocusState(TabPage selectedTab, bool focused)
+        {
+            if (selectedTab is null)
+            {
+                return;
+            }
+
+            if (focused)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(selectedTab);
+            }
+            else
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(selectedTab);
+            }
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            NotifyAboutFocusState(SelectedTab, focused: true);
+            base.OnGotFocus(e);
+        }
+
         /// <summary>
         ///  This is a notification that the handle has been created.
         ///  We do some work here to configure the handle.
@@ -1392,6 +1415,12 @@ namespace System.Windows.Forms
             base.OnLeave(e);
         }
 
+        protected override void OnLostFocus(EventArgs e)
+        {
+            NotifyAboutFocusState(SelectedTab, focused: false);
+            base.OnLostFocus(e);
+        }
+
         /// <summary>
         ///  We override this to get tabbing functionality.
         ///  If overriding this, remember to call base.onKeyDown.
@@ -1470,6 +1499,8 @@ namespace System.Windows.Forms
             UpdateTabSelection(GetState(State.UISelection));
             SetState(State.UISelection, false);
             _onSelectedIndexChanged?.Invoke(this, e);
+            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+            NotifyAboutFocusState(SelectedTab, focused: true);
         }
 
         /// <summary>
@@ -1512,6 +1543,7 @@ namespace System.Windows.Forms
             // Raise the Leave event for this tab.
             if (SelectedTab is not null)
             {
+                NotifyAboutFocusState(SelectedTab, focused: false);
                 SelectedTab.FireLeave(EventArgs.Empty);
             }
         }
@@ -1648,11 +1680,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip, string controlToolTipText)
+        internal override void SetToolTip(ToolTip toolTip)
         {
+            if (toolTip is null || !ShowToolTips)
+            {
+                return;
+            }
+
             User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETTOOLTIPS, toolTip.Handle);
             GC.KeepAlive(toolTip);
-            _controlTipText = controlToolTipText;
+            _controlTipText = toolTip.GetToolTip(this);
         }
 
         private void SetTabPage(int index, TabPage value)

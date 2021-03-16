@@ -5004,6 +5004,7 @@ namespace System.Windows.Forms.Tests
             ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Right, rightitem);
             ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Down, downitem);
         }
+
         [WinFormsTheory]
         [MemberData(nameof(ListView_FindNearestItem_Invoke_TestData))]
         public void ListView_FindNearestItem_With_Images(int item, int? leftitem, int? upitem, int? rightitem, int? downitem)
@@ -5066,6 +5067,26 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(listItems[resultItem.Value], item.FindNearestItem(direction));
             }
+        }
+
+        [WinFormsFact]
+        public void ListView_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using ListView listView = new ListView();
+            using ToolTip toolTip = new ToolTip();
+            listView.CreateControl();
+
+            dynamic listViewDynamic = listView.TestAccessor().Dynamic;
+            string actual = listViewDynamic.toolTipCaption;
+
+            Assert.Empty(actual);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(listView, text); // Invokes ListView's SetToolTip inside
+            actual = listViewDynamic.toolTipCaption;
+
+            Assert.Equal(text, actual);
         }
 
         private class SubListViewItem : ListViewItem

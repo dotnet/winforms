@@ -4898,6 +4898,312 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("TabPage: {}", control.ToString());
         }
 
+        [WinFormsFact]
+        public void TabPage_GetCaptionForTool_ReturnsToolTipText_IfToolTipTextIsSet()
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+            using ToolTip toolTip = new ToolTip();
+
+            string actual = ((IKeyboardToolTip)control).GetCaptionForTool(toolTip);
+
+            Assert.Equal(text, actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_GetCaptionForTool_ReturnsExternalToolTipText_IfInternalsAreNotSet()
+        {
+            using TabPage control = new TabPage();
+            using ToolTip toolTip = new ToolTip();
+            control.CreateControl();
+
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the tooltip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(control, text);
+
+            string actual = ((IKeyboardToolTip)control).GetCaptionForTool(toolTip);
+
+            Assert.Equal(text, actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_GetCaptionForTool_ReturnsNull_IfNoToolTipIsSet()
+        {
+            using TabPage control = new TabPage();
+            using ToolTip toolTip = new ToolTip();
+
+            string actual = ((IKeyboardToolTip)control).GetCaptionForTool(toolTip);
+
+            Assert.Null(actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_GetNeighboringToolsRectangles_ReturnsEmptyCollection_IfPageDoesntHaveTabControl()
+        {
+            using TabPage control = new TabPage();
+
+            IList<Rectangle> actual = ((IKeyboardToolTip)control).GetNeighboringToolsRectangles();
+
+            Assert.Empty(actual);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public void TabPage_GetNeighboringToolsRectangles_ReturnsCorrect(int index)
+        {
+            using TabControl tabControl = new TabControl();
+            const int pagesCount = 5;
+
+            for (int i = 0; i < pagesCount; i++)
+            {
+                tabControl.TabPages.Add(new TabPage());
+            }
+
+            TabPage testedTab = tabControl.TabPages[index];
+            IList<Rectangle> neighborsRectangles = ((IKeyboardToolTip)testedTab).GetNeighboringToolsRectangles();
+
+            Assert.NotEmpty(neighborsRectangles);
+
+            if (index > 0) // has the left neighbor
+            {
+                Assert.True(neighborsRectangles.Contains(GetTabRect(index - 1))); // check the left neighbor
+
+                for (int i = 0; i < index - 1; i++)
+                {
+                    Assert.False(neighborsRectangles.Contains(GetTabRect(i))); // check the rest lefts
+                }
+            }
+
+            if (index < pagesCount - 1) // has the right neighbor
+            {
+                Assert.True(neighborsRectangles.Contains(GetTabRect(index + 1))); // check the right neighbor
+
+                for (int i = index + 2; i < pagesCount; i++)
+                {
+                    Assert.False(neighborsRectangles.Contains(GetTabRect(i))); // check the rest rights
+                }
+            }
+
+            Rectangle GetTabRect(int index)
+                => tabControl.RectangleToScreen(tabControl.GetTabRect(index));
+        }
+
+        [WinFormsFact]
+        public void TabPage_InternalToolTip_IsSet_IfNoExternalIsSet()
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+
+            ToolTip internalToolTip = control.TestAccessor().Dynamic._internalToolTip;
+            string actual = internalToolTip.GetCaptionForTool(control);
+
+            Assert.Equal(text, actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_InternalToolTip_IsNotSet_IfExternalIsSet()
+        {
+            using TabPage control = new TabPage();
+            using ToolTip toolTip = new ToolTip();
+            string text = "Some test text";
+            control.ToolTipText = text;
+            control.CreateControl();
+
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the tooltip native window Handle
+
+            toolTip.SetToolTip(control, text);
+            ToolTip internalToolTip = control.TestAccessor().Dynamic._internalToolTip;
+            string actual = internalToolTip.GetCaptionForTool(control);
+
+            Assert.Null(actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_GetToolNativeScreenRectangle_ReturnsExpected()
+        {
+            using TabControl tabControl = new TabControl();
+            using TabPage page = new TabPage();
+            tabControl.TabPages.Add(page);
+
+            Rectangle expected = tabControl.RectangleToScreen(tabControl.GetTabRect(0));
+            Rectangle actual = page.GetToolNativeScreenRectangle();
+
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsFact]
+        public void TabPage_GetToolNativeScreenRectangle_ReturnsEmpty_WithoutParent()
+        {
+            using TabPage control = new TabPage();
+
+            Rectangle actual = control.GetToolNativeScreenRectangle();
+
+            Assert.Equal(Rectangle.Empty, actual);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, null)]
+        [InlineData(false, "Some test text")]
+        public void TabPage_SetToolTip_ManagesAssociatedToolTips_ForOneToolTipInstance(bool createToolTip, string expectedText)
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+
+            dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+            ToolTip internalToolTip = tabPageDynamic._internalToolTip;
+            ToolTip externalToolTip = tabPageDynamic._externalToolTip;
+            List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
+            string actualText = internalToolTip.GetCaptionForTool(control);
+
+            Assert.Equal(text, actualText);
+            Assert.Null(externalToolTip);
+            Assert.Null(associatedToolTips);
+
+            using ToolTip toolTip = createToolTip
+                ? new ToolTip() // TabPage's SetToolTip will clear the internal toolTip because external one is set
+                : null;  // TabPage's SetToolTip won't change states of fields and won't throw any exceptions
+
+            control.SetToolTip(toolTip);
+
+            externalToolTip = tabPageDynamic._externalToolTip;
+            associatedToolTips = tabPageDynamic._associatedToolTips;
+            actualText = internalToolTip.GetCaptionForTool(control);
+
+            Assert.Equal(expectedText, actualText);
+            Assert.Equal(toolTip, externalToolTip);
+            Assert.Null(associatedToolTips);
+        }
+
+        [WinFormsFact]
+        public void TabPage_SetToolTip_ManagesInternalAndAssociatedToolTips_ForTwoToolTipInstances()
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+
+            dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+            ToolTip internalToolTip = tabPageDynamic._internalToolTip;
+            ToolTip externalToolTip = tabPageDynamic._externalToolTip;
+            List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
+            string actualText = internalToolTip.GetCaptionForTool(control);
+
+            Assert.Equal(text, actualText);
+            Assert.Null(externalToolTip);
+            Assert.Null(associatedToolTips);
+
+            using ToolTip toolTip1 = new ToolTip();
+            using ToolTip toolTip2 = new ToolTip();
+
+            control.SetToolTip(toolTip1);
+            control.SetToolTip(toolTip2);
+
+            actualText = internalToolTip.GetCaptionForTool(control);
+            externalToolTip = tabPageDynamic._externalToolTip;
+            associatedToolTips = tabPageDynamic._associatedToolTips;
+
+            Assert.Null(actualText);
+            Assert.Equal(toolTip1, externalToolTip);
+            Assert.Equal(2, associatedToolTips.Count);
+            Assert.Equal(toolTip1, associatedToolTips[0]);
+            Assert.Equal(toolTip2, associatedToolTips[1]);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true)]
+        [InlineData(false, false)]
+        public void TabPage_RemoveToolTip_ManagesAssociatedToolTips_ForOneToolTipInstance(bool createToolTip, bool setToolTip)
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+
+            dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+            ToolTip internalToolTip = tabPageDynamic._internalToolTip;
+            ToolTip externalToolTip = tabPageDynamic._externalToolTip;
+
+            using ToolTip toolTip = createToolTip
+                ? new ToolTip() // TabPage's RemoveToolTip will clear the internal toolTip because external one is set
+                : null;  // TabPage's RemoveToolTip won't change states of fields and won't throw any exceptions
+
+            if (createToolTip && setToolTip)
+            {
+                // A simple workaround in the test to set expected states for fields
+                control.SetToolTip(toolTip);
+            }
+
+            control.RemoveToolTip(toolTip);
+
+            List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
+            string actualText = internalToolTip.GetCaptionForTool(control);
+
+            Assert.Equal(text, actualText);
+            Assert.Null(externalToolTip);
+            Assert.Null(associatedToolTips);
+        }
+
+        [WinFormsFact]
+        public void TabPage_RemoveToolTip_ManagesAssociatedToolTips_ForTwoToolTipInstances()
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+
+            dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+            ToolTip internalToolTip = tabPageDynamic._internalToolTip;
+
+            using ToolTip toolTip1 = new ToolTip();
+            using ToolTip toolTip2 = new ToolTip();
+
+            // A simple workaround in the test to set expected states for fields
+            control.SetToolTip(toolTip1);
+            control.SetToolTip(toolTip2);
+
+            control.RemoveToolTip(toolTip1);
+
+            List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
+            ToolTip externalToolTip = tabPageDynamic._externalToolTip;
+
+            Assert.Equal(toolTip2, externalToolTip);
+            Assert.Null(associatedToolTips);
+        }
+
+        [WinFormsFact]
+        public void TabPage_RemoveToolTip_ManagesAssociatedToolTips_ForThreeToolTipInstances()
+        {
+            using TabPage control = new TabPage();
+            string text = "Some test text";
+            control.ToolTipText = text;
+
+            dynamic tabPageDynamic = control.TestAccessor().Dynamic;
+            ToolTip internalToolTip = tabPageDynamic._internalToolTip;
+            ToolTip externalToolTip = tabPageDynamic._externalToolTip;
+
+            using ToolTip toolTip1 = new ToolTip();
+            using ToolTip toolTip2 = new ToolTip();
+            using ToolTip toolTip3 = new ToolTip();
+
+            // A simple workaround in the test to set expected states for fields
+            control.SetToolTip(toolTip1);
+            control.SetToolTip(toolTip2);
+            control.SetToolTip(toolTip3);
+
+            control.RemoveToolTip(toolTip1);
+
+            List<ToolTip> associatedToolTips = tabPageDynamic._associatedToolTips;
+
+            Assert.Equal(2, associatedToolTips.Count);
+            Assert.Equal(toolTip2, associatedToolTips[0]);
+            Assert.Equal(toolTip3, associatedToolTips[1]);
+        }
+
         private class NullTextTabPage : TabPage
         {
             public override string Text
