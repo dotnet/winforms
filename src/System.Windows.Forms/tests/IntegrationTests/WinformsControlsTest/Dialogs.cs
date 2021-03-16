@@ -26,7 +26,7 @@ namespace WinformsControlsTest
 
             _btnOpen = new("Open dialog")
             {
-                Image = (System.Drawing.Bitmap)(resources.GetObject("OpenDialog")),
+                Image = (System.Drawing.Bitmap?)(resources.GetObject("OpenDialog")),
                 Enabled = false
             };
 
