@@ -9,18 +9,10 @@ internal static class FXAssembly
     internal const string Version = "4.0.0.0";
 }
 
-internal static class ThisAssembly
-{
-    internal const string Version = "6.0.0.0";
-}
-
 internal static class AssemblyRef
 {
     internal const string MicrosoftPublicKey = "b03f5f7f11d50a3a";
-    internal const string PlatformPublicKey = "b77a5c561934e089";
-
     internal const string SystemDesign = "System.Design, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + MicrosoftPublicKey;
     internal const string SystemDrawingDesign = "System.Drawing.Design, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + MicrosoftPublicKey;
     internal const string SystemDrawing = "System.Drawing, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + MicrosoftPublicKey;
-    internal const string SystemWindowsFormsDesign = "System.Windows.Forms.Design, Version=" + ThisAssembly.Version + ", Culture=neutral, PublicKeyToken=" + PlatformPublicKey;
 }
