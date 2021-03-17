@@ -373,75 +373,173 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListViewGroupCollection_Add_ListViewGroup_Success()
         {
-            using var listView = new ListView();
-            ListViewGroupCollection collection = listView.Groups;
+            using var control = new ListView();
+            ListViewGroupCollection collection = control.Groups;
             var group1 = new ListViewGroup();
             Assert.Equal(0, collection.Add(group1));
             Assert.Same(group1, Assert.Single(collection));
-            Assert.Same(listView, group1.ListView);
+            Assert.Same(control, group1.ListView);
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
 
             // Add another.
             var group2 = new ListViewGroup();
             Assert.Equal(1, collection.Add(group2));
             Assert.Equal(new ListViewGroup[] { group1, group2 }, collection.Cast<ListViewGroup>());
-            Assert.Same(listView, group2.ListView);
-        }
-
-        [WinFormsFact]
-        public void ListViewGroupCollection_Add_ListViewGroupWithHandle_Success()
-        {
-            using var listView = new ListView();
-            Assert.NotEqual(IntPtr.Zero, listView.Handle);
-
-            ListViewGroupCollection collection = listView.Groups;
-            var group1 = new ListViewGroup();
-            Assert.Equal(0, collection.Add(group1));
-            Assert.Same(group1, Assert.Single(collection));
-            Assert.Same(listView, group1.ListView);
-
-            // Add another.
-            var group2 = new ListViewGroup();
-            Assert.Equal(1, collection.Add(group2));
-            Assert.Equal(new ListViewGroup[] { group1, group2 }, collection.Cast<ListViewGroup>());
-            Assert.Same(listView, group2.ListView);
+            Assert.Same(control, group2.ListView);
+            Assert.Empty(control.Items);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
         public void ListViewGroupCollection_Add_ListViewGroupWithItems_Success()
         {
-            using var listView = new ListView();
-            var item = new ListViewItem();
-
-            ListViewGroupCollection collection = listView.Groups;
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
             var group = new ListViewGroup();
-            group.Items.Add(new ListViewItem());
-            group.Items.Add(item);
-            listView.Items.Add(item);
+            group.Items.Add(item1);
+            group.Items.Add(item2);
+
+            using var control = new ListView();
+            ListViewGroupCollection collection = control.Groups;
 
             Assert.Equal(0, collection.Add(group));
             Assert.Same(group, Assert.Single(collection));
-            Assert.Same(listView, group.ListView);
+            Assert.Same(control, group.ListView);
+            Assert.Same(control, item1.ListView);
+            Assert.Same(group, item1.Group);
+            Assert.Same(control, item2.ListView);
+            Assert.Same(group, item2.Group);
+            Assert.Equal(new ListViewItem[] { item1, item2 }, control.Items.Cast<ListViewItem>());
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupCollection_Add_ListViewGroupWithItemAlreadyAdded_Success()
+        {
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            var group = new ListViewGroup();
+            group.Items.Add(item1);
+            group.Items.Add(item2);
+
+            using var control = new ListView();
+            ListViewGroupCollection collection = control.Groups;
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+
+            Assert.Equal(0, collection.Add(group));
+            Assert.Same(group, Assert.Single(collection));
+            Assert.Same(control, group.ListView);
+            Assert.Same(control, item1.ListView);
+            Assert.Same(group, item1.Group);
+            Assert.Same(control, item2.ListView);
+            Assert.Same(group, item2.Group);
+            Assert.Equal(new ListViewItem[] { item1, item2 }, control.Items.Cast<ListViewItem>());
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewGroupCollection_Add_ListViewGroupWithHandle_Success()
+        {
+            using var control = new ListView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            ListViewGroupCollection collection = control.Groups;
+            var group1 = new ListViewGroup();
+            Assert.Equal(0, collection.Add(group1));
+            Assert.Same(group1, Assert.Single(collection));
+            Assert.Same(control, group1.ListView);
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+
+            // Add another.
+            var group2 = new ListViewGroup();
+            Assert.Equal(1, collection.Add(group2));
+            Assert.Equal(new ListViewGroup[] { group1, group2 }, collection.Cast<ListViewGroup>());
+            Assert.Same(control, group2.ListView);
+            Assert.Empty(control.Items);
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
         public void ListViewGroupCollection_Add_ListViewGroupWithItemsWithHandle_Success()
         {
-            using var listView = new ListView();
-            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            var group = new ListViewGroup();
+            group.Items.Add(item1);
+            group.Items.Add(item2);
 
-            var item = new ListViewItem();
+            using var control = new ListView();
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
 
-            ListViewGroupCollection collection = listView.Groups;
-            var group1 = new ListViewGroup();
-            group1.Items.Add(new ListViewItem());
-            group1.Items.Add(item);
-            listView.Items.Add(item);
+            ListViewGroupCollection collection = control.Groups;
+            Assert.Equal(0, collection.Add(group));
+            Assert.Same(group, Assert.Single(collection));
+            Assert.Same(control, group.ListView);
+            Assert.Same(control, item1.ListView);
+            Assert.Same(group, item1.Group);
+            Assert.Same(control, item2.ListView);
+            Assert.Same(group, item2.Group);
+            Assert.Equal(new ListViewItem[] { item1, item2 }, control.Items.Cast<ListViewItem>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(2, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
+        }
 
-            Assert.Equal(0, collection.Add(group1));
-            Assert.Same(group1, Assert.Single(collection));
-            Assert.Same(listView, group1.ListView);
+        [WinFormsFact]
+        public void ListViewGroupCollection_Add_ListViewGroupWithItemAlreadyAddedWithHandle_Success()
+        {
+            var item1 = new ListViewItem();
+            var item2 = new ListViewItem();
+            var group = new ListViewGroup();
+            group.Items.Add(item1);
+            group.Items.Add(item2);
 
-            var group2 = new ListViewGroup();
+            using var control = new ListView();
+            ListViewGroupCollection collection = control.Groups;
+            control.Items.Add(item1);
+            control.Items.Add(item2);
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+            int invalidatedCallCount = 0;
+            control.Invalidated += (sender, e) => invalidatedCallCount++;
+            int styleChangedCallCount = 0;
+            control.StyleChanged += (sender, e) => styleChangedCallCount++;
+            int createdCallCount = 0;
+            control.HandleCreated += (sender, e) => createdCallCount++;
+
+            Assert.Equal(0, collection.Add(group));
+            Assert.Same(group, Assert.Single(collection));
+            Assert.Same(control, group.ListView);
+            Assert.Same(control, item1.ListView);
+            Assert.Same(group, item1.Group);
+            Assert.Same(control, item2.ListView);
+            Assert.Same(group, item2.Group);
+            Assert.Equal(new ListViewItem[] { item1, item2 }, control.Items.Cast<ListViewItem>());
+            Assert.True(control.IsHandleCreated);
+            Assert.Equal(0, invalidatedCallCount);
+            Assert.Equal(0, styleChangedCallCount);
+            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]

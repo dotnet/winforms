@@ -111,8 +111,6 @@ namespace System.Windows.Forms.Tests
             item2.Group = group;
             item.Group = group;
             listView.Groups.Add(group);
-            listView.Items.Add(item);
-            listView.Items.Add(item2);
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
             Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // Default group and one specified group
@@ -131,8 +129,6 @@ namespace System.Windows.Forms.Tests
             item2.Group = group;
             item.Group = group;
             listView.Groups.Add(group);
-            listView.Items.Add(item);
-            listView.Items.Add(item2);
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
 
@@ -155,8 +151,6 @@ namespace System.Windows.Forms.Tests
             item2.Group = group;
             item.Group = group;
             listView.Groups.Add(group);
-            listView.Items.Add(item);
-            listView.Items.Add(item2);
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
 
