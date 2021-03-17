@@ -432,7 +432,8 @@ namespace System.Drawing.Design
             {
                 // For backwards compat, here are the default property
                 // names we use
-                propertyNames = new string[] {
+                propertyNames = new string[]
+                {
                     "AssemblyName",
                     "Bitmap",
                     "DisplayName",

@@ -198,7 +198,8 @@ namespace System.Windows.Forms
         // These should be in the order given by the PROPCAT_X values
         // Also, note that they are not to be localized...
 
-        private static readonly CategoryAttribute[] categoryNames = new CategoryAttribute[] {
+        private static readonly CategoryAttribute[] categoryNames = new CategoryAttribute[]
+        {
             null,
             new WinCategoryAttribute("Default"),
             new WinCategoryAttribute("Default"),

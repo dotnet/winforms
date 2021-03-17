@@ -19,7 +19,8 @@ namespace System.Windows.Forms
     [Serializable]  // This class participates in resx serialization.
     public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
-        private static readonly int[] borderStyleToOffset = {
+        private static readonly int[] borderStyleToOffset =
+        {
             /*None = */ 0,
             /*Single = */ 1,
             /*Inset = */ 2,

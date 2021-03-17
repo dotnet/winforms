@@ -126,7 +126,8 @@ namespace System
 
                     // Walk up the heirarchy
                     type = type.BaseType;
-                } while (true);
+                }
+                while (true);
 
                 if (methodInfo is null)
                     return false;
@@ -179,7 +180,8 @@ namespace System
 
                     // Walk up the type heirarchy
                     type = type.BaseType;
-                } while (true);
+                }
+                while (true);
 
                 return info;
             }

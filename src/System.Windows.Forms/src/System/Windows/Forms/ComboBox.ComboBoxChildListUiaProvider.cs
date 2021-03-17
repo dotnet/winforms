@@ -200,7 +200,8 @@ namespace System.Windows.Forms
 
                 if (itemAccessibleObject is not null)
                 {
-                    return new UiaCore.IRawElementProviderSimple[] {
+                    return new UiaCore.IRawElementProviderSimple[]
+                    {
                         itemAccessibleObject
                     };
                 }

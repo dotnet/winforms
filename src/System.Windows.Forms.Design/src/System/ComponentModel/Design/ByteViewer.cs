@@ -96,7 +96,8 @@ namespace System.ComponentModel.Design
             //values on column are first two bytes and
             //values on rows are 3rd and 4th byte
 
-            int[,] encodings = {
+            int[,] encodings =
+            {
                    //Unknown 0000 feff fffe efbb  3c00 003c 3f00 003f  3c3f 786d  4c6f  a794
            /*Unknown*/ {1   ,5   ,1   ,1    ,1   ,1   ,1   ,1   ,1    ,1    ,1    ,1    ,1   },
               /*0000*/ {1   ,1   ,1   ,11   ,1   ,10  ,4   ,1   ,1    ,1    ,1    ,1    ,1   },

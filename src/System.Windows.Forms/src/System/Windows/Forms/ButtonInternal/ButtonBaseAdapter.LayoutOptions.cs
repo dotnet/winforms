@@ -462,7 +462,8 @@ namespace System.Windows.Forms.ButtonInternal
             // Maps an image align to the set of TextImageRelations that represent the same edge.
             // For example, imageAlign = TopLeft maps to TextImageRelations ImageAboveText (top)
             // and ImageBeforeText (left).
-            private static readonly TextImageRelation[] _imageAlignToRelation = new TextImageRelation[] {
+            private static readonly TextImageRelation[] _imageAlignToRelation = new TextImageRelation[]
+            {
                 /* TopLeft = */       TextImageRelation.ImageAboveText | TextImageRelation.ImageBeforeText,
                 /* TopCenter = */     TextImageRelation.ImageAboveText,
                 /* TopRight = */      TextImageRelation.ImageAboveText | TextImageRelation.TextBeforeImage,

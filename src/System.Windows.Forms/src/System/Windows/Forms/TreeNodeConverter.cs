@@ -73,31 +73,39 @@ namespace System.Windows.Forms
                 {
                     if (node.Nodes.Count == 0)
                     {
-                        info = typeof(TreeNode).GetConstructor(new Type[] {
+                        info = typeof(TreeNode).GetConstructor(new Type[]
+                        {
                             typeof(string),
                             typeof(int),
-                            typeof(int)});
-                        args = new object[] {
+                            typeof(int)
+                        });
+                        args = new object[]
+                        {
                             node.Text,
                             node.ImageIndex,
-                            node.SelectedImageIndex};
+                            node.SelectedImageIndex
+                        };
                     }
                     else
                     {
-                        info = typeof(TreeNode).GetConstructor(new Type[] {
+                        info = typeof(TreeNode).GetConstructor(new Type[]
+                        {
                             typeof(string),
                             typeof(int),
                             typeof(int),
-                            typeof(TreeNode[])});
+                            typeof(TreeNode[])
+                        });
 
                         TreeNode[] nodesArray = new TreeNode[node.Nodes.Count];
                         node.Nodes.CopyTo(nodesArray, 0);
 
-                        args = new object[] {
+                        args = new object[]
+                        {
                             node.Text,
                             node.ImageIndex,
                             node.SelectedImageIndex,
-                            nodesArray};
+                            nodesArray
+                        };
                     }
                 }
 

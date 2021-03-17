@@ -1400,20 +1400,23 @@ namespace System.Windows.Forms.Design
             public const int GRABHANDLE_WIDTH = 7;
             public const int GRABHANDLE_HEIGHT = 7;
             // tables we use to determine how things can move and size
-            internal static readonly int[] s_activeSizeArray = new int[] {
+            internal static readonly int[] s_activeSizeArray = new int[]
+            {
                 SIZE_X | SIZE_Y | POS_LEFT | POS_TOP,      SIZE_Y | POS_TOP,      SIZE_X | SIZE_Y | POS_TOP | POS_RIGHT,
                 SIZE_X | POS_LEFT,                                                SIZE_X | POS_RIGHT,
                 SIZE_X | SIZE_Y | POS_LEFT | POS_BOTTOM,   SIZE_Y | POS_BOTTOM,   SIZE_X | SIZE_Y | POS_RIGHT | POS_BOTTOM
             };
 
-            internal static readonly Cursor[] s_activeCursorArrays = new Cursor[] {
+            internal static readonly Cursor[] s_activeCursorArrays = new Cursor[]
+            {
                 Cursors.SizeNWSE,   Cursors.SizeNS,   Cursors.SizeNESW,
                 Cursors.SizeWE,                      Cursors.SizeWE,
                 Cursors.SizeNESW,   Cursors.SizeNS,   Cursors.SizeNWSE
             };
 
             internal static readonly int[] s_inactiveSizeArray = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-            internal static readonly Cursor[] s_inactiveCursorArray = new Cursor[] {
+            internal static readonly Cursor[] s_inactiveCursorArray = new Cursor[]
+            {
                 Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow,
                 Cursors.Arrow,                   Cursors.Arrow,
                 Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow

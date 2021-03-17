@@ -1446,7 +1446,8 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            _miniToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            _miniToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
                 _addItemButton
             });
         }

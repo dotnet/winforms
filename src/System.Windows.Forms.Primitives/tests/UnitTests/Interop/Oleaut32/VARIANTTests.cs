@@ -2421,7 +2421,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionUI1_TestData()
         {
             yield return new object[] { new byte[0, 0] };
-            yield return new object[] { new byte[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new byte[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -2527,7 +2534,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionI1_TestData()
         {
             yield return new object[] { new sbyte[0, 0] };
-            yield return new object[] { new sbyte[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new sbyte[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -2633,7 +2647,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionI2_TestData()
         {
             yield return new object[] { new short[0, 0] };
-            yield return new object[] { new short[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new short[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -2739,7 +2760,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionUI2_TestData()
         {
             yield return new object[] { new ushort[0, 0] };
-            yield return new object[] { new ushort[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new ushort[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -2845,7 +2873,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionI4_TestData()
         {
             yield return new object[] { new int[0, 0] };
-            yield return new object[] { new int[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new int[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3051,7 +3086,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionUI4_TestData()
         {
             yield return new object[] { new uint[0, 0] };
-            yield return new object[] { new uint[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new uint[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3257,7 +3299,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionINT_TestData()
         {
             yield return new object[] { new int[0, 0] };
-            yield return new object[] { new int[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new int[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3463,7 +3512,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionUINT_TestData()
         {
             yield return new object[] { new uint[0, 0] };
-            yield return new object[] { new uint[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new uint[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3669,7 +3725,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionI8_TestData()
         {
             yield return new object[] { new long[0, 0] };
-            yield return new object[] { new long[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new long[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3775,7 +3838,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionUI8_TestData()
         {
             yield return new object[] { new ulong[0, 0] };
-            yield return new object[] { new ulong[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new ulong[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3881,7 +3951,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionR4_TestData()
         {
             yield return new object[] { new float[0, 0] };
-            yield return new object[] { new float[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new float[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -3987,7 +4064,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionR8_TestData()
         {
             yield return new object[] { new double[0, 0] };
-            yield return new object[] { new double[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new double[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -4093,7 +4177,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionERROR_TestData()
         {
             yield return new object[] { new uint[0, 0] };
-            yield return new object[] { new uint[2, 3] { { 1, 2, 3 }, { 4, 5, 6 } } };
+            yield return new object[]
+            {
+                new uint[2, 3]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -4207,7 +4298,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionBOOL_TestData()
         {
             yield return new object[] { new VARIANT_BOOL[0, 0], new bool[0, 0] };
-            yield return new object[] { new VARIANT_BOOL[2, 3] { { VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE }, { VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE } }, new bool[2, 3] { { true, false, true }, { false, true, false } } };
+            yield return new object[]
+            {
+                new VARIANT_BOOL[2, 3]
+                {
+                    { VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE },
+                    { VARIANT_BOOL.FALSE, VARIANT_BOOL.TRUE, VARIANT_BOOL.FALSE }
+                },
+                new bool[2, 3]
+                {
+                    { true, false, true },
+                    { false, true, false }
+                }
+            };
         }
 
         [StaTheory]
@@ -4333,7 +4436,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             VarDecFromR8(3.1, out DECIMAL d4);
             VarDecFromR8(2.2, out DECIMAL d5);
             VarDecFromR8(1.3, out DECIMAL d6);
-            yield return new object[] { new DECIMAL[2, 3] { { d1, d2, d3 }, { d4, d5, d6 } }, new decimal[2, 3] { { 1.1m, 2.2m, 3.3m }, { 3.1m, 2.2m, 1.3m } } };
+            yield return new object[]
+            {
+                new DECIMAL[2, 3]
+                {
+                    { d1, d2, d3 },
+                    { d4, d5, d6 }
+                },
+                new decimal[2, 3]
+                {
+                    { 1.1m, 2.2m, 3.3m },
+                    { 3.1m, 2.2m, 1.3m }
+                }
+            };
         }
 
         [StaTheory]
@@ -4441,7 +4556,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         public static IEnumerable<object[]> MultiDimensionCY_TestData()
         {
             yield return new object[] { new long[0, 0], new decimal[0, 0] };
-            yield return new object[] { new long[2, 3] { { 11000, 22000, 33000 }, { 31000, 22000, 13000 } }, new decimal[2, 3] { { 1.1m, 2.2m, 3.3m }, { 3.1m, 2.2m, 1.3m } } };
+            yield return new object[]
+            {
+                new long[2, 3]
+                {
+                    { 11000, 22000, 33000 },
+                    { 31000, 22000, 13000 }
+                },
+                new decimal[2, 3]
+                {
+                    { 1.1m, 2.2m, 3.3m },
+                    { 3.1m, 2.2m, 1.3m }
+                }
+            };
         }
 
         [StaTheory]
@@ -4554,7 +4681,19 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             var d4 = new DateTime(1892, 1, 2, 3, 4, 5, 6);
             var d5 = new DateTime(2010, 2, 3, 4, 5, 6);
             var d6 = new DateTime(8000, 10, 11, 12, 13, 14);
-            yield return new object[] { new double[2, 3] { { d1.ToOADate(), d2.ToOADate(), d3.ToOADate() }, { d4.ToOADate(), d5.ToOADate(), d6.ToOADate() } }, new DateTime[2, 3] { { d1, d2, d3 }, { d4, d5, d6 } } };
+            yield return new object[]
+            {
+                new double[2, 3]
+                {
+                    { d1.ToOADate(), d2.ToOADate(), d3.ToOADate() },
+                    { d4.ToOADate(), d5.ToOADate(), d6.ToOADate() }
+                },
+                new DateTime[2, 3]
+                {
+                    { d1, d2, d3 },
+                    { d4, d5, d6 }
+                }
+            };
         }
 
         [StaTheory]
@@ -4687,7 +4826,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.StringToBSTR("text5");
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.BSTR, result);
                 using var variant = new VARIANT
                 {
@@ -4706,7 +4849,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(0, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new string[,] { { null, "text", "" }, { "text3", "text4", "text5" } }, array);
+                    Assert.Equal(new string[,]
+                    {
+                        { null, "text", "" },
+                        { "text3", "text4", "text5" }
+                    }, array);
                 });
             }
             finally
@@ -4729,7 +4876,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.StringToBSTR("text5");
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.BSTR, result, 1, 2);
                 using var variant = new VARIANT
                 {
@@ -4748,7 +4899,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(2, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new string[,] { { null, "text", "" }, { "text3", "text4", "text5" } }, array);
+                    Assert.Equal(new string[,]
+                    {
+                        { null, "text", "" },
+                        { "text3", "text4", "text5" }
+                    }, array);
                 });
             }
             finally
@@ -4848,7 +5003,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.UNKNOWN, result);
                 using var variant = new VARIANT
                 {
@@ -4867,7 +5026,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(0, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new object[,] { { null, o1, o2 }, { o3, o4, o5 } }, array);
+                    Assert.Equal(new object[,]
+                    {
+                        { null, o1, o2 },
+                        { o3, o4, o5 }
+                    }, array);
                 });
             }
             finally
@@ -4895,7 +5058,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.UNKNOWN, result, 1, 2);
                 using var variant = new VARIANT
                 {
@@ -4914,7 +5081,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(2, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new object[,] { { null, o1, o2 }, { o3, o4, o5 } }, array);
+                    Assert.Equal(new object[,]
+                    {
+                        { null, o1, o2 },
+                        { o3, o4, o5 }
+                    }, array);
                 });
             }
             finally
@@ -5014,7 +5185,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result);
                 using var variant = new VARIANT
                 {
@@ -5033,7 +5208,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(0, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new object[,] { { null, o1, o2 }, { o3, o4, o5 } }, array);
+                    Assert.Equal(new object[,]
+                    {
+                        { null, o1, o2 },
+                        { o3, o4, o5 }
+                    }, array);
                 });
             }
             finally
@@ -5061,7 +5240,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result, 1, 2);
                 using var variant = new VARIANT
                 {
@@ -5080,7 +5263,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(2, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new object[,] { { null, o1, o2 }, { o3, o4, o5 } }, array);
+                    Assert.Equal(new object[,]
+                    {
+                        { null, o1, o2 },
+                        { o3, o4, o5 }
+                    }, array);
                 });
             }
             finally
@@ -5180,7 +5367,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result);
                 using var variant = new VARIANT
                 {
@@ -5199,7 +5390,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(0, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new object[,] { { null, o1, o2 }, { o3, o4, o5 } }, array);
+                    Assert.Equal(new object[,]
+                    {
+                        { null, o1, o2 },
+                        { o3, o4, o5 }
+                    }, array);
                 });
             }
             finally
@@ -5227,7 +5422,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr ptr5 = Marshal.GetIUnknownForObject(o5);
             try
             {
-                var result = new IntPtr[2, 3] { { IntPtr.Zero, ptr1, ptr2 }, { ptr3, ptr4, ptr5 } };
+                var result = new IntPtr[2, 3]
+                {
+                    { IntPtr.Zero, ptr1, ptr2 },
+                    { ptr3, ptr4, ptr5 }
+                };
                 SAFEARRAY* psa = CreateSafeArray(VARENUM.DISPATCH, result, 1, 2);
                 using var variant = new VARIANT
                 {
@@ -5246,7 +5445,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     Assert.Equal(2, array.GetLowerBound(1));
                     Assert.Equal(result.GetLength(0), array.GetLength(0));
                     Assert.Equal(result.GetLength(1), array.GetLength(1));
-                    Assert.Equal(new object[,] { { null, o1, o2 }, { o3, o4, o5 } }, array);
+                    Assert.Equal(new object[,]
+                    {
+                        { null, o1, o2 },
+                        { o3, o4, o5 }
+                    }, array);
                 });
             }
             finally
@@ -5407,7 +5610,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 }
             };
 
-            var result = new VARIANT[2, 3] { { v1, v2, v3 }, { v4, v5, v6 } };
+            var result = new VARIANT[2, 3]
+            {
+                { v1, v2, v3 },
+                { v4, v5, v6 }
+            };
             SAFEARRAY* psa = CreateSafeArray(VARENUM.VARIANT, result);
             using var variant = new VARIANT
             {
@@ -5426,7 +5633,11 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(0, array.GetLowerBound(1));
                 Assert.Equal(result.GetLength(0), array.GetLength(0));
                 Assert.Equal(result.GetLength(1), array.GetLength(1));
-                Assert.Equal(new object[,] { { 1, 2, 3 }, { 4, 5, 6 } }, array);
+                Assert.Equal(new object[,]
+                {
+                    { 1, 2, 3 },
+                    { 4, 5, 6 }
+                }, array);
             });
         }
 

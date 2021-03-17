@@ -32,10 +32,12 @@ namespace System.Windows.Forms
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
         private static readonly TYMED[] ALLOWED_TYMEDS =
-        new TYMED[] {
+        new TYMED[]
+        {
             TYMED.TYMED_HGLOBAL,
             TYMED.TYMED_ISTREAM,
-            TYMED.TYMED_GDI};
+            TYMED.TYMED_GDI
+        };
 
         private readonly IDataObject innerData;
 
@@ -422,7 +424,8 @@ namespace System.Windows.Forms
                 || format.Equals(DataFormats.UnicodeText)
                 || format.Equals(DataFormats.StringFormat))
             {
-                return new string[] {
+                return new string[]
+                {
                     DataFormats.StringFormat,
                     DataFormats.UnicodeText,
                     DataFormats.Text,
@@ -433,7 +436,8 @@ namespace System.Windows.Forms
                 || format.Equals(CF_DEPRECATED_FILENAME)
                 || format.Equals(CF_DEPRECATED_FILENAMEW))
             {
-                return new string[] {
+                return new string[]
+                {
                     DataFormats.FileDrop,
                     CF_DEPRECATED_FILENAMEW,
                     CF_DEPRECATED_FILENAME,
@@ -443,7 +447,8 @@ namespace System.Windows.Forms
             if (format.Equals(DataFormats.Bitmap)
                 || format.Equals((typeof(Bitmap)).FullName))
             {
-                return new string[] {
+                return new string[]
+                {
                     (typeof(Bitmap)).FullName,
                     DataFormats.Bitmap,
                 };

@@ -1257,7 +1257,8 @@ namespace System.Windows.Forms.Tests
         {
             // These controls have AccessibleName defined.
             // MonthCalendar has "Month" view by default and returns current date as AccessibleName
-            var typeDefaultValues = new Dictionary<Type, string> {
+            var typeDefaultValues = new Dictionary<Type, string>
+            {
                 { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName},
                 { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview},
                 { typeof(MonthCalendar), string.Format(SR.MonthCalendarSingleDateSelected, DateTime.Now.ToLongDateString())}
@@ -1265,7 +1266,8 @@ namespace System.Windows.Forms.Tests
 
             foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
             {
-                yield return new object[] {
+                yield return new object[]
+                {
                     type,
                     typeDefaultValues.ContainsKey(type) ? typeDefaultValues[type] : null
                 };

@@ -1660,7 +1660,8 @@ namespace System.Windows.Forms
             switch (direction)
             {
                 case ArrowDirection.Up:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y + 1),
                         new Point(middle.X + Offset2X + 1, middle.Y + 1),
                         new Point(middle.X, middle.Y - Offset2Y)
@@ -1668,7 +1669,8 @@ namespace System.Windows.Forms
                     break;
 
                 case ArrowDirection.Left:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X + Offset2X, middle.Y - Offset2Y - 1),
                         new Point(middle.X + Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X - 1, middle.Y)
@@ -1676,7 +1678,8 @@ namespace System.Windows.Forms
                     break;
 
                 case ArrowDirection.Right:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y - Offset2Y - 1),
                         new Point(middle.X - Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X + 1, middle.Y)
@@ -1685,7 +1688,8 @@ namespace System.Windows.Forms
 
                 case ArrowDirection.Down:
                 default:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y - 1),
                         new Point(middle.X + Offset2X + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + Offset2Y)

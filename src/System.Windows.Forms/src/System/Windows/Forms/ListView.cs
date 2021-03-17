@@ -2877,7 +2877,8 @@ namespace System.Windows.Forms
                                         // SystemColors.HotTrack
                                         totalshift += 8;
                                     }
-                                } while (!clrAdjusted);
+                                }
+                                while (!clrAdjusted);
                             }
 
                             if (!haveRenderInfo || riBack.IsEmpty)

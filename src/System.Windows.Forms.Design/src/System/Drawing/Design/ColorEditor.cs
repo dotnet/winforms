@@ -106,7 +106,8 @@ namespace System.Drawing.Design
             private static int marginX = MARGIN;
             private static int marginY = MARGIN;
 
-            private static readonly int[] staticCells = new int[] {
+            private static readonly int[] staticCells = new int[]
+            {
                 0x00ffffff, 0x00c0c0ff, 0x00c0e0ff, 0x00c0ffff,
                 0x00c0ffc0, 0x00ffffc0, 0x00ffc0c0, 0x00ffc0ff,
 

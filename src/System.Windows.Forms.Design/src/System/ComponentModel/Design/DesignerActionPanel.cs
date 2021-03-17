@@ -162,7 +162,8 @@ namespace System.ComponentModel.Design
             {
                 if (_filteredCommandIDs is null)
                 {
-                    _filteredCommandIDs = new CommandID[] {
+                    _filteredCommandIDs = new CommandID[]
+                    {
                         StandardCommands.Copy,
                         StandardCommands.Cut,
                         StandardCommands.Delete,

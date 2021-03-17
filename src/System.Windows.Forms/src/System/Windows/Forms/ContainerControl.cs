@@ -426,7 +426,8 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
-            } while (ctl is not null);
+            }
+            while (ctl is not null);
 
             return ctl is not null;
         }
@@ -1278,7 +1279,8 @@ namespace System.Windows.Forms
 
                         wrapped = true;
                     }
-                } while (ctl != start);
+                }
+                while (ctl != start);
             }
             finally
             {

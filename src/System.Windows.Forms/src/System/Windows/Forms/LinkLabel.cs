@@ -1714,7 +1714,8 @@ namespace System.Windows.Forms
                     {
                         test = null;
                     }
-                } while (test != null
+                }
+                while (test != null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
             }
@@ -1733,7 +1734,8 @@ namespace System.Windows.Forms
                     {
                         test = null;
                     }
-                } while (test != null
+                }
+                while (test != null
                          && !test.Enabled
                          && LinkInText(charStart, charEnd - charStart));
             }

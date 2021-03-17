@@ -1128,15 +1128,21 @@ namespace System.Windows.Forms.Design.Behavior
                 //x's align
                 if (l1.x1 == l1.x2 && l1.x1 == l2.x1)
                 {
-                    return new Line[2] {new Line(l1.x1, Math.Min(l1.y1, l2.y1), l1.x1, Math.Max(l1.y1, l2.y1)),
-                                        new Line(l1.x1, Math.Min(l1.y2, l2.y2), l1.x1, Math.Max(l1.y2, l2.y2))};
+                    return new Line[2]
+                    {
+                        new Line(l1.x1, Math.Min(l1.y1, l2.y1), l1.x1, Math.Max(l1.y1, l2.y1)),
+                        new Line(l1.x1, Math.Min(l1.y2, l2.y2), l1.x1, Math.Max(l1.y2, l2.y2))
+                    };
                 }
 
                 //y's align
                 if (l1.y1 == l1.y2 && l1.y1 == l2.y1)
                 {
-                    return new Line[2] {new Line(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x1, l2.x1), l1.y1),
-                                        new Line(Math.Min(l1.x2, l2.x2), l1.y1, Math.Max(l1.x2, l2.x2), l1.y1)};
+                    return new Line[2]
+                    {
+                        new Line(Math.Min(l1.x1, l2.x1), l1.y1, Math.Max(l1.x1, l2.x1), l1.y1),
+                        new Line(Math.Min(l1.x2, l2.x2), l1.y1, Math.Max(l1.x2, l2.x2), l1.y1)
+                    };
                 }
 
                 return null;

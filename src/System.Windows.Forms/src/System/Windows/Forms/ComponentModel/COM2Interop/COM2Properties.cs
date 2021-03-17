@@ -78,12 +78,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  These are the classes of handlers corresponding to the extended
         ///  interfaces above.
         /// </summary>
-        private static readonly Type[] extendedInterfaceHandlerTypes = new Type[]{
-                                                        typeof(Com2ICategorizePropertiesHandler),
-                                                        typeof(Com2IProvidePropertyBuilderHandler),
-                                                        typeof(Com2IPerPropertyBrowsingHandler),
-                                                        typeof(Com2IVsPerPropertyBrowsingHandler),
-                                                        typeof(Com2IManagedPerPropertyBrowsingHandler)};
+        private static readonly Type[] extendedInterfaceHandlerTypes = new Type[]
+        {
+            typeof(Com2ICategorizePropertiesHandler),
+            typeof(Com2IProvidePropertyBuilderHandler),
+            typeof(Com2IPerPropertyBrowsingHandler),
+            typeof(Com2IVsPerPropertyBrowsingHandler),
+            typeof(Com2IManagedPerPropertyBrowsingHandler)
+        };
 
         public event EventHandler Disposed;
 

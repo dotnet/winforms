@@ -985,7 +985,8 @@ namespace System.Windows.Forms
             // toolStrip1
             //
             resources.ApplyResources(toolStrip1, "toolStrip1");
-            toolStrip1.Items.AddRange(new ToolStripItem[] {
+            toolStrip1.Items.AddRange(new ToolStripItem[]
+            {
             printToolStripButton,
             zoomToolStripSplitButton,
             separatorToolStripSeparator,
@@ -995,7 +996,8 @@ namespace System.Windows.Forms
             fourpagesToolStripButton,
             sixpagesToolStripButton,
             separatorToolStripSeparator1,
-            closeToolStripButton});
+            closeToolStripButton
+            });
             toolStrip1.Name = "toolStrip1";
 
             // in High Contrast mode the color scheme provided by ToolStripSystemRenderer
@@ -1019,7 +1021,8 @@ namespace System.Windows.Forms
             //
             zoomToolStripSplitButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             zoomToolStripSplitButton.DoubleClickEnabled = true;
-            zoomToolStripSplitButton.DropDownItems.AddRange(new ToolStripItem[] {
+            zoomToolStripSplitButton.DropDownItems.AddRange(new ToolStripItem[]
+            {
             autoToolStripMenuItem,
             toolStripMenuItem1,
             toolStripMenuItem2,
@@ -1028,7 +1031,8 @@ namespace System.Windows.Forms
             toolStripMenuItem5,
             toolStripMenuItem6,
             toolStripMenuItem7,
-            toolStripMenuItem8});
+            toolStripMenuItem8
+            });
             zoomToolStripSplitButton.Name = "zoomToolStripSplitButton";
             zoomToolStripSplitButton.SplitterWidth = 1;
             resources.ApplyResources(zoomToolStripSplitButton, "zoomToolStripSplitButton");

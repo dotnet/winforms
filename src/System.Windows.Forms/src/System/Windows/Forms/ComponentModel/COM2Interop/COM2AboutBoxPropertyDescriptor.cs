@@ -17,10 +17,16 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private TypeConverter converter;
         private UITypeEditor editor;
 
-        public Com2AboutBoxPropertyDescriptor() : base(Ole32.DispatchID.ABOUTBOX, "About", new Attribute[]{new DispIdAttribute((int)Ole32.DispatchID.ABOUTBOX),
-                                                                                      DesignerSerializationVisibilityAttribute.Hidden,
-                                                                                      new DescriptionAttribute(SR.AboutBoxDesc),
-                                                                                      new ParenthesizePropertyNameAttribute(true)}, true, typeof(string), null, false)
+        public Com2AboutBoxPropertyDescriptor()
+            : base(Ole32.DispatchID.ABOUTBOX, "About",
+                  new Attribute[]
+                  {
+                      new DispIdAttribute((int)Ole32.DispatchID.ABOUTBOX),
+                      DesignerSerializationVisibilityAttribute.Hidden,
+                      new DescriptionAttribute(SR.AboutBoxDesc),
+                      new ParenthesizePropertyNameAttribute(true)
+                  },
+                  true, typeof(string), null, false)
         {
         }
 

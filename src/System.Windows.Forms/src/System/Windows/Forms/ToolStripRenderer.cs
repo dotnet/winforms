@@ -56,12 +56,15 @@ namespace System.Windows.Forms
 
         // this is used in building up the half pyramid of rectangles that are drawn in a
         // status strip sizing grip.
-        private static readonly Rectangle[] baseSizeGripRectangles = new Rectangle[] { new Rectangle(8,0,2,2),
-                                                                                new Rectangle(8,4,2,2),
-                                                                                new Rectangle(8,8,2,2),
-                                                                                new Rectangle(4,4,2,2),
-                                                                                new Rectangle(4,8,2,2),
-                                                                                new Rectangle(0,8,2,2) };
+        private static readonly Rectangle[] baseSizeGripRectangles = new Rectangle[]
+        {
+            new Rectangle(8,0,2,2),
+            new Rectangle(8,4,2,2),
+            new Rectangle(8,8,2,2),
+            new Rectangle(4,4,2,2),
+            new Rectangle(4,8,2,2),
+            new Rectangle(0,8,2,2)
+        };
 
         protected ToolStripRenderer()
         {
@@ -648,32 +651,40 @@ namespace System.Windows.Forms
                 {
                     case ArrowDirection.Up:
 
-                        arrow = new Point[] {
-                                 new Point(middle.X - Offset2X, middle.Y + 1),
-                                 new Point(middle.X + Offset2X + 1, middle.Y + 1),
-                                 new Point(middle.X, middle.Y - Offset2Y)};
+                        arrow = new Point[]
+                        {
+                            new Point(middle.X - Offset2X, middle.Y + 1),
+                            new Point(middle.X + Offset2X + 1, middle.Y + 1),
+                            new Point(middle.X, middle.Y - Offset2Y)
+                        };
 
                         break;
                     case ArrowDirection.Left:
-                        arrow = new Point[] {
-                                 new Point(middle.X + Offset2X, middle.Y - offset4Y),
-                                 new Point(middle.X + Offset2X, middle.Y + offset4Y),
-                                 new Point(middle.X - horizontalOffset, middle.Y)};
+                        arrow = new Point[]
+                        {
+                            new Point(middle.X + Offset2X, middle.Y - offset4Y),
+                            new Point(middle.X + Offset2X, middle.Y + offset4Y),
+                            new Point(middle.X - horizontalOffset, middle.Y)
+                        };
 
                         break;
                     case ArrowDirection.Right:
-                        arrow = new Point[] {
-                                 new Point(middle.X - Offset2X, middle.Y - offset4Y),
-                                 new Point(middle.X - Offset2X, middle.Y + offset4Y),
-                                 new Point(middle.X + horizontalOffset, middle.Y)};
+                        arrow = new Point[]
+                        {
+                            new Point(middle.X - Offset2X, middle.Y - offset4Y),
+                            new Point(middle.X - Offset2X, middle.Y + offset4Y),
+                            new Point(middle.X + horizontalOffset, middle.Y)
+                        };
 
                         break;
                     case ArrowDirection.Down:
                     default:
-                        arrow = new Point[] {
-                             new Point(middle.X - Offset2X, middle.Y - 1),
-                             new Point(middle.X + Offset2X + 1, middle.Y - 1),
-                             new Point(middle.X, middle.Y + Offset2Y) };
+                        arrow = new Point[]
+                        {
+                            new Point(middle.X - Offset2X, middle.Y - 1),
+                            new Point(middle.X + Offset2X + 1, middle.Y - 1),
+                            new Point(middle.X, middle.Y + Offset2Y)
+                        };
                         break;
                 }
 

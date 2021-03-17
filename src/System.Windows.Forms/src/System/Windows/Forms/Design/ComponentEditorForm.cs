@@ -311,7 +311,8 @@ namespace System.Windows.Forms.Design
             AcceptButton = okButton;
 
             Controls.Clear();
-            Controls.AddRange(new Control[] {
+            Controls.AddRange(new Control[]
+            {
                 selector,
                 grayStrip,
                 pageHost,

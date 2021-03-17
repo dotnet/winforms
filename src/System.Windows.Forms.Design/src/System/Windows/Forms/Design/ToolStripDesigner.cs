@@ -2232,7 +2232,8 @@ namespace System.Windows.Forms.Design
         {
             base.PreFilterProperties(properties);
             PropertyDescriptor prop;
-            string[] shadowProps = new string[] {
+            string[] shadowProps = new string[]
+            {
                "Visible",
                "AllowDrop",
                "AllowItemReorder"

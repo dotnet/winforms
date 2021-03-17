@@ -1029,27 +1029,30 @@ namespace System.Windows.Forms
         /// </summary>
         internal class HtmlElementShim : HtmlShim
         {
-            private static readonly Type[] dispInterfaceTypes = {typeof(DHTMLElementEvents2),
-                                                    typeof(DHTMLAnchorEvents2),
-                                                    typeof(DHTMLAreaEvents2),
-                                                    typeof(DHTMLButtonElementEvents2),
-                                                    typeof(DHTMLControlElementEvents2),
-                                                    typeof(DHTMLFormElementEvents2),
-                                                    typeof(DHTMLFrameSiteEvents2),
-                                                    typeof(DHTMLImgEvents2),
-                                                    typeof(DHTMLInputFileElementEvents2),
-                                                    typeof(DHTMLInputImageEvents2),
-                                                    typeof(DHTMLInputTextElementEvents2),
-                                                    typeof(DHTMLLabelEvents2),
-                                                    typeof(DHTMLLinkElementEvents2),
-                                                    typeof(DHTMLMapEvents2),
-                                                    typeof(DHTMLMarqueeElementEvents2),
-                                                    typeof(DHTMLOptionButtonElementEvents2),
-                                                    typeof(DHTMLSelectElementEvents2),
-                                                    typeof(DHTMLStyleElementEvents2),
-                                                    typeof(DHTMLTableEvents2),
-                                                    typeof(DHTMLTextContainerEvents2),
-                                                    typeof(DHTMLScriptEvents2)};
+            private static readonly Type[] dispInterfaceTypes =
+            {
+                typeof(DHTMLElementEvents2),
+                typeof(DHTMLAnchorEvents2),
+                typeof(DHTMLAreaEvents2),
+                typeof(DHTMLButtonElementEvents2),
+                typeof(DHTMLControlElementEvents2),
+                typeof(DHTMLFormElementEvents2),
+                typeof(DHTMLFrameSiteEvents2),
+                typeof(DHTMLImgEvents2),
+                typeof(DHTMLInputFileElementEvents2),
+                typeof(DHTMLInputImageEvents2),
+                typeof(DHTMLInputTextElementEvents2),
+                typeof(DHTMLLabelEvents2),
+                typeof(DHTMLLinkElementEvents2),
+                typeof(DHTMLMapEvents2),
+                typeof(DHTMLMarqueeElementEvents2),
+                typeof(DHTMLOptionButtonElementEvents2),
+                typeof(DHTMLSelectElementEvents2),
+                typeof(DHTMLStyleElementEvents2),
+                typeof(DHTMLTableEvents2),
+                typeof(DHTMLTextContainerEvents2),
+                typeof(DHTMLScriptEvents2)
+            };
 
             private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native HtmlElement
             private HtmlElement htmlElement;

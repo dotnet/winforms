@@ -75,7 +75,8 @@ namespace System.Windows.Forms
 
                 _adviseList = new ArrayList();
                 _activeXState = new BitVector32();
-                _ambientProperties = new AmbientProperty[] {
+                _ambientProperties = new AmbientProperty[]
+                {
                     new AmbientProperty("Font", DispatchID.AMBIENT_FONT),
                     new AmbientProperty("BackColor", DispatchID.AMBIENT_BACKCOLOR),
                     new AmbientProperty("ForeColor", DispatchID.AMBIENT_FORECOLOR)
@@ -1022,7 +1023,8 @@ namespace System.Windows.Forms
             private bool IsResourceProp(PropertyDescriptor prop)
             {
                 TypeConverter converter = prop.Converter;
-                Type[] convertTypes = new Type[] {
+                Type[] convertTypes = new Type[]
+                {
                     typeof(string),
                     typeof(byte[])
                     };

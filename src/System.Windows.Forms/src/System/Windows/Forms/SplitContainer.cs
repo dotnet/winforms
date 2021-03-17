@@ -1929,7 +1929,8 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
-            } while (ctl is not null);
+            }
+            while (ctl is not null);
             if (ctl is not null && TabStop)
             {
                 //we are on Splitter.....Focus it
@@ -2012,7 +2013,8 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
-            } while (ctl is not null);
+            }
+            while (ctl is not null);
 
             //If CTL is null .. we r out of the Current SplitContainer...
             if (ctl is null || (ctl is SplitterPanel && !ctl.Visible))

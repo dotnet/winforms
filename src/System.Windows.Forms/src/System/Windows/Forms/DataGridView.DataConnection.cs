@@ -514,7 +514,8 @@ namespace System.Windows.Forms
                                 // the new row becomes a regular row and a "new" new row is appended
                                 _owner.NewRowIndex = -1;
                                 _owner.AddNewRow(false /* createdByEditing */);
-                            } while (DataBoundRowsCount() < CurrencyManager.Count);
+                            }
+                            while (DataBoundRowsCount() < CurrencyManager.Count);
                         }
 
                         _dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] = true;

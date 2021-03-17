@@ -10503,7 +10503,8 @@ namespace System.Windows.Forms
                         return ctl;
                     }
                 }
-            } while (ctl != start);
+            }
+            while (ctl != start);
             return null;
         }
 

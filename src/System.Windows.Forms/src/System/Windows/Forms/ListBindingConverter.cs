@@ -164,10 +164,12 @@ namespace System.Windows.Forms
             if (ctor is null)
             {
                 isComplete = false;
-                ctor = typeof(Binding).GetConstructor(new Type[] {
+                ctor = typeof(Binding).GetConstructor(new Type[]
+                {
                    typeof(string),
                    typeof(object),
-                   typeof(string)});
+                   typeof(string)
+                });
             }
 
             // now fill in the values.

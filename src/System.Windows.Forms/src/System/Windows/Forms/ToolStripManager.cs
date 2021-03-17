@@ -877,7 +877,8 @@ namespace System.Windows.Forms
                     }
 
                     activeControlInChain = activeControlInChain.ParentInternal;
-                } while (activeControlInChain != null);
+                }
+                while (activeControlInChain != null);
 
                 if (activeControlInChain != null)
                 {

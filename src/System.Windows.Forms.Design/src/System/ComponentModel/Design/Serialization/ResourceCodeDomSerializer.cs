@@ -990,7 +990,8 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     lastCulture = culture;
                     culture = culture.Parent;
-                } while (tryParents && !lastCulture.Equals(culture));
+                }
+                while (tryParents && !lastCulture.Equals(culture));
 
                 if (createIfNotExists)
                 {

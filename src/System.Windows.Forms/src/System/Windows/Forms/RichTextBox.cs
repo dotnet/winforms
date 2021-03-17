@@ -1854,7 +1854,8 @@ namespace System.Windows.Forms
                 ret = 1;
             }
 #else
-            catch (IOException) {
+            catch (IOException)
+            {
                 transferred = 0;
                 ret = 1;
             }

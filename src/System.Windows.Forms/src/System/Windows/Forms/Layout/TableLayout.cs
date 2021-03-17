@@ -123,7 +123,8 @@ namespace System.Windows.Forms.Layout
 
                         i++;
                         j--;
-                    } while (i <= j);
+                    }
+                    while (i <= j);
                     if (j - left <= right - i)
                     {
                         if (left < j)
@@ -142,7 +143,8 @@ namespace System.Windows.Forms.Layout
 
                         right = j;
                     }
-                } while (left < right);
+                }
+                while (left < right);
             }
         }
 
@@ -168,7 +170,8 @@ namespace System.Windows.Forms.Layout
         private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
         private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
 
-        private static readonly string[] _propertiesWhichInvalidateCache = new string[] {
+        private static readonly string[] _propertiesWhichInvalidateCache = new string[]
+        {
            //suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
 
            null,
@@ -692,7 +695,8 @@ namespace System.Windows.Forms.Layout
             do
             {
                 GetColStartAndStop(maxColumns, reservationGrid, layoutInfo, out colStop);
-            } while (ScanRowForOverlap(maxColumns, reservationGrid, layoutInfo, colStop, layoutInfo.RowStart - prevRow));
+            }
+            while (ScanRowForOverlap(maxColumns, reservationGrid, layoutInfo, colStop, layoutInfo.RowStart - prevRow));
         }
 
         /// <summary>

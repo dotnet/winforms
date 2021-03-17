@@ -220,19 +220,20 @@ namespace System.Windows.Forms
             // Add items to strip
             //
 
-            Items.AddRange(new ToolStripItem[] {
-                                MoveFirstItem,
-                                MovePreviousItem,
-                                separator1,
-                                PositionItem,
-                                CountItem,
-                                separator2,
-                                MoveNextItem,
-                                MoveLastItem,
-                                separator3,
-                                AddNewItem,
-                                DeleteItem,
-                                });
+            Items.AddRange(new ToolStripItem[]
+            {
+                MoveFirstItem,
+                MovePreviousItem,
+                separator1,
+                PositionItem,
+                CountItem,
+                separator2,
+                MoveNextItem,
+                MoveLastItem,
+                separator3,
+                AddNewItem,
+                DeleteItem,
+            });
         }
 
         /// <summary>

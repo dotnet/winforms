@@ -476,7 +476,8 @@ namespace System.Windows.Forms
 
                 names.Add(fileName);
                 fileName = charBuffer.GetString();
-            } while (fileName.Length > 0);
+            }
+            while (fileName.Length > 0);
 
             return names.ToArray();
         }

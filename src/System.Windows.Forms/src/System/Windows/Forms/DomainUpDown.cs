@@ -345,7 +345,8 @@ namespace System.Windows.Forms
                 {
                     index = 0;
                 }
-            } while (!found && index != startPosition);
+            }
+            while (!found && index != startPosition);
 
             return matchIndex;
         }
