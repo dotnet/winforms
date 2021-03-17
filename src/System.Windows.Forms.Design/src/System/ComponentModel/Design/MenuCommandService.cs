@@ -176,6 +176,7 @@ namespace System.ComponentModel.Design
                     _serviceProvider = null;
                     TypeDescriptor.Refreshed -= new RefreshEventHandler(this.OnTypeRefreshed);
                 }
+
                 lock (_commandGroupsLock)
                 {
                     foreach (KeyValuePair<Guid, ArrayList> group in _commandGroups)
@@ -185,6 +186,7 @@ namespace System.ComponentModel.Design
                         {
                             command.CommandChanged -= _commandChangedHandler;
                         }
+
                         commands.Clear();
                     }
                 }
@@ -299,6 +301,7 @@ namespace System.ComponentModel.Design
                         buildVerbs[key] = verbsOrder.Add(_globalVerbs[i]);
                     }
                 }
+
                 if (designerActionVerbs.Count > 0)
                 {
                     for (int i = 0; i < designerActionVerbs.Count; i++)
@@ -307,6 +310,7 @@ namespace System.ComponentModel.Design
                         buildVerbs[key] = verbsOrder.Add(designerActionVerbs[i]);
                     }
                 }
+
                 if (localVerbs != null && localVerbs.Count > 0)
                 {
                     for (int i = 0; i < localVerbs.Count; i++)
@@ -357,6 +361,7 @@ namespace System.ComponentModel.Design
             {
                 _commandGroups.TryGetValue(guid, out commands);
             }
+
             if (commands != null)
             {
                 Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
@@ -423,6 +428,7 @@ namespace System.ComponentModel.Design
             {
                 _commandGroups.TryGetValue(guid, out commands);
             }
+
             return commands;
         }
 
@@ -434,10 +440,12 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(serviceType));
             }
+
             if (_serviceProvider != null)
             {
                 return _serviceProvider.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -456,6 +464,7 @@ namespace System.ComponentModel.Design
                 cmd.Invoke();
                 return true;
             }
+
             return false;
         }
 
@@ -474,6 +483,7 @@ namespace System.ComponentModel.Design
                 cmd.Invoke(arg);
                 return true;
             }
+
             return false;
         }
 
@@ -531,6 +541,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(command));
             }
+
             ArrayList commands;
             lock (_commandGroupsLock)
             {
@@ -553,9 +564,11 @@ namespace System.ComponentModel.Design
                         // raise event
                         OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandRemoved, command));
                     }
+
                     return;
                 }
             }
+
             Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Unable to remove command: " + command.ToString());
         }
 
@@ -580,6 +593,7 @@ namespace System.ComponentModel.Design
                     {
                         ((IMenuCommandService)this).Verbs.Remove(verb);
                     }
+
                     OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandRemoved, verb));
                 }
             }

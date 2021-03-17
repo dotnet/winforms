@@ -68,6 +68,7 @@ namespace System.Windows.Forms.ButtonInternal
                     bounds.Width--;
                     bounds.Height--;
                 }
+
                 bounds.Inflate(-1, -1);
             }
 

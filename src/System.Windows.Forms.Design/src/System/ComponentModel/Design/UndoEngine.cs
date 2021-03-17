@@ -74,6 +74,7 @@ namespace System.ComponentModel.Design
                 {
                     return (UndoUnit)_unitStack.Peek();
                 }
+
                 return null;
             }
         }
@@ -237,6 +238,7 @@ namespace System.ComponentModel.Design
                     _componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                     _componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 }
+
                 _provider = null;
             }
         }
@@ -277,6 +279,7 @@ namespace System.ComponentModel.Design
                     componentName = obj.GetType().Name;
                 }
             }
+
             return componentName;
         }
 
@@ -294,6 +297,7 @@ namespace System.ComponentModel.Design
                 };
                 throw ex;
             }
+
             return service;
         }
 
@@ -311,6 +315,7 @@ namespace System.ComponentModel.Design
             {
                 return _provider.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -341,6 +346,7 @@ namespace System.ComponentModel.Design
                 {
                     name = SR.UndoEngineComponentAdd0;
                 }
+
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
@@ -383,6 +389,7 @@ namespace System.ComponentModel.Design
                 {
                     name = SR.UndoEngineComponentChange0;
                 }
+
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
@@ -412,6 +419,7 @@ namespace System.ComponentModel.Design
                 {
                     _componentChangeService.OnComponentChanged(ro.component, ro.member, null, null);
                 }
+
                 _refToRemovedComponent.Remove(e.Component);
             }
         }
@@ -430,6 +438,7 @@ namespace System.ComponentModel.Design
                 {
                     name = SR.UndoEngineComponentRemove0;
                 }
+
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
@@ -443,6 +452,7 @@ namespace System.ComponentModel.Design
                     {
                         continue;
                     }
+
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
                     foreach (PropertyDescriptor prop in props)
                     {
@@ -470,8 +480,10 @@ namespace System.ComponentModel.Design
                                     {
                                         _refToRemovedComponent = new Dictionary<IComponent, List<ReferencingComponent>>();
                                     }
+
                                     _refToRemovedComponent[e.Component] = propsToUpdate;
                                 }
+
                                 _componentChangeService.OnComponentChanging(comp, prop);
                                 propsToUpdate.Add(new ReferencingComponent(comp, prop));
                             }
@@ -596,6 +608,7 @@ namespace System.ComponentModel.Design
                             selectedNames[comp.Site.Name] = comp.Site.Container;
                         }
                     }
+
                     _lastSelection = selectedNames;
                 }
             }
@@ -674,6 +687,7 @@ namespace System.ComponentModel.Design
                 {
                     _ignoreAddedList = new ArrayList();
                 }
+
                 _ignoreAddedList.Add(e.Component);
             }
 
@@ -686,6 +700,7 @@ namespace System.ComponentModel.Design
                 {
                     _ignoreAddingList = new ArrayList();
                 }
+
                 _ignoreAddingList.Add(e.Component);
             }
 
@@ -695,6 +710,7 @@ namespace System.ComponentModel.Design
                 {
                     return false;
                 }
+
                 return changing.Component == changed.Component && changing.Member == changed.Member;
             }
 
@@ -718,6 +734,7 @@ namespace System.ComponentModel.Design
                         containsRename = true;
                     }
                 }
+
                 return containsAdd && !containsRename && !containsSymmetricChange;
             }
 
@@ -790,6 +807,7 @@ namespace System.ComponentModel.Design
                         {
                             memberName = e.Member.Name;
                         }
+
                         if (name != null)
                         {
                             Debug.WriteLineIf(s_traceUndo.TraceVerbose && hasChange, "Adding second ChangeEvent for " + name + " Member: " + memberName);
@@ -876,6 +894,7 @@ namespace System.ComponentModel.Design
                                     _events.Insert(changeIdx, evt);
                                 }
                             }
+
                             break;
                         }
                     }
@@ -897,6 +916,7 @@ namespace System.ComponentModel.Design
                 {
                     _removeEvents = new ArrayList();
                 }
+
                 try
                 {
                     AddRemoveUndoEvent evt = new AddRemoveUndoEvent(UndoEngine, e.Component, false);
@@ -945,6 +965,7 @@ namespace System.ComponentModel.Design
                     {
                         UndoEngine.OnUndoing(EventArgs.Empty);
                     }
+
                     // create a transaction here so things that do work on componentchanged can ignore that while the transaction is opened...big perf win.
                     transaction = UndoEngine._host.CreateTransaction();
                     UndoCore();
@@ -1031,6 +1052,7 @@ namespace System.ComponentModel.Design
                                         }
                                     }
                                 }
+
                                 ss.SetSelectedComponents(list, SelectionTypes.Replace);
                             }
                         }
@@ -1069,6 +1091,7 @@ namespace System.ComponentModel.Design
                         }
                     }
                 }
+
                 _reverse = !_reverse;
             }
 
@@ -1097,6 +1120,7 @@ namespace System.ComponentModel.Design
                     {
                         engine._serializationService.Serialize(_serializedData, component);
                     }
+
                     // For add events, we commit as soon as we receive the event.
                     _committed = add;
                 }
@@ -1165,6 +1189,7 @@ namespace System.ComponentModel.Design
                             host.DestroyComponent(component);
                         }
                     }
+
                     _nextUndoAdds = !_nextUndoAdds;
                 }
             }
@@ -1313,6 +1338,7 @@ namespace System.ComponentModel.Design
                             engine._serializationService.SerializeAbsolute(store, component);
                         }
                     }
+
                     return store;
                 }
 

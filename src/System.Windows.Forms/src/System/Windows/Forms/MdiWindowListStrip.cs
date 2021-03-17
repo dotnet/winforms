@@ -28,6 +28,7 @@ namespace System.Windows.Forms
             {
                 mdiParent = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -47,6 +48,7 @@ namespace System.Windows.Forms
                 {
                     Items.Add(mergeItem);
                 }
+
                 return mergeItem;
             }
         }
@@ -129,6 +131,7 @@ namespace System.Windows.Forms
                                     windowListItem.Checked = true;
                                     activeFormAdded = true;
                                 }
+
                                 accel++;
                                 formsAddedToMenu++;
                                 Debug.WriteLineIf(ToolStrip.s_mdiMergeDebug.TraceVerbose, "\tPopulateItems: Added " + windowListItem.Text);

@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                 {
                     owner.SortDomainItems();
                 }
+
                 return ret;
             }
 

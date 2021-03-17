@@ -100,6 +100,7 @@ namespace System.Windows.Forms.Design
             {
                 parent = component as ToolStrip;
             }
+
             return parent;
         }
 
@@ -129,6 +130,7 @@ namespace System.Windows.Forms.Design
                 // time to clear the toolbox item cache - we've got twice the number of toolbox items than actual custom item types.
                 s_cachedToolboxItems.Clear();
             }
+
             return tbxItem;
         }
 
@@ -139,12 +141,14 @@ namespace System.Windows.Forms.Design
             {
                 s_cachedWinformsImages = new Dictionary<Type, Bitmap>();
             }
+
             if (!s_cachedWinformsImages.ContainsKey(itemType))
             {
                 Bitmap knownImage = ToolboxBitmapAttribute.GetImageFromResource(itemType, null, false) as Bitmap;
                 s_cachedWinformsImages[itemType] = knownImage;
                 return knownImage;
             }
+
             return s_cachedWinformsImages[itemType];
         }
 
@@ -162,6 +166,7 @@ namespace System.Windows.Forms.Design
             {
                 return tbxItem.Bitmap;
             }
+
             // if all else fails, throw up a default image.
             return GetKnownToolboxBitmap(typeof(Component));
         }
@@ -177,14 +182,17 @@ namespace System.Windows.Forms.Design
             {
                 currentName = tbxItem.DisplayName;
             }
+
             if (currentName is null)
             {
                 currentName = itemType.Name;
             }
+
             if (currentName.StartsWith("ToolStrip"))
             {
                 return currentName.Substring(TOOLSTRIPCHARCOUNT);
             }
+
             return currentName;
         }
 
@@ -207,6 +215,7 @@ namespace System.Windows.Forms.Design
             {
                 return s_newItemTypesForStatusStrip;
             }
+
             Debug.Assert(toolStrip != null, "why werent we handed a toolstrip here? returning default list");
             return s_newItemTypesForToolStrip;
         }
@@ -230,6 +239,7 @@ namespace System.Windows.Forms.Design
             {
                 visiblity = ToolStripItemDesignerAvailability.ToolStrip;
             }
+
             return visiblity;
         }
 
@@ -240,8 +250,10 @@ namespace System.Windows.Forms.Design
             {
                 discoveryService = serviceProvider.GetService(typeof(ITypeDiscoveryService)) as ITypeDiscoveryService;
             }
+
             return GetCustomItemTypes(component, discoveryService);
         }
+
         public static Type[] GetCustomItemTypes(IComponent component, ITypeDiscoveryService discoveryService)
         {
             if (discoveryService != null)
@@ -263,14 +275,17 @@ namespace System.Windows.Forms.Design
                         {
                             continue;
                         }
+
                         if (!t.IsPublic && !t.IsNestedPublic)
                         {
                             continue;
                         }
+
                         if (t.ContainsGenericParameters)
                         {
                             continue;
                         }
+
                         // Check if we have public constructor...
                         ConstructorInfo ctor = t.GetConstructor(Array.Empty<Type>());
                         if (ctor is null)
@@ -292,6 +307,7 @@ namespace System.Windows.Forms.Design
                                     break;
                                 }
                             }
+
                             if (!isStockType)
                             {
                                 createableTypes.Add(t);
@@ -308,6 +324,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             s_customToolStripItemCount = 0;
             return Array.Empty<Type>();
         }
@@ -329,8 +346,10 @@ namespace System.Windows.Forms.Design
                 {
                     item.Click += onClick;
                 }
+
                 items[i] = item;
             }
+
             return items;
         }
 
@@ -351,8 +370,10 @@ namespace System.Windows.Forms.Design
                 {
                     item.Click += onClick;
                 }
+
                 items[i] = item;
             }
+
             return items;
         }
 
@@ -376,10 +397,12 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             if (populateCustom)
             {
                 GetCustomNewItemDropDown(contextMenu, component, currentItem, onClick, convertTo, serviceProvider);
             }
+
             if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
             {
                 contextMenu.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
@@ -389,6 +412,7 @@ namespace System.Windows.Forms.Design
                     contextMenu.ForeColor = (Color)uis.Styles["VsColorPanelText"];
                 }
             }
+
             contextMenu.Populate();
             return contextMenu;
         }
@@ -406,6 +430,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             contextMenu.Populate();
         }
 
@@ -416,6 +441,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             //InvalidateOriginal SelectedComponents.
             Region invalidateRegion = null;
             Region itemRegion = null;
@@ -543,6 +569,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     return s_bitsPerPixel;
                 }
             }
@@ -558,6 +585,7 @@ namespace System.Windows.Forms.Design
                     {
                         return s_lowRes;
                     }
+
                     s_lowRes = BitsPerPixel <= 8;
                     s_lowResSettingValid = true;
                     return s_lowRes;
@@ -575,11 +603,13 @@ namespace System.Windows.Forms.Design
                     {
                         return s_highContrast;
                     }
+
                     s_highContrast = SystemInformation.HighContrast;
                     s_highContrastSettingValid = true;
                     return s_highContrast;
                 }
             }
+
             public static bool IsDropShadowEnabled
             {
                 get
@@ -588,6 +618,7 @@ namespace System.Windows.Forms.Design
                     {
                         return s_dropShadowEnabled;
                     }
+
                     s_dropShadowEnabled = SystemInformation.IsDropShadowEnabled;
                     s_dropShadowSettingValid = true;
                     return s_dropShadowEnabled;
@@ -605,6 +636,7 @@ namespace System.Windows.Forms.Design
                     {
                         return s_isTerminalServerSession;
                     }
+
                     s_isTerminalServerSession = SystemInformation.TerminalServerSession;
                     s_terminalSettingValid = true;
                     return s_isTerminalServerSession;

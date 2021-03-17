@@ -71,6 +71,7 @@ namespace System.Windows.Forms
                     {
                         _items = new ItemArray(_owner);
                     }
+
                     return _items;
                 }
             }
@@ -133,6 +134,7 @@ namespace System.Windows.Forms
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
                     InnerArray.InsertEntry(index, entry);
                 }
+
                 bool successful = false;
 
                 try
@@ -159,6 +161,7 @@ namespace System.Windows.Forms
                             _owner.UpdateMaxItemWidth(item, false);
                         }
                     }
+
                     successful = true;
                 }
                 finally
@@ -274,6 +277,7 @@ namespace System.Windows.Forms
                 {
                     _owner.NativeClear();
                 }
+
                 InnerArray.Clear();
                 _owner.maxWidth = -1;
                 _owner.UpdateHorizontalExtent();
@@ -485,6 +489,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 _owner.UpdateHorizontalExtent();
             }
         }

@@ -310,6 +310,7 @@ namespace System.Windows.Forms.ButtonInternal
                         layout.Focus.Y++;
                         layout.Focus.Height--;
                     }
+
                     if (layout.Focus.Width % 2 == 0)
                     {
                         layout.Focus.X++;
@@ -333,6 +334,7 @@ namespace System.Windows.Forms.ButtonInternal
                             return TextImageRelation.ImageBeforeText;
                     }
                 }
+
                 return relation;
             }
 
@@ -589,6 +591,7 @@ namespace System.Windows.Forms.ButtonInternal
                         layout.Field.Y);
                     layout.TextBounds.Height = textBottom - layout.TextBounds.Y;
                 }
+
                 if (textImageRelation == TextImageRelation.TextAboveImage || textImageRelation == TextImageRelation.ImageAboveText)
                 {
                     // Adjust the horizontal position of textBounds so that the text doesn't fall off the boundary of the button
@@ -598,6 +601,7 @@ namespace System.Windows.Forms.ButtonInternal
                         layout.Field.X);
                     layout.TextBounds.Width = textRight - layout.TextBounds.X;
                 }
+
                 if (textImageRelation == TextImageRelation.ImageBeforeText && layout.ImageBounds.Size.Width != 0)
                 {
                     // Squeezes imageBounds.Width so that text is visible
@@ -606,6 +610,7 @@ namespace System.Windows.Forms.ButtonInternal
                         Math.Min(maxBounds.Width - layout.TextBounds.Width, layout.ImageBounds.Width));
                     layout.TextBounds.X = layout.ImageBounds.X + layout.ImageBounds.Width;
                 }
+
                 if (textImageRelation == TextImageRelation.ImageAboveText && layout.ImageBounds.Size.Height != 0)
                 {
                     // Squeezes imageBounds.Height so that the text is visible

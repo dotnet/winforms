@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Design.Behavior
                 rules = SelectionRules.Moveable;
                 hitTestCursor = Cursors.SizeAll;
             }
+
             // The handle is always upperleft
             bounds = new Rectangle(controlBounds.X - DesignerUtils.NORESIZEHANDLESIZE, controlBounds.Y - DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE, DesignerUtils.NORESIZEHANDLESIZE);
             hitBounds = bounds;

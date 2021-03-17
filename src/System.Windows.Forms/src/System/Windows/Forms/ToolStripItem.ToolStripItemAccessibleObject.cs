@@ -216,6 +216,7 @@ namespace System.Windows.Forms
                     {
                         accState |= AccessibleStates.Focused | AccessibleStates.HotTracked;
                     }
+
                     if (_ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Pressed;
@@ -232,6 +233,7 @@ namespace System.Windows.Forms
                     ((ToolStripItem)Owner).PerformClick();
                 }
             }
+
             public override int GetHelpTopic(out string fileName)
             {
                 int topic = 0;

@@ -56,6 +56,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     break;
                 }
             }
+
             return null;
         }
 
@@ -69,6 +70,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.CanConvertFrom(context, sourceType);
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -82,6 +84,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.CanConvertTo(context, destinationType);
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -94,6 +97,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.ConvertFrom(context, culture, value);
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -110,6 +114,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.ConvertTo(context, culture, value, destinationType);
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
@@ -124,6 +129,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.CreateInstance(context, propertyValues);
             }
+
             return base.CreateInstance(context, propertyValues);
         }
 
@@ -137,6 +143,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.GetCreateInstanceSupported(context);
             }
+
             return base.GetCreateInstanceSupported(context);
         }
 
@@ -151,6 +158,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.GetProperties(context, value, attributes);
             }
+
             return base.GetProperties(context, value, attributes);
         }
 
@@ -164,6 +172,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.GetPropertiesSupported(context);
             }
+
             return base.GetPropertiesSupported(context);
         }
 
@@ -179,6 +188,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.GetStandardValues(context);
             }
+
             return base.GetStandardValues(context);
         }
 
@@ -196,6 +206,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.GetStandardValuesExclusive(context);
             }
+
             return base.GetStandardValuesExclusive(context);
         }
 
@@ -209,6 +220,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.GetStandardValuesSupported(context);
             }
+
             return base.GetStandardValuesSupported(context);
         }
 
@@ -221,6 +233,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return innerConverter.IsValid(context, value);
             }
+
             return base.IsValid(context, value);
         }
     }

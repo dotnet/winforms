@@ -442,6 +442,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -896,7 +897,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -948,7 +950,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -2135,7 +2138,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("DisplayStyle", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -2182,7 +2186,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("DisplayStyle", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -3007,7 +3012,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Font", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -3053,7 +3059,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Font", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -3566,7 +3573,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) => locationChangedCallCount++;
@@ -3618,7 +3626,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) => locationChangedCallCount++;
@@ -3898,7 +3907,8 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal("Image", e.AffectedProperty);
                     ownerLayoutCallCount++;
                 }
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -3949,7 +3959,8 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal("Image", e.AffectedProperty);
                     ownerLayoutCallCount++;
                 }
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4191,7 +4202,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageAlign", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4244,7 +4256,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageAlign", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4447,7 +4460,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageIndex", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4495,7 +4509,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageIndex", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4546,7 +4561,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageIndex", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4944,7 +4960,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageKey", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -4994,7 +5011,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageKey", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -5043,7 +5061,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageKey", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -5410,7 +5429,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageScaling", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -5456,7 +5476,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("ImageScaling", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -5900,7 +5921,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Margin", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -5945,7 +5967,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Margin", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -5989,7 +6012,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Margin", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -6034,7 +6058,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Margin", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -6228,7 +6253,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(owner, e.AffectedComponent);
                 Assert.Equal("Overflow", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -6279,7 +6305,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(owner, e.AffectedComponent);
                 Assert.Equal("Overflow", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -6723,7 +6750,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Padding", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -6768,7 +6796,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Padding", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -7136,7 +7165,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("RightToLeft", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -7184,7 +7214,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("RightToLeft", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -7487,7 +7518,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("RightToLeftAutoMirrorImage", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -7903,7 +7935,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) => locationChangedCallCount++;
@@ -7952,7 +7985,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) => locationChangedCallCount++;
@@ -8032,7 +8066,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Text", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8080,7 +8115,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Text", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8260,7 +8296,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("TextAlign", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8313,7 +8350,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("TextAlign", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8533,7 +8571,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("TextDirection", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8581,7 +8620,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("TextDirection", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8783,7 +8823,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("TextImageRelation", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -8832,7 +8873,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("TextImageRelation", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -9676,7 +9718,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) => locationChangedCallCount++;
@@ -9728,7 +9771,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) => locationChangedCallCount++;
@@ -9811,7 +9855,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -9848,7 +9893,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -9889,7 +9935,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -9959,7 +10006,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -9998,7 +10046,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -10041,7 +10090,8 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(callCount > 0, item.Image is null);
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -10798,7 +10848,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -10835,7 +10886,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11313,6 +11365,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Font", e.AffectedProperty);
                 ownerLayoutCallCount++;
             }
+
             owner.Layout += ownerHandler;
 
             try
@@ -11357,6 +11410,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Font", e.AffectedProperty);
                 ownerLayoutCallCount++;
             }
+
             owner.Layout += ownerHandler;
 
             try
@@ -12221,6 +12275,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Font", e.AffectedProperty);
                 ownerLayoutCallCount++;
             }
+
             owner.Layout += ownerHandler;
 
             try
@@ -12274,6 +12329,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Font", e.AffectedProperty);
                 ownerLayoutCallCount++;
             }
+
             owner.Layout += ownerHandler;
 
             try
@@ -12685,7 +12741,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("RightToLeft", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -12741,7 +12798,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("RightToLeft", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -12919,7 +12977,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Text", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -12975,7 +13034,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Text", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -13256,7 +13316,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Items", e.AffectedProperty);
                 ownerLayoutCallCount++;
-            };
+            }
+
             owner.Layout += ownerHandler;
 
             try
@@ -13354,6 +13415,7 @@ namespace System.Windows.Forms.Tests
                 {
                     owner.Layout -= ownerHandler;
                 }
+
                 disposedCallCount++;
             };
             owner.Dispose();
@@ -14639,7 +14701,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) =>
@@ -14699,7 +14762,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) =>

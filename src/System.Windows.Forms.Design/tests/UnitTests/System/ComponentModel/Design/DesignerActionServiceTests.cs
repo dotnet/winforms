@@ -799,6 +799,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Empty(service.GetComponentActions(component2));
                 Assert.Equal(new DesignerActionListCollection { actionList3 }, service.GetComponentActions(component3));
             }
+
             Assert.Equal(new DesignerActionListCollection { actionList4, actionList4 }, service.GetComponentActions(component4));
             Assert.False(service.Contains(component1));
             if (service.GetComponentActions(component2).Count == 1)
@@ -811,6 +812,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.False(service.Contains(component2));
                 Assert.True(service.Contains(component3));
             }
+
             Assert.True(service.Contains(component4));
 
             // Remove duplicates.
@@ -827,6 +829,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Empty(service.GetComponentActions(component2));
                 Assert.Equal(new DesignerActionListCollection { actionList3 }, service.GetComponentActions(component3));
             }
+
             Assert.Empty(service.GetComponentActions(component4));
             Assert.False(service.Contains(component1));
             if (service.GetComponentActions(component2).Count == 1)
@@ -839,6 +842,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.False(service.Contains(component2));
                 Assert.True(service.Contains(component3));
             }
+
             Assert.True(service.Contains(component4));
         }
 

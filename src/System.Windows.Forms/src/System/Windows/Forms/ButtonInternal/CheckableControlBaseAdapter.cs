@@ -27,6 +27,7 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     _buttonAdapter = CreateButtonAdapter();
                 }
+
                 return _buttonAdapter;
             }
         }

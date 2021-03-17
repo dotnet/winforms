@@ -29,6 +29,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -42,6 +43,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -64,6 +66,7 @@ namespace System.Windows.Forms
                 {
                     culture = CultureInfo.CurrentCulture;
                 }
+
                 char separator = culture.TextInfo.ListSeparator[0];
                 string[] tokens = text.Split(new char[] { separator });
 
@@ -111,6 +114,7 @@ namespace System.Windows.Forms
                     {
                         culture = CultureInfo.CurrentCulture;
                     }
+
                     string sep = culture.TextInfo.ListSeparator + " ";
                     PropertyDescriptorCollection props = GetProperties(value);
                     string[] args = new string[props.Count];
@@ -123,10 +127,12 @@ namespace System.Windows.Forms
 
                     return string.Join(sep, args);
                 }
+
                 if (destinationType == typeof(DateTime))
                 {
                     return range.Start;
                 }
+
                 if (destinationType == typeof(InstanceDescriptor))
                 {
                     ConstructorInfo ctor = typeof(SelectionRange).GetConstructor(new Type[] {
@@ -137,6 +143,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 

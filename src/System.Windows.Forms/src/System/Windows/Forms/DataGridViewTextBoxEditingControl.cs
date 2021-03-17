@@ -119,11 +119,13 @@ namespace System.Windows.Forms
             {
                 BackColor = dataGridViewCellStyle.BackColor;
             }
+
             ForeColor = dataGridViewCellStyle.ForeColor;
             if (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True)
             {
                 WordWrap = true;
             }
+
             TextAlign = TranslateAlignment(dataGridViewCellStyle.Alignment);
             _repositionOnValueChange = (dataGridViewCellStyle.WrapMode == DataGridViewTriState.True && (dataGridViewCellStyle.Alignment & AnyTop) == 0);
         }
@@ -140,6 +142,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Left:
@@ -151,6 +154,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Down:
@@ -161,6 +165,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Up:
@@ -170,6 +175,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Home:
@@ -178,6 +184,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Prior:
@@ -186,6 +193,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Delete:
@@ -194,6 +202,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
 
                 case Keys.Enter:
@@ -201,8 +210,10 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     break;
             }
+
             return !dataGridViewWantsInputKey;
         }
 
@@ -263,6 +274,7 @@ namespace System.Windows.Forms
                         // Shift-Enter for multiline textboxes need to be accepted however.
                         return true;
                     }
+
                     break;
 
                 case Keys.LineFeed:
@@ -272,6 +284,7 @@ namespace System.Windows.Forms
                         // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
                         return true;
                     }
+
                     break;
 
                 case Keys.A:
@@ -280,8 +293,10 @@ namespace System.Windows.Forms
                         SelectAll();
                         return true;
                     }
+
                     break;
             }
+
             return base.ProcessKeyEventArgs(ref m);
         }
 

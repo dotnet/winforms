@@ -532,6 +532,7 @@ namespace System.ComponentModel.Design
                     base.OnLostFocus(e);
                     return;
                 }
+
                 if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
                 {
                     State = PushButtonState.Normal;
@@ -765,6 +766,7 @@ namespace System.ComponentModel.Design
                     ScaleButtonImageLogicalToDevice(_downButton);
                     ScaleButtonImageLogicalToDevice(_upButton);
                 }
+
                 Text = string.Format(SR.CollectionEditorCaption, CollectionItemType.Name);
 
                 HookEvents();
@@ -781,6 +783,7 @@ namespace System.ComponentModel.Design
                         _addDownMenu.Items.Add(new TypeMenuItem(newItemTypes[i], addDownMenuClick));
                     }
                 }
+
                 AdjustListBoxItemHeight();
             }
 
@@ -805,6 +808,7 @@ namespace System.ComponentModel.Design
                             }
                         }
                     }
+
                     return true;
                 }
             }
@@ -878,6 +882,7 @@ namespace System.ComponentModel.Design
                     {
                         items[i] = ((ListItem)_listbox.Items[i]).Value;
                     }
+
                     Items = items;
 
                     // If omeone changes the edit value which resets the selindex, we
@@ -932,6 +937,7 @@ namespace System.ComponentModel.Design
                 {
                     pic = PaintWidth + TextIndent;
                 }
+
                 return (int)Math.Ceiling(size.Width) + w + pic + SystemInformation.BorderSize.Width * 4;
             }
 
@@ -964,12 +970,15 @@ namespace System.ComponentModel.Design
                             // rollback the add. This is useless and is only needed for non sited component or other classes
                             return;
                         }
+
                         for (int i = 0; i < items.Length; i++)
                         {
                             DestroyInstance(items[i]);
                         }
+
                         _createdItems.Clear();
                     }
+
                     if (_removedItems != null)
                     {
                         _removedItems.Clear();
@@ -985,6 +994,7 @@ namespace System.ComponentModel.Design
                         {
                             items[i] = _originalItems[i];
                         }
+
                         Items = items;
                         _originalItems.Clear();
                     }
@@ -1245,6 +1255,7 @@ namespace System.ComponentModel.Design
                                 max = w;
                             }
                         }
+
                         _listbox.HorizontalExtent = max;
                     }
                 }
@@ -1286,6 +1297,7 @@ namespace System.ComponentModel.Design
                         backColor = SystemColors.Highlight;
                         textColor = SystemColors.HighlightText;
                     }
+
                     Rectangle res = new Rectangle(e.Bounds.X + offset, e.Bounds.Y,
                                                   e.Bounds.Width - offset,
                                                   e.Bounds.Height);
@@ -1294,6 +1306,7 @@ namespace System.ComponentModel.Design
                     {
                         ControlPaint.DrawFocusRectangle(g, res);
                     }
+
                     offset += 2;
 
                     if (item.Editor != null && item.Editor.GetPaintValueSupported())
@@ -1406,6 +1419,7 @@ namespace System.ComponentModel.Design
                         {
                             DestroyInstance(deadItems[i]);
                         }
+
                         _removedItems.Clear();
                     }
 
@@ -1457,6 +1471,7 @@ namespace System.ComponentModel.Design
                 {
                     _originalItems = new ArrayList();
                 }
+
                 _originalItems.Clear();
 
                 // Now update the list box.
@@ -1473,6 +1488,7 @@ namespace System.ComponentModel.Design
                             _listbox.Items.Add(new ListItem(_editor, items[i]));
                             _originalItems.Add(items[i]);
                         }
+
                         if (_listbox.Items.Count > 0)
                         {
                             _listbox.SelectedIndex = 0;
@@ -1532,6 +1548,7 @@ namespace System.ComponentModel.Design
                         {
                             RemoveInternal((ListItem)_listbox.SelectedItem);
                         }
+
                         if (index < _listbox.Items.Count)
                         {
                             _listbox.SelectedIndex = index;
@@ -1658,6 +1675,7 @@ namespace System.ComponentModel.Design
                     BeginInvoke(new MethodInvoker(UpdateEnabled));
                 }
             }
+
             /// <summary>
             ///  Used to prevent flicker when playing with the list box selection call resume when done.
             ///  Calls to UpdateEnabled will return silently until Resume is called
@@ -1936,6 +1954,7 @@ namespace System.ComponentModel.Design
                     {
                         li.Value = value;
                     }
+
                     _control.Invalidate();
                     OnValueChanged(component, EventArgs.Empty);
                 }
@@ -2166,6 +2185,7 @@ namespace System.ComponentModel.Design
                                 User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
+
                         break;
 
                     case User32.WM.CHAR:
@@ -2194,8 +2214,10 @@ namespace System.ComponentModel.Design
                             User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParam, m.LParam);
                             return;
                         }
+
                         break;
                 }
+
                 base.WndProc(ref m);
             }
         }

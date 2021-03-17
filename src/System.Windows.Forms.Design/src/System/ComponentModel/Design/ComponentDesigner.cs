@@ -191,6 +191,7 @@ namespace System.ComponentModel.Design
                 {
                     return host.GetDesigner(parent);
                 }
+
                 return null;
             }
         }
@@ -473,6 +474,7 @@ namespace System.ComponentModel.Design
                                 ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
+
                         persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
@@ -526,6 +528,7 @@ namespace System.ComponentModel.Design
                     return site.GetService(serviceType);
                 }
             }
+
             return null;
         }
 

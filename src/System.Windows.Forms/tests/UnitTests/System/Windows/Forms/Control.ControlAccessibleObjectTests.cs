@@ -220,7 +220,8 @@ namespace System.Windows.Forms.Tests
 
                 e.HelpString = result;
                 callCount++;
-            };
+            }
+
             ownerControl.QueryAccessibilityHelp += handler;
 
             // Get with handler.
@@ -887,7 +888,8 @@ namespace System.Windows.Forms.Tests
                 e.HelpNamespace = helpNamespace;
                 e.HelpKeyword = helpKeyword;
                 callCount++;
-            };
+            }
+
             ownerControl.QueryAccessibilityHelp += handler;
 
             // Get with handler.

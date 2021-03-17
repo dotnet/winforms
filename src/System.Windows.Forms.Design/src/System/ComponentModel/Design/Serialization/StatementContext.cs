@@ -73,11 +73,13 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 _table[idx] = new TableEntry(statementOwner, statements);
                             }
+
                             return;
                         }
                     }
                 }
             }
+
             _table.Add(new TableEntry(statementOwner, statements));
             _version++;
         }
@@ -105,9 +107,11 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 _table[idx] = new TableEntry(statementOwner, new CodeStatementCollection());
                             }
+
                             return _table[idx].Statements;
                         }
                     }
+
                     foreach (TableEntry e in _table)
                     {
                         if (object.ReferenceEquals(e.Owner, statementOwner))
@@ -116,6 +120,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
+
                 return null;
             }
         }
@@ -134,6 +139,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return (this[statementOwner] != null);
             }
+
             return false;
         }
 
@@ -154,6 +160,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(statementOwners));
             }
+
             foreach (object o in statementOwners)
             {
                 Populate(o);
@@ -169,6 +176,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(owner));
             }
+
             AddOwner(owner, null);
         }
 
@@ -217,6 +225,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         throw new InvalidOperationException();
                     }
+
                     if (_position < 0 || _table._table is null || _position >= _table._table.Count)
                     {
                         throw new InvalidOperationException();
@@ -249,6 +258,7 @@ namespace System.ComponentModel.Design.Serialization
                     _position++;
                     return true;
                 }
+
                 return false;
             }
 

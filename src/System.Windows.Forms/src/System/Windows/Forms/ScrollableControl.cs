@@ -187,6 +187,7 @@ namespace System.Windows.Forms
                 {
                     cp.Style &= ~(int)User32.WS.HSCROLL;
                 }
+
                 if (VScroll || VerticalScroll.Visible)
                 {
                     cp.Style |= (int)User32.WS.VSCROLL;
@@ -218,6 +219,7 @@ namespace System.Windows.Forms
                     {
                         rect.Width = _displayRect.Width;
                     }
+
                     if (VScroll)
                     {
                         rect.Height = _displayRect.Height;
@@ -240,6 +242,7 @@ namespace System.Windows.Forms
                     displayRectangle.Width = Math.Max(displayRectangle.Width, AutoScrollMinSize.Width);
                     displayRectangle.Height = Math.Max(displayRectangle.Height, AutoScrollMinSize.Height);
                 }
+
                 return displayRectangle;
             }
         }
@@ -409,6 +412,7 @@ namespace System.Windows.Forms
                     needHscroll = true;
                     maxX = layoutBounds.Width;
                 }
+
                 if (layoutBounds.Height > maxY)
                 {
                     needVscroll = true;
@@ -453,18 +457,22 @@ namespace System.Windows.Forms
                                     {
                                         watchHoriz = false;
                                     }
+
                                     if ((anchor & AnchorStyles.Left) != AnchorStyles.Left)
                                     {
                                         watchHoriz = false;
                                     }
+
                                     if ((anchor & AnchorStyles.Bottom) == AnchorStyles.Bottom)
                                     {
                                         watchVert = false;
                                     }
+
                                     if ((anchor & AnchorStyles.Top) != AnchorStyles.Top)
                                     {
                                         watchVert = false;
                                     }
+
                                     break;
                             }
                         }
@@ -486,6 +494,7 @@ namespace System.Windows.Forms
                                 needHscroll = true;
                                 maxX = ctlRight;
                             }
+
                             if (ctlBottom > maxY && watchVert)
                             {
                                 needVscroll = true;
@@ -504,31 +513,38 @@ namespace System.Windows.Forms
             {
                 needHscroll = false;
             }
+
             if (maxY <= fullClient.Height)
             {
                 needVscroll = false;
             }
+
             Rectangle clientToBe = fullClient;
             if (needHscroll)
             {
                 clientToBe.Height -= SystemInformation.HorizontalScrollBarHeight;
             }
+
             if (needVscroll)
             {
                 clientToBe.Width -= SystemInformation.VerticalScrollBarWidth;
             }
+
             if (needHscroll && maxY > clientToBe.Height)
             {
                 needVscroll = true;
             }
+
             if (needVscroll && maxX > clientToBe.Width)
             {
                 needHscroll = true;
             }
+
             if (!needHscroll)
             {
                 maxX = clientToBe.Width;
             }
+
             if (!needVscroll)
             {
                 maxY = clientToBe.Height;
@@ -545,6 +561,7 @@ namespace System.Windows.Forms
             {
                 needLayout = (SetDisplayRectangleSize(maxX, maxY) || needLayout);
             }
+
             // Else just update the display rect size. This keeps it as big as the client
             // area in a resize scenario
             else
@@ -567,10 +584,12 @@ namespace System.Windows.Forms
             {
                 _displayRect = ClientRectangle;
             }
+
             if (!AutoScroll && HorizontalScroll._visible == true)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, HorizontalScroll.Maximum, _displayRect.Height);
             }
+
             if (!AutoScroll && VerticalScroll._visible == true)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, _displayRect.Width, VerticalScroll.Maximum);
@@ -681,6 +700,7 @@ namespace System.Windows.Forms
                 {
                     PaintTransparentBackground(e, _displayRect);
                 }
+
                 ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, BackColor, BackgroundImageLayout, _displayRect, _displayRect, _displayRect.Location);
             }
             else
@@ -761,14 +781,17 @@ namespace System.Windows.Forms
             {
                 x = 0;
             }
+
             if (y > 0)
             {
                 y = 0;
             }
+
             if (x < minX)
             {
                 x = minX;
             }
+
             if (y < minY)
             {
                 y = minY;
@@ -778,10 +801,12 @@ namespace System.Windows.Forms
             {
                 xDelta = x - displayRectangle.X;
             }
+
             if (displayRectangle.Y != y)
             {
                 yDelta = y - displayRectangle.Y;
             }
+
             _displayRect.X = x;
             _displayRect.Y = y;
 
@@ -954,6 +979,7 @@ namespace System.Windows.Forms
             {
                 x = 0;
             }
+
             if (y < 0)
             {
                 y = 0;
@@ -1001,6 +1027,7 @@ namespace System.Windows.Forms
                 {
                     x = 0;
                 }
+
                 if (!vert)
                 {
                     y = 0;
@@ -1029,8 +1056,10 @@ namespace System.Windows.Forms
                 {
                     ResetScrollProperties(VerticalScroll);
                 }
+
                 UpdateStyles();
             }
+
             return needLayout;
         }
 
@@ -1055,6 +1084,7 @@ namespace System.Windows.Forms
             {
                 minX = 0;
             }
+
             if (minY > 0)
             {
                 minY = 0;
@@ -1067,6 +1097,7 @@ namespace System.Windows.Forms
             {
                 x = 0;
             }
+
             if (!VScroll)
             {
                 y = 0;
@@ -1076,6 +1107,7 @@ namespace System.Windows.Forms
             {
                 x = minX;
             }
+
             if (y < minY)
             {
                 y = minY;
@@ -1150,14 +1182,17 @@ namespace System.Windows.Forms
                     {
                         HorizontalScroll._maximum = displayRect.Width - 1;
                     }
+
                     if (!HorizontalScroll._largeChangeSetExternally)
                     {
                         HorizontalScroll._largeChange = ClientRectangle.Width;
                     }
+
                     if (!HorizontalScroll._smallChangeSetExternally)
                     {
                         HorizontalScroll._smallChange = 5;
                     }
+
                     if (resetRTLHScrollValue && !IsMirrored)
                     {
                         resetRTLHScrollValue = false;
@@ -1167,26 +1202,32 @@ namespace System.Windows.Forms
                     {
                         HorizontalScroll._value = -displayRect.X;
                     }
+
                     HorizontalScroll.UpdateScrollInfo();
                 }
+
                 if (VScroll)
                 {
                     if (!VerticalScroll._maximumSetExternally)
                     {
                         VerticalScroll._maximum = displayRect.Height - 1;
                     }
+
                     if (!VerticalScroll._largeChangeSetExternally)
                     {
                         VerticalScroll._largeChange = ClientRectangle.Height;
                     }
+
                     if (!VerticalScroll._smallChangeSetExternally)
                     {
                         VerticalScroll._smallChange = 5;
                     }
+
                     if (-displayRect.Y >= VerticalScroll._minimum && -displayRect.Y < VerticalScroll._maximum)
                     {
                         VerticalScroll._value = -displayRect.Y;
                     }
+
                     VerticalScroll.UpdateScrollInfo();
                 }
             }
@@ -1200,6 +1241,7 @@ namespace System.Windows.Forms
                 {
                     ResetScrollProperties(HorizontalScroll);
                 }
+
                 if (VerticalScroll.Visible)
                 {
                     VerticalScroll.Value = -displayRect.Y;
@@ -1272,6 +1314,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBV.LINEDOWN:
                     if (pos < maxPos - VerticalScroll.SmallChange)
@@ -1282,6 +1325,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBV.PAGEUP:
                     if (pos > VerticalScroll.LargeChange)
@@ -1292,6 +1336,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBV.PAGEDOWN:
                     if (pos < maxPos - VerticalScroll.LargeChange)
@@ -1302,6 +1347,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBV.TOP:
                     pos = 0;
@@ -1362,6 +1408,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.LINERIGHT:
                     if (pos < maxPos - HorizontalScroll.SmallChange)
@@ -1372,6 +1419,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBH.PAGELEFT:
                     if (pos > HorizontalScroll.LargeChange)
@@ -1382,6 +1430,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - HorizontalScroll.LargeChange)
@@ -1392,6 +1441,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBH.LEFT:
                     pos = 0;

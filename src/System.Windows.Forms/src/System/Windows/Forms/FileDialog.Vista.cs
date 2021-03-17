@@ -194,6 +194,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return ok;
         }
 
@@ -234,6 +235,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return extensions.ToArray();
         }
 

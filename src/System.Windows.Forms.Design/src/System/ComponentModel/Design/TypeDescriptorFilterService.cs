@@ -31,6 +31,7 @@ namespace System.ComponentModel.Design
                     return host.GetDesigner(component);
                 }
             }
+
             return null;
         }
 
@@ -43,6 +44,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             if (attributes is null)
             {
                 throw new ArgumentNullException(nameof(attributes));
@@ -55,6 +57,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterAttributes(attributes);
                 ((IDesignerFilter)designer).PostFilterAttributes(attributes);
             }
+
             return designer != null;
         }
 
@@ -67,6 +70,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             if (events is null)
             {
                 throw new ArgumentNullException(nameof(events));
@@ -79,6 +83,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterEvents(events);
                 ((IDesignerFilter)designer).PostFilterEvents(events);
             }
+
             return designer != null;
         }
 
@@ -91,6 +96,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             if (properties is null)
             {
                 throw new ArgumentNullException(nameof(properties));
@@ -103,6 +109,7 @@ namespace System.ComponentModel.Design
                 ((IDesignerFilter)designer).PreFilterProperties(properties);
                 ((IDesignerFilter)designer).PostFilterProperties(properties);
             }
+
             return designer != null;
         }
     }

@@ -114,6 +114,7 @@ namespace System.Windows.Forms.Design
                     selType = GlyphSelectionType.Selected;
                 }
             }
+
             AddControlGlyphs(parent, selType);
         }
 
@@ -142,6 +143,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 GlyphCollection glyphs = cd.GetGlyphs(selType);
                 if (glyphs != null)
                 {
@@ -172,30 +174,36 @@ namespace System.Windows.Forms.Design
             {
                 _designerHost = null;
             }
+
             if (_serviceProvider != null)
             {
                 if (_selSvc != null)
                 {
                     _selSvc = null;
                 }
+
                 _serviceProvider = null;
             }
+
             if (_behaviorService != null)
             {
                 _behaviorService.Adorners.Remove(_bodyAdorner);
                 _behaviorService.Adorners.Remove(_selectionAdorner);
                 _behaviorService = null;
             }
+
             if (_selectionAdorner != null)
             {
                 _selectionAdorner.Glyphs.Clear();
                 _selectionAdorner = null;
             }
+
             if (_bodyAdorner != null)
             {
                 _bodyAdorner.Glyphs.Clear();
                 _bodyAdorner = null;
             }
+
             if (_designerActionUI != null)
             {
                 _designerActionUI.Dispose();
@@ -243,6 +251,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             foreach (Glyph g in glyphsToRemove)
             {
                 _bodyAdorner.Glyphs.Remove(g);
@@ -282,6 +291,7 @@ namespace System.Windows.Forms.Design
             {
                 _componentToDesigner.Remove(ce.Component);
             }
+
             //remove the associated designeractionpanel
             if (_designerActionUI != null)
             {
@@ -331,10 +341,12 @@ namespace System.Windows.Forms.Design
                             toRefresh.Union(large);
                             toRefresh.Union(small);
                         }
+
                         intersected[s] = true;
                         break;
                     }
                 }
+
                 if (!largeIntersected)
                 {
                     toRefresh.Union(large);
@@ -361,6 +373,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return toRefresh;
         }
 
@@ -411,6 +424,7 @@ namespace System.Windows.Forms.Design
                         {
                             toUpdate = Rectangle.Union(toUpdate, _curSelectionBounds[i]);
                         }
+
                         if (toUpdate != Rectangle.Empty)
                         {
                             _selectionAdorner.Invalidate(toUpdate);
@@ -432,6 +446,7 @@ namespace System.Windows.Forms.Design
                 {
                     _prevSelectionBounds = null;
                 }
+
                 _selectionChanging = false;
             }
         }

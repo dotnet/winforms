@@ -99,6 +99,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 Assert.Equal(componentName, component1.Site.Name);
             }
+
             Assert.Equal(new IComponent[] { component1, component2 }, container.Components.Cast<IComponent>());
             Assert.Empty(host.Container.Components);
         }
@@ -427,6 +428,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Same(component, Assert.Single(container.Components));
                 Assert.Null(component.Site.Name);
             }
+
             mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
             mockExtenderProviderService.Verify(s => s.AddExtenderProvider(component as IExtenderProvider), Times.Never());
 
@@ -441,6 +443,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 Assert.Null(component.Site.Name);
             }
+
             mockServiceProvider.Verify(p => p.GetService(typeof(IExtenderProviderService)), Times.Never());
             mockExtenderProviderService.Verify(s => s.AddExtenderProvider(component as IExtenderProvider), Times.Never());
         }
@@ -640,6 +643,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 threwCheckoutException = true;
             }
+
             Assert.True(threwCheckoutException);
             Assert.Same(container, component.Container);
             Assert.Null(component.Site.Name);

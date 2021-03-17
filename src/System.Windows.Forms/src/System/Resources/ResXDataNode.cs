@@ -172,6 +172,7 @@ namespace System.Resources
                 {
                     result = _nodeInfo.Comment;
                 }
+
                 return result ?? string.Empty;
             }
             set
@@ -189,6 +190,7 @@ namespace System.Resources
                 {
                     result = _nodeInfo.Name;
                 }
+
                 return result;
             }
             set
@@ -197,10 +199,12 @@ namespace System.Resources
                 {
                     throw new ArgumentNullException(nameof(Name));
                 }
+
                 if (value.Length == 0)
                 {
                     throw new ArgumentException(nameof(Name));
                 }
+
                 _name = value;
             }
         }
@@ -213,6 +217,7 @@ namespace System.Resources
                 {
                     return null;
                 }
+
                 if (_fileRef is null)
                 {
                     _fileRef =
@@ -220,6 +225,7 @@ namespace System.Resources
                             ? new ResXFileRef(FileRefFullPath, FileRefType)
                             : new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
                 }
+
                 return _fileRef;
             }
         }
@@ -264,6 +270,7 @@ namespace System.Resources
                     output.Append(prefix);
                     output.Append(raw, current, lineWrap);
                 }
+
                 output.Append(crlf);
                 output.Append(prefix);
                 output.Append(raw, current, raw.Length - current);
@@ -498,6 +505,7 @@ namespace System.Resources
             {
                 _nodeInfo = new DataNodeInfo();
             }
+
             _nodeInfo.Name = Name;
             _nodeInfo.Comment = Comment;
 
@@ -519,6 +527,7 @@ namespace System.Resources
                     FillDataNodeInfoFromObject(_nodeInfo, _value);
                 }
             }
+
             return _nodeInfo;
         }
 
@@ -545,6 +554,7 @@ namespace System.Resources
                         ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter)
                         : _typeName;
             }
+
             string result = FileRefType;
             Type objectType = null;
             // do we have a fileref?
@@ -578,6 +588,7 @@ namespace System.Resources
                             {
                                 throw;
                             }
+
                             // something went wrong, type is not specified at all or stream is corrupted
                             // return system.object
                             result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter);
@@ -599,6 +610,7 @@ namespace System.Resources
                     objectType = ResolveType(_nodeInfo.TypeName, typeResolver);
                 }
             }
+
             if (objectType is not null)
             {
                 if (objectType == typeof(ResXNullRef))
@@ -610,6 +622,7 @@ namespace System.Resources
                     result = MultitargetUtil.GetAssemblyQualifiedName(objectType, _typeNameConverter);
                 }
             }
+
             return result;
         }
 
@@ -664,6 +677,7 @@ namespace System.Resources
                 // we need to return null here
                 return null;
             }
+
             return result;
         }
 
@@ -693,6 +707,7 @@ namespace System.Resources
                             break;
                     }
                 }
+
                 return Convert.FromBase64String(sb.ToString());
             }
 

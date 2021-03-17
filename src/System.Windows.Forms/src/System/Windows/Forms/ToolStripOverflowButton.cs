@@ -112,6 +112,7 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Min(constrainingSize.Height, maxHeight);
                 }
             }
+
             return preferredSize + Padding.Size;
         }
 
@@ -131,6 +132,7 @@ namespace System.Windows.Forms
                     bounds.X = 0;
                 }
             }
+
             base.SetBounds(bounds);
         }
 

@@ -24,6 +24,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             {
                 // Modal dialog may be closed automatically on build machine.
             }
+
             EndProcess(process);
         }
 
@@ -69,6 +70,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             {
                 // Modal dialog may be closed automatically on build machine.
             }
+
             EndProcess(process);
         }
 
@@ -84,6 +86,7 @@ namespace Microsoft.VisualBasic.IntegrationTests
             {
                 // Modal dialog may be closed automatically on build machine.
             }
+
             EndProcess(process);
         }
 

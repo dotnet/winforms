@@ -123,6 +123,7 @@ namespace System.Windows.Forms.Design.Behavior
                     selType = GlyphSelectionType.Selected;
                 }
             }
+
             AddControlGlyphs(parent, selType);
         }
 
@@ -151,6 +152,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
                 }
+
                 GlyphCollection glyphs = cd.GetGlyphs(selType);
                 if (glyphs != null)
                 {
@@ -191,6 +193,7 @@ namespace System.Windows.Forms.Design.Behavior
                     selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                     selSvc = null;
                 }
+
                 serviceProvider = null;
             }
 
@@ -262,6 +265,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             foreach (Glyph g in glyphsToRemove)
             {
                 bodyAdorner.Glyphs.Remove(g);
@@ -301,12 +305,14 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 componentToDesigner.Remove(ce.Component);
             }
+
             //remove the associated designeractionpanel
             if (designerActionUI != null)
             {
                 designerActionUI.RemoveActionGlyph(ce.Component);
             }
         }
+
         /// <summary>
         ///  Computes the region representing the difference between the old selection and the new selection.
         /// </summary>
@@ -349,15 +355,18 @@ namespace System.Windows.Forms.Design.Behavior
                             toRefresh.Union(large);
                             toRefresh.Union(small);
                         }
+
                         intersected[s] = true;
                         break;
                     }
                 }
+
                 if (!largeIntersected)
                 {
                     toRefresh.Union(large);
                 }
             }
+
             // now add any rects from the smaller array that weren't accounted for
             for (int k = 0; k < intersected.Length; k++)
             {
@@ -378,6 +387,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             return toRefresh;
         }
 
@@ -427,6 +437,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             toUpdate = Rectangle.Union(toUpdate, curSelectionBounds[i]);
                         }
+
                         if (toUpdate != Rectangle.Empty)
                         {
                             selectionAdorner.Invalidate(toUpdate);
@@ -448,6 +459,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     prevSelectionBounds = null;
                 }
+
                 selectionChanging = false;
             }
         }

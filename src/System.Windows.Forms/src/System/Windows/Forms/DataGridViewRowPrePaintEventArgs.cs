@@ -122,6 +122,7 @@ namespace System.Windows.Forms
             {
                 paintParts |= DataGridViewPaintParts.SelectionBackground;
             }
+
             _dataGridView.Rows.SharedRow(RowIndex).PaintCells(Graphics,
                                                               clipBounds,
                                                               RowBounds,
@@ -156,6 +157,7 @@ namespace System.Windows.Forms
             {
                 paintParts |= DataGridViewPaintParts.SelectionBackground;
             }
+
             PaintHeader(paintParts);
         }
 

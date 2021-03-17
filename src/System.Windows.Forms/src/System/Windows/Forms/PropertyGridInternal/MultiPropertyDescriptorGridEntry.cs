@@ -49,9 +49,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                             continue;
                         }
                     }
+
                     c = null;
                     break;
                 }
+
                 return c;
             }
         }
@@ -130,11 +132,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
+
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
                     SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
                 }
+
                 return fExpandable;
             }
             catch
@@ -149,6 +153,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return base.GetChildValueOwner(childEntry);
             }
+
             return mergedPd.GetValues(objs);
         }
 
@@ -179,6 +184,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return "";
             }
+
             return base.GetPropertyTextValue(value);
         }
 
@@ -193,6 +199,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 trans = host.CreateTransaction();
             }
+
             try
             {
                 success = base.NotifyChildValue(pe, type);
@@ -204,6 +211,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Commit();
                 }
             }
+
             return success;
         }
 
@@ -287,6 +295,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             trans = host.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
                         }
+
                         try
                         {
                             bool needChangeNotify = !(objects[0] is IComponent) || ((IComponent)objects[0]).Site is null;
@@ -299,6 +308,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                         trans.Cancel();
                                         trans = null;
                                     }
+
                                     return false;
                                 }
                             }
@@ -309,6 +319,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 OnComponentChanged();
                             }
+
                             NotifyParentChange(this);
                         }
                         finally
@@ -319,6 +330,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             }
                         }
                     }
+
                     return false;
                 case NOTIFY_DBL_CLICK:
                 case NOTIFY_RETURN:
@@ -371,8 +383,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return false;
                         }
                     }
+
                     return true;
                 }
+
                 return false;
             }
         }
@@ -394,10 +408,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return false;
                         }
+
                         throw;
                     }
                 }
             }
+
             return true;
         }
 

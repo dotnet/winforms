@@ -107,8 +107,10 @@ namespace System.Windows.Forms
                     ctlInEditMode.SetEditMode(WebBrowserHelper.AXEditMode.None);
                     ctlInEditMode = null;
                 }
+
                 return HRESULT.S_OK;
             }
+
             WebBrowserBase ctl = null;
             if (pActiveObject is Ole32.IOleObject oleObject)
             {
@@ -184,6 +186,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Control[] ctls = new Control[components.Keys.Count];
             components.Keys.CopyTo(ctls, 0);
             if (ctls != null)
@@ -256,6 +259,7 @@ namespace System.Windows.Forms
                             components.Add(comp, comp);
                         }
                     }
+
                     return;
                 }
             }
@@ -272,6 +276,7 @@ namespace System.Windows.Forms
                     components = new Hashtable();
                     checkHashTable = false;
                 }
+
                 for (int i = 0; i < ctls.Length; i++)
                 {
                     if (checkHashTable && !components.Contains(ctls[i]))
@@ -327,10 +332,12 @@ namespace System.Windows.Forms
                         {
                             ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                         }
+
                         return true;
                     }
                 }
             }
+
             return false;
         }
 
@@ -383,6 +390,7 @@ namespace System.Windows.Forms
                 {
                     return ctl.container;
                 }
+
                 ScrollableControl f = ctl.ContainingControl;
                 if (f != null)
                 {
@@ -394,6 +402,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return null;
         }
 
@@ -418,6 +427,7 @@ namespace System.Windows.Forms
                 WebBrowserBase tempSite = siteUIActive;
                 tempSite.AXInPlaceObject.UIDeactivate();
             }
+
             site.AddSelectionHandler();
             Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
             siteUIActive = site;

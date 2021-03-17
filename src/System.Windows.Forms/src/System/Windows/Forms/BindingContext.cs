@@ -114,6 +114,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataSource));
             }
+
             if (listManager is null)
             {
                 throw new ArgumentNullException(nameof(listManager));
@@ -195,6 +196,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(dataSource));
                 }
+
                 if (dataMember is null)
                 {
                     dataMember = string.Empty;
@@ -285,6 +287,7 @@ namespace System.Windows.Forms
             {
                 bindingManagerBase = (BindingManagerBase)wRef.Target;
             }
+
             if (bindingManagerBase is not null)
             {
                 return bindingManagerBase;
@@ -385,6 +388,7 @@ namespace System.Windows.Forms
                     {
                         cleanupList = new ArrayList();
                     }
+
                     cleanupList.Add(de.Key);
                 }
             }

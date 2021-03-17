@@ -201,6 +201,7 @@ namespace System.Windows.Forms
                 {
                     return IndexOf(Add(item.ToString()));
                 }
+
                 return -1;
             }
 
@@ -387,6 +388,7 @@ namespace System.Windows.Forms
                     // Throw the exception only at runtime.
                     throw new InvalidOperationException(SR.ListViewCantGetEnumeratorInVirtualMode);
                 }
+
                 return InnerList.GetEnumerator();
             }
 
@@ -399,6 +401,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -413,6 +416,7 @@ namespace System.Windows.Forms
                     return -1;
                 }
             }
+
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
@@ -462,6 +466,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
+
                 InnerList.Insert(index, item);
                 return item;
             }

@@ -490,6 +490,7 @@ namespace System.Windows.Forms
                 {
                     Array.Copy(_intEntries, 0, newEntries, 0, index);
                 }
+
                 if (index < newEntries.Length)
                 {
                     Debug.Assert(_intEntries.Length - index - 1 > 0);
@@ -562,11 +563,13 @@ namespace System.Windows.Forms
                     {
                         Array.Copy(_objEntries, 0, newEntries, 0, index);
                     }
+
                     if (index < newEntries.Length)
                     {
                         Debug.Assert(_objEntries.Length - index - 1 > 0);
                         Array.Copy(_objEntries, index + 1, newEntries, index, _objEntries.Length - index - 1);
                     }
+
                     _objEntries = newEntries;
                 }
             }
@@ -849,6 +852,7 @@ namespace System.Windows.Forms
             {
                 idx++;
             }
+
             Debug.Assert(index == idx, "GetIntegerEntry in property store broken. index is " + index + " while it should be " + idx + "length of the array is " + length);
         }
 
@@ -883,6 +887,7 @@ namespace System.Windows.Forms
             {
                 idx++;
             }
+
             Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
         }
 

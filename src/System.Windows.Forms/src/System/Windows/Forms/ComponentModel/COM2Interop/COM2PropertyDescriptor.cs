@@ -256,6 +256,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         newAttributes = new ArrayList(AttributeArray);
                     }
+
                     newAttributes.Add(new BrowsableAttribute(false));
                 }
                 else if (hrHidden)
@@ -274,6 +275,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 newAttributes = new ArrayList(AttributeArray);
                             }
+
                             newAttributes.Add(new BrowsableAttribute(true));
                             hrHidden = false;
                         }
@@ -374,6 +376,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     editor = typeEd;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
                 }
+
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
 
                 return converter;
@@ -428,6 +431,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     displayName = gni.NameString;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName, false);
                 }
+
                 return displayName;
             }
         }
@@ -454,6 +458,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     events = new EventHandlerList();
                 }
+
                 return events;
             }
         }
@@ -481,6 +486,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     readOnly = gbv.Value;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, false);
                 }
+
                 return readOnly;
             }
         }
@@ -547,6 +553,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return com2props.TargetObject;
                 }
+
                 return null;
             }
         }
@@ -646,6 +653,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 OnCanResetValue(gbv);
                 return gbv.Value;
             }
+
             return false;
         }
 
@@ -675,6 +683,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 converter = (Com2DataTypeToManagedDataTypeConverter)Activator.CreateInstance(t);
             }
+
             return converter;
         }
 
@@ -741,6 +750,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 localConverter = new TypeConverter();
             }
+
             return localConverter;
         }
 
@@ -781,10 +791,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             if (localEditor is null)
             {
                 localEditor = base.GetEditor(editorBaseType);
             }
+
             return localEditor;
         }
 
@@ -826,12 +838,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     converter = c;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
                 }
+
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
             }
             else
             {
                 editor = base.GetEditor(editorBaseType);
             }
+
             return editor;
         }
 
@@ -886,6 +900,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         lastValue = pVarResult[0];
                     }
+
                     return lastValue;
                 case HRESULT.DISP_E_EXCEPTION:
                     return null;
@@ -928,6 +943,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                 }
             }
+
             return lastValue;
         }
 
@@ -966,6 +982,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     editorType = value.GetType();
                 }
+
                 ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(value, ref localConverter, editorBaseType, ref localEditor);
             }
 
@@ -1321,6 +1338,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             errorInfo = TrimNewline(strMessage);
                         }
                     }
+
                     throw new ExternalException(errorInfo, (int)hr);
             }
         }
@@ -1353,6 +1371,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             OnShouldSerializeValue(gbv);
             return gbv.Value;
         }
+
         /// <summary>
         ///  we wrap all value editors in this one so we can intercept
         ///  the GetTextFromValue calls for objects that would like
@@ -1398,6 +1417,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                     }
                 }
+
                 return baseConversion;
             }
 
@@ -1435,6 +1455,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                     }
                 }
+
                 return (subprops == AllowSubprops);
             }
         }
@@ -1488,6 +1509,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return nameItem.ToString();
                 }
+
                 return "";
             }
         }

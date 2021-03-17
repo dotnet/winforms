@@ -87,6 +87,7 @@ namespace System.Windows.Forms
                 {
                     return maxInputLength;
                 }
+
                 return DATAGRIDVIEWTEXTBOXCELL_maxInputLength;
             }
             set
@@ -113,6 +114,7 @@ namespace System.Windows.Forms
                 {
                     return valueType;
                 }
+
                 return defaultValueType;
             }
         }
@@ -137,6 +139,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewTextBoxCell)System.Activator.CreateInstance(thisType);
             }
+
             CloneInternal(dataGridViewCell);
             dataGridViewCell.MaxInputLength = MaxInputLength;
             return dataGridViewCell;
@@ -185,6 +188,7 @@ namespace System.Windows.Forms
                             editingControlBounds.X += DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetLeft;
                             editingControlBounds.Width = Math.Max(0, editingControlBounds.Width - DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetLeft - 1);
                         }
+
                         break;
 
                     case DataGridViewContentAlignment.TopCenter:
@@ -208,6 +212,7 @@ namespace System.Windows.Forms
                             editingControlBounds.X += 1;
                             editingControlBounds.Width = Math.Max(0, editingControlBounds.Width - DATAGRIDVIEWTEXTBOXCELL_horizontalTextOffsetRight - 1);
                         }
+
                         break;
                 }
 
@@ -245,11 +250,13 @@ namespace System.Windows.Forms
                     {
                         editedFormattedValue = " ";
                     }
+
                     TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
                     using var screen = GdiCache.GetScreenDCGraphics();
                     preferredHeight = MeasureTextHeight(screen, editedFormattedValue, cellStyle.Font, originalWidth, flags);
                 }
+
                 if (preferredHeight < editingControlBounds.Height)
                 {
                     switch (cellStyle.Alignment)
@@ -415,6 +422,7 @@ namespace System.Windows.Forms
             {
                 formattedString = " ";
             }
+
             TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
             if (cellStyle.WrapMode == DataGridViewTriState.True && formattedString.Length > 1)
             {
@@ -430,6 +438,7 @@ namespace System.Windows.Forms
                                                      0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0,
@@ -440,6 +449,7 @@ namespace System.Windows.Forms
                                                                                         flags));
                             break;
                         }
+
                     default:
                         {
                             preferredSize = DataGridViewCell.MeasureTextPreferredSize(graphics,
@@ -461,12 +471,14 @@ namespace System.Windows.Forms
                                                      0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0,
                                                      DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags).Height);
                             break;
                         }
+
                     default:
                         {
                             preferredSize = DataGridViewCell.MeasureTextSize(graphics, formattedString, cellStyle.Font, flags);
@@ -484,6 +496,7 @@ namespace System.Windows.Forms
                     preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
+
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 int verticalTextMarginTop = cellStyle.WrapMode == DataGridViewTriState.True ? DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithWrapping : DATAGRIDVIEWTEXTBOXCELL_verticalTextMarginTopWithoutWrapping;
@@ -494,6 +507,7 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
+
             return preferredSize;
         }
 
@@ -533,6 +547,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.KeyEntersEditMode(e);
         }
 
@@ -542,6 +557,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (throughMouseClick)
             {
                 flagsState |= (byte)DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick;
@@ -554,6 +570,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             flagsState = (byte)(flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
         }
 
@@ -563,6 +580,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Debug.Assert(e.ColumnIndex == ColumnIndex);
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == e.ColumnIndex && ptCurrentCell.Y == e.RowIndex && e.Button == MouseButtons.Left)
@@ -686,6 +704,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }

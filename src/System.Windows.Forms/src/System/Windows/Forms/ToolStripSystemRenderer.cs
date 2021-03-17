@@ -18,9 +18,11 @@ namespace System.Windows.Forms
         public ToolStripSystemRenderer()
         {
         }
+
         internal ToolStripSystemRenderer(bool isDefault) : base(isDefault)
         {
         }
+
         internal override ToolStripRenderer RendererOverride
         {
             get
@@ -29,6 +31,7 @@ namespace System.Windows.Forms
                 {
                     return HighContrastRenderer;
                 }
+
                 return null;
             }
         }
@@ -41,6 +44,7 @@ namespace System.Windows.Forms
                 {
                     toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/true);
                 }
+
                 return toolStripHighContrastRenderer;
             }
         }
@@ -63,6 +67,7 @@ namespace System.Windows.Forms
                 {
                     renderer = null;
                 }
+
                 return renderer;
             }
         }
@@ -100,6 +105,7 @@ namespace System.Windows.Forms
         {
             return (int)GetSplitButtonToolBarState(item, false);
         }
+
         /// <summary>
         ///  translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </summary>
@@ -136,6 +142,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return state;
         }
 
@@ -151,6 +158,7 @@ namespace System.Windows.Forms
                 {
                     state = ToolBarState.Disabled;
                 }
+
                 if (item is ToolStripButton && ((ToolStripButton)item).Checked)
                 {
                     if (((ToolStripButton)item).Selected)
@@ -171,6 +179,7 @@ namespace System.Windows.Forms
                     state = ToolBarState.Hot;
                 }
             }
+
             return state;
         }
 
@@ -295,6 +304,7 @@ namespace System.Windows.Forms
                 {
                     vsRenderer.SetParameters(VisualStyleElement.Rebar.GripperVertical.Normal);
                 }
+
                 vsRenderer.DrawBackground(g, bounds);
             }
             else
@@ -309,6 +319,7 @@ namespace System.Windows.Forms
                     {
                         bounds.Inflate(0, -2);     // scoot down 2PX and start drawing
                     }
+
                     bounds.Width = 3;
                 }
                 else
@@ -317,6 +328,7 @@ namespace System.Windows.Forms
                     {
                         bounds.Inflate(-2, 0);        // scoot over 2PX and start drawing
                     }
+
                     bounds.Height = 3;
                 }
 
@@ -337,6 +349,7 @@ namespace System.Windows.Forms
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
         }
+
         /// <summary>
         ///  Draw the button background
         /// </summary>
@@ -384,6 +397,7 @@ namespace System.Windows.Forms
         {
             RenderLabelInternal(e);
         }
+
         /// <summary>
         ///  Draw the items background
         /// </summary>
@@ -414,6 +428,7 @@ namespace System.Windows.Forms
                     {
                         FillBackground(g, item.ContentRectangle, item.BackColor);
                     }
+
                     // Toplevel menu items do 3D borders.
                     ToolBarState state = GetToolBarState(item);
                     RenderSmall3DBorderInternal(g, bounds, state, (item.RightToLeft == RightToLeft.Yes));
@@ -516,6 +531,7 @@ namespace System.Windows.Forms
                     // scoot to the left so we dont draw double shadow like so: ][
                     splitButtonBounds.Inflate(2, 0);
                 }
+
                 // Draw the button portion of it.
                 vsRenderer.DrawBackground(g, splitButtonBounds);
 

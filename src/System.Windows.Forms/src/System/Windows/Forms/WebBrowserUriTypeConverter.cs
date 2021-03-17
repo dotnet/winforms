@@ -27,6 +27,7 @@ namespace System.Windows.Forms
                     //which will throw an exception with reasonable text later.
                 }
             }
+
             return uri;
         }
     }

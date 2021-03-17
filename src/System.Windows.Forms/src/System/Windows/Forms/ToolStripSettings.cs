@@ -198,6 +198,7 @@ namespace System.Windows.Forms
                     itemNames.Append(',');
                 }
             }
+
             return itemNames.ToString();
         }
 
@@ -261,6 +262,7 @@ namespace System.Windows.Forms
                 {
                     toolStripPanelName = toolStripPanel.Parent.Name + "." + toolStripPanel.Dock.ToString();
                 }
+
                 toolStripPanel.BeginInit();
                 // get the associated toolstrips for this panel
                 if (toolStripPanelDestinationHash.ContainsKey(toolStripPanelName))
@@ -281,6 +283,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 toolStripPanel.EndInit();
             }
 
@@ -453,6 +456,7 @@ namespace System.Windows.Forms
                 Name = toolStrip.Name;
                 ItemOrder = GetItemOrder(toolStrip);
             }
+
             public SettingsStub(ToolStripSettings toolStripSettings)
             {
                 ToolStripPanelName = toolStripSettings.ToolStripPanelName;

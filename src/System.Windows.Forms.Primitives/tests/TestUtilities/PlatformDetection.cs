@@ -116,8 +116,10 @@ namespace System
                     catch (PlatformNotSupportedException)
                     {
                     }
+
                     s_lazyNonZeroLowerBoundArraySupported = Tuple.Create<bool>(nonZeroLowerBoundArraysSupported);
                 }
+
                 return s_lazyNonZeroLowerBoundArraySupported.Item1;
             }
         }

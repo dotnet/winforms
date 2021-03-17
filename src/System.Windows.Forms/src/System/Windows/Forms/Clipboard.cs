@@ -365,6 +365,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
+
             if (filePaths.Count == 0)
             {
                 throw new ArgumentException(SR.CollectionEmptyException);
@@ -413,6 +414,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
+
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = new DataObject();

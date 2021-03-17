@@ -17,6 +17,7 @@ namespace System.Windows.Forms
         {
             owner = item;
         }
+
         public override AccessibleRole Role
         {
             get
@@ -26,6 +27,7 @@ namespace System.Windows.Forms
                 {
                     return role;
                 }
+
                 return AccessibleRole.MenuItem;
             }
         }
@@ -101,6 +103,7 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             return owner.DropDown.AccessibilityObject.GetChild(index);
         }
 
@@ -123,6 +126,7 @@ namespace System.Windows.Forms
             {
                 LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
             }
+
             return owner.DropDown.AccessibilityObject.GetChildCount();
         }
 
@@ -192,6 +196,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     int index = dropDown.Items.IndexOf(owner);
 
                     if (index == -1)

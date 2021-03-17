@@ -114,6 +114,7 @@ namespace SourceGenerated
             {
                 GenerateSequenceValidationMethodBody(context, sb, info, indent);
             }
+
             sb.AppendLine($"{indent}ReportEnumValidationError(parameterName, intValue, typeof({info.EnumType}));");
         }
 
@@ -124,6 +125,7 @@ namespace SourceGenerated
             {
                 total |= value;
             }
+
             sb.AppendLine($"{indent}if ((intValue & {total}) == intValue) return;");
         }
 
@@ -154,6 +156,7 @@ namespace SourceGenerated
                     {
                         yield return (min, max.Value);
                     }
+
                     min = value;
                     max = value;
                 }
@@ -162,11 +165,13 @@ namespace SourceGenerated
                     max = value;
                 }
             }
+
             if (max is null)
             {
                 context.ReportDiagnostic(Diagnostic.Create("EV1", nameof(EnumValidationGenerator), $"Can't validate an enum that has no elements", DiagnosticSeverity.Error, DiagnosticSeverity.Error, true, 4));
                 yield break;
             }
+
             yield return (min, max.Value);
         }
 

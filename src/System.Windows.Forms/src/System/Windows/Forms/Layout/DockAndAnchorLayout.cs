@@ -41,6 +41,7 @@ namespace System.Windows.Forms.Layout
                     {
                         proposedConstraints.Width = bounds.Width;
                     }
+
                     if ((anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
                     {
                         proposedConstraints.Height = bounds.Height;
@@ -241,6 +242,7 @@ namespace System.Windows.Forms.Layout
                     {
                         left = Math.Max(Math.Abs(left), Math.Abs(cachedBounds.Left));
                     }
+
                     right = left + Math.Max(element.Bounds.Width, cachedBounds.Width) + Math.Abs(right);
                 }
                 else
@@ -258,6 +260,7 @@ namespace System.Windows.Forms.Layout
                     {
                         top = Math.Max(Math.Abs(top), Math.Abs(cachedBounds.Top));
                     }
+
                     bottom = top + Math.Max(element.Bounds.Height, cachedBounds.Height) + Math.Abs(bottom);
                 }
                 else
@@ -339,6 +342,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Height -= element.Bounds.Height;
                                 break;
                             }
+
                         case DockStyle.Bottom:
                             {
                                 Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -351,6 +355,7 @@ namespace System.Windows.Forms.Layout
 
                                 break;
                             }
+
                         case DockStyle.Left:
                             {
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -363,6 +368,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
+
                         case DockStyle.Right:
                             {
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -374,6 +380,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
+
                         case DockStyle.Fill:
                             if (element is MdiClient)
                             {
@@ -387,6 +394,7 @@ namespace System.Windows.Forms.Layout
 
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
                             }
+
                             break;
                         default:
                             Debug.Fail("Unsupported value for dock.");
@@ -421,10 +429,12 @@ namespace System.Windows.Forms.Layout
                 {
                     neededSize.Width = 0;
                 }
+
                 if ((dockStyle == DockStyle.Left) || (dockStyle == DockStyle.Right))
                 {
                     neededSize.Height = 0;
                 }
+
                 if (dockStyle != DockStyle.Fill)
                 {
                     preferredSize += neededSize;
@@ -751,6 +761,7 @@ namespace System.Windows.Forms.Layout
                         // check for this in OnLayout, we just detect the case her and force a relayout.
                         LayoutTransaction.DoLayout(element.Container.Container, element, PropertyNames.Anchor);
                     }
+
                     LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Anchor);
                 }
             }

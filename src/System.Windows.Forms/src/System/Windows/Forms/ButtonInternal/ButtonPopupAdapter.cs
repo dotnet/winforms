@@ -125,6 +125,7 @@ namespace System.Windows.Forms.ButtonInternal
             {
                 r.Inflate(-1, -1);
             }
+
             r.Inflate(-1, -1);
 
             PaintImage(e, layout);

@@ -62,6 +62,7 @@ namespace System.Windows.Forms.Tests
                 .Returns(versionPresent);
             Assert.Equal(expected, featureSupport.Object.IsPresent(feature, minimumVersion));
         }
+
         public static IEnumerable<object[]> GetVersionPresent_TestData()
         {
             foreach (string invalidType in new string[] { null, string.Empty, "NoSuchType" })

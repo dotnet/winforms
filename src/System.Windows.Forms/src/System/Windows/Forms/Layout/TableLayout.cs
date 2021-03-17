@@ -108,6 +108,7 @@ namespace System.Windows.Forms.Layout
                         {
                             throw new InvalidOperationException();
                         }
+
                         if (i > j)
                         {
                             break;
@@ -119,6 +120,7 @@ namespace System.Windows.Forms.Layout
                             keys[i] = keys[j];
                             keys[j] = key;
                         }
+
                         i++;
                         j--;
                     } while (i <= j);
@@ -307,6 +309,7 @@ namespace System.Windows.Forms.Layout
             {
                 ClearCachedAssignments(containerInfo);
             }
+
             if (tempInfo.Rows != null && containerInfo.Rows != null && (tempInfo.Rows.Length != containerInfo.Rows.Length))
             {
                 ClearCachedAssignments(containerInfo);
@@ -352,6 +355,7 @@ namespace System.Windows.Forms.Layout
             {
                 cols[cols.Length - 1].MinSize += totalSpace.Width - usedSpace.Width;
             }
+
             if (rows.Length != 0 && totalSpace.Height > usedSpace.Height)
             {
                 rows[rows.Length - 1].MinSize += totalSpace.Height - usedSpace.Height;
@@ -479,6 +483,7 @@ namespace System.Windows.Forms.Layout
                         return false;
                     }
                 }
+
                 //test to see if either the absolutely positioned element is null or it fits.
                 if (flowElement != null && (fixedElement is null || (!IsCursorPastInsertionPoint(fixedElement, flowElement.RowStart, colStop) && !IsOverlappingWithReservationGrid(fixedElement, reservationGrid, currentRow))))
                 {
@@ -509,6 +514,7 @@ namespace System.Windows.Forms.Layout
                         currentRow++;
                         reservationGrid.AdvanceRow();
                     }
+
                     //set the rowStart and columnStart to fixedElement's specifed position
                     fixedElement.RowStart = Math.Min(fixedElement.RowPosition, maxRows - 1);
                     fixedElement.ColumnStart = Math.Min(fixedElement.ColumnPosition, maxColumns - 1);
@@ -526,6 +532,7 @@ namespace System.Windows.Forms.Layout
                     {
                         //set the start column to the specified column, which we have already done
                     }
+
                     fixedElement.RowStart = Math.Max(fixedElement.RowStart, currentRow);
 
                     //advance the reservation grid
@@ -550,6 +557,7 @@ namespace System.Windows.Forms.Layout
                         //advance the reservation grid if the fixedElement's row position has changed during layout
                         reservationGrid.AdvanceRow();
                     }
+
                     currentRow = fixedElement.RowStart;
 
                     //make sure that we truncate the element's column span if it is too big
@@ -561,6 +569,7 @@ namespace System.Windows.Forms.Layout
 
                     fixedElement = GetNextLayoutInfo(fixedChildrenInfo, ref fixedElementIndex, /*absolutelyPositioned*/true);
                 }
+
                 currentCol = colStop;
                 numRows = (numRows == int.MaxValue) ? rowStop : Math.Max(numRows, rowStop);
                 numColumns = (numColumns == int.MaxValue) ? colStop : Math.Max(numColumns, colStop);
@@ -593,6 +602,7 @@ namespace System.Windows.Forms.Layout
             {
                 containerInfo.Rows = new Strip[numRows];
             }
+
             if (containerInfo.Columns is null || containerInfo.Columns.Length != numColumns)
             {
                 containerInfo.Columns = new Strip[numColumns];
@@ -616,6 +626,7 @@ namespace System.Windows.Forms.Layout
                     return layoutInfo[i];
                 }
             }
+
             index = layoutInfo.Length;
             return null;
         }
@@ -633,11 +644,13 @@ namespace System.Windows.Forms.Layout
             {
                 return true;
             }
+
             //if the element is bumped to a column after its specified column position, it also means that the element overlaps with previous controls
             if (fixedLayoutInfo.RowPosition == insertionRow && fixedLayoutInfo.ColumnPosition < insertionCol)
             {
                 return true;
             }
+
             return false;
         }
 
@@ -652,6 +665,7 @@ namespace System.Windows.Forms.Layout
             {
                 return true;
             }
+
             for (int rowOffset = fixedLayoutInfo.RowPosition - currentRow; rowOffset < fixedLayoutInfo.RowPosition - currentRow + fixedLayoutInfo.RowSpan; rowOffset++)
             {
                 for (int colOffset = fixedLayoutInfo.ColumnPosition; colOffset < fixedLayoutInfo.ColumnPosition + fixedLayoutInfo.ColumnSpan; colOffset++)
@@ -662,6 +676,7 @@ namespace System.Windows.Forms.Layout
                     }
                 }
             }
+
             return false;
         }
 
@@ -696,6 +711,7 @@ namespace System.Windows.Forms.Layout
                     layoutInfo.ColumnStart = 0;
                     layoutInfo.RowStart++;
                 }
+
                 // Cap colStop in case we have a element too large to fit on any row.
                 colStop = Math.Min(layoutInfo.ColumnSpan, maxColumns);
             }
@@ -719,6 +735,7 @@ namespace System.Windows.Forms.Layout
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -743,11 +760,13 @@ namespace System.Windows.Forms.Layout
                 {
                     containerInfo.ChildHasColumnSpan = true;
                 }
+
                 if (layoutInfo.RowSpan > 1)
                 {
                     containerInfo.ChildHasRowSpan = true;
                 }
             }
+
             preferredSize.Width = InflateColumns(containerInfo, proposedConstraints, measureOnly);
             int expandLastElementWidth = Math.Max(0, proposedConstraints.Width - preferredSize.Width);
             preferredSize.Height = InflateRows(containerInfo, proposedConstraints, expandLastElementWidth, measureOnly);
@@ -772,6 +791,7 @@ namespace System.Windows.Forms.Layout
                     strip.MinSize = 0;
                     strip.MaxSize = 0;
                 }
+
                 strip.IsStart = false;
                 strips[i] = strip;
             }
@@ -962,6 +982,7 @@ namespace System.Windows.Forms.Layout
                     DistributeSize(containerInfo.RowStyles, containerInfo.Rows, layoutInfo.RowStart, rowStop, minHeight, maxHeight, containerInfo.CellBorderWidth);
                 }
             }
+
             return DistributeStyles(containerInfo.CellBorderWidth, containerInfo.RowStyles, containerInfo.Rows, proposedConstraints.Height, dontHonorConstraint);
         }
 
@@ -985,6 +1006,7 @@ namespace System.Windows.Forms.Layout
                 Strip strip = strips[i];
                 size += strip.MinSize;
             }
+
             return size;
         }
 
@@ -1016,8 +1038,10 @@ namespace System.Windows.Forms.Layout
                     //the strip is not absolutely sized and it hasn't been initialized
                     numUninitializedStrips++;
                 }
+
                 currentLength += sizeProxy.Size;
             }
+
             int missingLength = desiredLength - currentLength;
 
             if (missingLength <= 0)
@@ -1037,12 +1061,14 @@ namespace System.Windows.Forms.Layout
                         break;
                     }
                 }
+
                 //we have found one strip whose style is percent.
                 //make sure that the for loop below only looks at this strip
                 if (lastPercent != start - 1)
                 {
                     stop = lastPercent + 1;
                 }
+
                 //every strip has absolute width or all of them have already been allocated space
                 //walk backwards
                 for (int i = stop - 1; i >= start; i--)
@@ -1064,14 +1090,17 @@ namespace System.Windows.Forms.Layout
 
                             sizeProxy.Strip = strips[i];
                         }
+
                         //put whatever left into this strip
                         sizeProxy.Size += missingLength;
                         strips[i] = sizeProxy.Strip;
                         break;
                     }
                 }
+
                 //if we fall through here, everything is absolutely positioned. discard the extra space
             }
+
             //there are some uninitialized strips
             else
             {
@@ -1091,6 +1120,7 @@ namespace System.Windows.Forms.Layout
                             //we are at the last strip. place round off error here
                             average = missingLength - average * (numUninitializedStrips - 1);
                         }
+
                         sizeProxy.Size += average;
                         strips[i] = sizeProxy.Strip;
                     }
@@ -1151,6 +1181,7 @@ namespace System.Windows.Forms.Layout
                 {
                     hasAutoSizeColumn = true;
                 }
+
                 strip.MaxSize += cellBorderWidth;
                 strip.MinSize += cellBorderWidth;  //add the padding for the cell border
 
@@ -1238,9 +1269,11 @@ namespace System.Windows.Forms.Layout
                             usedSpace -= strip.MinSize;
                         }
                     }
+
                     usedSpace += maxPercentWidth;
                 }
             }
+
             remainingSpace = maxSize - usedSpace;
 
             // Step 3: add remaining space to autosize columns
@@ -1266,6 +1299,7 @@ namespace System.Windows.Forms.Layout
                     }
                 }
             }
+
             Debug.Assert((dontHonorConstraint || (usedSpace == SumStrips(strips, 0, strips.Length))), "Error computing usedSpace.");
             return usedSpace;
         }
@@ -1285,6 +1319,7 @@ namespace System.Windows.Forms.Layout
                 Control control = containerInfo.Container as Control;
                 isContainerRTL = control.RightToLeft == RightToLeft.Yes;
             }
+
             LayoutInfo[] childrenInfo = containerInfo.ChildrenInfo;
             float startX = isContainerRTL ? displayRectF.Right : displayRectF.X;
 
@@ -1306,6 +1341,7 @@ namespace System.Windows.Forms.Layout
                     {
                         top += containerInfo.Rows[currentRow].MinSize;
                     }
+
                     startX = isContainerRTL ? displayRectF.Right : displayRectF.X;
                     currentCol = 0;
                 }
@@ -1395,10 +1431,12 @@ namespace System.Windows.Forms.Layout
             {
                 throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, "RowPosition", row));
             }
+
             if (column < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, "ColumnPosition", column));
             }
+
             ArrangedElementCollection children = container.Children;
             ContainerInfo containerInfo = GetContainerInfo(container);
 
@@ -1407,11 +1445,13 @@ namespace System.Windows.Forms.Layout
                 //nothing in the container. returns null.
                 return null;
             }
+
             if (!containerInfo.Valid)
             {
                 //hasn't performed layout yet. assign rows and columns first
                 EnsureRowAndColumnAssignments(container, containerInfo, /* doNotCache = */ true);
             }
+
             for (int i = 0; i < children.Count; i++)
             {
                 LayoutInfo layoutInfo = GetLayoutInfo(children[i]);
@@ -1422,6 +1462,7 @@ namespace System.Windows.Forms.Layout
                     return layoutInfo.Element;
                 }
             }
+
             return null;
         }
 
@@ -1431,6 +1472,7 @@ namespace System.Windows.Forms.Layout
             {
                 return new TableLayoutPanelCellPosition(-1, -1);
             }
+
             ArrangedElementCollection children = container.Children;
             ContainerInfo containerInfo = GetContainerInfo(container);
 
@@ -1439,14 +1481,17 @@ namespace System.Windows.Forms.Layout
                 //nothing in the container. returns null.
                 return new TableLayoutPanelCellPosition(-1, -1);
             }
+
             if (!containerInfo.Valid)
             {
                 //hasn't performed layout yet. assign rows and columns first
                 EnsureRowAndColumnAssignments(container, containerInfo, /* doNotCache = */ true);
             }
+
             LayoutInfo layoutInfo = GetLayoutInfo(child);
             return new TableLayoutPanelCellPosition(layoutInfo.ColumnStart, layoutInfo.RowStart);
         }
+
         internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
         {
             LayoutInfo layoutInfo = (LayoutInfo)element.Properties.GetObject(_layoutInfoProperty);
@@ -1455,6 +1500,7 @@ namespace System.Windows.Forms.Layout
                 layoutInfo = new LayoutInfo(element);
                 SetLayoutInfo(element, layoutInfo);
             }
+
             return layoutInfo;
         }
 
@@ -1564,6 +1610,7 @@ namespace System.Windows.Forms.Layout
                 containerInfo = new ContainerInfo(container);
                 container.Properties.SetObject(_containerInfoProperty, containerInfo);
             }
+
             return containerInfo;
         }
 
@@ -1754,6 +1801,7 @@ namespace System.Windows.Forms.Layout
                     {
                         _rowStyles = new TableLayoutRowStyleCollection(_container);
                     }
+
                     return _rowStyles;
                 }
                 set
@@ -1774,6 +1822,7 @@ namespace System.Windows.Forms.Layout
                     {
                         _colStyles = new TableLayoutColumnStyleCollection(_container);
                     }
+
                     return _colStyles;
                 }
                 set
@@ -1820,6 +1869,7 @@ namespace System.Windows.Forms.Layout
                             {
                                 _countFixedChildren++;
                             }
+
                             childInfo[index++] = layoutInfo;
                             _minRowsAndColumns += layoutInfo.RowSpan * layoutInfo.ColumnSpan;
                             if (layoutInfo.IsAbsolutelyPositioned)
@@ -1840,8 +1890,10 @@ namespace System.Windows.Forms.Layout
                         {
                             _childInfo = childInfo;
                         }
+
                         _state[stateChildInfoValid] = true;
                     }
+
                     return _childInfo ?? (Array.Empty<LayoutInfo>());
                 }
             }
@@ -1850,6 +1902,7 @@ namespace System.Windows.Forms.Layout
             {
                 get { return _state[stateChildInfoValid]; }
             }
+
             public LayoutInfo[] FixedChildrenInfo
             {
                 get
@@ -1867,11 +1920,14 @@ namespace System.Windows.Forms.Layout
                                 fixedChildren[index++] = _childInfo[i];
                             }
                         }
+
                         Sort(fixedChildren, PreAssignedPositionComparer.GetInstance);
                     }
+
                     return fixedChildren;
                 }
             }
+
             public bool Valid
             {
                 get { return _state[stateValid]; }
@@ -1905,6 +1961,7 @@ namespace System.Windows.Forms.Layout
                                 {
                                     return true;
                                 }
+
                                 foundAny = true;
                             }
                         }
@@ -1939,6 +1996,7 @@ namespace System.Windows.Forms.Layout
                         return cachedSize;
                     }
                 }
+
                 return Size.Empty;
             }
         }
@@ -2058,18 +2116,22 @@ namespace System.Windows.Forms.Layout
                 {
                     return -1;
                 }
+
                 if (xInfo.RowStart > yInfo.RowStart)
                 {
                     return 1;
                 }
+
                 if (xInfo.ColumnStart < yInfo.ColumnStart)
                 {
                     return -1;
                 }
+
                 if (xInfo.ColumnStart > yInfo.ColumnStart)
                 {
                     return 1;
                 }
+
                 return 0;
             }
         }
@@ -2091,18 +2153,22 @@ namespace System.Windows.Forms.Layout
                 {
                     return -1;
                 }
+
                 if (xInfo.RowPosition > yInfo.RowPosition)
                 {
                     return 1;
                 }
+
                 if (xInfo.ColumnPosition < yInfo.ColumnPosition)
                 {
                     return -1;
                 }
+
                 if (xInfo.ColumnPosition > yInfo.ColumnPosition)
                 {
                     return 1;
                 }
+
                 return 0;
             }
         }
@@ -2121,10 +2187,12 @@ namespace System.Windows.Forms.Layout
                 {
                     return false;
                 }
+
                 if (column >= ((BitArray)_rows[rowOffset]).Length)
                 {
                     return false;
                 }
+
                 return ((BitArray)_rows[rowOffset])[column];
             }
 
@@ -2135,6 +2203,7 @@ namespace System.Windows.Forms.Layout
                 {
                     _rows.Add(new BitArray(_numColumns));
                 }
+
                 //increase the length of the _rows[rowOffset] if necessary
                 if (column >= ((BitArray)_rows[rowOffset]).Length)
                 {
@@ -2307,6 +2376,7 @@ namespace System.Windows.Forms.Layout
                         {
                             Debug.Assert(containerInfo.ColumnStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
                         }
+
                         for (k = layoutInfo2.ColumnStart; k < layoutInfo2.ColumnStart + layoutInfo2.ColumnSpan; k++)
                         {
                             Debug.Assert(containerInfo.ColumnStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
@@ -2323,6 +2393,7 @@ namespace System.Windows.Forms.Layout
                         {
                             Debug.Assert(containerInfo.RowStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");
                         }
+
                         for (k = layoutInfo2.RowStart; k < layoutInfo2.RowStart + layoutInfo2.RowSpan; k++)
                         {
                             Debug.Assert(containerInfo.RowStyles[k].SizeType == SizeType.Absolute, "column " + k + " is not absolutely sized");

@@ -924,7 +924,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -976,7 +977,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try

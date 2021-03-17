@@ -107,6 +107,7 @@ namespace System.Windows.Forms
 
             return systemIcon;
         }
+
         private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
 
         public void updateIcon()
@@ -179,6 +180,7 @@ namespace System.Windows.Forms
                 UnhookTarget();
                 _target = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -191,6 +193,7 @@ namespace System.Windows.Forms
                     controlTarget.HandleCreated -= new EventHandler(OnTargetWindowHandleRecreated);
                     controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);
                 }
+
                 _target = null;
             }
         }

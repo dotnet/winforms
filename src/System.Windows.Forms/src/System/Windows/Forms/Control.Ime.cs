@@ -731,6 +731,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             DefWndProc(ref m);
         }
 
@@ -1241,6 +1242,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                         Imm32.ImmReleaseContext(handle, inputContext);
                     }
+
                     break;
             }
 

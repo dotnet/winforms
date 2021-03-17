@@ -23,6 +23,7 @@ namespace System.Windows.Forms.Design
             {
                 return value;
             }
+
             if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
             {
                 return value;

@@ -148,6 +148,7 @@ namespace System.Resources
                                 assemblyList.Add(asmName);
                             }
                         }
+
                         _names = assemblyList.ToArray();
                     }
                 }

@@ -31,9 +31,11 @@ namespace System.Windows.Forms.Design
                 {
                     _groups = new ContextMenuStripGroupCollection();
                 }
+
                 return _groups;
             }
         }
+
         public StringCollection GroupOrdering
         {
             get
@@ -42,6 +44,7 @@ namespace System.Windows.Forms.Design
                 {
                     _groupOrdering = new StringCollection();
                 }
+
                 return _groupOrdering;
             }
         }
@@ -60,12 +63,14 @@ namespace System.Windows.Forms.Design
                     {
                         Items.Add(new ToolStripSeparator());
                     }
+
                     foreach (ToolStripItem item in items)
                     {
                         Items.Add(item);
                     }
                 }
             }
+
             _populated = true;
         }
 
@@ -76,6 +81,7 @@ namespace System.Windows.Forms.Design
             {
                 Populate();
             }
+
             RefreshItems();
             ResumeLayout(true);
             PerformLayout();

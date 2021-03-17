@@ -39,6 +39,7 @@ namespace System.Windows.Forms
                         Rectangle rect = Rectangle.Union(_ownerDataGridView._layout.ColumnHeaders, _ownerDataGridView._layout.TopLeftHeader);
                         return _ownerDataGridView.RectangleToScreen(rect);
                     }
+
                     return Rectangle.Empty;
                 }
             }
@@ -155,6 +156,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
+
                 int result = _ownerDataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
                 if (_ownerDataGridView.RowHeadersVisible)
                 {
@@ -171,6 +173,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet);
                 }
+
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.Down:
@@ -183,6 +186,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     case AccessibleNavigation.FirstChild:
                         return GetChild(0);
                     case AccessibleNavigation.LastChild:
@@ -227,18 +231,21 @@ namespace System.Windows.Forms
                         {
                             return Parent.GetChild(1);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
                         if (GetChildCount() > 0)
                         {
                             return GetChild(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
                         if (GetChildCount() > 0)
                         {
                             return GetChild(GetChildCount() - 1);
                         }
+
                         break;
                 }
 

@@ -132,6 +132,7 @@ namespace System.Windows.Forms
                         {
                             return GetChild(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
                         int subItemsCount = _owningItem.SubItems.Count;
@@ -139,6 +140,7 @@ namespace System.Windows.Forms
                         {
                             return GetChild(subItemsCount - 1);
                         }
+
                         break;
                 }
 

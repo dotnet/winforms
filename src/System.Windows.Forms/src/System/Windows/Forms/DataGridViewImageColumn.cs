@@ -38,6 +38,7 @@ namespace System.Windows.Forms
             {
                 defaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
             }
+
             DefaultCellStyle = defaultCellStyle;
         }
 
@@ -52,6 +53,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewImageCell"));
                 }
+
                 base.CellTemplate = value;
             }
         }
@@ -77,6 +79,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ImageCellTemplate.Description;
             }
             set
@@ -85,6 +88,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 ImageCellTemplate.Description = value;
                 if (DataGridView is not null)
                 {
@@ -158,11 +162,13 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 DataGridViewImageCellLayout imageLayout = ImageCellTemplate.ImageLayout;
                 if (imageLayout == DataGridViewImageCellLayout.NotSet)
                 {
                     imageLayout = DataGridViewImageCellLayout.Normal;
                 }
+
                 return imageLayout;
             }
             set
@@ -182,6 +188,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.ImageLayoutInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
                 }
@@ -198,6 +205,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ImageCellTemplate.ValueIsIcon;
             }
             set
@@ -217,6 +225,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.ValueIsIconInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
 
@@ -251,12 +260,14 @@ namespace System.Windows.Forms
 
                 dataGridViewColumn = (DataGridViewImageColumn)System.Activator.CreateInstance(thisType);
             }
+
             if (dataGridViewColumn is not null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 dataGridViewColumn.Icon = _icon;
                 dataGridViewColumn.Image = _image;
             }
+
             return dataGridViewColumn;
         }
 

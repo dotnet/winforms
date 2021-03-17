@@ -43,6 +43,7 @@ namespace System.Windows.Forms.Design
             {
                 actionUIService.HideUI(_designer.Component);
             }
+
             Cursor current = Cursor.Current;
             try
             {
@@ -92,6 +93,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             tool.SuspendLayout();
             ToolStripDesigner.s_autoAddNewItems = false;
             // create a transaction so this happens as an atomic unit.
@@ -132,6 +134,7 @@ namespace System.Windows.Forms.Design
                             {
                                 ((ComponentDesigner)designer).InitializeNewComponent(null);
                             }
+
                             item.Text = itemText;
                         }
                         else
@@ -143,6 +146,7 @@ namespace System.Windows.Forms.Design
                             {
                                 ((ComponentDesigner)designer).InitializeNewComponent(null);
                             }
+
                             item.Text = itemText;
                             Keys shortcut = menuItemShortcuts[j][i];
                             if ((item is ToolStripMenuItem) && shortcut != Keys.None)
@@ -152,6 +156,7 @@ namespace System.Windows.Forms.Design
                                     ((ToolStripMenuItem)item).ShortcutKeys = shortcut;
                                 }
                             }
+
                             Bitmap image = null;
                             try
                             {
@@ -161,6 +166,7 @@ namespace System.Windows.Forms.Design
                             {
                                 // eat the exception.. as you may not find image for all MenuItems.
                             }
+
                             if (image != null)
                             {
                                 PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];
@@ -169,6 +175,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     imageProperty.SetValue(item, image);
                                 }
+
                                 item.ImageTransparentColor = Color.Magenta;
                             }
                         }
@@ -183,6 +190,7 @@ namespace System.Windows.Forms.Design
                         {
                             rootItem.DropDownItems.Add(item);
                         }
+
                         //If Last SubItem Added the Raise the Events
                         if (i == menuArray.Length - 1)
                         {
@@ -213,6 +221,7 @@ namespace System.Windows.Forms.Design
                     IUIService uiService = (IUIService)_provider.GetService(typeof(IUIService));
                     uiService.ShowError(e.Message);
                 }
+
                 if (createMenu != null)
                 {
                     createMenu.Cancel();
@@ -227,6 +236,7 @@ namespace System.Windows.Forms.Design
                     createMenu.Commit();
                     createMenu = null;
                 }
+
                 tool.ResumeLayout();
                 // Select the Main Menu...
                 ISelectionService selSvc = (ISelectionService)_provider.GetService(typeof(ISelectionService));
@@ -234,12 +244,14 @@ namespace System.Windows.Forms.Design
                 {
                     selSvc.SetSelectedComponents(new object[] { _designer.Component });
                 }
+
                 //Refresh the Glyph
                 DesignerActionUIService actionUIService = (DesignerActionUIService)_provider.GetService(typeof(DesignerActionUIService));
                 if (actionUIService != null)
                 {
                     actionUIService.Refresh(_designer.Component);
                 }
+
                 // this will invalidate the Selection Glyphs.
                 SelectionManager selMgr = (SelectionManager)_provider.GetService(typeof(SelectionManager));
                 selMgr.Refresh();
@@ -335,6 +347,7 @@ namespace System.Windows.Forms.Design
                         {
                             // eat the exception.. as you may not find image for all MenuItems.
                         }
+
                         if (image != null)
                         {
                             PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(item)["Image"];
@@ -343,13 +356,16 @@ namespace System.Windows.Forms.Design
                             {
                                 imageProperty.SetValue(item, image);
                             }
+
                             item.ImageTransparentColor = Color.Magenta;
                         }
                     }
+
                     tool.Items.Add(item);
                     //increment the counter...
                     menuItemImageNamesCount++;
                 }
+
                 // finally, add it to the Main ToolStrip.
                 MemberDescriptor topMember = TypeDescriptor.GetProperties(tool)["Items"];
                 _componentChangeSvc.OnComponentChanging(tool, topMember);
@@ -362,6 +378,7 @@ namespace System.Windows.Forms.Design
                     IUIService uiService = (IUIService)_provider.GetService(typeof(IUIService));
                     uiService.ShowError(e.Message);
                 }
+
                 if (createMenu != null)
                 {
                     createMenu.Cancel();
@@ -377,6 +394,7 @@ namespace System.Windows.Forms.Design
                     createMenu.Commit();
                     createMenu = null;
                 }
+
                 tool.ResumeLayout();
                 // Select the Main Menu...
                 ISelectionService selSvc = (ISelectionService)_provider.GetService(typeof(ISelectionService));
@@ -391,6 +409,7 @@ namespace System.Windows.Forms.Design
                 {
                     actionUIService.Refresh(_designer.Component);
                 }
+
                 // this will invalidate the Selection Glyphs.
                 SelectionManager selMgr = (SelectionManager)_provider.GetService(typeof(SelectionManager));
                 selMgr.Refresh();
@@ -439,6 +458,7 @@ namespace System.Windows.Forms.Design
             {
                 image = new Icon(typeof(ToolStripMenuItem), "help").ToBitmap();
             }
+
             return image;
         }
 
@@ -469,9 +489,11 @@ namespace System.Windows.Forms.Design
                             c = char.ToLower(c, CultureInfo.CurrentCulture);
                             firstCharSeen = true;
                         }
+
                         name.Append(c);
                     }
                 }
+
                 name.Append(nameSuffix);
                 baseName = name.ToString();
                 if (adjustCapitalization)
@@ -506,6 +528,7 @@ namespace System.Windows.Forms.Design
                 {
                     newName = baseName + indexer.ToString(CultureInfo.InvariantCulture);
                 }
+
                 return newName;
             }
         }

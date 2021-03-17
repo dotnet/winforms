@@ -32,8 +32,10 @@ namespace System.Windows.Forms
                         {
                             return -1;
                         }
+
                         return 1;
                     }
+
                     return 1;
                 }
             }

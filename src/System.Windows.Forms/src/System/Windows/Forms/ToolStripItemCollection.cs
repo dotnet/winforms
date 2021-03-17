@@ -83,14 +83,17 @@ namespace System.Windows.Forms
         {
             return Add(text, null, null);
         }
+
         public ToolStripItem Add(Image image)
         {
             return Add(null, image, null);
         }
+
         public ToolStripItem Add(string text, Image image)
         {
             return Add(text, image, null);
         }
+
         public ToolStripItem Add(string text, Image image, EventHandler onClick)
         {
             ToolStripItem item = _owner.CreateDefaultItem(text, image, onClick);
@@ -109,6 +112,7 @@ namespace System.Windows.Forms
                 _owner.OnItemAddedInternal(value);
                 _owner.OnItemAdded(new ToolStripItemEventArgs(value));
             }
+
             return retVal;
         }
 
@@ -118,6 +122,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(toolStripItems));
             }
+
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -140,6 +145,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(toolStripItems));
             }
+
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -170,10 +176,12 @@ namespace System.Windows.Forms
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
+
             if (Count == 0)
             {
                 return;
             }
+
             ToolStripOverflow overflow = null;
 
             if (_owner != null && !_owner.IsDisposingItems)
@@ -185,6 +193,7 @@ namespace System.Windows.Forms
                     overflow.SuspendLayout();
                 }
             }
+
             try
             {
                 while (Count != 0)
@@ -198,6 +207,7 @@ namespace System.Windows.Forms
                 {
                     overflow.ResumeLayout(false);
                 }
+
                 if (_owner != null && !_owner.IsDisposingItems)
                 {
                     _owner.ResumeLayout();
@@ -219,6 +229,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
@@ -312,6 +323,7 @@ namespace System.Windows.Forms
             get { return InnerList[index]; }
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
+
         public void Insert(int index, ToolStripItem value)
         {
             CheckCanAddOrInsertItem(value);
@@ -328,6 +340,7 @@ namespace System.Windows.Forms
                     // next time we fetch the preferred size, recalc it.
                     CommonProperties.xClearPreferredSizeCache(_owner);
                 }
+
                 _owner.OnItemAddedInternal(value);
                 _owner.OnItemAdded(new ToolStripItemEventArgs(value));
             }
@@ -337,6 +350,7 @@ namespace System.Windows.Forms
         {
             return InnerList.IndexOf(value);
         }
+
         /// <summary>
         ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
         /// </summary>
@@ -421,6 +435,7 @@ namespace System.Windows.Forms
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
+
             InnerList.Remove(value);
             OnAfterRemove(value);
         }
@@ -431,11 +446,13 @@ namespace System.Windows.Forms
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
+
             ToolStripItem item = null;
             if (index < Count && index >= 0)
             {
                 item = (ToolStripItem)(InnerList[index]);
             }
+
             InnerList.RemoveAt(index);
             OnAfterRemove(item);
         }
@@ -449,6 +466,7 @@ namespace System.Windows.Forms
             {
                 throw new NotSupportedException(SR.ToolStripItemCollectionIsReadOnly);
             }
+
             int index = IndexOfKey(key);
             if (IsValidIndex(index))
             {
@@ -472,6 +490,7 @@ namespace System.Windows.Forms
                     value.ParentInternal.Items.RemoveAt(indexOfItem);
                 }
             }
+
             Add(value);
         }
 
@@ -498,6 +517,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             Insert(index, value);
         }
 

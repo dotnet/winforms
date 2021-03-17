@@ -259,6 +259,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                     return false;
                 }
             }
+
             return true;
         }
 

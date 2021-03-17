@@ -113,6 +113,7 @@ namespace System.Windows.Forms
             {
                 BackColor = dataGridViewCellStyle.BackColor;
             }
+
             ForeColor = dataGridViewCellStyle.ForeColor;
         }
 
@@ -126,6 +127,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return !dataGridViewWantsInputKey;
         }
 

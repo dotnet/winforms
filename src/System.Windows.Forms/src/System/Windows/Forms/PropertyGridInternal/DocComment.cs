@@ -125,6 +125,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Rectangle rectInvalidate = new Rectangle(rect.Width - 1, 0, newRect.Width - rect.Width + 1, rect.Height);
                 Invalidate(rectInvalidate);
             }
+
             if (DpiHelper.IsScalingRequirementMet)
             {
                 var lineHeightOld = lineHeight;

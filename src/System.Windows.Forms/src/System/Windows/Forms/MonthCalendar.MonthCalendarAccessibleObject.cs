@@ -72,6 +72,7 @@ namespace System.Windows.Forms
                             return _ownerMonthCalendar.GetType().Name + "(" + baseType.Name + ")";
                         }
                     }
+
                     return string.Empty;
                 }
             }
@@ -364,7 +365,7 @@ namespace System.Windows.Forms
                         return text;
                     case CalendarChildType.TodayLink:
                         return string.Format(SR.MonthCalendarTodayButtonAccessibleName, _ownerMonthCalendar.TodayDate.ToShortDateString());
-                };
+                }
 
                 return string.Empty;
             }

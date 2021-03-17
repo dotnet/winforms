@@ -36,6 +36,7 @@ namespace System.Windows.Forms
                 {
                     s_instance = new KeyboardToolTipStateMachine();
                 }
+
                 return s_instance;
             }
         }
@@ -198,6 +199,7 @@ namespace System.Windows.Forms
             {
                 toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
             }
+
             StartTimer(autoPopDelay,
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.AutoPopupDelayTimerExpired, _currentTool)));
             return SmState.Shown;
@@ -271,6 +273,7 @@ namespace System.Windows.Forms
                     currentToolTip.HideToolTip(_currentTool);
                 }
             }
+
             ResetTimer();
             _currentTool = null;
             return _currentState = SmState.Hidden;
@@ -349,6 +352,7 @@ namespace System.Windows.Forms
                             table.Remove(tool);
                         }
                     }
+
                     return toolTip;
                 }
                 set

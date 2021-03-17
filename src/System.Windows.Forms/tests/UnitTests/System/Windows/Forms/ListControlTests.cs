@@ -1241,6 +1241,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(context[dataSource], control.DataManager);
             }
+
             Assert.False(control.IsHandleCreated);
 
             // Set same.
@@ -1255,6 +1256,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(context[dataSource], control.DataManager);
             }
+
             Assert.False(control.IsHandleCreated);
         }
 

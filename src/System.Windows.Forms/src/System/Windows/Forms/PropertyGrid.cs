@@ -179,6 +179,7 @@ namespace System.Windows.Forms
                         s_normalButtonSize = LogicalToDeviceUnits(s_defaultNormalButtonSize);
                         s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
                     }
+
                     s_isScalingInitialized = true;
                 }
             }
@@ -260,10 +261,12 @@ namespace System.Windows.Forms
                 {
                     _doccomment.ResumeLayout(false);
                 }
+
                 if (_hotcommands != null)
                 {
                     _hotcommands.ResumeLayout(false);
                 }
+
                 ResumeLayout(true);
             }
         }
@@ -276,6 +279,7 @@ namespace System.Windows.Forms
                 {
                     _designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
                 }
+
                 return _designerHost;
             }
             set
@@ -332,6 +336,7 @@ namespace System.Windows.Forms
                     {
                         _peMain.DesignerHost = value;
                     }
+
                     RefreshTabs(PropertyTabScope.Document);
                 }
             }
@@ -405,6 +410,7 @@ namespace System.Windows.Forms
                     value.CopyTo(attributes, 0);
                     _browsableAttributes = new AttributeCollection(attributes);
                 }
+
                 if (_currentObjects != null && _currentObjects.Length > 0)
                 {
                     if (_peMain != null)
@@ -420,6 +426,7 @@ namespace System.Windows.Forms
                 {
                     _browsableAttributes = new AttributeCollection(new Attribute[] { new BrowsableAttribute(true) });
                 }
+
                 return _browsableAttributes;
             }
         }
@@ -734,6 +741,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     }
                 }
+
                 if (!value)
                 {
                     if (_paintFrozen == 0)
@@ -1107,6 +1115,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 return _currentObjects[0];
             }
             set
@@ -1181,6 +1190,7 @@ namespace System.Windows.Forms
                             {
                                 objTemp = ((ICustomTypeDescriptor)objTemp).GetPropertyOwner(null);
                             }
+
                             Type newType = objTemp.GetType();
 
                             // check if the types are the same.  If they are, and they
@@ -1258,6 +1268,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             SelectViewTabButtonDefault(viewTabButton);
                         }
 
@@ -1306,6 +1317,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         ShowEventsButton(showEvents && _currentObjects.Length > 0);
                         DisplayHotCommands();
 
@@ -1317,6 +1329,7 @@ namespace System.Windows.Forms
                         {
                             EnablePropPageButton(null);
                         }
+
                         OnSelectedObjectsChanged(EventArgs.Empty);
                     }
 
@@ -1352,6 +1365,7 @@ namespace System.Windows.Forms
                             {
                                 Refresh(false);
                             }
+
                             SetFlag(ReInitTab, false);
                         }
                         else
@@ -1377,6 +1391,7 @@ namespace System.Windows.Forms
                 {
                     return Array.Empty<object>();
                 }
+
                 return (object[])_currentObjects.Clone();
             }
         }
@@ -1405,6 +1420,7 @@ namespace System.Windows.Forms
                 {
                     return _peMain;
                 }
+
                 return g;
             }
             set
@@ -1544,6 +1560,7 @@ namespace System.Windows.Forms
                 {
                     SetupToolbar(_viewTabsDirty);
                 }
+
                 Invalidate();
                 _toolStrip.Invalidate();
             }
@@ -1557,6 +1574,7 @@ namespace System.Windows.Forms
                 {
                     return _toolStrip.Renderer;
                 }
+
                 return null;
             }
             set
@@ -1628,11 +1646,13 @@ namespace System.Windows.Forms
             {
                 image.MakeTransparent();
             }
+
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
             if (DpiHelper.IsScalingRequired && (image.Size.Width != s_normalButtonSize.Width || image.Size.Height != s_normalButtonSize.Height))
             {
                 image = DpiHelper.CreateResizedBitmap(image, s_normalButtonSize);
             }
+
             int result = _imageList[NormalButtonSize].Images.Count;
             _imageList[NormalButtonSize].Images.Add(image);
             return result;
@@ -1873,6 +1893,7 @@ namespace System.Windows.Forms
                     {
                         Array.Copy(tabComps, newComps, oldArraySize);
                     }
+
                     newComps[oldArraySize] = component;
                     tab.Components = newComps;
                 }
@@ -1922,6 +1943,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.PropertyGridTabScope);
             }
+
             RemoveTabs(tabScope, true);
         }
 
@@ -2029,6 +2051,7 @@ namespace System.Windows.Forms
 
                 // we're good to go!
             }
+
             return tab;
         }
 
@@ -2151,9 +2174,11 @@ namespace System.Windows.Forms
                     {
                         _designerEventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                     }
+
                     _designerEventService = null;
                     SetFlag(GotDesignerEventService, false);
                 }
+
                 ActiveDesigner = null;
 
                 if (_viewTabs != null)
@@ -2162,6 +2187,7 @@ namespace System.Windows.Forms
                     {
                         _viewTabs[i].Dispose();
                     }
+
                     _viewTabs = null;
                 }
 
@@ -2174,6 +2200,7 @@ namespace System.Windows.Forms
                             _imageList[i].Dispose();
                         }
                     }
+
                     _imageList = null;
                 }
 
@@ -2240,6 +2267,7 @@ namespace System.Windows.Forms
                 {
                     return _hotcommands;
                 }
+
                 useGrid = 0;
             }
 
@@ -2275,6 +2303,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return null;
         }
 
@@ -2408,6 +2437,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             _designerEventService = (IDesignerEventService)GetService(typeof(IDesignerEventService));
             if (_designerEventService != null)
             {
@@ -2536,6 +2566,7 @@ namespace System.Windows.Forms
                         Array.Copy(tabTypes, 0, newTabs, 0, types);
                         tabTypes = newTabs;
                     }
+
                     tabTypes[types++] = tabAttr.TabClasses[i];
                 }
             }
@@ -2591,6 +2622,7 @@ namespace System.Windows.Forms
             {
                 Array.Copy(tabTypes, 0, returnTypes, 0, types);
             }
+
             return returnTypes;
         }
 
@@ -2600,6 +2632,7 @@ namespace System.Windows.Forms
             {
                 _peDefault = (GridEntry)_currentPropEntries[0];
             }
+
             return _peDefault;
         }
 
@@ -2645,6 +2678,7 @@ namespace System.Windows.Forms
             {
                 obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(null);
             }
+
             return obj;
         }
 
@@ -2654,6 +2688,7 @@ namespace System.Windows.Forms
             {
                 UpdateSelection();
             }
+
             SetFlag(PropertiesChanged, false);
             return _currentPropEntries;
         }
@@ -2674,6 +2709,7 @@ namespace System.Windows.Forms
             {
                 SetActiveControl(_gridView);
             }
+
             _gridView.Focus();
         }
 
@@ -2857,6 +2893,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(BatchModeChange, true);
                 }
+
                 return;
             }
 
@@ -3194,6 +3231,7 @@ namespace System.Windows.Forms
                 {
                     Cursor = null;
                 }
+
                 return;
             }
 
@@ -3261,6 +3299,7 @@ namespace System.Windows.Forms
             {
                 OnLayoutInternal(false);
             }
+
             base.OnResize(e);
         }
 
@@ -3404,6 +3443,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 SetFlag(BatchMode, false);
                 if (GetFlag(FullRefreshAfterBatch))
                 {
@@ -3414,6 +3454,7 @@ namespace System.Windows.Forms
                 {
                     Refresh(false);
                 }
+
                 SetFlag(BatchModeChange, false);
             }
         }
@@ -3504,6 +3545,7 @@ namespace System.Windows.Forms
             {
                 FreezePainting = false;
             }
+
             OnButtonClick(sender, e);
         }
 
@@ -3520,6 +3562,7 @@ namespace System.Windows.Forms
             {
                 FreezePainting = false;
             }
+
             OnButtonClick(sender, e);
         }
 
@@ -3586,6 +3629,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         throw;
                                     }
 
@@ -3603,6 +3647,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         _gridView.Refresh();
                     }
                 }
@@ -3620,6 +3665,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             OnButtonClick(sender, e);
         }
 
@@ -3704,6 +3750,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
                     }
                     else
@@ -3722,6 +3769,7 @@ namespace System.Windows.Forms
                             {
                                 base.ProcessDialogKey(keyData);
                             }
+
                             return true;
                         }
                         else if (_gridView.FocusInside)
@@ -3769,9 +3817,11 @@ namespace System.Windows.Forms
                                     User32.SetFocus(hWndParent);
                                 }
                             }
+
                             return result;
                         }
                     }
+
                     return true;
                     /* This conflicts with VS tab linking
                     case Keys.Prior: // PAGE_UP
@@ -3788,6 +3838,7 @@ namespace System.Windows.Forms
                         break;
                     */
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -3823,6 +3874,7 @@ namespace System.Windows.Forms
                 {
                     ClearCachedProps();
                 }
+
                 RefreshProperties(clearCached);
                 _gridView.Refresh();
                 DisplayHotCommands();
@@ -3951,6 +4003,7 @@ namespace System.Windows.Forms
                     components = newComponents;
                     tab.Components = components;
                 }
+
                 killTab = (components.Length == 0);
             }
             catch (Exception e)
@@ -4190,6 +4243,7 @@ namespace System.Windows.Forms
                 {
                     _designerSelections = new Hashtable();
                 }
+
                 _designerSelections[_designerHost.GetHashCode()] = _selectedViewTab;
             }
         }
@@ -4283,6 +4337,7 @@ namespace System.Windows.Forms
                     {
                         SetFlag(TabsChanging, false);
                     }
+
                     return true;
                 }
             }
@@ -4407,6 +4462,7 @@ namespace System.Windows.Forms
                         {
                             _bmpAlpha = SortByPropertyImage;
                         }
+
                         alphaIndex = AddImage(_bmpAlpha);
                     }
                     catch (Exception)
@@ -4419,6 +4475,7 @@ namespace System.Windows.Forms
                         {
                             _bmpCategory = SortByCategoryImage;
                         }
+
                         categoryIndex = AddImage(_bmpCategory);
                     }
                     catch (Exception)
@@ -4497,6 +4554,7 @@ namespace System.Windows.Forms
                     {
                         _bmpPropPage = ShowPropertyPageImage;
                     }
+
                     designpg = AddImage(_bmpPropPage);
                 }
                 catch (Exception)
@@ -4529,6 +4587,7 @@ namespace System.Windows.Forms
                 {
                     _toolStrip.Items.Add(buttonList[j] as ToolStripItem);
                 }
+
                 _toolStrip.ResumeLayout();
 
                 if (_viewTabsDirty)
@@ -4669,6 +4728,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
+
                     _connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
                 }
                 catch
@@ -4711,6 +4771,7 @@ namespace System.Windows.Forms
                         nOtherViewsVisible++;
                     }
                 }
+
                 if (nOtherViewsVisible > 0)
                 {
                     _viewTabButtons[PROPERTIES].Visible = true;
@@ -4866,6 +4927,7 @@ namespace System.Windows.Forms
                 SetupToolbar(true);
                 SetFlag(SysColorChangeRefresh, true);
             }
+
             base.OnSystemColorsChanged(e);
         }
 
@@ -4905,6 +4967,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanUndo ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
                 case (int)User32.WM.CUT:
                     if ((long)m.LParam == 0)
@@ -4915,6 +4978,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanCut ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
 
                 case (int)User32.WM.COPY:
@@ -4926,6 +4990,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanCopy ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
 
                 case (int)User32.WM.PASTE:
@@ -4937,6 +5002,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanPaste ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
 
                 case (int)User32.WM.COPYDATA:
@@ -4949,6 +5015,7 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)_toolStrip.Items.Count;
                         return;
                     }
+
                     break;
                 case AutomationMessages.PGM_GETBUTTONSTATE:
                     if (_toolStrip != null)
@@ -4965,8 +5032,10 @@ namespace System.Windows.Forms
                                 m.Result = IntPtr.Zero;
                             }
                         }
+
                         return;
                     }
+
                     break;
                 case AutomationMessages.PGM_SETBUTTONSTATE:
                     if (_toolStrip != null)
@@ -4997,8 +5066,10 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return;
                     }
+
                     break;
 
                 case AutomationMessages.PGM_GETBUTTONTEXT:
@@ -5021,8 +5092,10 @@ namespace System.Windows.Forms
                             // write text into test file.
                             m.Result = AutomationMessages.WriteAutomationText(text);
                         }
+
                         return;
                     }
+
                     break;
 
                 case AutomationMessages.PGM_GETTESTINGINFO:
@@ -5039,6 +5112,7 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)_gridView.GetPropertyLocation(_propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
                         return;
                     }
+
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
@@ -5059,6 +5133,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     m.Result = (IntPtr)0;
                     return;
             }

@@ -133,7 +133,7 @@
     <Rule Id="SA1510" Action="None" />
     <Rule Id="SA1511" Action="None" />
     <Rule Id="SA1512" Action="None" />
-    <Rule Id="SA1513" Action="None" />
+    <Rule Id="SA1513" Action="Error" /> <!-- A closing brace within a C# element, statement, or expression is not followed by a blank line -->
     <Rule Id="SA1514" Action="None" />
     <Rule Id="SA1515" Action="None" />
     <Rule Id="SA1516" Action="None" />

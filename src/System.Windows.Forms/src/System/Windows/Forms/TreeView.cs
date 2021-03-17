@@ -93,8 +93,10 @@ namespace System.Windows.Forms
                     {
                         scaledStateImageSize = DpiHelper.LogicalToDeviceUnits(new Size(16, 16));
                     }
+
                     isScalingInitialized = true;
                 }
+
                 return scaledStateImageSize;
             }
         }
@@ -107,6 +109,7 @@ namespace System.Windows.Forms
                 {
                     imageIndexer = new ImageList.Indexer();
                 }
+
                 imageIndexer.ImageList = ImageList;
                 return imageIndexer;
             }
@@ -120,6 +123,7 @@ namespace System.Windows.Forms
                 {
                     selectedImageIndexer = new ImageList.Indexer();
                 }
+
                 selectedImageIndexer.ImageList = ImageList;
 
                 return selectedImageIndexer;
@@ -322,6 +326,7 @@ namespace System.Windows.Forms
                     int currentStyle = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
                     cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
+
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
@@ -560,10 +565,12 @@ namespace System.Windows.Forms
                 {
                     return ImageList.Indexer.DefaultIndex;
                 }
+
                 if (ImageIndexer.Index >= imageList.Images.Count)
                 {
                     return Math.Max(0, imageList.Images.Count - 1);
                 }
+
                 return ImageIndexer.Index;
             }
 
@@ -621,6 +628,7 @@ namespace System.Windows.Forms
                     {
                         ImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
+
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
@@ -663,6 +671,7 @@ namespace System.Windows.Forms
                             SetStateImageList(internalStateImageList.Handle);
                         }
                     }
+
                     UpdateCheckedState(root, true);
                 }
             }
@@ -775,6 +784,7 @@ namespace System.Windows.Forms
                 {
                     return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT));
                 }
+
                 return DefaultTreeViewIndent;
             }
 
@@ -786,10 +796,12 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Indent), value, 0));
                     }
+
                     if (value > MaxIndent)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(Indent), value, MaxIndent));
                     }
+
                     indent = value;
                     if (IsHandleCreated)
                     {
@@ -824,6 +836,7 @@ namespace System.Windows.Forms
                     {
                         return Math.Max(16, FontHeight + 3);
                     }
+
                     return FontHeight + 3;
                 }
             }
@@ -836,6 +849,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ItemHeight), value, 1));
                     }
+
                     if (value >= short.MaxValue)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(ItemHeight), value, short.MaxValue));
@@ -907,6 +921,7 @@ namespace System.Windows.Forms
                     int intColor = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETLINECOLOR));
                     return ColorTranslator.FromWin32(intColor);
                 }
+
                 return lineColor;
             }
             set
@@ -938,6 +953,7 @@ namespace System.Windows.Forms
                 {
                     nodes = new TreeNodeCollection(root);
                 }
+
                 return nodes;
             }
         }
@@ -1075,10 +1091,12 @@ namespace System.Windows.Forms
                 {
                     return ImageList.Indexer.DefaultIndex;
                 }
+
                 if (SelectedImageIndexer.Index >= imageList.Images.Count)
                 {
                     return Math.Max(0, imageList.Images.Count - 1);
                 }
+
                 return SelectedImageIndexer.Index;
             }
             set
@@ -1096,6 +1114,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, 0));
                 }
+
                 if (SelectedImageIndexer.Index != value)
                 {
                     SelectedImageIndexer.Index = value;
@@ -1135,6 +1154,7 @@ namespace System.Windows.Forms
                     {
                         SelectedImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
+
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
@@ -1381,6 +1401,7 @@ namespace System.Windows.Forms
                     IntPtr hitem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.FIRSTVISIBLE);
                     return (hitem == IntPtr.Zero ? null : NodeFromHandle(hitem));
                 }
+
                 return topNode;
             }
             set
@@ -1606,6 +1627,7 @@ namespace System.Windows.Forms
                     ThemingScope.Deactivate(userCookie);
                 }
             }
+
             base.CreateHandle();
         }
 
@@ -1809,6 +1831,7 @@ namespace System.Windows.Forms
                 {
                     UpdateImagesRecursive(node);
                 }
+
                 EndUpdate();
             }
         }
@@ -1838,6 +1861,7 @@ namespace System.Windows.Forms
                 {
                     handle = internalStateImageList.Handle;
                 }
+
                 SetStateImageList(handle);
             }
         }
@@ -1907,6 +1931,7 @@ namespace System.Windows.Forms
                         return true;
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -2066,6 +2091,7 @@ namespace System.Windows.Forms
                 {
                     images[i] = stateImageList.Images[i - 1];
                 }
+
                 newImageList.Images.AddRange(images);
                 User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.Handle);
 
@@ -2073,6 +2099,7 @@ namespace System.Windows.Forms
                 {
                     internalStateImageList.Dispose();
                 }
+
                 internalStateImageList = newImageList;
             }
         }
@@ -2288,6 +2315,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // if it's a space, send the check notifications and toggle the checkbox if we're not
             // cancelled.
             if (CheckBoxes && (e.KeyData & Keys.KeyCode) == Keys.Space)
@@ -2301,6 +2329,7 @@ namespace System.Windows.Forms
                         node.CheckedInternal = !node.CheckedInternal;
                         TreeViewAfterCheck(node, TreeViewAction.ByKeyboard);
                     }
+
                     e.Handled = true;
                     return;
                 }
@@ -2317,6 +2346,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // eat the space key
             if ((e.KeyData & Keys.KeyCode) == Keys.Space)
             {
@@ -2335,6 +2365,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // eat the space key
             if (e.KeyChar == ' ')
             {
@@ -2410,6 +2441,7 @@ namespace System.Windows.Forms
             {
                 return (SelectedImageIndex != 0);
             }
+
             return (SelectedImageIndex != ImageList.Indexer.DefaultIndex);
         }
 
@@ -2419,6 +2451,7 @@ namespace System.Windows.Forms
             {
                 return (ImageIndex != 0);
             }
+
             return (ImageIndex != ImageList.Indexer.DefaultIndex);
         }
 
@@ -2445,6 +2478,7 @@ namespace System.Windows.Forms
                     s += ", Nodes[0]: " + Nodes[0].ToString();
                 }
             }
+
             return s;
         }
 
@@ -2484,6 +2518,7 @@ namespace System.Windows.Forms
                 e = new TreeViewCancelEventArgs(NodeFromHandle(item.hItem), false, TreeViewAction.Collapse);
                 OnBeforeCollapse(e);
             }
+
             return (IntPtr)(e.Cancel ? 1 : 0);
         }
 
@@ -2519,6 +2554,7 @@ namespace System.Windows.Forms
             {
                 return (IntPtr)1;
             }
+
             // Check for invalid node handle
             if (nmtv->itemNew.hItem == IntPtr.Zero)
             {
@@ -2625,6 +2661,7 @@ namespace System.Windows.Forms
                     ForceScrollbarUpdate(true);
                 }
             }
+
             return (IntPtr)(e.CancelEdit ? 0 : 1);
         }
 
@@ -2757,6 +2794,7 @@ namespace System.Windows.Forms
                                     bounds.Width += value;
                                 }
                             }
+
                             e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(state));
                             OnDrawNode(e);
                         }
@@ -2784,6 +2822,7 @@ namespace System.Windows.Forms
                     {
                         nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
                     }
+
                     if (renderinfo != null && !riBack.IsEmpty)
                     {
                         nmtvcd->clrTextBk = ColorTranslator.ToWin32(riBack);
@@ -2885,6 +2924,7 @@ namespace System.Windows.Forms
                 retval.ForeColor = node.propBag.ForeColor;
                 retval.BackColor = node.propBag.BackColor;
             }
+
             retval.Font = node.propBag.Font;
             return retval;
         }
@@ -2934,6 +2974,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -3043,6 +3084,7 @@ namespace System.Windows.Forms
                                 OnMouseClick(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
                             }
                         }
+
                         if (nmtv->nmhdr.code == (int)NM.RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
@@ -3055,6 +3097,7 @@ namespace System.Windows.Forms
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
                                 User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, (IntPtr)User32.GetMessagePos());
                             }
+
                             m.Result = (IntPtr)1;
                         }
 
@@ -3070,6 +3113,7 @@ namespace System.Windows.Forms
                                 treeViewState[TREEVIEWSTATE_mouseUpFired] = true;
                             }
                         }
+
                         break;
                 }
             }
@@ -3155,6 +3199,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case (int)User32.WM.HSCROLL:
                     base.WndProc(ref m);
@@ -3162,6 +3207,7 @@ namespace System.Windows.Forms
                     {
                         Invalidate();
                     }
+
                     break;
 
                 case (int)User32.WM.PRINT:
@@ -3187,6 +3233,7 @@ namespace System.Windows.Forms
                             node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
                         }
                     }
+
                     break;
                 case (int)User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
@@ -3214,6 +3261,7 @@ namespace System.Windows.Forms
                             base.WndProc(ref m);
                             break;
                     }
+
                     break;
                 case (int)(User32.WM.REFLECT_NOTIFY):
                     WmNotify(ref m);
@@ -3265,12 +3313,14 @@ namespace System.Windows.Forms
                                 TreeViewAfterCheck(node, TreeViewAction.ByMouse);
                             }
                         }
+
                         m.Result = IntPtr.Zero;
                     }
                     else
                     {
                         WmMouseDown(ref m, MouseButtons.Left, 1);
                     }
+
                     downButton = MouseButtons.Left;
                     break;
                 case (int)User32.WM.LBUTTONUP:
@@ -3308,6 +3358,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
@@ -3380,6 +3431,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case (int)User32.WM.CONTEXTMENU:
                     if (treeViewState[TREEVIEWSTATE_showTreeViewContextMenu])
@@ -3409,6 +3461,7 @@ namespace System.Windows.Forms
                             base.WndProc(ref m);
                         }
                     }
+
                     break;
 
                 default:

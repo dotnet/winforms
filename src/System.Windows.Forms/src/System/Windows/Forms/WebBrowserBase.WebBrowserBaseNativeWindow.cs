@@ -55,6 +55,7 @@ namespace System.Windows.Forms
                     wp->cx = s.Width;
                     wp->cy = s.Height;
                 }
+
                 m.Result = (IntPtr)0;
             }
         }

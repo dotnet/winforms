@@ -71,6 +71,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             region.Intersect(new Rectangle(0, 0, size.Width, size.Height));
                         }
                         finally
@@ -101,6 +102,7 @@ namespace System.Windows.Forms
                     region.Dispose();
                     region = null;
                 }
+
                 icon.Dispose();
             }
         }

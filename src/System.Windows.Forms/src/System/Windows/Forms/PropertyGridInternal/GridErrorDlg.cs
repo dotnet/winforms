@@ -65,6 +65,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref expandImage);
             }
+
             collapseImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "up");
             if (DpiHelper.IsScalingRequired)
             {
@@ -342,6 +343,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     DetailsClick(details, EventArgs.Empty);
                 }
             }
+
             okBtn.Focus();
         }
     }

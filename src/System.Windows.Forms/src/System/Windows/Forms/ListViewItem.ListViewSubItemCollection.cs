@@ -79,6 +79,7 @@ namespace System.Windows.Forms
                     this[index] = item;
                 }
             }
+
             /// <summary>
             ///  Retrieves the child control with the specified key.
             /// </summary>
@@ -270,6 +271,7 @@ namespace System.Windows.Forms
                         {
                             Array.Copy(_owner.subItems, newItems, _owner.SubItemCount);
                         }
+
                         _owner.subItems = newItems;
                     }
                 }
@@ -351,6 +353,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
+
                 if (item is null)
                 {
                     throw new ArgumentNullException(nameof(item));

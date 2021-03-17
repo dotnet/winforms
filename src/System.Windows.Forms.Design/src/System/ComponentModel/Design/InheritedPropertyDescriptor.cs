@@ -205,6 +205,7 @@ namespace System.ComponentModel.Design
                     value = s_noDefault;
                 }
             }
+
             return value;
         }
 
@@ -256,6 +257,7 @@ namespace System.ComponentModel.Design
                     currentValue = _defaultValue;
                     _defaultValue = ClonedDefaultValue(_defaultValue);
                 }
+
                 SaveOriginalValue(currentValue);
             }
             catch
@@ -263,6 +265,7 @@ namespace System.ComponentModel.Design
                 // If the property get blows chunks, then the default value is NoDefault and we resort to the base property descriptor.
                 _defaultValue = s_noDefault;
             }
+
             _initShouldSerialize = ShouldSerializeValue(component);
         }
 
@@ -330,6 +333,7 @@ namespace System.ComponentModel.Design
                 {
                     return SR.GetResourceString(SR.InheritanceServiceReadOnlyCollection);
                 }
+
                 return base.ConvertTo(context, culture, value, destinationType);
             }
         }

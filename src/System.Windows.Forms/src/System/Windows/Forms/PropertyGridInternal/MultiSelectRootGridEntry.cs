@@ -38,12 +38,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                             break;
                         }
                     }
+
                     if (anyRO)
                     {
                         flags |= FLAG_FORCE_READONLY;
                     }
+
                     forceReadOnlyChecked = true;
                 }
+
                 return base.ForceReadOnly;
             }
         }
@@ -69,11 +72,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     ChildCollection.AddRange(mergedProps);
                 }
+
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
                     SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
                 }
+
                 CategorizePropEntries();
                 return fExpandable;
             }
@@ -157,6 +162,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         pdc = pdc.Sort(PropertyComparer);
                     }
+
                     propCollections[i] = pdc;
                 }
 
@@ -193,6 +199,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 match = false;
                                 break;
                             }
+
                             matchArray[j] = jProp;
                             continue;
                         }
@@ -220,6 +227,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                     matchArray[j] = jProp;
                                     posArray[j] = jPos + 1;
                                 }
+
                                 break;
                             }
 
@@ -268,6 +276,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             newEntries = new MultiPropertyDescriptorGridEntry[entries.Length];
                         }
+
                         newEntries[newPos++] = entries[i];
                         entries[i] = null;
                     }
@@ -283,8 +292,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             newEntries[newPos++] = entries[i];
                         }
                     }
+
                     entries = newEntries;
                 }
+
                 return entries;
             }
 
@@ -332,6 +343,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             start += delta;
                             len -= delta;
                         }
+
                         offset = len / 2;
                     }
 
@@ -342,6 +354,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         mergedEntries.Add(mergeArray.Clone());
                     }
                 }
+
                 return mergedEntries;
             }
         }
@@ -373,6 +386,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     result = string.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, System.Globalization.CultureInfo.CurrentCulture);
                 }
+
                 return result;
             }
         }

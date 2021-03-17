@@ -712,6 +712,7 @@ namespace System.Windows.Forms
             {
                 Value = _minimum;
             }
+
             if (Value > _maximum)
             {
                 Value = _maximum;
@@ -997,6 +998,7 @@ namespace System.Windows.Forms
                 {
                     _value = _minimum;
                 }
+
                 if (_value > _maximum)
                 {
                     _value = _maximum;
@@ -1060,8 +1062,10 @@ namespace System.Windows.Forms
                                 OnScroll(EventArgs.Empty);
                                 OnValueChanged(EventArgs.Empty);
                             }
+
                             break;
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

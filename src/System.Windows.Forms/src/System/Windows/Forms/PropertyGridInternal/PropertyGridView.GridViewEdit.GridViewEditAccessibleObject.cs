@@ -37,6 +37,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             states &= ~AccessibleStates.ReadOnly;
                         }
+
                         return states;
                     }
                 }

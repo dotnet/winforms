@@ -28,6 +28,7 @@ namespace System.Windows.Forms
                         Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
                         return true;
                     }
+
                     return false;
                 }
 
@@ -47,6 +48,7 @@ namespace System.Windows.Forms
                     {
                         return base.GetOuterBorderColor(comboBox);
                     }
+
                     return (comboBox.Enabled) ? SystemColors.Window : GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder;
                 }
 

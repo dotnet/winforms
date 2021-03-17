@@ -164,6 +164,7 @@ namespace System.Windows.Forms
                 return LinkUtilities.IEActiveLinkColor;
             }
         }
+
         private Color IEVisitedLinkColor
         {
             get
@@ -171,6 +172,7 @@ namespace System.Windows.Forms
                 return LinkUtilities.IEVisitedLinkColor;
             }
         }
+
         private Color IEDisabledLinkColor
         {
             get
@@ -179,6 +181,7 @@ namespace System.Windows.Forms
                 {
                     s_iedisabledLinkColor = ControlPaint.Dark(DisabledColor);
                 }
+
                 return s_iedisabledLinkColor;
             }
         }
@@ -215,6 +218,7 @@ namespace System.Windows.Forms
                 {
                     return new LinkArea(0, 0);
                 }
+
                 return new LinkArea(((Link)_links[0]).Start, ((Link)_links[0]).Length);
             }
             set
@@ -229,6 +233,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(LinkArea), value, SR.LinkLabelAreaStart);
                     }
+
                     if (value.Length < -1)
                     {
                         throw new ArgumentOutOfRangeException(nameof(LinkArea), value, SR.LinkLabelAreaLength);
@@ -297,6 +302,7 @@ namespace System.Windows.Forms
                     {
                         return SystemColors.HotTrack;
                     }
+
                     return IELinkColor;
                 }
                 else
@@ -327,6 +333,7 @@ namespace System.Windows.Forms
                 {
                     _linkCollection = new LinkCollection(this);
                 }
+
                 return _linkCollection;
             }
         }
@@ -358,6 +365,7 @@ namespace System.Windows.Forms
                     {
                         Links.Add(new Link(this));
                     }
+
                     ((Link)_links[0]).Visited = value;
                 }
             }
@@ -447,6 +455,7 @@ namespace System.Windows.Forms
                     {
                         return LinkUtilities.GetVisitedLinkColor();
                     }
+
                     return IEVisitedLinkColor;
                 }
                 else
@@ -588,6 +597,7 @@ namespace System.Windows.Forms
             {
                 return 0;
             }
+
             if (string.IsNullOrEmpty(text))
             {
                 Debug.Assert(text != null, "string should not be null");
@@ -606,6 +616,7 @@ namespace System.Windows.Forms
             {
                 return index - numTextElements + text.Length;  //pretend all the characters after are ASCII characters
             }
+
             //return the length of the substring which has specified number of characters
             string sub = stringInfo.SubstringByTextElements(0, index);
             return sub.Length;
@@ -713,6 +724,7 @@ namespace System.Windows.Forms
                         {
                             Links[0].VisualRegion = visualRegion;
                         }
+
                         _textRegion = visualRegion;
                     }
                 }
@@ -792,11 +804,13 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             StringInfo stringInfo = new StringInfo(Text);
             if (LinkArea.Start == 0 && LinkArea.Length == stringInfo.LengthInTextElements)
             {
                 return true;
             }
+
             return false;
         }
 
@@ -825,6 +839,7 @@ namespace System.Windows.Forms
                 g.Dispose();
                 g = null;
             }
+
             return hit;
         }
 
@@ -993,6 +1008,7 @@ namespace System.Windows.Forms
                     {
                         InvalidateLink(link);
                     }
+
                     OverrideCursor = null;
                 }
             }
@@ -1024,6 +1040,7 @@ namespace System.Windows.Forms
                         FocusLink = (Link)_links[i];
                         InvalidateLink(FocusLink);
                     }
+
                     Capture = true;
                     break;
                 }
@@ -1099,6 +1116,7 @@ namespace System.Windows.Forms
                 {
                     hoverLink.State &= ~LinkState.Hover;
                 }
+
                 if (pointIn != null)
                 {
                     pointIn.State |= LinkState.Hover;
@@ -1118,6 +1136,7 @@ namespace System.Windows.Forms
                     {
                         InvalidateLink(hoverLink);
                     }
+
                     if (pointIn != null)
                     {
                         InvalidateLink(pointIn);
@@ -1222,6 +1241,7 @@ namespace System.Windows.Forms
                                         {
                                             finalrect.Height = requiredSize.Height;
                                         }
+
                                         finalrect = CalcTextRenderBounds(Rectangle.Round(finalrect) /*textRect*/, ClientRectWithPadding /*clientRect*/, RtlTranslateContent(TextAlign));
                                     }
 
@@ -1394,8 +1414,10 @@ namespace System.Windows.Forms
                 {
                     ((Link)_links[i]).State &= ~(LinkState.Hover | LinkState.Active);
                 }
+
                 OverrideCursor = null;
             }
+
             InvalidateTextLayout();
             Invalidate();
         }
@@ -1617,6 +1639,7 @@ namespace System.Windows.Forms
                                 return true;
                             }
                         }
+
                         break;
                     case Keys.Up:
                     case Keys.Left:
@@ -1624,6 +1647,7 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         break;
                     case Keys.Down:
                     case Keys.Right:
@@ -1631,9 +1655,11 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         break;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -1805,6 +1831,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.Select(directed, forward);
         }
 
@@ -1834,6 +1861,7 @@ namespace System.Windows.Forms
                 // use field access to find out if "length" is really -1
                 return Links[0].Start != 0 || Links[0]._length != -1;
             }
+
             return true;
         }
 
@@ -1881,6 +1909,7 @@ namespace System.Windows.Forms
                     focusIndex = i;
                 }
             }
+
             AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);
         }
 

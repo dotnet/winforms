@@ -241,6 +241,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { format };
             }
+
             foreach (string format in s_mappedFormats)
             {
                 yield return new object[] { format };
@@ -319,6 +320,7 @@ namespace System.Windows.Forms.Tests
                 {
                     yield return new object[] { format, autoConvert };
                 }
+
                 foreach (string format in s_mappedFormats)
                 {
                     yield return new object[] { format, autoConvert };
@@ -407,6 +409,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { format };
             }
+
             foreach (string format in s_mappedFormats)
             {
                 yield return new object[] { format };
@@ -485,6 +488,7 @@ namespace System.Windows.Forms.Tests
                 {
                     yield return new object[] { format, autoConvert };
                 }
+
                 foreach (string format in s_mappedFormats)
                 {
                     yield return new object[] { format, autoConvert };

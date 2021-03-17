@@ -4313,7 +4313,7 @@ namespace System.Windows.Forms.Tests
                             yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
                         }
                     }
-                };
+                }
             }
         }
 
@@ -4365,7 +4365,7 @@ namespace System.Windows.Forms.Tests
                             yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
                         }
                     }
-                };
+                }
             }
         }
 

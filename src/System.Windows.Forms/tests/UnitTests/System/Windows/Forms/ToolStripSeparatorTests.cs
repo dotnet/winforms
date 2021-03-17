@@ -1535,7 +1535,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) =>
@@ -1588,7 +1589,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(item, e.AffectedComponent);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             int locationChangedCallCount = 0;
             item.LocationChanged += (sender, e) =>

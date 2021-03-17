@@ -571,6 +571,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
+
             _value += value;
 
             // Enforce that value is within the range (minimum, maximum)
@@ -578,6 +579,7 @@ namespace System.Windows.Forms
             {
                 _value = _minimum;
             }
+
             if (_value > _maximum)
             {
                 _value = _maximum;
@@ -600,6 +602,7 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
             }
+
             StartMarquee();
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }

@@ -102,6 +102,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             [Browsable(false)]
             public Rectangle Bounds
             {

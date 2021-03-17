@@ -166,6 +166,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(s_propRowErrorText, value);
                 }
+
                 if (DataGridView is not null && !errorText.Equals(ErrorTextInternal))
                 {
                     DataGridView.OnRowErrorTextChanged(this);
@@ -226,6 +227,7 @@ namespace System.Windows.Forms
                 Thickness = value;
             }
         }
+
         public override DataGridViewCellStyle InheritedStyle
         {
             get
@@ -371,6 +373,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.None;
@@ -385,6 +388,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.None;
@@ -399,6 +403,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         if (DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
@@ -407,6 +412,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.None;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -420,6 +426,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         if (DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
@@ -428,6 +435,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.None;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -441,6 +449,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         if (DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
@@ -449,6 +458,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.None;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -462,6 +472,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.None;
@@ -481,6 +492,7 @@ namespace System.Windows.Forms
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                             return dataGridViewAdvancedBorderStylePlaceholder;
                         }
+
                         break;
 
                     case DataGridViewAdvancedCellBorderStyle.Outset:
@@ -492,6 +504,7 @@ namespace System.Windows.Forms
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                             return dataGridViewAdvancedBorderStylePlaceholder;
                         }
+
                         break;
 
                     case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
@@ -505,6 +518,7 @@ namespace System.Windows.Forms
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         if (isFirstDisplayedRow)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView is not null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
@@ -513,6 +527,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetPartial;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = isLastVisibleRow ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetPartial;
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
@@ -527,6 +542,7 @@ namespace System.Windows.Forms
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         if (isFirstDisplayedRow)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView is not null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
@@ -535,6 +551,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
@@ -549,6 +566,7 @@ namespace System.Windows.Forms
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }
+
                         if (isFirstDisplayedRow)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView is not null && DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
@@ -557,6 +575,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
@@ -569,9 +588,11 @@ namespace System.Windows.Forms
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             return dataGridViewAdvancedBorderStylePlaceholder;
                         }
+
                         break;
                 }
             }
+
             return dataGridViewAdvancedBorderStyleInput;
         }
 
@@ -1013,6 +1034,7 @@ namespace System.Windows.Forms
                 inheritedRowStyle.PaddingInternal = dataGridViewStyle.Padding;
             }
         }
+
         public override object Clone()
         {
             DataGridViewRow dataGridViewRow;
@@ -1035,10 +1057,12 @@ namespace System.Windows.Forms
                 {
                     dataGridViewRow.ErrorText = ErrorTextInternal;
                 }
+
                 if (HasHeaderCell)
                 {
                     dataGridViewRow.HeaderCell = (DataGridViewRowHeaderCell)HeaderCell.Clone();
                 }
+
                 dataGridViewRow.CloneCells(this);
             }
 
@@ -1057,19 +1081,23 @@ namespace System.Windows.Forms
                     DataGridViewCell dgvcNew = (DataGridViewCell)dataGridViewCell.Clone();
                     cells[i] = dgvcNew;
                 }
+
                 Cells.AddRange(cells);
             }
         }
+
         protected virtual AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewRowAccessibleObject(this);
         }
+
         public void CreateCells(DataGridView dataGridView)
         {
             if (dataGridView is null)
             {
                 throw new ArgumentNullException(nameof(dataGridView));
             }
+
             if (DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridView_RowAlreadyBelongsToDataGridView);
@@ -1090,6 +1118,7 @@ namespace System.Windows.Forms
                 cells.Add(dgvcNew);
             }
         }
+
         public void CreateCells(DataGridView dataGridView, params object[] values)
         {
             if (values is null)
@@ -1124,6 +1153,7 @@ namespace System.Windows.Forms
                 {
                     HeaderCell.DataGridView = null;
                 }
+
                 foreach (DataGridViewCell dataGridViewCell in Cells)
                 {
                     dataGridViewCell.DataGridView = null;
@@ -1132,6 +1162,7 @@ namespace System.Windows.Forms
                         dataGridViewCell.SelectedInternal = false;
                     }
                 }
+
                 if (Selected)
                 {
                     SelectedInternal = false;
@@ -1155,10 +1186,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
+
             if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
+
             if (cellStyle is null)
             {
                 throw new ArgumentNullException(nameof(cellStyle));
@@ -1173,6 +1206,7 @@ namespace System.Windows.Forms
             {
                 backColor = cellStyle.BackColor;
             }
+
             ControlPaint.DrawFocusRectangle(graphics, bounds, Color.Empty, backColor);
         }
 
@@ -1185,6 +1219,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedRow);
                 }
+
                 if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -1213,6 +1248,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedRow);
                 }
+
                 if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -1224,6 +1260,7 @@ namespace System.Windows.Forms
                 {
                     errorText = DataGridView.DataConnection.GetError(rowIndex);
                 }
+
                 if (DataGridView.DataSource is not null || DataGridView.VirtualMode)
                 {
                     errorText = DataGridView.OnRowErrorTextNeeded(rowIndex, errorText);
@@ -1257,10 +1294,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int)autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }
+
             if (!(DataGridView is null || (rowIndex >= 0 && rowIndex < DataGridView.Rows.Count)))
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (DataGridView is null)
             {
                 return -1;
@@ -1282,6 +1321,7 @@ namespace System.Windows.Forms
                     preferredRowThickness = Math.Max(preferredRowThickness, HeaderCell.GetPreferredSize(rowIndex).Height);
                 }
             }
+
             if ((((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode) & DataGridViewAutoSizeRowCriteriaInternal.AllColumns) != 0)
             {
                 foreach (DataGridViewCell dataGridViewCell in Cells)
@@ -1298,6 +1338,7 @@ namespace System.Windows.Forms
                         {
                             preferredCellThickness = dataGridViewCell.GetPreferredSize(rowIndex).Height;
                         }
+
                         if (preferredRowThickness < preferredCellThickness)
                         {
                             preferredRowThickness = preferredCellThickness;
@@ -1344,12 +1385,14 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (DataGridView is null || DataGridView.Rows.SharedRow(rowIndex).Index != -1)
             {
                 if (rowIndex != Index)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
+
                 return base.State;
             }
             else
@@ -1376,6 +1419,7 @@ namespace System.Windows.Forms
             Debug.Assert(DataGridView is not null);
             DataGridView.OnDataGridViewElementStateChanging(this, sharedRowIndex, elementState);
         }
+
         protected internal virtual void Paint(Graphics graphics,
             Rectangle clipBounds,
             Rectangle rowBounds,
@@ -1388,6 +1432,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
+
             if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1466,10 +1511,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
+
             if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
+
             if (paintParts < DataGridViewPaintParts.None || paintParts > DataGridViewPaintParts.All)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "paintParts"));
@@ -1495,6 +1542,7 @@ namespace System.Windows.Forms
                 {
                     cellBounds.Width++;
                 }
+
                 Debug.Assert(cellBounds.Width > 0);
                 if (dataGridView.RightToLeftInternal)
                 {
@@ -1556,6 +1604,7 @@ namespace System.Windows.Forms
                     {
                         dataBounds.X -= dataGridView.FirstDisplayedScrollingColumnHiddenWidth;
                     }
+
                     dataBounds.Width += dataGridView.FirstDisplayedScrollingColumnHiddenWidth;
 
                     Region clipRegion = null;
@@ -1567,6 +1616,7 @@ namespace System.Windows.Forms
                         {
                             rowRect.X += cx;
                         }
+
                         rowRect.Width -= cx;
                         graphics.SetClip(rowRect);
                     }
@@ -1582,6 +1632,7 @@ namespace System.Windows.Forms
                         {
                             cellBounds.Width++;
                         }
+
                         Debug.Assert(cellBounds.Width > 0);
                         if (dataGridView.RightToLeftInternal)
                         {
@@ -1655,10 +1706,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
+
             if (graphics is null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
+
             if (paintParts < DataGridViewPaintParts.None || paintParts > DataGridViewPaintParts.All)
             {
                 throw new InvalidEnumArgumentException(nameof(paintParts), (int)paintParts, typeof(DataGridViewPaintParts));
@@ -1674,6 +1727,7 @@ namespace System.Windows.Forms
                 {
                     cellBounds.X = rowBounds.Right - cellBounds.Width;
                 }
+
                 if (clipBounds.IntersectsWith(cellBounds))
                 {
                     DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
@@ -1708,6 +1762,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewCellTmp.ReadOnlyInternal = true;
                 }
+
                 dataGridViewCell.ReadOnlyInternal = false;
                 ReadOnly = false;
             }
@@ -1717,6 +1772,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.ReadOnlyInternal = true;
             }
         }
+
         public bool SetValues(params object[] values)
         {
             if (values is null)
@@ -1730,6 +1786,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationInVirtualMode);
                 }
+
                 if (Index == -1)
                 {
                     throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedRow);
@@ -1751,6 +1808,7 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 if (!cells[columnIndex].SetValueInternal(Index, values[columnIndex]))
                 {
                     setResult = false;
@@ -1832,6 +1890,7 @@ namespace System.Windows.Forms
                     return rowRect;
                 }
             }
+
             public override string Name
             {
                 get
@@ -1844,6 +1903,7 @@ namespace System.Windows.Forms
                     return string.Format(SR.DataGridView_AccRowName, owner.Index.ToString(CultureInfo.CurrentCulture));
                 }
             }
+
             public DataGridViewRow Owner
             {
                 get => owner;
@@ -1857,6 +1917,7 @@ namespace System.Windows.Forms
                     owner = value;
                 }
             }
+
             public override AccessibleObject Parent => ParentPrivate;
 
             private AccessibleObject ParentPrivate
@@ -1871,6 +1932,7 @@ namespace System.Windows.Forms
                     return owner.DataGridView?.AccessibilityObject;
                 }
             }
+
             public override AccessibleRole Role => AccessibleRole.Row;
 
             internal override int[] RuntimeId
@@ -1904,6 +1966,7 @@ namespace System.Windows.Forms
                     {
                         selectedCellsAccessibilityObject = new DataGridViewSelectedRowCellsAccessibleObject(owner);
                     }
+
                     return selectedCellsAccessibilityObject;
                 }
             }
@@ -1953,6 +2016,7 @@ namespace System.Windows.Forms
                     return accState;
                 }
             }
+
             public override string Value
             {
                 get
@@ -1961,6 +2025,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
+
                     if (owner.DataGridView is not null && owner.DataGridView.AllowUserToAddRows && owner.Index == owner.DataGridView.NewRowIndex)
                     {
                         return SR.DataGridView_AccRowCreateNew;
@@ -1997,6 +2062,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
+
                 if (owner is null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
@@ -2018,6 +2084,7 @@ namespace System.Windows.Forms
                     {
                         index--;
                     }
+
                     Debug.Assert(index >= 0);
                     int columnIndex = owner.DataGridView.Columns.ActualDisplayIndexToColumnIndex(index, DataGridViewElementStates.Visible);
                     return owner.Cells[columnIndex].AccessibilityObject;
@@ -2030,6 +2097,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
+
                 if (owner.DataGridView is null)
                 {
                     return 0;
@@ -2100,6 +2168,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     case AccessibleNavigation.Up:
                     case AccessibleNavigation.Previous:
                         if (owner.Index != owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible))
@@ -2125,6 +2194,7 @@ namespace System.Windows.Forms
                             // if this is the first row and the DataGridView RowHeaders are not visible return null;
                             return null;
                         }
+
                     case AccessibleNavigation.FirstChild:
                         if (GetChildCount() == 0)
                         {
@@ -2134,6 +2204,7 @@ namespace System.Windows.Forms
                         {
                             return GetChild(0);
                         }
+
                     case AccessibleNavigation.LastChild:
                         int childCount = GetChildCount();
                         if (childCount == 0)
@@ -2144,6 +2215,7 @@ namespace System.Windows.Forms
                         {
                             return GetChild(childCount - 1);
                         }
+
                     default:
                         return null;
                 }
@@ -2361,6 +2433,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     case AccessibleNavigation.LastChild:
                         if (GetChildCount() > 0)
                         {
@@ -2370,6 +2443,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     default:
                         return null;
                 }

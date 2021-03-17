@@ -168,9 +168,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 //}
                             }
                         }
+
                         _helpKeyword = typeName + "." + _propertyInfo.Name;
                     }
                 }
+
                 return _helpKeyword;
             }
         }
@@ -232,6 +234,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _parensAroundName = ParensAroundNameNo;
                     }
                 }
+
                 return (_parensAroundName == ParensAroundNameYes);
             }
         }
@@ -245,6 +248,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     category = base.PropertyCategory;
                 }
+
                 return category;
             }
         }
@@ -277,6 +281,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     label = "(" + label + ")";
                 }
+
                 return label;
             }
         }
@@ -292,6 +297,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return _propertyInfo.Name;
                 }
+
                 return null;
             }
         }
@@ -331,6 +337,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // clear the flags
                         SetFlagsAndExceptionInfo(0, new ExceptionConverter(), new ExceptionEditor());
                     }
+
                     return e;
                 }
             }
@@ -349,6 +356,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _pvSvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
                     _pvSvcChecked = true;
                 }
+
                 return _pvSvc;
             }
         }
@@ -382,6 +390,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _forceRenderReadOnly = true;
                     }
                 }
+
                 _readOnlyVerified = true;
 
                 if (base.ShouldRenderReadOnly)
@@ -391,6 +400,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return true;
                     }
                 }
+
                 return false;
             }
         }
@@ -411,6 +421,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     converter = _propertyInfo.Converter;
                 }
+
                 return base.TypeConverter;
             }
         }
@@ -464,6 +475,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             _toolTipText = null;
             return base.GetLabelToolTipLocation(mouseX, mouseY);
         }
@@ -479,6 +491,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 target = ((ICustomTypeDescriptor)target).GetPropertyOwner(_propertyInfo);
             }
+
             try
             {
                 return _propertyInfo.GetValue(target);
@@ -575,6 +588,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             _pvUIItems[i].Reset();
                         }
                     }
+
                     _pvUIItems = null;
                     return false;
                 case NOTIFY_CAN_RESET:
@@ -591,8 +605,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             _exceptionConverter = new ExceptionConverter();
                             _exceptionEditor = new ExceptionEditor();
                         }
+
                         return false;
                     }
+
                 case NOTIFY_SHOULD_PERSIST:
                     try
                     {
@@ -607,6 +623,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             _exceptionConverter = new ExceptionConverter();
                             _exceptionEditor = new ExceptionEditor();
                         }
+
                         return false;
                     }
 
@@ -616,6 +633,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                     }
+
                     if (_eventBindings is not null)
                     {
                         EventDescriptor descriptor = _eventBindings.GetEvent(_propertyInfo);
@@ -624,8 +642,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return ViewEvent(obj, null, null, true);
                         }
                     }
+
                     break;
             }
+
             return false;
         }
 
@@ -650,6 +670,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return base.OnMouseClick(x, y, count, button);
         }
 
@@ -680,6 +701,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         s_scaledImageSizeX = DpiHelper.LogicalToDeviceUnitsX(ImageSize);
                         s_scaledImageSizeY = DpiHelper.LogicalToDeviceUnitsY(ImageSize);
                     }
+
                     s_isScalingInitialized = true;
                 }
 
@@ -688,6 +710,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _uiItemRects[i] = new Rectangle(rect.Right - ((s_scaledImageSizeX + 1) * (i + 1)), (rect.Height - s_scaledImageSizeY) / 2, s_scaledImageSizeX, s_scaledImageSizeY);
                     g.DrawImage(_pvUIItems[i].Image, _uiItemRects[i]);
                 }
+
                 GridEntryHost.LabelPaintMargin = (s_scaledImageSizeX + 1) * _pvUIItems.Length;
             }
         }
@@ -736,6 +759,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return oldValue;
                         }
+
                         throw;
                     }
                 }
@@ -768,6 +792,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                     }
+
                     if (_eventBindings is not null)
                     {
                         eventDesc = _eventBindings.GetEvent(_propertyInfo);
@@ -791,6 +816,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 eventObj = objArray.GetValue(0);
                             }
                         }
+
                         eventDesc = TypeDescriptor.GetEvents(eventObj)[_propertyInfo.Name];
                     }
                 }
@@ -850,6 +876,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return null;
                 }
+
                 throw;
             }
             catch
@@ -869,6 +896,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Commit();
                 }
             }
+
             return obj;
         }
 
@@ -984,6 +1012,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                 }
+
                 if (_eventBindings is not null)
                 {
                     eventdesc = _eventBindings.GetEvent(_propertyInfo);
@@ -1038,6 +1067,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 break;
                             }
                         }
+
                         if (!methodExists)
                         {
                             alwaysNavigate = true;
@@ -1081,6 +1111,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Cancel();
                     trans = null;
                 }
+
                 throw;
             }
             finally
@@ -1090,6 +1121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Commit();
                 }
             }
+
             return true;
         }
 
@@ -1353,10 +1385,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             ex = ex.InnerException;
                         }
+
                         return ex.Message;
                     }
+
                     return null;
                 }
+
                 throw GetConvertToException(value, destinationType);
             }
         }
@@ -1393,6 +1428,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
                     }
                 }
+
                 return value;
             }
 

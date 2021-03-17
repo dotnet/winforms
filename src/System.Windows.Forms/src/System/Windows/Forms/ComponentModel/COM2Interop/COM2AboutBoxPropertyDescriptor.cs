@@ -40,9 +40,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     converter = new TypeConverter();
                 }
+
                 return converter;
             }
         }
+
         /// <summary>
         ///  Indicates whether this property is read only.
         /// </summary>

@@ -115,10 +115,12 @@ namespace VisualBasicRuntimeTest
             {
                 throw new InvalidOperationException();
             }
+
             if (!loaded && !isFirstInstance)
             {
                 throw new InvalidOperationException();
             }
+
             if (!valid)
             {
                 throw new InvalidOperationException();

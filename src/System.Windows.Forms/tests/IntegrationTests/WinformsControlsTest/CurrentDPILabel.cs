@@ -22,6 +22,7 @@ namespace WinformsControlsTest
             get => base.AutoSize;
             set => base.AutoSize = value;
         }
+
         private void CurrentDPILabel_HandleCreated(object sender, EventArgs e)
         {
             SetText();

@@ -202,6 +202,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expectedBounds, actualBounds);
             });
         }
+
         public static IEnumerable<object[]> ListViewGroupAccessibleObject_TestData()
         {
             foreach (View view in Enum.GetValues(typeof(View)))

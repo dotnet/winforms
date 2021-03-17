@@ -70,6 +70,7 @@ namespace System.Windows.Forms
                 Default,
                 State
             }
+
             private readonly ImageListType imageListType;
 
             public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
@@ -111,6 +112,7 @@ namespace System.Windows.Forms
                 {
                     imageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
                 }
+
                 return imageIndexer;
             }
         }
@@ -138,6 +140,7 @@ namespace System.Windows.Forms
                 {
                     stateImageIndexer = new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
                 }
+
                 return stateImageIndexer;
             }
         }
@@ -242,6 +245,7 @@ namespace System.Windows.Forms
                         propBag.BackColor = Color.Empty;
                         RemovePropBagIfEmpty();
                     }
+
                     if (!oldbk.IsEmpty)
                     {
                         InvalidateHostTree();
@@ -279,6 +283,7 @@ namespace System.Windows.Forms
                 {
                     return Rectangle.Empty;
                 }
+
                 RECT rc = new RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
@@ -289,6 +294,7 @@ namespace System.Windows.Forms
                     //
                     return Rectangle.Empty;
                 }
+
                 return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
             }
         }
@@ -310,12 +316,14 @@ namespace System.Windows.Forms
                 {
                     return Rectangle.Empty;
                 }
+
                 if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == 0)
                 {
                     // This means the node is not visible
                     //
                     return Rectangle.Empty;
                 }
+
                 return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
             }
         }
@@ -456,6 +464,7 @@ namespace System.Windows.Forms
                 {
                     node = node.Parent;
                 }
+
                 return node;
             }
         }
@@ -490,6 +499,7 @@ namespace System.Windows.Forms
                         propBag.ForeColor = Color.Empty;
                         RemovePropBagIfEmpty();
                     }
+
                     if (!oldfc.IsEmpty)
                     {
                         InvalidateHostTree();
@@ -550,6 +560,7 @@ namespace System.Windows.Forms
                 {
                     TreeView.CreateControl(); // force handle creation
                 }
+
                 return handle;
             }
         }
@@ -665,6 +676,7 @@ namespace System.Windows.Forms
                 {
                     return expandOnRealization;
                 }
+
                 return (State & TVIS.EXPANDED) != 0;
             }
         }
@@ -715,6 +727,7 @@ namespace System.Windows.Forms
                     Size size = tv.ClientSize;
                     visible = (rc.bottom > 0 && rc.right > 0 && rc.top < size.Height && rc.left < size.Width);
                 }
+
                 return visible;
             }
         }
@@ -841,6 +854,7 @@ namespace System.Windows.Forms
                         propBag.Font = null;
                         RemovePropBagIfEmpty();
                     }
+
                     if (oldfont != null)
                     {
                         InvalidateHostTree();
@@ -874,6 +888,7 @@ namespace System.Windows.Forms
                 {
                     nodes = new TreeNodeCollection(this);
                 }
+
                 return nodes;
             }
         }
@@ -952,6 +967,7 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
+
                     IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.PREVIOUSVISIBLE, node.Handle);
                     if (prev != IntPtr.Zero)
                     {
@@ -1263,6 +1279,7 @@ namespace System.Windows.Forms
                                 iLim = iT;
                             }
                         }
+
                         index = iMin;
                     }
                 }
@@ -1282,6 +1299,7 @@ namespace System.Windows.Forms
                             iLim = iT;
                         }
                     }
+
                     index = iMin;
                 }
             }
@@ -1323,6 +1341,7 @@ namespace System.Windows.Forms
                                 min = j;
                                 continue;
                             }
+
                             if (compare.Compare(children[j].Text, children[min].Text) <= 0)
                             {
                                 min = j;
@@ -1335,6 +1354,7 @@ namespace System.Windows.Forms
                         newOrder[i].index = i;
                         newOrder[i].SortChildren(parentTreeView);
                     }
+
                     children = newOrder;
                 }
                 else
@@ -1355,6 +1375,7 @@ namespace System.Windows.Forms
                                 min = j;
                                 continue;
                             }
+
                             if (sorter.Compare(children[j] /*previous*/, children[min] /*current*/) <= 0)
                             {
                                 min = j;
@@ -1367,6 +1388,7 @@ namespace System.Windows.Forms
                         newOrder[i].index = i;
                         newOrder[i].SortChildren(parentTreeView);
                     }
+
                     children = newOrder;
                 }
             }
@@ -1424,6 +1446,7 @@ namespace System.Windows.Forms
                 {
                     children[childCount - 1].Remove(true);
                 }
+
                 children = null;
 
                 if (tv != null && isBulkOperation)
@@ -1437,6 +1460,7 @@ namespace System.Windows.Forms
                 {
                     tv.nodesCollectionClear = false;
                 }
+
                 nodesCleared = true;
             }
         }
@@ -1500,6 +1524,7 @@ namespace System.Windows.Forms
             {
                 node.propBag = OwnerDrawPropertyBag.Copy(propBag);
             }
+
             node.Checked = Checked;
             node.Tag = Tag;
 
@@ -1536,10 +1561,12 @@ namespace System.Windows.Forms
                         {
                             setSelection = true;
                         }
+
                         children[i].DoCollapse(tv);
                         children[i].Collapse();
                     }
                 }
+
                 DoCollapse(tv);
             }
 
@@ -1682,6 +1709,7 @@ namespace System.Windows.Forms
                 {
                     childNodes[i] = (TreeNode)serializationInfo.GetValue("children" + i, typeof(TreeNode));
                 }
+
                 Nodes.AddRange(childNodes);
             }
         }
@@ -1696,6 +1724,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(cancel));
         }
 
@@ -1710,6 +1739,7 @@ namespace System.Windows.Forms
             {
                 size = 4;
             }
+
             if (children is null)
             {
                 children = new TreeNode[size];
@@ -1721,6 +1751,7 @@ namespace System.Windows.Forms
                 {
                     newSize = childCount * 2;
                 }
+
                 TreeNode[] bigger = new TreeNode[newSize];
                 System.Array.Copy(children, 0, bigger, 0, childCount);
                 children = bigger;
@@ -1783,6 +1814,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.EXPAND, Handle);
             }
+
             expandOnRealization = false;
         }
 
@@ -1860,6 +1892,7 @@ namespace System.Windows.Forms
                     total += children[i].GetNodeCount(true);
                 }
             }
+
             return total;
         }
 
@@ -1876,6 +1909,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.TreeNodeCircularReference);
                 }
+
                 node = node.parent;
             }
         }
@@ -1892,6 +1926,7 @@ namespace System.Windows.Forms
             {
                 (children[i] = children[i - 1]).index = i;
             }
+
             children[index] = node;
             childCount++;
             node.Realize(false);
@@ -2071,6 +2106,7 @@ namespace System.Windows.Forms
                 parent.childCount--;
                 parent = null;
             }
+
             // Expand when we are realized the next time.
             expandOnRealization = expanded;
 
@@ -2093,6 +2129,7 @@ namespace System.Windows.Forms
                 treeView.nodeTable.Remove(handle);
                 handle = IntPtr.Zero;
             }
+
             treeView = null;
         }
 
@@ -2184,6 +2221,7 @@ namespace System.Windows.Forms
                 si.AddValue("UserData", userData, userData.GetType());
             }
         }
+
         /// <summary>
         ///  Toggle the state of the node. Expand if collapsed or collapse if
         ///  expanded.

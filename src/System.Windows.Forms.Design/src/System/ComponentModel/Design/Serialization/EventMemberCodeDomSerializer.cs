@@ -38,14 +38,17 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (!(descriptor is EventDescriptor eventToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
+
             if (statements is null)
             {
                 throw new ArgumentNullException(nameof(statements));

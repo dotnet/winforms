@@ -35,14 +35,17 @@ namespace System.Windows.Forms
                 {
                     buttons |= MouseButtons.Left;
                 }
+
                 if ((nButtons & 2) != 0)
                 {
                     buttons |= MouseButtons.Right;
                 }
+
                 if ((nButtons & 4) != 0)
                 {
                     buttons |= MouseButtons.Middle;
                 }
+
                 return buttons;
             }
         }

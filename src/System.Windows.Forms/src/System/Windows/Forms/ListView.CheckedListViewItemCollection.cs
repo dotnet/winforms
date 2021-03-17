@@ -57,6 +57,7 @@ namespace System.Windows.Forms
                             items[index++] = owner.Items[i];
                         }
                     }
+
                     return items;
                 }
             }
@@ -220,6 +221,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 

@@ -88,43 +88,53 @@ namespace System.ComponentModel.Design
                 {
                     _gradientDarkColor = (Color)uiService.Styles["VsColorPanelGradientDark"];
                 }
+
                 if (uiService.Styles["VsColorPanelGradientLight"] is Color)
                 {
                     _gradientLightColor = (Color)uiService.Styles["VsColorPanelGradientLight"];
                 }
+
                 if (uiService.Styles["VsColorPanelHyperLink"] is Color)
                 {
                     _linkColor = (Color)uiService.Styles["VsColorPanelHyperLink"];
                 }
+
                 if (uiService.Styles["VsColorPanelHyperLinkPressed"] is Color)
                 {
                     _activeLinkColor = (Color)uiService.Styles["VsColorPanelHyperLinkPressed"];
                 }
+
                 if (uiService.Styles["VsColorPanelTitleBar"] is Color)
                 {
                     _titleBarColor = (Color)uiService.Styles["VsColorPanelTitleBar"];
                 }
+
                 if (uiService.Styles["VsColorPanelTitleBarUnselected"] is Color)
                 {
                     _titleBarUnselectedColor = (Color)uiService.Styles["VsColorPanelTitleBarUnselected"];
                 }
+
                 if (uiService.Styles["VsColorPanelTitleBarText"] is Color)
                 {
                     _titleBarTextColor = (Color)uiService.Styles["VsColorPanelTitleBarText"];
                 }
+
                 if (uiService.Styles["VsColorPanelBorder"] is Color)
                 {
                     _borderColor = (Color)uiService.Styles["VsColorPanelBorder"];
                 }
+
                 if (uiService.Styles["VsColorPanelSeparator"] is Color)
                 {
                     _separatorColor = (Color)uiService.Styles["VsColorPanelSeparator"];
                 }
+
                 if (uiService.Styles["VsColorPanelText"] is Color)
                 {
                     _labelForeColor = (Color)uiService.Styles["VsColorPanelText"];
                 }
             }
+
             MinimumSize = new Size(150, 0);
         }
 
@@ -188,6 +198,7 @@ namespace System.ComponentModel.Design
                         MenuCommands.KeyShiftHome,
                     };
                 }
+
                 return _filteredCommandIDs;
             }
         }
@@ -204,6 +215,7 @@ namespace System.ComponentModel.Design
                 {
                     return activeControl.Tag as Line;
                 }
+
                 return null;
             }
         }
@@ -298,6 +310,7 @@ namespace System.ComponentModel.Design
                 categoryList = new List<LineInfo>();
                 category.Add(lineInfo.List, categoryList);
             }
+
             categoryList.Add(lineInfo);
         }
 
@@ -412,6 +425,7 @@ namespace System.ComponentModel.Design
             {
                 Debug.Assert(false); // should never get here
             }
+
             return new Point(x, y);
         }
 
@@ -421,6 +435,7 @@ namespace System.ComponentModel.Design
             {
                 _toolTip.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -456,6 +471,7 @@ namespace System.ComponentModel.Design
             {
                 ResumeLayout(!measureOnly);
             }
+
             return new Size(panelWidth, yPos + BottomPadding);
         }
 
@@ -466,6 +482,7 @@ namespace System.ComponentModel.Design
             {
                 return proposedSize;
             }
+
             return DoLayout(proposedSize, true);
         }
 
@@ -475,6 +492,7 @@ namespace System.ComponentModel.Design
             {
                 return true;
             }
+
             return (pd.ComponentType.GetProperty(pd.Name).GetSetMethod() is null);
         }
 
@@ -603,6 +621,7 @@ namespace System.ComponentModel.Design
                     return true;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -618,6 +637,7 @@ namespace System.ComponentModel.Design
             {
                 return;
             }
+
             foreach (DesignerActionList list in lists)
             {
                 if (list != null)
@@ -631,11 +651,13 @@ namespace System.ComponentModel.Design
                             {
                                 continue;
                             }
+
                             LineInfo lineInfo = ProcessTaskItem(list, item);
                             if (lineInfo is null)
                             {
                                 continue;
                             }
+
                             AddToCategories(lineInfo, categories);
                             // Process lists from related component
                             IComponent relatedComponent = null;
@@ -650,6 +672,7 @@ namespace System.ComponentModel.Design
                                     relatedComponent = methodItem.RelatedComponent;
                                 }
                             }
+
                             if (relatedComponent != null)
                             {
                                 IEnumerable<LineInfo> relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
@@ -685,6 +708,7 @@ namespace System.ComponentModel.Design
                 {
                     serviceProvider = ServiceProvider;
                 }
+
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
                 if (host != null)
                 {
@@ -724,6 +748,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return lineInfos;
         }
 
@@ -788,6 +813,7 @@ namespace System.ComponentModel.Design
                 // Ignore unknown items
                 return null;
             }
+
             return new LineInfo(list, item, newLine);
         }
 
@@ -810,6 +836,7 @@ namespace System.ComponentModel.Design
                 {
                     options = (MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
                 }
+
                 MessageBox.Show(this, errorMessage, SR.UIServiceHelper_ErrorCaption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, options);
             }
         }
@@ -826,6 +853,7 @@ namespace System.ComponentModel.Design
             {
                 return string.Empty;
             }
+
             StringBuilder result = new StringBuilder(s.Length);
             for (int i = 0; i < s.Length; i++)
             {
@@ -840,8 +868,10 @@ namespace System.ComponentModel.Design
                         break;
                     }
                 }
+
                 result.Append(s[i]);
             }
+
             return result.ToString();
         }
 
@@ -986,6 +1016,7 @@ namespace System.ComponentModel.Design
                 // Actually, we do want to resume layout since invalidation causes an OnPaint, and OnPaint relies on everything being layed out already
                 ResumeLayout(true);
             }
+
             Invalidate();
         }
 
@@ -1053,9 +1084,11 @@ namespace System.ComponentModel.Design
                         {
                             return false;
                         }
+
                         throw;
                     }
                 }
+
                 return true;
             }
 
@@ -1106,6 +1139,7 @@ namespace System.ComponentModel.Design
                 {
                     c.Tag = this;
                 }
+
                 return _addedControls;
             }
 
@@ -1207,6 +1241,7 @@ namespace System.ComponentModel.Design
                     _subtitleLabel.Location = new Point(LineLeftMargin, top + PanelHeaderVerticalPadding * 2 + titleSize.Height);
                     _subtitleLabel.Size = subtitleSize;
                 }
+
                 int newWidth = Math.Max(titleSize.Width, subtitleSize.Width) + 2 * PanelHeaderHorizontalPadding;
                 int newHeight = (subtitleSize.IsEmpty ? (titleSize.Height + 2 * PanelHeaderVerticalPadding) : (titleSize.Height + subtitleSize.Height + 3 * PanelHeaderVerticalPadding));
                 return new Size(newWidth + 2, newHeight + 1);
@@ -1309,6 +1344,7 @@ namespace System.ComponentModel.Design
                     _linkLabel.Location = new Point(LineLeftMargin, top + LineVerticalPadding / 2);
                     _linkLabel.Size = linkLabelSize;
                 }
+
                 return linkLabelSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
             }
 
@@ -1326,6 +1362,7 @@ namespace System.ComponentModel.Design
                     {
                         ex = ex.InnerException;
                     }
+
                     //NOTE: We had code to rethrow if this was one of [NullReferenceException, StackOverflowException, OutOfMemoryException,
                     //ThreadAbortException].  Removing this rethrow.  StackOverflow and ThreadAbort can't be meaningfully caught, and
                     //NullRef and OutOfMemory really shouldn't be caught.  Out of these, OOM is the most correct one to call, but OOM is
@@ -1363,6 +1400,7 @@ namespace System.ComponentModel.Design
                                 return false;
                         }
                     }
+
                     return base.ProcessDialogKey(keyData);
                 }
             }
@@ -1394,6 +1432,7 @@ namespace System.ComponentModel.Design
                     {
                         _propDesc = TypeDescriptor.GetProperties(_actionList)[_propertyItem.MemberName];
                     }
+
                     return _propDesc;
                 }
             }
@@ -1411,6 +1450,7 @@ namespace System.ComponentModel.Design
                     {
                         _typeDescriptorContext = new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList);
                     }
+
                     return _typeDescriptorContext;
                 }
             }
@@ -1430,6 +1470,7 @@ namespace System.ComponentModel.Design
                 {
                     return;
                 }
+
                 _pushingValue = true;
                 try
                 {
@@ -1455,6 +1496,7 @@ namespace System.ComponentModel.Design
                             }
                         }
                     }
+
                     if (!object.Equals(_value, newValue))
                     {
                         PropertyDescriptor.SetValue(_actionList, newValue);
@@ -1469,6 +1511,7 @@ namespace System.ComponentModel.Design
                     {
                         e = e.InnerException;
                     }
+
                     ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_ErrorSettingValue, newValue, PropertyDescriptor.Name, e.Message));
                 }
                 finally
@@ -1528,6 +1571,7 @@ namespace System.ComponentModel.Design
                     _checkBox.Location = new Point(LineLeftMargin, top + LineVerticalPadding / 2);
                     _checkBox.Size = checkBoxPreferredSize;
                 }
+
                 return checkBoxPreferredSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
             }
 
@@ -1632,6 +1676,7 @@ namespace System.ComponentModel.Design
                 {
                     return LineLeftMargin;
                 }
+
                 return LineLeftMargin + _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Width + TextBoxLineCenterMargin;
             }
 
@@ -1665,10 +1710,12 @@ namespace System.ComponentModel.Design
                     {
                         specialPadding = 2;
                     }
+
                     _editControl.Location = new Point(_editRegionLocation.X + GetTextBoxLeftPadding(textBoxPreferredHeight) + 1 + specialPadding, _editRegionLocation.Y + TextBoxLineInnerPadding + 1);
                     _editControl.Width = _editRegionSize.Width - GetTextBoxRightPadding(textBoxPreferredHeight) - GetTextBoxLeftPadding(textBoxPreferredHeight) - specialPadding;
                     _editControl.Height = _editRegionSize.Height - TextBoxLineInnerPadding * 2 - 1;
                 }
+
                 return new Size(width, height);
             }
 
@@ -1697,6 +1744,7 @@ namespace System.ComponentModel.Design
                     _textBox.Visible = true;
                     _editControl = _textBox;
                 }
+
                 _editControl.AccessibleDescription = PropertyItem.Description;
                 _editControl.AccessibleName = StripAmpersands(PropertyItem.DisplayName);
                 _editControl.TabIndex = currentTabIndex++;
@@ -1731,6 +1779,7 @@ namespace System.ComponentModel.Design
                 {
                     return converter.GetStandardValues(TypeDescriptorContext);
                 }
+
                 return null;
             }
 
@@ -1751,15 +1800,18 @@ namespace System.ComponentModel.Design
                                 {
                                     SetValue(standardValues[i + 1]);
                                 }
+
                                 return;
                             }
                         }
+
                         // Previous value wasn't found, select the first one by default
                         if (standardValues.Count > 0)
                         {
                             SetValue(standardValues[0]);
                         }
                     }
+
                     return;
                 }
 
@@ -1778,15 +1830,18 @@ namespace System.ComponentModel.Design
                                 {
                                     SetValue(standardValues[i - 1]);
                                 }
+
                                 return;
                             }
                         }
+
                         // Previous value wasn't found, select the first one by default
                         if (standardValues.Count > 0)
                         {
                             SetValue(standardValues[standardValues.Count - 1]);
                         }
                     }
+
                     return;
                 }
             }
@@ -1810,6 +1865,7 @@ namespace System.ComponentModel.Design
                     e.Handled = true;
                     return;
                 }
+
                 // Delegate the rest of the processing to a common helper
                 OnEditControlKeyDown(e);
             }
@@ -1820,6 +1876,7 @@ namespace System.ComponentModel.Design
                 {
                     return;
                 }
+
                 UpdateValue();
             }
 
@@ -1883,6 +1940,7 @@ namespace System.ComponentModel.Design
                     {
                         return true;
                     }
+
                     return base.IsInputKey(keyData);
                 }
 
@@ -2057,6 +2115,7 @@ namespace System.ComponentModel.Design
                     _button.Location = new Point(EditRegionLocation.X + EditRegionSize.Width - buttonHeight - EditorLineButtonPadding, EditRegionLocation.Y + EditorLineButtonPadding + 1);
                     _button.Size = new Size(buttonHeight, buttonHeight);
                 }
+
                 return size;
             }
 
@@ -2176,6 +2235,7 @@ namespace System.ComponentModel.Design
                             swatchGraphics.DrawRectangle(SystemPens.ControlDark, new Rectangle(0, 0, width - 1, height - 1));
                         }
                     }
+
                     g.DrawImage(_swatch, new Point(EditRegionRelativeLocation.X + 2, EditorLineSwatchPadding + 5));
                 }
             }
@@ -2198,12 +2258,14 @@ namespace System.ComponentModel.Design
 
                         return true;
                     }
+
                     // Not passing Alt key event to base class to prevent  closing 'Combobox Tasks window'
                     else if ((keyData & Keys.Alt) == Keys.Alt)
                     {
                         return true;
                     }
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -2229,6 +2291,7 @@ namespace System.ComponentModel.Design
                     {
                         editorLocation.Y += editorBounds.Height;
                     }
+
                     _dropDownHolder.Location = editorLocation;
                 }
                 else
@@ -2250,6 +2313,7 @@ namespace System.ComponentModel.Design
                     {
                         editorLocation.Y += editorBounds.Height;
                     }
+
                     _dropDownHolder.Location = editorLocation;
                 }
 
@@ -2285,6 +2349,7 @@ namespace System.ComponentModel.Design
                 {
                     return uiService.ShowDialog(dialog);
                 }
+
                 return dialog.ShowDialog();
             }
             #endregion
@@ -2297,6 +2362,7 @@ namespace System.ComponentModel.Design
                 {
                     return this;
                 }
+
                 return ServiceProvider.GetService(serviceType);
             }
             #endregion
@@ -2361,6 +2427,7 @@ namespace System.ComponentModel.Design
                             width += 2;
                             height += 4;
                         }
+
                         _hostedControl.Dock = DockStyle.Fill;
 
                         Width = width;
@@ -2387,6 +2454,7 @@ namespace System.ComponentModel.Design
                                 cp.Parent = _parentControl.Handle;
                             }
                         }
+
                         return cp;
                     }
                 }
@@ -2398,6 +2466,7 @@ namespace System.ComponentModel.Design
                         _hostedControl.Focus();
                     }
                 }
+
                 // Lifted directly from PropertyGridView.DropDownHolder. Less destructive than using ShowDialog().
                 public void DoModalLoop()
                 {
@@ -2420,11 +2489,13 @@ namespace System.ComponentModel.Design
                         {
                             return false;
                         }
+
                         if (hWnd == Handle)
                         {
                             return true;
                         }
                     }
+
                     return false;
                 }
 
@@ -2438,6 +2509,7 @@ namespace System.ComponentModel.Design
                         Visible = false;
                         return true;
                     }
+
                     return base.ProcessDialogKey(keyData);
                 }
 
@@ -2454,6 +2526,7 @@ namespace System.ComponentModel.Design
                             User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                             User32.ReleaseCapture();
                         }
+
                         Visible = true; // NOTE: Do this AFTER creating handle and setting parent
                         FocusComponent();
                         DoModalLoop();
@@ -2492,10 +2565,12 @@ namespace System.ComponentModel.Design
                                         toplevel.Visible = false;
                                     }
                                 }
+
                                 return;
                             }
                         }
                     }
+
                     base.WndProc(ref m);
                 }
             }
@@ -2582,6 +2657,7 @@ namespace System.ComponentModel.Design
                             {
                                 state = ComboBoxState.Disabled;
                             }
+
                             ComboBoxRenderer.DrawDropDownButton(g, new Rectangle(0, 0, Width, Height), state);
                         }
                         else
@@ -2646,6 +2722,7 @@ namespace System.ComponentModel.Design
                             {
                             }
                         }
+
                         if (Focused)
                         {
                             ControlPaint.DrawFocusRectangle(g, new Rectangle(2, 2, Width - 5, Height - 5));
@@ -2701,6 +2778,7 @@ namespace System.ComponentModel.Design
                     _label.Location = new Point(LineLeftMargin, top + LineVerticalPadding / 2);
                     _label.Size = labelSize;
                 }
+
                 return labelSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
             }
 

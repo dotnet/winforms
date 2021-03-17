@@ -68,6 +68,7 @@ internal static partial class Interop
                     {
                         return ToVector(thisVariant->data.ca, vt);
                     }
+
                     if ((vt & VARENUM.ARRAY) != 0)
                     {
                         return ToArray(*(SAFEARRAY**)data, vt);
@@ -186,6 +187,7 @@ internal static partial class Interop
                             {
                                 throw new ArgumentException("Specified OLE variant is invalid.");
                             }
+
                             if (record->pvRecord is null)
                             {
                                 return null;
@@ -289,8 +291,10 @@ internal static partial class Interop
                                     {
                                         result[i] = data[i] != VARIANT_BOOL.FALSE;
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.DECIMAL:
                                 {
                                     var data = new Span<DECIMAL>(psa->pvData, array.Length);
@@ -299,8 +303,10 @@ internal static partial class Interop
                                     {
                                         result[i] = data[i].ToDecimal();
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.CY:
                                 {
                                     var data = new Span<long>(psa->pvData, array.Length);
@@ -309,8 +315,10 @@ internal static partial class Interop
                                     {
                                         result[i] = decimal.FromOACurrency(data[i]);
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.DATE:
                                 {
                                     var data = new Span<double>(psa->pvData, array.Length);
@@ -319,8 +327,10 @@ internal static partial class Interop
                                     {
                                         result[i] = DateTime.FromOADate(data[i]);
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.BSTR:
                                 {
                                     var data = new Span<IntPtr>(psa->pvData, array.Length);
@@ -329,8 +339,10 @@ internal static partial class Interop
                                     {
                                         result[i] = Marshal.PtrToStringUni(data[i]);
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.DISPATCH:
                             case VARENUM.UNKNOWN:
                                 {
@@ -347,8 +359,10 @@ internal static partial class Interop
                                             result[i] = Marshal.GetObjectForIUnknown(data[i]);
                                         }
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.VARIANT:
                                 {
                                     var data = new Span<VARIANT>(psa->pvData, array.Length);
@@ -357,8 +371,10 @@ internal static partial class Interop
                                     {
                                         result[i] = data[i].ToObject();
                                     }
+
                                     break;
                                 }
+
                             case VARENUM.RECORD:
                                 throw new NotImplementedException();
                             default:
@@ -509,30 +525,35 @@ internal static partial class Interop
                             SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
                             break;
                         }
+
                     case VARENUM.DECIMAL:
                         {
                             DECIMAL data = psa->GetValue<DECIMAL>(indices);
                             SetValue(array, data.ToDecimal(), indices, lowerBounds);
                             break;
                         }
+
                     case VARENUM.CY:
                         {
                             long data = psa->GetValue<long>(indices);
                             SetValue(array, decimal.FromOACurrency(data), indices, lowerBounds);
                             break;
                         }
+
                     case VARENUM.DATE:
                         {
                             double data = psa->GetValue<double>(indices);
                             SetValue(array, DateTime.FromOADate(data), indices, lowerBounds);
                             break;
                         }
+
                     case VARENUM.BSTR:
                         {
                             IntPtr data = psa->GetValue<IntPtr>(indices);
                             SetValue(array, Marshal.PtrToStringUni(data), indices, lowerBounds);
                             break;
                         }
+
                     case VARENUM.DISPATCH:
                     case VARENUM.UNKNOWN:
                         {
@@ -545,14 +566,17 @@ internal static partial class Interop
                             {
                                 SetValue(array, Marshal.GetObjectForIUnknown(data), indices, lowerBounds);
                             }
+
                             break;
                         }
+
                     case VARENUM.VARIANT:
                         {
                             VARIANT data = psa->GetValue<VARIANT>(indices);
                             SetValue(array, data.ToObject(), indices, lowerBounds);
                             break;
                         }
+
                     case VARENUM.RECORD:
                         throw new NotImplementedException();
                     default:
@@ -567,6 +591,7 @@ internal static partial class Interop
                 {
                     throw new InvalidOleVariantTypeException();
                 }
+
                 if (vt == VARENUM.RECORD)
                 {
                     HRESULT hr = SafeArrayGetRecordInfo(psa, out IRecordInfo record);
@@ -586,6 +611,7 @@ internal static partial class Interop
                         throw new SafeArrayTypeMismatchException();
                     }
                 }
+
                 // Allow limited conversion between arrays of different but related types.
                 else if (arrayVarType != vt
                     && !(vt == VARENUM.INT && arrayVarType == VARENUM.I4)
@@ -751,8 +777,10 @@ internal static partial class Interop
                             {
                                 result[i] = data[i] != VARIANT_BOOL.FALSE;
                             }
+
                             return result;
                         }
+
                     case VARENUM.I4:
                     case VARENUM.INT: // Not explicitly mentioned in the docs but trivial to implement.
                         return new Span<int>(ca.pElems, (int)ca.cElems).ToArray();
@@ -776,8 +804,10 @@ internal static partial class Interop
                             {
                                 result[i] = decimal.FromOACurrency(data[i]);
                             }
+
                             return result;
                         }
+
                     case VARENUM.DATE:
                         {
                             var data = new Span<double>(ca.pElems, (int)ca.cElems);
@@ -786,8 +816,10 @@ internal static partial class Interop
                             {
                                 result[i] = DateTime.FromOADate(data[i]);
                             }
+
                             return result;
                         }
+
                     case VARENUM.FILETIME:
                         {
                             var data = new Span<Kernel32.FILETIME>(ca.pElems, (int)ca.cElems);
@@ -796,8 +828,10 @@ internal static partial class Interop
                             {
                                 result[i] = data[i].ToDateTime();
                             }
+
                             return result;
                         }
+
                     case VARENUM.CLSID:
                         return new Span<Guid>(ca.pElems, (int)ca.cElems).ToArray();
                     case VARENUM.BSTR:
@@ -809,8 +843,10 @@ internal static partial class Interop
                             {
                                 result[i] = Marshal.PtrToStringUni(data[i]);
                             }
+
                             return result;
                         }
+
                     case VARENUM.LPSTR:
                         {
                             var data = new Span<IntPtr>(ca.pElems, (int)ca.cElems);
@@ -819,8 +855,10 @@ internal static partial class Interop
                             {
                                 result[i] = Marshal.PtrToStringAnsi(data[i]);
                             }
+
                             return result;
                         }
+
                     case VARENUM.VARIANT:
                         {
                             var data = new Span<VARIANT>(ca.pElems, (int)ca.cElems);
@@ -829,8 +867,10 @@ internal static partial class Interop
                             {
                                 result[i] = data[i].ToObject();
                             }
+
                             return result;
                         }
+
                     case VARENUM.CF: // Not implemented.
                     case VARENUM.BSTR_BLOB: // System use only.
                     default: // Documentation does not specify any other types that are supported.

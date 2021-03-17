@@ -1146,6 +1146,7 @@ namespace System.Windows.Forms.Tests
             HtmlDocument document = control.Document;
             Assert.Equal(new Uri(file.Path), document.Url);
         }
+
         [WinFormsFact]
         public async Task HtmlDocument_VisitedLinkColor_Get_ReturnsExpected()
         {
@@ -1351,6 +1352,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             document.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 

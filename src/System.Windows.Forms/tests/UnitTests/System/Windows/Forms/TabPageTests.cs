@@ -1983,7 +1983,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -2207,7 +2208,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -4475,7 +4477,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -4807,7 +4810,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try

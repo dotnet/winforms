@@ -41,6 +41,7 @@ namespace System.Windows.Forms.Design
                 {
                     _dropSource = new Control();
                 }
+
                 return _dropSource;
             }
         }
@@ -63,6 +64,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
@@ -117,6 +119,7 @@ namespace System.Windows.Forms.Design
                 Debug.Assert(selSvc != null, "Failed to get Selection Service!");
                 return selSvc;
             }
+
             return null;
         }
 
@@ -130,6 +133,7 @@ namespace System.Windows.Forms.Design
                 Debug.Assert(behaviorSvc != null, "Failed to get Behavior Service!");
                 return behaviorSvc;
             }
+
             return null;
         }
 
@@ -143,6 +147,7 @@ namespace System.Windows.Forms.Design
                 Debug.Assert(keyBoardSvc != null, "Failed to get ToolStripKeyboardHandlingService!");
                 return keyBoardSvc;
             }
+
             return null;
         }
 
@@ -159,6 +164,7 @@ namespace System.Windows.Forms.Design
                 bounds.Width--;
                 bounds.Height--;
             }
+
             return bounds;
         }
 
@@ -170,10 +176,12 @@ namespace System.Windows.Forms.Design
             {
                 _eventSvc = (IEventHandlerService)item.Site.GetService(typeof(IEventHandlerService));
             }
+
             if (_eventSvc != null)
             {
                 mouseHandler = (IMouseHandler)_eventSvc.GetHandler(typeof(IMouseHandler));
             }
+
             return (mouseHandler != null);
         }
 
@@ -201,6 +209,7 @@ namespace System.Windows.Forms.Design
             {
                 _doubleClickFired = true;
             }
+
             return false;
         }
 
@@ -213,6 +222,7 @@ namespace System.Windows.Forms.Design
             {
                 return false;
             }
+
             SetParentDesignerValuesForDragDrop(glyphItem, false, Point.Empty);
             if (_doubleClickFired)
             {
@@ -236,6 +246,7 @@ namespace System.Windows.Forms.Design
                             _timer.Dispose();
                             _timer = null;
                         }
+
                         // If the Selecteditem is already in editmode ... bail out
                         if (selectedItem != null)
                         {
@@ -244,8 +255,10 @@ namespace System.Windows.Forms.Design
                             {
                                 return false;
                             }
+
                             selectedItemDesigner.DoDefaultAction();
                         }
+
                         _doubleClickFired = false;
                         _mouseUpFired = false;
                     }
@@ -255,6 +268,7 @@ namespace System.Windows.Forms.Design
             {
                 _mouseUpFired = true;
             }
+
             return false;
         }
 
@@ -381,6 +395,7 @@ namespace System.Windows.Forms.Design
                             {
                                 parent = glyphItem.GetCurrentParent();
                             }
+
                             int startIndexOfSelection = Math.Min(parent.Items.IndexOf(selectedItem), parent.Items.IndexOf(glyphItem));
                             int endIndexOfSelection = Math.Max(parent.Items.IndexOf(selectedItem), parent.Items.IndexOf(glyphItem));
                             int countofItemsSelected = (endIndexOfSelection - startIndexOfSelection) + 1;
@@ -398,11 +413,13 @@ namespace System.Windows.Forms.Design
                                 {
                                     totalObjects[j++] = parent.Items[i];
                                 }
+
                                 selSvc.SetSelectedComponents(new IComponent[] { parent }, SelectionTypes.Replace);
                                 ToolStripDesigner.s_shiftState = true;
                                 selSvc.SetSelectedComponents(totalObjects, SelectionTypes.Replace);
                             }
                         }
+
                         //End Implmentation
                         else
                         {
@@ -415,14 +432,17 @@ namespace System.Windows.Forms.Design
                                     bSvc.Invalidate(glyphItem.Owner.Bounds);
                                 }
                             }
+
                             selSvc.SetSelectedComponents(new IComponent[] { glyphItem }, SelectionTypes.Auto);
                         }
+
                         // Set the appropriate object.
                         if (keyService != null)
                         {
                             keyService.ShiftPrimaryItem = glyphItem;
                         }
                     }
+
                     // we are already selected and if shiftpressed...
                     else if (shiftPressed || (Control.ModifierKeys & Keys.Control) > 0)
                     {
@@ -466,6 +486,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -481,6 +502,7 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
+
                 ISelectionService selSvc = GetSelectionService(glyphItem);
                 if (selSvc != null)
                 {
@@ -490,6 +512,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -506,6 +529,7 @@ namespace System.Windows.Forms.Design
             {
                 return false;
             }
+
             if (!selSvc.GetComponentSelected(glyphItem))
             {
                 PaintInsertionMark(glyphItem);
@@ -538,6 +562,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 // If the mouse moves outside the rectangle, start the drag.
                 if (dragBox != Rectangle.Empty && !dragBox.Contains(mouseLoc.X, mouseLoc.Y))
                 {
@@ -583,6 +608,7 @@ namespace System.Windows.Forms.Design
                                 ToolStripDropDownItem ownerItem = dropDown.OwnerItem as ToolStripDropDownItem;
                                 selSvc.SetSelectedComponents(new IComponent[] { ownerItem }, SelectionTypes.Replace);
                             }
+
                             DropSource.DoDragDrop(data, DragDropEffects.All);
                         }
                     }
@@ -594,9 +620,11 @@ namespace System.Windows.Forms.Design
                         ToolStripDesigner.s_dragItem = null;
                         _dropSource = null;
                     }
+
                     retVal = false;
                 }
             }
+
             return retVal;
         }
 
@@ -630,6 +658,7 @@ namespace System.Windows.Forms.Design
                         {
                             name = components[0].GetType().Name;
                         }
+
                         transDesc = string.Format(copy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                     }
                     else
@@ -662,16 +691,19 @@ namespace System.Windows.Forms.Design
                             {
                                 primaryIndex = components.IndexOf(selectedItem);
                             }
+
                             ToolStripKeyboardHandlingService keyboardHandlingService = GetKeyBoardHandlingService(selectedItem);
                             if (keyboardHandlingService != null)
                             {
                                 keyboardHandlingService.CopyInProgress = true;
                             }
+
                             components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site) as ArrayList;
                             if (keyboardHandlingService != null)
                             {
                                 keyboardHandlingService.CopyInProgress = false;
                             }
+
                             if (primaryIndex != -1)
                             {
                                 selectedItem = components[primaryIndex] as ToolStripItem;
@@ -702,14 +734,17 @@ namespace System.Windows.Forms.Design
                                     {
                                         indexOfItemUnderMouseToDrop--;
                                     }
+
                                     foreach (ToolStripItem item in components)
                                     {
                                         parentToolStrip.Items.Insert(indexOfItemUnderMouseToDrop, item);
                                     }
                                 }
+
                                 selSvc.SetSelectedComponents(new IComponent[] { selectedItem }, SelectionTypes.Primary | SelectionTypes.Replace);
                             }
                         }
+
                         if (changeSvc != null)
                         {
                             ToolStripDropDown dropDown = parentToolStrip as ToolStripDropDown;
@@ -750,6 +785,7 @@ namespace System.Windows.Forms.Design
                                     itemDesigner.InitializeDropDown();
                                 }
                             }
+
                             if (item.GetCurrentParent() is ToolStripDropDown dropDown && !(dropDown is ToolStripOverflow))
                             {
                                 if (dropDown.OwnerItem is ToolStripDropDownItem ownerItem)
@@ -762,6 +798,7 @@ namespace System.Windows.Forms.Design
                                 }
                             }
                         }
+
                         // Refresh on SelectionManager...
                         BehaviorService bSvc = GetBehaviorService(currentDropItem);
                         if (bSvc != null)
@@ -776,6 +813,7 @@ namespace System.Windows.Forms.Design
                             designerTransaction.Cancel();
                             designerTransaction = null;
                         }
+
                         if (ClientUtils.IsCriticalException(ex))
                         {
                             throw;
@@ -858,6 +896,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
@@ -904,6 +943,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             if (e.EscapePressed)
             {
                 e.Action = DragAction.Cancel;
@@ -914,6 +954,7 @@ namespace System.Windows.Forms.Design
                 {
                     selSvc.SetSelectedComponents(new IComponent[] { item }, SelectionTypes.Auto);
                 }
+
                 ToolStripDesigner.s_dragItem = null;
             }
         }
@@ -925,6 +966,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             // Remember the point where the mouse down occurred. The DragSize indicates the size that the mouse can move before a drag event should be started.
             Size dragSize = new Size(1, 1);
 

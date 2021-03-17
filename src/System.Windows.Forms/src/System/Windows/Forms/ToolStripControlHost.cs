@@ -598,7 +598,7 @@ namespace System.Windows.Forms
             {
                 Visible = Control.Visible;
                 // this should fire the OnVisibleChanged and raise events appropriately.
-            };
+            }
         }
 
         private void HandleValidating(object sender, CancelEventArgs e) => OnValidating(e);

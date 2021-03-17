@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                 {
                     value = DefaultInputLanguage;
                 }
+
                 IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
                 if (handleOld == IntPtr.Zero)
                 {

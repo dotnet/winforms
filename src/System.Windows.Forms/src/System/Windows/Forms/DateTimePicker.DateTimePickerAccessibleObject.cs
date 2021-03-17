@@ -58,6 +58,7 @@ namespace System.Windows.Forms
                     {
                         return Owner.Text;
                     }
+
                     return baseValue;
                 }
             }

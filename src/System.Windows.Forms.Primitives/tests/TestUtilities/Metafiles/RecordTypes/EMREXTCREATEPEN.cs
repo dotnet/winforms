@@ -23,9 +23,7 @@ namespace System.Windows.Forms.Metafiles
         public EXTLOGPEN32 elp;         // The extended pen with the style array.
 
         public override string ToString()
-            => $@"[{nameof(EMREXTCREATEPEN)}] Index: {ihPen} Style: {elp.elpPenStyle} Width: {
-                elp.elpWidth} BrushStyle: {elp.elpBrushStyle} Color: {
-                elp.elpColor.ToSystemColorString()}";
+            => $@"[{nameof(EMREXTCREATEPEN)}] Index: {ihPen} Style: {elp.elpPenStyle} Width: {elp.elpWidth}BrushStyle: {elp.elpBrushStyle} Color: {elp.elpColor.ToSystemColorString()}";
     }
 
     [StructLayout(LayoutKind.Sequential)]

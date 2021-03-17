@@ -32,6 +32,7 @@ namespace System.Windows.Forms
                     {
                         t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton);
                     }
+
                     return t_visualStyleRenderer;
                 }
             }
@@ -57,6 +58,7 @@ namespace System.Windows.Forms
                 {
                     t_visualStyleRenderer.SetParameters(s_comboBoxBorder.ClassName, s_comboBoxBorder.Part, s_comboBoxBorder.State);
                 }
+
                 t_visualStyleRenderer.DrawBackground(g, bounds);
             }
 
@@ -84,6 +86,7 @@ namespace System.Windows.Forms
                         t_visualStyleRenderer.SetParameters(s_comboBoxDropDownButtonRight.ClassName, s_comboBoxDropDownButtonRight.Part, (int)state);
                     }
                 }
+
                 t_visualStyleRenderer.DrawBackground(g, bounds);
             }
 
@@ -97,6 +100,7 @@ namespace System.Windows.Forms
                 {
                     t_visualStyleRenderer.SetParameters(s_comboBoxReadOnlyButton.ClassName, s_comboBoxReadOnlyButton.Part, (int)state);
                 }
+
                 t_visualStyleRenderer.DrawBackground(g, bounds);
             }
         }

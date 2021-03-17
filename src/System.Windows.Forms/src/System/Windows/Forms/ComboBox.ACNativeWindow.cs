@@ -39,6 +39,7 @@ namespace System.Windows.Forms
                 {
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
+
                 return BOOL.TRUE;
             }
 
@@ -52,6 +53,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     foreach (object o in s_ACWindows.Values)
                     {
                         if (o is ACNativeWindow window && window.Visible)
@@ -59,6 +61,7 @@ namespace System.Windows.Forms
                             return true;
                         }
                     }
+
                     return false;
                 }
             }
@@ -119,6 +122,7 @@ namespace System.Windows.Forms
                         nulllist.Add(e.Key);
                     }
                 }
+
                 foreach (IntPtr handle in nulllist)
                 {
                     s_ACWindows.Remove(handle);

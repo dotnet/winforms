@@ -91,6 +91,7 @@ namespace System.Windows.Forms
                             return element;
                         }
                     }
+
                     return null;    // not found
                 }
                 else
@@ -127,6 +128,7 @@ namespace System.Windows.Forms
                 {
                     elements[i] = temp[i];
                 }
+
                 return new HtmlElementCollection(shimManager, elements);
             }
         }

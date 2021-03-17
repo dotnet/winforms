@@ -52,6 +52,7 @@ namespace System.Windows.Forms
                 {
                     return Keys.None;
                 }
+
                 return keyGenerated;
             }
         }

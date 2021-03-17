@@ -166,6 +166,7 @@ namespace System.Windows.Forms
                     (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
                     (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ};
                 }
+
                 textBoxFlags[shortcutsEnabled] = value;
             }
         }
@@ -190,6 +191,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             //
             // There are a few keys that change the alignment of the text, but that
             // are not ignored by the native control when the ReadOnly property is set.
@@ -222,6 +224,7 @@ namespace System.Windows.Forms
                     EndUpdateInternal();
                     SetSelectedTextInternal(string.Empty, clearUndo: false);
                 }
+
                 return true;
             }
 
@@ -423,6 +426,7 @@ namespace System.Windows.Forms
 
                     return b;
                 }
+
                 return false;
             }
         }
@@ -462,6 +466,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)WS.BORDER;
                         break;
                 }
+
                 if (textBoxFlags[multiline])
                 {
                     cp.Style |= (int)ES.MULTILINE;
@@ -672,6 +677,7 @@ namespace System.Windows.Forms
                         text.Append("\r\n");
                         text.Append(value[i]);
                     }
+
                     Text = text.ToString();
                 }
                 else
@@ -731,6 +737,7 @@ namespace System.Windows.Forms
                         textBoxFlags[modified] = curState;
                         OnModifiedChanged(EventArgs.Empty);
                     }
+
                     return curState;
                 }
                 else
@@ -863,6 +870,7 @@ namespace System.Windows.Forms
                 {
                     height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
                 }
+
                 return height;
             }
         }
@@ -891,6 +899,7 @@ namespace System.Windows.Forms
                 bordersAndPadding.Width += 2;
                 bordersAndPadding.Height += 2;
             }
+
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
 
@@ -905,6 +914,7 @@ namespace System.Windows.Forms
             {
                 format |= TextFormatFlags.WordBreak;
             }
+
             Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
             // We use this old computation as a lower bound to ensure backwards compatibility.
@@ -1432,6 +1442,7 @@ namespace System.Windows.Forms
                         // else fall through to base
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1457,6 +1468,7 @@ namespace System.Windows.Forms
             {
                 SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(true));
             }
+
             if (textBoxFlags[scrollToCaretOnHandleCreated])
             {
                 ScrollToCaret();
@@ -1648,6 +1660,7 @@ namespace System.Windows.Forms
                     index = Math.Max(t.Length - 1, 0);
                 }
             }
+
             return index;
         }
 
@@ -1687,6 +1700,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
+
             return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)lineNumber));
         }
 
@@ -1984,10 +1998,12 @@ namespace System.Windows.Forms
             {
                 start = 0;
             }
+
             if (start > bytes.Length)
             {
                 start = bytes.Length;
             }
+
             if (end > bytes.Length)
             {
                 end = bytes.Length;
@@ -2028,14 +2044,17 @@ namespace System.Windows.Forms
             {
                 start = 0;
             }
+
             if (start > str.Length)
             {
                 start = str.Length;
             }
+
             if (end < start)
             {
                 end = start;
             }
+
             if (end > str.Length)
             {
                 end = str.Length;
@@ -2210,6 +2229,7 @@ namespace System.Windows.Forms
                         // SystemMenu if ContextMenuStrip menus are null
                         WmTextBoxContextMenu(ref m);
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

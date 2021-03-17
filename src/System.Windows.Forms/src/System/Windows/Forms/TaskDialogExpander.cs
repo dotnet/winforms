@@ -221,6 +221,7 @@ namespace System.Windows.Forms
             {
                 flags |= ComCtl32.TDF.EXPANDED_BY_DEFAULT;
             }
+
             if (_expanderPosition == TaskDialogExpanderPosition.AfterFootnote)
             {
                 flags |= ComCtl32.TDF.EXPAND_FOOTER_AREA;

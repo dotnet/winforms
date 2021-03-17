@@ -32,6 +32,7 @@ namespace System.Windows.Forms.Design
             {
                 _designerHost.AddService(typeof(ISupportInSituService), this);
             }
+
             _componentChangeSvc = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
             Debug.Assert(_componentChangeSvc != null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
             if (_componentChangeSvc != null)
@@ -50,11 +51,13 @@ namespace System.Windows.Forms.Design
                 _toolDesigner.Dispose();
                 _toolDesigner = null;
             }
+
             if (_toolItemDesigner != null)
             {
                 _toolItemDesigner.Dispose();
                 _toolItemDesigner = null;
             }
+
             if (_componentChangeSvc != null)
             {
                 _componentChangeSvc.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
@@ -70,6 +73,7 @@ namespace System.Windows.Forms.Design
                 {
                     _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_sp.GetService(typeof(ToolStripKeyboardHandlingService));
                 }
+
                 return _toolStripKeyBoardService;
             }
         }
@@ -89,6 +93,7 @@ namespace System.Windows.Forms.Design
                     {
                         comp = (IComponent)ToolStripKeyBoardService.SelectedDesignerControl;
                     }
+
                     if (comp != null)
                     {
                         if (comp is DesignerToolStripControlHost c)
@@ -161,6 +166,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return false;
             }
         }
@@ -188,6 +194,7 @@ namespace System.Windows.Forms.Design
                             {
                                 comp = ToolStripKeyBoardService.SelectedDesignerControl;
                             }
+
                             DesignerToolStripControlHost designerItem = comp as DesignerToolStripControlHost;
                             if (designerItem != null || comp is ToolStripDropDown)
                             {
@@ -221,6 +228,7 @@ namespace System.Windows.Forms.Design
             {
                 hWnd = (_toolItemDesigner.Editor.EditBox.Visible) ? _toolItemDesigner.Editor.EditBox.Handle : hWnd;
             }
+
             return hWnd;
         }
 
@@ -237,6 +245,7 @@ namespace System.Windows.Forms.Design
                     break;
                 }
             }
+
             if (!toolStripPresent)
             {
                 ToolStripInSituService inSituService = (ToolStripInSituService)_sp.GetService(typeof(ISupportInSituService));

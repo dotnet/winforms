@@ -593,6 +593,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackColorChanged += handler;
 
             // Set different.
@@ -645,6 +646,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageChanged += handler;
 
             // Set different.
@@ -706,6 +708,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -984,6 +987,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.ForeColorChanged += handler;
 
             // Set different.
@@ -2235,6 +2239,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(deselectingCallCount, selectedIndexChangedCallCount);
                 deselectingCallCount++;
             }
+
             void deselectedHandler(object sender, TabControlEventArgs e)
             {
                 Assert.Same(control, sender);
@@ -2246,6 +2251,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(deselectedCallCount, selectedIndexChangedCallCount);
                 deselectedCallCount++;
             }
+
             void selectingHandler(object sender, TabControlCancelEventArgs e)
             {
                 Assert.Same(control, sender);
@@ -2257,6 +2263,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(selectingCallCount, selectedIndexChangedCallCount);
                 selectingCallCount++;
             }
+
             void selectedHandler(object sender, TabControlEventArgs e)
             {
                 Assert.Same(control, sender);
@@ -2266,12 +2273,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(selectedCallCount, selectedIndexChangedCallCount);
                 selectedCallCount++;
             }
+
             void selectedIndexChangedHandler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 selectedIndexChangedCallCount++;
             }
+
             control.Deselecting += deselectingHandler;
             control.Deselected += deselectedHandler;
             control.Selecting += selectingHandler;
@@ -2345,6 +2354,7 @@ namespace System.Windows.Forms.Tests
 
                 e.Cancel = true;
             }
+
             void deselectedHandler(object sender, TabControlEventArgs e) => deselectedCallCount++;
             void selectingHandler(object sender, TabControlCancelEventArgs e) => selectingCallCount++;
             void selectedHandler(object sender, TabControlEventArgs e) => selectedCallCount++;
@@ -2420,6 +2430,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, selectedIndexChangedCallCount);
                 deselectingCallCount++;
             }
+
             void deselectedHandler(object sender, TabControlEventArgs e)
             {
                 Assert.Same(control, sender);
@@ -2431,6 +2442,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(0, selectedIndexChangedCallCount);
                 deselectedCallCount++;
             }
+
             void selectingHandler(object sender, TabControlCancelEventArgs e)
             {
                 Assert.Same(control, sender);
@@ -2444,6 +2456,7 @@ namespace System.Windows.Forms.Tests
 
                 e.Cancel = true;
             }
+
             void selectedHandler(object sender, TabControlEventArgs e) => selectedCallCount++;
             void selectedIndexChangedHandler(object sender, EventArgs e) => selectedIndexChangedCallCount++;
             control.Deselecting += deselectingHandler;
@@ -2956,6 +2969,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.TextChanged += handler;
 
             // Set different.
@@ -4138,12 +4152,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(callCount, leaveCallCount1);
                 callCount++;
             }
+
             void leaveHandler1(object sender, EventArgs e)
             {
                 Assert.Same(page1, sender);
                 Assert.Same(EventArgs.Empty, e);
                 leaveCallCount1++;
             }
+
             void leaveHandler2(object sender, EventArgs e) => leaveCallCount2++;
 
             // Call with handler.
@@ -4194,6 +4210,7 @@ namespace System.Windows.Forms.Tests
             control.OnDeselecting(eventArgs);
             Assert.Equal(1, callCount);
         }
+
         public static IEnumerable<object[]> DrawItemEventArgs_TestData()
         {
             using var bitmap = new Bitmap(10, 10);
@@ -4608,12 +4625,14 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(callCount, enterCallCount1);
                 callCount++;
             }
+
             void enterHandler1(object sender, EventArgs e)
             {
                 Assert.Same(page1, sender);
                 Assert.Same(EventArgs.Empty, e);
                 enterCallCount1++;
             }
+
             void enterHandler2(object sender, EventArgs e) => enterCallCount2++;
 
             // Call with handler.
@@ -4991,6 +5010,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 layoutCallCount++;
             }
+
             control.Layout += layoutHandler;
             int controlRemovedCallCount = 0;
             control.ControlRemoved += (sender, e) => controlRemovedCallCount++;
@@ -5104,7 +5124,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(child3, e.AffectedControl);
                 Assert.Equal("Parent", e.AffectedProperty);
                 layoutCallCount++;
-            };
+            }
+
             control.Layout += layoutHandler;
 
             try

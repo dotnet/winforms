@@ -40,6 +40,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeNS;
                         rules = SelectionRules.TopSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the top and the bottom of the selection border glyph
                     hitBounds.Y -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Height += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
@@ -50,6 +51,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeNS;
                         rules = SelectionRules.BottomSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the top and the bottom of the selection border glyph
                     hitBounds.Y -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Height += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
@@ -60,6 +62,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeWE;
                         rules = SelectionRules.LeftSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the left and the right of the selection border glyph
                     hitBounds.X -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
@@ -70,6 +73,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeWE;
                         rules = SelectionRules.RightSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the left and the right of the selection border glyph
                     hitBounds.X -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;

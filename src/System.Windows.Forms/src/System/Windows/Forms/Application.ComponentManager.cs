@@ -64,6 +64,7 @@ namespace System.Windows.Forms
                 {
                     *ppvObj = null;
                 }
+
                 return HRESULT.E_NOINTERFACE;
             }
 
@@ -120,6 +121,7 @@ namespace System.Windows.Forms
                 {
                     _activeComponent = null;
                 }
+
                 if (entry.component == _trackingComponent)
                 {
                     _trackingComponent = null;
@@ -426,6 +428,7 @@ namespace System.Windows.Forms
                 {
                     *ppvObj = null;
                 }
+
                 return BOOL.FALSE;
             }
 
@@ -437,6 +440,7 @@ namespace System.Windows.Forms
                 {
                     *ppicm = null;
                 }
+
                 return BOOL.FALSE;
             }
 

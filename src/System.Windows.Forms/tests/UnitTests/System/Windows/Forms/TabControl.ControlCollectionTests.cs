@@ -64,6 +64,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -186,6 +187,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -345,6 +347,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -485,6 +488,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -911,6 +915,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -1006,6 +1011,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -1130,6 +1136,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -1241,6 +1248,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;

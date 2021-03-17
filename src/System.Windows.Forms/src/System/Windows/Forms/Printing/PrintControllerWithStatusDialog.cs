@@ -28,6 +28,7 @@ namespace System.Windows.Forms
             this.underlyingController = underlyingController;
             this.dialogTitle = dialogTitle;
         }
+
         /// <summary>
         ///  This is new public property which notifies if this controller is used for PrintPreview.. so get the underlying Controller
         ///  and return its IsPreview Property.
@@ -40,6 +41,7 @@ namespace System.Windows.Forms
                 {
                     return underlyingController.IsPreview;
                 }
+
                 return false;
             }
         }
@@ -73,6 +75,7 @@ namespace System.Windows.Forms
                 {
                     backgroundThread.Stop();
                 }
+
                 throw;
             }
             finally
@@ -95,11 +98,13 @@ namespace System.Windows.Forms
             {
                 backgroundThread.UpdateLabel();
             }
+
             Graphics result = underlyingController.OnStartPage(document, e);
             if (backgroundThread != null && backgroundThread.canceled)
             {
                 e.Cancel = true;
             }
+
             return result;
         }
 
@@ -113,6 +118,7 @@ namespace System.Windows.Forms
             {
                 e.Cancel = true;
             }
+
             pageNumber++;
 
             base.OnEndPage(document, e);
@@ -204,6 +210,7 @@ namespace System.Windows.Forms
                         dialog.BeginInvoke(new MethodInvoker(dialog.Close));
                         return;
                     }
+
                     alreadyStopped = true;
                 }
             }
@@ -306,10 +313,12 @@ namespace System.Windows.Forms
                 {
                     ClientSize = clientSize;
                 }
+
                 CancelButton = button1;
                 SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
                 Controls.Add(tableLayoutPanel1);
             }
+
             private void button1_Click(object sender, EventArgs e)
             {
                 button1.Enabled = false;

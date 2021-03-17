@@ -2586,8 +2586,10 @@ namespace System.Windows.Forms.Tests
                     Assert.Same(c, item.Control);
                     Assert.False(c.IsDisposed);
                 }
+
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -2626,8 +2628,10 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(c, item.Control);
                     Assert.False(c.IsDisposed);
                 }
+
                 callCount++;
-            };
+            }
+
             item.Disposed += handler;
 
             try
@@ -4213,6 +4217,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var c = new CustomProcessControl
             {
                 ProcessCmdKeyAction = action
@@ -4272,6 +4277,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var c = new CustomProcessControl
             {
                 ProcessDialogKeyAction = action
@@ -4331,6 +4337,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var c = new CustomProcessControl
             {
                 ProcessMnemonicAction = action

@@ -442,6 +442,7 @@ namespace System.Windows.Forms.Design
             int maskDexIndex = GetMaskDescriptorIndex(maskDex);
             SetSelectedMaskDescriptor(maskDexIndex);
         }
+
         private void SetSelectedMaskDescriptor(int maskDexIndex)
         {
             if (maskDexIndex < 0 || _listViewCannedMasks.Items.Count <= maskDexIndex)
@@ -528,6 +529,7 @@ namespace System.Windows.Forms.Design
         {
             InsertMaskDescriptor(index, maskDescriptor, true);
         }
+
         private void InsertMaskDescriptor(int index, MaskDescriptor maskDescriptor, bool validateDescriptor)
         {
             string errorMessage;

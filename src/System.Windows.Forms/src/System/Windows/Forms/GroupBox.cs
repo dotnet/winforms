@@ -103,6 +103,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -256,6 +257,7 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     }
+
                     base.Text = value;
                 }
                 finally
@@ -265,6 +267,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
                     }
                 }
+
                 Invalidate(true);
             }
         }
@@ -625,8 +628,10 @@ namespace System.Windows.Forms
                 SelectNextControl(null, true, true, true, false);
                 return true;
             }
+
             return false;
         }
+
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             if (factor.Width != 1F && factor.Height != 1F)
@@ -637,6 +642,7 @@ namespace System.Windows.Forms
                 _fontHeight = -1;
                 _cachedFont = null;
             }
+
             base.ScaleControl(factor, specified);
         }
 
@@ -703,6 +709,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = IntPtr.Zero;
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

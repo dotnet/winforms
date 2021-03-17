@@ -34,6 +34,7 @@ namespace System.Windows.Forms
                     dropDownArrowSize = DpiHelper.LogicalToDeviceUnits(dropDownArrowSizeUnscaled);
                     scaledDropDownArrowPadding = DpiHelper.LogicalToDeviceUnits(dropDownArrowPadding);
                 }
+
                 this.ownerItem = ownerItem;
             }
 
@@ -51,6 +52,7 @@ namespace System.Windows.Forms
                         preferredSize.Height += DropDownArrowRect.Height + scaledDropDownArrowPadding.Vertical;
                     }
                 }
+
                 return preferredSize;
             }
 
@@ -90,6 +92,7 @@ namespace System.Windows.Forms
                         dropDownArrowRect = new Rectangle(0, options.Client.Bottom + scaledDropDownArrowPadding.Top, ownerItem.Bounds.Width - 1, dropDownArrowSize.Height);
                     }
                 }
+
                 return options;
             }
 

@@ -33,6 +33,7 @@ namespace System.Drawing.Design
             {
                 return value;
             }
+
             if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
             {
                 return value;
@@ -142,6 +143,7 @@ namespace System.Drawing.Design
                         marginX = DpiHelper.LogicalToDeviceUnitsX(MARGIN);
                         marginY = DpiHelper.LogicalToDeviceUnitsY(MARGIN);
                     }
+
                     isScalingInitialized = true;
                 }
 
@@ -222,6 +224,7 @@ namespace System.Drawing.Design
                         }
                     }
                 }
+
                 return Point.Empty;
             }
 
@@ -279,6 +282,7 @@ namespace System.Drawing.Design
                 {
                     return -1;
                 }
+
                 return x + CELLS_ACROSS * y;
             }
 
@@ -329,6 +333,7 @@ namespace System.Drawing.Design
                     case Keys.F2:
                         return false;
                 }
+
                 return base.IsInputKey(keyData);
             }
 
@@ -462,6 +467,7 @@ namespace System.Drawing.Design
                 {
                     g.FillRectangle(brush, ClientRectangle);
                 }
+
                 Rectangle rect = new Rectangle
                 {
                     Width = cellSizeX,
@@ -531,14 +537,17 @@ namespace System.Drawing.Design
                 {
                     newFocus.X = 0;
                 }
+
                 if (newFocus.Y < 0)
                 {
                     newFocus.Y = 0;
                 }
+
                 if (newFocus.X >= CELLS_ACROSS)
                 {
                     newFocus.X = CELLS_ACROSS - 1;
                 }
+
                 if (newFocus.Y >= CELLS_DOWN)
                 {
                     newFocus.Y = CELLS_DOWN - 1;
@@ -579,6 +588,7 @@ namespace System.Drawing.Design
                     {
                         cells[id] = new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
                     }
+
                     return cells[id];
                 }
 
@@ -652,9 +662,11 @@ namespace System.Drawing.Design
                             {
                                 state |= AccessibleStates.Focused;
                             }
+
                             return state;
                         }
                     }
+
                     public override string Value => color.ToString();
                 }
             }
@@ -708,6 +720,7 @@ namespace System.Drawing.Design
                             customColors[i] = Color.White;
                         }
                     }
+
                     return customColors;
                 }
 
@@ -767,6 +780,7 @@ namespace System.Drawing.Design
                         return (Color)colors[i];
                     }
                 }
+
                 return color;
             }
 
@@ -848,6 +862,7 @@ namespace System.Drawing.Design
                 {
                     lbCommon.Items.Add(color);
                 }
+
                 lbSystem.Items.Clear();
                 foreach (object color in SystemColorValues)
                 {
@@ -882,6 +897,7 @@ namespace System.Drawing.Design
                 {
                     value = (Color)lb.SelectedItem;
                 }
+
                 edSvc.CloseDropDown();
             }
 
@@ -987,6 +1003,7 @@ namespace System.Drawing.Design
                         return true;
                     }
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -1041,6 +1058,7 @@ namespace System.Drawing.Design
                         case Keys.Return:
                             return true;
                     }
+
                     return base.IsInputKey(keyData);
                 }
             }
@@ -1149,6 +1167,7 @@ namespace System.Drawing.Design
                             PostMessageW(hwnd, WM.COMMAND, PARAM.FromLowHigh((int)ID.OK, 0), GetDlgItem(hwnd, (DialogItemID)ID.OK));
                             break;
                         }
+
                         break;
                 }
 

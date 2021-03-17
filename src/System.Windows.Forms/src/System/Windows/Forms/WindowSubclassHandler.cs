@@ -92,6 +92,7 @@ namespace System.Windows.Forms
             {
                 throw new ObjectDisposedException(nameof(WindowSubclassHandler));
             }
+
             if (_opened)
             {
                 throw new InvalidOperationException();

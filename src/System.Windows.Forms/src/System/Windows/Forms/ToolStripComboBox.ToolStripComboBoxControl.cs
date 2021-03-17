@@ -29,6 +29,7 @@ namespace System.Windows.Forms
                             return renderer.ColorTable;
                         }
                     }
+
                     return ProfessionalColors.ColorTable;
                 }
             }

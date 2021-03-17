@@ -323,6 +323,7 @@ namespace System.Windows.Forms
                                 // this DPI value comes from the primary monitor.
                                 _currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
                             }
+
                             break;
 
                         default:
@@ -350,6 +351,7 @@ namespace System.Windows.Forms
                 {
                     return ParentInternal.FindForm();
                 }
+
                 if (this is Form)
                 {
                     return null;
@@ -389,6 +391,7 @@ namespace System.Windows.Forms
                     updateContainerActiveControl = (cc.ActiveControl != this);
                 }
             }
+
             if (control != _activeControl || updateContainerActiveControl)
             {
                 if (updateContainerActiveControl)
@@ -496,6 +499,7 @@ namespace System.Windows.Forms
                 {
                     cc = parent.GetContainerControl() as ContainerControl;
                 }
+
                 if (cc is not null &&
                     cc._unvalidatedControl is not null &&
                     (cc._unvalidatedControl == control || control.Contains(cc._unvalidatedControl)))
@@ -779,6 +783,7 @@ namespace System.Windows.Forms
                 {
                     SelectNextControl(null, true, true, true, false);
                 }
+
                 InnerMostActiveContainerControl.FocusActiveControlInternal();
             }
         }
@@ -827,6 +832,7 @@ namespace System.Windows.Forms
             {
                 AxContainerFormCreated();
             }
+
             OnBindingContextChanged(EventArgs.Empty);
         }
 
@@ -963,6 +969,7 @@ namespace System.Windows.Forms
                     _state[s_stateScalingNeededOnLayout] = false;
                     EnableRequiredScaling(this, enable: false);
                 }
+
                 _state[s_stateParentChanged] = false;
 
                 if (suspended)
@@ -1176,6 +1183,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             if (ParentInternal is null)
             {
                 // Unfortunately, we have to stick this here for the case where we're hosted without
@@ -1328,6 +1336,7 @@ namespace System.Windows.Forms
                     correctParentActiveControl = (c.ActiveControl == this);
                 }
             }
+
             if (directed && correctParentActiveControl)
             {
                 SelectNextControl(null, forward, tabStopOnly: true, nested: true, wrap: false);
@@ -1355,6 +1364,7 @@ namespace System.Windows.Forms
                 {
                     cc = (value.ParentInternal.GetContainerControl()) as ContainerControl;
                 }
+
                 if (cc is not null)
                 {
                     // Call to the recursive function that corrects the chain of active controls
@@ -1797,6 +1807,7 @@ namespace System.Windows.Forms
                     currentActiveContainerControl.ResetValidationFlag();
                 }
             }
+
             try
             {
                 while (currentValidatingControl is not null && currentValidatingControl != ancestorControl)
@@ -1826,6 +1837,7 @@ namespace System.Windows.Forms
                     {
                         _unvalidatedControl = currentValidatingControl;
                     }
+
                     // This bit 'marks' the control that was going to get the focus, so that it will ignore any pending
                     // mouse or key events. Otherwise it would still perform its default 'click' action or whatever.
                     if (currentActiveControl == _activeControl)
@@ -1844,6 +1856,7 @@ namespace System.Windows.Forms
                                 {
                                     currentActiveContainerControl._focusedControl.ValidationCancelled = true;
                                 }
+
                                 currentActiveContainerControl.ResetActiveAndFocusedControlsRecursive();
                             }
                         }
@@ -1924,6 +1937,7 @@ namespace System.Windows.Forms
                             {
                                 succeeded = c.ActivateControl(this);
                             }
+
                             if (!succeeded)
                             {
                                 return;

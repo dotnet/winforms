@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                         {
                             _owner.ChildWndProc(ref m);
                         }
+
                         break;
                     default:
                         if (_childWindowType == ChildWindowType.DropDownList)
@@ -60,6 +61,7 @@ namespace System.Windows.Forms
                         {
                             _owner.ChildWndProc(ref m);
                         }
+
                         break;
                 }
             }
@@ -117,6 +119,7 @@ namespace System.Windows.Forms
                             wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
+
                         iacc = (UiaCore.IAccessibleInternal)_accessibilityObject;
 
                         // Obtain the Lresult

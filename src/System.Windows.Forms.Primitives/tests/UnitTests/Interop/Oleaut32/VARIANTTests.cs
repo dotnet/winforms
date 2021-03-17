@@ -188,6 +188,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { VARENUM.I1, (IntPtr)long.MinValue, (sbyte)0 };
             }
+
             yield return new object[] { VARENUM.I1, (IntPtr)int.MinValue, (sbyte)0 };
             yield return new object[] { VARENUM.I1, (IntPtr)short.MinValue, (sbyte)0 };
             yield return new object[] { VARENUM.I1, (IntPtr)sbyte.MinValue, sbyte.MinValue };
@@ -211,12 +212,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { VARENUM.UI1, (IntPtr)uint.MaxValue, byte.MaxValue };
             }
+
             yield return new object[] { VARENUM.UI1, (IntPtr)(-1), byte.MaxValue };
 
             if (IntPtr.Size == 8)
             {
                 yield return new object[] { VARENUM.I2, (IntPtr)long.MinValue, (short)0 };
             }
+
             yield return new object[] { VARENUM.I2, (IntPtr)int.MinValue, (short)0 };
             yield return new object[] { VARENUM.I2, (IntPtr)short.MinValue, short.MinValue };
             yield return new object[] { VARENUM.I2, (IntPtr)sbyte.MinValue, (short)sbyte.MinValue };
@@ -239,12 +242,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { VARENUM.UI2, (IntPtr)uint.MaxValue, ushort.MaxValue };
             }
+
             yield return new object[] { VARENUM.UI2, (IntPtr)(-1), ushort.MaxValue };
 
             if (IntPtr.Size == 8)
             {
                 yield return new object[] { VARENUM.I4, (IntPtr)long.MinValue, 0 };
             }
+
             yield return new object[] { VARENUM.I4, (IntPtr)int.MinValue, int.MinValue };
             yield return new object[] { VARENUM.I4, (IntPtr)short.MinValue, (int)short.MinValue };
             yield return new object[] { VARENUM.I4, (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
@@ -268,12 +273,14 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { VARENUM.UI4, (IntPtr)uint.MaxValue, uint.MaxValue };
             }
+
             yield return new object[] { VARENUM.UI4, (IntPtr)(-1), uint.MaxValue };
 
             if (IntPtr.Size == 8)
             {
                 yield return new object[] { VARENUM.INT, (IntPtr)long.MinValue, 0 };
             }
+
             yield return new object[] { VARENUM.INT, (IntPtr)int.MinValue, int.MinValue };
             yield return new object[] { VARENUM.INT, (IntPtr)short.MinValue, (int)short.MinValue };
             yield return new object[] { VARENUM.INT, (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
@@ -297,6 +304,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { VARENUM.UINT, (IntPtr)uint.MaxValue, uint.MaxValue };
             }
+
             yield return new object[] { VARENUM.UINT, (IntPtr)(-1), uint.MaxValue };
 
             yield return new object[] { VARENUM.BOOL, (IntPtr)(-1), true };
@@ -307,6 +315,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { VARENUM.ERROR, (IntPtr)long.MinValue, 0 };
             }
+
             yield return new object[] { VARENUM.ERROR, (IntPtr)int.MinValue, int.MinValue };
             yield return new object[] { VARENUM.ERROR, (IntPtr)short.MinValue, (int)short.MinValue };
             yield return new object[] { VARENUM.ERROR, (IntPtr)sbyte.MinValue, (int)sbyte.MinValue };
@@ -420,6 +429,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 yield return new object[] { (IntPtr)sbyte.MinValue, (long)sbyte.MinValue };
                 yield return new object[] { (IntPtr)(-10), (long)(-10) };
             }
+
             yield return new object[] { (IntPtr)0, (long)0 };
             yield return new object[] { (IntPtr)10, (long)10 };
             yield return new object[] { (IntPtr)sbyte.MaxValue, (long)sbyte.MaxValue };
@@ -482,6 +492,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             {
                 yield return new object[] { (IntPtr)(-10), (ulong)18446744073709551606 };
             }
+
             yield return new object[] { (IntPtr)0, (ulong)0 };
             yield return new object[] { (IntPtr)10, (ulong)10 };
             yield return new object[] { (IntPtr)byte.MaxValue, (ulong)byte.MaxValue };
@@ -815,6 +826,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 {
                     yield return new object[] { (IntPtr)long.MinValue, 0 };
                 }
+
                 if (IntPtr.Size == 8)
                 {
                     yield return new object[] { (IntPtr)long.MaxValue, -1 };
@@ -1543,6 +1555,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI1, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1573,6 +1586,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.I2, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1603,6 +1617,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI2, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1665,6 +1680,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.I4, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1695,6 +1711,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI4, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1805,6 +1822,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.I8, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1835,6 +1853,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.UI8, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -1905,6 +1924,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 Assert.Equal(HRESULT.S_OK, hr);
                 Assert.Equal(VARENUM.VECTOR | VARENUM.R8, variant.vt);
             }
+
             AssertToObjectEqualExtension<InvalidOleVariantTypeException>(result, variant);
         }
 
@@ -5600,6 +5620,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 {
                     hr = SafeArrayPutElement(psa, &index, &value);
                 }
+
                 Assert.Equal(HRESULT.S_OK, hr);
             }
 
@@ -5642,6 +5663,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                     {
                         hr = SafeArrayPutElement(psa, indices, &value);
                     }
+
                     Assert.Equal(HRESULT.S_OK, hr);
                 }
             }

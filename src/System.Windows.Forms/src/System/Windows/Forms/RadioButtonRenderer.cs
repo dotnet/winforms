@@ -105,6 +105,7 @@ namespace System.Windows.Forms
                 {
                     glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
                 }
+
                 ControlPaint.DrawRadioButton(graphics, glyphBounds, ConvertToButtonState(state));
             }
         }
@@ -134,6 +135,7 @@ namespace System.Windows.Forms
             {
                 glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
             }
+
             Color textColor;
 
             if (RenderWithVisualStyles)
@@ -182,6 +184,7 @@ namespace System.Windows.Forms
             {
                 glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hWnd));
             }
+
             Color textColor;
 
             if (RenderWithVisualStyles)

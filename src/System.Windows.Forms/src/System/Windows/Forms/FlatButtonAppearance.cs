@@ -57,6 +57,7 @@ namespace System.Windows.Forms
                     {
                         LayoutTransaction.DoLayoutIf(owner.AutoSize, owner.ParentInternal, owner, PropertyNames.FlatAppearanceBorderSize);
                     }
+
                     owner.Invalidate();
                 }
             }

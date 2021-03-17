@@ -54,6 +54,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
+
                 return owner.children[index];
             }
             set
@@ -140,6 +141,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
         [Browsable(false)]
         public int Count
@@ -271,6 +273,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(nodes));
             }
+
             if (nodes.Length == 0)
             {
                 return;
@@ -281,12 +284,14 @@ namespace System.Windows.Forms
             {
                 tv.BeginUpdate();
             }
+
             owner.Nodes.FixedIndex = owner.childCount;
             owner.EnsureCapacity(nodes.Length);
             for (int i = nodes.Length - 1; i >= 0; i--)
             {
                 AddInternal(nodes[i], i);
             }
+
             owner.Nodes.FixedIndex = -1;
             if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
@@ -332,6 +337,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
+
                     if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
                         // If it has a valid child collection, append those results to our collection.
@@ -357,6 +363,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(node));
             }
+
             if (node.handle != IntPtr.Zero)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
@@ -380,6 +387,7 @@ namespace System.Windows.Forms
             {
                 return owner.AddSorted(node);
             }
+
             node.parent = owner;
             int fixedIndex = owner.Nodes.FixedIndex;
             if (fixedIndex != -1)
@@ -393,6 +401,7 @@ namespace System.Windows.Forms
                 owner.EnsureCapacity(1);
                 node.index = owner.childCount;
             }
+
             owner.children[node.index] = node;
             owner.childCount++;
             node.Realize(false);
@@ -460,6 +469,7 @@ namespace System.Windows.Forms
                     return index;
                 }
             }
+
             return -1;
         }
 

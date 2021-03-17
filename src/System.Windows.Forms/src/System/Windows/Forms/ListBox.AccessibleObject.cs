@@ -146,6 +146,7 @@ namespace System.Windows.Forms
                         {
                             _owningListBox.HasKeyboardFocus = false;
                         }
+
                         return result;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _owningListBox.InternalHandle;

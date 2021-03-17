@@ -64,6 +64,7 @@ namespace System.Windows.Forms
         {
             Initialize();
         }
+
         public ToolStripSplitButton(string text, Image image, params ToolStripItem[] dropDownItems) : base(text, image, dropDownItems)
         {
             Initialize();
@@ -115,6 +116,7 @@ namespace System.Windows.Forms
             add => Events.AddHandler(s_eventButtonClick, value);
             remove => Events.RemoveHandler(s_eventButtonClick, value);
         }
+
         /// <summary>
         ///  Occurs when the utton portion of a split button  is double clicked.
         /// </summary>
@@ -249,6 +251,7 @@ namespace System.Windows.Forms
                     {
                         s_scaledDropDownButtonWidth = DpiHelper.LogicalToDeviceUnitsX(DefaultDropDownWidth);
                     }
+
                     s_isScalingInitialized = true;
                 }
 
@@ -267,6 +270,7 @@ namespace System.Windows.Forms
                 {
                     _splitButtonButton = new ToolStripSplitButtonButton(this);
                 }
+
                 _splitButtonButton.Image = Image;
                 _splitButtonButton.Text = Text;
                 _splitButtonButton.BackColor = BackColor;
@@ -291,6 +295,7 @@ namespace System.Windows.Forms
                 {
                     _splitButtonButtonLayout = new ToolStripSplitButtonButtonLayout(this);
                 }
+
                 return _splitButtonButtonLayout;
             }
         }
@@ -318,9 +323,11 @@ namespace System.Windows.Forms
                 {
                     _splitterWidth = value;
                 }
+
                 InvalidateSplitButtonLayout();
             }
         }
+
         /// <summary>
         ///  the boundaries of the separator between the default and drop down button, exposed for custom
         ///  painting purposes.
@@ -504,6 +511,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             Point clickPoint = new Point(e.X, e.Y);
             if ((e.Button == MouseButtons.Left) && SplitButtonButton.Bounds.Contains(clickPoint))
             {
@@ -522,6 +530,7 @@ namespace System.Windows.Forms
                         shouldFireDoubleClick = true;
                     }
                 }
+
                 if (shouldFireDoubleClick)
                 {
                     OnButtonDoubleClick(EventArgs.Empty);
@@ -534,6 +543,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         protected override void OnMouseLeave(EventArgs e)
         {
             _openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
@@ -591,6 +601,7 @@ namespace System.Windows.Forms
         {
             _dropDownButtonBounds = rect;
         }
+
         /// <summary>
         ///  Determines if the <see cref='ToolStripItem.Size'/> property needs to be persisted.
         /// </summary>

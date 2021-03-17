@@ -48,6 +48,7 @@ namespace System.Windows.Forms
                     return displayRect;
                 }
             }
+
             public override Rectangle DragBounds
             {
                 get
@@ -100,6 +101,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, "VerticalRM.CanMove returns false - not enough room");
                 return false;
             }
+
             protected internal override int FreeSpaceFromRow(int spaceToFree)
             {
                 int requiredSpace = spaceToFree;
@@ -114,6 +116,7 @@ namespace System.Windows.Forms
                     {
                         return 0;
                     }
+
                     Padding cellMargin = lastCellOnRow.Margin;
 
                     // only check margin.left as we are only concerned with getting right edge of
@@ -130,6 +133,7 @@ namespace System.Windows.Forms
                         cellMargin.Top = 0;
                         cellMargin.Bottom = 0;
                     }
+
                     lastCellOnRow.Margin = cellMargin;
 
                     // start moving the toolstrips before this guy.
@@ -140,6 +144,7 @@ namespace System.Windows.Forms
                         spaceToFree -= lastCellOnRow.Shrink(spaceToFree);
                     }
                 }
+
                 return requiredSpace - Math.Max(0, spaceToFree);
             }
 
@@ -149,6 +154,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 if (DragBounds.Contains(clientEndLocation))
                 {
                     int index = Row.ControlsInternal.IndexOf(movingControl);
@@ -192,6 +198,7 @@ namespace System.Windows.Forms
                         {
                             continue;
                         }
+
                         int requiredSpace = spaceToFree - freedSpace;
 
                         Padding cellMargin = cell.Margin;
@@ -324,6 +331,7 @@ namespace System.Windows.Forms
                         {
                             continue;
                         }
+
                         int requiredSpace = spaceToFree - freedSpace;
                         freedSpace += cell.Shrink(requiredSpace);
 
@@ -392,6 +400,7 @@ namespace System.Windows.Forms
                             cellMargin.Bottom = 0;
                             lastCellOnRow.Margin = cellMargin;
                         }
+
                         spaceToFree -= lastCellOnRow.Shrink(spaceToFree);
                         // start moving the toolstrips before this guy.
                         MoveUp(Row.Cells.Count - 1, spaceToFree);
@@ -427,6 +436,7 @@ namespace System.Windows.Forms
                                 {
                                     continue;
                                 }
+
                                 //  [:   ]  [: x  ]
                                 if (cell.Bounds.Contains(locationToDrag))
                                 {
@@ -468,6 +478,7 @@ namespace System.Windows.Forms
                                 // make sure we account for the left side
                                 requiredSpace += locationToDrag.Y;
                             }
+
                             int freedSpace = 0;
 
                             if (index < Row.ControlsInternal.Count - 1)
@@ -595,9 +606,11 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     // remove the control from the row.
                     ((IList)Row.Cells).RemoveAt(index);
                 }
+
                 Row.ResumeLayout(true);
             }
         }

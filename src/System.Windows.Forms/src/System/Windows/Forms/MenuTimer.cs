@@ -30,6 +30,7 @@ namespace System.Windows.Forms
             // of interval
             slowShow = Math.Max(quickShow, SystemInformation.MenuShowDelay);
         }
+
         // the current item to autoexpand.
         private ToolStripMenuItem CurrentItem
         {
@@ -43,6 +44,7 @@ namespace System.Windows.Forms
                 currentItem = value;
             }
         }
+
         public bool InTransition
         {
             get { return inTransition; }
@@ -55,6 +57,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             StartCore(item);
         }
 
@@ -64,6 +67,7 @@ namespace System.Windows.Forms
             {
                 Cancel(CurrentItem);
             }
+
             CurrentItem = item;
             if (item != null)
             {
@@ -92,6 +96,7 @@ namespace System.Windows.Forms
                 CancelCore();
                 StartCore(toItem);
             }
+
             // set up the current item to be the toItem so it will be auto expanded when complete.
             CurrentItem = toItem;
             InTransition = true;
@@ -103,8 +108,10 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             CancelCore();
         }
+
         /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
         /// </summary>
@@ -114,6 +121,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (item == CurrentItem)
             {
                 CancelCore();
@@ -125,6 +133,7 @@ namespace System.Windows.Forms
             autoMenuExpandTimer.Enabled = false;
             CurrentItem = null;
         }
+
         private void EndTransition(bool forceClose)
         {
             ToolStripMenuItem lastSelected = fromItem;
@@ -141,6 +150,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         internal void HandleToolStripMouseLeave(ToolStrip toolStrip)
         {
             if (InTransition && toolStrip == fromItem.ParentInternal)
@@ -177,6 +187,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             EndTransition(/*forceClose*/false);
             if (CurrentItem != null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {

@@ -56,6 +56,7 @@ namespace System.Windows.Forms
                         {
                             return currentCell.AccessibilityObject;
                         }
+
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
                     case UiaCore.NavigateDirection.LastChild:

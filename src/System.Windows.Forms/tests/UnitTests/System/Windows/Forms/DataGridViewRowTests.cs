@@ -1490,6 +1490,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
             // Set same.
@@ -1502,6 +1503,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
@@ -1524,6 +1526,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
             // Set same.
@@ -1536,6 +1539,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
@@ -1582,6 +1586,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
             // Set same.
@@ -1594,6 +1599,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
@@ -1620,6 +1626,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
             // Set same.
@@ -1632,6 +1639,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
@@ -1655,6 +1663,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
             // Set same.
@@ -1667,6 +1676,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
@@ -1693,6 +1703,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
 
             // Set same.
@@ -1705,6 +1716,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(row.HeaderCell);
             }
+
             Assert.Equal(row, row.HeaderCell.OwningRow);
         }
 
@@ -2125,14 +2137,16 @@ namespace System.Windows.Forms.Tests
             {
                 control.RowsDefaultCellStyle = rowsDefaultCellStyle;
             }
+
             if (alternatingRowsDefaultCellStyle != null)
             {
                 control.AlternatingRowsDefaultCellStyle = alternatingRowsDefaultCellStyle;
             }
+
             if (gridDefaultCellStyle != null)
             {
                 control.DefaultCellStyle = gridDefaultCellStyle;
-            };
+            }
 
             control.Rows.Add(new SubDataGridViewRow());
             control.Rows.Add(new SubDataGridViewRow());
@@ -2142,6 +2156,7 @@ namespace System.Windows.Forms.Tests
             {
                 row.DefaultCellStyle = rowDefaultCellStyle;
             }
+
             Assert.Equal(expected, row.InheritedStyle);
         }
 
@@ -3349,6 +3364,7 @@ namespace System.Windows.Forms.Tests
                     true, DataGridViewAdvancedCellBorderStyle.Inset, DataGridViewAdvancedCellBorderStyle.Inset, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None
                 };
             }
+
             yield return new object[]
             {
                 false, true, RightToLeft.No, DataGridViewAdvancedCellBorderStyle.Inset, true, true, true, true,
@@ -3404,6 +3420,7 @@ namespace System.Windows.Forms.Tests
                     true, DataGridViewAdvancedCellBorderStyle.Inset, DataGridViewAdvancedCellBorderStyle.InsetDouble, DataGridViewAdvancedCellBorderStyle.Inset, DataGridViewAdvancedCellBorderStyle.Inset
                 };
             }
+
             yield return new object[]
             {
                 true, false, RightToLeft.No, DataGridViewAdvancedCellBorderStyle.InsetDouble, true, true, false, true,
@@ -3444,6 +3461,7 @@ namespace System.Windows.Forms.Tests
                     true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.None
                 };
             }
+
             yield return new object[]
             {
                 false, true, RightToLeft.No, DataGridViewAdvancedCellBorderStyle.Outset, true, true, true, true,
@@ -3499,6 +3517,7 @@ namespace System.Windows.Forms.Tests
                     true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset
                 };
             }
+
             yield return new object[]
             {
                 true, false, RightToLeft.No, DataGridViewAdvancedCellBorderStyle.OutsetDouble, true, true, false, true,
@@ -3547,6 +3566,7 @@ namespace System.Windows.Forms.Tests
                     };
                 }
             }
+
             foreach (bool isLastVisibleRow in new bool[] { true, false })
             {
                 yield return new object[]
@@ -3560,6 +3580,7 @@ namespace System.Windows.Forms.Tests
                     true, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.Outset, DataGridViewAdvancedCellBorderStyle.OutsetDouble, DataGridViewAdvancedCellBorderStyle.None
                 };
             }
+
             yield return new object[]
             {
                 false, true, RightToLeft.No, DataGridViewAdvancedCellBorderStyle.OutsetPartial, true, true, true, true,
@@ -3635,6 +3656,7 @@ namespace System.Windows.Forms.Tests
                     true, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.Single, DataGridViewAdvancedCellBorderStyle.None, DataGridViewAdvancedCellBorderStyle.Single
                 };
             }
+
             yield return new object[]
             {
                 true, false, RightToLeft.No, DataGridViewAdvancedCellBorderStyle.Single, true, true, true, true,

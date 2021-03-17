@@ -75,6 +75,7 @@ namespace System.Windows.Forms
             get => base.AcceptButton;
             set => base.AcceptButton = value;
         }
+
         /// <summary>
         ///  Gets or sets a value indicating whether the form will adjust its size
         ///  to fit the height of the font used on the form and scale
@@ -164,6 +165,7 @@ namespace System.Windows.Forms
             add => base.BackColorChanged += value;
             remove => base.BackColorChanged -= value;
         }
+
         /// <summary>
         ///  Gets
         ///  or
@@ -177,6 +179,7 @@ namespace System.Windows.Forms
             get => base.CancelButton;
             set => base.CancelButton = value;
         }
+
         /// <summary>
         ///  Gets or sets a value indicating whether a control box is displayed in the
         ///  caption bar of the form.
@@ -218,6 +221,7 @@ namespace System.Windows.Forms
             get => base.FormBorderStyle;
             set => base.FormBorderStyle = value;
         }
+
         /// <summary>
         ///  Gets or sets a value indicating whether a
         ///  help button should be displayed in the caption box of the form.
@@ -229,6 +233,7 @@ namespace System.Windows.Forms
             get => base.HelpButton;
             set => base.HelpButton = value;
         }
+
         /// <summary>
         ///  Gets or sets the icon for the form.
         /// </summary>
@@ -239,6 +244,7 @@ namespace System.Windows.Forms
             get => base.Icon;
             set => base.Icon = value;
         }
+
         /// <summary>
         ///  Gets or sets a value indicating whether the form is a container for multiple document interface
         ///  (MDI) child forms.
@@ -250,6 +256,7 @@ namespace System.Windows.Forms
             get => base.IsMdiContainer;
             set => base.IsMdiContainer = value;
         }
+
         /// <summary>
         ///  Gets or sets a value
         ///  indicating whether the form will receive key events
@@ -262,6 +269,7 @@ namespace System.Windows.Forms
             get => base.KeyPreview;
             set => base.KeyPreview = value;
         }
+
         /// <summary>
         ///  Gets or Sets the maximum size the dialog can be resized to.
         /// </summary>
@@ -280,6 +288,7 @@ namespace System.Windows.Forms
             add => base.MaximumSizeChanged += value;
             remove => base.MaximumSizeChanged -= value;
         }
+
         /// <summary>
         ///  Gets or sets a value indicating whether the maximize button is
         ///  displayed in the caption bar of the form.
@@ -368,6 +377,7 @@ namespace System.Windows.Forms
             add => base.SizeChanged += value;
             remove => base.SizeChanged -= value;
         }
+
         /// <summary>
         ///  Gets or sets the
         ///  starting position of the form at run time.
@@ -379,6 +389,7 @@ namespace System.Windows.Forms
             get => base.StartPosition;
             set => base.StartPosition = value;
         }
+
         /// <summary>
         ///  Gets or sets a value indicating whether the form should be displayed as the top-most
         ///  form of your application.
@@ -423,6 +434,7 @@ namespace System.Windows.Forms
             get => base.WindowState;
             set => base.WindowState = value;
         }
+
         /// <summary>
         ///  The accessible role of the control
         /// </summary>
@@ -433,6 +445,7 @@ namespace System.Windows.Forms
             get => base.AccessibleRole;
             set => base.AccessibleRole = value;
         }
+
         /// <summary>
         ///  The accessible description of the control
         /// </summary>
@@ -443,6 +456,7 @@ namespace System.Windows.Forms
             get => base.AccessibleDescription;
             set => base.AccessibleDescription = value;
         }
+
         /// <summary>
         ///  The accessible name of the control
         /// </summary>
@@ -453,6 +467,7 @@ namespace System.Windows.Forms
             get => base.AccessibleName;
             set => base.AccessibleName = value;
         }
+
         /// <summary>
         ///
         ///  Indicates whether entering the control causes validation on the controls requiring validation.
@@ -472,6 +487,7 @@ namespace System.Windows.Forms
             add => base.CausesValidationChanged += value;
             remove => base.CausesValidationChanged -= value;
         }
+
         /// <summary>
         ///  Retrieves the bindings for this control.
         /// </summary>
@@ -505,6 +521,7 @@ namespace System.Windows.Forms
             add => base.EnabledChanged += value;
             remove => base.EnabledChanged -= value;
         }
+
         /// <summary>
         ///  The location of this control.
         /// </summary>
@@ -532,6 +549,7 @@ namespace System.Windows.Forms
             get => base.Tag;
             set => base.Tag = value;
         }
+
         /// <summary>
         ///  The AllowDrop property. If AllowDrop is set to true then
         ///  this control will allow drag and drop operations and events to be used.
@@ -543,6 +561,7 @@ namespace System.Windows.Forms
             get => base.AllowDrop;
             set => base.AllowDrop = value;
         }
+
         /// <summary>
         ///  Retrieves the cursor that will be displayed when the mouse is over this
         ///  control.
@@ -600,6 +619,7 @@ namespace System.Windows.Forms
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
+
         /// <summary>
         ///  Specifies a value that determines the IME (Input Method Editor) status of the
         ///  object when that object is selected.
@@ -632,6 +652,7 @@ namespace System.Windows.Forms
             get => base.AutoScrollMargin;
             set => base.AutoScrollMargin = value;
         }
+
         /// <summary>
         ///  Gets or sets the mimimum size of the auto-scroll.
         /// </summary>
@@ -642,6 +663,7 @@ namespace System.Windows.Forms
             get => base.AutoScrollMinSize;
             set => base.AutoScrollMinSize = value;
         }
+
         /// <summary>
         ///  The current value of the anchor property. The anchor property
         ///  determines which edges of the control are anchored to the container's
@@ -654,6 +676,7 @@ namespace System.Windows.Forms
             get => base.Anchor;
             set => base.Anchor = value;
         }
+
         /// <summary>
         ///  Indicates whether the control is visible.
         /// </summary>
@@ -672,6 +695,7 @@ namespace System.Windows.Forms
             add => base.VisibleChanged += value;
             remove => base.VisibleChanged -= value;
         }
+
         /// <summary>
         ///  The foreground color of the control.
         /// </summary>
@@ -821,6 +845,7 @@ namespace System.Windows.Forms
         {
             get => base.DockPadding;
         }
+
         //-------------------------------------------------------------------------------------------------------------
         //end addition
 
@@ -1299,6 +1324,7 @@ namespace System.Windows.Forms
                 pageCounter.Focus();
                 return true;
             }
+
             return false;
         }
 
@@ -1450,6 +1476,7 @@ namespace System.Windows.Forms
             previewControl.Rows = 2;
             previewControl.Columns = 3;
         }
+
         //----------------------
 
         void UpdownMove(object sender, EventArgs eventargs)

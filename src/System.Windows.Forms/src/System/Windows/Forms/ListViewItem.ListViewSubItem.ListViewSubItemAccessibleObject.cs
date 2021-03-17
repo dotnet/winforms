@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                             {
                                 return _owningItem.SubItems[nextSubItemIndex].AccessibilityObject;
                             }
+
                             break;
                         case UiaCore.NavigateDirection.PreviousSibling:
                             int previousSubItemIndex = GetCurrentSubItemIndex() - 1;
@@ -68,6 +69,7 @@ namespace System.Windows.Forms
                             {
                                 return _owningItem.SubItems[previousSubItemIndex].AccessibilityObject;
                             }
+
                             break;
                     }
 

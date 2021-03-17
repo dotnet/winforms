@@ -58,8 +58,10 @@ namespace System.Windows.Forms
                         shimManager.AddDocumentShim(this);
                         shim = ShimManager.GetDocumentShim(this);
                     }
+
                     return shim;
                 }
+
                 return null;
             }
         }
@@ -157,6 +159,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -182,6 +185,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -207,6 +211,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -232,6 +237,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -257,6 +263,7 @@ namespace System.Windows.Forms
                         throw;
                     }
                 }
+
                 return c;
             }
             set
@@ -702,6 +709,7 @@ namespace System.Windows.Forms
                     {
                         Marshal.FinalReleaseComObject(htmlDocument.NativeHtmlDocument2);
                     }
+
                     htmlDocument = null;
                 }
             }
@@ -934,6 +942,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.Release(leftPtr);
                 }
+
                 if (rightPtr != IntPtr.Zero)
                 {
                     Marshal.Release(rightPtr);

@@ -345,6 +345,7 @@ namespace System.ComponentModel.Design
                             printablesCount++;
                         }
                     }
+
                     for (int i = 0; i < size; i += 2)
                     {
                         char[] unicodeChars = new char[1];
@@ -435,6 +436,7 @@ namespace System.ComponentModel.Design
                     size = Kernel32.MultiByteToWideChar(Kernel32.CP.ACP, 0, pDataBuff, size, pText, size);
                 }
             }
+
             text[size] = '\0';
 
             for (int i = 0; i < size; i++)
@@ -525,6 +527,7 @@ namespace System.ComponentModel.Design
                 _scrollBar.Show();
                 _scrollBar.Enabled = false;
             }
+
             _scrollBar.Select();
             Invalidate();
         }
@@ -715,6 +718,7 @@ namespace System.ComponentModel.Design
                     {
                         ResumeLayout();
                     }
+
                     break;
             }
         }

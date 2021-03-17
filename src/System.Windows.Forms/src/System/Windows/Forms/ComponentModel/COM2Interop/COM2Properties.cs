@@ -99,11 +99,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 dbgObjName = "(null)";
             }
+
             dbgObjClass = cnd.GetClassName(obj);
             if (dbgObjClass is null)
             {
                 dbgObjClass = "(null)";
             }
+
             if (DbgCom2PropertiesSwitch.TraceVerbose)
             {
                 Debug.WriteLine("Creating Com2Properties for object " + dbgObjName + ", class=" + dbgObjClass);
@@ -135,6 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         return;
                     }
+
                     alwaysValid++;
                 }
                 else
@@ -158,6 +161,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return null;
                 }
+
                 if (defaultIndex == -1)
                 {
                     if (props.Length > 0)
@@ -169,6 +173,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         return null;
                     }
                 }
+
                 Debug.Assert(defaultIndex < props.Length, "Whoops! default index is > props.Length");
                 return props[defaultIndex];
             }
@@ -192,6 +197,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 #endif
                     return null;
                 }
+
                 return weakObjRef.Target;
             }
         }
@@ -207,6 +213,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return 0;
                 }
+
                 return DateTime.Now.Ticks - touchedTime;
             }
         }
@@ -223,6 +230,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return null;
                 }
+
                 touchedTime = DateTime.Now.Ticks;
 
                 // refresh everyone!
@@ -254,6 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return false;
                 }
+
                 return TicksSinceTouched > AGE_THRESHHOLD;
             }
         }
@@ -361,6 +370,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 versions[i] = GetTypeInfoVersion(pTypeInfos[i]);
             }
+
             return versions;
         }
 

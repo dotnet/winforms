@@ -851,6 +851,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -2225,7 +2226,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3001,7 +3003,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ScrollBars", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3135,7 +3138,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(parent, sender);
                 Assert.Same(control, e.AffectedControl);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -4767,6 +4771,7 @@ namespace System.Windows.Forms.Tests
             {
                 result._szFaceName[i] = faceName[i];
             }
+
             using var control = new CustomGetCharFormatRichTextBox
             {
                 ExpectedWParam = (IntPtr)SCF.SELECTION,
@@ -6254,6 +6259,7 @@ namespace System.Windows.Forms.Tests
             {
                 result.rgxTabs[i] = tabs[i];
             }
+
             using var control = new CustomGetParaFormatRichTextBox
             {
                 GetParaFormatResult = result
@@ -7136,7 +7142,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -7370,7 +7377,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try

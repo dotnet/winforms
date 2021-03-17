@@ -53,6 +53,7 @@ namespace System.Windows.Forms
                 return Padding.Empty;
             }
         }
+
         protected override Padding DefaultPadding
         {
             get
@@ -69,6 +70,7 @@ namespace System.Windows.Forms
                 {
                     downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
                 }
+
                 return downScrollImage;
             }
         }
@@ -89,6 +91,7 @@ namespace System.Windows.Forms
                 {
                     upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
                 }
+
                 return upScrollImage;
             }
         }
@@ -101,6 +104,7 @@ namespace System.Windows.Forms
                 {
                     mouseDownTimer = new Timer();
                 }
+
                 return mouseDownTimer;
             }
         }
@@ -116,8 +120,10 @@ namespace System.Windows.Forms
                     mouseDownTimer = null;
                 }
             }
+
             base.Dispose(disposing);
         }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             UnsubscribeAll();
@@ -140,6 +146,7 @@ namespace System.Windows.Forms
         {
             UnsubscribeAll();
         }
+
         private void UnsubscribeAll()
         {
             MouseDownTimer.Enabled = false;
@@ -194,6 +201,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 base.SetBoundsCore(x, y, width, height, specified);
             }
 
