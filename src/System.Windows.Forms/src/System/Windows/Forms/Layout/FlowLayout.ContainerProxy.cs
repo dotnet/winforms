@@ -28,10 +28,9 @@ namespace System.Windows.Forms.Layout
         private class ContainerProxy
         {
             private readonly IArrangedElement _container;
-            private ElementProxy? _elementProxy;
-            private Rectangle _displayRect;
             private readonly bool _isContainerRTL;
-
+            private Rectangle _displayRect;
+            private ElementProxy? _elementProxy;
             public ContainerProxy(IArrangedElement container)
             {
                 _container = container;
@@ -74,6 +73,7 @@ namespace System.Windows.Forms.Layout
                                 {
                                     pt.Offset(ptScroll.X, 0);
                                 }
+
                                 value.Location = pt;
                             }
                         }
@@ -84,14 +84,6 @@ namespace System.Windows.Forms.Layout
             }
 
             public IArrangedElement Container => _container;
-
-            /// <summary>
-            ///  Specifies if we're TopDown or BottomUp and should use the VerticalElementProxy to
-            ///  translate
-            /// </summary>
-            protected virtual bool IsVertical => false;
-
-            protected bool IsContainerRTL => _isContainerRTL;
 
             /// <summary>
             ///  Returns the display rectangle of the container - this will be flipped if the layout
@@ -130,6 +122,13 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
+            protected bool IsContainerRTL => _isContainerRTL;
+
+            /// <summary>
+            ///  Specifies if we're TopDown or BottomUp and should use the VerticalElementProxy to
+            ///  translate
+            /// </summary>
+            protected virtual bool IsVertical => false;
             /// <summary>
             ///  Used when you want to translate from right to left, but preserve Margin.Righ
             ///  and Margin.Left.

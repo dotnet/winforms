@@ -320,12 +320,6 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(GetFlowDirection(container) == value, "GetFlowDirection should return the same value as we set");
         }
 
-
-
-
-
-
-
         [Conditional("DEBUG_VERIFY_ALIGNMENT")]
         private void Debug_VerifyAlignment(IArrangedElement container, FlowDirection flowDirection)
         {

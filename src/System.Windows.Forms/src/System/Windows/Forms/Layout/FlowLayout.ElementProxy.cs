@@ -34,16 +34,19 @@ namespace System.Windows.Forms.Layout
                         //the element stretches to fill in the whole row. Equivalent to AnchorStyles.Top|AnchorStyles.Bottom
                         return LayoutUtils.VerticalAnchorStyles;
                     }
+
                     if (isTop)
                     {
                         //the element anchors to top and doesn't stretch
                         return AnchorStyles.Top;
                     }
+
                     if (isBottom)
                     {
                         //the element anchors to bottom and doesn't stretch
                         return AnchorStyles.Bottom;
                     }
+
                     return AnchorStyles.None;
                 }
             }
@@ -65,6 +68,14 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
+            public virtual Padding Margin => CommonProperties.GetMargin(Element);
+
+            public virtual Size MinimumSize => CommonProperties.GetMinimumSize(Element, Size.Empty);
+
+            public bool ParticipatesInLayout => _element.ParticipatesInLayout;
+
+            public virtual Size SpecifiedSize => CommonProperties.GetSpecifiedBounds(_element).Size;
+
             public bool Stretches
             {
                 get
@@ -73,14 +84,6 @@ namespace System.Windows.Forms.Layout
                     return (LayoutUtils.VerticalAnchorStyles & styles) == LayoutUtils.VerticalAnchorStyles;
                 }
             }
-
-            public virtual Padding Margin => CommonProperties.GetMargin(Element);
-
-            public virtual Size MinimumSize => CommonProperties.GetMinimumSize(Element, Size.Empty);
-
-            public bool ParticipatesInLayout => _element.ParticipatesInLayout;
-
-            public virtual Size SpecifiedSize => CommonProperties.GetSpecifiedBounds(_element).Size;
 
             public virtual Size GetPreferredSize(Size proposedSize)
             {

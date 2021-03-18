@@ -27,10 +27,12 @@ namespace System.Windows.Forms.Layout
                     {
                         return LayoutUtils.VerticalAnchorStyles;
                     }
+
                     if (isLeft)
                     {
                         return AnchorStyles.Top;
                     }
+
                     if (isRight)
                     {
                         return AnchorStyles.Bottom;

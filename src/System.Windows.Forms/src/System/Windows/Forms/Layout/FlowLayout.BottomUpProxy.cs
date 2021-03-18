@@ -14,8 +14,6 @@ namespace System.Windows.Forms.Layout
             {
             }
 
-            protected override bool IsVertical => true;
-
             /// <summary>
             ///  For BottomUp we're really still laying out horizontally. The element proxy is the one
             ///  which flips all the rectangles and rotates itself into the vertical orientation.
@@ -36,6 +34,8 @@ namespace System.Windows.Forms.Layout
                     base.Bounds = RTLTranslateNoMarginSwap(value);
                 }
             }
+
+            protected override bool IsVertical => true;
         }
     }
 }
