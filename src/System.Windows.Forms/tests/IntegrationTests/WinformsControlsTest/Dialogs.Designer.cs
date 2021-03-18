@@ -125,6 +125,13 @@ namespace WinformsControlsTest
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // folderBrowserDialog1
+            // 
+            this.folderBrowserDialog1.Description = "Open global dotnet folder";
+            this.folderBrowserDialog1.InitialDirectory = "C:\\Program Files\\dotnet";
+            this.folderBrowserDialog1.ShowNewFolderButton = false;
+            this.folderBrowserDialog1.UseDescriptionForTitle = true;
+            // 
             // Dialogs
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
