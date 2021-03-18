@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(Popup))]
     [ToolboxItemFilter("System.Windows.Forms")]
     [SRDescription(nameof(SR.DescriptionToolTip))]
-    public class ToolTip : Component, IExtenderProvider, IHandle
+    public partial class ToolTip : Component, IExtenderProvider, IHandle
     {
         private const int DefaultDelay = 500;
         private const int ReshowRatio = 5;
@@ -2346,61 +2346,6 @@ namespace System.Windows.Forms
                 default:
                     _window?.DefWndProc(ref msg);
                     break;
-            }
-        }
-
-        private class ToolTipNativeWindow : NativeWindow
-        {
-            private readonly ToolTip _control;
-
-            internal ToolTipNativeWindow(ToolTip control)
-            {
-                _control = control;
-            }
-
-            protected override void WndProc(ref Message m) => _control?.WndProc(ref m);
-        }
-
-        private class ToolTipTimer : Timer
-        {
-            public ToolTipTimer(IWin32Window owner) : base()
-            {
-                Host = owner;
-            }
-
-            public IWin32Window Host { get; }
-        }
-
-        private class TipInfo
-        {
-            [Flags]
-            public enum Type
-            {
-                None = 0x0000,
-                Auto = 0x0001,
-                Absolute = 0x0002,
-                SemiAbsolute = 0x0004
-            }
-
-            public Type TipType { get; set; } = Type.Auto;
-            private string _caption;
-            private readonly string _designerText;
-            public Point Position { get; set; }
-
-            public TipInfo(string caption, Type type)
-            {
-                _caption = caption;
-                TipType = type;
-                if (type == Type.Auto)
-                {
-                    _designerText = caption;
-                }
-            }
-
-            public string Caption
-            {
-                get => ((TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? _caption : _designerText;
-                set => _caption = value;
             }
         }
     }

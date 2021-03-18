@@ -10597,7 +10597,7 @@ System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.Tab
 ~System.Windows.Forms.TabPage.ImageKey.get -> string
 ~System.Windows.Forms.TabPage.ImageKey.set -> void
 ~System.Windows.Forms.TabPage.TabPage(string text) -> void
-~System.Windows.Forms.TabPage.TabPageControlCollection.TabPageControlCollection(System.Windows.Forms.TabPage owner) -> void
+System.Windows.Forms.TabPage.TabPageControlCollection.TabPageControlCollection(System.Windows.Forms.TabPage! owner) -> void
 ~System.Windows.Forms.TabPage.ToolTipText.get -> string
 ~System.Windows.Forms.TabPage.ToolTipText.set -> void
 ~System.Windows.Forms.TableLayoutCellPaintEventArgs.TableLayoutCellPaintEventArgs(System.Drawing.Graphics g, System.Drawing.Rectangle clipRectangle, System.Drawing.Rectangle cellBounds, int column, int row) -> void
@@ -11898,7 +11898,7 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.TabPage.OnEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabPage.OnLeave(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabPage.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.TabPage.TabPageControlCollection.Add(System.Windows.Forms.Control value) -> void
+override System.Windows.Forms.TabPage.TabPageControlCollection.Add(System.Windows.Forms.Control! value) -> void
 ~override System.Windows.Forms.TabPage.Text.get -> string
 ~override System.Windows.Forms.TabPage.Text.set -> void
 ~override System.Windows.Forms.TabPage.ToString() -> string
