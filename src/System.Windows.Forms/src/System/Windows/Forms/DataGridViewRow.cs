@@ -2210,8 +2210,6 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    DataGridView dataGridView = owner.DataGridView;
-
                     switch (direction)
                     {
                         case UiaCore.NavigateDirection.Parent:
@@ -2234,7 +2232,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.DataGridView.AccessibilityObject;
+                    return ParentPrivate;
                 }
             }
 
@@ -2252,7 +2250,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return Owner.DataGridView.Enabled;
+                        return Owner?.DataGridView?.Enabled ?? false;
                     case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
@@ -2338,7 +2336,7 @@ namespace System.Windows.Forms
 
             public override AccessibleObject GetFocused()
             {
-                if (owner.DataGridView.CurrentCell is not null && owner.DataGridView.CurrentCell.Selected)
+                if (owner.DataGridView?.CurrentCell is not null && owner.DataGridView.CurrentCell.Selected)
                 {
                     return owner.DataGridView.CurrentCell.AccessibilityObject;
                 }
