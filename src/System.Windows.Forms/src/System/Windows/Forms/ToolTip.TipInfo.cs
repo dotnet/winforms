@@ -10,19 +10,8 @@ namespace System.Windows.Forms
     {
         private class TipInfo
         {
-            [Flags]
-            public enum Type
-            {
-                None = 0x0000,
-                Auto = 0x0001,
-                Absolute = 0x0002,
-                SemiAbsolute = 0x0004
-            }
-
-            public Type TipType { get; set; } = Type.Auto;
-            private string? _caption;
             private readonly string? _designerText;
-            public Point Position { get; set; }
+            private string? _caption;
 
             public TipInfo(string caption, Type type)
             {
@@ -38,6 +27,19 @@ namespace System.Windows.Forms
             {
                 get => ((TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? _caption : _designerText;
                 set => _caption = value;
+            }
+
+            public Point Position { get; set; }
+
+            public Type TipType { get; set; } = Type.Auto;
+
+            [Flags]
+            public enum Type
+            {
+                None = 0x0000,
+                Auto = 0x0001,
+                Absolute = 0x0002,
+                SemiAbsolute = 0x0004
             }
         }
     }
