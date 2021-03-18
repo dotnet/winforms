@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -22,7 +20,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!Owner.DataGridView.IsHandleCreated)
+                    if (Owner is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                    }
+
+                    if (Owner.DataGridView is null || !Owner.DataGridView.IsHandleCreated)
                     {
                         return Rectangle.Empty;
                     }
@@ -36,7 +39,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner.DataGridView.MultiSelect)
+                    if (Owner is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                    }
+
+                    if (Owner.DataGridView?.MultiSelect ?? false)
                     {
                         return SR.DataGridView_AccTopLeftColumnHeaderCellDefaultAction;
                     }
@@ -51,6 +59,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (Owner is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                    }
+
                     object value = Owner.Value;
                     if (value is not null && !(value is string))
                     {
@@ -59,7 +72,7 @@ namespace System.Windows.Forms
                         //
                         return string.Empty;
                     }
-                    string strValue = value as string;
+                    string? strValue = value as string;
                     if (string.IsNullOrEmpty(strValue))
                     {
                         if (Owner.DataGridView is not null)
@@ -89,6 +102,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (Owner is null)
+                    {
+                        throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                    }
+
                     AccessibleStates resultState = AccessibleStates.Selectable;
 
                     // get the Offscreen state from the base method.
@@ -99,7 +117,7 @@ namespace System.Windows.Forms
                     }
 
                     // If all the cells are selected, then the top left header cell accessible object is considered to be selected as well.
-                    if (Owner.DataGridView.AreAllCellsSelected(false /*includeInvisibleCells*/))
+                    if (Owner.DataGridView is not null && Owner.DataGridView.AreAllCellsSelected(false /*includeInvisibleCells*/))
                     {
                         resultState |= AccessibleStates.Selected;
                     }
@@ -126,8 +144,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
+                if (Owner is null)
+                {
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
+
+                if (Owner.DataGridView is null)
+                {
+                    return null;
+                }
+
                 Debug.Assert(Owner.DataGridView.RowHeadersVisible, "if the row headers are not visible how did you get the top left header cell acc object?");
                 switch (navigationDirection)
                 {
@@ -158,15 +186,20 @@ namespace System.Windows.Forms
                 }
             }
 
-            private AccessibleObject NavigateForward()
+            private AccessibleObject? NavigateForward()
             {
-                if (Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
+                if (Owner is null)
+                {
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
+
+                if (Owner.DataGridView is null || Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
                 {
                     return null;
                 }
 
                 // return the acc object for the first visible column
-                return Owner.DataGridView.AccessibilityObject.GetChild(0).GetChild(1);
+                return Owner.DataGridView.AccessibilityObject.GetChild(0)?.GetChild(1);
             }
 
             public override void Select(AccessibleSelection flags)
@@ -220,8 +253,18 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderFragment Implementation
 
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
+                if (Owner is null)
+                {
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
+
+                if (Owner.DataGridView is null)
+                {
+                    return null;
+                }
+
                 DataGridView dataGridView = Owner.DataGridView;
 
                 switch (direction)
@@ -246,7 +289,7 @@ namespace System.Windows.Forms
 
             #region IRawElementProviderSimple Implementation
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyId)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyId)
             {
                 switch (propertyId)
                 {
@@ -255,7 +298,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.HeaderControlTypeId;
                     case UiaCore.UIA.IsEnabledPropertyId:
-                        return Owner.DataGridView.Enabled;
+                        return Owner?.DataGridView?.Enabled ?? false;
                     case UiaCore.UIA.HelpTextPropertyId:
                         return Help ?? string.Empty;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
