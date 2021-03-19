@@ -13,11 +13,11 @@ namespace System.Windows.Forms
     {
         private class BackgroundThread
         {
-            private readonly PrintControllerWithStatusDialog _parent;
-            private StatusDialog _dialog;
-            private readonly Thread _thread;
             internal bool _canceled;
+            private readonly PrintControllerWithStatusDialog _parent;
+            private readonly Thread _thread;
             private bool _alreadyStopped;
+            private StatusDialog _dialog;
 
             // Called from any thread
             internal BackgroundThread(PrintControllerWithStatusDialog parent)
@@ -29,6 +29,31 @@ namespace System.Windows.Forms
                 _thread = new Thread(new ThreadStart(Run));
                 _thread.SetApartmentState(ApartmentState.STA);
                 _thread.Start();
+            }
+
+            // Called from any thread
+            internal void Stop()
+            {
+                lock (this)
+                {
+                    if (_dialog != null && _dialog.IsHandleCreated)
+                    {
+                        _dialog.BeginInvoke(new MethodInvoker(_dialog.Close));
+                        return;
+                    }
+
+                    _alreadyStopped = true;
+                }
+            }
+
+            // Called from any thread
+            internal void UpdateLabel()
+            {
+                if (_dialog != null && _dialog.IsHandleCreated)
+                {
+                    _dialog.BeginInvoke(new MethodInvoker(ThreadUnsafeUpdateLabel));
+                    // Don't wait for a response
+                }
             }
 
             // on correct thread
@@ -68,37 +93,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Called from any thread
-            internal void Stop()
-            {
-                lock (this)
-                {
-                    if (_dialog != null && _dialog.IsHandleCreated)
-                    {
-                        _dialog.BeginInvoke(new MethodInvoker(_dialog.Close));
-                        return;
-                    }
-
-                    _alreadyStopped = true;
-                }
-            }
-
             // on correct thread
             private void ThreadUnsafeUpdateLabel()
             {
                 // "page {0} of {1}"
                 _dialog._label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting,
                                                    _parent._pageNumber, _parent._document.DocumentName);
-            }
-
-            // Called from any thread
-            internal void UpdateLabel()
-            {
-                if (_dialog != null && _dialog.IsHandleCreated)
-                {
-                    _dialog.BeginInvoke(new MethodInvoker(ThreadUnsafeUpdateLabel));
-                    // Don't wait for a response
-                }
             }
         }
     }

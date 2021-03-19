@@ -38,6 +38,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
+            bool ICollection.IsSynchronized
+            {
+                get
+                {
+                    return false;
+                }
+            }
+
             /// <summary>
             ///  Prevents the contents of the collection from being re-initialized;
             /// </summary>
@@ -58,14 +66,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get
                 {
                     return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
                 }
             }
 
