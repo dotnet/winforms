@@ -14,8 +14,8 @@ namespace System.Windows.Forms
             private class SubItemStyle
             {
                 public Color backColor = Color.Empty; // Do NOT rename (binary serialization).
-                public Color foreColor = Color.Empty; // Do NOT rename (binary serialization).
                 public Font? font; // Do NOT rename (binary serialization).
+                public Color foreColor = Color.Empty; // Do NOT rename (binary serialization).
             }
         }
     }

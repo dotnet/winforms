@@ -10,14 +10,15 @@ namespace System.Windows.Forms.Layout
     {
         private struct PreferredSizeCache
         {
+            public Size ConstrainingSize;
+
+            public Size PreferredSize;
+
             public PreferredSizeCache(Size constrainingSize, Size preferredSize)
             {
                 ConstrainingSize = constrainingSize;
                 PreferredSize = preferredSize;
             }
-
-            public Size ConstrainingSize;
-            public Size PreferredSize;
         }
     }
 }
