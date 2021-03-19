@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     {
         private ToolStrip _wrappedToolStrip;
         private ToolStripPanelRow _parent;
-        private Size _maxSize = LayoutUtils.MaxSize;
+        private Size _maxSize = LayoutUtils.s_maxSize;
         private bool _currentlySizing;
         private bool _currentlyDragging;
         private bool _restoreOnVisibleChanged;
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
             if (MaximumSize.Height + growBy >= Control.PreferredSize.Height)
             {
                 int freed = Control.PreferredSize.Height - MaximumSize.Height;
-                _maxSize = LayoutUtils.MaxSize;
+                _maxSize = LayoutUtils.s_maxSize;
                 return freed;
             }
 
@@ -208,7 +208,7 @@ namespace System.Windows.Forms
             if (MaximumSize.Width + growBy >= Control.PreferredSize.Width)
             {
                 int freed = Control.PreferredSize.Width - MaximumSize.Width;
-                _maxSize = LayoutUtils.MaxSize;
+                _maxSize = LayoutUtils.s_maxSize;
                 return freed;
             }
 

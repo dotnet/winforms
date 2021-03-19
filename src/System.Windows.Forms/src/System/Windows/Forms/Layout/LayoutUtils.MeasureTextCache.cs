@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Layout
         ///  3000 character strings take 9 seconds to load the form
         public sealed class MeasureTextCache
         {
-            private Size _unconstrainedPreferredSize = LayoutUtils.InvalidSize;
+            private Size _unconstrainedPreferredSize = LayoutUtils.s_invalidSize;
             private const int MaxCacheSize = 6;           // the number of preferred sizes to store
             private int _nextCacheEntry = -1;              // the next place in the ring buffer to store a preferred size
 
@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Layout
             ///  Clears out the cached values, should be called whenever Text, Font or a TextFormatFlag has changed
             public void InvalidateCache()
             {
-                _unconstrainedPreferredSize = LayoutUtils.InvalidSize;
+                _unconstrainedPreferredSize = LayoutUtils.s_invalidSize;
                 _sizeCacheList = null;
             }
 
@@ -95,13 +95,13 @@ namespace System.Windows.Forms.Layout
             ///  Gets the unconstrained (Int32.MaxValue, Int32.MaxValue) size for a piece of text
             private Size GetUnconstrainedSize(string? text, Font? font, TextFormatFlags flags)
             {
-                if (_unconstrainedPreferredSize == InvalidSize)
+                if (_unconstrainedPreferredSize == s_invalidSize)
                 {
                     // we also investigated setting the SingleLine flag, however this did not yield as much benefit as the word break
                     // and had possibility of causing internationalization issues.
 
                     flags = (flags & ~TextFormatFlags.WordBreak); // rip out the wordbreak flag
-                    _unconstrainedPreferredSize = TextRenderer.MeasureText(text, font, MaxSize, flags);
+                    _unconstrainedPreferredSize = TextRenderer.MeasureText(text, font, s_maxSize, flags);
                 }
 
                 return _unconstrainedPreferredSize;

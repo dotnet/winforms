@@ -12,10 +12,10 @@ namespace System.Windows.Forms.Layout
     // namespace, you should probably move them to WindowsFormsUtils.
     internal partial class LayoutUtils
     {
-        public static readonly Size MaxSize = new Size(int.MaxValue, int.MaxValue);
-        public static readonly Size InvalidSize = new Size(int.MinValue, int.MinValue);
+        public static readonly Size s_maxSize = new(int.MaxValue, int.MaxValue);
+        public static readonly Size s_invalidSize = new(int.MinValue, int.MinValue);
 
-        public static readonly Rectangle MaxRectangle = new Rectangle(0, 0, int.MaxValue, int.MaxValue);
+        public static readonly Rectangle s_maxRectangle = new(0, 0, int.MaxValue, int.MaxValue);
 
         public const ContentAlignment AnyTop = ContentAlignment.TopLeft | ContentAlignment.TopCenter | ContentAlignment.TopRight;
         public const ContentAlignment AnyBottom = ContentAlignment.BottomLeft | ContentAlignment.BottomCenter | ContentAlignment.BottomRight;

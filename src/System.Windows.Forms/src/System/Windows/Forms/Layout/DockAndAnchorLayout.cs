@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Layout
                     Rectangle bounds = GetCachedBounds(element);
 
                     AnchorStyles anchor = GetAnchor(element);
-                    Size proposedConstraints = LayoutUtils.MaxSize;
+                    Size proposedConstraints = LayoutUtils.s_maxSize;
 
                     if ((anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right))
                     {

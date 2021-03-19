@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         private Point _startLocation = Point.Empty;
         private bool _movingToolStrip;
         private Point _lastEndLocation = ToolStrip.s_invalidMouseEnter;
-        private static Size s_dragSize = LayoutUtils.MaxSize;
+        private static Size s_dragSize = LayoutUtils.s_maxSize;
 
         private static readonly Padding _defaultPadding = new Padding(2);
         private const int GripThicknessDefault = 3;
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 int deltaX = currentLocation.X - _startLocation.X;
                 deltaX = (deltaX < 0) ? deltaX * -1 : deltaX;
 
-                if (s_dragSize == LayoutUtils.MaxSize)
+                if (s_dragSize == LayoutUtils.s_maxSize)
                 {
                     s_dragSize = SystemInformation.DragSize;
                 }
