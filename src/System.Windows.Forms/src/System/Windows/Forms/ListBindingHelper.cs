@@ -100,6 +100,7 @@ namespace System.Windows.Forms
             {
                 return string.Empty;
             }
+
             if (list is ITypedList typedList)
             {
                 // Use typed list
@@ -390,6 +391,7 @@ namespace System.Windows.Forms
                 // Walk down the tree
                 pdc = GetListItemPropertiesByType(subType, listAccessors, startIndex);
             }
+
             // Return descriptors
             return pdc;
         }

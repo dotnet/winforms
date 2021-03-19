@@ -89,6 +89,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
                 }
+
                 return (localizable == TriState.Yes);
             }
         }
@@ -114,6 +115,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
                 }
+
                 return (readOnly == TriState.Yes);
             }
         }
@@ -159,6 +161,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return (canReset == TriState.Yes);
         }
 
@@ -251,6 +254,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 propertyOwner = ((ICustomTypeDescriptor)propertyOwner).GetPropertyOwner(descriptors[i]);
             }
+
             return propertyOwner;
         }
 
@@ -335,6 +339,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 values[i] = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
             }
+
             return values;
         }
 
@@ -429,6 +434,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -541,6 +547,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return false;
                     }
                 }
+
                 return true;
             }
 
@@ -550,6 +557,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return;
                 }
+
                 items = new object[collection.Count];
                 collection.CopyTo(items, 0);
             }
@@ -622,6 +630,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     foundAttributes = new Hashtable();
                 }
+
                 foundAttributes[attributeType] = value;
                 return value;
             }

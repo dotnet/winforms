@@ -55,6 +55,7 @@ namespace System.Drawing.Design
             {
                 return innerEditor.GetPaintValueSupported(context);
             }
+
             return base.GetPaintValueSupported(context);
         }
 
@@ -68,6 +69,7 @@ namespace System.Drawing.Design
             {
                 return innerEditor.GetEditStyle(context);
             }
+
             return base.GetEditStyle(context);
         }
 
@@ -82,6 +84,7 @@ namespace System.Drawing.Design
             {
                 innerEditor.PaintValue(e);
             }
+
             base.PaintValue(e);
         }
     }

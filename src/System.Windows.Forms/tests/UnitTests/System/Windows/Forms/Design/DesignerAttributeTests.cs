@@ -19,7 +19,8 @@ namespace System.Windows.Forms.Design.Tests
         private const string AssemblyRef_SystemWinformsDesign = "System.Windows.Forms.Design, Version=" + FXAssembly.Version + ", Culture=neutral, PublicKeyToken=" + AssemblyRef.MicrosoftPublicKey;
         private readonly ITestOutputHelper _output;
 
-        private static readonly ImmutableHashSet<string> SkipList = ImmutableHashSet.Create(new string[] {
+        private static readonly ImmutableHashSet<string> SkipList = ImmutableHashSet.Create(new string[]
+        {
             // https://github.com/dotnet/winforms/issues/2412
             "System.Windows.Forms.Design.ControlBindingsConverter, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
 

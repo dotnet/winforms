@@ -36,6 +36,7 @@ namespace System.Windows.Forms
                             Automation.AutomationNotificationProcessing.CurrentThenMostRecent, SR.UpDownEditLocalizedControlTypeName);
                         AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
                     }
+
                     base.Text = value;
                 }
             }
@@ -75,6 +76,7 @@ namespace System.Windows.Forms
                             _parent.OnMouseDoubleClick(me);
                         }
                     }
+
                     _doubleClickFired = false;
                 }
 

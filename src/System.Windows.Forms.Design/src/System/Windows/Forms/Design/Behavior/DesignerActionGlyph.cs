@@ -80,6 +80,7 @@ namespace System.Windows.Forms.Design.Behavior
                 MouseOver = true;
                 return Cursors.Default;
             }
+
             MouseOver = false;
             return null;
         }
@@ -100,6 +101,7 @@ namespace System.Windows.Forms.Design.Behavior
                         DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageClosed);
                     }
                 }
+
                 return _glyphImageClosed;
             }
         }
@@ -117,6 +119,7 @@ namespace System.Windows.Forms.Design.Behavior
                         DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageOpened);
                     }
                 }
+
                 return _glyphImageOpened;
             }
         }
@@ -146,6 +149,7 @@ namespace System.Windows.Forms.Design.Behavior
                 topRight = _adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
                 topRight.X += relatedControl.Width;
             }
+
             // ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem special logic here for our comp being a toolstrip item
             else
             {
@@ -158,10 +162,12 @@ namespace System.Windows.Forms.Design.Behavior
                         _alternativeBounds = trayControl.Bounds;
                     }
                 }
+
                 Rectangle newRect = DesignerUtils.GetBoundsForNoResizeSelectionType(_alternativeBounds, SelectionBorderGlyphType.Top);
                 topRight.X = newRect.Right;
                 topRight.Y = newRect.Top;
             }
+
             topRight.X -= (GlyphImageOpened.Width + CONTROLOVERLAP_X);
             topRight.Y -= (GlyphImageOpened.Height - CONTROLOVERLAP_Y);
             _bounds = (new Rectangle(topRight.X, topRight.Y, GlyphImageOpened.Width, GlyphImageOpened.Height));
@@ -196,6 +202,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     return;
                 }
+
                 IComponent panelComponent = ((DesignerActionUI)((DesignerActionBehavior)Behavior).ParentUI).LastPanelComponent;
                 IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
                 if (panelComponent != null && panelComponent == relatedComponent)
@@ -206,6 +213,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     image = GlyphImageClosed;
                 }
+
                 try
                 {
                     _insidePaint = true;

@@ -46,6 +46,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 int retVal = InnerList.Add(value);
                 OnAdd(value, retVal);
                 return retVal;
@@ -63,6 +64,7 @@ namespace System.Windows.Forms
                 {
                     currentOwner.SuspendLayout();
                 }
+
                 try
                 {
                     for (int i = 0; i < value.Length; i++)
@@ -78,6 +80,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             public void AddRange(ToolStripPanelRowCollection value)
             {
                 if (value is null)
@@ -90,6 +93,7 @@ namespace System.Windows.Forms
                 {
                     currentOwner.SuspendLayout();
                 }
+
                 try
                 {
                     int currentCount = value.Count;
@@ -118,6 +122,7 @@ namespace System.Windows.Forms
                 {
                     _owner.SuspendLayout();
                 }
+
                 try
                 {
                     while (Count != 0)
@@ -206,6 +211,7 @@ namespace System.Windows.Forms
                 {
                     item = (ToolStripPanelRow)(InnerList[index]);
                 }
+
                 InnerList.RemoveAt(index);
                 OnAfterRemove(item);
             }

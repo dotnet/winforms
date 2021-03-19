@@ -240,6 +240,7 @@ namespace System.Windows.Forms
                     {
                         _minimum = value;
                     }
+
                     if (value < _value)
                     {
                         Value = value;
@@ -269,6 +270,7 @@ namespace System.Windows.Forms
                     {
                         _maximum = value;
                     }
+
                     if (value > _value)
                     {
                         _value = value;
@@ -731,6 +733,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, User32.WM.KILLFOCUS);
                         User32.SendMessageW(this, User32.WM.SETFOCUS);
                     }
+
                     break;
 
                 default:

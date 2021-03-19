@@ -46,6 +46,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return def;
         }
 

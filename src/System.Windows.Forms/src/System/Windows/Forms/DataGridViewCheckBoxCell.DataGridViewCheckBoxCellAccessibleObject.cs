@@ -110,6 +110,7 @@ namespace System.Windows.Forms
                         endEditMode = true;
                         dataGridView.BeginEdit(selectAll: false);
                     }
+
                     if (dataGridView.IsCurrentCellInEditMode)
                     {
                         if (dataGridViewCell.SwitchFormattedValue())
@@ -123,6 +124,7 @@ namespace System.Windows.Forms
                                 checkBoxCell.NotifyUiaClient();
                             }
                         }
+
                         if (endEditMode)
                         {
                             dataGridView.EndEdit();

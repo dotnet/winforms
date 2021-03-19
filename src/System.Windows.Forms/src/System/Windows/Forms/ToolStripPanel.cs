@@ -134,6 +134,7 @@ namespace System.Windows.Forms
         {
             get { return Padding.Empty; }
         }
+
         protected override Padding DefaultMargin
         {
             get { return Padding.Empty; }
@@ -237,6 +238,7 @@ namespace System.Windows.Forms
                     HandleRendererChanged(this, EventArgs.Empty);
                     _rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
                 }
+
                 return _rendererSwitcher;
             }
         }
@@ -294,6 +296,7 @@ namespace System.Windows.Forms
                     rowCollection = CreateToolStripPanelRowCollection();
                     Properties.SetObject(s_propToolStripPanelRowCollection, rowCollection);
                 }
+
                 return rowCollection;
             }
         }
@@ -414,6 +417,7 @@ namespace System.Windows.Forms
             {
                 ToolStripManager.ToolStripPanels.Remove(this);
             }
+
             base.Dispose(disposing);
         }
 
@@ -427,8 +431,10 @@ namespace System.Windows.Forms
             {
                 FlowLayout.SetFlowDirection(this, FlowDirection.LeftToRight);
             }
+
             FlowLayout.SetWrapContents(this, false);
         }
+
         private Point GetStartLocation(ToolStrip toolStripToDrag)
         {
             if (toolStripToDrag.IsCurrentlyDragging
@@ -438,6 +444,7 @@ namespace System.Windows.Forms
                 // the grip is on the right side, not left.
                 return new Point(toolStripToDrag.Right, toolStripToDrag.Top);
             }
+
             return toolStripToDrag.Location;
         }
 
@@ -481,6 +488,7 @@ namespace System.Windows.Forms
             {
                 controlToBeDragged.ToolStripPanelRow?.ControlsInternal.Remove(e.Control);
             }
+
             base.OnControlRemoved(e);
         }
 
@@ -495,6 +503,7 @@ namespace System.Windows.Forms
                     LayoutTransaction.DoLayout(draggedControl.ToolStripPanelRow, e.AffectedComponent as IArrangedElement, e.AffectedProperty);
                 }
             }
+
             base.OnLayout(e);
         }
 
@@ -581,6 +590,7 @@ namespace System.Windows.Forms
         {
             PerformUpdate(false);
         }
+
         internal void PerformUpdate(bool forceLayout)
         {
             if (!_state[s_stateBeginInit] && !_state[s_stateInJoin])
@@ -588,6 +598,7 @@ namespace System.Windows.Forms
                 JoinControls(forceLayout);
             }
         }
+
         private void ResetRenderMode()
         {
             RendererSwitcher.ResetRenderMode();
@@ -607,6 +618,7 @@ namespace System.Windows.Forms
         {
             JoinControls(false);
         }
+
         private void JoinControls(bool forceLayout)
         {
             // undone: config - shift to other container
@@ -631,10 +643,12 @@ namespace System.Windows.Forms
                             continue;
                         }
                     }
+
                     if (controlArray[i].AutoSize)
                     {
                         controlArray[i].Size = controlArray[i].PreferredSize;
                     }
+
                     Point controlLocation = controlArray[i].Location;
 
                     // right to left has changed while layout was deferred...
@@ -642,6 +656,7 @@ namespace System.Windows.Forms
                     {
                         controlLocation = new Point(Width - controlArray[i].Right, controlLocation.Y);
                     }
+
                     Join(controlArray[i] as ToolStrip, controlArray[i].Location);
                     if (numRows < RowsInternal.Count || forceLayout)
                     {
@@ -653,6 +668,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             _state[s_stateRightToLeftChanged] = false;
         }
 
@@ -668,6 +684,7 @@ namespace System.Windows.Forms
                 // paint the feedback in the correct location when RTL.Yes
                 screenLocation.Offset(-toolStripToDrag.Width, 0);
             }
+
             if (CurrentFeedbackRect is null)
             {
                 Debug.WriteLineIf(s_toolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: creating NEW feedback at " + screenLocation.ToString());
@@ -774,6 +791,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(toolStripToDrag));
             }
+
             if (!_state[s_stateBeginInit] && !_state[s_stateInJoin])
             {
                 try
@@ -913,6 +931,7 @@ namespace System.Windows.Forms
                             previousRow = RowsInternal[index - 1];
                         }
                     }
+
                     if (previousRow != null /* there was a previous row */
                         && previousRow.ControlsInternal.Count == 1 /*toolStripToDrag*/
                         && previousRow.ControlsInternal.Contains(toolStripToDrag))
@@ -955,6 +974,7 @@ namespace System.Windows.Forms
                             return;
                         }
                     }
+
                     row = new ToolStripPanelRow(this);
                     RowsInternal.Insert(index, row);
                     clientLocation.Y = row.Bounds.Y;
@@ -971,6 +991,7 @@ namespace System.Windows.Forms
                         changedRow = true;
                     }
                 }
+
                 if (changedRow)
                 {
                     Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
@@ -978,6 +999,7 @@ namespace System.Windows.Forms
                     {
                         currentToolStripPanelRow.LeaveRow(toolStripToDrag);
                     }
+
                     row.JoinRow(toolStripToDrag, clientLocation);
                 }
 
@@ -1004,6 +1026,7 @@ namespace System.Windows.Forms
                             cursorLoc.Y += toolStripToDrag.GripRectangle.Height / 2;
                             cursorLoc.X = Cursor.Position.X;
                         }
+
                         Cursor.Position = cursorLoc;
                     }
                 }
@@ -1030,6 +1053,7 @@ namespace System.Windows.Forms
                 {
                     panel.MoveControl(toolStripToDrag, screenLocation);
                 }
+
                 toolStripToDrag.PerformLayout();
 #if DEBUG
                 ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
@@ -1075,6 +1099,7 @@ namespace System.Windows.Forms
                     return row;
                 }
             }
+
             return null;
         }
 
@@ -1122,6 +1147,7 @@ namespace System.Windows.Forms
                 {
                     Debug.Write(string.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));
                 }
+
                 Debug.Write("\r\n");
             }
         }
@@ -1143,6 +1169,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
+
                     Rectangle intersection = c1.Bounds;
                     intersection.Intersect(c2.Bounds);
 

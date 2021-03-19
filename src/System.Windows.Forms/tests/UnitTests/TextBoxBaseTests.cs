@@ -531,6 +531,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -594,7 +595,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("BorderStyle", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1987,7 +1989,8 @@ namespace System.Windows.Forms.Tests
                 //TODO
                 //Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3698,7 +3701,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("WordWrap", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -6069,6 +6073,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = action
@@ -6146,6 +6151,7 @@ namespace System.Windows.Forms.Tests
                 var message = new Message();
                 Assert.True(control.ProcessCmdKey(ref message, Keys.Control | Keys.Back));
             }
+
             Assert.Equal(expected, control.Text);
         }
 
@@ -6222,6 +6228,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessDialogKeyAction = action

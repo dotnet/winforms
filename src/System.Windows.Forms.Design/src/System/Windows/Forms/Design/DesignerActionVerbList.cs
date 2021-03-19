@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design
                     items.Add(new DesignerActionVerbItem(_verbs[i]));
                 }
             }
+
             return items;
         }
     }

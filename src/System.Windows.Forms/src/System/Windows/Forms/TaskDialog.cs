@@ -658,6 +658,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(min));
             }
+
             if (max < 0 || max > ushort.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(max));
@@ -842,6 +843,7 @@ namespace System.Windows.Forms
                             _raisedPageCreated = true;
                             _boundPage.OnCreated(EventArgs.Empty);
                         }
+
                         break;
 
                     case ComCtl32.TDN.NAVIGATED:
@@ -910,6 +912,7 @@ namespace System.Windows.Forms
                             // with the 'Destroyed' notification.
                             _handle = IntPtr.Zero;
                         }
+
                         break;
 
                     case ComCtl32.TDN.BUTTON_CLICKED:
@@ -973,6 +976,7 @@ namespace System.Windows.Forms
                             {
                                 _buttonClickNavigationCounter.stackCount++;
                             }
+
                             try
                             {
                                 applyButtonResult = button.HandleButtonClicked();
@@ -1040,6 +1044,7 @@ namespace System.Windows.Forms
                         {
                             RadioButtonClickedStackCount++;
                         }
+
                         try
                         {
                             radioButton.HandleRadioButtonClicked();

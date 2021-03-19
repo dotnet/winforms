@@ -1805,6 +1805,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 remove { }
             }
         }
+
         private static void DumpState(Hashtable state)
         {
             Console.WriteLine("---- DUMPING ----");

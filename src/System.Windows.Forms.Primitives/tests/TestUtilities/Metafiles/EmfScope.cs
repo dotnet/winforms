@@ -45,6 +45,7 @@ namespace System.Windows.Forms.Metafiles
             {
                 throw new Win32Exception("Could not create metafile");
             }
+
             return metafileHdc;
         }
 
@@ -178,6 +179,7 @@ namespace System.Windows.Forms.Metafiles
                                 state.Transform = state.Transform * transform->xform;
                                 break;
                         }
+
                         break;
                     case Gdi32.EMR.SAVEDC:
                         state.SaveDC();

@@ -29,6 +29,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -38,6 +39,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return true;
             }
+
             return destType.IsEnum;
         }
 
@@ -50,6 +52,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return _com2Enum.FromString((string)value);
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -80,6 +83,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return Enum.ToObject(destinationType, value);
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
@@ -99,6 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     _values = new StandardValuesCollection(objValues);
                 }
             }
+
             return _values;
         }
 

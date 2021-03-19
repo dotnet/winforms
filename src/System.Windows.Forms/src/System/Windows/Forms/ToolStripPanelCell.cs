@@ -37,6 +37,7 @@ namespace System.Windows.Forms
         public ToolStripPanelCell(Control control) : this(null, control)
         {
         }
+
         public ToolStripPanelCell(ToolStripPanelRow parent, Control control)
         {
 #if DEBUG
@@ -56,6 +57,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
+
             CommonProperties.SetAutoSize(this, true);
             _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
             _wrappedToolStrip.VisibleChanged += new EventHandler(OnToolStripVisibleChanged);
@@ -105,6 +107,7 @@ namespace System.Windows.Forms
                     {
                         ((IList)_parent.Cells).Remove(this);
                     }
+
                     _parent = value;
                     Margin = Padding.Empty;
                 }
@@ -119,6 +122,7 @@ namespace System.Windows.Forms
                 {
                     return InnerElement.ParticipatesInLayout;
                 }
+
                 return false;
             }
             set
@@ -183,6 +187,7 @@ namespace System.Windows.Forms
                 _maxSize.Height += growBy;
                 return growBy;
             }
+
             return 0;
         }
 
@@ -215,8 +220,10 @@ namespace System.Windows.Forms
                 _maxSize.Width += growBy;
                 return growBy;
             }
+
             return 0;
         }
+
         protected override void Dispose(bool disposing)
         {
             try
@@ -231,11 +238,13 @@ namespace System.Windows.Forms
                         _wrappedToolStrip.LocationChanging -= new ToolStripLocationCancelEventHandler(OnToolStripLocationChanging);
                         _wrappedToolStrip.VisibleChanged -= new EventHandler(OnToolStripVisibleChanged);
                     }
+
                     _wrappedToolStrip = null;
                     if (_parent != null)
                     {
                         ((IList)_parent.Cells).Remove(this);
                     }
+
                     _parent = null;
                 }
 #if DEBUG
@@ -314,6 +323,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelMouseDebug.TraceVerbose, "[CELL] DRAGGING calling SetBounds " + bounds.ToString());
                     base.SetBoundsCore(bounds, specified);
                     InnerElement.SetBounds(bounds, specified);
@@ -367,6 +377,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (!_currentlySizing && !_currentlyDragging)
             {
                 try
@@ -379,6 +390,7 @@ namespace System.Windows.Forms
                     {
                         ToolStripPanelRow.ToolStripPanel.PerformUpdate(true);
                     }
+
                     if (_wrappedToolStrip != null)
                     {
                         ToolStripPanelRow.ToolStripPanel.Join(_wrappedToolStrip, newloc);

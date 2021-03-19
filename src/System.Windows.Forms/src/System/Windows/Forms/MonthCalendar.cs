@@ -500,6 +500,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
                 }
+
                 if (value < DateTimePicker.MinimumDateTime)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
@@ -607,6 +608,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
                 }
+
                 if (value > MaxScrollChange)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
@@ -642,6 +644,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
                 }
+
                 if (value > MaxDate)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
@@ -685,6 +688,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
                 }
+
                 if (value > _maxDate)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
@@ -1398,6 +1402,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (IntPtr)_maxSelectionCount);
             }
+
             AdjustSize();
 
             if (_todayDateSet)
@@ -1704,6 +1709,7 @@ namespace System.Windows.Forms
 
                 width = GetPreferredWidth(width, updateRowsAndColumns);
             }
+
             if (height != oldBounds.Height)
             {
                 if (height > max.Height)
@@ -1713,6 +1719,7 @@ namespace System.Windows.Forms
 
                 height = GetPreferredHeight(height, updateRowsAndColumns);
             }
+
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
@@ -1742,18 +1749,22 @@ namespace System.Windows.Forms
             {
                 _selectionStart = minDate;
             }
+
             if (_selectionStart > maxDate)
             {
                 _selectionStart = maxDate;
             }
+
             if (_selectionEnd < minDate)
             {
                 _selectionEnd = minDate;
             }
+
             if (_selectionEnd > maxDate)
             {
                 _selectionEnd = maxDate;
             }
+
             SetSelRange(_selectionStart, _selectionEnd);
 
             // Updated the calendar range
@@ -1779,6 +1790,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(x), string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
             }
+
             if (y < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(y), string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
@@ -1819,6 +1831,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidLowBoundArgumentEx, nameof(date), FormatDate(date), nameof(MinDate)));
             }
+
             if (date.Ticks > _maxDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidHighBoundArgumentEx, nameof(date), FormatDate(date), nameof(MaxDate)));
@@ -1889,14 +1902,17 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date1), nameof(MinDate)));
             }
+
             if (date1.Ticks > _maxDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date1), nameof(MaxDate)));
             }
+
             if (date2.Ticks < _minDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date2), nameof(MinDate)));
             }
+
             if (date2.Ticks > _maxDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date2), nameof(MaxDate)));
@@ -2199,6 +2215,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);

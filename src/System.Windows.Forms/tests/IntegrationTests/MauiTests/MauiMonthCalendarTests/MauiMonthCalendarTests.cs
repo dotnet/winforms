@@ -37,6 +37,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 Calendar.Dispose();
             }
         }
+
         public MauiMonthCalendarTests(string[] args) : base(args)
         {
             this.BringToForeground();

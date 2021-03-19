@@ -70,12 +70,14 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.DataGridViewCell_FormattedValueTypeNull);
                 }
+
                 if (value is null || !FormattedValueType.IsAssignableFrom(value.GetType()))
                 {
                     // Assigned formatted value may not be of the good type, in cases where the app
                     // is feeding wrong values to the cell in virtual / databound mode.
                     throw new ArgumentException(SR.DataGridViewCheckBoxCell_InvalidValueType);
                 }
+
                 if (value is CheckState)
                 {
                     if (((CheckState)value) == System.Windows.Forms.CheckState.Checked)
@@ -139,6 +141,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCell_FormattedValueTypeNull);
             }
+
             if (FormattedValueType.IsAssignableFrom(defaultCheckStateType))
             {
                 if ((flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0x00)
@@ -147,6 +150,7 @@ namespace System.Windows.Forms
                     {
                         return SR.DataGridViewCheckBoxCell_ClipboardChecked;
                     }
+
                     return System.Windows.Forms.CheckState.Checked;
                 }
                 else if ((flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0x00)
@@ -155,6 +159,7 @@ namespace System.Windows.Forms
                     {
                         return SR.DataGridViewCheckBoxCell_ClipboardIndeterminate;
                     }
+
                     return System.Windows.Forms.CheckState.Indeterminate;
                 }
                 else
@@ -163,6 +168,7 @@ namespace System.Windows.Forms
                     {
                         return SR.DataGridViewCheckBoxCell_ClipboardUnchecked;
                     }
+
                     return System.Windows.Forms.CheckState.Unchecked;
                 }
             }
@@ -173,6 +179,7 @@ namespace System.Windows.Forms
                 {
                     return ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse;
                 }
+
                 return ret;
             }
             else
@@ -194,6 +201,7 @@ namespace System.Windows.Forms
                 {
                     return (ButtonState)buttonState;
                 }
+
                 return ButtonState.Normal;
             }
             set
@@ -266,6 +274,7 @@ namespace System.Windows.Forms
                 {
                     return (FlatStyle)flatStyle;
                 }
+
                 return FlatStyle.Standard;
             }
             set
@@ -468,6 +477,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewCheckBoxCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.ThreeStateInternal = ThreeState;
             dataGridViewCell.TrueValueInternal = TrueValue;
@@ -676,6 +686,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return ret;
         }
 
@@ -722,11 +733,13 @@ namespace System.Windows.Forms
                             preferredSize = new Size(checkBoxSize.Width + borderAndPaddingWidths + 2 * DATAGRIDVIEWCHECKBOXCELL_margin, 0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0, checkBoxSize.Height + borderAndPaddingHeights + 2 * DATAGRIDVIEWCHECKBOXCELL_margin);
                             break;
                         }
+
                     default:
                         {
                             preferredSize = new Size(checkBoxSize.Width + borderAndPaddingWidths + 2 * DATAGRIDVIEWCHECKBOXCELL_margin,
@@ -758,11 +771,13 @@ namespace System.Windows.Forms
                             preferredSize = new Size(checkBoxSize + borderAndPaddingWidths, 0);
                             break;
                         }
+
                     case DataGridViewFreeDimension.Height:
                         {
                             preferredSize = new Size(0, checkBoxSize + borderAndPaddingHeights);
                             break;
                         }
+
                     default:
                         {
                             preferredSize = new Size(checkBoxSize + borderAndPaddingWidths, checkBoxSize + borderAndPaddingHeights);
@@ -786,12 +801,14 @@ namespace System.Windows.Forms
                     preferredSize.Width = Math.Max(preferredSize.Width,
                                                    borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
+
                 if (freeDimension != DataGridViewFreeDimension.Width)
                 {
                     preferredSize.Height = Math.Max(preferredSize.Height,
                                                     borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
+
             return preferredSize;
         }
 
@@ -837,6 +854,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == ColumnIndex &&
                 ptCurrentCell.Y == e.RowIndex &&
@@ -866,6 +884,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift)
             {
                 UpdateButtonState(ButtonState | ButtonState.Checked, rowIndex);
@@ -879,6 +898,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.KeyCode == Keys.Space)
             {
                 UpdateButtonState(ButtonState & ~ButtonState.Checked, rowIndex);
@@ -891,6 +911,7 @@ namespace System.Windows.Forms
                     {
                         RaiseCellContentClick(new DataGridViewCellEventArgs(ColumnIndex, rowIndex));
                     }
+
                     e.Handled = true;
                 }
 
@@ -904,6 +925,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (ButtonState != ButtonState.Normal)
             {
                 Debug.Assert(RowIndex >= 0); // Cell is not in a shared row.
@@ -917,6 +939,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.Button == MouseButtons.Left && mouseInContentBounds)
             {
                 Debug.Assert(DataGridView.CellMouseDownInContentBounds);
@@ -992,6 +1015,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.Button == MouseButtons.Left)
             {
                 UpdateButtonState(ButtonState & ~ButtonState.Pushed, e.RowIndex);
@@ -1184,6 +1208,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
@@ -1415,6 +1440,7 @@ namespace System.Windows.Forms
                                             User32.DFC.MENU,
                                             User32.DFCS.MENUCHECK);
                                     }
+
                                     bitmap.MakeTransparent();
                                     checkImage = bitmap;
                                 }
@@ -1534,6 +1560,7 @@ namespace System.Windows.Forms
                                     colors,
                                     colors.WindowText);
                             }
+
                             resultBounds = layout.CheckBounds;
                         }
                         else
@@ -1671,6 +1698,7 @@ namespace System.Windows.Forms
                             {
                                 return CheckState.Checked;
                             }
+
                             break;
                         case CheckState.Unchecked:
                             if (FalseValue is not null)
@@ -1685,6 +1713,7 @@ namespace System.Windows.Forms
                             {
                                 return CheckState.Unchecked;
                             }
+
                             break;
                         case CheckState.Indeterminate:
                             if (IndeterminateValue is not null)
@@ -1695,11 +1724,13 @@ namespace System.Windows.Forms
                             {
                                 return CheckState.Indeterminate;
                             }
+
                             /* case where this.ValueType.IsAssignableFrom(defaultBooleanType) is treated in base.ParseFormattedValue */
                             break;
                     }
                 }
             }
+
             return base.ParseFormattedValue(formattedValue, cellStyle, formattedValueTypeConverter, valueTypeConverter);
         }
 
@@ -1709,6 +1740,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
             if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
             {
@@ -1729,6 +1761,7 @@ namespace System.Windows.Forms
             {
                 editingCell.EditingCellFormattedValue = !((bool)editingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting));
             }
+
             return true;
         }
 

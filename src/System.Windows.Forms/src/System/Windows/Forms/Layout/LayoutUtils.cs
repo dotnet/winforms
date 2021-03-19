@@ -27,7 +27,8 @@ namespace System.Windows.Forms.Layout
         public const AnchorStyles HorizontalAnchorStyles = AnchorStyles.Left | AnchorStyles.Right;
         public const AnchorStyles VerticalAnchorStyles = AnchorStyles.Top | AnchorStyles.Bottom;
 
-        private static readonly AnchorStyles[] dockingToAnchor = new AnchorStyles[] {
+        private static readonly AnchorStyles[] dockingToAnchor = new AnchorStyles[]
+        {
             /* None   */ AnchorStyles.Top | AnchorStyles.Left,
             /* Top    */ AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
             /* Bottom */ AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
@@ -53,6 +54,7 @@ namespace System.Windows.Forms.Layout
                     largestSize.Height = Math.Max(largestSize.Height, textSize.Height);
                 }
             }
+
             return largestSize;
         }
 
@@ -147,6 +149,7 @@ namespace System.Windows.Forms.Layout
                 padding.Right = Math.Max(0, padding.Right);
                 padding.Bottom = Math.Max(0, padding.Bottom);
             }
+
             return padding;
         }
 
@@ -221,16 +224,19 @@ namespace System.Windows.Forms.Layout
             {
                 return false;
             }
+
             if (rect1.X <= rect2.X && rect1.X + rect1.Width >= rect2.X + rect2.Width)
             {
                 //rect 1 contains rect 2 horizontally
                 return true;
             }
+
             if (rect2.X <= rect1.X && rect2.X + rect2.Width >= rect1.X + rect1.Width)
             {
                 //rect 2 contains rect 1 horizontally
                 return true;
             }
+
             return false;
         }
 
@@ -240,16 +246,19 @@ namespace System.Windows.Forms.Layout
             {
                 return false;
             }
+
             if (rect1.Y <= rect2.Y && rect1.Y + rect1.Width >= rect2.Y + rect2.Width)
             {
                 //rect 1 contains rect 2 vertically
                 return true;
             }
+
             if (rect2.Y <= rect1.Y && rect2.Y + rect2.Width >= rect1.Y + rect1.Width)
             {
                 //rect 2 contains rect 1 vertically
                 return true;
             }
+
             return false;
         }
 
@@ -261,6 +270,7 @@ namespace System.Windows.Forms.Layout
             {
                 return dockingToAnchor[(int)dockStyle];
             }
+
             return DefaultLayout.GetAnchor(element);
         }
 
@@ -289,6 +299,7 @@ namespace System.Windows.Forms.Layout
             {
                 withinThis.X += (withinThis.Width - alignThis.Width) / 2;
             }
+
             withinThis.Width = alignThis.Width;
 
             return withinThis;
@@ -304,6 +315,7 @@ namespace System.Windows.Forms.Layout
             {
                 withinThis.X += (withinThis.Width - alignThis.Width) / 2;
             }
+
             withinThis.Width = alignThis.Width;
 
             return withinThis;
@@ -351,10 +363,12 @@ namespace System.Windows.Forms.Layout
             {
                 stretchedSize.Width = withinThis.Width;
             }
+
             if (stretchedSize.Height > withinThis.Height)
             {
                 stretchedSize.Height = withinThis.Height;
             }
+
             return stretchedSize;
         }
 
@@ -393,6 +407,7 @@ namespace System.Windows.Forms.Layout
                 currentSize.Width += contentSize.Width;
                 currentSize.Height = Math.Max(currentSize.Height, contentSize.Height);
             }
+
             return currentSize;
         }
 
@@ -555,6 +570,7 @@ namespace System.Windows.Forms.Layout
                     Debug.Fail("Unsupported value for region1Align.");
                     break;
             }
+
             Debug.Assert(Rectangle.Union(region1, region2) == bounds, "region1 and region2 do not add up to bounds.");
         }
 
@@ -573,6 +589,7 @@ namespace System.Windows.Forms.Layout
             {
                 currentSize.Width -= contentSize.Width;
             }
+
             return currentSize;
         }
 
@@ -663,6 +680,7 @@ namespace System.Windows.Forms.Layout
 
                             return sizeCache.PreferredSize;
                         }
+
                         //
                     }
 
@@ -688,6 +706,7 @@ namespace System.Windows.Forms.Layout
                     flags = (flags & ~TextFormatFlags.WordBreak); // rip out the wordbreak flag
                     unconstrainedPreferredSize = TextRenderer.MeasureText(text, font, MaxSize, flags);
                 }
+
                 return unconstrainedPreferredSize;
             }
 
@@ -710,6 +729,7 @@ namespace System.Windows.Forms.Layout
                     ConstrainingSize = constrainingSize;
                     PreferredSize = preferredSize;
                 }
+
                 public Size ConstrainingSize;
                 public Size PreferredSize;
             }
@@ -809,6 +829,7 @@ namespace System.Windows.Forms.Layout
                     elementToLayout.PerformLayout(elementCausingLayout, property);
                 }
             }
+
             Debug.Assert(elementCausingLayout != null, "LayoutTransaction.DoLayout - elementCausingLayout is null, no layout performed - did you mix up your parameters?");
         }
 
@@ -830,6 +851,7 @@ namespace System.Windows.Forms.Layout
             }
         }
     }
+
     internal struct NullLayoutTransaction : IDisposable
     {
         public void Dispose()

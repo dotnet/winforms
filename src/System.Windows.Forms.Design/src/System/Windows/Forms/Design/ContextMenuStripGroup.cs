@@ -21,6 +21,7 @@ namespace System.Windows.Forms.Design
                 {
                     _items = new List<ToolStripItem>();
                 }
+
                 return _items;
             }
         }

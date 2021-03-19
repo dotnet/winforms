@@ -129,6 +129,7 @@ namespace System.Windows.Forms
                         s_interpolationMode = InterpolationMode.HighQualityBicubic;
                     }
                 }
+
                 return s_interpolationMode;
             }
         }
@@ -283,6 +284,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap, deviceDpi);
             if (deviceBitmap is not null)
             {

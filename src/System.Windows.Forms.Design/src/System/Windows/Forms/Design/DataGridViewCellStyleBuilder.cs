@@ -49,6 +49,7 @@ namespace System.Windows.Forms.Design
             {
                 _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }
+
             _cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, comp);
         }
 
@@ -337,6 +338,7 @@ namespace System.Windows.Forms.Design
                 {
                     _accObj = new DialogDataGridViewCellAccessibleObject(this);
                 }
+
                 return _accObj;
             }
 

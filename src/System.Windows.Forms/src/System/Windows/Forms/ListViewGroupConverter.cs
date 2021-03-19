@@ -43,6 +43,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             if (destinationType == typeof(string) && context != null && context.Instance is ListViewItem)
             {
                 return true;
@@ -129,9 +130,11 @@ namespace System.Windows.Forms
                 {
                     list.Add(group);
                 }
+
                 list.Add(null);
                 return new StandardValuesCollection(list);
             }
+
             return null;
         }
 

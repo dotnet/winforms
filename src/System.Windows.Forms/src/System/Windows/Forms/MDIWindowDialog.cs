@@ -49,6 +49,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             this.active = active;
             itemList.SelectedIndex = selIndex;
         }

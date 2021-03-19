@@ -97,6 +97,7 @@ namespace System.Windows.Forms
                                 goto FindSlotComplete;
                             }
                         }
+
                         throw new ArgumentException(SR.CommandIdNotAllocated);
                     }
                     else

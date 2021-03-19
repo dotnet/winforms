@@ -42,6 +42,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(affectedProperty, e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             int layoutCallCount1 = 0;
             control1.Layout += (sender, e) => layoutCallCount1++;

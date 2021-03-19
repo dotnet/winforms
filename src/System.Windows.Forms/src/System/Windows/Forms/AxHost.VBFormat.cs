@@ -56,6 +56,7 @@ namespace System.Windows.Forms
                             Marshal.WriteInt16(lpBuffer, i * 2, ch);
                         }
                     }
+
                     Marshal.WriteInt16(lpBuffer, i * 2, (short)0);
                     *rcb = i;
                 }

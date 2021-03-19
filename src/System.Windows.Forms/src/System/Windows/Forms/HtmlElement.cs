@@ -111,8 +111,10 @@ namespace System.Windows.Forms
                         shimManager.AddElementShim(this);
                         shim = ShimManager.GetElementShim(this);
                     }
+
                     return shim;
                 }
+
                 return null;
             }
         }
@@ -127,6 +129,7 @@ namespace System.Windows.Forms
                 {
                     iHtmlElement = iHtmlDomNode.FirstChild() as IHTMLElement;
                 }
+
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
@@ -161,6 +164,7 @@ namespace System.Windows.Forms
                     {
                         throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
+
                     throw;
                 }
             }
@@ -184,6 +188,7 @@ namespace System.Windows.Forms
                     {
                         throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
+
                     throw;
                 }
             }
@@ -219,6 +224,7 @@ namespace System.Windows.Forms
                 {
                     iHtmlElement = iHtmlDomNode.NextSibling() as IHTMLElement;
                 }
+
                 return iHtmlElement != null ? new HtmlElement(shimManager, iHtmlElement) : null;
             }
         }
@@ -259,6 +265,7 @@ namespace System.Windows.Forms
                     {
                         throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
+
                     throw;
                 }
             }
@@ -282,6 +289,7 @@ namespace System.Windows.Forms
                     {
                         throw new NotSupportedException(SR.HtmlElementPropertyNotSupported);
                     }
+
                     throw;
                 }
             }
@@ -405,6 +413,7 @@ namespace System.Windows.Forms
                 {
                     throw new NotSupportedException(SR.HtmlElementMethodNotSupported);
                 }
+
                 throw;
             }
         }
@@ -420,6 +429,7 @@ namespace System.Windows.Forms
             IHTMLElementCollection iHTMLElementCollection = ((IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
             return iHTMLElementCollection != null ? new HtmlElementCollection(shimManager, iHTMLElementCollection) : new HtmlElementCollection(shimManager);
         }
+
         public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
         {
             IHTMLElement iHtmlElement = ((IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
@@ -515,6 +525,7 @@ namespace System.Windows.Forms
                 {
                     throw new NotSupportedException(SR.HtmlElementAttributeNotSupported);
                 }
+
                 throw;
             }
         }
@@ -587,11 +598,13 @@ namespace System.Windows.Forms
             add => ElementShim.AddHandler(EventKeyDown, value);
             remove => ElementShim.RemoveHandler(EventKeyDown, value);
         }
+
         public event HtmlElementEventHandler KeyPress
         {
             add => ElementShim.AddHandler(EventKeyPress, value);
             remove => ElementShim.RemoveHandler(EventKeyPress, value);
         }
+
         public event HtmlElementEventHandler KeyUp
         {
             add => ElementShim.AddHandler(EventKeyUp, value);
@@ -603,11 +616,13 @@ namespace System.Windows.Forms
             add => ElementShim.AddHandler(EventMouseMove, value);
             remove => ElementShim.RemoveHandler(EventMouseMove, value);
         }
+
         public event HtmlElementEventHandler MouseDown
         {
             add => ElementShim.AddHandler(EventMouseDown, value);
             remove => ElementShim.RemoveHandler(EventMouseDown, value);
         }
+
         public event HtmlElementEventHandler MouseOver
         {
             add => ElementShim.AddHandler(EventMouseOver, value);
@@ -671,6 +686,7 @@ namespace System.Windows.Forms
             {
                 parent = htmlElement;
             }
+
             private void FireEvent(object key, EventArgs e)
             {
                 if (parent != null)
@@ -1013,27 +1029,30 @@ namespace System.Windows.Forms
         /// </summary>
         internal class HtmlElementShim : HtmlShim
         {
-            private static readonly Type[] dispInterfaceTypes = {typeof(DHTMLElementEvents2),
-                                                    typeof(DHTMLAnchorEvents2),
-                                                    typeof(DHTMLAreaEvents2),
-                                                    typeof(DHTMLButtonElementEvents2),
-                                                    typeof(DHTMLControlElementEvents2),
-                                                    typeof(DHTMLFormElementEvents2),
-                                                    typeof(DHTMLFrameSiteEvents2),
-                                                    typeof(DHTMLImgEvents2),
-                                                    typeof(DHTMLInputFileElementEvents2),
-                                                    typeof(DHTMLInputImageEvents2),
-                                                    typeof(DHTMLInputTextElementEvents2),
-                                                    typeof(DHTMLLabelEvents2),
-                                                    typeof(DHTMLLinkElementEvents2),
-                                                    typeof(DHTMLMapEvents2),
-                                                    typeof(DHTMLMarqueeElementEvents2),
-                                                    typeof(DHTMLOptionButtonElementEvents2),
-                                                    typeof(DHTMLSelectElementEvents2),
-                                                    typeof(DHTMLStyleElementEvents2),
-                                                    typeof(DHTMLTableEvents2),
-                                                    typeof(DHTMLTextContainerEvents2),
-                                                    typeof(DHTMLScriptEvents2)};
+            private static readonly Type[] dispInterfaceTypes =
+            {
+                typeof(DHTMLElementEvents2),
+                typeof(DHTMLAnchorEvents2),
+                typeof(DHTMLAreaEvents2),
+                typeof(DHTMLButtonElementEvents2),
+                typeof(DHTMLControlElementEvents2),
+                typeof(DHTMLFormElementEvents2),
+                typeof(DHTMLFrameSiteEvents2),
+                typeof(DHTMLImgEvents2),
+                typeof(DHTMLInputFileElementEvents2),
+                typeof(DHTMLInputImageEvents2),
+                typeof(DHTMLInputTextElementEvents2),
+                typeof(DHTMLLabelEvents2),
+                typeof(DHTMLLinkElementEvents2),
+                typeof(DHTMLMapEvents2),
+                typeof(DHTMLMarqueeElementEvents2),
+                typeof(DHTMLOptionButtonElementEvents2),
+                typeof(DHTMLSelectElementEvents2),
+                typeof(DHTMLStyleElementEvents2),
+                typeof(DHTMLTableEvents2),
+                typeof(DHTMLTextContainerEvents2),
+                typeof(DHTMLScriptEvents2)
+            };
 
             private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native HtmlElement
             private HtmlElement htmlElement;
@@ -1120,6 +1139,7 @@ namespace System.Windows.Forms
                     cookie = null;
                 }
             }
+
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
@@ -1127,6 +1147,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.FinalReleaseComObject(htmlElement.NativeHtmlElement);
                 }
+
                 htmlElement = null;
             }
 
@@ -1166,6 +1187,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.Release(leftPtr);
                 }
+
                 if (rightPtr != IntPtr.Zero)
                 {
                     Marshal.Release(rightPtr);

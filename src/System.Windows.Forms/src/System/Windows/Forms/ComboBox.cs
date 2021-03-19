@@ -157,15 +157,18 @@ namespace System.Windows.Forms
                 {
                     throw new NotSupportedException(SR.ComboBoxAutoCompleteModeOnlyNoneAllowed);
                 }
+
                 if (Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
                 }
+
                 bool resetAutoComplete = false;
                 if (_autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
                 {
                     resetAutoComplete = true;
                 }
+
                 _autoCompleteMode = value;
                 SetAutoComplete(resetAutoComplete, true);
             }
@@ -196,6 +199,7 @@ namespace System.Windows.Forms
                 {
                     throw new NotSupportedException(SR.ComboBoxAutoCompleteSourceOnlyListItemsAllowed);
                 }
+
                 if (Application.OleRequired() != System.Threading.ApartmentState.STA)
                 {
                     throw new ThreadStateException(SR.ThreadMustBeSTA);
@@ -225,6 +229,7 @@ namespace System.Windows.Forms
                     _autoCompleteCustomSource = new AutoCompleteStringCollection();
                     _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
+
                 return _autoCompleteCustomSource;
             }
             set
@@ -242,6 +247,7 @@ namespace System.Windows.Forms
                     {
                         _autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
+
                     SetAutoComplete(false, true);
                 }
             }
@@ -374,6 +380,7 @@ namespace System.Windows.Forms
                         cp.Height = PreferredHeight;
                         break;
                 }
+
                 switch (DrawMode)
                 {
                     case DrawMode.OwnerDrawFixed:
@@ -475,6 +482,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
                 }
+
                 if (Properties.GetInteger(PropDropDownWidth) != value)
                 {
                     Properties.SetInteger(PropDropDownWidth, value);
@@ -514,6 +522,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
                 }
+
                 if (Properties.GetInteger(PropDropDownHeight) != value)
                 {
                     Properties.SetInteger(PropDropDownHeight, value);
@@ -678,6 +687,7 @@ namespace System.Windows.Forms
                 {
                     throw new Win32Exception();
                 }
+
                 return h;
             }
 
@@ -718,6 +728,7 @@ namespace System.Windows.Forms
                 {
                     _itemsCollection = new ObjectCollection(this);
                 }
+
                 return _itemsCollection;
             }
         }
@@ -760,6 +771,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
                 }
+
                 _maxDropDownItems = (short)value;
             }
         }
@@ -906,6 +918,7 @@ namespace System.Windows.Forms
                             _prefHeightCache = (short)GetComboHeight();
                         }
                     }
+
                     return _prefHeightCache;
                 }
             }
@@ -954,6 +967,7 @@ namespace System.Windows.Forms
                 {
                     strings[i] = AutoCompleteCustomSource[i];
                 }
+
                 return strings;
             }
             else if (collection is ObjectCollection)
@@ -963,8 +977,10 @@ namespace System.Windows.Forms
                 {
                     strings[i] = GetItemText(_itemsCollection[i]);
                 }
+
                 return strings;
             }
+
             return Array.Empty<string>();
         }
 
@@ -1140,6 +1156,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
+
                 Select(value, SelectionLength);
             }
         }
@@ -1247,6 +1264,7 @@ namespace System.Windows.Forms
                         return FilterItemOnProperty(SelectedItem).ToString();       //heinous.
                     }
                 }
+
                 return base.Text;
             }
             set
@@ -1557,9 +1575,11 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
+
                             DefChildWndProc(ref m);
                         }
                     }
+
                     break;
                 case WM.SYSCHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
@@ -1574,9 +1594,11 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
+
                             DefChildWndProc(ref m);
                         }
                     }
+
                     break;
                 case WM.KEYDOWN:
                 case WM.SYSKEYDOWN:
@@ -1612,9 +1634,11 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
+
                             DefChildWndProc(ref m);
                         }
                     }
+
                     break;
 
                 case WM.INPUTLANGCHANGE:
@@ -1635,9 +1659,11 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
+
                             DefChildWndProc(ref m);
                         }
                     }
+
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive)
                     {
                         _finder.FindDropDowns();
@@ -1708,6 +1734,7 @@ namespace System.Windows.Forms
                     {
                         Invalidate();
                     }
+
                     break;
 
                 case WM.SETFONT:
@@ -1716,6 +1743,7 @@ namespace System.Windows.Forms
                     {
                         SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
+
                     break;
                 case WM.LBUTTONDBLCLK:
                     // The Listbox gets WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP
@@ -1882,6 +1910,7 @@ namespace System.Windows.Forms
                     {
                         DefChildWndProc(ref m);
                     }
+
                     break;
 
                 case WM.MOUSEMOVE:
@@ -1902,6 +1931,7 @@ namespace System.Windows.Forms
                     {
                         DefChildWndProc(ref m);
                     }
+
                     break;
 
                 case WM.MOUSELEAVE:
@@ -1979,12 +2009,14 @@ namespace System.Windows.Forms
                 {
                     _autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
+
                 if (_stringSource is not null)
                 {
                     _stringSource.ReleaseAutoComplete();
                     _stringSource = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -2001,12 +2033,14 @@ namespace System.Windows.Forms
             {
                 SetAutoComplete(false, false);
             }
+
             if (EndUpdateInternal())
             {
                 if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
                 {
                     InvalidateRect(new HandleRef(this, _childEdit.Handle), null, BOOL.FALSE);
                 }
+
                 if (_childListBox is not null && _childListBox.Handle != IntPtr.Zero)
                 {
                     InvalidateRect(new HandleRef(this, _childListBox.Handle), null, BOOL.FALSE);
@@ -2077,6 +2111,7 @@ namespace System.Windows.Forms
                 // in this case, we need to reset our height cache.
                 ResetHeightCache();
             }
+
             base.ScaleControl(factor, specified);
         }
 
@@ -2105,6 +2140,7 @@ namespace System.Windows.Forms
                 {
                     throw new Win32Exception();
                 }
+
                 return h;
             }
 
@@ -2168,6 +2204,7 @@ namespace System.Windows.Forms
                     {
                         SelectedIndex = 0;
                     }
+
                     return false;
                 }
             }
@@ -2193,6 +2230,7 @@ namespace System.Windows.Forms
                         MatchingText = MatchingText.Remove(MatchingText.Length - 1);
                         SelectedIndex = FindString(MatchingText);
                     }
+
                     _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return false;
                 }
@@ -2207,6 +2245,7 @@ namespace System.Windows.Forms
                 {
                     DroppedDown = true;
                 }
+
                 if (DateTime.Now.Ticks - _autoCompleteTimeStamp > AutoCompleteTimeout)
                 {
                     newMatchingText = new string(keyChar, 1);
@@ -2215,6 +2254,7 @@ namespace System.Windows.Forms
                         MatchingText = newMatchingText;
                         // Select the found item
                     }
+
                     _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return false;
                 }
@@ -2230,11 +2270,13 @@ namespace System.Windows.Forms
                             SelectedIndex = itemFound;
                         }
                     }
+
                     // Do not change the selection
                     _autoCompleteTimeStamp = DateTime.Now.Ticks;
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -2291,6 +2333,7 @@ namespace System.Windows.Forms
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
             }
+
             return insertIndex;
         }
 
@@ -2354,6 +2397,7 @@ namespace System.Windows.Forms
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
             }
+
             Debug.Assert(insertIndex == index, "NativeComboBox inserted at " + insertIndex + " not the requested index of " + index);
             return insertIndex;
         }
@@ -2387,6 +2431,7 @@ namespace System.Windows.Forms
                 WindowText = oldText;   //restore the window text
             }
         }
+
         /// <summary>
         ///  Overridden to avoid multiple layouts during handle creation due to combobox size change
         /// </summary>
@@ -2457,6 +2502,7 @@ namespace System.Windows.Forms
                 // someone has set the item height - update it
                 UpdateItemHeight();
             }
+
             // Resize a simple style combobox on handle creation
             // to respect the requested height.
             //
@@ -2493,6 +2539,7 @@ namespace System.Windows.Forms
                     _selectedIndex = -1;
                 }
             }
+
             // NOTE: Setting SelectedIndex must be the last thing we do.
         }
 
@@ -2512,11 +2559,13 @@ namespace System.Windows.Forms
             {
                 _selectedIndex = SelectedIndex;
             }
+
             if (_stringSource is not null)
             {
                 _stringSource.ReleaseAutoComplete();
                 _stringSource = null;
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -2572,6 +2621,7 @@ namespace System.Windows.Forms
                     // Fire TextChanged Only
                     NotifyAutoComplete(false);
                 }
+
                 _autoCompleteDroppedDown = false;
             }
 
@@ -2625,6 +2675,7 @@ namespace System.Windows.Forms
             base.OnMouseEnter(e);
             MouseIsOver = true;
         }
+
         /// <summary>
         ///  If we have the style set to popup show mouse over
         /// </summary>
@@ -2783,6 +2834,7 @@ namespace System.Windows.Forms
                 //we always will recreate the handle when autocomplete mode is on
                 RecreateHandle();
             }
+
             CommonProperties.xClearPreferredSizeCache(this);
         }
 
@@ -2842,6 +2894,7 @@ namespace System.Windows.Forms
                 {
                     MatchingText = string.Empty;
                 }
+
                 base.OnLostFocus(e);
                 _canFireLostFocus = false;
             }
@@ -2930,6 +2983,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ComboBoxDataSourceWithSort);
                 }
             }
+
             if (DataSource is null)
             {
                 BeginUpdate();
@@ -2937,6 +2991,7 @@ namespace System.Windows.Forms
                 Items.ClearInternal();
                 EndUpdate();
             }
+
             if (!Sorted && Created)
             {
                 base.OnDataSourceChanged(e);
@@ -3014,6 +3069,7 @@ namespace System.Windows.Forms
                     EndUpdateInternal();
                     SelectedText = string.Empty;
                 }
+
                 return true;
             }
 
@@ -3039,6 +3095,7 @@ namespace System.Windows.Forms
         {
             _prefHeightCache = -1;
         }
+
         /// <summary>
         ///  Reparses the objects, getting new text strings for them.
         /// </summary>
@@ -3069,6 +3126,7 @@ namespace System.Windows.Forms
                 newItems = new object[savedItems.Count];
                 savedItems.CopyTo(newItems, arrayIndex: 0);
             }
+
             BeginUpdate();
             try
             {
@@ -3078,12 +3136,14 @@ namespace System.Windows.Forms
                 {
                     NativeClear();
                 }
+
                 // Store the current list of items
                 //
                 if (newItems is not null)
                 {
                     Items.AddRangeInternal(newItems);
                 }
+
                 if (DataManager is not null)
                 {
                     // put the selectedIndex in sync w/ the position in the dataManager
@@ -3257,10 +3317,12 @@ namespace System.Windows.Forms
                     {
                         mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                     }
+
                     if (AutoCompleteMode == AutoCompleteMode.Append)
                     {
                         mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                     }
+
                     if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                     {
                         mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
@@ -3286,6 +3348,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
             }
+
             // the Length can be negative to support Selecting in the "reverse" direction..
             int end = start + length;
 
@@ -3413,6 +3476,7 @@ namespace System.Windows.Forms
                     int count = Math.Min(Math.Max(itemCount, 1), _maxDropDownItems);
                     height = (ItemHeight * count + 2);
                 }
+
                 SetWindowPos(
                     new HandleRef(this, _dropDownHandle),
                     HWND_TOP,
@@ -3436,6 +3500,7 @@ namespace System.Windows.Forms
                 // if we don't create control here we report item heights incorrectly later on.
                 CreateControl();
             }
+
             if (DrawMode == DrawMode.OwnerDrawFixed)
             {
                 SendMessageW(this, (WM)CB.SETITEMHEIGHT, (IntPtr)(-1), (IntPtr)ItemHeight);
@@ -3455,6 +3520,7 @@ namespace System.Windows.Forms
                         SendMessageW(this, (WM)CB.SETITEMHEIGHT, (IntPtr)i, (IntPtr)mievent.ItemHeight);
                     }
                 }
+
                 graphics.Dispose();
             }
         }
@@ -3618,6 +3684,7 @@ namespace System.Windows.Forms
                     {
                         OnTextChanged(EventArgs.Empty);
                     }
+
                     _dropDown = false;
                     break;
                 case CBN.DROPDOWN:
@@ -3702,6 +3769,7 @@ namespace System.Windows.Forms
                     {
                         _fireSetFocus = true;
                     }
+
                     break;
                 case WM.KILLFOCUS:
                     try
@@ -3729,6 +3797,7 @@ namespace System.Windows.Forms
                     {
                         _fireLostFocus = true;
                     }
+
                     break;
                 case WM.CTLCOLOREDIT:
                 case WM.CTLCOLORLISTBOX:
@@ -3776,6 +3845,7 @@ namespace System.Windows.Forms
                             OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                             OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         }
+
                         base.WndProc(ref m);
                     }
                     else
@@ -3783,6 +3853,7 @@ namespace System.Windows.Forms
                         Capture = false;
                         DefWndProc(ref m);
                     }
+
                     break;
 
                 case WM.MOUSELEAVE:
@@ -3850,9 +3921,11 @@ namespace System.Windows.Forms
                                     FlatComboBoxAdapter.DrawFlatCombo(this, g);
                                 }
                             }
+
                             return;
                         }
                     }
+
                     base.WndProc(ref m);
                     return;
 
@@ -3865,6 +3938,7 @@ namespace System.Windows.Forms
                     {
                         _suppressNextWindosPos = true;
                     }
+
                     base.WndProc(ref m);
                     break;
 
@@ -3873,6 +3947,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     _suppressNextWindosPos = false;
                     break;
 
@@ -3888,6 +3963,7 @@ namespace System.Windows.Forms
                         OnMouseEnterInternal(EventArgs.Empty);
                         break;
                     }
+
                     base.WndProc(ref m);
                     break;
             }
@@ -3902,6 +3978,7 @@ namespace System.Windows.Forms
                     comboAdapter = CreateFlatComboAdapterInstance();
                     Properties.SetObject(PropFlatComboAdapter, comboAdapter);
                 }
+
                 return comboAdapter;
             }
         }

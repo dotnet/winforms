@@ -32,12 +32,14 @@ namespace System.Windows.Forms
                         Debug.Fail("A property specified in the path is null or not yet instanciated at this time");
                         break; // path is wrong
                     }
+
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
                     if (prop is null)
                     {
                         Debug.Fail("The path specified to the property is wrong");
                         break; // path is wrong
                     }
+
                     if (i == pathInfo.Length - 1)
                     {
                         // we're on the last one, look if that's our guy

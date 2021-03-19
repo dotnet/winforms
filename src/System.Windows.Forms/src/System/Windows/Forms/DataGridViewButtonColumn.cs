@@ -38,6 +38,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
                 }
+
                 base.CellTemplate = value;
             }
         }
@@ -62,6 +63,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ((DataGridViewButtonCell)CellTemplate).FlatStyle;
             }
             set
@@ -81,6 +83,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
                 }
@@ -120,6 +123,7 @@ namespace System.Windows.Forms
                                     return;
                                 }
                             }
+
                             DataGridView.InvalidateColumn(Index);
                         }
                     }
@@ -138,6 +142,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValue;
             }
             set
@@ -157,6 +162,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.UseColumnTextForButtonValueInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
                 }
@@ -176,11 +182,13 @@ namespace System.Windows.Forms
             {
                 dataGridViewColumn = (DataGridViewButtonColumn)System.Activator.CreateInstance(thisType);
             }
+
             if (dataGridViewColumn is not null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 dataGridViewColumn.Text = _text;
             }
+
             return dataGridViewColumn;
         }
 

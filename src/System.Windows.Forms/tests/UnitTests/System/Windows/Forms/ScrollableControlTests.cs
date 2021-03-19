@@ -2543,6 +2543,7 @@ namespace System.Windows.Forms.Tests
             {
                 control.Controls.Add(activeControl.Parent ?? activeControl);
             }
+
             control.ScrollControlIntoView(activeControl);
             Assert.Equal(expectedDisplayRectangle, control.DisplayRectangle);
 

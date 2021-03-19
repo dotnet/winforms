@@ -119,6 +119,7 @@ namespace System.Windows.Forms.Design
                         g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, BOXIMAGESIZE - 1, BOXIMAGESIZE - 1);
                     }
                 }
+
                 return s_boxImage;
             }
         }
@@ -145,6 +146,7 @@ namespace System.Windows.Forms.Design
                     s_minDragSize.Width = Math.Max(minDrag.Width, minDblClick.Width);
                     s_minDragSize.Height = Math.Max(minDrag.Height, minDblClick.Height);
                 }
+
                 return s_minDragSize;
             }
         }
@@ -229,6 +231,7 @@ namespace System.Windows.Forms.Design
             {
                 color = SystemColors.ControlLight;
             }
+
             switch (style)
             {
                 case FrameStyle.Dashed:
@@ -239,6 +242,7 @@ namespace System.Windows.Forms.Design
                     brush = new SolidBrush(color);
                     break;
             }
+
             g.FillRegion(brush, resizeBorder);
             brush.Dispose();
         }
@@ -311,6 +315,7 @@ namespace System.Windows.Forms.Design
                 GenerateSnapShotWithBitBlt(control, ref image);
                 //if we still failed - we'll just fall though, put up a border around an empty area and call it good enough
             }
+
             //set the opacity
             if (opacity < 1.0 && opacity > 0.0)
             {
@@ -341,6 +346,7 @@ namespace System.Windows.Forms.Design
                 case AdornmentType.Maximum:
                     return new Size(CONTAINERGRABHANDLESIZE, CONTAINERGRABHANDLESIZE);
             }
+
             return new Size(0, 0);
         }
 
@@ -361,6 +367,7 @@ namespace System.Windows.Forms.Design
             {
                 useSnapLines = (bool)optionValue;
             }
+
             return useSnapLines;
         }
 
@@ -385,6 +392,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return optionValue;
         }
 
@@ -456,6 +464,7 @@ namespace System.Windows.Forms.Design
                 //wm_print failed
                 return false;
             }
+
             return true;
         }
 
@@ -483,6 +492,7 @@ namespace System.Windows.Forms.Design
                     bounds = originalBounds;
                     break;
             }
+
             return bounds;
         }
 
@@ -518,6 +528,7 @@ namespace System.Windows.Forms.Design
                         break;
                 }
             }
+
             return bounds;
         }
 
@@ -661,6 +672,7 @@ namespace System.Windows.Forms.Design
                 {
                     nameN = name + i.ToString(CultureInfo.InvariantCulture);
                 }
+
                 return nameN;
             }
         }
@@ -728,6 +740,7 @@ namespace System.Windows.Forms.Design
                     final.Add(t);
                 }
             }
+
             return final;
         }
 
@@ -777,6 +790,7 @@ namespace System.Windows.Forms.Design
                     {
                         css.Serialize(store, comp);
                     }
+
                     store.Close();
                     copyObjects = css.Deserialize(store);
 
@@ -797,6 +811,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     Debug.Assert(newObjects.Count == objects.Count, "Why is the count of the copied objects not the same?");
                     return newObjects;
                 }
@@ -805,6 +820,7 @@ namespace System.Windows.Forms.Design
             {
                 Cursor.Current = oldCursor;
             }
+
             return null;
         }
 
@@ -821,6 +837,7 @@ namespace System.Windows.Forms.Design
                 copySelection.Add(comp);
                 GetAssociatedComponents(comp, host, copySelection);
             }
+
             return copySelection;
         }
 
@@ -864,6 +881,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new ArgumentNullException(nameof(treeView));
             }
+
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             IntPtr hwnd = treeView.Handle;
@@ -883,6 +901,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new ArgumentNullException(nameof(listView));
             }
+
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             User32.SendMessageW(hwnd, (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);

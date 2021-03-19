@@ -127,6 +127,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException();
                     }
+
                     DeviceContext = graphics;
                 }
             }

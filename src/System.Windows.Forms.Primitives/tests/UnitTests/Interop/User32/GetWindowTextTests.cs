@@ -68,6 +68,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                         {
                             SetWindowTextW(hWnd, text);
                         }
+
                         break;
                     case WM.GETTEXT:
                         text = BeforeGetTextCallback?.Invoke();
@@ -75,6 +76,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.User32
                         {
                             SetWindowTextW(hWnd, text);
                         }
+
                         break;
                 }
 

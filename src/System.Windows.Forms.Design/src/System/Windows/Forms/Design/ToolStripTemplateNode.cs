@@ -133,6 +133,7 @@ namespace System.Windows.Forms.Design
                     MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH = DpiHelper.LogicalToDeviceUnitsX(MINITOOLSTRIP_DROPDOWN_BUTTON_WIDTH_ORIGINAL);
                     MINITOOLSTRIP_TEXTBOX_WIDTH = DpiHelper.LogicalToDeviceUnitsX(MINITOOLSTRIP_TEXTBOX_WIDTH_ORIGINAL);
                 }
+
                 s_isScalingInitialized = true;
             }
 
@@ -283,6 +284,7 @@ namespace System.Windows.Forms.Design
                 {
                     templateNodeContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
                 }
+
                 return templateNodeContextMenu;
             }
         }
@@ -344,6 +346,7 @@ namespace System.Windows.Forms.Design
                 {
                     _toolStripKeyBoardService = (ToolStripKeyboardHandlingService)_component.Site.GetService(typeof(ToolStripKeyboardHandlingService));
                 }
+
                 return _toolStripKeyBoardService;
             }
         }
@@ -359,6 +362,7 @@ namespace System.Windows.Forms.Design
                 {
                     _selectionService = (ISelectionService)_component.Site.GetService(typeof(ISelectionService));
                 }
+
                 return _selectionService;
             }
         }
@@ -371,6 +375,7 @@ namespace System.Windows.Forms.Design
                 {
                     _behaviorService = (BehaviorService)_component.Site.GetService(typeof(BehaviorService));
                 }
+
                 return _behaviorService;
             }
         }
@@ -414,6 +419,7 @@ namespace System.Windows.Forms.Design
                     {
                         designer.DontCloseOverflow = true;
                     }
+
                     SelectionService.SetSelectedComponents(new object[] { _component });
                 }
                 finally
@@ -468,10 +474,12 @@ namespace System.Windows.Forms.Design
                 {
                     return;
                 }
+
                 if (KeyboardService != null)
                 {
                     KeyboardService.SelectedDesignerControl = _controlHost;
                 }
+
                 SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                 if (BehaviorService != null)
                 {
@@ -489,6 +497,7 @@ namespace System.Windows.Forms.Design
                     {
                         KeyboardService.SelectedDesignerControl = _controlHost;
                     }
+
                     SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                     ToolStripDropDown oldContextMenu = _contextMenu;
                     // PERF: Consider refresh mechanism for the derived items.
@@ -499,6 +508,7 @@ namespace System.Windows.Forms.Design
                         oldContextMenu.Opened -= new EventHandler(OnContextMenuOpened);
                         oldContextMenu.Dispose();
                     }
+
                     _contextMenu = null;
                     ShowDropDownMenu();
                 }
@@ -513,6 +523,7 @@ namespace System.Windows.Forms.Design
                         {
                             KeyboardService.ActiveTemplateNode.Commit(false, false);
                         }
+
                         // cause a selectionChange...
                         if (SelectionService.PrimarySelection is null)
                         {
@@ -523,6 +534,7 @@ namespace System.Windows.Forms.Design
                         SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                         ((ToolStripDesigner)_designer).ShowEditNode(true);
                     }
+
                     if (_designer is ToolStripMenuItemDesigner)
                     {
                         // cache the serviceProvider (Site) since the component can potential get disposed after the call to CommitAndSelect();
@@ -549,6 +561,7 @@ namespace System.Windows.Forms.Design
                                 KeyboardService.ActiveTemplateNode.Commit(false, false);
                             }
                         }
+
                         if (_designer != null)
                         {
                             ((ToolStripMenuItemDesigner)_designer).EditTemplateNode(true);
@@ -570,6 +583,7 @@ namespace System.Windows.Forms.Design
                                             bSvc.Invalidate(bounds);
                                         }
                                     }
+
                                     itemDesigner.EditTemplateNode(true);
                                 }
                             }
@@ -611,6 +625,7 @@ namespace System.Windows.Forms.Design
                     {
                         _renderer.State = (int)TemplateNodeSelectionState.MouseOverLabel;
                     }
+
                     _miniToolStrip.Invalidate();
                 }
             }
@@ -627,10 +642,12 @@ namespace System.Windows.Forms.Design
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.None;
                 }
+
                 if (KeyboardService != null && KeyboardService.SelectedDesignerControl == _controlHost)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 }
+
                 _miniToolStrip.Invalidate();
             }
         }
@@ -705,6 +722,7 @@ namespace System.Windows.Forms.Design
                     _addItemButton.Dispose();
                     _addItemButton = null;
                 }
+
                 if (_contextMenu != null)
                 {
                     _contextMenu.Closed -= new ToolStripDropDownClosedEventHandler(OnContextMenuClosed);
@@ -722,6 +740,7 @@ namespace System.Windows.Forms.Design
                     _designSurface.Flushed -= new EventHandler(OnLoaderFlushed);
                     _designSurface = null;
                 }
+
                 _designer = null;
                 OnClosed(new EventArgs());
             }
@@ -765,6 +784,7 @@ namespace System.Windows.Forms.Design
                 {
                     ToolStripItemType = typeof(ToolStripSeparator);
                 }
+
                 if (ToolStripItemType != null)
                 {
                     selectedType = ToolStripItemType;
@@ -775,6 +795,7 @@ namespace System.Windows.Forms.Design
                     Type[] supportedTypes = ToolStripDesignerUtils.GetStandardItemTypes(_component);
                     selectedType = supportedTypes[0];
                 }
+
                 if (_designer is ToolStripDesigner)
                 {
                     ((ToolStripDesigner)_designer).AddNewItem(selectedType, text, enterKeyPressed, tabKeyPressed);
@@ -819,6 +840,7 @@ namespace System.Windows.Forms.Design
                         {
                             BehaviorService.Invalidate(rgn);
                         }
+
                         rgn.Dispose();
                     }
                 }
@@ -837,6 +859,7 @@ namespace System.Windows.Forms.Design
                 {
                     _miniToolStrip.Parent.SuspendLayout();
                 }
+
                 try
                 {
                     Active = true;
@@ -869,6 +892,7 @@ namespace System.Windows.Forms.Design
                     {
                         _centerTextBox.Margin = new System.Windows.Forms.Padding(1);
                     }
+
                     _centerTextBox.Size = _miniToolStrip.DisplayRectangle.Size - _centerTextBox.Margin.Size;
                     _centerTextBox.Name = "centerTextBox";
                     _centerTextBox.MouseEnter += new EventHandler(CenterTextBoxMouseEnter);
@@ -915,6 +939,7 @@ namespace System.Windows.Forms.Design
                 {
                     _miniToolStrip.Parent.SuspendLayout();
                 }
+
                 try
                 {
                     //if going insitu with a real item, set & select all the text
@@ -944,6 +969,7 @@ namespace System.Windows.Forms.Design
                     {
                         _miniToolStrip.Parent.ResumeLayout();
                     }
+
                     // POP of the Handler !!!
                     Active = false;
                 }
@@ -959,6 +985,7 @@ namespace System.Windows.Forms.Design
             {
                 _centerLabel.Text = currentItem.Text;
             }
+
             EnterInSituEdit();
         }
 
@@ -1048,6 +1075,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             switch (e.KeyCode)
             {
                 case Keys.Up:
@@ -1056,6 +1084,7 @@ namespace System.Windows.Forms.Design
                     {
                         KeyboardService.ProcessUpDown(false);
                     }
+
                     break;
                 case Keys.Down:
                     Commit(true, false);
@@ -1069,6 +1098,7 @@ namespace System.Windows.Forms.Design
                         ignoreFirstKeyUp = false;
                         return;
                     }
+
                     OnKeyDefaultAction(sender, e);
                     break;
             }
@@ -1083,6 +1113,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             if (e.KeyCode == Keys.A && (e.KeyData & Keys.Control) != 0)
             {
                 if (sender is TextBox t)
@@ -1147,6 +1178,7 @@ namespace System.Windows.Forms.Design
             {
                 KeyboardService.SelectedDesignerControl = _controlHost;
             }
+
             SelectionService.SetSelectedComponents(null, SelectionTypes.Replace);
         }
 
@@ -1169,6 +1201,7 @@ namespace System.Windows.Forms.Design
                         _renderer.State = (int)TemplateNodeSelectionState.DropDownSelected;
                     }
                 }
+
                 _miniToolStrip.Invalidate();
             }
         }
@@ -1184,10 +1217,12 @@ namespace System.Windows.Forms.Design
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.None;
                 }
+
                 if (KeyboardService != null && KeyboardService.SelectedDesignerControl == _controlHost)
                 {
                     _renderer.State = (int)TemplateNodeSelectionState.TemplateNodeSelected;
                 }
+
                 _miniToolStrip.Invalidate();
             }
         }
@@ -1221,6 +1256,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -1267,6 +1303,7 @@ namespace System.Windows.Forms.Design
                     _isPopulated = true;
                     ToolStripDesignerUtils.GetCustomNewItemDropDown(_contextMenu, _component, null, new EventHandler(AddNewItemClick), false, _component.Site);
                 }
+
                 _addItemButton.ShowDropDown();
             }
             else
@@ -1304,6 +1341,7 @@ namespace System.Windows.Forms.Design
                             _contextMenu.RightToLeft = stripItem.RightToLeft;
                         }
                     }
+
                     _contextMenu.Show(translatedBounds.X, translatedBounds.Y + translatedBounds.Height);
                     _contextMenu.Focus();
                     if (_renderer != null)
@@ -1334,6 +1372,7 @@ namespace System.Windows.Forms.Design
             {
                 _centerLabel.Margin = new Padding(1, 2, 1, 3);
             }
+
             _centerLabel.Padding = new Padding(0, 1, 0, 0);
             _centerLabel.Name = CenterLabelName;
             _centerLabel.Size = _miniToolStrip.DisplayRectangle.Size - _centerLabel.Margin.Size;
@@ -1392,9 +1431,11 @@ namespace System.Windows.Forms.Design
                     {
                         DpiHelper.ScaleBitmapLogicalToDevice(ref bmp);
                     }
+
                     _addItemButton.Image = bmp;
                     _addItemButton.DefaultItem = firstItem;
                 }
+
                 Debug.Assert(_addItemButton.DropDownItems.Count > 0);
             }
             catch (Exception ex)
@@ -1404,7 +1445,9 @@ namespace System.Windows.Forms.Design
                     throw;
                 }
             }
-            _miniToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+
+            _miniToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
                 _addItemButton
             });
         }
@@ -1424,11 +1467,13 @@ namespace System.Windows.Forms.Design
                 // Make TransparentToolStrip has the same "Site" as ToolStrip. This could make sure TransparentToolStrip has the same design time behavior as ToolStrip.
                 _miniToolStrip.Site = strip.Site;
             }
+
             if (currentItem is ToolStripDropDownItem stripItem)
             {
                 _miniToolStrip.RightToLeft = stripItem.RightToLeft;
                 stripItem.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
             }
+
             _miniToolStrip.SuspendLayout();
             _miniToolStrip.CanOverflow = false;
             _miniToolStrip.Cursor = System.Windows.Forms.Cursors.Default;
@@ -1451,6 +1496,7 @@ namespace System.Windows.Forms.Design
                 SetUpToolTemplateNode(owner, text, image, currentItem);
                 _miniToolStrip.AccessibleRole = AccessibleRole.ButtonDropDown;
             }
+
             _miniToolStrip.MouseLeave += new System.EventHandler(OnMouseLeave);
             _miniToolStrip.ResumeLayout();
         }
@@ -1497,6 +1543,7 @@ namespace System.Windows.Forms.Design
                 {
                     return true;
                 }
+
                 return false;
             }
 
@@ -1508,6 +1555,7 @@ namespace System.Windows.Forms.Design
                         owner.Commit(true, false);
                         return true;
                 }
+
                 return base.IsInputKey(keyData);
             }
 
@@ -1525,6 +1573,7 @@ namespace System.Windows.Forms.Design
                     owner.IMEModeSet = false;
                     owner.ignoreFirstKeyUp = false;
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -1542,6 +1591,7 @@ namespace System.Windows.Forms.Design
                         {
                             owner.Commit(false, false);
                         }
+
                         break;
 
                     // 1.Slowly click on a menu strip item twice to make it editable, while the item's dropdown menu is visible
@@ -1611,6 +1661,7 @@ namespace System.Windows.Forms.Design
                         selectedItem = Items[i];
                     }
                 }
+
                 return selectedItem;
             }
 
@@ -1639,6 +1690,7 @@ namespace System.Windows.Forms.Design
                     CommitAndSelectNext(forward);
                     return true;
                 }
+
                 return false;
             }
 
@@ -1666,6 +1718,7 @@ namespace System.Windows.Forms.Design
                         return retVal;
                     }
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -1702,8 +1755,10 @@ namespace System.Windows.Forms.Design
                             // m.Result = AutomationInteropProvider.ReturnRawElementProvider(Handle, m.WParam, m.LParam, (IRawElementProviderSimple)(new TransparentToolStripUiaProvider(this)));
                             return;
                         }
+
                         break;
                 }
+
                 base.WndProc(ref m);
             }
         }
@@ -1764,20 +1819,24 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, bounds);
                         }
+
                         break;
                     case 5: //MouseOnthe HotRegion
                         using (SolidBrush b = new SolidBrush(dropDownMouseOverColor))
                         {
                             g.FillRectangle(b, hotRegion);
                         }
+
                         break;
                     case 6: //HotRegionSelected
                         using (SolidBrush b = new SolidBrush(dropDownMouseDownColor))
                         {
                             g.FillRectangle(b, hotRegion);
                         }
+
                         break;
                 }
+
                 DrawArrow(g, bounds);
             }
 
@@ -1824,6 +1883,7 @@ namespace System.Windows.Forms.Design
                     {
                         g.FillRectangle(brush, drawRect);
                     }
+
                     if (owner.EditorToolStrip.RightToLeft == RightToLeft.Yes)
                     {
                         hotRegion = new Rectangle(bounds.Left + 2, bounds.Top + 2, TEMPLATE_HOTREGION_WIDTH, bounds.Bottom - 4);
@@ -1832,6 +1892,7 @@ namespace System.Windows.Forms.Design
                     {
                         hotRegion = new Rectangle(bounds.Right - TEMPLATE_HOTREGION_WIDTH - 2, bounds.Top + 2, TEMPLATE_HOTREGION_WIDTH, bounds.Bottom - 4);
                     }
+
                     owner.HotRegion = hotRegion;
 
                     // do the Actual Drawing
@@ -1852,6 +1913,7 @@ namespace System.Windows.Forms.Design
                     {
                         hotRegion = new Rectangle(bounds.Right - TEMPLATE_HOTREGION_WIDTH - 2, bounds.Top + 2, TEMPLATE_HOTREGION_WIDTH, bounds.Bottom - 4);
                     }
+
                     owner.HotRegion = hotRegion;
 
                     g.Clear(toolStripBorderColor);
@@ -1886,6 +1948,7 @@ namespace System.Windows.Forms.Design
                     g.DrawRectangle(borderPen, drawRect);
                     item.ForeColor = defaultBorderColor;
                 }
+
                 borderPen.Dispose();
             }
 
@@ -1919,6 +1982,7 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, fillRect);
                         }
+
                         splitButtonSelected = true;
                     }
                     else if (state == (int)TemplateNodeSelectionState.SplitButtonSelected)
@@ -1927,6 +1991,7 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, splitButton.ButtonBounds);
                         }
+
                         splitButtonSelected = true;
                     }
                     else if (state == (int)TemplateNodeSelectionState.DropDownSelected)
@@ -1936,6 +2001,7 @@ namespace System.Windows.Forms.Design
                         {
                             g.FillRectangle(brush, fillRect);
                         }
+
                         splitButtonSelected = true;
                     }
                     else if (state == (int)TemplateNodeSelectionState.TemplateNodeSelected)
@@ -1971,6 +2037,7 @@ namespace System.Windows.Forms.Design
                     // "Type Here" node always has white background, text should be painted in black
                     e.TextColor = Color.Black;
                 }
+
                 base.OnRenderItemText(e);
             }
         }

@@ -394,6 +394,7 @@ namespace System.Windows.Forms
                     Debug.Fail("we can't be in showobject if we own our window...");
                     return HRESULT.S_OK;
                 }
+
                 if (host.GetAxState(AxHost.fFakingWindow))
                 {
                     // we really should not be here...
@@ -407,6 +408,7 @@ namespace System.Windows.Forms
                     host.TransitionDownTo(OC_LOADED);
                     host.TransitionUpTo(OC_INPLACE);
                 }
+
                 if (host.GetOcState() < OC_INPLACE)
                 {
                     return HRESULT.S_OK;
@@ -652,6 +654,7 @@ namespace System.Windows.Forms
                                 {
                                     return HRESULT.S_OK;
                                 }
+
                                 throw;
                             }
 

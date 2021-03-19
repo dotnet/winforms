@@ -73,6 +73,7 @@ namespace System.Windows.Forms
                         {
                             return 0;
                         }
+
                         return _owner.Padding.All;
                     }
                 }

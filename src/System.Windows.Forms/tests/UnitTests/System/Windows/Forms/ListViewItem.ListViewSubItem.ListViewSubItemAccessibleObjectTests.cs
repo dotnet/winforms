@@ -15,19 +15,23 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemAccessibleObject_GetChild_ReturnCorrectValue()
         {
             using ListView list = new ListView();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] {
+            ListViewItem listViewItem1 = new ListViewItem(new string[]
+            {
             "Test 1",
             "Item 1",
-            "Something 1"}, -1);
+            "Something 1"
+            }, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
             ColumnHeader columnHeader2 = new ColumnHeader();
             ColumnHeader columnHeader3 = new ColumnHeader();
 
-            list.Columns.AddRange(new ColumnHeader[] {
+            list.Columns.AddRange(new ColumnHeader[]
+            {
             columnHeader1,
             columnHeader2,
-            columnHeader3});
+            columnHeader3
+            });
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;
@@ -46,19 +50,23 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemAccessibleObject_GetPropertyValue_returns_correct_values(bool labelEdit, int childId, int expectedControlType)
         {
             using ListView list = new ListView();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] {
+            ListViewItem listViewItem1 = new ListViewItem(new string[]
+            {
             "Test 1",
             "Test 2",
-            "Something 1"}, -1);
+            "Something 1"
+            }, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
             ColumnHeader columnHeader2 = new ColumnHeader();
             ColumnHeader columnHeader3 = new ColumnHeader();
 
-            list.Columns.AddRange(new ColumnHeader[] {
+            list.Columns.AddRange(new ColumnHeader[]
+            {
             columnHeader1,
             columnHeader2,
-            columnHeader3});
+            columnHeader3
+            });
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;
@@ -88,19 +96,23 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemAccessibleObject_FragmentNavigate_WorkCorrectly()
         {
             using ListView list = new ListView();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] {
+            ListViewItem listViewItem1 = new ListViewItem(new string[]
+            {
             "Test 1",
             "Item 1",
-            "Something 1"}, -1);
+            "Something 1"
+            }, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
             ColumnHeader columnHeader2 = new ColumnHeader();
             ColumnHeader columnHeader3 = new ColumnHeader();
 
-            list.Columns.AddRange(new ColumnHeader[] {
+            list.Columns.AddRange(new ColumnHeader[]
+            {
             columnHeader1,
             columnHeader2,
-            columnHeader3});
+            columnHeader3
+            });
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;
@@ -138,19 +150,23 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemAccessibleObject_Bounds_ReturnCorrectValue()
         {
             using ListView list = new ListView();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] {
+            ListViewItem listViewItem1 = new ListViewItem(new string[]
+            {
             "Test 1",
             "Item 1",
-            "Something 1"}, -1);
+            "Something 1"
+            }, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
             ColumnHeader columnHeader2 = new ColumnHeader();
             ColumnHeader columnHeader3 = new ColumnHeader();
 
-            list.Columns.AddRange(new ColumnHeader[] {
+            list.Columns.AddRange(new ColumnHeader[]
+            {
             columnHeader1,
             columnHeader2,
-            columnHeader3});
+            columnHeader3
+            });
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;
@@ -178,19 +194,23 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemAccessibleObject_ColunmProperty_ReturnCorrectValue()
         {
             using ListView list = new ListView();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] {
+            ListViewItem listViewItem1 = new ListViewItem(new string[]
+            {
             "Test 1",
             "Item 1",
-            "Something 1"}, -1);
+            "Something 1"
+            }, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
             ColumnHeader columnHeader2 = new ColumnHeader();
             ColumnHeader columnHeader3 = new ColumnHeader();
 
-            list.Columns.AddRange(new ColumnHeader[] {
+            list.Columns.AddRange(new ColumnHeader[]
+            {
             columnHeader1,
             columnHeader2,
-            columnHeader3});
+            columnHeader3
+            });
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;
@@ -209,19 +229,23 @@ namespace System.Windows.Forms.Tests
         public void ListViewSubItemAccessibleObject_RowProperty_ReturnCorrectValue()
         {
             using ListView list = new ListView();
-            ListViewItem listViewItem1 = new ListViewItem(new string[] {
+            ListViewItem listViewItem1 = new ListViewItem(new string[]
+            {
             "Test 1",
             "Item 1",
-            "Something 1"}, -1);
+            "Something 1"
+            }, -1);
 
             ColumnHeader columnHeader1 = new ColumnHeader();
             ColumnHeader columnHeader2 = new ColumnHeader();
             ColumnHeader columnHeader3 = new ColumnHeader();
 
-            list.Columns.AddRange(new ColumnHeader[] {
+            list.Columns.AddRange(new ColumnHeader[]
+            {
             columnHeader1,
             columnHeader2,
-            columnHeader3});
+            columnHeader3
+            });
             list.HideSelection = false;
             list.Items.Add(listViewItem1);
             list.View = View.Details;

@@ -18,6 +18,7 @@ namespace WinformsControlsTest
         {
             InitializeComponent();
         }
+
         private void MenuStripScaling_Load(object sender, EventArgs e)
         {
             currentDpiLabel.Text = $"Current scaling = {(int)Math.Round((DeviceDpi / 96.0) * 100)}%";

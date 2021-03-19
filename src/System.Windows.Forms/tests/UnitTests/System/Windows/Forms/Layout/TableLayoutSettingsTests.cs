@@ -518,6 +518,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -590,6 +591,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -735,6 +737,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -969,6 +972,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("ColumnSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1209,6 +1213,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1443,6 +1448,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("RowSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try

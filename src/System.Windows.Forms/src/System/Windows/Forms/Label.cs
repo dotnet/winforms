@@ -222,10 +222,12 @@ namespace System.Windows.Forms
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle);
                     }
+
                     if (AutoSize)
                     {
                         AdjustSize();
                     }
+
                     RecreateHandle();
                 }
             }
@@ -343,6 +345,7 @@ namespace System.Windows.Forms
                         {
                             AdjustSize();
                         }
+
                         RecreateHandle();
                     }
                     else
@@ -418,6 +421,7 @@ namespace System.Windows.Forms
                     {
                         return ImageList.Images.Count - 1;
                     }
+
                     return index;
                 }
 
@@ -556,6 +560,7 @@ namespace System.Windows.Forms
                 {
                     return (ContentAlignment)imageAlign;
                 }
+
                 return ContentAlignment.MiddleCenter;
             }
             set
@@ -564,6 +569,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
+
                 if (value != ImageAlign)
                 {
                     Properties.SetInteger(s_propImageAlign, (int)value);
@@ -733,6 +739,7 @@ namespace System.Windows.Forms
                     {
                         RecreateHandle();
                     }
+
                     OnTextAlignChanged(EventArgs.Empty);
                 }
             }
@@ -830,6 +837,7 @@ namespace System.Windows.Forms
                         {
                             style &= ~(int)User32.SS.NOPREFIX;
                         }
+
                         WindowStyle = style;
                     }
                 }
@@ -985,6 +993,7 @@ namespace System.Windows.Forms
                     ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
                     Properties.SetObject(s_propImageList, null);
                 }
+
                 if (Image != null)
                 {
                     Properties.SetObject(s_propImage, null);
@@ -996,8 +1005,10 @@ namespace System.Windows.Forms
                     _textToolTip.Dispose();
                     _textToolTip = null;
                 }
+
                 _controlToolTip = false;
             }
+
             base.Dispose(disposing);
         }
 
@@ -1062,6 +1073,7 @@ namespace System.Windows.Forms
                     bordersAndPadding += new Size(2, 2);
                 }
             }
+
             return bordersAndPadding;
         }
 
@@ -1072,10 +1084,12 @@ namespace System.Windows.Forms
             {
                 proposedSize.Width = 0;
             }
+
             if (proposedSize.Height == 1)
             {
                 proposedSize.Height = 0;
             }
+
             return base.GetPreferredSize(proposedSize);
         }
 
@@ -1200,6 +1214,7 @@ namespace System.Windows.Forms
                     _controlToolTip = false;
                 }
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -1373,6 +1388,7 @@ namespace System.Windows.Forms
                 // we dont know what size to be until we're parented
                 AdjustSize();
             }
+
             Animate();
         }
 
@@ -1413,8 +1429,10 @@ namespace System.Windows.Forms
                         parent.Focus();
                     }
                 }
+
                 return true;
             }
+
             return false;
         }
 

@@ -2431,6 +2431,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
         }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Form_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)

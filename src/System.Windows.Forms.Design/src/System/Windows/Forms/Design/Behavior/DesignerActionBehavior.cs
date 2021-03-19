@@ -85,6 +85,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Debug.Fail("Why are we trying to 'showui' on a glyph that's not a DesignerActionGlyph?");
                 return;
             }
+
             DesignerActionPanel dap = CreateDesignerActionPanel(RelatedComponent);
             ParentUI.ShowDesignerActionPanel(RelatedComponent, dap, glyph);
         }
@@ -117,6 +118,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return true;
             }
+
             bool returnValue = true;
             if (ParentUI.IsDesignerActionPanelVisible)
             {
@@ -139,12 +141,14 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
                 }
+
                 ShowUI(g);
             }
             else
             {
                 returnValue = false;
             }
+
             _ignoreNextMouseUp = false;
             return returnValue;
         }

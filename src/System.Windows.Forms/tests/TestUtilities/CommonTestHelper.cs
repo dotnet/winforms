@@ -26,6 +26,7 @@ namespace WinForms.Common.Tests
             {
                 data.Add(item);
             }
+
             return data;
         }
 
@@ -377,11 +378,13 @@ namespace WinForms.Common.Tests
                 data.Add(new Point(10));
                 data.Add(new Point(1, 2));
             }
+
             if (!includeType.HasFlag(TestIncludeType.NoNegatives))
             {
                 data.Add(new Point(int.MaxValue, int.MinValue));
                 data.Add(new Point(-1, -2));
             }
+
             return data;
         }
 
@@ -396,11 +399,13 @@ namespace WinForms.Common.Tests
                 data.Add(new Size(new Point(1, 1)));
                 data.Add(new Size(1, 2));
             }
+
             if (!includeType.HasFlag(TestIncludeType.NoNegatives))
             {
                 data.Add(new Size(-1, 1));
                 data.Add(new Size(1, -1));
             }
+
             return data;
         }
 

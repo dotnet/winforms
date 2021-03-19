@@ -261,6 +261,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             }
+
             Assert.False(control.IsHandleCreated);
         }
 
@@ -432,6 +433,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             }
+
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);

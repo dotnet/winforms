@@ -95,6 +95,7 @@ namespace System.Windows.Forms
                     {
                         pceltFetched[0] = 1;
                     }
+
                     _current++;
                 }
                 else
@@ -103,8 +104,10 @@ namespace System.Windows.Forms
                     {
                         pceltFetched[0] = 0;
                     }
+
                     return (int)HRESULT.S_FALSE;
                 }
+
                 return (int)HRESULT.S_OK;
             }
 
@@ -115,6 +118,7 @@ namespace System.Windows.Forms
                 {
                     return (int)HRESULT.S_FALSE;
                 }
+
                 _current += celt;
                 return (int)HRESULT.S_OK;
             }

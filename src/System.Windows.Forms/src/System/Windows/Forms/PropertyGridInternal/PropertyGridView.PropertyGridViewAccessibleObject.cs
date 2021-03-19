@@ -160,6 +160,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return nextEntry.AccessibilityObject;
                 }
+
                 return null;
             }
 
@@ -376,6 +377,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return prevEntry.AccessibilityObject;
                 }
+
                 return null;
             }
 
@@ -450,6 +452,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return gridEntry.AccessibilityObject;
                 }
+
                 return null;
             }
 
@@ -463,6 +466,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return gridEntry.AccessibilityObject;
                 }
+
                 return null;
             }
 
@@ -517,6 +521,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return GetChild(GetChildCount() - 1);
                     }
                 }
+
                 return null;    // Perform default behavior
             }
 

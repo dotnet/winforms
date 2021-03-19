@@ -27,6 +27,7 @@ namespace System.Windows.Forms
                     {
                         visualStyleRenderer = new VisualStyleRenderer(ButtonElement);
                     }
+
                     return visualStyleRenderer;
                 }
             }

@@ -115,6 +115,7 @@ namespace System.Windows.Forms
                             ctrls = Owner.GetChildControlsInTabOrder(true);
                             index = 0;
                         }
+
                         break;
                     case AccessibleNavigation.LastChild:
                         if (IsClientObject)
@@ -122,6 +123,7 @@ namespace System.Windows.Forms
                             ctrls = Owner.GetChildControlsInTabOrder(true);
                             index = ctrls.Length - 1;
                         }
+
                         break;
                     case AccessibleNavigation.Previous:
                         if (IsNonClientObject && parentControl is not null)
@@ -133,6 +135,7 @@ namespace System.Windows.Forms
                                 --index;
                             }
                         }
+
                         break;
                     case AccessibleNavigation.Next:
                         if (IsNonClientObject && parentControl is not null)
@@ -144,6 +147,7 @@ namespace System.Windows.Forms
                                 ++index;
                             }
                         }
+
                         break;
                 }
 

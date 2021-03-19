@@ -149,6 +149,7 @@ namespace System.Windows.Forms
                 {
                     throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
                 }
+
                 return _handle;
             }
         }
@@ -232,6 +233,7 @@ namespace System.Windows.Forms
                 {
                     User32.DestroyCursor(_handle);
                 }
+
                 _handle = IntPtr.Zero;
             }
         }
@@ -464,6 +466,7 @@ namespace System.Windows.Forms
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
+
             if (_cursorData is null)
             {
                 throw new InvalidOperationException(SR.InvalidPictureFormat);
@@ -529,6 +532,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return (this == (Cursor)obj);
         }
     }

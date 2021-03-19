@@ -25,6 +25,7 @@ namespace System.Windows.Forms
             {
                 Cancel(_currentItem);
             }
+
             _currentItem = item;
             if (_currentItem != null)
             {

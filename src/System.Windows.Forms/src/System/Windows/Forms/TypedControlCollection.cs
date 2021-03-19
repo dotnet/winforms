@@ -38,10 +38,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (IsReadOnly)
             {
                 throw new NotSupportedException(SR.ReadonlyControlsCollection);
             }
+
             if (!_typeOfControl.IsAssignableFrom(value.GetType()))
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, _typeOfControl.Name)), value.GetType().Name);

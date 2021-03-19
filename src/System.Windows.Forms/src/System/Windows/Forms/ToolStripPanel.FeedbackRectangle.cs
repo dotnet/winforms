@@ -30,6 +30,7 @@ namespace System.Windows.Forms
                     {
                         return _dropDown.Visible;
                     }
+
                     return false;
                 }
                 set
@@ -45,6 +46,7 @@ namespace System.Windows.Forms
             {
                 _dropDown.Show(newLocation);
             }
+
             public void Move(Point newLocation)
             {
                 _dropDown.MoveTo(newLocation);

@@ -36,6 +36,7 @@ namespace System.Windows.Forms
                     return _owner.ParentInternal;
                 }
             }
+
             public override Rectangle ImageRectangle
             {
                 get

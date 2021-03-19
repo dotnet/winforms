@@ -172,6 +172,7 @@ namespace System.Windows.Forms
             {
                 val = null;
             }
+
             return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics,
                                                                    (string)val,
                                                                    cellStyle,
@@ -309,6 +310,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
@@ -334,6 +336,7 @@ namespace System.Windows.Forms
                 {
                     textColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                 }
+
                 TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
                 if (paint)
                 {
@@ -343,6 +346,7 @@ namespace System.Windows.Forms
                         {
                             flags |= TextFormatFlags.EndEllipsis;
                         }
+
                         TextRenderer.DrawText(graphics,
                                               formattedValueStr,
                                               cellStyle.Font,
@@ -486,6 +490,7 @@ namespace System.Windows.Forms
                         //
                         return string.Empty;
                     }
+
                     string strValue = value as string;
                     if (string.IsNullOrEmpty(strValue))
                     {
@@ -569,6 +574,7 @@ namespace System.Windows.Forms
                         {
                             return NavigateForward();
                         }
+
                     case AccessibleNavigation.Next:
                         return NavigateForward();
                     case AccessibleNavigation.Right:
@@ -580,6 +586,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     default:
                         return null;
                 }

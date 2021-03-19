@@ -33,10 +33,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
+
             if (dataBinding.BindingManagerBase == _bindingManagerBase)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
             }
+
             if (dataBinding.BindingManagerBase != null)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
@@ -63,6 +65,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
+
             if (dataBinding.BindingManagerBase != _bindingManagerBase)
             {
                 throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));

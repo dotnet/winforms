@@ -111,10 +111,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
+
             if (dataBinding.BindableComponent == _control)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
             }
+
             if (dataBinding.BindableComponent is not null)
             {
                 throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
@@ -182,6 +184,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataBinding));
             }
+
             if (dataBinding.BindableComponent != _control)
             {
                 throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));

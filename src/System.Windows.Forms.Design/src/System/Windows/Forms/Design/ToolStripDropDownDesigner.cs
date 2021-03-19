@@ -59,6 +59,7 @@ namespace System.Windows.Forms.Design
                 {
                     actionLists.Add(cmActionList);
                 }
+
                 // finally add the verbs for this component there...
                 DesignerVerbCollection cmVerbs = Verbs;
                 if (cmVerbs != null && cmVerbs.Count != 0)
@@ -67,6 +68,7 @@ namespace System.Windows.Forms.Design
                     cmVerbs.CopyTo(cmverbsArray, 0);
                     actionLists.Add(new DesignerActionVerbList(cmverbsArray));
                 }
+
                 return actionLists;
             }
         }
@@ -114,6 +116,7 @@ namespace System.Windows.Forms.Design
                 {
                     return InheritanceAttribute.InheritedReadOnly;
                 }
+
                 return base.InheritanceAttribute;
             }
         }
@@ -176,10 +179,12 @@ namespace System.Windows.Forms.Design
                                 ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
+
                         persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
                 }
+
                 return ShadowProperties[SettingsKeyName] as string;
             }
             set
@@ -247,15 +252,18 @@ namespace System.Windows.Forms.Design
                     designMenu.Dispose();
                     designMenu = null;
                 }
+
                 if (dummyToolStripGlyph != null)
                 {
                     dummyToolStripGlyph = null;
                 }
+
                 if (_undoEngine != null)
                 {
                     _undoEngine.Undone -= new EventHandler(OnUndone);
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -271,6 +279,7 @@ namespace System.Windows.Forms.Design
                 {
                     form.Controls.Remove(designMenu);
                 }
+
                 if (menuItem != null)
                 {
                     if (_nestedContainer != null)
@@ -278,6 +287,7 @@ namespace System.Windows.Forms.Design
                         _nestedContainer.Dispose();
                         _nestedContainer = null;
                     }
+
                     menuItem.Dispose();
                     menuItem = null;
                 }
@@ -373,6 +383,7 @@ namespace System.Windows.Forms.Design
                 {
                     _selectionService.SetSelectedComponents(new IComponent[] { host.RootComponent }, SelectionTypes.Replace);
                 }
+
                 _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
                 _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
@@ -459,6 +470,7 @@ namespace System.Windows.Forms.Design
                     // Try if the item has not laid out...
                     parent = ((ToolStripItem)comp).Owner as ToolStripDropDown;
                 }
+
                 if (parent != null && parent.Visible)
                 {
                     ToolStripItem ownerItem = parent.OwnerItem;
@@ -476,6 +488,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             if (topmost != null)
             {
                 ToolStripItem topMostItem = topmost.OwnerItem;
@@ -484,6 +497,7 @@ namespace System.Windows.Forms.Design
                     showDesignMenu = true;
                 }
             }
+
             return showDesignMenu;
         }
 
@@ -510,6 +524,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             ISelectionService selectionService = (ISelectionService)sender;
             // Select the container if TopLevel Dummy MenuItem is selected.
             if (selectionService.GetComponentSelected(menuItem))
@@ -753,6 +768,7 @@ namespace System.Windows.Forms.Design
                 {
                     return true;
                 }
+
                 return false;
             }
         }

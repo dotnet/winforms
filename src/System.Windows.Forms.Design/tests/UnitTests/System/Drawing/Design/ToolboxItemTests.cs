@@ -1173,6 +1173,7 @@ namespace System.Drawing.Design.Tests
             {
                 Assert.Equal(expected, actual);
             }
+
             Assert.Equal(same, object.ReferenceEquals(value, actual));
         }
 
@@ -1363,6 +1364,7 @@ namespace System.Drawing.Design.Tests
                 {
                     Assert.Equal(new Size(16, 16), item.Bitmap.Size);
                 }
+
                 Assert.Equal("Microsoft Corporation", item.Company);
                 Assert.Equal("Description", item.Description);
                 Assert.Equal(type.Assembly.FullName, item.AssemblyName.FullName);
@@ -1486,6 +1488,7 @@ namespace System.Drawing.Design.Tests
             item.OnComponentsCreated(null);
             Assert.Equal(1, callCount);
         }
+
         [Fact]
         public void ToolboxItem_OnComponentsCreating_Invoke_Success()
         {

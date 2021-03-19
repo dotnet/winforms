@@ -112,6 +112,7 @@ namespace System.ComponentModel.Design
                         _watermarkBrush = null;
                     }
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -129,6 +130,7 @@ namespace System.ComponentModel.Design
                         return true;
                     }
                 }
+
                 return base.IsInputKey(keyData);
             }
 
@@ -144,9 +146,11 @@ namespace System.ComponentModel.Design
                                 // Returned by EndEdit to signal that we should disregard changes.
                                 _escapePressed = true;
                             }
+
                             break;
                     }
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -252,6 +256,7 @@ namespace System.ComponentModel.Design
                 {
                     ResizeToContent();
                 }
+
                 _contentsResizedRaised = false;
                 base.OnTextChanged(e);
             }
@@ -263,6 +268,7 @@ namespace System.ComponentModel.Design
                     ProcessSurrogateFonts(0, Text.Length);
                     Select(Text.Length, 0); // move caret to the end
                 }
+
                 ResizeToContent();
                 base.OnVisibleChanged(e);
             }
@@ -280,6 +286,7 @@ namespace System.ComponentModel.Design
                             (int)Math.Min(Math.Ceiling(WatermarkSize.Width * 1.75), workingArea.Width / 3),
                             (int)Math.Min(Font.Height * 10, workingArea.Height / 3));
                     }
+
                     return _minimumSize;
                 }
             }
@@ -313,6 +320,7 @@ namespace System.ComponentModel.Design
                             {
                                 low = value[surrogates[i] + 1];
                             }
+
                             if (value[surrogates[i]] >= 0xD800 && value[surrogates[i]] <= 0xDBFF)
                             {
                                 if (low >= 0xDC00 && low <= 0xDFFF)
@@ -330,9 +338,11 @@ namespace System.ComponentModel.Design
                                             {
                                                 replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
                                             }
+
                                             _fallbackFonts[planeNumber] = replaceFont;
                                         }
                                     }
+
                                     if (replaceFont != null)
                                     {
                                         int selectionLength = (i == surrogates.Length - 1) ? value.Length - surrogates[i] : surrogates[i + 1] - surrogates[i];
@@ -387,8 +397,10 @@ namespace System.ComponentModel.Design
                         {
                             size = g.MeasureString(SR.MultilineStringEditorWatermark, Font);
                         }
+
                         _watermarkSize = new Size((int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
                     }
+
                     return _watermarkSize;
                 }
             }
@@ -402,6 +414,7 @@ namespace System.ComponentModel.Design
                     {
                         return false;
                     }
+
                     return WatermarkSize.Width < ClientSize.Width;
                 }
             }
@@ -417,6 +430,7 @@ namespace System.ComponentModel.Design
                         Color c = Color.FromArgb((short)(ct.R * 0.3 + cw.R * 0.7), (short)(ct.G * 0.3 + cw.G * 0.7), (short)(ct.B * 0.3 + cw.B * 0.7));
                         _watermarkBrush = new SolidBrush(c);
                     }
+
                     return _watermarkBrush;
                 }
             }
@@ -433,6 +447,7 @@ namespace System.ComponentModel.Design
                                 using Graphics g = CreateGraphics();
                                 g.DrawString(SR.MultilineStringEditorWatermark, Font, WatermarkBrush, new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height), _watermarkFormat);
                             }
+
                             break;
                         }
                 }

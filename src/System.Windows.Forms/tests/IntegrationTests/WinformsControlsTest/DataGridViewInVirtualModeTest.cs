@@ -108,6 +108,7 @@ namespace WinformsControlsTest
                     {
                         _customerInEdit.Age = result;
                     }
+
                     break;
                 case "hasAJobColumn":
                     _customerInEdit.HasAJob = (bool)newValue;

@@ -263,9 +263,11 @@ namespace System.Windows.Forms
                                     //
                                     item.StateSelected = false;
                                 }
+
                                 item.UnHost(i, false);
                             }
                         }
+
                         Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
 
                         User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
@@ -309,6 +311,7 @@ namespace System.Windows.Forms
                     {
                         owner.savedCheckedItems = null;
                     }
+
                     owner.itemCount = 0;
 
                     if (owner.ExpectingMouseUp)
@@ -387,6 +390,7 @@ namespace System.Windows.Forms
                         return i;
                     }
                 }
+
                 return -1;
             }
 

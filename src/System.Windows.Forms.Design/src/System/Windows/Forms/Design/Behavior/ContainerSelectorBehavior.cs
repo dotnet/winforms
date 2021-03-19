@@ -94,6 +94,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         return false;
                     }
+
                     foreach (Adorner a in _behaviorService.Adorners)
                     {
                         foreach (Glyph glyph in a.Glyphs)
@@ -102,11 +103,13 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 continue;
                             }
+
                             // Don't care if we are looking at the same containerselectorglyph
                             if (selNew.Equals(selOld))
                             {
                                 continue;
                             }
+
                             // Check if the containercontrols are the same
                             if (!(selNew.RelatedBehavior is ContainerSelectorBehavior behNew) || !(selOld.RelatedBehavior is ContainerSelectorBehavior behOld))
                             {
@@ -130,6 +133,7 @@ namespace System.Windows.Forms.Design.Behavior
                     OkToMove = true;
                 }
             }
+
             return false;
         }
 
@@ -161,6 +165,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     InitialDragPoint = DetermineInitialDragPoint(mouseLoc);
                 }
+
                 Size delta = new Size(Math.Abs(mouseLoc.X - InitialDragPoint.X), Math.Abs(mouseLoc.Y - InitialDragPoint.Y));
                 if (delta.Width >= DesignerUtils.MinDragSize.Width / 2 || delta.Height >= DesignerUtils.MinDragSize.Height / 2)
                 {
@@ -170,6 +175,7 @@ namespace System.Windows.Forms.Design.Behavior
                     StartDragOperation(screenLoc);
                 }
             }
+
             return false;
         }
 
@@ -196,6 +202,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Debug.Fail("Can't drag this Container! Either SelectionService is null or DesignerHost is null");
                 return;
             }
+
             //must identify a required parent to avoid dragging mixes of children
             Control requiredParent = _containerControl.Parent;
             ArrayList dragControls = new ArrayList();
@@ -209,6 +216,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         continue; //mixed selection of different parents - don't add this
                     }
+
                     if (host.GetDesigner(ctrl) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)
                     {
                         dragControls.Add(ctrl);
@@ -230,6 +238,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     controlOrigin = initialMouseLocation;
                 }
+
                 DropSourceBehavior dsb = new DropSourceBehavior(dragControls, _containerControl.Parent, controlOrigin);
                 try
                 {

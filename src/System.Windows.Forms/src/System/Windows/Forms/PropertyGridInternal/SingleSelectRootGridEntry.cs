@@ -57,6 +57,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
                 }
+
                 return browsableAttributes;
             }
             set
@@ -110,6 +111,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 }
+
                 return changeService;
             }
         }
@@ -169,8 +171,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         flags |= FLAG_FORCE_READONLY;
                     }
+
                     forceReadOnlyChecked = true;
                 }
+
                 return base.ForceReadOnly || (GridEntryHost is not null && !GridEntryHost.Enabled);
             }
         }
@@ -274,6 +278,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 gridEntryHost = null;
                 changeService = null;
             }
+
             objValue = null;
             objValueClassName = null;
             propDefault = null;
@@ -288,10 +293,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 service = host.GetService(serviceType);
             }
+
             if (service is null && baseProvider is not null)
             {
                 service = baseProvider.GetService(serviceType);
             }
+
             return service;
         }
 
@@ -354,6 +361,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 bin = new ArrayList();
                                 bins[category] = bin;
                             }
+
                             bin.Add(pe);
                         }
                     }

@@ -513,6 +513,7 @@ namespace System.Windows.Forms
                                                     : Rectangle.Union(alignedLeftItems, new Rectangle(x, y, itemSize.Width, itemSize.Height));
                             break;
                     }
+
                     item.ParentInternal = ToolStrip;
                     Point itemLocation = new Point(x, y);
 

@@ -28,6 +28,7 @@ namespace System.Windows.Forms
                         Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
                         return true;
                     }
+
                     return false;
                 }
 
@@ -47,6 +48,7 @@ namespace System.Windows.Forms
                     {
                         return base.GetOuterBorderColor(comboBox);
                     }
+
                     return (comboBox.Enabled) ? SystemColors.Window : GetColorTable(comboBox as ToolStripComboBoxControl).ComboBoxBorder;
                 }
 
@@ -143,7 +145,8 @@ namespace System.Windows.Forms
 
                     // If the width is odd - favor pushing it over one pixel right.
                     middle.X += (dropDownRect.Width % 2);
-                    g.FillPolygon(brush, new Point[] {
+                    g.FillPolygon(brush, new Point[]
+                    {
                         new Point(middle.X - FlatComboAdapter.s_offsetPixels, middle.Y - 1),
                         new Point(middle.X + FlatComboAdapter.s_offsetPixels + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + FlatComboAdapter.s_offsetPixels)

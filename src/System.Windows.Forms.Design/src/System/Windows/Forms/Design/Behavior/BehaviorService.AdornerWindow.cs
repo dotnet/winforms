@@ -346,6 +346,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             m.Result = (IntPtr)User32.HT.CLIENT;
                         }
+
                         break;
 
                     case User32.WM.CAPTURECHANGED:
@@ -374,6 +375,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.RBUTTONDOWN:
@@ -381,6 +383,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.MOUSEMOVE:
@@ -388,6 +391,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.LBUTTONUP:
@@ -395,6 +399,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.RBUTTONUP:
@@ -402,6 +407,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.MOUSEHOVER:
@@ -409,6 +415,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.LBUTTONDBLCLK:
@@ -416,6 +423,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.RBUTTONDBLCLK:
@@ -423,6 +431,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
                 }
 

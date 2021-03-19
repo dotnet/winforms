@@ -79,12 +79,14 @@ namespace System.Windows.Forms.Design
             {
                 _overlayService.RemoveOverlay(_toolStripAdornerWindow);
             }
+
             _toolStripAdornerWindow.Dispose();
             if (_behaviorService != null)
             {
                 _behaviorService.Adorners.Remove(_dropDownAdorner);
                 _behaviorService = null;
             }
+
             if (_dropDownAdorner != null)
             {
                 _dropDownAdorner.Glyphs.Clear();
@@ -228,6 +230,7 @@ namespace System.Windows.Forms.Design
                         _designerFrame = null;
                     }
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -242,6 +245,7 @@ namespace System.Windows.Forms.Design
                     {
                         return false;
                     }
+
                     return true;
                 }
             }

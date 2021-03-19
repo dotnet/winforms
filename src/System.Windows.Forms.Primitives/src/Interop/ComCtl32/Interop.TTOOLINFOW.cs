@@ -67,6 +67,7 @@ internal static partial class Interop
                     {
                         Info.lpszText = c;
                     }
+
                     IntPtr result = User32.SendMessageW(sender, message, (IntPtr)state, (IntPtr)i);
                     GC.KeepAlive(_handle);
                     return result;

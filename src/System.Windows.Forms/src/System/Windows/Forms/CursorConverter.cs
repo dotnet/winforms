@@ -33,6 +33,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 

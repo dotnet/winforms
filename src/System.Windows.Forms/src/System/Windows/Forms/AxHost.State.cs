@@ -92,6 +92,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 for (; sie.MoveNext();)
                 {
                     if (string.Compare(sie.Name, "Data", true, CultureInfo.InvariantCulture) == 0)
@@ -240,6 +241,7 @@ namespace System.Windows.Forms
                 {
                     ms.Seek(0, SeekOrigin.Begin);
                 }
+
                 return new Ole32.GPStream(ms);
             }
 
@@ -255,6 +257,7 @@ namespace System.Windows.Forms
                 {
                     licenseKey = new string(br.ReadChars(cc));
                 }
+
                 for (int skipUnits = br.ReadInt32(); skipUnits > 0; skipUnits--)
                 {
                     int len = br.ReadInt32();
@@ -321,6 +324,7 @@ namespace System.Windows.Forms
                 {
                     iPersistStorage.SaveCompleted(storage);
                 }
+
                 return this;
             }
 
@@ -340,6 +344,7 @@ namespace System.Windows.Forms
                 {
                     bw.Write((int)0);
                 }
+
                 bw.Write((int)0); // skip units
                 bw.Write(length);
                 if (buffer is not null)

@@ -55,6 +55,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeNS;
                         rules = SelectionRules.TopSizeable;
                     }
+
                     break;
                 case GrabHandleGlyphType.MiddleBottom:
                     // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for LowerLeft and LowerRight handles, 1 HANDLESIZE for the MiddleBottom handle, 1 HANDLESIZE for padding
@@ -64,6 +65,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeNS;
                         rules = SelectionRules.BottomSizeable;
                     }
+
                     break;
                 case GrabHandleGlyphType.MiddleLeft:
                     // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperLeft and LowerLeft handles, 1 HANDLESIZE for the MiddleLeft handle, 1 HANDLESIZE for padding
@@ -73,6 +75,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeWE;
                         rules = SelectionRules.LeftSizeable;
                     }
+
                     break;
                 case GrabHandleGlyphType.MiddleRight:
                     // Only add this one if there's room enough. Room is enough is as follows: 2*HANDLEOVERLAP for UpperRight and LowerRight handles, 1 HANDLESIZE for the MiddleRight handle, 1 HANDLESIZE for padding
@@ -82,6 +85,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeWE;
                         rules = SelectionRules.RightSizeable;
                     }
+
                     break;
                 default:
                     Debug.Assert(false, "GrabHandleGlyph was called with a bad GrapHandleGlyphType.");

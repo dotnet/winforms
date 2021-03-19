@@ -51,6 +51,7 @@ namespace System.Windows.Forms
                                 {
                                     return 1;
                                 }
+
                                 return 0;
 
                             case SelectionMode.MultiSimple:

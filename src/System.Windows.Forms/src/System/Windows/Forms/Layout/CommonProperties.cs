@@ -105,6 +105,7 @@ namespace System.Windows.Forms.Layout
             {
                 return padding;
             }
+
             return DefaultMargin;
         }
 
@@ -117,6 +118,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return defaultMaximumSize;
         }
 
@@ -129,6 +131,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return defaultMinimumSize;
         }
 
@@ -146,6 +149,7 @@ namespace System.Windows.Forms.Layout
             {
                 return padding;
             }
+
             return defaultPadding;
         }
 
@@ -158,6 +162,7 @@ namespace System.Windows.Forms.Layout
             {
                 return rectangle;
             }
+
             return element.Bounds;
         }
 
@@ -375,6 +380,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return Size.Empty;
         }
 
@@ -494,11 +500,13 @@ namespace System.Windows.Forms.Layout
                         return GetSelfAutoSizeInDefaultLayout(element);
                     }
                 }
+
                 // else
                 //   - unknown element type
                 //   - new LayoutEngine which should set the size to the preferredSize anyways.
                 return false;
             }
+
             // autosize false things should selfsize.
             return true;
         }
@@ -544,6 +552,7 @@ namespace System.Windows.Forms.Layout
             {
                 return false;
             }
+
             bool result = (state[_autoSizeSection] != 0) && (state[_dockModeSection] == (int)DockAnchorMode.Anchor);
             Debug.Assert(result == (GetAutoSize(element) && xGetDock(element) == DockStyle.None),
                 "Error detected in xGetAutoSizeAndAnchored.");
@@ -625,6 +634,7 @@ namespace System.Windows.Forms.Layout
                 case DefaultAnchor:
                     return AnchorStyles.None;
             }
+
             return anchor;
         }
 
@@ -670,6 +680,7 @@ namespace System.Windows.Forms.Layout
             {
                 return size;
             }
+
             return Size.Empty;
         }
 
@@ -739,6 +750,7 @@ namespace System.Windows.Forms.Layout
             {
                 diff = "For more info, try enabling PreferredSize trace switch";
             }
+
             return diff;
         }
 
@@ -747,6 +759,7 @@ namespace System.Windows.Forms.Layout
             // DEBUG - store off the old state so we can figure out what has changed in a GPS assert
             element.Properties.SetObject(_lastKnownStateProperty, Debug_GetCurrentPropertyState(element));
         }
+
         internal static void Debug_ClearProperties(IArrangedElement element)
         {
             // DEBUG - clear off the old state so we can figure out what has changed in a GPS assert
@@ -764,6 +777,7 @@ namespace System.Windows.Forms.Layout
                     {
                         continue;  // avoid accidentally forcing a call to GetPreferredSize
                     }
+
                     try
                     {
                         if (pd.IsBrowsable && !pd.IsReadOnly && pd.SerializationVisibility != DesignerSerializationVisibility.Hidden)
@@ -776,6 +790,7 @@ namespace System.Windows.Forms.Layout
                     }
                 }
             }
+
             return propertyHash;
         }
 

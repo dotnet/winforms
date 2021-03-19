@@ -138,6 +138,7 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, style.GetType().Name), nameof(style));
             }
         }
+
         internal void EnsureOwnership(IArrangedElement owner)
         {
             _owner = owner;
@@ -146,6 +147,7 @@ namespace System.Windows.Forms
                 this[i].Owner = owner;
             }
         }
+
         private void PerformLayoutIfOwned()
         {
             if (Owner is not null)

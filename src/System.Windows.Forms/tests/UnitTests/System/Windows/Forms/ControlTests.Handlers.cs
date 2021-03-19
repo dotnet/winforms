@@ -429,6 +429,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, child1CallCount);
             Assert.Equal(1, child2CallCount);
         }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_Invoke_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
@@ -5744,21 +5745,24 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(grandchild1, sender);
                 Assert.Same(eventArgs, e);
                 grandchildCallCount1++;
-            };
+            }
+
             grandchild1.VisibleChanged += grandchildHandler1;
             void childHandler1(object sender, EventArgs e)
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount1++;
-            };
+            }
+
             child1.VisibleChanged += childHandler1;
             void childHandler2(object sender, EventArgs e)
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount2++;
-            };
+            }
+
             child2.VisibleChanged += childHandler2;
 
             try

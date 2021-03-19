@@ -18,6 +18,7 @@ namespace System.Windows.Forms
             _originalClip = graphics.Clip;
             _graphics = graphics;
         }
+
         public void Dispose()
         {
             _graphics.Clip = _originalClip;

@@ -207,6 +207,7 @@ namespace System.Windows.Forms.Design.Behavior
                             break;
                         }
                     }
+
                     return false;
                 }
             }

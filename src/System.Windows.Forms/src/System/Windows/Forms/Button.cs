@@ -78,6 +78,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -125,6 +126,7 @@ namespace System.Windows.Forms
                 requiredSize.Height += 9;
                 _systemSize = requiredSize;
             }
+
             Size paddedSize = _systemSize + Padding.Size;
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
@@ -153,6 +155,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
                     }
                 }
+
                 return cp;
             }
         }
@@ -276,6 +279,7 @@ namespace System.Windows.Forms
                     //Paint in raised state...
                     ResetFlagsandPaint();
                 }
+
                 if (isMouseDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
@@ -285,10 +289,12 @@ namespace System.Windows.Forms
                         {
                             OnClick(mevent);
                         }
+
                         OnMouseClick(mevent);
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -349,6 +355,7 @@ namespace System.Windows.Forms
                 PerformClick();
                 return true;
             }
+
             return base.ProcessMnemonic(charCode);
         }
 
@@ -379,6 +386,7 @@ namespace System.Windows.Forms
                             OnClick(EventArgs.Empty);
                         }
                     }
+
                     break;
                 case User32.WM.ERASEBKGND:
                     DefWndProc(ref m);

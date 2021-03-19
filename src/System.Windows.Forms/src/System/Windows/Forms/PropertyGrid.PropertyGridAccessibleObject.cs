@@ -76,6 +76,7 @@ namespace System.Windows.Forms
                         {
                             return GetChildFragment(childFragmentCount - 1);
                         }
+
                         break;
                 }
 

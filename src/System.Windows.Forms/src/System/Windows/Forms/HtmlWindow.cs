@@ -57,8 +57,10 @@ namespace System.Windows.Forms
                         shimManager.AddWindowShim(this);
                         shim = ShimManager.GetWindowShim(this);
                     }
+
                     return shim;
                 }
+
                 return null;
             }
         }
@@ -541,6 +543,7 @@ namespace System.Windows.Forms
                     {
                         Marshal.FinalReleaseComObject(htmlWindow.NativeHtmlWindow);
                     }
+
                     htmlWindow = null;
                 }
             }
@@ -590,6 +593,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.Release(leftPtr);
                 }
+
                 if (rightPtr != IntPtr.Zero)
                 {
                     Marshal.Release(rightPtr);

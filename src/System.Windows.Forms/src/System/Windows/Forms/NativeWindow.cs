@@ -274,6 +274,7 @@ namespace System.Windows.Forms
                             Debug.Assert(window.PreviousWindow._nextWindow is null, "Last window in chain should have null next ptr");
                             window.PreviousWindow._nextWindow = window;
                         }
+
                         oldRoot.Free();
                     }
                 }
@@ -382,6 +383,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 OnThreadException(e);
             }
             finally
@@ -490,6 +492,7 @@ namespace System.Windows.Forms
                     {
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
+
                     _ownHandle = true;
                 }
             }
@@ -512,6 +515,7 @@ namespace System.Windows.Forms
                     m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
                 }
+
                 m.Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else
@@ -563,6 +567,7 @@ namespace System.Windows.Forms
             {
                 return (NativeWindow)value.Target;
             }
+
             return null;
         }
 
@@ -785,6 +790,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeApplicationExceptionMode);
             }
+
             if (threadScope && t_anyHandleCreated)
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeThreadExceptionMode);
@@ -801,6 +807,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = 0;
                     }
+
                     break;
                 case UnhandledExceptionMode.ThrowException:
                     if (threadScope)
@@ -811,6 +818,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = UseDebuggableWndProc | InitializedFlags;
                     }
+
                     break;
                 case UnhandledExceptionMode.CatchException:
                     if (threadScope)
@@ -821,6 +829,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = InitializedFlags;
                     }
+
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(mode), (int)mode, typeof(UnhandledExceptionMode));

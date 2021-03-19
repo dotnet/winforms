@@ -96,10 +96,12 @@ namespace System.Windows.Forms
                     {
                         result.X = (szCtl.Width - result.Width) / 2;
                     }
+
                     if (szCtl.Height > result.Height)
                     {
                         result.Y = (szCtl.Height - result.Height) / 2;
                     }
+
                     break;
 
                 case ImageLayout.Zoom:
@@ -768,6 +770,7 @@ namespace System.Windows.Forms
 
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -783,6 +786,7 @@ namespace System.Windows.Forms
                             // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i] + 1, bounds.Y + i);
                         }
+
                         break;
                     }
             }
@@ -822,8 +826,10 @@ namespace System.Windows.Forms
                                 graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                             }
                         }
+
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -839,6 +845,7 @@ namespace System.Windows.Forms
                             // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i] + 1);
                         }
+
                         break;
                     }
             }
@@ -888,8 +895,10 @@ namespace System.Windows.Forms
                                     bounds.Y + bounds.Height - 1 - i);
                             }
                         }
+
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -910,6 +919,7 @@ namespace System.Windows.Forms
                                 bottomLineRights[i] + 1,
                                 bounds.Y + bounds.Height - 1 - i);
                         }
+
                         break;
                     }
             }
@@ -959,8 +969,10 @@ namespace System.Windows.Forms
                                     rightLineBottoms[i]);
                             }
                         }
+
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -980,6 +992,7 @@ namespace System.Windows.Forms
                                 bounds.X + bounds.Width - 1 - i,
                                 rightLineBottoms[i] + 1);
                         }
+
                         break;
                     }
             }
@@ -1681,6 +1694,7 @@ namespace System.Windows.Forms
                         GraphicsUnit.Pixel,
                         t_disabledImageAttr);
                 }
+
                 graphics.DrawImageUnscaled(bmp, imageBounds);
             }
             else
@@ -2407,6 +2421,7 @@ namespace System.Windows.Forms
                     {
                         s += row[k] * column[k];
                     }
+
                     result[i][j] = s;
                 }
             }
@@ -2626,6 +2641,7 @@ namespace System.Windows.Forms
             {
                 result = StringAlignment.Near;
             }
+
             return result;
         }
 

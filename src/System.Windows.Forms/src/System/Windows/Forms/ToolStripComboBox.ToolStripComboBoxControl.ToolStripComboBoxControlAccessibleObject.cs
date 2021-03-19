@@ -33,6 +33,7 @@ namespace System.Windows.Forms
                             {
                                 return toolStripComboBoxControl.Owner.AccessibilityObject.FragmentNavigate(direction);
                             }
+
                             break;
                     }
 

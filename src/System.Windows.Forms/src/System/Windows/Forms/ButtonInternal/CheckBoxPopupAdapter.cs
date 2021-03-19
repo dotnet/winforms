@@ -155,6 +155,7 @@ namespace System.Windows.Forms.ButtonInternal
                 layout.CheckSize = (int)(checkSize * GetDpiScaleRatio(control));
                 layout.CheckPaddingSize = 1;
             }
+
             return layout;
         }
 
@@ -171,6 +172,7 @@ namespace System.Windows.Forms.ButtonInternal
                 layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio());
                 layout.CheckPaddingSize = 1;
             }
+
             return layout;
         }
 

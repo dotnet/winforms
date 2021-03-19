@@ -79,6 +79,7 @@ namespace System.Windows.Forms
                     // the ListControl should also eat the exception - this is the RTM behavior and doing anything else is a breaking change
                     DisplayMember = string.Empty;
                 }
+
                 if (value is null)
                 {
                     DisplayMember = string.Empty;
@@ -264,6 +265,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (props[i].Name.Equals(bindingMemberInfo.BindingField))
                 {
                     return true;
@@ -276,6 +278,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (string.Equals(props[i].Name, bindingMemberInfo.BindingField, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return true;
@@ -439,6 +442,7 @@ namespace System.Windows.Forms
                     {
                         descriptor = TypeDescriptor.GetProperties(item).Find(field, true);
                     }
+
                     if (descriptor != null)
                     {
                         item = descriptor.GetValue(item);
@@ -464,10 +468,12 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
+
             if (items is null || items.Count == 0)
             {
                 return -1;
             }
+
             if (startIndex < -1 || startIndex >= items.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
@@ -534,6 +540,7 @@ namespace System.Windows.Forms
             {
                 _stringTypeConverter = TypeDescriptor.GetConverter(typeof(string));
             }
+
             try
             {
                 return (string)Formatter.FormatObject(filteredItem, typeof(string), DisplayMemberConverter, _stringTypeConverter, _formatString, _formatInfo, null, DBNull.Value);
@@ -658,6 +665,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             try
             {
                 if (force || dataSourceChanged || displayMemberChanged)

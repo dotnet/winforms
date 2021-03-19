@@ -98,6 +98,7 @@ namespace System.Windows.Forms
                     {
                         return _owner.Selected;
                     }
+
                     return base.Selected;
                 }
             }

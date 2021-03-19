@@ -58,6 +58,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
                 Assert.Equal(new Size(123, control.PreferredHeight), control.PreferredSize);
             }
+
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -628,6 +629,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageChanged += handler;
 
             // Set different.
@@ -689,6 +691,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.

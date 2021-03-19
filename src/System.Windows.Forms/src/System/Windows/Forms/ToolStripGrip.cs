@@ -79,6 +79,7 @@ namespace System.Windows.Forms
                             return;
                         }
                     }
+
                     _movingToolStrip = value;
                     _lastEndLocation = ToolStrip.s_invalidMouseEnter;
                     if (_movingToolStrip)
@@ -120,6 +121,7 @@ namespace System.Windows.Forms
                     preferredSize = new Size(GripThickness, ParentInternal.Height);
                 }
             }
+
             // Constrain ourselves
             if (preferredSize.Width > constrainingSize.Width)
             {
@@ -188,6 +190,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (MovingToolStrip)
             {
                 if (leftMouseButtonDown)
@@ -201,6 +204,7 @@ namespace System.Windows.Forms
                         ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation);
                         _lastEndLocation = endLocation;
                     }
+
                     _startLocation = endLocation;
                 }
                 else
@@ -225,6 +229,7 @@ namespace System.Windows.Forms
             {
                 _oldCursor = null;
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -237,10 +242,12 @@ namespace System.Windows.Forms
             {
                 ParentInternal.Cursor = _oldCursor;
             }
+
             if (!MovingToolStrip && LeftMouseButtonIsDown())
             {
                 MovingToolStrip = true;
             }
+
             base.OnMouseLeave(e);
         }
 
@@ -256,6 +263,7 @@ namespace System.Windows.Forms
             {
                 ParentInternal.Cursor = _oldCursor;
             }
+
             ToolStripPanel.ClearDragFeedback();
             MovingToolStrip = false;
             base.OnMouseUp(mea);

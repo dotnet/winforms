@@ -25,6 +25,7 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
+
                     return AccessibleRole.StatusBar;
                 }
             }
@@ -48,6 +49,7 @@ namespace System.Windows.Forms
                                 return firstChild;
                             }
                         }
+
                         return null;
 
                     case UiaCore.NavigateDirection.LastChild:
@@ -60,6 +62,7 @@ namespace System.Windows.Forms
                                 return lastChild;
                             }
                         }
+
                         return null;
                 }
 

@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new EnumCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }

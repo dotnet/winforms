@@ -59,6 +59,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
                 Assert.Equal(new Size(20, control.PreferredHeight), control.PreferredSize);
             }
+
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);

@@ -60,6 +60,7 @@ namespace System.Windows.Forms.Design
                             state |= AccessibleStates.Focused;
                         }
                     }
+
                     return state;
                 }
             }

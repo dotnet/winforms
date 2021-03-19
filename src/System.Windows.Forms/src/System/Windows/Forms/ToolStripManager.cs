@@ -84,9 +84,11 @@ namespace System.Windows.Forms
                             {
                                 retFont = sysFont;
                             }
+
                             s_defaultFontCache[dpi] = retFont;
                         }
                     }
+
                     return retFont;
                 }
                 else
@@ -110,6 +112,7 @@ namespace System.Windows.Forms
                                     // ...or to control font if menu font unavailable
                                     sysFont = Control.DefaultFont;
                                 }
+
                                 if (sysFont != null)
                                 {
                                     // Ensure font is in pixels so it displays properly in the property grid at design time.
@@ -125,10 +128,12 @@ namespace System.Windows.Forms
                                         retFont = s_defaultFont;
                                     }
                                 }
+
                                 return retFont;
                             }
                         }
                     }
+
                     return retFont;
                 }
             }
@@ -225,10 +230,12 @@ namespace System.Windows.Forms
                 Debug.Assert(start != null, "passed in bogus start, why?");
                 return false;
             }
+
             if (start == toolStrip)
             {
                 return false;
             }
+
             if (ModalMenuFilter.InMenuMode)
             {
                 if (ModalMenuFilter.GetActiveToolStrip() == start)
@@ -236,6 +243,7 @@ namespace System.Windows.Forms
                     ModalMenuFilter.RemoveActiveToolStrip(start);
                     start.NotifySelectionChange(null);
                 }
+
                 ModalMenuFilter.SetActiveToolStrip(toolStrip);
             }
             else
@@ -306,15 +314,18 @@ namespace System.Windows.Forms
                     toolStripPruneNeeded = true;
                     continue;
                 }
+
                 if (invalidateText)
                 {
                     toolStrip.InvalidateTextItems();
                 }
+
                 if (activationChange)
                 {
                     toolStrip.KeyboardActive = false;
                 }
             }
+
             if (toolStripPruneNeeded)
             {
                 PruneToolStripList();
@@ -440,6 +451,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "\tREVERSE skipping wrap candidate " + toolStrip.Name + toolStrip.TabIndex.ToString(CultureInfo.CurrentCulture));
                     }
                 }
+
                 if (nextControl != null
                     && Math.Abs(nextControl.TabIndex - startTabIndex) <= 1)
                 {
@@ -448,6 +460,7 @@ namespace System.Windows.Forms
                     break;
                 }
             }
+
             if (nextControl != null)
             {
                 Debug.WriteLineIf(ToolStrip.s_controlTabDebug.TraceVerbose, "SELECTING " + nextControl.Name);
@@ -503,6 +516,7 @@ namespace System.Windows.Forms
                 {
                     t_defaultRenderer = CreateRenderer(RenderMode);
                 }
+
                 return t_defaultRenderer;
             }
             set
@@ -541,12 +555,14 @@ namespace System.Windows.Forms
                 {
                     return ToolStripManagerRenderMode.Custom;
                 }
+
                 // check the type of the currently set renderer.
                 // types are cached as this may be called frequently.
                 if (currentType == s_professionalRendererType)
                 {
                     return ToolStripManagerRenderMode.Professional;
                 }
+
                 if (currentType == s_systemRendererType)
                 {
                     return ToolStripManagerRenderMode.System;
@@ -648,6 +664,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return null;
         }
 
@@ -767,6 +784,7 @@ namespace System.Windows.Forms
                             // Shift + somekey isnt a valid modifier either
                             return false;
                         }
+
                         return true;
                 }
             }
@@ -811,6 +829,7 @@ namespace System.Windows.Forms
 
                 return ToolStripManager.ProcessShortcut(ref m, keyData);
             }
+
             if (m.Msg == (int)User32.WM.SYSKEYDOWN)
             {
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - Checking if it's a menu key: [" + keyData.ToString() + "]");
@@ -856,8 +875,10 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     activeControlInChain = activeControlInChain.ParentInternal;
-                } while (activeControlInChain != null);
+                }
+                while (activeControlInChain != null);
 
                 if (activeControlInChain != null)
                 {
@@ -913,6 +934,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             // else it's not a child of a context menu
                         }
 
@@ -945,6 +967,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
                         {
                             if (toolStrip.Shortcuts[shortcut] is ToolStripMenuItem item)
@@ -959,6 +982,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (needsPrune)
                 {
                     PruneToolStripList();
@@ -1005,6 +1029,7 @@ namespace System.Windows.Forms
                         // Only activate the menu if there's no win32 menu. Win32 menus trump menustrips.
                         menuStripToActivate = GetMainMenuStrip(toplevelControl);
                     }
+
                     Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "[ProcessMenuKey] MenuStripToActivate is: {0}", menuStripToActivate));
                 }
             }
@@ -1096,6 +1121,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
+
                     if (controlsToLookIn[i] is MenuStrip)
                     {
                         return controlsToLookIn[i] as MenuStrip;
@@ -1152,6 +1178,7 @@ namespace System.Windows.Forms
                     result = destinationItems[source.MergeIndex];
                 }
             }
+
             return result;
         }
 
@@ -1187,10 +1214,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(sourceToolStrip));
             }
+
             if (targetToolStrip is null)
             {
                 throw new ArgumentNullException(nameof(targetToolStrip));
             }
+
             if (targetToolStrip == sourceToolStrip)
             {
                 throw new ArgumentException(SR.ToolStripMergeImpossibleIdentical);
@@ -1236,6 +1265,7 @@ namespace System.Windows.Forms
                         sourceToolStrip.ResumeLayout();
                         targetToolStrip.ResumeLayout();
                     }
+
                     if (mergeHistory.MergeHistoryItemsStack.Count > 0)
                     {
                         // Only push this on the stack if we actually did something
@@ -1290,6 +1320,7 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 break;
                             case MergeAction.Replace:
                             case MergeAction.Remove:
@@ -1316,9 +1347,11 @@ namespace System.Windows.Forms
                                     maction.IndexCollection = destinationItems;
                                     history.Push(maction);
                                 }
+
                                 break;
                         }
                     }
+
                     break;
                 case MergeAction.Insert:
                     if (source.MergeIndex > -1)
@@ -1335,6 +1368,7 @@ namespace System.Windows.Forms
                         maction.Index = insertIndex;
                         history.Push(maction);
                     }
+
                     break;
                 case MergeAction.Append:
                     maction = new MergeHistoryItem(MergeAction.Remove)
@@ -1349,6 +1383,7 @@ namespace System.Windows.Forms
                     history.Push(maction);
                     break;
             }
+
             Debug.Unindent();
         }
 
@@ -1361,6 +1396,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(sourceToolStrip));
             }
+
             if (targetName is null)
             {
                 throw new ArgumentNullException(nameof(targetName));
@@ -1387,6 +1423,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(targetToolStrip));
             }
+
             if (targetToolStrip == sourceToolStrip)
             {
                 throw new ArgumentException(SR.ToolStripMergeImpossibleIdentical);
@@ -1459,6 +1496,7 @@ namespace System.Windows.Forms
                                 break;
                         }
                     }
+
                     Debug.Unindent();
                 }
 

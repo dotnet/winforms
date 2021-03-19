@@ -1670,6 +1670,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.ForeColorChanged += handler;
 
             // Set different.

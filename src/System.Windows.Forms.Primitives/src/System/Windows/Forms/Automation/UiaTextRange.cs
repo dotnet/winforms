@@ -157,6 +157,7 @@ namespace System.Windows.Forms.Automation
                     {
                         End = MoveEndpointForward(End, TextUnit.Character, 1, out int moved);
                     }
+
                     break;
 
                 case TextUnit.Word:
@@ -179,6 +180,7 @@ namespace System.Windows.Forms.Automation
                             End++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Line:
@@ -207,6 +209,7 @@ namespace System.Windows.Forms.Automation
                             MoveTo(0, _provider.TextLength);
                         }
                     }
+
                     break;
 
                 case TextUnit.Paragraph:
@@ -229,6 +232,7 @@ namespace System.Windows.Forms.Automation
                             End++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Format:
@@ -712,6 +716,7 @@ namespace System.Windows.Forms.Automation
 
                         index = index > limit ? limit : index;
                     }
+
                     break;
 
                 case TextUnit.Word:
@@ -732,6 +737,7 @@ namespace System.Windows.Forms.Automation
                             moved++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Line:
@@ -758,6 +764,7 @@ namespace System.Windows.Forms.Automation
                             moved = 1;
                         }
                     }
+
                     break;
 
                 case TextUnit.Paragraph:
@@ -780,6 +787,7 @@ namespace System.Windows.Forms.Automation
                             moved++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Format:
@@ -797,6 +805,7 @@ namespace System.Windows.Forms.Automation
                         moved = index < limit ? 1 : 0;
                         index = limit;
                     }
+
                     break;
 
                 default:
@@ -821,6 +830,7 @@ namespace System.Windows.Forms.Automation
                         index = index + moved;
                         index = index < 0 ? 0 : index;
                     }
+
                     break;
 
                 case TextUnit.Word:
@@ -838,6 +848,7 @@ namespace System.Windows.Forms.Automation
                             }
                         }
                     }
+
                     break;
 
                 case TextUnit.Line:
@@ -888,6 +899,7 @@ namespace System.Windows.Forms.Automation
                             index = _provider.GetLineIndex(line + actualCount) - LineSeparator.Length;
                         }
                     }
+
                     break;
 
                 case TextUnit.Paragraph:
@@ -907,6 +919,7 @@ namespace System.Windows.Forms.Automation
                             }
                         }
                     }
+
                     break;
 
                 case TextUnit.Format:
@@ -922,6 +935,7 @@ namespace System.Windows.Forms.Automation
                         moved = index > 0 ? -1 : 0;
                         index = 0;
                     }
+
                     break;
 
                 default:

@@ -62,6 +62,7 @@ namespace System.Windows.Forms
                             Array.Copy(_windows, 0, newWindows, 0, _windowCount);
                             _windows = newWindows;
                         }
+
                         _windows[_windowCount++] = hWnd;
                     }
                 }

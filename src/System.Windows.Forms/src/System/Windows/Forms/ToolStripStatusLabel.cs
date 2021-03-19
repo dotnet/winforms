@@ -33,22 +33,27 @@ namespace System.Windows.Forms
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text) : base(text, null, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(Image image) : base(null, image, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image) : base(text, image, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image,/*isLink=*/false, onClick, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image,/*isLink=*/false, onClick, name)
         {
             Initialize();

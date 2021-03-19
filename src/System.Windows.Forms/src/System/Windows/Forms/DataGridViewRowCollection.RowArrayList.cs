@@ -45,6 +45,7 @@ namespace System.Windows.Forms
                         {
                             owner.SwapSortedRows(left, right);
                         }
+
                         return;
                     }
 
@@ -58,15 +59,18 @@ namespace System.Windows.Forms
                         {
                             i++;
                         }
+
                         while (k != j && rowComparer.CompareObjects(x, rowComparer.GetComparedObject(j), k, j) < 0)
                         {
                             j--;
                         }
+
                         Debug.Assert(i >= left && j <= right, "(i>=left && j<=right)  Sort failed - Is your IComparer bogus?");
                         if (i > j)
                         {
                             break;
                         }
+
                         if (i < j)
                         {
                             owner.SwapSortedRows(i, j);
@@ -79,6 +83,7 @@ namespace System.Windows.Forms
                                 k = i;
                             }
                         }
+
                         i++;
                         j--;
                     }
@@ -90,6 +95,7 @@ namespace System.Windows.Forms
                         {
                             CustomQuickSort(left, j);
                         }
+
                         left = i;
                     }
                     else
@@ -98,6 +104,7 @@ namespace System.Windows.Forms
                         {
                             CustomQuickSort(i, right);
                         }
+
                         right = j;
                     }
                 }
@@ -111,14 +118,17 @@ namespace System.Windows.Forms
                 {
                     owner.SwapSortedRows(left, center);
                 }
+
                 if (rowComparer.CompareObjects(rowComparer.GetComparedObject(left), rowComparer.GetComparedObject(right), left, right) > 0)
                 {
                     owner.SwapSortedRows(left, right);
                 }
+
                 if (rowComparer.CompareObjects(rowComparer.GetComparedObject(center), rowComparer.GetComparedObject(right), center, right) > 0)
                 {
                     owner.SwapSortedRows(center, right);
                 }
+
                 return rowComparer.GetComparedObject(center);
             }
         }

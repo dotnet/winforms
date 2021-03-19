@@ -74,6 +74,7 @@ namespace Microsoft.VisualBasic.ApplicationServices.Tests
             {
                 pairs.Add(((string)key, (string)vars[key]));
             }
+
             return pairs.OrderBy(pair => pair.Item1).ToArray();
         }
 

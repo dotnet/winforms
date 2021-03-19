@@ -28,9 +28,11 @@ namespace System.Windows.Forms
                     {
                         return menu.ShowCheckMargin;
                     }
+
                     return false;
                 }
             }
+
             public bool ShowImageMargin
             {
                 get
@@ -39,6 +41,7 @@ namespace System.Windows.Forms
                     {
                         return menu.ShowImageMargin;
                     }
+
                     return false;
                 }
             }
@@ -58,6 +61,7 @@ namespace System.Windows.Forms
                     return ShowImageMargin;
                 }
             }
+
             public Rectangle ArrowRectangle
             {
                 get
@@ -73,9 +77,11 @@ namespace System.Windows.Forms
                             return arrowRect;
                         }
                     }
+
                     return Rectangle.Empty;
                 }
             }
+
             public Rectangle CheckRectangle
             {
                 get
@@ -95,9 +101,11 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return Rectangle.Empty;
                 }
             }
+
             public override Rectangle ImageRectangle
             {
                 get
@@ -119,10 +127,12 @@ namespace System.Windows.Forms
                                 Image image = ownerItem.Image ?? ownerItem.CheckedImage;
                                 imageRect.Size = image.Size;
                             }
+
                             imageRect.Y = LayoutUtils.VAlign(imageRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
                             return imageRect;
                         }
                     }
+
                     return base.ImageRectangle;
                 }
             }
@@ -138,6 +148,7 @@ namespace System.Windows.Forms
                             return menu.TextRectangle;
                         }
                     }
+
                     return base.TextRectangle;
                 }
             }
@@ -159,6 +170,7 @@ namespace System.Windows.Forms
                         return menu.MaxItemSize;
                     }
                 }
+
                 return base.GetPreferredSize(constrainingSize);
             }
         }

@@ -120,7 +120,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ColumnHeadersHeight", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -268,7 +269,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ColumnHeadersHeight", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1042,7 +1044,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("RowHeadersWidth", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1196,7 +1199,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("RowHeadersWidth", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try

@@ -157,6 +157,7 @@ namespace System.Windows.Forms
                 ButtonBaseAdapter.LayoutData data = _currentLayoutOptions.Layout();
                 return data;
             }
+
             public virtual Size GetPreferredSize(Size constrainingSize)
             {
                 Size preferredSize = Size.Empty;
@@ -172,6 +173,7 @@ namespace System.Windows.Forms
                     _lastPreferredSize = _currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
                     return _lastPreferredSize;
                 }
+
                 return Size.Empty;
             }
 
@@ -222,6 +224,7 @@ namespace System.Windows.Forms
                     _autoSize = toolStrip.AutoSize;
                     _size = toolStrip.Size;
                 }
+
                 public bool IsCurrent(ToolStrip toolStrip)
                     => toolStrip != null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
             }

@@ -387,6 +387,7 @@ namespace System.Windows.Forms
                     Name = (string)entry.Value!;
                 }
             }
+
             if (count > 0)
             {
                 ListViewItem[] items = new ListViewItem[count];
@@ -394,6 +395,7 @@ namespace System.Windows.Forms
                 {
                     items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem))!;
                 }
+
                 Items.AddRange(items);
             }
         }
@@ -424,6 +426,7 @@ namespace System.Windows.Forms
             {
                 info.AddValue(nameof(Name), Name);
             }
+
             if (_items != null && _items.Count > 0)
             {
                 info.AddValue("ItemsCount", Items.Count);

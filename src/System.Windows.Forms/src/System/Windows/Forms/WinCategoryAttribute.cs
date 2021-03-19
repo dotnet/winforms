@@ -37,6 +37,7 @@ namespace System.Windows.Forms
             {
                 localizedValue = (string)GetSRObject("WinFormsCategory" + value);
             }
+
             // This attribute is internal, and we should never have a missing resource string.
             //
             Debug.Assert(localizedValue != null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");

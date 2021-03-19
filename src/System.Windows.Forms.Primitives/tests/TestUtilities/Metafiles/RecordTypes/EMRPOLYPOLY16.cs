@@ -75,6 +75,7 @@ namespace System.Windows.Forms.Metafiles
                     currentPoint += counts[current];
                     current++;
                 }
+
                 return new ReadOnlySpan<POINTS>(currentPoint, (int)counts[current]);
             }
         }

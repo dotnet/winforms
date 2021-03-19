@@ -145,6 +145,7 @@ namespace System.Drawing.Design
                 rectangle.X = (rectangle.Width - icon.Width) / 2;
                 rectangle.Width = icon.Width;
             }
+
             if (icon.Height < rectangle.Height)
             {
                 rectangle.X = (rectangle.Height - icon.Height) / 2;

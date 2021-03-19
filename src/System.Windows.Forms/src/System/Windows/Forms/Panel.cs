@@ -85,6 +85,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -136,6 +137,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
+
                 return cp;
             }
         }

@@ -40,6 +40,7 @@ namespace System.Windows.Forms
                 {
                     return (ButtonState)buttonState;
                 }
+
                 return ButtonState.Normal;
             }
         }
@@ -62,6 +63,7 @@ namespace System.Windows.Forms
             {
                 FlipXPThemesBitmap.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -209,6 +211,7 @@ namespace System.Windows.Forms
                 {
                     return valueType;
                 }
+
                 return s_defaultValueType;
             }
             set
@@ -263,6 +266,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewHeaderCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.Value = Value;
             return dataGridViewCell;
@@ -298,15 +302,18 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
+
                 if (DataGridView is not null && DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
+
                 state |= (OwningRow.GetState(rowIndex) & DataGridViewElementStates.Frozen);
                 if (OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True || (DataGridView is not null && DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing))
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
+
                 if (OwningRow.GetVisible(rowIndex) && (DataGridView is null || DataGridView.RowHeadersVisible))
                 {
                     state |= DataGridViewElementStates.Visible;
@@ -323,12 +330,14 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 state |= (OwningColumn.State & DataGridViewElementStates.Frozen);
                 if (OwningColumn.Resizable == DataGridViewTriState.True ||
                     (DataGridView is not null && DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing))
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
+
                 if (OwningColumn.Visible && (DataGridView is null || DataGridView.ColumnHeadersVisible))
                 {
                     state |= DataGridViewElementStates.Visible;
@@ -345,11 +354,13 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 state |= DataGridViewElementStates.Frozen;
                 if (DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing)
                 {
                     state |= DataGridViewElementStates.Resizable;
                 }
+
                 if (DataGridView.RowHeadersVisible && DataGridView.ColumnHeadersVisible)
                 {
                     state |= DataGridViewElementStates.Visible;
@@ -368,26 +379,32 @@ namespace System.Windows.Forms
                 {
                     stateDebug |= DataGridViewElementStates.Displayed;
                 }
+
                 if (Frozen)
                 {
                     stateDebug |= DataGridViewElementStates.Frozen;
                 }
+
                 if (ReadOnly)
                 {
                     stateDebug |= DataGridViewElementStates.ReadOnly;
                 }
+
                 if (Resizable)
                 {
                     stateDebug |= DataGridViewElementStates.Resizable;
                 }
+
                 if (Selected)
                 {
                     stateDebug |= DataGridViewElementStates.Selected;
                 }
+
                 if (Visible)
                 {
                     stateDebug |= DataGridViewElementStates.Visible;
                 }
+
                 Debug.Assert(state == stateDebug);
             }
 #endif
@@ -404,8 +421,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 return new Size(-1, -1);
             }
+
             if (OwningColumn is not null)
             {
                 // must be a column header cell
@@ -413,6 +432,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 return new Size(OwningColumn.Thickness, DataGridView.ColumnHeadersHeight);
             }
             else if (OwningRow is not null)
@@ -422,10 +442,12 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
+
                 return new Size(DataGridView.RowHeadersWidth, OwningRow.GetHeight(rowIndex));
             }
             else
@@ -435,6 +457,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 return new Size(DataGridView.RowHeadersWidth, DataGridView.ColumnHeadersHeight);
             }
         }
@@ -483,6 +506,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             return Properties.GetObject(s_propCellValue);
         }
 
@@ -514,6 +538,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.Button == MouseButtons.Left &&
                 DataGridView.ApplyVisualStylesToHeaderCells &&
                 !DataGridView.ResizingOperationAboutToStart)
@@ -528,6 +553,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (DataGridView.ApplyVisualStylesToHeaderCells)
             {
                 if (ColumnIndex == DataGridView.MouseDownCellAddress.X &&
@@ -538,6 +564,7 @@ namespace System.Windows.Forms
                 {
                     UpdateButtonState(ButtonState.Pushed, rowIndex);
                 }
+
                 DataGridView.InvalidateCell(ColumnIndex, rowIndex);
             }
         }
@@ -548,6 +575,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (DataGridView.ApplyVisualStylesToHeaderCells)
             {
                 if (ButtonState != ButtonState.Normal)
@@ -557,6 +585,7 @@ namespace System.Windows.Forms
                     Debug.Assert(rowIndex == DataGridView.MouseDownCellAddress.Y);
                     UpdateButtonState(ButtonState.Normal, rowIndex);
                 }
+
                 DataGridView.InvalidateCell(ColumnIndex, rowIndex);
             }
         }
@@ -567,6 +596,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells)
             {
                 UpdateButtonState(ButtonState.Normal, e.RowIndex);

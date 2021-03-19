@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Layout
                     + "displayRect=" + container.DisplayRectangle.ToString() + ", "
                     + "args=" + args.ToString() + ")");
             }
+
             Debug.Indent();
 #endif
 
@@ -385,6 +386,7 @@ namespace System.Windows.Forms.Layout
                                 {
                                     pt.Offset(ptScroll.X, 0);
                                 }
+
                                 value.Location = pt;
                             }
                         }
@@ -569,16 +571,19 @@ namespace System.Windows.Forms.Layout
                         //the element stretches to fill in the whole row. Equivalent to AnchorStyles.Top|AnchorStyles.Bottom
                         return LayoutUtils.VerticalAnchorStyles;
                     }
+
                     if (isTop)
                     {
                         //the element anchors to top and doesn't stretch
                         return AnchorStyles.Top;
                     }
+
                     if (isBottom)
                     {
                         //the element anchors to bottom and doesn't stretch
                         return AnchorStyles.Bottom;
                     }
+
                     return AnchorStyles.None;
                 }
             }
@@ -642,10 +647,12 @@ namespace System.Windows.Forms.Layout
                     {
                         return LayoutUtils.VerticalAnchorStyles;
                     }
+
                     if (isLeft)
                     {
                         return AnchorStyles.Top;
                     }
+
                     if (isRight)
                     {
                         return AnchorStyles.Bottom;

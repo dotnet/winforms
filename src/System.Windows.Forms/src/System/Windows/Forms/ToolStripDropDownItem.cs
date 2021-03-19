@@ -73,6 +73,7 @@ namespace System.Windows.Forms
                         dropDown.ShowItemToolTips = ParentInternal.ShowItemToolTips;
                     }
                 }
+
                 return dropDown;
             }
             set
@@ -85,6 +86,7 @@ namespace System.Windows.Forms
                         {
                             KeyboardToolTipStateMachine.Instance.Unhook(dropDown, hookedKeyboardTooltip);
                         }
+
                         dropDown.Opened -= new EventHandler(DropDown_Opened);
                         dropDown.Closed -= new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                         dropDown.ItemClicked -= new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
@@ -98,6 +100,7 @@ namespace System.Windows.Forms
                         {
                             KeyboardToolTipStateMachine.Instance.Hook(dropDown, hookedKeyboardTooltip);
                         }
+
                         dropDown.Opened += new EventHandler(DropDown_Opened);
                         dropDown.Closed += new ToolStripDropDownClosedEventHandler(DropDown_Closed);
                         dropDown.ItemClicked += new ToolStripItemClickedEventHandler(DropDown_ItemClicked);
@@ -151,6 +154,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return dropDownDirection;
                     }
                 }
@@ -205,6 +209,7 @@ namespace System.Windows.Forms
                 {
                     return Point.Empty;
                 }
+
                 ToolStripDropDownDirection dropDownDirection = DropDownDirection;
                 return GetDropDownBounds(dropDownDirection).Location;
             }
@@ -217,6 +222,7 @@ namespace System.Windows.Forms
             add => Events.AddHandler(EventDropDownShow, value);
             remove => Events.RemoveHandler(EventDropDownShow, value);
         }
+
         /// <summary>
         ///  Occurs when the dropdown is opened
         /// </summary>
@@ -270,6 +276,7 @@ namespace System.Windows.Forms
                         return DropDown.OwnerItem == this && DropDown.Visible;
                     }
                 }
+
                 return base.Pressed;
             }
         }
@@ -316,6 +323,7 @@ namespace System.Windows.Forms
                         // overlap the toplevel toolstrip
                         offset.X--;
                     }
+
                     break;
 
                 case ToolStripDropDownDirection.Left:
@@ -361,6 +369,7 @@ namespace System.Windows.Forms
                     dropDown = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -525,6 +534,7 @@ namespace System.Windows.Forms
             {
                 return DropDown.ProcessCmdKeyInternal(ref m, keyData);
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 
@@ -548,6 +558,7 @@ namespace System.Windows.Forms
                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                         DropDown.SelectNextToolStripItem(null, true);
                     }// else eat the key
+
                     return true;
                 }
                 else if (!isToplevel)
@@ -567,6 +578,7 @@ namespace System.Windows.Forms
                             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                             DropDown.SelectNextToolStripItem(null, true);
                         } // else eat the key
+
                         return true;
                     }
                 }
@@ -592,6 +604,7 @@ namespace System.Windows.Forms
                         parent.SelectPreviousToolStrip();
                         return true;
                     }
+
                     // else if (parent.IsFirstDropDown)
                     //    the base handling (ToolStripDropDown.ProcessArrowKey) will perform auto-expansion of
                     //    the previous item in the menu.
@@ -619,6 +632,7 @@ namespace System.Windows.Forms
                 case ToolStripDropDownDirection.Left:
                     return ToolStripDropDownDirection.Right;
             }
+
             Debug.Fail("Why are we here");
 
             // dont expect it to come to this but just in case here are the real defaults.
@@ -647,6 +661,7 @@ namespace System.Windows.Forms
                 {
                     menu.ResetScrollPosition();
                 }
+
                 menu.RestoreScrollPosition();
             }
         }

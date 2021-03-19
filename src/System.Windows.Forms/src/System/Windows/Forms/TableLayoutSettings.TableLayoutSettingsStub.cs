@@ -106,6 +106,7 @@ namespace System.Windows.Forms
                 {
                     return s_defaultControlInfo;
                 }
+
                 if (!_controlsInfo.ContainsKey(controlName))
                 {
                     return s_defaultControlInfo;

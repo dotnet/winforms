@@ -163,8 +163,10 @@ namespace System.Windows.Forms.Tests
                         {
                             yield return new object[] { false, true, true, columnsAutoSizeMode, autoSizeMode };
                         }
+
                         yield return new object[] { false, true, false, columnsAutoSizeMode, autoSizeMode };
                     }
+
                     yield return new object[] { false, false, true, columnsAutoSizeMode, autoSizeMode };
                     yield return new object[] { false, false, false, columnsAutoSizeMode, autoSizeMode };
                 }

@@ -120,7 +120,7 @@
     <Rule Id="SA1412" Action="None" />
     <Rule Id="SA1413" Action="None" />
     <Rule Id="SA1414" Action="None" /> <!-- Tuple types in signatures should have element names -->
-    <Rule Id="SA1500" Action="None" />
+    <Rule Id="SA1500" Action="Error" /> <!-- The opening or closing brace within a C# statement, element, or expression is not placed on its own line. -->
     <Rule Id="SA1501" Action="None" />
     <Rule Id="SA1502" Action="None" />
     <Rule Id="SA1503" Action="None" />
@@ -133,7 +133,7 @@
     <Rule Id="SA1510" Action="None" />
     <Rule Id="SA1511" Action="None" />
     <Rule Id="SA1512" Action="None" />
-    <Rule Id="SA1513" Action="None" />
+    <Rule Id="SA1513" Action="Error" /> <!-- A closing brace within a C# element, statement, or expression is not followed by a blank line -->
     <Rule Id="SA1514" Action="None" />
     <Rule Id="SA1515" Action="None" />
     <Rule Id="SA1516" Action="None" />

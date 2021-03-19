@@ -105,6 +105,7 @@ namespace System.ComponentModel.Design
                             RemoveReferences(ic);
                             CreateReferences(ic);
                         }
+
                         _addedComponents.Clear();
                     }
 
@@ -114,6 +115,7 @@ namespace System.ComponentModel.Design
                         {
                             RemoveReferences(ic);
                         }
+
                         _removedComponents.Clear();
                     }
                 }
@@ -212,6 +214,7 @@ namespace System.ComponentModel.Design
                     cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                     cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                 }
+
                 _references = null;
                 _provider = null;
             }
@@ -235,6 +238,7 @@ namespace System.ComponentModel.Design
                     return holder.SitedComponent;
                 }
             }
+
             return null;
         }
 
@@ -278,6 +282,7 @@ namespace System.ComponentModel.Design
                     return holder.Reference;
                 }
             }
+
             return null;
         }
 
@@ -293,6 +298,7 @@ namespace System.ComponentModel.Design
             {
                 references[i] = ((ReferenceHolder)_references[i]).Reference;
             }
+
             return references;
         }
 
@@ -400,6 +406,7 @@ namespace System.ComponentModel.Design
 #endif // DEBUG
                         }
                     }
+
                     return _fullName;
                 }
             }

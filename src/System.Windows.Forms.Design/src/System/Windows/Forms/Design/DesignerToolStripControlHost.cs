@@ -35,6 +35,7 @@ namespace System.Windows.Forms.Design
             {
                 _behaviorService = (BehaviorService)parent.Site.GetService(typeof(BehaviorService));
             }
+
             Point loc = _behaviorService.ControlToAdornerWindow(Parent);
             Rectangle r = Bounds;
             r.Offset(loc);

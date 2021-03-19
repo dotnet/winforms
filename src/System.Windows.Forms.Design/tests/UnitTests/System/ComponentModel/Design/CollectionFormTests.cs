@@ -489,6 +489,7 @@ namespace System.ComponentModel.Design.Tests
             var form = new SubCollectionForm(editor);
             Assert.True(form.CanSelectMultipleInstances());
         }
+
         public static IEnumerable<object[]> InvalidDesignerHost_TestData()
         {
             yield return new object[] { null };

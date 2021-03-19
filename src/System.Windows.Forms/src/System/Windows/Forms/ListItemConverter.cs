@@ -222,7 +222,8 @@ namespace System.Windows.Forms
                         typeof(Font)
                     });
                     Debug.Assert(ctor != null, "Expected the constructor to exist.");
-                    return new InstanceDescriptor(ctor, new object[] {
+                    return new InstanceDescriptor(ctor, new object[]
+                    {
                         null,
                         item.Text,
                         item.ForeColor,

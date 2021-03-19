@@ -49,6 +49,7 @@ namespace System.Windows.Forms
                     catch
                     {
                     }
+
                     if (nameToBind is not null)
                     {
                         if (string.CompareOrdinal(nameToBind.Name, AllowedAssemblyName) == 0)
@@ -67,6 +68,7 @@ namespace System.Windows.Forms
                                         break;
                                     }
                                 }
+
                                 if (!block)
                                 {
                                     return null;
@@ -75,6 +77,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
             }
 

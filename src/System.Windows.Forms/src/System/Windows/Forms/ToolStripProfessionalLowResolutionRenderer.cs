@@ -86,6 +86,7 @@ namespace System.Windows.Forms
                 // top right pixel
                 g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, 1, 1, 1));
             }
+
             // bottom conntecting pixels - drawn only if height is odd
             if (oddHeight)
             {

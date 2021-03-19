@@ -95,6 +95,7 @@ namespace System.Windows.Forms
                         {
                             toLayout.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(toLayout, this, PropertyNames.AutoSize);
                     }
                 }
@@ -174,6 +175,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
+
                 return cp;
             }
         }
@@ -312,6 +314,7 @@ namespace System.Windows.Forms
                     SelectNextControl(null, true, true, true, false);
                 }
             }
+
             if (!ValidationCancelled)
             {
                 base.WndProc(ref m);

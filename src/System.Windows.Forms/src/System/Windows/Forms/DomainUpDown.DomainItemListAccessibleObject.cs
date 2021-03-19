@@ -26,6 +26,7 @@ namespace System.Windows.Forms
                     {
                         return "Items";
                     }
+
                     return baseName;
                 }
                 set => base.Name = value;

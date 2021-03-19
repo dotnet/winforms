@@ -207,6 +207,7 @@ namespace System.ComponentModel.Design.Serialization
                             DeserializeName(manager, statements.Name, statements);
                         }
                     }
+
                     if (rootStatements != null)
                     {
                         DeserializeName(manager, rootStatements.Name, rootStatements);
@@ -221,6 +222,7 @@ namespace System.ComponentModel.Design.Serialization
                     manager.Context.Pop();
                 }
             }
+
             return rootObject;
         }
 
@@ -332,6 +334,7 @@ namespace System.ComponentModel.Design.Serialization
                                             prop.SetValue(value, modifiers);
                                         }
                                     }
+
                                     _nameTable[name] = value;
                                 }
                                 catch (Exception ex)
@@ -343,6 +346,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return value;
         }
 
@@ -355,19 +359,23 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (declaration is null)
             {
                 throw new ArgumentNullException(nameof(declaration));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (!(declaration.UserData[s_initMethodKey] is CodeConstructor ctor))
             {
                 ctor = new CodeConstructor();
                 declaration.UserData[s_initMethodKey] = ctor;
             }
+
             return ctor;
         }
 
@@ -380,10 +388,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (declaration is null)
             {
                 throw new ArgumentNullException(nameof(declaration));
             }
+
             foreach (CodeTypeMember member in declaration.Members)
             {
                 if (member is CodeConstructor ctor && ctor.Parameters.Count == 0)
@@ -391,6 +401,7 @@ namespace System.ComponentModel.Design.Serialization
                     return new CodeMemberMethod[] { ctor };
                 }
             }
+
             return Array.Empty<CodeMemberMethod>();
         }
 
@@ -430,10 +441,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (root is null)
             {
                 throw new ArgumentNullException(nameof(root));
             }
+
             Trace("TypeCodeDomSerializer::Serialize");
 
             // As a type serializer we are responsible for creating the type declaration. Other serializers may access this type declaration and add members to it, so we need to place it on the context stack. The serialization process also looks at the root context to see if there is a root component. The root context is also used by the serializers to add statement collections for serialized components.
@@ -477,6 +490,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
+
                 // Now do the root object last.
 #if DEBUG
                 string rootName = manager.GetName(root);
@@ -501,6 +515,7 @@ namespace System.ComponentModel.Design.Serialization
                 manager.Context.Pop();
                 manager.Context.Pop();
             }
+
             Trace("--------------------------------------------------------------------");
             Trace("     Generated code for ", manager.GetName(root));
             Trace("--------------------------------------------------------------------");
@@ -530,6 +545,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 throw new InvalidOperationException();
                             }
+
                             CodeMethodMap map;
                             if (methodMapIndex.TryGetValue(method.Name, out int mapIndex))
                             {
@@ -560,6 +576,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     throw new InvalidOperationException();
                 }
+
                 CodeMethodMap rootMap;
                 if (methodMapIndex.TryGetValue(rootMethod.Name, out int rootMapIndex))
                 {
@@ -612,6 +629,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     return 0;
                 }
+
                 return cscLeft.Order - cscRight.Order;
             }
         }

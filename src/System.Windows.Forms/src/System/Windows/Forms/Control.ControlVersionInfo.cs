@@ -66,6 +66,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return _companyName;
                 }
             }
@@ -102,6 +103,7 @@ namespace System.Windows.Forms
                             {
                                 ns = string.Empty;
                             }
+
                             int firstDot = ns.IndexOf('.');
                             if (firstDot != -1)
                             {
@@ -150,6 +152,7 @@ namespace System.Windows.Forms
                             _productVersion = "1.0.0.0";
                         }
                     }
+
                     return _productVersion;
                 }
             }
@@ -166,6 +169,7 @@ namespace System.Windows.Forms
 
                     _versionInfo = FileVersionInfo.GetVersionInfo(path);
                 }
+
                 return _versionInfo;
             }
         }

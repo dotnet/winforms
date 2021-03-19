@@ -122,6 +122,7 @@ namespace System.ComponentModel.Design
             {
                 value = _binaryUI.Value;
             }
+
             _binaryUI.Value = null;
 
             return value;

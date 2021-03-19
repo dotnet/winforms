@@ -183,6 +183,7 @@ namespace System.Windows.Forms
                         {
                             return TopRowAccessibilityObject.GetChild(actualDisplayIndex);
                         }
+
                     case DataGridViewHitTestType.RowHeader:
                         return _ownerDataGridView.Rows[hti.RowIndex].AccessibilityObject;
                     case DataGridViewHitTestType.TopLeftHeader:
@@ -308,6 +309,7 @@ namespace System.Windows.Forms
                 {
                     result[i] = _ownerDataGridView.Rows[i].HeaderCell.AccessibilityObject;
                 }
+
                 return result;
             }
 
@@ -323,6 +325,7 @@ namespace System.Windows.Forms
                 {
                     result[i] = _ownerDataGridView.Columns[i].HeaderCell.AccessibilityObject;
                 }
+
                 return result;
             }
 
@@ -389,6 +392,7 @@ namespace System.Windows.Forms
                         {
                             return GetChild(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildCount();
@@ -397,6 +401,7 @@ namespace System.Windows.Forms
                             int lastChildIndex = childCount - 1;
                             return GetChild(lastChildIndex);
                         }
+
                         break;
                 }
 

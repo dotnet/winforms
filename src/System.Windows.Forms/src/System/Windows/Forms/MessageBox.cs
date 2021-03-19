@@ -97,6 +97,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         private static void PushHelpInfo(HelpInfo hpi)
         {
             // we roll our own stack here because we want a pretty lightweight implementation.
@@ -118,6 +119,7 @@ namespace System.Windows.Forms
                 newTable = new HelpInfo[lastCount + 1];
                 Array.Copy(helpInfoTable, newTable, lastCount);
             }
+
             newTable[lastCount] = hpi;
             helpInfoTable = newTable;
         }
@@ -333,6 +335,7 @@ namespace System.Windows.Forms
             {
                 PopHelpInfo();
             }
+
             return result;
         }
 
@@ -347,6 +350,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidEnumArgumentException(nameof(icon), (int)icon, typeof(MessageBoxIcon));
             }
+
             // valid values are 0x0 0x100, 0x200, chop off the last 8 bits and check that it's between 0 and 2.
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2))
             {
@@ -359,10 +363,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
+
             if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
             }
+
             if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));

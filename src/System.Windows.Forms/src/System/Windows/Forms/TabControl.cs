@@ -380,6 +380,7 @@ namespace System.Windows.Forms
                             CreateHandle();
                         }
                     }
+
                     if (IsHandleCreated)
                     {
                         User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
@@ -525,6 +526,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemSize), value));
                 }
+
                 _itemSize = value;
                 ApplyItemSize();
                 UpdateSize();
@@ -689,6 +691,7 @@ namespace System.Windows.Forms
                                 SetState(State.UISelection, false);
                                 return;
                             }
+
                             if (ValidationCancelled)
                             {
                                 SetState(State.UISelection, false);
@@ -832,6 +835,7 @@ namespace System.Windows.Forms
                 return _tabCollection;
             }
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
@@ -936,6 +940,7 @@ namespace System.Windows.Forms
             {
                 Insert(index, tabPage);
             }
+
             return index;
         }
 
@@ -984,6 +989,7 @@ namespace System.Windows.Forms
                     ThemingScope.Deactivate(userCookie);
                 }
             }
+
             base.CreateHandle();
         }
 
@@ -1020,6 +1026,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(tabPage));
             }
+
             int index = FindTabPage(tabPage);
             DeselectTab(index);
         }
@@ -1033,6 +1040,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(tabPageName));
             }
+
             TabPage tabPage = TabPages[tabPageName];
             DeselectTab(tabPage);
         }
@@ -1075,6 +1083,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return -1;
         }
 
@@ -1089,6 +1098,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+
             return _tabPages[index];
         }
 
@@ -1155,6 +1165,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(item));
             }
+
             if (!(item is TabPage tabPage))
             {
                 throw new ArgumentException(SR.TabControlBadControl, nameof(item));
@@ -1183,10 +1194,12 @@ namespace System.Windows.Forms
                 Array.Copy(_tabPages, 0, newTabPages, 0, _tabPageCount);
                 _tabPages = newTabPages;
             }
+
             if (index < _tabPageCount)
             {
                 Array.Copy(_tabPages, index, _tabPages, index + 1, _tabPageCount - index);
             }
+
             _tabPages[index] = tabPage;
             _tabPageCount++;
             _cachedDisplayRect = Rectangle.Empty;
@@ -1240,6 +1253,7 @@ namespace System.Windows.Forms
                 case Keys.End:
                     return true;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1334,8 +1348,10 @@ namespace System.Windows.Forms
                 {
                     SetState(State.FromCreateHandles, false);
                 }
+
                 _selectedIndex = -1;
             }
+
             UpdateTabSelection(false);
         }
 
@@ -1345,6 +1361,7 @@ namespace System.Windows.Forms
             {
                 _selectedIndex = SelectedIndex;
             }
+
             //Remove the Handle from NativewIndow....
 
             // Don't try to remove the Handle if we've already done so
@@ -1412,6 +1429,7 @@ namespace System.Windows.Forms
             {
                 SelectedTab.FireLeave(e);
             }
+
             base.OnLeave(e);
         }
 
@@ -1432,10 +1450,12 @@ namespace System.Windows.Forms
                 bool forward = (ke.KeyData & Keys.Shift) == 0;
                 SelectNextTab(ke, forward);
             }
+
             if (ke.KeyCode == Keys.PageDown && (ke.KeyData & Keys.Control) != 0)
             {
                 SelectNextTab(ke, true);
             }
+
             if (ke.KeyCode == Keys.PageUp && (ke.KeyData & Keys.Control) != 0)
             {
                 SelectNextTab(ke, false);
@@ -1567,6 +1587,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // the spin control (left right arrows) won't update without resizing.
             // the most correct thing would be to recreate the handle, but this works
             // and is cheaper.
@@ -1599,6 +1620,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEALLITEMS);
             }
+
             this._tabPages = null;
             _tabPageCount = 0;
 
@@ -1608,6 +1630,7 @@ namespace System.Windows.Forms
             {
                 TabPages.Add(tabPages[i]);
             }
+
             try
             {
                 SetState(State.FromCreateHandles, true);
@@ -1649,11 +1672,13 @@ namespace System.Windows.Forms
             {
                 Array.Copy(_tabPages, index + 1, _tabPages, index, _tabPageCount - index);
             }
+
             _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
                 User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEITEM, (IntPtr)index);
             }
+
             _cachedDisplayRect = Rectangle.Empty;
         }
 
@@ -1698,6 +1723,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
@@ -1713,6 +1739,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
             }
+
             _tabPages[index] = value;
         }
 
@@ -1737,6 +1764,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(tabPage));
             }
+
             int index = FindTabPage(tabPage);
             SelectTab(index);
         }
@@ -1750,6 +1778,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(tabPageName));
             }
+
             TabPage tabPage = TabPages[tabPageName];
             SelectTab(tabPage);
         }
@@ -1774,6 +1803,7 @@ namespace System.Windows.Forms
                 SetState(State.UISelection, false);
                 return;
             }
+
             if (ValidationCancelled)
             {
                 SetState(State.UISelection, false);
@@ -1851,6 +1881,7 @@ namespace System.Windows.Forms
                     s += ", TabPages[0]: " + TabPages[0].ToString();
                 }
             }
+
             return s;
         }
 
@@ -1883,6 +1914,7 @@ namespace System.Windows.Forms
                     {
                         tabPages[index].SuspendLayout();
                     }
+
                     tabPages[index].Bounds = DisplayRectangle;
 
                     // After changing the Bounds of TabPages, we need to
@@ -1915,6 +1947,7 @@ namespace System.Windows.Forms
                                         {
                                             c = (IContainerControl)c.ActiveControl;
                                         }
+
                                         if (c.ActiveControl is not null)
                                         {
                                             c.ActiveControl.Focus();
@@ -1940,6 +1973,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 for (int i = 0; i < tabPages.Length; i++)
                 {
                     if (i != SelectedIndex)
@@ -2023,6 +2057,7 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)_lastSelection);
                 UpdateTabSelection(true);
             }
+
             return tcc.Cancel;
         }
 
@@ -2040,6 +2075,7 @@ namespace System.Windows.Forms
                     c.ActiveControl = this;
                 }
             }
+
             // Fire DeSelecting .... on the current Selected Index...
             // Set the return value to a global
             // if 'cancelled' return from here else..
@@ -2051,6 +2087,7 @@ namespace System.Windows.Forms
             {
                 OnDeselected(new TabControlEventArgs(SelectedTab, SelectedIndex, TabControlAction.Deselected));
             }
+
             return tcc.Cancel;
         }
 
@@ -2116,6 +2153,7 @@ namespace System.Windows.Forms
                             {
                                 SetState(State.UISelection, true);
                             }
+
                             break;
                         case (int)TCN.SELCHANGE:
                             if (WmSelChange())
@@ -2128,6 +2166,7 @@ namespace System.Windows.Forms
                             {
                                 SetState(State.UISelection, true);
                             }
+
                             break;
                         case (int)TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
@@ -2136,13 +2175,16 @@ namespace System.Windows.Forms
                             m.Result = (IntPtr)1;
                             return;
                     }
+
                     break;
             }
+
             if (m.Msg == (int)_tabBaseReLayoutMessage)
             {
                 WmTabBaseReLayout(ref m);
                 return;
             }
+
             base.WndProc(ref m);
         }
 

@@ -14,6 +14,7 @@ namespace System.Windows.Forms.SourceGenerators
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
+#pragma warning disable SA1513 // Closing brace should be followed by blank line
             if (syntaxNode is InvocationExpressionSyntax
                 {
                     ArgumentList:
@@ -53,6 +54,7 @@ namespace System.Windows.Forms.SourceGenerators
             {
                 ArgumentsToValidate.Add(arguments.First().Expression);
             }
+#pragma warning restore SA1513 // Closing brace should be followed by blank line
         }
     }
 }

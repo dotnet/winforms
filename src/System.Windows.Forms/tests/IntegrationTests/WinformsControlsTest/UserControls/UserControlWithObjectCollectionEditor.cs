@@ -45,8 +45,10 @@ namespace WinformsControlsTest.UserControls
                     {
                         result.Append(", ");
                     }
+
                     result.Append(list[i]);
                 }
+
                 return result.ToString();
             }
 

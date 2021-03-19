@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
                 }
+
                 return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }
         }

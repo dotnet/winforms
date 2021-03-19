@@ -107,11 +107,13 @@ namespace System.Windows.Forms.Design
                         {
                             size.Height += SystemInformation.HorizontalScrollBarHeight;
                         }
+
                         if (form.VerticalScroll.Visible)
                         {
                             size.Width += SystemInformation.VerticalScrollBarWidth;
                         }
                     }
+
                     return size;
                 }
             }
@@ -134,6 +136,7 @@ namespace System.Windows.Forms.Design
                 {
                     UnhookChildControls(Control);
                 }
+
                 ((Form)Control).IsMdiContainer = value;
                 if (value)
                 {
@@ -155,6 +158,7 @@ namespace System.Windows.Forms.Design
                     throw new ArgumentException(string.Format(SR.InvalidBoundArgument, "value", value.ToString(CultureInfo.CurrentCulture),
                                                                     (0.0f).ToString(CultureInfo.CurrentCulture), (1.0f).ToString(CultureInfo.CurrentCulture)), nameof(value));
                 }
+
                 ShadowProperties[nameof(Opacity)] = value;
             }
         }
@@ -202,6 +206,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return snapLines;
             }
         }
@@ -281,6 +286,7 @@ namespace System.Windows.Forms.Design
                 IDesignerHost host = GetService<IDesignerHost>();
                 Debug.Assert(host != null, "Must have a designer host on dispose");
             }
+
             base.Dispose(disposing);
         }
 
@@ -334,12 +340,14 @@ namespace System.Windows.Forms.Design
             {
                 _toolStripAdornerWindowService = null;
             }
+
             if (ce.Component is IButtonControl)
             {
                 if (ce.Component == ShadowProperties[nameof(AcceptButton)])
                 {
                     AcceptButton = null;
                 }
+
                 if (ce.Component == ShadowProperties[nameof(CancelButton)])
                 {
                     CancelButton = null;
@@ -464,6 +472,7 @@ namespace System.Windows.Forms.Design
                     WmWindowPosChanging(ref m);
                     break;
             }
+
             base.WndProc(ref m);
         }
     }

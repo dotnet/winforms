@@ -98,6 +98,7 @@ namespace System.Windows.Forms
                 {
                     subItems[i] = new ListViewSubItem(this, items[i]);
                 }
+
                 SubItemCount = items.Length;
             }
         }
@@ -179,6 +180,7 @@ namespace System.Windows.Forms
                 {
                     subItems[i] = new ListViewSubItem(this, items[i]);
                 }
+
                 SubItemCount = items.Length;
             }
         }
@@ -554,6 +556,7 @@ namespace System.Windows.Forms
                     {
                         lastIndex = listView.GetDisplayIndex(this, lastIndex);
                     }
+
                     return lastIndex;
                 }
                 else
@@ -715,6 +718,7 @@ namespace System.Windows.Forms
                     LVIS state = (LVIS)((value + 1) << 12);  // index is 1-based
                     listView.SetItemState(Index, state, LVIS.STATEIMAGEMASK);
                 }
+
                 SavedStateImageIndex = value;
             }
         }
@@ -846,6 +850,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.ListViewBeginEditFailed);
                 }
+
                 if (!lv.Focused)
                 {
                     lv.Focus();
@@ -882,6 +887,7 @@ namespace System.Windows.Forms
             {
                 newItem = (ListViewItem)Activator.CreateInstance(clonedType);
             }
+
             newItem.subItems = clonedSubItems;
             newItem.ImageIndexer.Index = ImageIndexer.Index;
             newItem.SubItemCount = SubItemCount;
@@ -1089,6 +1095,7 @@ namespace System.Windows.Forms
                 {
                     StateSelected = (lvItem.state & LVIS.SELECTED) != 0;
                 }
+
                 SavedStateImageIndex = ((int)(lvItem.state & LVIS.STATEIMAGEMASK) >> 12) - 1;
 
                 group = null;
@@ -1201,6 +1208,7 @@ namespace System.Windows.Forms
                     newItem.owner = this;
                     newItems[i] = newItem;
                 }
+
                 newItems[0] = subItems[0];
                 subItems = newItems;
             }
@@ -1217,6 +1225,7 @@ namespace System.Windows.Forms
             {
                 info.AddValue(nameof(ImageKey), ImageIndexer.Key);
             }
+
             if (SubItemCount > 1)
             {
                 info.AddValue(nameof(SubItemCount), SubItemCount);
@@ -1225,6 +1234,7 @@ namespace System.Windows.Forms
                     info.AddValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), subItems[i], typeof(ListViewSubItem));
                 }
             }
+
             info.AddValue(nameof(BackColor), BackColor);
             info.AddValue(nameof(Checked), Checked);
             info.AddValue(nameof(Font), Font);

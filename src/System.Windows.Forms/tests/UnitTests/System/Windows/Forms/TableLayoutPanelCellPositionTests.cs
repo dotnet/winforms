@@ -88,6 +88,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expected, position == otherPosition);
                 Assert.Equal(!expected, position != otherPosition);
             }
+
             Assert.Equal(expected, position.Equals(other));
         }
 
@@ -223,6 +224,7 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(null, null));
         }
+
         public static IEnumerable<object[]> CreateInstance_InvalidPropertyValueType_TestData()
         {
             yield return new object[]

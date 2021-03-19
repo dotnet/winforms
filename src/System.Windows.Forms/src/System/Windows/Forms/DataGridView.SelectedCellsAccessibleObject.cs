@@ -102,6 +102,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     case AccessibleNavigation.LastChild:
                         if (_ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected) > 0)
                         {
@@ -111,6 +112,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     default:
                         {
                             return null;
