@@ -13,14 +13,14 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private class MergedAttributeCollection : AttributeCollection
         {
-            private readonly MergePropertyDescriptor owner;
+            private readonly MergePropertyDescriptor _owner;
 
-            private AttributeCollection[] attributeCollections;
-            private IDictionary foundAttributes;
+            private AttributeCollection[] _attributeCollections;
+            private IDictionary _foundAttributes;
 
             public MergedAttributeCollection(MergePropertyDescriptor owner) : base((Attribute[])null)
             {
-                this.owner = owner;
+                _owner = owner;
             }
 
             public override Attribute this[Type attributeType]
@@ -33,40 +33,40 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private Attribute GetCommonAttribute(Type attributeType)
             {
-                if (attributeCollections is null)
+                if (_attributeCollections is null)
                 {
-                    attributeCollections = new AttributeCollection[owner.descriptors.Length];
-                    for (int i = 0; i < owner.descriptors.Length; i++)
+                    _attributeCollections = new AttributeCollection[_owner._descriptors.Length];
+                    for (int i = 0; i < _owner._descriptors.Length; i++)
                     {
-                        attributeCollections[i] = owner.descriptors[i].Attributes;
+                        _attributeCollections[i] = _owner._descriptors[i].Attributes;
                     }
                 }
 
-                if (attributeCollections.Length == 0)
+                if (_attributeCollections.Length == 0)
                 {
                     return GetDefaultAttribute(attributeType);
                 }
 
                 Attribute value;
-                if (foundAttributes is not null)
+                if (_foundAttributes is not null)
                 {
-                    value = foundAttributes[attributeType] as Attribute;
+                    value = _foundAttributes[attributeType] as Attribute;
                     if (value is not null)
                     {
                         return value;
                     }
                 }
 
-                value = attributeCollections[0][attributeType];
+                value = _attributeCollections[0][attributeType];
 
                 if (value is null)
                 {
                     return null;
                 }
 
-                for (int i = 1; i < attributeCollections.Length; i++)
+                for (int i = 1; i < _attributeCollections.Length; i++)
                 {
-                    Attribute newValue = attributeCollections[i][attributeType];
+                    Attribute newValue = _attributeCollections[i][attributeType];
                     if (!value.Equals(newValue))
                     {
                         value = GetDefaultAttribute(attributeType);
@@ -74,12 +74,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (foundAttributes is null)
+                if (_foundAttributes is null)
                 {
-                    foundAttributes = new Hashtable();
+                    _foundAttributes = new Hashtable();
                 }
 
-                foundAttributes[attributeType] = value;
+                _foundAttributes[attributeType] = value;
                 return value;
             }
         }

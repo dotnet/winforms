@@ -11,11 +11,11 @@ namespace System.Windows.Forms
 {
     public partial class PrintControllerWithStatusDialog : PrintController
     {
-        private readonly PrintController underlyingController;
-        private PrintDocument document;
-        private BackgroundThread backgroundThread;
-        private int pageNumber;
-        private readonly string dialogTitle;
+        private readonly PrintController _underlyingController;
+        private PrintDocument _document;
+        private BackgroundThread _backgroundThread;
+        private int _pageNumber;
+        private readonly string _dialogTitle;
 
         public PrintControllerWithStatusDialog(PrintController underlyingController)
         : this(underlyingController, SR.PrintControllerWithStatusDialog_DialogTitlePrint)
@@ -24,8 +24,8 @@ namespace System.Windows.Forms
 
         public PrintControllerWithStatusDialog(PrintController underlyingController, string dialogTitle)
         {
-            this.underlyingController = underlyingController;
-            this.dialogTitle = dialogTitle;
+            _underlyingController = underlyingController;
+            _dialogTitle = dialogTitle;
         }
 
         /// <summary>
@@ -36,9 +36,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (underlyingController != null)
+                if (_underlyingController != null)
                 {
-                    return underlyingController.IsPreview;
+                    return _underlyingController.IsPreview;
                 }
 
                 return false;
@@ -52,12 +52,12 @@ namespace System.Windows.Forms
         {
             base.OnStartPrint(document, e);
 
-            this.document = document;
-            pageNumber = 1;
+            this._document = document;
+            _pageNumber = 1;
 
             if (SystemInformation.UserInteractive)
             {
-                backgroundThread = new BackgroundThread(this); // starts running & shows dialog automatically
+                _backgroundThread = new BackgroundThread(this); // starts running & shows dialog automatically
             }
 
             // OnStartPrint does the security check... lots of
@@ -66,20 +66,20 @@ namespace System.Windows.Forms
             //
             try
             {
-                underlyingController.OnStartPrint(document, e);
+                _underlyingController.OnStartPrint(document, e);
             }
             catch
             {
-                if (backgroundThread != null)
+                if (_backgroundThread != null)
                 {
-                    backgroundThread.Stop();
+                    _backgroundThread.Stop();
                 }
 
                 throw;
             }
             finally
             {
-                if (backgroundThread != null && backgroundThread.canceled)
+                if (_backgroundThread != null && _backgroundThread._canceled)
                 {
                     e.Cancel = true;
                 }
@@ -93,13 +93,13 @@ namespace System.Windows.Forms
         {
             base.OnStartPage(document, e);
 
-            if (backgroundThread != null)
+            if (_backgroundThread != null)
             {
-                backgroundThread.UpdateLabel();
+                _backgroundThread.UpdateLabel();
             }
 
-            Graphics result = underlyingController.OnStartPage(document, e);
-            if (backgroundThread != null && backgroundThread.canceled)
+            Graphics result = _underlyingController.OnStartPage(document, e);
+            if (_backgroundThread != null && _backgroundThread._canceled)
             {
                 e.Cancel = true;
             }
@@ -112,13 +112,13 @@ namespace System.Windows.Forms
         /// </summary>
         public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
         {
-            underlyingController.OnEndPage(document, e);
-            if (backgroundThread != null && backgroundThread.canceled)
+            _underlyingController.OnEndPage(document, e);
+            if (_backgroundThread != null && _backgroundThread._canceled)
             {
                 e.Cancel = true;
             }
 
-            pageNumber++;
+            _pageNumber++;
 
             base.OnEndPage(document, e);
         }
@@ -128,15 +128,15 @@ namespace System.Windows.Forms
         /// </summary>
         public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
         {
-            underlyingController.OnEndPrint(document, e);
-            if (backgroundThread != null && backgroundThread.canceled)
+            _underlyingController.OnEndPrint(document, e);
+            if (_backgroundThread != null && _backgroundThread._canceled)
             {
                 e.Cancel = true;
             }
 
-            if (backgroundThread != null)
+            if (_backgroundThread != null)
             {
-                backgroundThread.Stop();
+                _backgroundThread.Stop();
             }
 
             base.OnEndPrint(document, e);

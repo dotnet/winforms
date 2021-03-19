@@ -12,8 +12,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private class MultiMergeCollection : ICollection
         {
-            private object[] items;
-            private bool locked;
+            private object[] _items;
+            private bool _locked;
 
             public MultiMergeCollection(ICollection original)
             {
@@ -27,9 +27,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (items is not null)
+                    if (_items is not null)
                     {
-                        return items.Length;
+                        return _items.Length;
                     }
                     else
                     {
@@ -45,11 +45,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return locked;
+                    return _locked;
                 }
                 set
                 {
-                    locked = value;
+                    _locked = value;
                 }
             }
 
@@ -71,19 +71,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void CopyTo(Array array, int index)
             {
-                if (items is null)
+                if (_items is null)
                 {
                     return;
                 }
 
-                Array.Copy(items, 0, array, index, items.Length);
+                Array.Copy(_items, 0, array, index, _items.Length);
             }
 
             public IEnumerator GetEnumerator()
             {
-                if (items is not null)
+                if (_items is not null)
                 {
-                    return items.GetEnumerator();
+                    return _items.GetEnumerator();
                 }
                 else
                 {
@@ -97,14 +97,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public bool MergeCollection(ICollection newCollection)
             {
-                if (locked)
+                if (_locked)
                 {
                     return true;
                 }
 
-                if (items.Length != newCollection.Count)
+                if (_items.Length != newCollection.Count)
                 {
-                    items = Array.Empty<object>();
+                    _items = Array.Empty<object>();
                     return false;
                 }
 
@@ -112,10 +112,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 newCollection.CopyTo(newItems, 0);
                 for (int i = 0; i < newItems.Length; i++)
                 {
-                    if (((newItems[i] is null) != (items[i] is null)) ||
-                        (items[i] is not null && !items[i].Equals(newItems[i])))
+                    if (((newItems[i] is null) != (_items[i] is null)) ||
+                        (_items[i] is not null && !_items[i].Equals(newItems[i])))
                     {
-                        items = Array.Empty<object>();
+                        _items = Array.Empty<object>();
                         return false;
                     }
                 }
@@ -125,13 +125,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void SetItems(ICollection collection)
             {
-                if (locked)
+                if (_locked)
                 {
                     return;
                 }
 
-                items = new object[collection.Count];
-                collection.CopyTo(items, 0);
+                _items = new object[collection.Count];
+                collection.CopyTo(_items, 0);
             }
         }
     }

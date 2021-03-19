@@ -13,22 +13,22 @@ namespace System.Windows.Forms
     {
         private class BackgroundThread
         {
-            private readonly PrintControllerWithStatusDialog parent;
-            private StatusDialog dialog;
-            private readonly Thread thread;
-            internal bool canceled;
-            private bool alreadyStopped;
+            private readonly PrintControllerWithStatusDialog _parent;
+            private StatusDialog _dialog;
+            private readonly Thread _thread;
+            internal bool _canceled;
+            private bool _alreadyStopped;
 
             // Called from any thread
             internal BackgroundThread(PrintControllerWithStatusDialog parent)
             {
-                this.parent = parent;
+                _parent = parent;
 
                 // Calling Application.DoEvents() from within a paint event causes all sorts of problems,
                 // so we need to put the dialog on its own thread.
-                thread = new Thread(new ThreadStart(Run));
-                thread.SetApartmentState(ApartmentState.STA);
-                thread.Start();
+                _thread = new Thread(new ThreadStart(Run));
+                _thread.SetApartmentState(ApartmentState.STA);
+                _thread.Start();
             }
 
             // on correct thread
@@ -40,29 +40,29 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
-                        if (alreadyStopped)
+                        if (_alreadyStopped)
                         {
                             return;
                         }
 
-                        dialog = new StatusDialog(this, parent.dialogTitle);
+                        _dialog = new StatusDialog(this, _parent._dialogTitle);
                         ThreadUnsafeUpdateLabel();
-                        dialog.Visible = true;
+                        _dialog.Visible = true;
                     }
 
-                    if (!alreadyStopped)
+                    if (!_alreadyStopped)
                     {
-                        Application.Run(dialog);
+                        Application.Run(_dialog);
                     }
                 }
                 finally
                 {
                     lock (this)
                     {
-                        if (dialog != null)
+                        if (_dialog != null)
                         {
-                            dialog.Dispose();
-                            dialog = null;
+                            _dialog.Dispose();
+                            _dialog = null;
                         }
                     }
                 }
@@ -73,13 +73,13 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (dialog != null && dialog.IsHandleCreated)
+                    if (_dialog != null && _dialog.IsHandleCreated)
                     {
-                        dialog.BeginInvoke(new MethodInvoker(dialog.Close));
+                        _dialog.BeginInvoke(new MethodInvoker(_dialog.Close));
                         return;
                     }
 
-                    alreadyStopped = true;
+                    _alreadyStopped = true;
                 }
             }
 
@@ -87,16 +87,16 @@ namespace System.Windows.Forms
             private void ThreadUnsafeUpdateLabel()
             {
                 // "page {0} of {1}"
-                dialog.label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting,
-                                                   parent.pageNumber, parent.document.DocumentName);
+                _dialog._label1.Text = string.Format(SR.PrintControllerWithStatusDialog_NowPrinting,
+                                                   _parent._pageNumber, _parent._document.DocumentName);
             }
 
             // Called from any thread
             internal void UpdateLabel()
             {
-                if (dialog != null && dialog.IsHandleCreated)
+                if (_dialog != null && _dialog.IsHandleCreated)
                 {
-                    dialog.BeginInvoke(new MethodInvoker(ThreadUnsafeUpdateLabel));
+                    _dialog.BeginInvoke(new MethodInvoker(ThreadUnsafeUpdateLabel));
                     // Don't wait for a response
                 }
             }

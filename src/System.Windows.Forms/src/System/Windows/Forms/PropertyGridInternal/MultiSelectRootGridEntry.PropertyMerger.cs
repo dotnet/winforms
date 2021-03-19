@@ -85,7 +85,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     PropertyDescriptorCollection pdc = tab.GetProperties(parentEntry, objs[i], attrs);
                     if (presort)
                     {
-                        pdc = pdc.Sort(PropertyComparer);
+                        pdc = pdc.Sort(s_propertyComparer);
                     }
 
                     propCollections[i] = pdc;
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         // if we aren't on a match, check all the items until we're past
                         // where the matching item would be
-                        while (PropertyComparer.Compare(jProp, pivotDesc) <= 0)
+                        while (s_propertyComparer.Compare(jProp, pivotDesc) <= 0)
                         {
                             // got a match!
                             if (pivotDesc.Equals(jProp))

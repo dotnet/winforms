@@ -13,15 +13,15 @@ namespace System.Windows.Forms
     {
         private class StatusDialog : Form
         {
-            internal Label label1;
-            private Button button1;
-            private TableLayoutPanel tableLayoutPanel1;
-            private readonly BackgroundThread backgroundThread;
+            internal Label _label1;
+            private Button _button1;
+            private TableLayoutPanel _tableLayoutPanel1;
+            private readonly BackgroundThread _backgroundThread;
 
             internal StatusDialog(BackgroundThread backgroundThread, string dialogTitle)
             {
                 InitializeComponent();
-                this.backgroundThread = backgroundThread;
+                _backgroundThread = backgroundThread;
                 Text = dialogTitle;
                 MinimumSize = Size;
             }
@@ -45,36 +45,36 @@ namespace System.Windows.Forms
                     RightToLeft = RightToLeft.Yes;
                 }
 
-                tableLayoutPanel1 = new TableLayoutPanel();
-                label1 = new Label();
-                button1 = new Button();
+                _tableLayoutPanel1 = new TableLayoutPanel();
+                _label1 = new Label();
+                _button1 = new Button();
 
-                label1.AutoSize = true;
-                label1.Location = new Point(8, 16);
-                label1.TextAlign = ContentAlignment.MiddleCenter;
-                label1.Size = new Size(240, 64);
-                label1.TabIndex = 1;
-                label1.Anchor = AnchorStyles.None;
+                _label1.AutoSize = true;
+                _label1.Location = new Point(8, 16);
+                _label1.TextAlign = ContentAlignment.MiddleCenter;
+                _label1.Size = new Size(240, 64);
+                _label1.TabIndex = 1;
+                _label1.Anchor = AnchorStyles.None;
 
-                button1.AutoSize = true;
-                button1.Size = new Size(75, 23);
-                button1.TabIndex = 0;
-                button1.Text = SR.PrintControllerWithStatusDialog_Cancel;
-                button1.Location = new Point(88, 88);
-                button1.Anchor = AnchorStyles.None;
-                button1.Click += new EventHandler(button1_Click);
+                _button1.AutoSize = true;
+                _button1.Size = new Size(75, 23);
+                _button1.TabIndex = 0;
+                _button1.Text = SR.PrintControllerWithStatusDialog_Cancel;
+                _button1.Location = new Point(88, 88);
+                _button1.Anchor = AnchorStyles.None;
+                _button1.Click += new EventHandler(button1_Click);
 
-                tableLayoutPanel1.AutoSize = true;
-                tableLayoutPanel1.ColumnCount = 1;
-                tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-                tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-                tableLayoutPanel1.Location = new Point(0, 0);
-                tableLayoutPanel1.RowCount = 2;
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-                tableLayoutPanel1.TabIndex = 0;
-                tableLayoutPanel1.Controls.Add(label1, 0, 0);
-                tableLayoutPanel1.Controls.Add(button1, 0, 1);
+                _tableLayoutPanel1.AutoSize = true;
+                _tableLayoutPanel1.ColumnCount = 1;
+                _tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+                _tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+                _tableLayoutPanel1.Location = new Point(0, 0);
+                _tableLayoutPanel1.RowCount = 2;
+                _tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+                _tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+                _tableLayoutPanel1.TabIndex = 0;
+                _tableLayoutPanel1.Controls.Add(_label1, 0, 0);
+                _tableLayoutPanel1.Controls.Add(_button1, 0, 1);
 
                 AutoScaleDimensions = new Size(6, 13);
                 AutoScaleMode = AutoScaleMode.Font;
@@ -91,16 +91,16 @@ namespace System.Windows.Forms
                     ClientSize = clientSize;
                 }
 
-                CancelButton = button1;
+                CancelButton = _button1;
                 SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-                Controls.Add(tableLayoutPanel1);
+                Controls.Add(_tableLayoutPanel1);
             }
 
             private void button1_Click(object sender, EventArgs e)
             {
-                button1.Enabled = false;
-                label1.Text = SR.PrintControllerWithStatusDialog_Canceling;
-                backgroundThread.canceled = true;
+                _button1.Enabled = false;
+                _label1.Text = SR.PrintControllerWithStatusDialog_Canceling;
+                _backgroundThread._canceled = true;
             }
         }
     }
