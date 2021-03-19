@@ -2032,21 +2032,24 @@ namespace System.Windows.Forms
             return tab;
         }
 
-        private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useCheckButtonRole = false)
+        private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useRadioButtonRole = false)
         {
-            PropertyGridToolStripButton button = new PropertyGridToolStripButton
+            PropertyGridToolStripButton button = new PropertyGridToolStripButton(this, useRadioButtonRole)
             {
                 Text = toolTipText,
                 AutoToolTip = true,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 ImageIndex = imageIndex
             };
+
             button.Click += eventHandler;
             button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 
-            if (useCheckButtonRole)
+            if (useRadioButtonRole)
             {
-                button.AccessibleRole = AccessibleRole.CheckButton;
+                // As discussed in https://github.com/dotnet/winforms/issues/4428 issue, set the accessible role
+                // to "RadioButton" instead of "CheckBox" as it better matches the behavior of the button.
+                button.AccessibleRole = AccessibleRole.RadioButton;
             }
 
             return button;

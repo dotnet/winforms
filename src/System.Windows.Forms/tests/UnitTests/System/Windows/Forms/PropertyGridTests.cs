@@ -3746,6 +3746,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void PropertyGrid_Buttons_AccessibleRole_IsRadiButton()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+            ToolStripButton categoryButton = toolStripButtons[0];
+            ToolStripButton alphaButton = toolStripButtons[1];
+
+            Assert.Equal(AccessibleRole.RadioButton, categoryButton.AccessibleRole);
+            Assert.Equal(AccessibleRole.RadioButton, alphaButton.AccessibleRole);
+        }
+
         private class SubToolStripRenderer : ToolStripRenderer
         {
         }
