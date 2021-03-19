@@ -5,6 +5,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -299,6 +300,21 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRowAccessibleObject_Select_NoOwner_ThrowsInvalidOperationException(AccessibleObject accessibleObject)
         {
             Assert.Throws<InvalidOperationException>(() => accessibleObject.Select(AccessibleSelection.None));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_FragmentRoot_ReturnsNull_WithoutDataGridView()
+        {
+            using DataGridViewRow dataGridViewRow = new();
+            Assert.Null(dataGridViewRow.AccessibilityObject.FragmentRoot);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewRowAccessibleObject_IsEnabled_ReturnsFalse_WithoutDataGridView()
+        {
+            using DataGridViewRow dataGridViewRow = new();
+            bool actualValue = (bool)dataGridViewRow.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId);
+            Assert.False(actualValue);
         }
 
         private class SubDataGridViewCell : DataGridViewCell
