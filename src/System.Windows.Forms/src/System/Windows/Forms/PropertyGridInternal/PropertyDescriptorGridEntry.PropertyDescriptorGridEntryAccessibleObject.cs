@@ -19,7 +19,42 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owningPropertyDescriptorGridEntry = owner;
             }
 
-            internal override bool IsIAccessibleExSupported() => true;
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    PropertyGridView propertyGridView = GetPropertyGridView();
+                    if (propertyGridView is null)
+                    {
+                        return UiaCore.ExpandCollapseState.Collapsed;
+                    }
+
+                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry &&
+                        ((_owningPropertyDescriptorGridEntry is not null && _owningPropertyDescriptorGridEntry.InternalExpanded)
+                         || propertyGridView.DropDownVisible))
+                    {
+                        return UiaCore.ExpandCollapseState.Expanded;
+                    }
+
+                    return UiaCore.ExpandCollapseState.Collapsed;
+                }
+            }
+
+            internal override void Collapse()
+            {
+                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                {
+                    ExpandOrCollapse();
+                }
+            }
+
+            internal override void Expand()
+            {
+                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                {
+                    ExpandOrCollapse();
+                }
+            }
 
             /// <summary>
             ///  Returns the element in the specified direction.
@@ -47,6 +82,58 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 return base.FragmentNavigate(direction);
+            }
+
+            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
+                {
+                    return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
+                }
+                else if (propertyID == UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId)
+                {
+                    return string.Empty;
+                }
+                else if (propertyID == UiaCore.UIA.IsValuePatternAvailablePropertyId)
+                {
+                    return true;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsIAccessibleExSupported() => true;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.ValuePatternId ||
+                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.Enumerable))
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
+            private void ExpandOrCollapse()
+            {
+                if (!GetPropertyGridView().IsHandleCreated)
+                {
+                    return;
+                }
+
+                PropertyGridView propertyGridView = GetPropertyGridView();
+                if (propertyGridView is null)
+                {
+                    return;
+                }
+
+                int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
+
+                if (row != -1)
+                {
+                    propertyGridView.PopupDialog(row);
+                }
             }
 
             private UiaCore.IRawElementProviderFragment GetFirstChild()
@@ -129,93 +216,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 return propertyGridViewAccessibleObject.Owner as PropertyGridView;
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId ||
-                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.Enumerable))
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override void Expand()
-            {
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
-                {
-                    ExpandOrCollapse();
-                }
-            }
-
-            internal override void Collapse()
-            {
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
-                {
-                    ExpandOrCollapse();
-                }
-            }
-
-            private void ExpandOrCollapse()
-            {
-                if (!GetPropertyGridView().IsHandleCreated)
-                {
-                    return;
-                }
-
-                PropertyGridView propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
-                {
-                    return;
-                }
-
-                int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
-
-                if (row != -1)
-                {
-                    propertyGridView.PopupDialog(row);
-                }
-            }
-
-            internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            {
-                get
-                {
-                    PropertyGridView propertyGridView = GetPropertyGridView();
-                    if (propertyGridView is null)
-                    {
-                        return UiaCore.ExpandCollapseState.Collapsed;
-                    }
-
-                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry &&
-                        ((_owningPropertyDescriptorGridEntry is not null && _owningPropertyDescriptorGridEntry.InternalExpanded)
-                         || propertyGridView.DropDownVisible))
-                    {
-                        return UiaCore.ExpandCollapseState.Expanded;
-                    }
-
-                    return UiaCore.ExpandCollapseState.Collapsed;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
-                {
-                    return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
-                }
-                else if (propertyID == UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId)
-                {
-                    return string.Empty;
-                }
-                else if (propertyID == UiaCore.UIA.IsValuePatternAvailablePropertyId)
-                {
-                    return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
             }
         }
     }
