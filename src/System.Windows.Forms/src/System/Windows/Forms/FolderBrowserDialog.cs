@@ -271,11 +271,11 @@ namespace System.Windows.Forms
 
             dialog.SetOptions(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
 
-            if (!string.IsNullOrEmpty(InitialDirectory))
+            if (!string.IsNullOrEmpty(_initialDirectory))
             {
                 try
                 {
-                    IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
+                    IShellItem initialDirectory = GetShellItemForPath(_initialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
             if (!string.IsNullOrEmpty(_selectedPath))
             {
                 string parent = Path.GetDirectoryName(_selectedPath);
-                if (parent is null || !string.IsNullOrEmpty(InitialDirectory) || !Directory.Exists(parent))
+                if (parent is null || !string.IsNullOrEmpty(_initialDirectory) || !Directory.Exists(parent))
                 {
                     dialog.SetFileName(_selectedPath);
                 }
