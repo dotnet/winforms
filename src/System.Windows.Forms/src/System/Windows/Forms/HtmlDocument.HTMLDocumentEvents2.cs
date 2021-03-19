@@ -25,13 +25,31 @@ namespace System.Windows.Forms
                 _parent = htmlDocument;
             }
 
-            private void FireEvent(object key, EventArgs e)
+            public void onactivate(IHTMLEventObj evtObj) { }
+
+            public void onafterupdate(IHTMLEventObj evtObj) { }
+
+            public bool onbeforeactivate(IHTMLEventObj evtObj)
             {
-                if (_parent != null)
-                {
-                    _parent.DocumentShim.FireEvent(key, e);
-                }
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
             }
+
+            public bool onbeforedeactivate(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
+            public void onbeforeeditfocus(IHTMLEventObj evtObj) { }
+
+            public bool onbeforeupdate(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
+            public void oncellchange(IHTMLEventObj evtObj) { }
 
             public bool onclick(IHTMLEventObj evtObj)
             {
@@ -48,6 +66,38 @@ namespace System.Windows.Forms
                 return e.ReturnValue;
             }
 
+            public bool oncontrolselect(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
+            public void ondataavailable(IHTMLEventObj evtObj) { }
+
+            public void ondatasetchanged(IHTMLEventObj evtObj) { }
+
+            public void ondatasetcomplete(IHTMLEventObj evtObj) { }
+
+            public bool ondblclick(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
+            public void ondeactivate(IHTMLEventObj evtObj) { }
+
+            public bool ondragstart(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
+            public bool onerrorupdate(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
             public void onfocusin(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
@@ -60,16 +110,32 @@ namespace System.Windows.Forms
                 FireEvent(HtmlDocument.s_eventLosingFocus, e);
             }
 
-            public void onmousemove(IHTMLEventObj evtObj)
+            public bool onhelp(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.s_eventMouseMove, e);
+                return e.ReturnValue;
             }
+
+            public void onkeydown(IHTMLEventObj evtObj) { }
+
+            public bool onkeypress(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
+            public void onkeyup(IHTMLEventObj evtObj) { }
 
             public void onmousedown(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 FireEvent(HtmlDocument.s_eventMouseDown, e);
+            }
+
+            public void onmousemove(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                FireEvent(HtmlDocument.s_eventMouseMove, e);
             }
 
             public void onmouseout(IHTMLEventObj evtObj)
@@ -90,66 +156,19 @@ namespace System.Windows.Forms
                 FireEvent(HtmlDocument.s_eventMouseUp, e);
             }
 
-            public bool onstop(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlDocument.s_eventStop, e);
-                return e.ReturnValue;
-            }
-
-            public bool onhelp(IHTMLEventObj evtObj)
+            public bool onmousewheel(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
 
-            public bool ondblclick(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onkeydown(IHTMLEventObj evtObj) { }
-
-            public void onkeyup(IHTMLEventObj evtObj) { }
-
-            public bool onkeypress(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
+            public void onpropertychange(IHTMLEventObj evtObj) { }
 
             public void onreadystatechange(IHTMLEventObj evtObj) { }
 
-            public bool onbeforeupdate(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onafterupdate(IHTMLEventObj evtObj) { }
-
-            public bool onrowexit(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
             public void onrowenter(IHTMLEventObj evtObj) { }
 
-            public bool ondragstart(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onselectstart(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onerrorupdate(IHTMLEventObj evtObj)
+            public bool onrowexit(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 return e.ReturnValue;
@@ -159,46 +178,27 @@ namespace System.Windows.Forms
 
             public void onrowsinserted(IHTMLEventObj evtObj) { }
 
-            public void oncellchange(IHTMLEventObj evtObj) { }
-
-            public void onpropertychange(IHTMLEventObj evtObj) { }
-
-            public void ondatasetchanged(IHTMLEventObj evtObj) { }
-
-            public void ondataavailable(IHTMLEventObj evtObj) { }
-
-            public void ondatasetcomplete(IHTMLEventObj evtObj) { }
-
-            public void onbeforeeditfocus(IHTMLEventObj evtObj) { }
-
             public void onselectionchange(IHTMLEventObj evtObj) { }
 
-            public bool oncontrolselect(IHTMLEventObj evtObj)
+            public bool onselectstart(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 return e.ReturnValue;
             }
 
-            public bool onmousewheel(IHTMLEventObj evtObj)
+            public bool onstop(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                FireEvent(HtmlDocument.s_eventStop, e);
                 return e.ReturnValue;
             }
 
-            public void onactivate(IHTMLEventObj evtObj) { }
-
-            public void ondeactivate(IHTMLEventObj evtObj) { }
-
-            public bool onbeforeactivate(IHTMLEventObj evtObj)
+            private void FireEvent(object key, EventArgs e)
             {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public bool onbeforedeactivate(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
+                if (_parent != null)
+                {
+                    _parent.DocumentShim.FireEvent(key, e);
+                }
             }
         }
     }

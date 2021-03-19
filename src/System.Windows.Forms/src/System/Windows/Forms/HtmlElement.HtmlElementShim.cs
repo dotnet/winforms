@@ -46,10 +46,9 @@ namespace System.Windows.Forms
                 typeof(DHTMLScriptEvents2)
             };
 
+            private readonly IHTMLWindow2 _associatedWindow;
             private AxHost.ConnectionPointCookie _cookie;   // To hook up events from the native HtmlElement
             private HtmlElement _htmlElement;
-            private readonly IHTMLWindow2 _associatedWindow;
-
             public HtmlElementShim(HtmlElement element)
             {
                 _htmlElement = element;
@@ -69,6 +68,11 @@ namespace System.Windows.Forms
                 }
             }
 
+            public override IHTMLWindow2 AssociatedWindow
+            {
+                get { return _associatedWindow; }
+            }
+
             public IHTMLElement NativeHtmlElement
             {
                 get { return _htmlElement.NativeHtmlElement; }
@@ -77,11 +81,6 @@ namespace System.Windows.Forms
             internal HtmlElement Element
             {
                 get { return _htmlElement; }
-            }
-
-            public override IHTMLWindow2 AssociatedWindow
-            {
-                get { return _associatedWindow; }
             }
 
             ///  Support IHTMLElement2.AttachEventHandler

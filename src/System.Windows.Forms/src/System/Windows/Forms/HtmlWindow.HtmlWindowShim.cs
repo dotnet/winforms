@@ -35,12 +35,12 @@ namespace System.Windows.Forms
                 _htmlWindow = window;
             }
 
-            public IHTMLWindow2 NativeHtmlWindow
+            public override IHTMLWindow2 AssociatedWindow
             {
                 get { return _htmlWindow.NativeHtmlWindow; }
             }
 
-            public override IHTMLWindow2 AssociatedWindow
+            public IHTMLWindow2 NativeHtmlWindow
             {
                 get { return _htmlWindow.NativeHtmlWindow; }
             }
@@ -92,6 +92,14 @@ namespace System.Windows.Forms
                 }
             }
 
+            public void OnWindowUnload()
+            {
+                if (_htmlWindow != null)
+                {
+                    _htmlWindow.ShimManager.OnWindowUnloaded(_htmlWindow);
+                }
+            }
+
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
@@ -109,14 +117,6 @@ namespace System.Windows.Forms
             protected override object GetEventSender()
             {
                 return _htmlWindow;
-            }
-
-            public void OnWindowUnload()
-            {
-                if (_htmlWindow != null)
-                {
-                    _htmlWindow.ShimManager.OnWindowUnloaded(_htmlWindow);
-                }
             }
         }
     }

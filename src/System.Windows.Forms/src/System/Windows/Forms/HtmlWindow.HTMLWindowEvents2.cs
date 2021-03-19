@@ -25,19 +25,11 @@ namespace System.Windows.Forms
                 _parent = htmlWindow;
             }
 
-            private void FireEvent(object key, EventArgs e)
-            {
-                if (_parent != null)
-                {
-                    _parent.WindowShim.FireEvent(key, e);
-                }
-            }
+            public void onafterprint(IHTMLEventObj evtObj) { }
 
-            public void onfocus(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventGotFocus, e);
-            }
+            public void onbeforeprint(IHTMLEventObj evtObj) { }
+
+            public void onbeforeunload(IHTMLEventObj evtObj) { }
 
             public void onblur(IHTMLEventObj evtObj)
             {
@@ -52,10 +44,34 @@ namespace System.Windows.Forms
                 return e.Handled;
             }
 
+            public void onfocus(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                FireEvent(HtmlWindow.s_eventGotFocus, e);
+            }
+
+            public bool onhelp(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                return e.ReturnValue;
+            }
+
             public void onload(IHTMLEventObj evtObj)
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.s_eventLoad, e);
+            }
+
+            public void onresize(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                FireEvent(HtmlWindow.s_eventResize, e);
+            }
+
+            public void onscroll(IHTMLEventObj evtObj)
+            {
+                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
+                FireEvent(HtmlWindow.s_eventScroll, e);
             }
 
             public void onunload(IHTMLEventObj evtObj)
@@ -68,29 +84,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public void onscroll(IHTMLEventObj evtObj)
+            private void FireEvent(object key, EventArgs e)
             {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventScroll, e);
+                if (_parent != null)
+                {
+                    _parent.WindowShim.FireEvent(key, e);
+                }
             }
-
-            public void onresize(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                FireEvent(HtmlWindow.s_eventResize, e);
-            }
-
-            public bool onhelp(IHTMLEventObj evtObj)
-            {
-                HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
-                return e.ReturnValue;
-            }
-
-            public void onbeforeunload(IHTMLEventObj evtObj) { }
-
-            public void onbeforeprint(IHTMLEventObj evtObj) { }
-
-            public void onafterprint(IHTMLEventObj evtObj) { }
         }
     }
 }

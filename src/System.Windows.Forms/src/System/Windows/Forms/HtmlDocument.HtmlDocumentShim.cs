@@ -26,10 +26,9 @@ namespace System.Windows.Forms
         /// </summary>
         internal class HtmlDocumentShim : HtmlShim
         {
+            private readonly IHTMLWindow2 _associatedWindow;
             private AxHost.ConnectionPointCookie _cookie;
             private HtmlDocument _htmlDocument;
-            private readonly IHTMLWindow2 _associatedWindow;
-
             internal HtmlDocumentShim(HtmlDocument htmlDocument)
             {
                 _htmlDocument = htmlDocument;
@@ -70,16 +69,6 @@ namespace System.Windows.Forms
                 ((IHTMLDocument3)NativeHtmlDocument2).AttachEvent(eventName, proxy);
             }
 
-            ///  Support IHtmlDocument3.DetachHandler
-            public override void DetachEventHandler(string eventName, EventHandler eventHandler)
-            {
-                HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
-                {
-                    ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
-                }
-            }
-
             //
             // Connect to standard events
             //
@@ -95,6 +84,16 @@ namespace System.Windows.Forms
                     {
                         _cookie = null;
                     }
+                }
+            }
+
+            ///  Support IHtmlDocument3.DetachHandler
+            public override void DetachEventHandler(string eventName, EventHandler eventHandler)
+            {
+                HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
+                if (proxy != null)
+                {
+                    ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
                 }
             }
 
