@@ -61,13 +61,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _owningPropertyDescriptorGridEntry.Children.GetEntry(0).AccessibilityObject;
                 }
 
-                var propertyGridView = GetPropertyGridView();
+                PropertyGridView propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
                     return null;
                 }
 
-                var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
                 if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
                 {
                     if (selectedGridEntry.Enumerable &&
@@ -101,13 +101,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                         .GetEntry(_owningPropertyDescriptorGridEntry.ChildCount - 1).AccessibilityObject;
                 }
 
-                var propertyGridView = GetPropertyGridView();
+                PropertyGridView propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
                     return null;
                 }
 
-                var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
                 if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
                 {
                     if (selectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
@@ -123,8 +123,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private PropertyGridView GetPropertyGridView()
             {
-                var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                if (propertyGridViewAccessibleObject is null)
+                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject propertyGridViewAccessibleObject)
                 {
                     return null;
                 }
@@ -166,7 +165,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                var propertyGridView = GetPropertyGridView();
+                PropertyGridView propertyGridView = GetPropertyGridView();
                 if (propertyGridView is null)
                 {
                     return;
@@ -184,7 +183,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    var propertyGridView = GetPropertyGridView();
+                    PropertyGridView propertyGridView = GetPropertyGridView();
                     if (propertyGridView is null)
                     {
                         return UiaCore.ExpandCollapseState.Collapsed;
