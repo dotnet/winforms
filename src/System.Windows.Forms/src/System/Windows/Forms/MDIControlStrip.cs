@@ -66,9 +66,7 @@ namespace System.Windows.Forms
             }
 
             // set up the sytem menu
-
-            _system.Image = GetTargetWindowIcon();
-            _system.Visible = GetTargetWindowIconVisibility();
+            UpdateIcon();
             _system.Alignment = ToolStripItemAlignment.Left;
             _system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
             _system.ImageScaling = ToolStripItemImageScaling.None;
@@ -96,23 +94,33 @@ namespace System.Windows.Forms
             }
         }
 
-        private Image GetTargetWindowIcon()
+        private (Image Image,bool Visible) GetTargetWindowIcon()
         {
-            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(_target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
-            Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
-            Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
+            if (_target is not Form formTarget || formTarget.ShowIcon)
+            {
+                IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(_target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+                Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
+                Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
-            Image systemIcon = smallIcon.ToBitmap();
-            smallIcon.Dispose();
+                Image systemIcon = smallIcon.ToBitmap();
+                smallIcon.Dispose();
 
-            return systemIcon;
+                return (systemIcon, true);
+            }
+            else
+            {
+                return (null, false);
+            }
         }
-        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
 
-        public void updateIcon()
+        public void UpdateIcon()
         {
-            _system.Image = GetTargetWindowIcon();
-            _system.Visible = GetTargetWindowIconVisibility();
+            var imageInfo = GetTargetWindowIcon();
+            if (_system.Image is not null) {
+                _system.Image.Dispose();
+            }
+            _system.Image = imageInfo.Image;
+            _system.Visible = imageInfo.Visible;
         }
 
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
@@ -151,8 +159,7 @@ namespace System.Windows.Forms
                 _system.DropDown.Dispose();
             }
 
-            _system.Image = GetTargetWindowIcon();
-            _system.Visible = GetTargetWindowIconVisibility();
+            UpdateIcon();
         }
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
