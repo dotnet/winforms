@@ -16,33 +16,33 @@ namespace System.Windows.Forms
 {
     public sealed partial class HtmlDocument
     {
-        internal static object EventClick = new object();
-        internal static object EventContextMenuShowing = new object();
-        internal static object EventFocusing = new object();
-        internal static object EventLosingFocus = new object();
-        internal static object EventMouseDown = new object();
-        internal static object EventMouseLeave = new object();
-        internal static object EventMouseMove = new object();
-        internal static object EventMouseOver = new object();
-        internal static object EventMouseUp = new object();
-        internal static object EventStop = new object();
+        internal static object s_eventClick = new();
+        internal static object s_eventContextMenuShowing = new();
+        internal static object s_eventFocusing = new();
+        internal static object s_eventLosingFocus = new();
+        internal static object s_eventMouseDown = new();
+        internal static object s_eventMouseLeave = new();
+        internal static object s_eventMouseMove = new();
+        internal static object s_eventMouseOver = new();
+        internal static object s_eventMouseUp = new();
+        internal static object s_eventStop = new();
 
-        private readonly IHTMLDocument2 htmlDocument2;
-        private readonly HtmlShimManager shimManager;
+        private readonly IHTMLDocument2 _htmlDocument2;
+        private readonly HtmlShimManager _shimManager;
 
         internal HtmlDocument(HtmlShimManager shimManager, IHTMLDocument doc)
         {
-            htmlDocument2 = (IHTMLDocument2)doc;
+            _htmlDocument2 = (IHTMLDocument2)doc;
             Debug.Assert(NativeHtmlDocument2 != null, "The document should implement IHtmlDocument2");
 
-            this.shimManager = shimManager;
+            _shimManager = shimManager;
         }
 
         internal IHTMLDocument2 NativeHtmlDocument2
         {
             get
             {
-                return htmlDocument2;
+                return _htmlDocument2;
             }
         }
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
                     HtmlDocumentShim shim = ShimManager.GetDocumentShim(this);
                     if (shim is null)
                     {
-                        shimManager.AddDocumentShim(this);
+                        _shimManager.AddDocumentShim(this);
                         shim = ShimManager.GetDocumentShim(this);
                     }
 
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return shimManager;
+                return _shimManager;
             }
         }
 
@@ -503,32 +503,32 @@ namespace System.Windows.Forms
 
         public event HtmlElementEventHandler Click
         {
-            add => DocumentShim.AddHandler(EventClick, value);
-            remove => DocumentShim.RemoveHandler(EventClick, value);
+            add => DocumentShim.AddHandler(s_eventClick, value);
+            remove => DocumentShim.RemoveHandler(s_eventClick, value);
         }
 
         public event HtmlElementEventHandler ContextMenuShowing
         {
-            add => DocumentShim.AddHandler(EventContextMenuShowing, value);
-            remove => DocumentShim.RemoveHandler(EventContextMenuShowing, value);
+            add => DocumentShim.AddHandler(s_eventContextMenuShowing, value);
+            remove => DocumentShim.RemoveHandler(s_eventContextMenuShowing, value);
         }
 
         public event HtmlElementEventHandler Focusing
         {
-            add => DocumentShim.AddHandler(EventFocusing, value);
-            remove => DocumentShim.RemoveHandler(EventFocusing, value);
+            add => DocumentShim.AddHandler(s_eventFocusing, value);
+            remove => DocumentShim.RemoveHandler(s_eventFocusing, value);
         }
 
         public event HtmlElementEventHandler LosingFocus
         {
-            add => DocumentShim.AddHandler(EventLosingFocus, value);
-            remove => DocumentShim.RemoveHandler(EventLosingFocus, value);
+            add => DocumentShim.AddHandler(s_eventLosingFocus, value);
+            remove => DocumentShim.RemoveHandler(s_eventLosingFocus, value);
         }
 
         public event HtmlElementEventHandler MouseDown
         {
-            add => DocumentShim.AddHandler(EventMouseDown, value);
-            remove => DocumentShim.RemoveHandler(EventMouseDown, value);
+            add => DocumentShim.AddHandler(s_eventMouseDown, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseDown, value);
         }
 
         /// <summary>
@@ -536,32 +536,32 @@ namespace System.Windows.Forms
         /// </summary>
         public event HtmlElementEventHandler MouseLeave
         {
-            add => DocumentShim.AddHandler(EventMouseLeave, value);
-            remove => DocumentShim.RemoveHandler(EventMouseLeave, value);
+            add => DocumentShim.AddHandler(s_eventMouseLeave, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseLeave, value);
         }
 
         public event HtmlElementEventHandler MouseMove
         {
-            add => DocumentShim.AddHandler(EventMouseMove, value);
-            remove => DocumentShim.RemoveHandler(EventMouseMove, value);
+            add => DocumentShim.AddHandler(s_eventMouseMove, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseMove, value);
         }
 
         public event HtmlElementEventHandler MouseOver
         {
-            add => DocumentShim.AddHandler(EventMouseOver, value);
-            remove => DocumentShim.RemoveHandler(EventMouseOver, value);
+            add => DocumentShim.AddHandler(s_eventMouseOver, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseOver, value);
         }
 
         public event HtmlElementEventHandler MouseUp
         {
-            add => DocumentShim.AddHandler(EventMouseUp, value);
-            remove => DocumentShim.RemoveHandler(EventMouseUp, value);
+            add => DocumentShim.AddHandler(s_eventMouseUp, value);
+            remove => DocumentShim.RemoveHandler(s_eventMouseUp, value);
         }
 
         public event HtmlElementEventHandler Stop
         {
-            add => DocumentShim.AddHandler(EventStop, value);
-            remove => DocumentShim.RemoveHandler(EventStop, value);
+            add => DocumentShim.AddHandler(s_eventStop, value);
+            remove => DocumentShim.RemoveHandler(s_eventStop, value);
         }
 
         private Color ColorFromObject(object oColor)
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode() => htmlDocument2?.GetHashCode() ?? 0;
+        public override int GetHashCode() => _htmlDocument2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {

@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal class HtmlElementShim : HtmlShim
         {
-            private static readonly Type[] dispInterfaceTypes =
+            private static readonly Type[] s_dispInterfaceTypes =
             {
                 typeof(DHTMLElementEvents2),
                 typeof(DHTMLAnchorEvents2),
@@ -46,24 +46,24 @@ namespace System.Windows.Forms
                 typeof(DHTMLScriptEvents2)
             };
 
-            private AxHost.ConnectionPointCookie cookie;   // To hook up events from the native HtmlElement
-            private HtmlElement htmlElement;
-            private readonly IHTMLWindow2 associatedWindow;
+            private AxHost.ConnectionPointCookie _cookie;   // To hook up events from the native HtmlElement
+            private HtmlElement _htmlElement;
+            private readonly IHTMLWindow2 _associatedWindow;
 
             public HtmlElementShim(HtmlElement element)
             {
-                htmlElement = element;
+                _htmlElement = element;
 
                 // snap our associated window so we know when to disconnect.
-                if (htmlElement != null)
+                if (_htmlElement != null)
                 {
-                    HtmlDocument doc = htmlElement.Document;
+                    HtmlDocument doc = _htmlElement.Document;
                     if (doc != null)
                     {
                         HtmlWindow window = doc.Window;
                         if (window != null)
                         {
-                            associatedWindow = window.NativeHtmlWindow;
+                            _associatedWindow = window.NativeHtmlWindow;
                         }
                     }
                 }
@@ -71,17 +71,17 @@ namespace System.Windows.Forms
 
             public IHTMLElement NativeHtmlElement
             {
-                get { return htmlElement.NativeHtmlElement; }
+                get { return _htmlElement.NativeHtmlElement; }
             }
 
             internal HtmlElement Element
             {
-                get { return htmlElement; }
+                get { return _htmlElement; }
             }
 
             public override IHTMLWindow2 AssociatedWindow
             {
-                get { return associatedWindow; }
+                get { return _associatedWindow; }
             }
 
             ///  Support IHTMLElement2.AttachEventHandler
@@ -97,17 +97,17 @@ namespace System.Windows.Forms
 
             public override void ConnectToEvents()
             {
-                if (cookie is null || !cookie.Connected)
+                if (_cookie is null || !_cookie.Connected)
                 {
-                    for (int i = 0; i < dispInterfaceTypes.Length && cookie is null; i++)
+                    for (int i = 0; i < s_dispInterfaceTypes.Length && _cookie is null; i++)
                     {
-                        cookie = new AxHost.ConnectionPointCookie(NativeHtmlElement,
-                                                                                  new HTMLElementEvents2(htmlElement),
-                                                                                  dispInterfaceTypes[i],
+                        _cookie = new AxHost.ConnectionPointCookie(NativeHtmlElement,
+                                                                                  new HTMLElementEvents2(_htmlElement),
+                                                                                  s_dispInterfaceTypes[i],
                                                                                   /*throwException*/ false);
-                        if (!cookie.Connected)
+                        if (!_cookie.Connected)
                         {
-                            cookie = null;
+                            _cookie = null;
                         }
                     }
                 }
@@ -125,27 +125,27 @@ namespace System.Windows.Forms
 
             public override void DisconnectFromEvents()
             {
-                if (cookie != null)
+                if (_cookie != null)
                 {
-                    cookie.Disconnect();
-                    cookie = null;
+                    _cookie.Disconnect();
+                    _cookie = null;
                 }
             }
 
             protected override void Dispose(bool disposing)
             {
                 base.Dispose(disposing);
-                if (htmlElement != null)
+                if (_htmlElement != null)
                 {
-                    Marshal.FinalReleaseComObject(htmlElement.NativeHtmlElement);
+                    Marshal.FinalReleaseComObject(_htmlElement.NativeHtmlElement);
                 }
 
-                htmlElement = null;
+                _htmlElement = null;
             }
 
             protected override object GetEventSender()
             {
-                return htmlElement;
+                return _htmlElement;
             }
         }
     }

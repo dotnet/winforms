@@ -26,37 +26,37 @@ namespace System.Windows.Forms
         /// </summary>
         internal class HtmlDocumentShim : HtmlShim
         {
-            private AxHost.ConnectionPointCookie cookie;
-            private HtmlDocument htmlDocument;
-            private readonly IHTMLWindow2 associatedWindow;
+            private AxHost.ConnectionPointCookie _cookie;
+            private HtmlDocument _htmlDocument;
+            private readonly IHTMLWindow2 _associatedWindow;
 
             internal HtmlDocumentShim(HtmlDocument htmlDocument)
             {
-                this.htmlDocument = htmlDocument;
+                _htmlDocument = htmlDocument;
                 // snap our associated window so we know when to disconnect.
-                if (this.htmlDocument != null)
+                if (_htmlDocument != null)
                 {
                     HtmlWindow window = htmlDocument.Window;
                     if (window != null)
                     {
-                        associatedWindow = window.NativeHtmlWindow;
+                        _associatedWindow = window.NativeHtmlWindow;
                     }
                 }
             }
 
             public override IHTMLWindow2 AssociatedWindow
             {
-                get { return associatedWindow; }
+                get { return _associatedWindow; }
             }
 
             public IHTMLDocument2 NativeHtmlDocument2
             {
-                get { return htmlDocument.NativeHtmlDocument2; }
+                get { return _htmlDocument.NativeHtmlDocument2; }
             }
 
             internal HtmlDocument Document
             {
-                get { return htmlDocument; }
+                get { return _htmlDocument; }
             }
 
             ///  Support IHtmlDocument3.AttachHandler
@@ -85,15 +85,15 @@ namespace System.Windows.Forms
             //
             public override void ConnectToEvents()
             {
-                if (cookie is null || !cookie.Connected)
+                if (_cookie is null || !_cookie.Connected)
                 {
-                    cookie = new AxHost.ConnectionPointCookie(NativeHtmlDocument2,
-                                                                          new HTMLDocumentEvents2(htmlDocument),
+                    _cookie = new AxHost.ConnectionPointCookie(NativeHtmlDocument2,
+                                                                          new HTMLDocumentEvents2(_htmlDocument),
                                                                           typeof(DHTMLDocumentEvents2),
                                                                           /*throwException*/ false);
-                    if (!cookie.Connected)
+                    if (!_cookie.Connected)
                     {
-                        cookie = null;
+                        _cookie = null;
                     }
                 }
             }
@@ -103,10 +103,10 @@ namespace System.Windows.Forms
             //
             public override void DisconnectFromEvents()
             {
-                if (cookie != null)
+                if (_cookie != null)
                 {
-                    cookie.Disconnect();
-                    cookie = null;
+                    _cookie.Disconnect();
+                    _cookie = null;
                 }
             }
 
@@ -115,18 +115,18 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    if (htmlDocument != null)
+                    if (_htmlDocument != null)
                     {
-                        Marshal.FinalReleaseComObject(htmlDocument.NativeHtmlDocument2);
+                        Marshal.FinalReleaseComObject(_htmlDocument.NativeHtmlDocument2);
                     }
 
-                    htmlDocument = null;
+                    _htmlDocument = null;
                 }
             }
 
             protected override object GetEventSender()
             {
-                return htmlDocument;
+                return _htmlDocument;
             }
         }
     }

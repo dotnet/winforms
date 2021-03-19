@@ -27,22 +27,22 @@ namespace System.Windows.Forms
         /// </summary>
         internal class HtmlWindowShim : HtmlShim
         {
-            private AxHost.ConnectionPointCookie cookie;
-            private HtmlWindow htmlWindow;
+            private AxHost.ConnectionPointCookie _cookie;
+            private HtmlWindow _htmlWindow;
 
             public HtmlWindowShim(HtmlWindow window)
             {
-                htmlWindow = window;
+                _htmlWindow = window;
             }
 
             public IHTMLWindow2 NativeHtmlWindow
             {
-                get { return htmlWindow.NativeHtmlWindow; }
+                get { return _htmlWindow.NativeHtmlWindow; }
             }
 
             public override IHTMLWindow2 AssociatedWindow
             {
-                get { return htmlWindow.NativeHtmlWindow; }
+                get { return _htmlWindow.NativeHtmlWindow; }
             }
 
             ///  Support IHtmlDocument3.AttachHandler
@@ -60,15 +60,15 @@ namespace System.Windows.Forms
             ///  Support HTMLWindowEvents2
             public override void ConnectToEvents()
             {
-                if (cookie is null || !cookie.Connected)
+                if (_cookie is null || !_cookie.Connected)
                 {
-                    cookie = new AxHost.ConnectionPointCookie(NativeHtmlWindow,
-                                                                              new HTMLWindowEvents2(htmlWindow),
+                    _cookie = new AxHost.ConnectionPointCookie(NativeHtmlWindow,
+                                                                              new HTMLWindowEvents2(_htmlWindow),
                                                                               typeof(DHTMLWindowEvents2),
                                                                               /*throwException*/ false);
-                    if (!cookie.Connected)
+                    if (!_cookie.Connected)
                     {
-                        cookie = null;
+                        _cookie = null;
                     }
                 }
             }
@@ -85,10 +85,10 @@ namespace System.Windows.Forms
 
             public override void DisconnectFromEvents()
             {
-                if (cookie != null)
+                if (_cookie != null)
                 {
-                    cookie.Disconnect();
-                    cookie = null;
+                    _cookie.Disconnect();
+                    _cookie = null;
                 }
             }
 
@@ -97,25 +97,25 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    if (htmlWindow != null && htmlWindow.NativeHtmlWindow != null)
+                    if (_htmlWindow != null && _htmlWindow.NativeHtmlWindow != null)
                     {
-                        Marshal.FinalReleaseComObject(htmlWindow.NativeHtmlWindow);
+                        Marshal.FinalReleaseComObject(_htmlWindow.NativeHtmlWindow);
                     }
 
-                    htmlWindow = null;
+                    _htmlWindow = null;
                 }
             }
 
             protected override object GetEventSender()
             {
-                return htmlWindow;
+                return _htmlWindow;
             }
 
             public void OnWindowUnload()
             {
-                if (htmlWindow != null)
+                if (_htmlWindow != null)
                 {
-                    htmlWindow.ShimManager.OnWindowUnloaded(htmlWindow);
+                    _htmlWindow.ShimManager.OnWindowUnloaded(_htmlWindow);
                 }
             }
         }

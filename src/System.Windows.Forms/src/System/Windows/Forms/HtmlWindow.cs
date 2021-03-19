@@ -13,36 +13,36 @@ namespace System.Windows.Forms
 {
     public sealed partial class HtmlWindow
     {
-        internal static readonly object EventError = new object();
-        internal static readonly object EventGotFocus = new object();
-        internal static readonly object EventLoad = new object();
-        internal static readonly object EventLostFocus = new object();
-        internal static readonly object EventResize = new object();
-        internal static readonly object EventScroll = new object();
-        internal static readonly object EventUnload = new object();
+        internal static readonly object s_eventError = new();
+        internal static readonly object s_eventGotFocus = new();
+        internal static readonly object s_eventLoad = new();
+        internal static readonly object s_eventLostFocus = new();
+        internal static readonly object s_eventResize = new();
+        internal static readonly object s_eventScroll = new();
+        internal static readonly object s_eventUnload = new();
 
-        private readonly HtmlShimManager shimManager;
-        private readonly IHTMLWindow2 htmlWindow2;
+        private readonly HtmlShimManager _shimManager;
+        private readonly IHTMLWindow2 _htmlWindow2;
 
         internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2 win)
         {
-            htmlWindow2 = win;
+            _htmlWindow2 = win;
             Debug.Assert(NativeHtmlWindow != null, "The window object should implement IHTMLWindow2");
 
-            this.shimManager = shimManager;
+            _shimManager = shimManager;
         }
 
         internal IHTMLWindow2 NativeHtmlWindow
         {
             get
             {
-                return htmlWindow2;
+                return _htmlWindow2;
             }
         }
 
         private HtmlShimManager ShimManager
         {
-            get { return shimManager; }
+            get { return _shimManager; }
         }
 
         private HtmlWindowShim WindowShim
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                     HtmlWindowShim shim = ShimManager.GetWindowShim(this);
                     if (shim is null)
                     {
-                        shimManager.AddWindowShim(this);
+                        _shimManager.AddWindowShim(this);
                         shim = ShimManager.GetWindowShim(this);
                     }
 
@@ -332,44 +332,44 @@ namespace System.Windows.Forms
 
         public event HtmlElementErrorEventHandler Error
         {
-            add => WindowShim.AddHandler(EventError, value);
-            remove => WindowShim.RemoveHandler(EventError, value);
+            add => WindowShim.AddHandler(s_eventError, value);
+            remove => WindowShim.RemoveHandler(s_eventError, value);
         }
 
         public event HtmlElementEventHandler GotFocus
         {
-            add => WindowShim.AddHandler(EventGotFocus, value);
-            remove => WindowShim.RemoveHandler(EventGotFocus, value);
+            add => WindowShim.AddHandler(s_eventGotFocus, value);
+            remove => WindowShim.RemoveHandler(s_eventGotFocus, value);
         }
 
         public event HtmlElementEventHandler Load
         {
-            add => WindowShim.AddHandler(EventLoad, value);
-            remove => WindowShim.RemoveHandler(EventLoad, value);
+            add => WindowShim.AddHandler(s_eventLoad, value);
+            remove => WindowShim.RemoveHandler(s_eventLoad, value);
         }
 
         public event HtmlElementEventHandler LostFocus
         {
-            add => WindowShim.AddHandler(EventLostFocus, value);
-            remove => WindowShim.RemoveHandler(EventLostFocus, value);
+            add => WindowShim.AddHandler(s_eventLostFocus, value);
+            remove => WindowShim.RemoveHandler(s_eventLostFocus, value);
         }
 
         public event HtmlElementEventHandler Resize
         {
-            add => WindowShim.AddHandler(EventResize, value);
-            remove => WindowShim.RemoveHandler(EventResize, value);
+            add => WindowShim.AddHandler(s_eventResize, value);
+            remove => WindowShim.RemoveHandler(s_eventResize, value);
         }
 
         public event HtmlElementEventHandler Scroll
         {
-            add => WindowShim.AddHandler(EventScroll, value);
-            remove => WindowShim.RemoveHandler(EventScroll, value);
+            add => WindowShim.AddHandler(s_eventScroll, value);
+            remove => WindowShim.RemoveHandler(s_eventScroll, value);
         }
 
         public event HtmlElementEventHandler Unload
         {
-            add => WindowShim.AddHandler(EventUnload, value);
-            remove => WindowShim.RemoveHandler(EventUnload, value);
+            add => WindowShim.AddHandler(s_eventUnload, value);
+            remove => WindowShim.RemoveHandler(s_eventUnload, value);
         }
 
         #region operators
@@ -416,7 +416,7 @@ namespace System.Windows.Forms
             return !(left == right);
         }
 
-        public override int GetHashCode() => htmlWindow2?.GetHashCode() ?? 0;
+        public override int GetHashCode() => _htmlWindow2?.GetHashCode() ?? 0;
 
         public override bool Equals(object obj)
         {
