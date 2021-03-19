@@ -34,7 +34,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (result == 0)
                 {
-                    //
                     result = string.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, System.Globalization.CultureInfo.CurrentCulture);
                 }
 
