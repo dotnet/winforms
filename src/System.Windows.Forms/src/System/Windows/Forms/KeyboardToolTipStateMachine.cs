@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     ///  one ToolTip-enabled control to another, the keyboard ToolTip will be shown after a time interval specified
     ///  with TTDT_RESHOW flag has passed.
     /// </remarks>
-    internal sealed class KeyboardToolTipStateMachine
+    internal sealed partial class KeyboardToolTipStateMachine
     {
         public static KeyboardToolTipStateMachine Instance
         {
@@ -328,64 +328,6 @@ namespace System.Windows.Forms
             Shown,
             ReadyForReshow,
             WaitForRefocus
-        }
-
-        private sealed class InternalStateMachineTimer : Timer
-        {
-            public void ClearTimerTickHandlers() => _onTimer = null;
-        }
-
-        private sealed class ToolToTipDictionary
-        {
-            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
-
-            public ToolTip this[IKeyboardToolTip tool]
-            {
-                get
-                {
-                    ToolTip toolTip = null;
-                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
-                    {
-                        if (!toolTipReference.TryGetTarget(out toolTip))
-                        {
-                            // removing dead reference
-                            table.Remove(tool);
-                        }
-                    }
-
-                    return toolTip;
-                }
-                set
-                {
-                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
-                    {
-                        toolTipReference.SetTarget(value);
-                    }
-                    else
-                    {
-                        table.Add(tool, new WeakReference<ToolTip>(value));
-                    }
-                }
-            }
-
-            public void Remove(IKeyboardToolTip tool, ToolTip toolTip)
-            {
-                if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
-                {
-                    if (toolTipReference.TryGetTarget(out ToolTip existingToolTip))
-                    {
-                        if (existingToolTip == toolTip)
-                        {
-                            table.Remove(tool);
-                        }
-                    }
-                    else
-                    {
-                        // removing dead reference
-                        table.Remove(tool);
-                    }
-                }
-            }
         }
     }
 }

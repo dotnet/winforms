@@ -277,14 +277,6 @@ namespace System.Windows.Forms
             }
 
             public override string ToString() => "ListViewSubItem: {" + Text + "}";
-
-            [Serializable] // This type is participating in resx serialization scenarios.
-            private class SubItemStyle
-            {
-                public Color backColor = Color.Empty; // Do NOT rename (binary serialization).
-                public Color foreColor = Color.Empty; // Do NOT rename (binary serialization).
-                public Font font; // Do NOT rename (binary serialization).
-            }
         }
     }
 }
