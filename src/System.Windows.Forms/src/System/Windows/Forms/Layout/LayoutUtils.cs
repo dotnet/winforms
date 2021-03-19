@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Layout
         public const AnchorStyles HorizontalAnchorStyles = AnchorStyles.Left | AnchorStyles.Right;
         public const AnchorStyles VerticalAnchorStyles = AnchorStyles.Top | AnchorStyles.Bottom;
 
-        private static readonly AnchorStyles[] dockingToAnchor = new AnchorStyles[]
+        private static readonly AnchorStyles[] s_dockingToAnchor = new AnchorStyles[]
         {
             /* None   */ AnchorStyles.Top | AnchorStyles.Left,
             /* Top    */ AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Layout
             DockStyle dockStyle = DefaultLayout.GetDock(element);
             if (dockStyle != DockStyle.None)
             {
-                return dockingToAnchor[(int)dockStyle];
+                return s_dockingToAnchor[(int)dockStyle];
             }
 
             return DefaultLayout.GetAnchor(element);

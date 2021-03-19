@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using static Interop;
 
@@ -44,14 +43,14 @@ namespace System.Windows.Forms
         [ThreadStatic]
         private static KeyboardToolTipStateMachine s_instance;
 
-        private readonly ToolToTipDictionary _toolToTip = new ToolToTipDictionary();
+        private readonly ToolToTipDictionary _toolToTip = new();
 
         private SmState _currentState = SmState.Hidden;
         private IKeyboardToolTip _currentTool;
-        private readonly InternalStateMachineTimer _timer = new InternalStateMachineTimer();
+        private readonly InternalStateMachineTimer _timer = new();
         private SendOrPostCallback _refocusDelayExpirationCallback;
 
-        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
+        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new(null);
 
         private KeyboardToolTipStateMachine()
         {

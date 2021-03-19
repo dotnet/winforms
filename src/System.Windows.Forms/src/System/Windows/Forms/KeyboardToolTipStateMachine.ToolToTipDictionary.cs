@@ -12,19 +12,19 @@ namespace System.Windows.Forms
     {
         private sealed class ToolToTipDictionary
         {
-            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
+            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> _table = new();
 
             public ToolTip this[IKeyboardToolTip tool]
             {
                 get
                 {
                     ToolTip toolTip = null;
-                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                    if (_table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
                     {
                         if (!toolTipReference.TryGetTarget(out toolTip))
                         {
                             // removing dead reference
-                            table.Remove(tool);
+                            _table.Remove(tool);
                         }
                     }
 
@@ -32,32 +32,32 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                    if (_table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
                     {
                         toolTipReference.SetTarget(value);
                     }
                     else
                     {
-                        table.Add(tool, new WeakReference<ToolTip>(value));
+                        _table.Add(tool, new WeakReference<ToolTip>(value));
                     }
                 }
             }
 
             public void Remove(IKeyboardToolTip tool, ToolTip toolTip)
             {
-                if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
+                if (_table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
                 {
                     if (toolTipReference.TryGetTarget(out ToolTip existingToolTip))
                     {
                         if (existingToolTip == toolTip)
                         {
-                            table.Remove(tool);
+                            _table.Remove(tool);
                         }
                     }
                     else
                     {
                         // removing dead reference
-                        table.Remove(tool);
+                        _table.Remove(tool);
                     }
                 }
             }
