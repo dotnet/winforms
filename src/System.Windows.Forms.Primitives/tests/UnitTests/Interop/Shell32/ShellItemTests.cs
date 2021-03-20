@@ -12,11 +12,11 @@ namespace System.Windows.Forms.Tests.Interop.Shell32Tests
     public class ShellItemTests
     {
         [Fact]
-        public void SHILCreateFromPath_ValidPath()
+        public void SHParseDisplayName_ValidPath()
         {
             string path = Path.GetTempPath();
             uint rgflnOut = default;
-            HRESULT result = Shell32.SHILCreateFromPath(path, out IntPtr ppidl, ref rgflnOut);
+            HRESULT result = Shell32.SHParseDisplayName(path, IntPtr.Zero, out IntPtr ppidl, 0, out rgflnOut);
             try
             {
                 Assert.Equal(HRESULT.S_OK, result);
