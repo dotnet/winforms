@@ -193,13 +193,13 @@ namespace System.Windows.Forms
 
             internal class ToolStripItemLayoutOptions : ButtonBaseAdapter.LayoutOptions
             {
-                private Size _cachedSize = LayoutUtils.InvalidSize;
-                private Size _cachedProposedConstraints = LayoutUtils.InvalidSize;
+                private Size _cachedSize = LayoutUtils.s_invalidSize;
+                private Size _cachedProposedConstraints = LayoutUtils.s_invalidSize;
 
                 // override GetTextSize to provide simple text caching.
                 protected override Size GetTextSize(Size proposedConstraints)
                 {
-                    if (_cachedSize != LayoutUtils.InvalidSize
+                    if (_cachedSize != LayoutUtils.s_invalidSize
                         && (_cachedProposedConstraints == proposedConstraints
                         || _cachedSize.Width <= proposedConstraints.Width))
                     {

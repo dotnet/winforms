@@ -2408,7 +2408,7 @@ namespace System.Windows.Forms
                     Size cachedSize = CommonProperties.xGetPreferredSizeCache(this);
 
                     // If the "default" preferred size is being requested, and we have a cached value for it, return it.
-                    if (!cachedSize.IsEmpty && (proposedSize == LayoutUtils.MaxSize))
+                    if (!cachedSize.IsEmpty && (proposedSize == LayoutUtils.s_maxSize))
                     {
                         return cachedSize;
                     }
@@ -2429,7 +2429,7 @@ namespace System.Windows.Forms
                 prefSize = ApplySizeConstraints(prefSize);
 
                 // If the "default" preferred size was requested, cache the computed value.
-                if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.MaxSize)
+                if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.s_maxSize)
                 {
                     CommonProperties.xSetPreferredSizeCache(this, prefSize);
                 }
