@@ -14,9 +14,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class MergePropertyDescriptor : PropertyDescriptor
+    internal partial class MergePropertyDescriptor : PropertyDescriptor
     {
-        private readonly PropertyDescriptor[] descriptors;
+        private readonly PropertyDescriptor[] _descriptors;
 
         private enum TriState
         {
@@ -25,15 +25,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             No
         }
 
-        private TriState localizable = TriState.Unknown;
-        private TriState readOnly = TriState.Unknown;
-        private TriState canReset = TriState.Unknown;
+        private TriState _localizable = TriState.Unknown;
+        private TriState _readOnly = TriState.Unknown;
+        private TriState _canReset = TriState.Unknown;
 
-        private MultiMergeCollection collection;
+        private MultiMergeCollection _collection;
 
         public MergePropertyDescriptor(PropertyDescriptor[] descriptors) : base(descriptors[0].Name, null)
         {
-            this.descriptors = descriptors;
+            _descriptors = descriptors;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return descriptors[0].ComponentType;
+                return _descriptors[0].ComponentType;
             }
         }
 
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return descriptors[0].Converter;
+                return _descriptors[0].Converter;
             }
         }
 
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return descriptors[0].DisplayName;
+                return _descriptors[0].DisplayName;
             }
         }
 
@@ -77,20 +77,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (localizable == TriState.Unknown)
+                if (_localizable == TriState.Unknown)
                 {
-                    localizable = TriState.Yes;
-                    foreach (PropertyDescriptor pd in descriptors)
+                    _localizable = TriState.Yes;
+                    foreach (PropertyDescriptor pd in _descriptors)
                     {
                         if (!pd.IsLocalizable)
                         {
-                            localizable = TriState.No;
+                            _localizable = TriState.No;
                             break;
                         }
                     }
                 }
 
-                return (localizable == TriState.Yes);
+                return (_localizable == TriState.Yes);
             }
         }
 
@@ -103,20 +103,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (readOnly == TriState.Unknown)
+                if (_readOnly == TriState.Unknown)
                 {
-                    readOnly = TriState.No;
-                    foreach (PropertyDescriptor pd in descriptors)
+                    _readOnly = TriState.No;
+                    foreach (PropertyDescriptor pd in _descriptors)
                     {
                         if (pd.IsReadOnly)
                         {
-                            readOnly = TriState.Yes;
+                            _readOnly = TriState.Yes;
                             break;
                         }
                     }
                 }
 
-                return (readOnly == TriState.Yes);
+                return (_readOnly == TriState.Yes);
             }
         }
 
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return descriptors[0].PropertyType;
+                return _descriptors[0].PropertyType;
             }
         }
 
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return descriptors[index];
+                return _descriptors[index];
             }
         }
 
@@ -148,21 +148,21 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override bool CanResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");
-            if (canReset == TriState.Unknown)
+            if (_canReset == TriState.Unknown)
             {
-                canReset = TriState.Yes;
+                _canReset = TriState.Yes;
                 Array a = (Array)component;
-                for (int i = 0; i < descriptors.Length; i++)
+                for (int i = 0; i < _descriptors.Length; i++)
                 {
-                    if (!descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
+                    if (!_descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
                     {
-                        canReset = TriState.No;
+                        _canReset = TriState.No;
                         break;
                     }
                 }
             }
 
-            return (canReset == TriState.Yes);
+            return (_canReset == TriState.Yes);
         }
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             object propertyOwner = a.GetValue(i);
             if (propertyOwner is ICustomTypeDescriptor)
             {
-                propertyOwner = ((ICustomTypeDescriptor)propertyOwner).GetPropertyOwner(descriptors[i]);
+                propertyOwner = ((ICustomTypeDescriptor)propertyOwner).GetPropertyOwner(_descriptors[i]);
             }
 
             return propertyOwner;
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public override object GetEditor(Type editorBaseType)
         {
-            return descriptors[0].GetEditor(editorBaseType);
+            return _descriptors[0].GetEditor(editorBaseType);
         }
 
         /// <summary>
@@ -281,31 +281,31 @@ namespace System.Windows.Forms.PropertyGridInternal
         public object GetValue(Array components, out bool allEqual)
         {
             allEqual = true;
-            object obj = descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
+            object obj = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
 
             if (obj is ICollection)
             {
-                if (collection is null)
+                if (_collection is null)
                 {
-                    collection = new MultiMergeCollection((ICollection)obj);
+                    _collection = new MultiMergeCollection((ICollection)obj);
                 }
-                else if (collection.Locked)
+                else if (_collection.Locked)
                 {
-                    return collection;
+                    return _collection;
                 }
                 else
                 {
-                    collection.SetItems((ICollection)obj);
+                    _collection.SetItems((ICollection)obj);
                 }
             }
 
-            for (int i = 1; i < descriptors.Length; i++)
+            for (int i = 1; i < _descriptors.Length; i++)
             {
-                object objCur = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
+                object objCur = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
 
-                if (collection is not null)
+                if (_collection is not null)
                 {
-                    if (!collection.MergeCollection((ICollection)objCur))
+                    if (!_collection.MergeCollection((ICollection)objCur))
                     {
                         allEqual = false;
                         return null;
@@ -323,12 +323,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            if (allEqual && collection is not null && collection.Count == 0)
+            if (allEqual && _collection is not null && _collection.Count == 0)
             {
                 return null;
             }
 
-            return (collection ?? obj);
+            return (_collection ?? obj);
         }
 
         internal object[] GetValues(Array components)
@@ -337,7 +337,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < components.Length; i++)
             {
-                values[i] = descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
+                values[i] = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
             }
 
             return values;
@@ -353,9 +353,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
             Array a = (Array)component;
-            for (int i = 0; i < descriptors.Length; i++)
+            for (int i = 0; i < _descriptors.Length; i++)
             {
-                descriptors[i].ResetValue(GetPropertyOwnerForComponent(a, i));
+                _descriptors[i].ResetValue(GetPropertyOwnerForComponent(a, i));
             }
         }
 
@@ -363,9 +363,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (collection is not null)
+                if (_collection is not null)
                 {
-                    collection.Locked = true;
+                    _collection.Locked = true;
                 }
 
                 // now we have to copy the value into each property.
@@ -373,9 +373,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 listValue.CopyTo(values, 0);
 
-                for (int i = 0; i < descriptors.Length; i++)
+                for (int i = 0; i < _descriptors.Length; i++)
                 {
-                    if (!(descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is IList propList))
+                    if (!(_descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is IList propList))
                     {
                         continue;
                     }
@@ -389,9 +389,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             finally
             {
-                if (collection is not null)
+                if (_collection is not null)
                 {
-                    collection.Locked = false;
+                    _collection.Locked = false;
                 }
             }
         }
@@ -410,10 +410,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                for (int i = 0; i < descriptors.Length; i++)
+                for (int i = 0; i < _descriptors.Length; i++)
                 {
                     object clonedValue = CopyValue(value);
-                    descriptors[i].SetValue(GetPropertyOwnerForComponent(a, i), clonedValue);
+                    _descriptors[i].SetValue(GetPropertyOwnerForComponent(a, i), clonedValue);
                 }
             }
         }
@@ -427,213 +427,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");
             Array a = (Array)component;
-            for (int i = 0; i < descriptors.Length; i++)
+            for (int i = 0; i < _descriptors.Length; i++)
             {
-                if (!descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(a, i)))
+                if (!_descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(a, i)))
                 {
                     return false;
                 }
             }
 
             return true;
-        }
-
-        private class MultiMergeCollection : ICollection
-        {
-            private object[] items;
-            private bool locked;
-
-            public MultiMergeCollection(ICollection original)
-            {
-                SetItems(original);
-            }
-
-            /// <summary>
-            ///  Retrieves the number of items.
-            /// </summary>
-            public int Count
-            {
-                get
-                {
-                    if (items is not null)
-                    {
-                        return items.Length;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Prevents the contents of the collection from being re-initialized;
-            /// </summary>
-            public bool Locked
-            {
-                get
-                {
-                    return locked;
-                }
-                set
-                {
-                    locked = value;
-                }
-            }
-
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public void CopyTo(Array array, int index)
-            {
-                if (items is null)
-                {
-                    return;
-                }
-
-                Array.Copy(items, 0, array, index, items.Length);
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                if (items is not null)
-                {
-                    return items.GetEnumerator();
-                }
-                else
-                {
-                    return Array.Empty<object>().GetEnumerator();
-                }
-            }
-
-            /// <summary>
-            ///  Ensures that the new collection equals the exisitng one.
-            ///  Otherwise, it wipes out the contents of the new collection.
-            /// </summary>
-            public bool MergeCollection(ICollection newCollection)
-            {
-                if (locked)
-                {
-                    return true;
-                }
-
-                if (items.Length != newCollection.Count)
-                {
-                    items = Array.Empty<object>();
-                    return false;
-                }
-
-                object[] newItems = new object[newCollection.Count];
-                newCollection.CopyTo(newItems, 0);
-                for (int i = 0; i < newItems.Length; i++)
-                {
-                    if (((newItems[i] is null) != (items[i] is null)) ||
-                        (items[i] is not null && !items[i].Equals(newItems[i])))
-                    {
-                        items = Array.Empty<object>();
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-
-            public void SetItems(ICollection collection)
-            {
-                if (locked)
-                {
-                    return;
-                }
-
-                items = new object[collection.Count];
-                collection.CopyTo(items, 0);
-            }
-        }
-
-        private class MergedAttributeCollection : AttributeCollection
-        {
-            private readonly MergePropertyDescriptor owner;
-
-            private AttributeCollection[] attributeCollections;
-            private IDictionary foundAttributes;
-
-            public MergedAttributeCollection(MergePropertyDescriptor owner) : base((Attribute[])null)
-            {
-                this.owner = owner;
-            }
-
-            public override Attribute this[Type attributeType]
-            {
-                get
-                {
-                    return GetCommonAttribute(attributeType);
-                }
-            }
-
-            private Attribute GetCommonAttribute(Type attributeType)
-            {
-                if (attributeCollections is null)
-                {
-                    attributeCollections = new AttributeCollection[owner.descriptors.Length];
-                    for (int i = 0; i < owner.descriptors.Length; i++)
-                    {
-                        attributeCollections[i] = owner.descriptors[i].Attributes;
-                    }
-                }
-
-                if (attributeCollections.Length == 0)
-                {
-                    return GetDefaultAttribute(attributeType);
-                }
-
-                Attribute value;
-                if (foundAttributes is not null)
-                {
-                    value = foundAttributes[attributeType] as Attribute;
-                    if (value is not null)
-                    {
-                        return value;
-                    }
-                }
-
-                value = attributeCollections[0][attributeType];
-
-                if (value is null)
-                {
-                    return null;
-                }
-
-                for (int i = 1; i < attributeCollections.Length; i++)
-                {
-                    Attribute newValue = attributeCollections[i][attributeType];
-                    if (!value.Equals(newValue))
-                    {
-                        value = GetDefaultAttribute(attributeType);
-                        break;
-                    }
-                }
-
-                if (foundAttributes is null)
-                {
-                    foundAttributes = new Hashtable();
-                }
-
-                foundAttributes[attributeType] = value;
-                return value;
-            }
         }
     }
 }
