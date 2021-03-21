@@ -12,14 +12,41 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref='LinkClickedEventArgs'/> class.
         /// </summary>
-        public LinkClickedEventArgs(string? linkText)
+        /// <param name="linkText">The text of the link being clicked.</param>
+        public LinkClickedEventArgs(string? linkText) : this(linkText, 0, 0) { }
+
+        /// <summary>
+        ///  Initializes a new instance of the <see cref='LinkClickedEventArgs'/> class.
+        /// </summary>
+        /// <param name="linkText">The text of the link being clicked.</param>
+        /// <param name="linkStart">The start of the link span being clicked.</param>
+        /// <param name="linkLength">The length of the link span being clicked.</param>
+        public LinkClickedEventArgs(string? linkText, int linkStart, int linkLength)
         {
+            if (linkStart < 0)
+                throw new ArgumentOutOfRangeException(nameof(linkStart));
+
+            if (linkLength < 0 || linkStart + linkLength < 0)
+                throw new ArgumentOutOfRangeException(nameof(linkLength));
+
             LinkText = linkText;
+            LinkStart = linkStart;
+            LinkLength = linkLength;
         }
 
         /// <summary>
         ///  Gets the text of the link being clicked.
         /// </summary>
         public string? LinkText { get; }
+
+        /// <summary>
+        /// Gets the start of the link span being clicked.
+        /// </summary>
+        public int LinkStart { get; }
+
+        /// <summary>
+        /// Gets the length of the link span being clicked.
+        /// </summary>
+        public int LinkLength { get; }
     }
 }
