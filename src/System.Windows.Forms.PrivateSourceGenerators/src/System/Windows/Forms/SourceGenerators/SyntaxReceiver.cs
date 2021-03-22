@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace System.Windows.Forms.SourceGenerators
+namespace System.Windows.Forms.PrivateSourceGenerators
 {
     internal class SyntaxReceiver : ISyntaxReceiver
     {
