@@ -9223,7 +9223,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(RichTextBox_InvalidLinkClickedEventArgs_TestData))]
-        public void RichTextBox_InvalidLinkClickedEventArgs(int linkStart, int linkLength)
+        public void RichTextBox_InvalidLinkClickedEventArgs_ThrowsArgumentOutOfRangeException(int linkStart, int linkLength)
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new LinkClickedEventArgs("text", linkStart, linkLength));
         }
