@@ -40,15 +40,19 @@ namespace System.Windows.Forms
         public ToolStripLabel(Image image) : base(null, image, null)
         {
         }
+
         public ToolStripLabel(string text, Image image) : base(text, image, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink) : this(text, image, isLink, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick) : this(text, image, isLink, onClick, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text, image, onClick, name)
         {
             IsLink = isLink;
@@ -102,6 +106,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         private Color IELinkColor
         {
             get
@@ -117,6 +122,7 @@ namespace System.Windows.Forms
                 return LinkUtilities.IEActiveLinkColor;
             }
         }
+
         private Color IEVisitedLinkColor
         {
             get
@@ -253,6 +259,7 @@ namespace System.Windows.Forms
                     parent.Cursor = Cursors.Hand;
                 }
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -266,6 +273,7 @@ namespace System.Windows.Forms
                     parent.Cursor = _lastCursor;
                 }
             }
+
             base.OnMouseLeave(e);
         }
 
@@ -332,6 +340,7 @@ namespace System.Windows.Forms
                 {
                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle));
                 }
+
                 PaintText(e.Graphics);
             }
         }
@@ -364,6 +373,7 @@ namespace System.Windows.Forms
                         textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
                     }
                 }
+
                 Rectangle textRect = InternalLayout.TextRectangle;
                 renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, textRect, textColor, font, InternalLayout.TextFormat));
             }
@@ -383,8 +393,10 @@ namespace System.Windows.Forms
                 {
                     FireEvent(ToolStripItemEventType.Click);
                 }
+
                 return true;
             }
+
             return false;
         }
     }

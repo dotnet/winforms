@@ -70,9 +70,9 @@ namespace System.Windows.Forms
         internal object activeXInstance;
 
         /// <summary>
-            ///  Creates a new instance of a WinForms control which wraps an ActiveX control
+        ///  Creates a new instance of a WinForms control which wraps an ActiveX control
         ///  given by the clsid parameter.
-            /// </summary>
+        /// </summary>
         internal WebBrowserBase(string clsidString) : base()
         {
             if (Application.OleRequired() != ApartmentState.STA)
@@ -132,35 +132,35 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-            ///  This will be called when the native ActiveX control has just been created.
+        ///  This will be called when the native ActiveX control has just been created.
         ///  Inheritors of this class can override this method to cast the nativeActiveXObject
         ///  parameter to the appropriate interface. They can then cache this interface
         ///  value in a member variable. However, they must release this value when
         ///  DetachInterfaces is called (by setting the cached interface variable to null).
-            /// </summary>
+        /// </summary>
         protected virtual void AttachInterfaces(object nativeActiveXObject)
         {
         }
 
         /// <summary>
-            ///  See AttachInterfaces for a description of when to override DetachInterfaces.
-            /// </summary>
+        ///  See AttachInterfaces for a description of when to override DetachInterfaces.
+        /// </summary>
         protected virtual void DetachInterfaces()
         {
         }
 
         /// <summary>
-            ///  This will be called when we are ready to start listening to events.
+        ///  This will be called when we are ready to start listening to events.
         ///  Inheritors can override this method to hook their own connection points.
-            /// </summary>
+        /// </summary>
         protected virtual void CreateSink()
         {
         }
 
         /// <summary>
-            ///  This will be called when it is time to stop listening to events.
+        ///  This will be called when it is time to stop listening to events.
         ///  This is where inheritors have to disconnect their connection points.
-            /// </summary>
+        /// </summary>
         protected virtual void DetachSink()
         {
         }
@@ -227,6 +227,7 @@ namespace System.Windows.Forms
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
         }
+
         public unsafe override bool PreProcessMessage(ref Message msg)
         {
             // Let us assume that TAB key was pressed. In this case, we should first
@@ -287,6 +288,7 @@ namespace System.Windows.Forms
                                 {
                                     ignoreDialogKeys = false;
                                 }
+
                                 return ret;
                             }
                             else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
@@ -362,9 +364,11 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
+
                     Debug.Fail("error in processMnemonic");
                 }
             }
+
             return processed;
         }
 
@@ -420,6 +424,7 @@ namespace System.Windows.Forms
                             Focus();
                         }
                     }
+
                     DefWndProc(ref m);
                     break;
 
@@ -433,6 +438,7 @@ namespace System.Windows.Forms
                     {
                         hwndFocus = IntPtr.Zero;
                     }
+
                     break;
 
                 case User32.WM.DESTROY:
@@ -481,6 +487,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
             }
         }
@@ -492,6 +499,7 @@ namespace System.Windows.Forms
             {
                 TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
             }
+
             base.OnParentChanged(e);
         }
 
@@ -501,6 +509,7 @@ namespace System.Windows.Forms
             {
                 TransitionUpTo(WebBrowserHelper.AXState.InPlaceActive);
             }
+
             base.OnVisibleChanged(e);
         }
 
@@ -510,6 +519,7 @@ namespace System.Windows.Forms
             {
                 TransitionUpTo(WebBrowserHelper.AXState.UIActive);
             }
+
             base.OnGotFocus(e);
         }
 
@@ -583,6 +593,7 @@ namespace System.Windows.Forms
             {
                 TransitionDownTo(WebBrowserHelper.AXState.Passive);
             }
+
             base.Dispose(disposing);
         }
 
@@ -741,6 +752,7 @@ namespace System.Windows.Forms
             {
                 wbContainer = new WebBrowserContainer(this);
             }
+
             return wbContainer;
         }
 
@@ -750,11 +762,13 @@ namespace System.Windows.Forms
             {
                 container = WebBrowserContainer.FindContainerForControl(this);
             }
+
             if (container is null)
             {
                 container = CreateWebBrowserContainer();
                 container.AddControl(this);
             }
+
             return container;
         }
 
@@ -809,6 +823,7 @@ namespace System.Windows.Forms
                     iss.SelectionChanging -= SelectionChangeHandler;
                 }
             }
+
             return retVal;
         }
 
@@ -820,6 +835,7 @@ namespace System.Windows.Forms
             {
                 axWindow.ReleaseHandle();
             }
+
             axWindow = new WebBrowserBaseNativeWindow(this);
             axWindow.AssignHandle(hwnd, false);
 
@@ -879,6 +895,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.sinkAttached, true);
                 CreateSink();
             }
+
             ActiveXSite.StartEvents();
         }
 
@@ -889,6 +906,7 @@ namespace System.Windows.Forms
                 SetAXHostState(WebBrowserHelper.sinkAttached, false);
                 DetachSink();
             }
+
             ActiveXSite.StopEvents();
         }
 
@@ -1096,6 +1114,7 @@ namespace System.Windows.Forms
                 {
                     axSite = CreateWebBrowserSiteBase();
                 }
+
                 return axSite;
             }
         }
@@ -1135,6 +1154,7 @@ namespace System.Windows.Forms
                 {
                     selectionChangeHandler = new EventHandler(OnNewSelection);
                 }
+
                 return selectionChangeHandler;
             }
         }
@@ -1159,6 +1179,7 @@ namespace System.Windows.Forms
                             GetParentContainer().OnExitEditMode(this);
                             SetEditMode(WebBrowserHelper.AXEditMode.None);
                         }
+
                         SetSelectionStyle(WebBrowserHelper.SelectionStyle.Selected);
                         RemoveSelectionHandler();
                     }
@@ -1190,6 +1211,7 @@ namespace System.Windows.Forms
             {
                 resetExtents = true;
             }
+
             if (resetExtents)
             {
                 axOleObject.GetExtent(Ole32.DVASPECT.CONTENT, &sz);
@@ -1350,6 +1372,7 @@ namespace System.Windows.Forms
                 {
                     TransitionDownTo(axReloadingState);
                 }
+
                 axReloadingState = WebBrowserHelper.AXState.Passive;
             }
         }
@@ -1674,7 +1697,7 @@ namespace System.Windows.Forms
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-//Everett
+        //Everett
         new public event HelpEventHandler HelpRequested
         {
             add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));

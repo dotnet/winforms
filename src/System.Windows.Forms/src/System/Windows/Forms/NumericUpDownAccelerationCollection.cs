@@ -39,8 +39,10 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 index++;
             }
+
             items.Insert(index, acceleration);
         }
 

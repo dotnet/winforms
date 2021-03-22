@@ -27,6 +27,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 // if the app has changed activation, restore focus
 
                 switch ((User32.WM)m.Msg)
@@ -51,12 +52,14 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return false;
 
                     default:
                         return false;
                 }
             }
+
             private void RestoreFocusInternal()
             {
                 Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");

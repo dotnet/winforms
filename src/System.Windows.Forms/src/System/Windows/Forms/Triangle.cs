@@ -6,8 +6,8 @@
 
 namespace System.Windows.Forms
 {
-    using System.Diagnostics;
     using System;
+    using System.Diagnostics;
     using System.Drawing;
 
     /// <summary>
@@ -63,6 +63,7 @@ namespace System.Windows.Forms
                         points[1] = new Point(updnWidth, updnHeight);
                         points[2] = new Point(updnWidth / 2, 0);
                     }
+
                     break;
                 case TriangleDirection.Down:
                     {
@@ -70,6 +71,7 @@ namespace System.Windows.Forms
                         points[1] = new Point(updnWidth, 0);
                         points[2] = new Point(updnWidth / 2, updnHeight);
                     }
+
                     break;
                 case TriangleDirection.Left:
                     {
@@ -77,6 +79,7 @@ namespace System.Windows.Forms
                         points[1] = new Point(lrWidth, lrHeight);
                         points[2] = new Point(0, lrHeight / 2);
                     }
+
                     break;
                 case TriangleDirection.Right:
                     {
@@ -84,6 +87,7 @@ namespace System.Windows.Forms
                         points[1] = new Point(0, lrHeight);
                         points[2] = new Point(lrWidth, lrHeight / 2);
                     }
+
                     break;
                 default:
                     Debug.Fail("Wrong triangle enum");
@@ -107,6 +111,7 @@ namespace System.Windows.Forms
                                   bounds.Y + (bounds.Height - lrHeight) / 2);
                     break;
             }
+
             return points;
         }
 

@@ -107,6 +107,7 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
+
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
@@ -157,6 +158,7 @@ namespace System.Windows.Forms
                     _timer.Dispose();
                     _timer = null;
                 }
+
                 if (_tipWindow != null)
                 {
                     _tipWindow.DestroyHandle();
@@ -229,11 +231,13 @@ namespace System.Windows.Forms
                 {
                     blinkPhase += _items[i].BlinkPhase;
                 }
+
                 if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
                     Debug.Assert(_timer != null);
                     _timer.Stop();
                 }
+
                 Update(timerCaused: true);
             }
 
@@ -255,6 +259,7 @@ namespace System.Windows.Forms
                         shownTooltips++;
                     }
                 }
+
                 Debug.Assert(shownTooltips <= 1);
 #endif
             }
@@ -456,6 +461,7 @@ namespace System.Windows.Forms
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
+
                         break;
                     case User32.WM.ERASEBKGND:
                         break;

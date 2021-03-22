@@ -346,7 +346,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> CreateInstance_InvokeWithoutContext_TestData()
         {
-            yield return new object[] { typeof(int), 0  };
+            yield return new object[] { typeof(int), 0 };
             yield return new object[] { typeof(string), string.Empty };
         }
 

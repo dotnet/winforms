@@ -46,6 +46,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_current is not null); // Since this is for internal use only.
                 _current = _current.Next;
             }
+
             return (_current is not null);
         }
 

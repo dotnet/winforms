@@ -52,7 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new HotCommandsAccessibleObject(this, ownerGrid);
+            return new HotCommandsAccessibleObject(this, ownerPropertyGrid);
         }
 
         public override Rectangle DisplayRectangle
@@ -81,6 +81,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
                     Controls.Add(label);
                 }
+
                 return label;
             }
         }
@@ -103,10 +104,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     verbCount = verbs.Length;
                 }
+
                 optimalHeight = verbCount * lineHeight + 8;
             }
+
             return optimalHeight;
         }
+
         public override int SnapHeightRequest(int request)
         {
             return request;
@@ -176,6 +180,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     this.verbs[i].CommandChanged -= new EventHandler(OnCommandChanged);
                 }
+
                 this.component = null;
                 this.verbs = null;
             }
@@ -200,6 +205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Visible = true;
                 }
+
                 SetupLabel();
             }
 
@@ -224,6 +230,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         sb.Append(' ');
                         charLoc += 2;
                     }
+
                     string name = verbs[i].Text;
 
                     links[i] = new Point(charLoc, name.Length);

@@ -205,27 +205,33 @@ namespace System.Windows.Forms
                 {
                     cp.Parent = TopLevelControl.Handle;
                 }
+
                 cp.ClassName = WindowClasses.TOOLTIPS_CLASS;
                 if (_showAlways)
                 {
                     cp.Style = (int)TTS.ALWAYSTIP;
                 }
+
                 if (_isBalloon)
                 {
                     cp.Style |= (int)TTS.BALLOON;
                 }
+
                 if (!_stripAmpersands)
                 {
                     cp.Style |= (int)TTS.NOPREFIX;
                 }
+
                 if (!_useAnimation)
                 {
                     cp.Style |= (int)TTS.NOANIMATE;
                 }
+
                 if (!_useFading)
                 {
                     cp.Style |= (int)TTS.NOFADE;
                 }
+
                 cp.ExStyle = 0;
                 cp.Caption = null;
 
@@ -639,51 +645,9 @@ namespace System.Windows.Forms
 
             Control control = (Control)sender;
             CreateRegion(control);
-            CheckNativeToolTip(control);
-            CheckCompositeControls(control);
+            SetToolTipToControl(control);
 
             KeyboardToolTipStateMachine.Instance.Hook(control, this);
-        }
-
-        private void CheckNativeToolTip(Control associatedControl)
-        {
-            // Wait for the Handle Creation.
-            if (!GetHandleCreated())
-            {
-                return;
-            }
-
-            if (associatedControl is TreeView treeView && treeView.ShowNodeToolTips)
-            {
-                treeView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is TabControl tabControl && tabControl.ShowToolTips)
-            {
-                tabControl.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            if (associatedControl is ListView listView)
-            {
-                listView.SetToolTip(this, GetToolTip(associatedControl));
-            }
-
-            // Label now has its own Tooltip for AutoEllipsis.
-            // So this control too falls in special casing.
-            // We need to disable the LABEL AutoEllipsis tooltip and show
-            // this tooltip always.
-            if (associatedControl is Label label)
-            {
-                label.SetToolTip(this);
-            }
-        }
-
-        private void CheckCompositeControls(Control associatedControl)
-        {
-            if (associatedControl is UpDownBase upDownBase)
-            {
-                upDownBase.SetToolTip(this, GetToolTip(associatedControl));
-            }
         }
 
         private void HandleDestroyed(object sender, EventArgs eventargs)
@@ -804,10 +768,12 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, PARAM.FromColor(BackColor));
             }
+
             if (ForeColor != SystemColors.InfoText)
             {
                 User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, PARAM.FromColor(ForeColor));
             }
+
             if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
             {
                 // If the title is null/empty, the icon won't display.
@@ -871,6 +837,7 @@ namespace System.Windows.Forms
                 SetToolInfo(ctl, caption);
                 _created[ctl] = ctl;
             }
+
             if (ctl.IsHandleCreated && _topLevelControl is null)
             {
                 // Remove first to purge any duplicates.
@@ -923,6 +890,7 @@ namespace System.Windows.Forms
             {
                 new ToolInfoWrapper<Control>(ctl).SendMessage(this, (User32.WM)TTM.DELTOOLW);
                 _created.Remove(ctl);
+                ctl.RemoveToolTip(this);
             }
         }
 
@@ -1054,6 +1022,7 @@ namespace System.Windows.Forms
                         return hwndControl;
                     }
                 }
+
                 return IntPtr.Zero;
             }
 
@@ -1108,6 +1077,7 @@ namespace System.Windows.Forms
                     {
                         current = current.ParentInternal;
                     }
+
                     if (current != null)
                     {
                         hwnd = IntPtr.Zero;
@@ -1252,8 +1222,7 @@ namespace System.Windows.Forms
                 {
                     ToolInfoWrapper<Control> toolInfo = GetTOOLINFO(control, info.Caption);
                     toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
-                    CheckNativeToolTip(control);
-                    CheckCompositeControls(control);
+                    SetToolTipToControl(control);
                 }
                 else if (empty && exists && !DesignMode)
                 {
@@ -1267,6 +1236,14 @@ namespace System.Windows.Forms
 
                     _created.Remove(control);
                 }
+            }
+        }
+
+        private void SetToolTipToControl(Control associatedControl)
+        {
+            if (GetHandleCreated())
+            {
+                associatedControl.SetToolTip(this);
             }
         }
 
@@ -1387,6 +1364,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(window));
             }
+
             if (duration < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
@@ -1430,6 +1408,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(window));
             }
+
             if (duration < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
@@ -1478,6 +1457,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(window));
             }
+
             if (duration < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
@@ -1501,6 +1481,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(tool));
             }
+
             if (duration < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), 0));
@@ -1684,6 +1665,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             break;
                         case LocationIndexRight:
                             // When RTL is enabled Left location is preferred
@@ -1691,6 +1673,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             break;
                         case LocationIndexLeft:
                             // When RTL is disabled Right location is preferred
@@ -1698,6 +1681,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             break;
                         default:
                             throw new NotSupportedException("Unsupported location index value");
@@ -1745,6 +1729,7 @@ namespace System.Windows.Forms
                 info.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE);
                 info.SendMessage(this, (User32.WM)TTM.DELTOOLW);
             }
+
             StopTimer();
 
             // Check if the passed in IWin32Window is a Control.
@@ -1807,6 +1792,7 @@ namespace System.Windows.Forms
                     {
                         flags |= TTF.ABSOLUTE;
                     }
+
                     toolInfo.Info.uFlags |= flags;
                     toolInfo.Text = text;
                 }
@@ -1821,6 +1807,7 @@ namespace System.Windows.Forms
                     tt.TipType |= type;
                     tt.Caption = text;
                 }
+
                 tt.Position = position;
                 _tools[tool] = tt;
 
@@ -1964,6 +1951,7 @@ namespace System.Windows.Forms
             {
                 return toolInfo.Info.hwnd;
             }
+
             return IntPtr.Zero;
         }
 
@@ -2288,6 +2276,7 @@ namespace System.Windows.Forms
                         WmPop();
                         _window?.DefWndProc(ref msg);
                     }
+
                     break;
 
                 case (int)User32.WM.WINDOWPOSCHANGING:
@@ -2299,6 +2288,7 @@ namespace System.Windows.Forms
                     {
                         _window.DefWndProc(ref msg);
                     }
+
                     break;
 
                 case (int)User32.WM.MOUSEACTIVATE:

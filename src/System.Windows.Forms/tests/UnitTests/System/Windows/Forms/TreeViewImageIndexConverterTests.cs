@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> TreeViewImageIndexConverter_ConvertFrom_special_string_to_int_ReturnsExpected_TestData()
         {
-            yield return new object[] { SR.toStringDefault, - 1, };
+            yield return new object[] { SR.toStringDefault, -1, };
             yield return new object[] { SR.toStringDefault, ImageList.Indexer.DefaultIndex };
             yield return new object[] { SR.toStringNone, -2 };
             yield return new object[] { SR.toStringNone, ImageList.Indexer.NoneIndex };

@@ -36,6 +36,7 @@ namespace System.Windows.Forms.Design
                 Array.Copy(value, 0, colHeaders, 0, value.Length);
                 list.AddRange(colHeaders);
             }
+
             return editValue;
         }
 
@@ -58,6 +59,7 @@ namespace System.Windows.Forms.Design
                     itemsProp = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
                     cs.OnComponentChanging(Context.Instance, itemsProp);
                 }
+
                 listview.Columns.Remove(column);
 
                 if (cs != null && itemsProp != null)

@@ -42,6 +42,7 @@ namespace System.Windows.Forms
                     {
                         _innerList = new List<Entry>();
                     }
+
                     return _innerList;
                 }
             }
@@ -100,6 +101,7 @@ namespace System.Windows.Forms
                 {
                     _owner.SetAutoComplete(false, false);
                 }
+
                 return index;
             }
 
@@ -109,6 +111,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(item));
                 }
+
                 int index = -1;
                 if (!_owner._sorted)
                 {
@@ -126,6 +129,7 @@ namespace System.Windows.Forms
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
                     InnerList.Insert(index, entry);
                 }
+
                 bool successful = false;
 
                 try
@@ -145,6 +149,7 @@ namespace System.Windows.Forms
                             _owner.NativeAdd(item);
                         }
                     }
+
                     successful = true;
                 }
                 finally
@@ -184,6 +189,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
+
                 foreach (object item in items)
                 {
                     // adding items one-by-one for performance (especially for sorted combobox)
@@ -191,6 +197,7 @@ namespace System.Windows.Forms
                     // AddInternal is based on BinarySearch and ensures n*log(n) complexity
                     AddInternal(item);
                 }
+
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
                     _owner.SetAutoComplete(false, false);
@@ -385,6 +392,7 @@ namespace System.Windows.Forms
                 {
                     _owner._selectedIndex--;
                 }
+
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                 {
                     _owner.SetAutoComplete(false, false);
@@ -429,6 +437,7 @@ namespace System.Windows.Forms
                             _owner.SelectedIndex = index;
                             _owner.UpdateText();
                         }
+
                         if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
                         {
                             _owner.SetAutoComplete(false, false);

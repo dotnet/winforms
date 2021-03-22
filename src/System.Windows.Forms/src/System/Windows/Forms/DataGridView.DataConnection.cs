@@ -457,6 +457,7 @@ namespace System.Windows.Forms
                     {
                         _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges] = false;
                     }
+
                     return;
                 }
 
@@ -478,6 +479,7 @@ namespace System.Windows.Forms
                         // this will also set DATACONNECTIONSTATE_listWasReset to false
                         ResetDataConnectionState();
                     }
+
                     return;
                 }
 
@@ -512,7 +514,8 @@ namespace System.Windows.Forms
                                 // the new row becomes a regular row and a "new" new row is appended
                                 _owner.NewRowIndex = -1;
                                 _owner.AddNewRow(false /* createdByEditing */);
-                            } while (DataBoundRowsCount() < CurrencyManager.Count);
+                            }
+                            while (DataBoundRowsCount() < CurrencyManager.Count);
                         }
 
                         _dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] = true;
@@ -611,6 +614,7 @@ namespace System.Windows.Forms
                         {
                             _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = false;
                         }
+
                         return;
                     }
                     else if (CurrencyManager.List.Count == DataBoundRowsCount())
@@ -634,6 +638,7 @@ namespace System.Windows.Forms
                             {
                                 _owner.BeginUpdateInternal();
                             }
+
                             try
                             {
                                 _owner.RefreshRows(!_owner.InSortOperation /*scrollIntoView*/);
@@ -652,6 +657,7 @@ namespace System.Windows.Forms
                                     _owner.Invalidate(true);
                                 }
                             }
+
                             break;
                         case ListChangedType.ItemAdded:
                             if (_owner.NewRowIndex == -1 || e.NewIndex != _owner.Rows.Count)
@@ -665,6 +671,7 @@ namespace System.Windows.Forms
 #endif // DEBUG
                                 throw new InvalidOperationException();
                             }
+
                             break;
                         case ListChangedType.ItemDeleted:
                             _owner.Rows.RemoveAtInternal(e.NewIndex, true /*force*/);
@@ -686,6 +693,7 @@ namespace System.Windows.Forms
                             {
                                 dataPropertyName = ((MemberDescriptor)(e.PropertyDescriptor)).Name;
                             }
+
                             for (int columnIndex = 0; columnIndex < _owner.Columns.Count; columnIndex++)
                             {
                                 DataGridViewColumn dataGridViewColumn = _owner.Columns[columnIndex];
@@ -704,6 +712,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             // Repaint the row header cell to show potential error icon
                             _owner.InvalidateCell(-1, e.NewIndex);
                             // update the editing control value if the data changed in the row the user was editing
@@ -711,10 +720,12 @@ namespace System.Windows.Forms
                             {
                                 _owner.RefreshEdit();
                             }
+
                             break;
                         default:
                             break;
                     }
+
                     // now put the position in the DataGridView control according to the position in the currency manager
                     if (_owner.Rows.Count > 0 &&
                         !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl] &&
@@ -976,6 +987,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn = new DataGridViewTextBoxColumn();
                 }
+
                 return dataGridViewColumn;
             }
 
@@ -985,6 +997,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 ArrayList cols = new ArrayList();
 
                 for (int i = 0; i < _props.Count; i++)
@@ -1134,6 +1147,7 @@ namespace System.Windows.Forms
                                 dsInit.Initialized += new EventHandler(DataSource_Initialized);
                                 _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp] = true;
                             }
+
                             CurrencyManager = null;
                         }
                         else
@@ -1187,6 +1201,7 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
+
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, -1 /*columnIndex*/, rowIndex,
                                                                                                DataGridViewDataErrorContexts.Display);
                     _owner.OnDataErrorInternal(dgvdee);
@@ -1221,6 +1236,7 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
+
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, columnIndex, rowIndex,
                                                                                                DataGridViewDataErrorContexts.Display);
                     _owner.OnDataErrorInternal(dgvdee);
@@ -1254,6 +1270,7 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
+
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception, columnIndex, rowIndex,
                                                                                                DataGridViewDataErrorContexts.Display);
                     _owner.OnDataErrorInternal(dgvdee);
@@ -1262,6 +1279,7 @@ namespace System.Windows.Forms
                         throw dgvdee.Exception;
                     }
                 }
+
                 return value;
             }
 
@@ -1431,6 +1449,7 @@ namespace System.Windows.Forms
                             {
                                 throw;
                             }
+
                             DataGridViewCellCancelEventArgs dgvce = new DataGridViewCellCancelEventArgs(e.ColumnIndex, e.RowIndex);
                             ProcessException(exception, dgvce, false /*beginEdit*/);
                         }
@@ -1488,6 +1507,7 @@ namespace System.Windows.Forms
                         {
                             throw;
                         }
+
                         ProcessException(exception, e, true /*beginEdit*/);
                     }
                     finally
@@ -1558,6 +1578,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     _props[boundColumnIndex].SetValue(CurrencyManager[rowIndex], value);
                 }
                 catch (Exception exception)
@@ -1566,10 +1587,12 @@ namespace System.Windows.Forms
                     {
                         throw;
                     }
+
                     DataGridViewCellCancelEventArgs e = new DataGridViewCellCancelEventArgs(columnIndex, rowIndex);
                     ProcessException(exception, e, false);
                     return !e.Cancel;
                 }
+
                 return true;
             }
 

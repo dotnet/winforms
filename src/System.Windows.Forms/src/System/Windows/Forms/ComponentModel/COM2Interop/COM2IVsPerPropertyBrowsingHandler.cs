@@ -55,6 +55,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetDynamicAttributes);
@@ -122,6 +123,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 
@@ -201,6 +203,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             Debug.Assert(sender.TargetObject is null || sender.TargetObject is VSSDK.IVsPerPropertyBrowsing, "Object is not " + Interface.Name + "!");
         }
 

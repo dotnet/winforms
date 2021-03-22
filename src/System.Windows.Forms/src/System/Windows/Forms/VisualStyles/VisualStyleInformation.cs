@@ -280,6 +280,7 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         t_visualStyleRenderer.SetParameters(VisualStyleElement.TextBox.TextEdit.Normal);
                     }
+
                     Color borderColor = t_visualStyleRenderer.GetColor(ColorProperty.BorderColor);
                     return borderColor;
                 }
@@ -305,6 +306,7 @@ namespace System.Windows.Forms.VisualStyles
                     {
                         t_visualStyleRenderer.SetParameters(VisualStyleElement.Button.PushButton.Normal);
                     }
+
                     Color accentColor = t_visualStyleRenderer.GetColor(ColorProperty.AccentColorHint);
                     return accentColor;
                 }

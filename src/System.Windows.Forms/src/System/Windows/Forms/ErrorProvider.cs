@@ -661,6 +661,7 @@ namespace System.Windows.Forms
             {
                 w[i].Dispose();
             }
+
             _windows.Clear();
             foreach (ControlItem item in _items.Values)
             {
@@ -690,6 +691,7 @@ namespace System.Windows.Forms
                 DisposeRegion();
                 UnwireEvents(_errorManager);
             }
+
             base.Dispose(disposing);
         }
 
@@ -721,6 +723,7 @@ namespace System.Windows.Forms
                 item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
                 _items[control] = item;
             }
+
             return item;
         }
 

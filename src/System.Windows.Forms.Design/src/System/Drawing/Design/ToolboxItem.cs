@@ -43,6 +43,7 @@ namespace System.Drawing.Design
                     s_iconWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_DIMENSION);
                     s_iconHeight = DpiHelper.LogicalToDeviceUnitsY(ICON_DIMENSION);
                 }
+
                 s_isScalingInitialized = true;
             }
         }
@@ -84,6 +85,7 @@ namespace System.Drawing.Design
                 {
                     return (AssemblyName[])names.Clone();
                 }
+
                 return null;
             }
             set
@@ -323,6 +325,7 @@ namespace System.Drawing.Design
             {
                 OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
             }
+
             return comps;
         }
 
@@ -339,6 +342,7 @@ namespace System.Drawing.Design
             {
                 OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
             }
+
             return comps;
         }
 
@@ -428,7 +432,8 @@ namespace System.Drawing.Design
             {
                 // For backwards compat, here are the default property
                 // names we use
-                propertyNames = new string[] {
+                propertyNames = new string[]
+                {
                     "AssemblyName",
                     "Bitmap",
                     "DisplayName",
@@ -533,6 +538,7 @@ namespace System.Drawing.Design
 
                     break;
             }
+
             return value;
         }
 
@@ -585,6 +591,7 @@ namespace System.Drawing.Design
                         {
                             type = Type.GetType(typeName);
                         }
+
                         if (type != null)
                         {
                             ts.ReferenceAssembly(type.Assembly.GetName());
@@ -686,6 +693,7 @@ namespace System.Drawing.Design
                     {
                         parents[aname.FullName] = aname;
                     }
+
                     parentType = parentType.BaseType;
                 }
 
@@ -735,6 +743,7 @@ namespace System.Drawing.Design
                                 itemBitmap = new Bitmap(itemBitmap, new Size(s_iconWidth, s_iconHeight));
                             }
                         }
+
                         Bitmap = itemBitmap;
                     }
 
@@ -748,6 +757,7 @@ namespace System.Drawing.Design
                             {
                                 filterContainsType = true;
                             }
+
                             array.Add(ta);
                         }
                     }
@@ -844,8 +854,10 @@ namespace System.Drawing.Design
                 propertyNames.Add(de.Key);
                 info.AddValue((string)de.Key, de.Value);
             }
+
             info.AddValue("PropertyNames", (string[])propertyNames.ToArray(typeof(string)));
         }
+
         /// <summary>
         ///  Raises the OnComponentsCreated event. This
         ///  will be called when this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
@@ -963,6 +975,7 @@ namespace System.Drawing.Design
                     ValidatePropertyType(propertyName, value, typeof(bool), false);
                     break;
             }
+
             return value;
         }
 

@@ -124,6 +124,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             catch (Exception)
             {
             }
+
             process.WaitForExit(timeout);
             return process.ExitCode;
         }
@@ -234,8 +235,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
                     var ret = Path.Combine(currentDirectory, seek);
                     return ret;
                 }
+
                 currentDirectory = Directory.GetParent(currentDirectory).FullName;
             }
+
             throw new DirectoryNotFoundException($"No {seek} folder was found among siblings of subfolders of {codeBasePath}.");
         }
 

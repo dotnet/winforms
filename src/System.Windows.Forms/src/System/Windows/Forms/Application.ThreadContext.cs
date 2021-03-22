@@ -337,6 +337,7 @@ namespace System.Windows.Forms
                     {
                         return _activatingControlRef.Target as Control;
                     }
+
                     return null;
                 }
                 set
@@ -374,6 +375,7 @@ namespace System.Windows.Forms
 
                             _marshalingControl = new MarshalingControl();
                         }
+
                         return _marshalingControl;
                     }
                 }
@@ -389,10 +391,12 @@ namespace System.Windows.Forms
                 {
                     _messageFilters = new List<IMessageFilter>();
                 }
+
                 if (_messageFilterSnapshot is null)
                 {
                     _messageFilterSnapshot = new List<IMessageFilter>();
                 }
+
                 if (f is not null)
                 {
                     SetState(STATE_FILTERSNAPSHOTVALID, false);
@@ -532,6 +536,7 @@ namespace System.Windows.Forms
                                         {
                                             s_contextHash.Remove(_id);
                                         }
+
                                         if (t_currentThreadContext == this)
                                         {
                                             t_currentThreadContext = null;
@@ -580,6 +585,7 @@ namespace System.Windows.Forms
                             _parkingWindows[i] = null;
                         }
                     }
+
                     _parkingWindows.Clear();
                 }
             }
@@ -893,6 +899,7 @@ namespace System.Windows.Forms
                             {
                                 td.Dispose();
                             }
+
                             switch (result)
                             {
                                 case DialogResult.Abort:
@@ -904,6 +911,7 @@ namespace System.Windows.Forms
                                     {
                                         Help.ShowHelp(null, w.HelpUrl, w.HelpTopic);
                                     }
+
                                     break;
                             }
                         }
@@ -1227,6 +1235,7 @@ namespace System.Windows.Forms
                             User32.WaitMessage();
                         }
                     }
+
                     return continueLoop;
                 }
                 catch
@@ -1254,6 +1263,7 @@ namespace System.Windows.Forms
                     {
                         _messageFilterSnapshot.AddRange(_messageFilters);
                     }
+
                     SetState(STATE_FILTERSNAPSHOTVALID, true);
                 }
 
@@ -1329,6 +1339,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     Control target = Control.FromChildHandle(msg.hwnd);
                     bool retValue = false;
 
@@ -1526,6 +1537,7 @@ namespace System.Windows.Forms
                             {
                                 continueLoop = false;
                             }
+
                             break;
 
                         case msoloop.ModalAlert:
@@ -1539,6 +1551,7 @@ namespace System.Windows.Forms
                             {
                                 continueLoop = false;
                             }
+
                             break;
 
                         case msoloop.DoEvents:

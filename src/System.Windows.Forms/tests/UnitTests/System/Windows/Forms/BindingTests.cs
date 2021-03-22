@@ -401,6 +401,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.False(eventArgs.Cancel);
             }
+
             Assert.Equal(1, callCount);
         }
 
@@ -432,6 +433,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.True(eventArgs.Cancel);
             }
+
             Assert.Equal(1, callCount);
         }
 
@@ -481,6 +483,7 @@ namespace System.Windows.Forms.Tests
             {
                 eventArgs.Value = oldValue;
             }
+
             binding.OnFormat(eventArgs);
             Assert.Equal(expectedValue, eventArgs?.Value);
             Assert.Equal(1, callCount);
@@ -491,6 +494,7 @@ namespace System.Windows.Forms.Tests
             {
                 eventArgs.Value = oldValue;
             }
+
             binding.OnFormat(eventArgs);
             Assert.Equal(expectedValue, eventArgs?.Value);
             Assert.Equal(1, callCount);
@@ -524,6 +528,7 @@ namespace System.Windows.Forms.Tests
             {
                 eventArgs.Value = oldValue;
             }
+
             binding.OnParse(eventArgs);
             Assert.Equal(expectedValue, eventArgs?.Value);
             Assert.Equal(1, callCount);
@@ -534,6 +539,7 @@ namespace System.Windows.Forms.Tests
             {
                 eventArgs.Value = oldValue;
             }
+
             binding.OnParse(eventArgs);
             Assert.Equal(expectedValue, eventArgs?.Value);
             Assert.Equal(1, callCount);

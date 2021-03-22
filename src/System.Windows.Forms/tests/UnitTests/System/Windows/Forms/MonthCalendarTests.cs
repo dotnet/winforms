@@ -1147,6 +1147,7 @@ namespace System.Windows.Forms.Tests
             {
                 expected -= 7;
             }
+
             Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETFIRSTDAYOFWEEK, IntPtr.Zero, IntPtr.Zero));
         }
 
@@ -2023,6 +2024,7 @@ namespace System.Windows.Forms.Tests
             calendar.MaxDate = new DateTime(2019, 9, 3);
             Assert.Throws<ArgumentOutOfRangeException>("value", () => calendar.SelectionStart = calendar.MaxDate.AddTicks(1));
         }
+
         public static IEnumerable<object[]> SelectionEnd_Set_TestData()
         {
             yield return new object[] { new DateTime(1753, 1, 1), new DateTime(1753, 1, 1) };

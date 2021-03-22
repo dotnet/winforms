@@ -128,6 +128,7 @@ namespace System.Windows.Forms
                 {
                     resetAutoComplete = true;
                 }
+
                 autoCompleteMode = value;
                 SetAutoComplete(resetAutoComplete);
             }
@@ -190,6 +191,7 @@ namespace System.Windows.Forms
                     autoCompleteCustomSource = new AutoCompleteStringCollection();
                     autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
+
                 return autoCompleteCustomSource;
             }
             set
@@ -207,6 +209,7 @@ namespace System.Windows.Forms
                     {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
+
                     SetAutoComplete(false);
                 }
             }
@@ -308,6 +311,7 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= (int)WS.HSCROLL;
                     }
+
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
                         cp.Style |= (int)WS.VSCROLL;
@@ -401,6 +405,7 @@ namespace System.Windows.Forms
             {
                 scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
             }
+
             if (Multiline && (ScrollBars & ScrollBars.Vertical) != 0)
             {
                 scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
@@ -509,12 +514,14 @@ namespace System.Windows.Forms
                 {
                     autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
+
                 if (stringSource is not null)
                 {
                     stringSource.ReleaseAutoComplete();
                     stringSource = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -531,6 +538,7 @@ namespace System.Windows.Forms
                         return acceptsReturn;
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -632,6 +640,7 @@ namespace System.Windows.Forms
                 stringSource.ReleaseAutoComplete();
                 stringSource = null;
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -734,6 +743,7 @@ namespace System.Windows.Forms
             {
                 strings[i] = AutoCompleteCustomSource[i];
             }
+
             return strings;
         }
 
@@ -794,10 +804,12 @@ namespace System.Windows.Forms
                         {
                             mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                         }
+
                         if (AutoCompleteMode == AutoCompleteMode.Append)
                         {
                             mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                         }
+
                         if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                         {
                             mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
@@ -946,6 +958,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.PAINT:
@@ -982,6 +995,7 @@ namespace System.Windows.Forms
                             User32.ValidateRect(this, null);
                         }
                     }
+
                     break;
 
                 case User32.WM.PRINT:

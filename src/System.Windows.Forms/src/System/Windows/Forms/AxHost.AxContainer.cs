@@ -129,6 +129,7 @@ namespace System.Windows.Forms
                 {
                     rval = (Oleaut32.IExtender)proxyCache[ctl];
                 }
+
                 if (rval is null)
                 {
                     if (ctl != parent && !GetControlBelongs(ctl))
@@ -149,8 +150,10 @@ namespace System.Windows.Forms
                     {
                         rval = new ExtenderProxy(ctl, this);
                     }
+
                     proxyCache.Add(ctl, rval);
                 }
+
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "found proxy " + rval.ToString());
                 return rval;
             }
@@ -245,6 +248,7 @@ namespace System.Windows.Forms
                         Debug.Fail("onlyNext && onlyPrev are both set!");
                         throw E_INVALIDARG;
                     }
+
                     if (dwWhich == GC_WCH.CONTAINER || dwWhich == GC_WCH.CONTAINED)
                     {
                         if (onlyNext || onlyPrev)
@@ -253,6 +257,7 @@ namespace System.Windows.Forms
                             throw E_INVALIDARG;
                         }
                     }
+
                     int first = 0;
                     int last = -1; // meaning all
                     Control[] ctls = null;
@@ -283,6 +288,7 @@ namespace System.Windows.Forms
                             {
                                 ctls = Array.Empty<Control>();
                             }
+
                             ctl = null;
                             break;
                         case GC_WCH.CONTAINER:
@@ -301,6 +307,7 @@ namespace System.Windows.Forms
                                     break;
                                 }
                             }
+
                             break;
                         case GC_WCH.ALL:
                             Hashtable htbl = GetComponents();
@@ -309,6 +316,7 @@ namespace System.Windows.Forms
                             ctl = parent;
                             break;
                     }
+
                     if (l is null)
                     {
                         l = new ArrayList();
@@ -327,6 +335,7 @@ namespace System.Windows.Forms
                             MaybeAdd(l, ctls[i], selected, dwOleContF, false);
                         }
                     }
+
                     object[] rval = new object[l.Count];
                     l.CopyTo(rval, 0);
                     if (reverse)
@@ -338,6 +347,7 @@ namespace System.Windows.Forms
                             rval[j] = temp;
                         }
                     }
+
                     return new EnumUnknown(rval);
                 }
                 finally
@@ -361,6 +371,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 if (ctl is AxHost hostctl && (dwOleContF & OLECONTF.EMBEDDINGS) != 0)
                 {
                     l.Add(hostctl.GetOcx());
@@ -390,6 +401,7 @@ namespace System.Windows.Forms
                                 components.Add(comp, comp);
                             }
                         }
+
                         return;
                     }
                 }
@@ -407,6 +419,7 @@ namespace System.Windows.Forms
                         components = new Hashtable();
                         checkHashTable = false;
                     }
+
                     for (int i = 0; i < ctls.Length; i++)
                     {
                         if (checkHashTable && !components.Contains(ctls[i]))
@@ -453,6 +466,7 @@ namespace System.Windows.Forms
                 {
                     FillComponentsTable(cont);
                 }
+
                 return components;
             }
 
@@ -501,10 +515,12 @@ namespace System.Windows.Forms
                             {
                                 ccs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                             }
+
                             return true;
                         }
                     }
                 }
+
                 return false;
             }
 
@@ -536,6 +552,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return null;
             }
 
@@ -590,6 +607,7 @@ namespace System.Windows.Forms
                         tempSite.SetAxState(AxHost.ownDisposing, ownDisposing);
                     }
                 }
+
                 site.AddSelectionHandler();
                 Debug.Assert(siteUIActive is null, "Object did not call OnUIDeactivate");
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "active Object is now " + site.ToString());
@@ -671,7 +689,7 @@ namespace System.Windows.Forms
             }
 
             // IOleContainer methods:
-            unsafe HRESULT IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint *pchEaten, IntPtr* ppmkOut)
+            unsafe HRESULT IOleContainer.ParseDisplayName(IntPtr pbc, string pszDisplayName, uint* pchEaten, IntPtr* ppmkOut)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ParseDisplayName");
                 if (ppmkOut is not null)
@@ -769,9 +787,11 @@ namespace System.Windows.Forms
                         {
                             Marshal.ReleaseComObject(siteUIActive.iOleInPlaceActiveObjectExternal);
                         }
+
                         siteUIActive.iOleInPlaceActiveObjectExternal = pActiveObject;
                     }
                 }
+
                 if (pActiveObject is null)
                 {
                     if (ctlInEditMode is not null)
@@ -779,8 +799,10 @@ namespace System.Windows.Forms
                         ctlInEditMode.editMode = EDITM_NONE;
                         ctlInEditMode = null;
                     }
+
                     return HRESULT.S_OK;
                 }
+
                 AxHost ctl = null;
                 if (pActiveObject is IOleObject oleObject)
                 {
@@ -930,6 +952,7 @@ namespace System.Windows.Forms
                         {
                             rval = NativeMethods.ActiveX.ALIGN_NO_CHANGE;
                         }
+
                         return rval;
                     }
                     set
@@ -1168,6 +1191,7 @@ namespace System.Windows.Forms
                     {
                         prop = GetType().GetProperty(name, bindingAttr);
                     }
+
                     return prop;
                 }
 
@@ -1178,6 +1202,7 @@ namespace System.Windows.Forms
                     {
                         prop = GetType().GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
                     }
+
                     return prop;
                 }
 
@@ -1220,6 +1245,7 @@ namespace System.Windows.Forms
                     {
                         memb = GetType().GetMember(name, bindingAttr);
                     }
+
                     return memb;
                 }
 

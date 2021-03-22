@@ -7,7 +7,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class HotCommandsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class HotCommands_HotCommandsAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void HotCommandsAccessibleObject_Ctor_Default()

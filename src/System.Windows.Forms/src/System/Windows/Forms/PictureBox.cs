@@ -686,6 +686,7 @@ namespace System.Windows.Forms
                         _currentAsyncLoadOperation.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(100, null));
                     }
+
                     PostCompleted(null, false);
 
                     // Do this so any exception that Close() throws will be
@@ -809,6 +810,7 @@ namespace System.Windows.Forms
                         AutoSize = true;
                         SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
                     }
+
                     if (value != PictureBoxSizeMode.AutoSize)
                     {
                         AutoSize = false;
@@ -990,6 +992,7 @@ namespace System.Windows.Forms
                 _localImageStreamReader.Dispose();
                 _localImageStreamReader = null;
             }
+
             if (_uriImageStream != null)
             {
                 _uriImageStream.Dispose();
@@ -1036,6 +1039,7 @@ namespace System.Windows.Forms
                     {
                         BeginInvoke(new EventHandler(OnFrameChanged), o, e);
                     }
+
                     return;
                 }
             }

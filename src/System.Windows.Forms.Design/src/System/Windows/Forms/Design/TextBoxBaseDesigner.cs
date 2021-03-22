@@ -115,7 +115,8 @@ namespace System.Windows.Forms.Design
 
             // Handle shadowed properties
             //
-            string[] shadowProps = new string[] {
+            string[] shadowProps = new string[]
+            {
                 "Text",
             };
 

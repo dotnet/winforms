@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                 {
                     value = DefaultInputLanguage;
                 }
+
                 IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
                 if (handleOld == IntPtr.Zero)
                 {
@@ -86,7 +87,7 @@ namespace System.Windows.Forms
                 int size = User32.GetKeyboardLayoutList(0, null);
 
                 var handles = new IntPtr[size];
-                fixed (IntPtr *pHandles = handles)
+                fixed (IntPtr* pHandles = handles)
                 {
                     User32.GetKeyboardLayoutList(size, pHandles);
                 }

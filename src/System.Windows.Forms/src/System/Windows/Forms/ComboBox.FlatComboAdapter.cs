@@ -181,6 +181,7 @@ namespace System.Windows.Forms
                 {
                     return SystemColors.ControlDark;
                 }
+
                 return focused ? SystemColors.ControlDark : SystemColors.Window;
             }
 

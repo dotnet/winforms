@@ -125,8 +125,8 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = PaintPopupLayout(show3D: true);
-            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.MaxSize)
-                == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.MaxSize),
+            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize)
+                == PaintPopupLayout(show3D: false).GetPreferredSizeCore(LayoutUtils.s_maxSize),
                 "The state of show3D should not effect PreferredSize");
             return layout;
         }
@@ -155,6 +155,7 @@ namespace System.Windows.Forms.ButtonInternal
                 layout.CheckSize = (int)(checkSize * GetDpiScaleRatio(control));
                 layout.CheckPaddingSize = 1;
             }
+
             return layout;
         }
 
@@ -171,6 +172,7 @@ namespace System.Windows.Forms.ButtonInternal
                 layout.CheckSize = (int)(FlatCheckSize * GetDpiScaleRatio());
                 layout.CheckPaddingSize = 1;
             }
+
             return layout;
         }
 

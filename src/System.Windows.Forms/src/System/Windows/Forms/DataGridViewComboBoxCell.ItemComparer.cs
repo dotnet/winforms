@@ -28,12 +28,15 @@ namespace System.Windows.Forms
                     {
                         return 0; //both null, then they are equal
                     }
+
                     return -1; //item1 is null, but item2 is valid (greater)
                 }
+
                 if (item2 is null)
                 {
                     return 1; //item2 is null, so item 1 is greater
                 }
+
                 string itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
                 string itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
 

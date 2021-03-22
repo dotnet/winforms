@@ -38,8 +38,10 @@ namespace System.Windows.Forms
                     {
                         ownedWindows = new List<HandleRef>();
                     }
+
                     ownedWindows.Add(hRef);
                 }
+
                 return BOOL.TRUE;
             }
 

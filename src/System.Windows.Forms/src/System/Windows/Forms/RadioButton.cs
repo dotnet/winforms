@@ -252,6 +252,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
                 }
+
                 return cp;
             }
         }
@@ -419,6 +420,7 @@ namespace System.Windows.Forms
             {
                 Checked = true;
             }
+
             base.OnClick(e);
         }
 
@@ -450,6 +452,7 @@ namespace System.Windows.Forms
                     TabStop = true;
                 }
             }
+
             base.OnEnter(e);
         }
 
@@ -461,6 +464,7 @@ namespace System.Windows.Forms
                 {
                     WipeTabStops(tabbedInto);
                 }
+
                 TabStop = isChecked;
                 if (isChecked)
                 {
@@ -504,6 +508,7 @@ namespace System.Windows.Forms
                         {
                             button.firstfocus = false;
                         }
+
                         if (button.autoCheck)
                         {
                             button.TabStop = false;
@@ -559,6 +564,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -592,8 +598,10 @@ namespace System.Windows.Forms
                 {
                     PerformClick();     // Generate a click if already focused
                 }
+
                 return true;
             }
+
             return false;
         }
 

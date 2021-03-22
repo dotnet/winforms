@@ -182,6 +182,7 @@ namespace System.Windows.Forms.Design
                     bounds.Y = selectedControl.Location.Y + GridSize.Height;
                 }
             }
+
             // If we were not given a size, ask the control for its default.  We also update the location here so the control is in the middle of the user's point, rather than at the edge.
             if (hasSize)
             {
@@ -223,12 +224,14 @@ namespace System.Windows.Forms.Design
                     bounds = snappedBounds;
                 }
             }
+
             // Parent the control to the designer and set it to the front.
             PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Control)["Controls"];
             if (_componentChangeService != null)
             {
                 _componentChangeService.OnComponentChanging(Control, controlsProp);
             }
+
             AddChildControl(newChild);
             // Now see if the control has size and location properties.  Update these values if it does.
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(newChild);
@@ -259,6 +262,7 @@ namespace System.Windows.Forms.Design
             {
                 _componentChangeService.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
             }
+
             newChild.Update();
         }
 
@@ -271,6 +275,7 @@ namespace System.Windows.Forms.Design
                 loc.Offset(GridSize.Width, GridSize.Height);
                 newChild.Location = loc;
             }
+
             Control.Controls.Add(newChild);
             Control.Controls.SetChildIndex(newChild, 0);
         }
@@ -285,6 +290,7 @@ namespace System.Windows.Forms.Design
                 centeredLocation.X = DefaultControlLocation.X;
                 centeredLocation.Y = DefaultControlLocation.Y;
             }
+
             return centeredLocation;
         }
 
@@ -332,6 +338,7 @@ namespace System.Windows.Forms.Design
                     return size;
                 }
             }
+
             // Couldn't get the size or a def size attrib, returning 75,23...
             return (new Size(75, 23));
         }
@@ -348,10 +355,12 @@ namespace System.Windows.Forms.Design
             {
                 adjustedRect.X = minimumLocation.X;
             }
+
             if (adjustedRect.Y < minimumLocation.Y)
             {
                 adjustedRect.Y = minimumLocation.Y;
             }
+
             // here's our rect that has been snapped to grid
             return adjustedRect;
         }

@@ -376,15 +376,21 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             listView.CreateControl();
-            ListViewItem listItem1 = new ListViewItem(new string[] {
+            ListViewItem listItem1 = new ListViewItem(new string[]
+            {
                 "Test A",
-                "Alpha"}, -1);
-            ListViewItem listItem2 = new ListViewItem(new string[] {
+                "Alpha"
+            }, -1);
+            ListViewItem listItem2 = new ListViewItem(new string[]
+            {
                 "Test B",
-                "Beta"}, -1);
-            ListViewItem listItem3 = new ListViewItem(new string[] {
+                "Beta"
+            }, -1);
+            ListViewItem listItem3 = new ListViewItem(new string[]
+            {
                 "Test C",
-                "Gamma"}, -1);
+                "Gamma"
+            }, -1);
             listView.Items.Add(listItem1);
             listView.Items.Add(listItem2);
             listView.Items.Add(listItem3);
@@ -495,15 +501,21 @@ namespace System.Windows.Forms.Tests
 
             listView.VirtualListSize = 1;
 
-            ListViewItem listItem1 = new ListViewItem(new string[] {
+            ListViewItem listItem1 = new ListViewItem(new string[]
+            {
                 "Test A",
-                "Alpha"}, -1);
-            ListViewItem listItem2 = new ListViewItem(new string[] {
+                "Alpha"
+            }, -1);
+            ListViewItem listItem2 = new ListViewItem(new string[]
+            {
                 "Test B",
-                "Beta"}, -1);
-            ListViewItem listItem3 = new ListViewItem(new string[] {
+                "Beta"
+            }, -1);
+            ListViewItem listItem3 = new ListViewItem(new string[]
+            {
                 "Test C",
-                "Gamma"}, -1);
+                "Gamma"
+            }, -1);
 
             listView.RetrieveVirtualItem += (s, e) =>
             {
@@ -566,15 +578,21 @@ namespace System.Windows.Forms.Tests
 
             listView.VirtualListSize = 3;
 
-            ListViewItem listItem1 = new ListViewItem(new string[] {
+            ListViewItem listItem1 = new ListViewItem(new string[]
+            {
                 "Test A",
-                "Alpha"}, -1);
-            ListViewItem listItem2 = new ListViewItem(new string[] {
+                "Alpha"
+            }, -1);
+            ListViewItem listItem2 = new ListViewItem(new string[]
+            {
                 "Test B",
-                "Beta"}, -1);
-            ListViewItem listItem3 = new ListViewItem(new string[] {
+                "Beta"
+            }, -1);
+            ListViewItem listItem3 = new ListViewItem(new string[]
+            {
                 "Test C",
-                "Gamma"}, -1);
+                "Gamma"
+            }, -1);
 
             listView.RetrieveVirtualItem += (s, e) =>
             {
@@ -645,15 +663,21 @@ namespace System.Windows.Forms.Tests
 
             listView.VirtualListSize = 3;
 
-            ListViewItem listItem1 = new ListViewItem(new string[] {
+            ListViewItem listItem1 = new ListViewItem(new string[]
+            {
                 "Test A",
-                "Alpha"}, -1);
-            ListViewItem listItem2 = new ListViewItem(new string[] {
+                "Alpha"
+            }, -1);
+            ListViewItem listItem2 = new ListViewItem(new string[]
+            {
                 "Test B",
-                "Beta"}, -1);
-            ListViewItem listItem3 = new ListViewItem(new string[] {
+                "Beta"
+            }, -1);
+            ListViewItem listItem3 = new ListViewItem(new string[]
+            {
                 "Test C",
-                "Gamma"}, -1);
+                "Gamma"
+            }, -1);
 
             listView.RetrieveVirtualItem += (s, e) =>
             {

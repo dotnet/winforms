@@ -296,6 +296,7 @@ namespace System.Windows.Forms.Tests
             panel.RowMargin = value;
             Assert.Equal(value, panel.RowMargin);
         }
+
         [WinFormsFact]
         public void ToolStripPanel_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

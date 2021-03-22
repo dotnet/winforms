@@ -261,6 +261,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             }
+
             Assert.False(control.IsHandleCreated);
         }
 
@@ -432,6 +433,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             }
+
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2885,9 +2887,9 @@ namespace System.Windows.Forms.Tests
         {
             // Frozen.
             yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen };
-            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible  | DataGridViewElementStates.Displayed};
+            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed };
             yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen };
-            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible  | DataGridViewElementStates.Displayed};
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed };
 
             // Visible.
             yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed };

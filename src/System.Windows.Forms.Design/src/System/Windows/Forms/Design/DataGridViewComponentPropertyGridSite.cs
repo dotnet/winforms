@@ -44,6 +44,7 @@ namespace System.Windows.Forms.Design
             {
                 return null;
             }
+
             try
             {
                 _inGetService = true;

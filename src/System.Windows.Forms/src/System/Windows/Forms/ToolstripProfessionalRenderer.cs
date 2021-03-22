@@ -43,6 +43,7 @@ namespace System.Windows.Forms
         public ToolStripProfessionalRenderer()
         {
         }
+
         internal ToolStripProfessionalRenderer(bool isDefault) : base(isDefault)
         {
         }
@@ -60,6 +61,7 @@ namespace System.Windows.Forms
                 {
                     return ProfessionalColors.ColorTable;
                 }
+
                 return professionalColorTable;
             }
         }
@@ -72,10 +74,12 @@ namespace System.Windows.Forms
                 {
                     return HighContrastRenderer;
                 }
+
                 if (DisplayInformation.LowResolution)
                 {
                     return LowResolutionRenderer;
                 }
+
                 return null;
             }
         }
@@ -88,6 +92,7 @@ namespace System.Windows.Forms
                 {
                     toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/false);
                 }
+
                 return toolStripHighContrastRenderer;
             }
         }
@@ -100,6 +105,7 @@ namespace System.Windows.Forms
                 {
                     toolStripLowResolutionRenderer = new ToolStripProfessionalLowResolutionRenderer();
                 }
+
                 return toolStripLowResolutionRenderer;
             }
         }
@@ -154,10 +160,12 @@ namespace System.Windows.Forms
             }
         }
 
-        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
+        protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
+        {
             ScaleObjectSizesIfNeeded(e.ToolStrip.DeviceDpi);
 
-            if (RendererOverride != null) {
+            if (RendererOverride != null)
+            {
                 base.OnRenderOverflowButtonBackground(e);
                 return;
             }
@@ -300,6 +308,7 @@ namespace System.Windows.Forms
             {
                 RenderPressedGradient(e.Graphics, bounds);
             }
+
             Rectangle dropDownRect = item.DropDownButtonBounds;
 
             if (buttonPressedOrSelected && !item.Pressed)
@@ -461,6 +470,7 @@ namespace System.Windows.Forms
                         {
                             edging = new Rectangle(3, bounds.Height - 1, bounds.Width - 3, bounds.Height - 1);
                         }
+
                         ScaleObjectSizesIfNeeded(toolStrip.DeviceDpi);
                         FillWithDoubleGradient(ColorTable.OverflowButtonGradientBegin, ColorTable.OverflowButtonGradientMiddle, ColorTable.OverflowButtonGradientEnd, e.Graphics, edging, iconWellGradientWidth, iconWellGradientWidth, LinearGradientMode.Vertical, /*flipHorizontal=*/false);
                         RenderToolStripCurve(e);
@@ -555,7 +565,8 @@ namespace System.Windows.Forms
                 return; // no highlights are painted behind a system menu item
             }
 
-            if (item.IsOnDropDown) {
+            if (item.IsOnDropDown)
+            {
                 ScaleObjectSizesIfNeeded(item.DeviceDpi);
 
                 bounds = LayoutUtils.DeflateRect(bounds, scaledDropDownMenuItemPaintPadding);
@@ -726,6 +737,7 @@ namespace System.Windows.Forms
             RenderCheckBackground(e);
             base.OnRenderItemCheck(e);
         }
+
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
             if (RendererOverride != null)
@@ -783,6 +795,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // dont paint background effects
             e.Handled = true;
 
@@ -826,10 +839,12 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (!RoundedEdges)
             {
                 return null;
             }
+
             Rectangle bounds = new Rectangle(Point.Empty, toolStrip.Size);
 
             // Render curve
@@ -880,6 +895,7 @@ namespace System.Windows.Forms
 
                 return parentRegionToPaint;
             }
+
             return null;
         }
 
@@ -1058,6 +1074,7 @@ namespace System.Windows.Forms
                 {
                     RenderSelectedButtonFill(g, bounds);
                 }
+
                 g.DrawRectangle(SystemPens.Highlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
             }
         }
@@ -1262,6 +1279,7 @@ namespace System.Windows.Forms
                     start.X = overflowBoundsFill.Right + 1;
                     end.X = overflowBoundsFill.Right;
                 }
+
                 g.DrawLine(pen, start, end);
             }
 
@@ -1290,6 +1308,7 @@ namespace System.Windows.Forms
                         top1.X = overflowBoundsFill.Right + 1;
                         top2.X = overflowBoundsFill.Right;
                     }
+
                     g.FillRectangle(brush, top1.X, top1.Y, 1, 1);
                     g.FillRectangle(brush, top2.X, top2.Y, 1, 1);
                 }
@@ -1309,6 +1328,7 @@ namespace System.Windows.Forms
                     {
                         fillRect.X = overflowBoundsFill.Right;
                     }
+
                     g.FillRectangle(brush, fillRect);
                 }
                 else
@@ -1409,6 +1429,7 @@ namespace System.Windows.Forms
                 g.FillRectangle(brush, bounds);
             }
         }
+
         private void RenderCheckedButtonFill(Graphics g, Rectangle bounds)
         {
             if ((bounds.Width == 0) || (bounds.Height == 0))
@@ -1639,7 +1660,8 @@ namespace System.Windows.Forms
             switch (direction)
             {
                 case ArrowDirection.Up:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y + 1),
                         new Point(middle.X + Offset2X + 1, middle.Y + 1),
                         new Point(middle.X, middle.Y - Offset2Y)
@@ -1647,7 +1669,8 @@ namespace System.Windows.Forms
                     break;
 
                 case ArrowDirection.Left:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X + Offset2X, middle.Y - Offset2Y - 1),
                         new Point(middle.X + Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X - 1, middle.Y)
@@ -1655,7 +1678,8 @@ namespace System.Windows.Forms
                     break;
 
                 case ArrowDirection.Right:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y - Offset2Y - 1),
                         new Point(middle.X - Offset2X, middle.Y + Offset2Y + 1),
                         new Point(middle.X + 1, middle.Y)
@@ -1664,13 +1688,15 @@ namespace System.Windows.Forms
 
                 case ArrowDirection.Down:
                 default:
-                    arrow = new Point[] {
+                    arrow = new Point[]
+                    {
                         new Point(middle.X - Offset2X, middle.Y - 1),
                         new Point(middle.X + Offset2X + 1, middle.Y - 1),
                         new Point(middle.X, middle.Y + Offset2Y)
                     };
                     break;
             }
+
             g.FillPolygon(brush, arrow);
 
             return middle;

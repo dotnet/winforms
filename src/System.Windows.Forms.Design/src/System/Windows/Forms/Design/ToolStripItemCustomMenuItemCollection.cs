@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -83,6 +83,7 @@ namespace System.Windows.Forms.Design
                     item.DropDown.Font = (Font)uis.Styles["DialogFont"];
                 }
             }
+
             return item;
         }
 
@@ -178,8 +179,10 @@ namespace System.Windows.Forms.Design
                             displayStyleToolStripMenuItem.DropDown.ForeColor = panelTextColor;
                         }
                     }
+
                     AddRange(new System.Windows.Forms.ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
                 }
+
                 toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
                 Add(toolStripSeparator1);
             }
@@ -447,6 +450,7 @@ namespace System.Windows.Forms.Design
                 {
                     ((ComponentDesigner)designer).InitializeNewComponent(null);
                 }
+
                 Debug.Assert(dummyIndex != -1, "Why is item index negative?");
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
@@ -492,6 +496,7 @@ namespace System.Windows.Forms.Design
                 {
                     ((ComponentDesigner)designer).InitializeNewComponent(null);
                 }
+
                 Debug.Assert(dummyIndex != -1, "Why is item index negative?");
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
@@ -538,6 +543,7 @@ namespace System.Windows.Forms.Design
                 {
                     ((ComponentDesigner)designer).InitializeNewComponent(null);
                 }
+
                 //Set the Image property and DisplayStyle...
                 if (component is ToolStripButton || component is ToolStripSplitButton || component is ToolStripDropDownButton)
                 {
@@ -553,6 +559,7 @@ namespace System.Windows.Forms.Design
                             throw;
                         }
                     }
+
                     ChangeProperty(component, "Image", image);
                     ChangeProperty(component, "DisplayStyle", ToolStripItemDisplayStyle.Image);
                     ChangeProperty(component, "ImageTransparentColor", Color.Magenta);
@@ -574,6 +581,7 @@ namespace System.Windows.Forms.Design
                     newItemTransaction.Cancel();
                     newItemTransaction = null;
                 }
+
                 if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
@@ -601,6 +609,7 @@ namespace System.Windows.Forms.Design
                     return attribute.Browsable;
                 }
             }
+
             return true;
         }
 
@@ -613,6 +622,7 @@ namespace System.Windows.Forms.Design
             {
                 return getProperty.GetValue(currentItem);
             }
+
             return null;
         }
 
@@ -674,6 +684,7 @@ namespace System.Windows.Forms.Design
                     {
                         isLinkToolStripMenuItem.Checked = (bool)GetProperty("IsLink");
                     }
+
                     RefreshAlignment();
                     RefreshDisplayStyle();
                 }
@@ -688,6 +699,7 @@ namespace System.Windows.Forms.Design
                 PropertyName = propertyName;
                 Value = value;
             }
+
             public string PropertyName;
             public object Value;
         }

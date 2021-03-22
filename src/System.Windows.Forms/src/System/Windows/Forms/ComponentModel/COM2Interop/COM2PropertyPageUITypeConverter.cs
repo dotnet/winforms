@@ -67,6 +67,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                 }
             }
+
             return value;
         }
 

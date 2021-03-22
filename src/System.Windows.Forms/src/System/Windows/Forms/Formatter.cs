@@ -71,6 +71,7 @@ namespace System.Windows.Forms
             {
                 throw new FormatException(GetCantConvertMessage(value, targetType));
             }
+
             return result;
         }
 
@@ -158,6 +159,7 @@ namespace System.Windows.Forms
                     {
                         sourceConverter = sourceTypeTypeConverter;
                     }
+
                     if (sourceConverter != null && sourceConverter.CanConvertTo(booleanType))
                     {
                         return (bool)sourceConverter.ConvertTo(null, GetFormatterCulture(formatInfo), value, booleanType)
@@ -317,15 +319,18 @@ namespace System.Windows.Forms
                 {
                     return DBNull.Value;
                 }
+
                 // Explicit conversion from CheckState to Boolean
                 if (targetType == booleanType)
                 {
                     return (state == CheckState.Checked);
                 }
+
                 if (targetConverter is null)
                 {
                     targetConverter = targetTypeTypeConverter;
                 }
+
                 if (targetConverter != null && targetConverter.CanConvertFrom(booleanType))
                 {
                     return targetConverter.ConvertFrom(null, GetFormatterCulture(formatInfo), state == CheckState.Checked);
@@ -407,6 +412,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 // Always do a case insensitive comparison for strings
                 return string.Compare(valueStr, formattedNullValueStr, true, GetFormatterCulture(formatInfo)) == 0;
             }

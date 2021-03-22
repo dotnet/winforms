@@ -203,9 +203,8 @@ namespace System.Windows.Forms
                     owner.ItemCollectionChangedInMouseDown = true;
                 }
 
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                if (comparer != null || (owner.Sorting != SortOrder.None) && !owner.VirtualMode)
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                if (comparer != null ||
+                    ((owner.Sorting != SortOrder.None) && !owner.VirtualMode))
                 {
                     owner.Sort();
                 }
@@ -264,9 +263,11 @@ namespace System.Windows.Forms
                                     //
                                     item.StateSelected = false;
                                 }
+
                                 item.UnHost(i, false);
                             }
                         }
+
                         Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
 
                         User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
@@ -310,6 +311,7 @@ namespace System.Windows.Forms
                     {
                         owner.savedCheckedItems = null;
                     }
+
                     owner.itemCount = 0;
 
                     if (owner.ExpectingMouseUp)
@@ -388,6 +390,7 @@ namespace System.Windows.Forms
                         return i;
                     }
                 }
+
                 return -1;
             }
 

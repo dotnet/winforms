@@ -42,6 +42,7 @@ namespace System.Windows.Forms.Design
                 {
                     _image = ToolStripDesignerUtils.GetToolboxBitmap(ItemType);
                 }
+
                 return _image;
             }
             set
@@ -65,6 +66,7 @@ namespace System.Windows.Forms.Design
             {
                 TbxItem = null;
             }
+
             base.Dispose(disposing);
         }
     }

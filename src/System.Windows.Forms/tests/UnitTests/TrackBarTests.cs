@@ -2746,6 +2746,7 @@ namespace System.Windows.Forms.Tests
             control.OnScroll(eventArgs);
             Assert.Equal(1, callCount);
         }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TrackBar_OnSystemColorsChanged_Invoke_CallsSystemColorsChanged(EventArgs eventArgs)

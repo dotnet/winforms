@@ -15,7 +15,7 @@ internal partial class Interop
         /// <remarks>
         ///  Note that this structure is the exact same defintion as OSVERSIONINFOEX.
         /// </remarks>
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         internal unsafe struct RTL_OSVERSIONINFOEX
         {
             internal uint dwOSVersionInfoSize;

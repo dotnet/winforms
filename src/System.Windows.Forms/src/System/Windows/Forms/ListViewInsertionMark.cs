@@ -77,6 +77,7 @@ namespace System.Windows.Forms
                 {
                     color = new COLORREF((uint)User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKCOLOR));
                 }
+
                 return color;
             }
             set

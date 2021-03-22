@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -163,6 +163,7 @@ namespace System.Windows.Forms
                         // switch over to a MessageHook
                         MessageHook.HookMessages = true;
                     }
+
                     _inMenuMode = true;
 
                     NotifyLastLastFocusedToolAboutFocusLoss();
@@ -216,6 +217,7 @@ namespace System.Windows.Forms
                             {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
+
                             ActiveHwndInternal = NativeMethods.NullHandleRef;
                         }
 
@@ -445,6 +447,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 toolStrip.KeyboardActive = true;
 
                 if (_inputFilterQueue is null)
@@ -556,16 +559,19 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 ToolStrip activeToolStrip = GetActiveToolStrip();
                 if (activeToolStrip is null)
                 {
                     return false;
                 }
+
                 if (activeToolStrip.IsDisposed)
                 {
                     RemoveActiveToolStripCore(activeToolStrip);
                     return false;
                 }
+
                 HandleRef hwndActiveToolStrip = new HandleRef(activeToolStrip, activeToolStrip.Handle);
                 HandleRef hwndCurrentActiveWindow = new HandleRef(null, User32.GetActiveWindow());
 
@@ -643,6 +649,7 @@ namespace System.Windows.Forms
                                     return true;
                                 }
                             }
+
                             break;
                         case User32.WM.LBUTTONDOWN:
                         case User32.WM.RBUTTONDOWN:
@@ -684,6 +691,7 @@ namespace System.Windows.Forms
                             {
                                 Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] got Keyboard message " + m.ToString());
                             }
+
                             break;
                     }
                 }

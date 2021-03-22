@@ -38,11 +38,13 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(SR.MDIContainerMustBeTopLevel, nameof(value));
                     }
+
                     owner.AutoScroll = false;
                     if (owner.IsMdiChild)
                     {
                         throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                     }
+
                     owner.ctlClient = (MdiClient)value;
                 }
 
@@ -70,6 +72,7 @@ namespace System.Windows.Forms
                 {
                     owner.ctlClient = null;
                 }
+
                 base.Remove(value);
             }
         }

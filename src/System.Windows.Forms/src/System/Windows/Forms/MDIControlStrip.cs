@@ -68,6 +68,7 @@ namespace System.Windows.Forms
             // set up the sytem menu
 
             _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
             _system.Alignment = ToolStripItemAlignment.Left;
             _system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
             _system.ImageScaling = ToolStripItemImageScaling.None;
@@ -107,6 +108,14 @@ namespace System.Windows.Forms
             return systemIcon;
         }
 
+        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
+
+        public void updateIcon()
+        {
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
+        }
+
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
         {
             base.OnItemAdded(e);
@@ -144,6 +153,7 @@ namespace System.Windows.Forms
             }
 
             _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
@@ -170,6 +180,7 @@ namespace System.Windows.Forms
                 UnhookTarget();
                 _target = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -182,6 +193,7 @@ namespace System.Windows.Forms
                     controlTarget.HandleCreated -= new EventHandler(OnTargetWindowHandleRecreated);
                     controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);
                 }
+
                 _target = null;
             }
         }

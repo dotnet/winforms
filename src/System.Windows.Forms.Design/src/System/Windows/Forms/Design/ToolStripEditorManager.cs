@@ -63,6 +63,7 @@ namespace System.Windows.Forms.Design
                         _currentItem = null;
                     }
                 }
+
                 if (item != null)
                 {
                     // Add new editor from the item...
@@ -71,6 +72,7 @@ namespace System.Windows.Forms.Design
                     {
                         _itemDesigner = (ToolStripItemDesigner)_designerHost.GetDesigner(_currentItem);
                     }
+
                     _editorUI = (ToolStripTemplateNode)_itemDesigner.Editor;
                     // If we got an editor, position and focus it.
                     if (_editorUI != null)

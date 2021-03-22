@@ -43,6 +43,7 @@ namespace System.Windows.Forms
                         {
                             return owner.savedSelectedItems.Count;
                         }
+
                         return 0;
                     }
                 }
@@ -195,6 +196,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -257,6 +259,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     if (owner.IsHandleCreated)
                     {
                         owner.SetItemState(itemIndex, LVIS.SELECTED, LVIS.SELECTED);
@@ -273,6 +276,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     owner.Items[itemIndex].Selected = true;
                     return Count;
                 }
@@ -284,6 +288,7 @@ namespace System.Windows.Forms
                 {
                     owner.savedSelectedItems = null;
                 }
+
                 if (owner.IsHandleCreated)
                 {
                     owner.SetItemState(-1, 0, LVIS.SELECTED);
@@ -319,6 +324,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     if (owner.IsHandleCreated)
                     {
                         owner.SetItemState(itemIndex, 0, LVIS.SELECTED);
@@ -330,6 +336,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     owner.Items[itemIndex].Selected = false;
                 }
             }

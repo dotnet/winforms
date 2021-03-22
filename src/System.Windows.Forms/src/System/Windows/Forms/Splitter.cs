@@ -113,6 +113,7 @@ namespace System.Windows.Forms
                     case DockStyle.Right:
                         return Cursors.VSplit;
                 }
+
                 return base.DefaultCursor;
             }
         }
@@ -230,6 +231,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
+
                 return cp;
             }
         }
@@ -266,6 +268,7 @@ namespace System.Windows.Forms
                         {
                             Height = requestedSize;
                         }
+
                         break;
                     case DockStyle.Left:
                     case DockStyle.Right:
@@ -273,6 +276,7 @@ namespace System.Windows.Forms
                         {
                             Width = requestedSize;
                         }
+
                         break;
                 }
             }
@@ -422,6 +426,7 @@ namespace System.Windows.Forms
                         bounds.Width = value;
                         break;
                 }
+
                 spd.target.Bounds = bounds;
                 Application.DoEvents();
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
@@ -531,6 +536,7 @@ namespace System.Windows.Forms
                 DrawSplitHelper(lastDrawSplit);
                 lastDrawSplit = -1;
             }
+
             // Bail if drawing with no old point...
             //
             else if (mode != DRAW_START && lastDrawSplit == -1)
@@ -549,6 +555,7 @@ namespace System.Windows.Forms
                 {
                     DrawSplitHelper(lastDrawSplit);
                 }
+
                 lastDrawSplit = -1;
             }
         }
@@ -596,6 +603,7 @@ namespace System.Windows.Forms
                     r.X = bounds.X + bounds.Width - splitSize - r.Width;
                     break;
             }
+
             return r;
         }
 
@@ -645,6 +653,7 @@ namespace System.Windows.Forms
                         initTargetSize = target.Bounds.Height;
                         break;
                 }
+
                 Control parent = ParentInternal;
                 ControlCollection children = parent.Controls;
                 int count = children.Count;
@@ -667,6 +676,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 Size clientSize = parent.ClientSize;
                 if (Horizontal)
                 {
@@ -676,9 +686,11 @@ namespace System.Windows.Forms
                 {
                     maxSize = clientSize.Height - dockHeight - minExtra;
                 }
+
                 spd.dockWidth = dockWidth;
                 spd.dockHeight = dockHeight;
             }
+
             return spd;
         }
 
@@ -758,6 +770,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return null;
         }
 
@@ -775,6 +788,7 @@ namespace System.Windows.Forms
             {
                 delta = y - anchor.Y;
             }
+
             int size = 0;
             switch (Dock)
             {
@@ -791,6 +805,7 @@ namespace System.Windows.Forms
                     size = splitTarget.Width - delta;
                     break;
             }
+
             return Math.Max(Math.Min(size, maxSize), minSize);
         }
 
@@ -878,6 +893,7 @@ namespace System.Windows.Forms
                 {
                     width = 3;
                 }
+
                 splitterThickness = width;
             }
             else
@@ -886,8 +902,10 @@ namespace System.Windows.Forms
                 {
                     height = 3;
                 }
+
                 splitterThickness = height;
             }
+
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
@@ -907,6 +925,7 @@ namespace System.Windows.Forms
                 {
                     splitterMessageFilter = new SplitterMessageFilter(this);
                 }
+
                 Application.AddMessageFilter(splitterMessageFilter);
 
                 Capture = true;
@@ -936,6 +955,7 @@ namespace System.Windows.Forms
             {
                 SplitPosition = initTargetSize;
             }
+
             anchor = Point.Empty;
         }
 
@@ -1000,8 +1020,10 @@ namespace System.Windows.Forms
                     {
                         owner.SplitEnd(false);
                     }
+
                     return true;
                 }
+
                 return false;
             }
         }

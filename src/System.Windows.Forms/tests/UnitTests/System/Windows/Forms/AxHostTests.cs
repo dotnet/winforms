@@ -2314,10 +2314,10 @@ namespace System.Windows.Forms.Tests
             control.OnMouseCaptureChanged(eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.MouseCaptureChanged -= handler;
-           control.OnMouseCaptureChanged(eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.MouseCaptureChanged -= handler;
+            control.OnMouseCaptureChanged(eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsFact]

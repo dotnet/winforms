@@ -414,6 +414,7 @@ namespace System.Windows.Forms
                         // Try to select the folder specified by selectedPath
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, PARAM.FromBool(true), _selectedPath);
                     }
+
                     break;
                 case BFFM.SELCHANGED:
                     // Indicates the selection has changed. The lpData parameter points to the item identifier list for the newly selected item.
@@ -424,6 +425,7 @@ namespace System.Windows.Forms
                         bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
                         User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, IntPtr.Zero, PARAM.FromBool(isFileSystemFolder));
                     }
+
                     break;
             }
 

@@ -30,6 +30,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new CollectionCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }
@@ -50,6 +51,7 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Fail("Collection of type " + modified.GetType().FullName + " doesn't return an enumerator");
                 return modified;
             }
+
             // first hash up the values so we can quickly decide if it's a new one or not
             IDictionary originalValues = new HybridDictionary();
             foreach (object originalValue in original)
@@ -84,9 +86,11 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result.Add(modifiedEnum.Current);
                         }
+
                         // and finally skip the one we're on
                         modifiedEnum.MoveNext();
                     }
+
                     // decrement the count if we've got more than one...
                     int count = (int)originalValues[value];
 
@@ -104,6 +108,7 @@ namespace System.ComponentModel.Design.Serialization
                     // this one isn't in the old list, so add it to our  result list.
                     result.Add(value);
                 }
+
                 // this item isn't in the list and we haven't yet created our array list so just keep on going.
             }
 
@@ -111,6 +116,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return result;
             }
+
             return modified;
         }
 
@@ -152,6 +158,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             object result = null;
             using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
             {
@@ -177,6 +184,7 @@ namespace System.ComponentModel.Design.Serialization
                     prop = null;
                     Trace("No valid context.  We can only serialize if this is an array.");
                 }
+
                 // If we have a target expression see if we can create a delta for the collection. We want to do this only if the propery the collection is associated with is inherited, and if the collection is not an array.
                 if (value is ICollection collection)
                 {
@@ -219,6 +227,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     resultCol.Add(resultStmt);
                                 }
+
                                 result = resultCol;
                             }
 
@@ -237,6 +246,7 @@ namespace System.ComponentModel.Design.Serialization
                     TraceError("Collection serializer invoked for non collection: {0}", (value is null ? "(null)" : value.GetType().Name));
                 }
             }
+
             return result;
         }
 
@@ -299,6 +309,7 @@ namespace System.ComponentModel.Design.Serialization
                     finalType = candidateType;
                 }
             }
+
             return final;
         }
 
@@ -343,6 +354,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         result = arrayCreate;
                     }
+
                     serialized = true;
                 }
             }
@@ -355,6 +367,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     provider = TypeDescriptor.GetProvider(originalCollection);
                 }
+
                 MethodInfo[] methods = provider.GetReflectionType(originalCollection).GetMethods(BindingFlags.Public | BindingFlags.Instance);
                 ParameterInfo[] parameters;
                 List<MethodInfo> addRangeMethods = new List<MethodInfo>();
@@ -589,6 +602,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return statements;
         }
 
@@ -668,6 +682,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     exp = new CodeCastExpression(elementType, exp);
                                 }
+
                                 arrayList.Add(exp);
                             }
                         }
@@ -697,6 +712,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return statements;
         }
 
@@ -730,6 +746,7 @@ namespace System.ComponentModel.Design.Serialization
                     shouldClear = false;
                 }
             }
+
             return shouldClear;
         }
     }

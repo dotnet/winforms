@@ -153,6 +153,7 @@ namespace System.Windows.Forms
                     {
                         hdr.DisplayIndexInternal -= hdrMovedForward ? 1 : -1;
                     }
+
                     if (i != Index)
                     {
                         colsOrder[hdr.DisplayIndexInternal] = i;
@@ -199,6 +200,7 @@ namespace System.Windows.Forms
                 {
                     return ImageList.Images.Count - 1;
                 }
+
                 return _imageIndexer.Index;
             }
             set
@@ -286,6 +288,7 @@ namespace System.Windows.Forms
                 {
                     _name = value;
                 }
+
                 if (Site is not null)
                 {
                     Site.Name = value;
@@ -314,6 +317,7 @@ namespace System.Windows.Forms
                 {
                     _text = value;
                 }
+
                 if (ListView is not null)
                 {
                     ListView.SetColumnInfo(LVCF.TEXT, this);
@@ -341,6 +345,7 @@ namespace System.Windows.Forms
                         _textAlign = HorizontalAlignment.Right;
                     }
                 }
+
                 return _textAlign;
             }
             set
@@ -469,6 +474,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.Dispose(disposing);
         }
 

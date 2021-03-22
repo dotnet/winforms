@@ -248,6 +248,7 @@ namespace System.Windows.Forms.Design
                 {
                     return maskedTextBox.Text;
                 }
+
                 return maskedTextBox.MaskedTextProvider.ToString(false, false);
             }
             set

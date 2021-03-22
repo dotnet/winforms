@@ -167,6 +167,7 @@ namespace System.Windows.Forms
         protected ToolStripItem(string text, Image image, EventHandler onClick) : this(text, image, onClick, null)
         {
         }
+
         protected ToolStripItem(string text, Image image, EventHandler onClick, string name) : this()
         {
             Text = text;
@@ -175,6 +176,7 @@ namespace System.Windows.Forms
             {
                 Click += onClick;
             }
+
             Name = name;
         }
 
@@ -853,6 +855,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetColor(s_foreColorProperty, value);
                 }
+
                 if (!c.Equals(ForeColor))
                 {
                     OnForeColorChanged(EventArgs.Empty);
@@ -1038,6 +1041,7 @@ namespace System.Windows.Forms
 
                     value = bmp;
                 }
+
                 if (value != null)
                 {
                     ImageIndex = ImageList.Indexer.DefaultIndex;
@@ -1410,6 +1414,7 @@ namespace System.Windows.Forms
                     {
                         _owner.Items.Remove(this);
                     }
+
                     if (value != null)
                     {
                         value.Items.Add(this);
@@ -2100,6 +2105,7 @@ namespace System.Windows.Forms
                     _state[s_stateDisposed] = true;
                 }
             }
+
             base.Dispose(disposing);
 
             if (disposing)
@@ -2157,6 +2163,7 @@ namespace System.Windows.Forms
                     iwdata = new DataObject();
                     iwdata.SetData(data);
                 }
+
                 dataObject = (IComDataObject)iwdata;
             }
 
@@ -2192,6 +2199,7 @@ namespace System.Windows.Forms
                     {
                         FireEventInteractive(e, met);
                     }
+
                     break;
                 case ToolStripItemEventType.MouseEnter:
                     HandleMouseEnter(e);
@@ -2207,6 +2215,7 @@ namespace System.Windows.Forms
                     {
                         HandleMouseLeave(e);
                     }
+
                     break;
                 case ToolStripItemEventType.MouseMove:
                     // Disabled items typically dont get mouse move
@@ -2219,6 +2228,7 @@ namespace System.Windows.Forms
                     {
                         FireEventInteractive(e, met);
                     }
+
                     break;
                 default:
                     FireEventInteractive(e, met);
@@ -2274,6 +2284,7 @@ namespace System.Windows.Forms
 
             return Owner as ToolStripDropDown;
         }
+
         public virtual Size GetPreferredSize(Size constrainingSize)
         {
             // Switch Size.Empty to maximum possible values
@@ -2349,6 +2360,7 @@ namespace System.Windows.Forms
                 {
                     _state[s_statePressed] = true;
                 }
+
                 // force painting w/o using message loop here because it may be quite a long
                 // time before it gets pumped again.
                 InvokePaint();
@@ -2375,6 +2387,7 @@ namespace System.Windows.Forms
             // when we get around to it, paint unpressed.
             Invalidate();
         }
+
         private void HandleDoubleClick(EventArgs e) => OnDoubleClick(e);
 
         private void HandlePaint(PaintEventArgs e)
@@ -2446,6 +2459,7 @@ namespace System.Windows.Forms
                     Select();
                 }
             }
+
             OnMouseMove(mea);
             RaiseMouseEvent(s_mouseMoveEvent, mea);
         }
@@ -2479,6 +2493,7 @@ namespace System.Windows.Forms
                 RaiseEvent(s_mouseLeaveEvent, e);
             }
         }
+
         private void HandleMouseDown(MouseEventArgs e)
         {
             Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseDown");
@@ -2490,11 +2505,13 @@ namespace System.Windows.Forms
                 {
                     Push(true);
                 }
+
                 //
                 OnMouseDown(e);
                 RaiseMouseEvent(s_mouseDownEvent, e);
             }
         }
+
         private void HandleMouseUp(MouseEventArgs e)
         {
             Debug.WriteLineIf(s_mouseDebugging.TraceVerbose, "[" + Text + "] MouseUp");
@@ -2531,6 +2548,7 @@ namespace System.Windows.Forms
                             shouldFireDoubleClick = true;
                         }
                     }
+
                     if (shouldFireDoubleClick)
                     {
                         HandleDoubleClick(EventArgs.Empty);
@@ -2719,6 +2737,7 @@ namespace System.Windows.Forms
             {
                 _toolStripItemInternalLayout = null;
             }
+
             RaiseEvent(s_fontChangedEvent, e);
         }
 
@@ -2795,6 +2814,7 @@ namespace System.Windows.Forms
             {
                 oldParent.DropTargetManager.EnsureUnRegistered(this);
             }
+
             if (AllowDrop && (newParent != null))
             {
                 EnsureParentDropTargetRegistered();
@@ -2856,6 +2876,7 @@ namespace System.Windows.Forms
                 {
                     rightToLeft = (int)RightToLeft.Inherit;
                 }
+
                 if ((rightToLeft == (int)RightToLeft.Inherit) && RightToLeft != DefaultRightToLeft)
                 {
                     OnRightToLeftChanged(EventArgs.Empty);
@@ -2950,8 +2971,10 @@ namespace System.Windows.Forms
                 {
                     ParentInternal.RestoreFocusInternal();
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -3028,6 +3051,7 @@ namespace System.Windows.Forms
                 // make sure we dont select during a drag operation.
                 return;
             }
+
             if (ParentInternal != null && ParentInternal.IsSelectionSuspended)
             {
                 Debug.WriteLineIf(ToolStrip.s_selectionDebug.TraceVerbose, "[Selection DBG] BAILING, selection is currently suspended");
@@ -3042,6 +3066,7 @@ namespace System.Windows.Forms
                     ParentInternal.NotifySelectionChange(this);
                     Debug.Assert(_state[s_stateSelected], "calling notify selection change changed the selection state of this item");
                 }
+
                 if (IsOnDropDown)
                 {
                     if (OwnerItem != null && OwnerItem.IsOnDropDown)
@@ -3070,6 +3095,7 @@ namespace System.Windows.Forms
                 {
                     _owner._rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
                 }
+
                 _owner = newOwner;
 
                 if (_owner != null)
@@ -3082,6 +3108,7 @@ namespace System.Windows.Forms
                 {
                     this.ParentInternal = null;
                 }
+
                 if (!_state[s_stateDisposing] && !IsDisposed)
                 {
                     OnOwnerChanged(EventArgs.Empty);
@@ -3322,6 +3349,7 @@ namespace System.Windows.Forms
             {
                 parent = (IsOnOverflow && Owner != null) ? Owner.OverflowButton.DropDown : Owner;
             }
+
             if (parent is null)
             {
                 // should not throw here as it's an internal function call.
@@ -3350,6 +3378,7 @@ namespace System.Windows.Forms
                     toPoint.Y += currentToolStripItemLocation.Y;
                 }
             }
+
             // From: ToolStrip or ToolStripItem
             // To:      Screen or ToolStripItem
             else
@@ -3368,6 +3397,7 @@ namespace System.Windows.Forms
                 {
                     toPoint = parent.PointToScreen(fromPoint);
                 }
+
                 // Convert ToolStripCoords --> ToolStripItemCoords
                 else if (toPointType == ToolStripPointType.ToolStripItemCoords)
                 {
@@ -3381,6 +3411,7 @@ namespace System.Windows.Forms
                     toPoint = fromPoint;
                 }
             }
+
             return toPoint;
         }
 
@@ -3470,6 +3501,7 @@ namespace System.Windows.Forms
                         i++;
                     }
                 }
+
                 Debug.Assert(i < count, "Item has a parent set but the parent doesn't own the item");
             }
 

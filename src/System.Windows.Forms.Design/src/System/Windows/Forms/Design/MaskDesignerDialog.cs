@@ -144,10 +144,12 @@ namespace System.Windows.Forms.Design
             // listViewCannedMasks
             //
             resources.ApplyResources(_listViewCannedMasks, "listViewCannedMasks");
-            _listViewCannedMasks.Columns.AddRange(new ColumnHeader[] {
+            _listViewCannedMasks.Columns.AddRange(new ColumnHeader[]
+            {
             _maskDescriptionHeader,
             _dataFormatHeader,
-            _validatingTypeHeader});
+            _validatingTypeHeader
+            });
             _listViewCannedMasks.FullRowSelect = true;
             _listViewCannedMasks.HideSelection = false;
             _listViewCannedMasks.Margin = new Padding(0, 3, 0, 3);
@@ -442,6 +444,7 @@ namespace System.Windows.Forms.Design
             int maskDexIndex = GetMaskDescriptorIndex(maskDex);
             SetSelectedMaskDescriptor(maskDexIndex);
         }
+
         private void SetSelectedMaskDescriptor(int maskDexIndex)
         {
             if (maskDexIndex < 0 || _listViewCannedMasks.Items.Count <= maskDexIndex)
@@ -528,6 +531,7 @@ namespace System.Windows.Forms.Design
         {
             InsertMaskDescriptor(index, maskDescriptor, true);
         }
+
         private void InsertMaskDescriptor(int index, MaskDescriptor maskDescriptor, bool validateDescriptor)
         {
             string errorMessage;

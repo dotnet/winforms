@@ -77,8 +77,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return "(Object)";
                 }
+
                 return text;
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 

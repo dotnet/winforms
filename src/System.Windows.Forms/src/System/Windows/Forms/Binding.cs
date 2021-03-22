@@ -372,6 +372,7 @@ namespace System.Windows.Forms
                         EventHandler handler = new EventHandler(Target_PropertyChanged);
                         _propInfo.AddValueChanged(BindableComponent, handler);
                     }
+
                     if (_validateInfo is not null)
                     {
                         CancelEventHandler handler = new CancelEventHandler(Target_Validate);
@@ -386,6 +387,7 @@ namespace System.Windows.Forms
                     EventHandler handler = new EventHandler(Target_PropertyChanged);
                     _propInfo.RemoveValueChanged(BindableComponent, handler);
                 }
+
                 if (_validateInfo is not null)
                 {
                     CancelEventHandler handler = new CancelEventHandler(Target_Validate);
@@ -443,6 +445,7 @@ namespace System.Windows.Forms
                             break;
                         }
                     }
+
                     if (tempPropIsNullInfo is null && string.Equals(propInfos[i].Name, propertyNameIsNull, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropIsNullInfo = propInfos[i];
@@ -457,6 +460,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.ListBindingBindProperty, PropertyName), nameof(PropertyName));
                 }
+
                 if (tempPropInfo.IsReadOnly && _controlUpdateMode != ControlUpdateMode.Never)
                 {
                     throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, PropertyName), nameof(PropertyName));
@@ -483,6 +487,7 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
+
                 _validateInfo = tempValidateInfo;
             }
             else
@@ -644,6 +649,7 @@ namespace System.Windows.Forms
                 {
                     return typeConverter.ConvertTo(value, type);
                 }
+
                 // last try: use Convert.ToType
                 if (value is IConvertible)
                 {
@@ -1185,6 +1191,7 @@ namespace System.Windows.Forms
                     {
                         text = errorInfo.Error;
                     }
+
                     // Get the column error if there is a DataMember.
                     // The DataTable uses its own Locale to lookup column names <sigh>.
                     // So passing the DataMember from the BindingField could cause problems.
@@ -1228,6 +1235,7 @@ namespace System.Windows.Forms
                         {
                             type = type.GetElementType();
                         }
+
                         return type;
                     }
 
@@ -1246,6 +1254,7 @@ namespace System.Windows.Forms
                     {
                         editableObject.BeginEdit();
                     }
+
                     if (!FieldInfo.IsReadOnly)
                     {
                         FieldInfo.SetValue(obj, value);

@@ -1670,6 +1670,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.ForeColorChanged += handler;
 
             // Set different.
@@ -3252,7 +3253,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { Color.Empty, SystemColors.ControlText };
             yield return new object[] { Color.Red, Color.Red };
-            yield return new object[] { Color.FromArgb(254, 1, 2, 3),Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
         }
 
         [WinFormsTheory]
@@ -3744,6 +3745,18 @@ namespace System.Windows.Forms.Tests
             control.OnMouseUp(eventArgs);
             Assert.Equal(0, callCount);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_Buttons_AccessibleRole_IsRadiButton()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+            ToolStripButton categoryButton = toolStripButtons[0];
+            ToolStripButton alphaButton = toolStripButtons[1];
+
+            Assert.Equal(AccessibleRole.RadioButton, categoryButton.AccessibleRole);
+            Assert.Equal(AccessibleRole.RadioButton, alphaButton.AccessibleRole);
         }
 
         private class SubToolStripRenderer : ToolStripRenderer

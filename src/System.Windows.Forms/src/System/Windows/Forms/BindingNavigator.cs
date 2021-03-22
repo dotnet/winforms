@@ -220,19 +220,20 @@ namespace System.Windows.Forms
             // Add items to strip
             //
 
-            Items.AddRange(new ToolStripItem[] {
-                                MoveFirstItem,
-                                MovePreviousItem,
-                                separator1,
-                                PositionItem,
-                                CountItem,
-                                separator2,
-                                MoveNextItem,
-                                MoveLastItem,
-                                separator3,
-                                AddNewItem,
-                                DeleteItem,
-                                });
+            Items.AddRange(new ToolStripItem[]
+            {
+                MoveFirstItem,
+                MovePreviousItem,
+                separator1,
+                PositionItem,
+                CountItem,
+                separator2,
+                MoveNextItem,
+                MoveLastItem,
+                separator3,
+                AddNewItem,
+                DeleteItem,
+            });
         }
 
         /// <summary>
@@ -269,6 +270,7 @@ namespace System.Windows.Forms
                 {
                     _moveFirstItem = null;
                 }
+
                 return _moveFirstItem;
             }
 
@@ -316,6 +318,7 @@ namespace System.Windows.Forms
                 {
                     _moveNextItem = null;
                 }
+
                 return _moveNextItem;
             }
 
@@ -339,6 +342,7 @@ namespace System.Windows.Forms
                 {
                     _moveLastItem = null;
                 }
+
                 return _moveLastItem;
             }
 
@@ -362,6 +366,7 @@ namespace System.Windows.Forms
                 {
                     _addNewItem = null;
                 }
+
                 return _addNewItem;
             }
 
@@ -372,6 +377,7 @@ namespace System.Windows.Forms
                     value.InternalEnabledChanged += new EventHandler(OnAddNewItemEnabledChanged);
                     _addNewItemUserEnabled = value.Enabled;
                 }
+
                 WireUpButton(ref _addNewItem, value, new EventHandler(OnAddNew));
             }
         }
@@ -390,6 +396,7 @@ namespace System.Windows.Forms
                 {
                     _deleteItem = null;
                 }
+
                 return _deleteItem;
             }
 
@@ -400,6 +407,7 @@ namespace System.Windows.Forms
                     value.InternalEnabledChanged += new EventHandler(OnDeleteItemEnabledChanged);
                     _deleteItemUserEnabled = value.Enabled;
                 }
+
                 WireUpButton(ref _deleteItem, value, new EventHandler(OnDelete));
             }
         }
@@ -418,6 +426,7 @@ namespace System.Windows.Forms
                 {
                     _positionItem = null;
                 }
+
                 return _positionItem;
             }
 
@@ -441,6 +450,7 @@ namespace System.Windows.Forms
                 {
                     _countItem = null;
                 }
+
                 return _countItem;
             }
 

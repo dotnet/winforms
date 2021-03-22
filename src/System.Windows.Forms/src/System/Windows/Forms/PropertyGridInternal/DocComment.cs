@@ -81,7 +81,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // do this to avoid getting parented to the Parking window.
             //
-            if (ownerGrid.IsHandleCreated && !IsHandleCreated)
+            if (ownerPropertyGrid.IsHandleCreated && !IsHandleCreated)
             {
                 CreateControl();
             }
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // compute optimal text height
             var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
             Graphics g = m_labelDesc.CreateGraphicsInternal();
-            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(ownerGrid, g, m_labelTitle.Text, Font, width);
+            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(ownerPropertyGrid, g, m_labelTitle.Text, Font, width);
             Size sz = Size.Ceiling(sizef);
             g.Dispose();
             var padding = isScalingRequirementMet ? LogicalToDeviceUnits(2) : 2;
@@ -125,6 +125,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Rectangle rectInvalidate = new Rectangle(rect.Width - 1, 0, newRect.Width - rect.Width + 1, rect.Height);
                 Invalidate(rectInvalidate);
             }
+
             if (DpiHelper.IsScalingRequirementMet)
             {
                 var lineHeightOld = lineHeight;
@@ -216,7 +217,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new DocCommentAccessibleObject(this, ownerGrid);
+            return new DocCommentAccessibleObject(this, ownerPropertyGrid);
         }
 
         /// <summary>
@@ -227,8 +228,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal void UpdateTextRenderingEngine()
         {
-            m_labelTitle.UseCompatibleTextRendering = ownerGrid.UseCompatibleTextRendering;
-            m_labelDesc.UseCompatibleTextRendering = ownerGrid.UseCompatibleTextRendering;
+            m_labelTitle.UseCompatibleTextRendering = ownerPropertyGrid.UseCompatibleTextRendering;
+            m_labelDesc.UseCompatibleTextRendering = ownerPropertyGrid.UseCompatibleTextRendering;
         }
 
         private void UpdateUIWithFont()

@@ -95,6 +95,7 @@ namespace System.Windows.Forms.Design
                     {
                         toolStripItemCustomMenuItemCollection = new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
                     }
+
                     foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
                     {
                         toolStripContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
@@ -106,6 +107,7 @@ namespace System.Windows.Forms.Design
                 {
                     toolStripItemCustomMenuItemCollection.RefreshItems();
                 }
+
                 toolStripContextMenu.Populated = false;
                 return toolStripContextMenu;
             }
@@ -129,6 +131,7 @@ namespace System.Windows.Forms.Design
                 {
                     return InheritanceAttribute.InheritedReadOnly;
                 }
+
                 return base.InheritanceAttribute;
             }
         }
@@ -160,6 +163,7 @@ namespace System.Windows.Forms.Design
                     ToolStrip parent = ToolStripItem.GetCurrentParent();
                     return parent ?? ToolStripItem.Owner;
                 }
+
                 return null;
             }
         }
@@ -217,8 +221,10 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     return GetMainToolStrip();
                 }
+
                 return null;
             }
         }
@@ -292,6 +298,7 @@ namespace System.Windows.Forms.Design
                         {
                             parentControls.Add(item.Owner);
                         }
+
                         startComp = item.Owner;
                     }
                 }
@@ -303,6 +310,7 @@ namespace System.Windows.Forms.Design
                     {
                         parentControls.Add(parentControl);
                     }
+
                     startComp = parentControl;
                 }
             }
@@ -382,6 +390,7 @@ namespace System.Windows.Forms.Design
                         {
                             textProp.SetValue(ToolStripItem, text);
                         }
+
                         if (enterKeyPressed && _selectionService != null)
                         {
                             SelectNextItem(_selectionService, enterKeyPressed, designer);
@@ -394,10 +403,12 @@ namespace System.Windows.Forms.Design
                             designerTransaction.Cancel();
                             designerTransaction = null;
                         }
+
                         if (selectionManager != null)
                         {
                             selectionManager.Refresh();
                         }
+
                         if (ClientUtils.IsCriticalException(e))
                         {
                             throw;
@@ -412,6 +423,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 //Reset the DummyItem flag
                 dummyItemAdded = false;
             }
@@ -503,10 +515,13 @@ namespace System.Windows.Forms.Design
                     {
                         item.Dispose();
                     }
+
                     toolStripItemCustomMenuItemCollection.Clear();
                 }
+
                 toolStripItemCustomMenuItemCollection = null;
             }
+
             base.Dispose(disposing);
         }
 
@@ -627,8 +642,10 @@ namespace System.Windows.Forms.Design
                 {
                     topmost = topmost.OwnerItem.Owner as ToolStripDropDown;
                 }
+
                 return topmost;
             }
+
             return null;
         }
 
@@ -706,6 +723,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             base.InitializeNewComponent(defaultValues);
             // ComboBoxes and TextBoxes shouldnt have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
             if (Component is ToolStripTextBox || Component is ToolStripComboBox)
@@ -738,6 +756,7 @@ namespace System.Windows.Forms.Design
             {
                 parent = ToolStripItem.Owner;
             }
+
             ToolStripMenuItemDesigner ownerItemDesigner = null;
 
             int dummyIndex = parent.Items.IndexOf(ToolStripItem);
@@ -878,6 +897,7 @@ namespace System.Windows.Forms.Design
                     ownerItemDesigner.RemoveItemBodyGlyph(newItem);
                     ownerItemDesigner.AddItemBodyGlyph(newItem);
                 }
+
                 // re start the ComponentAdding/Added events
                 ToolStripDesigner.s_autoAddNewItems = true;
                 //Invalidate the AdornerWindow to refresh selectionglyphs.
@@ -887,6 +907,7 @@ namespace System.Windows.Forms.Design
                     {
                         parent.PerformLayout();
                     }
+
                     BehaviorService windowService = (BehaviorService)newItem.Site.GetService(typeof(BehaviorService));
                     if (windowService != null)
                     {
@@ -900,6 +921,7 @@ namespace System.Windows.Forms.Design
                         selSvc.SetSelectedComponents(new object[] { newItem }, SelectionTypes.Replace);
                     }
                 }
+
                 return newItem;
             }
             catch
@@ -920,6 +942,7 @@ namespace System.Windows.Forms.Design
                     designerTransaction = null;
                 }
             }
+
             return newItem;
         }
 
@@ -964,6 +987,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             //determine if we are selected
             ToolStripItem currentSelection = sSvc.PrimarySelection as ToolStripItem;
             // Accessibility information
@@ -979,12 +1003,14 @@ namespace System.Windows.Forms.Design
                     {
                         focusIndex = owner.Items.IndexOf(currentSelection);
                     }
+
                     acc.AddState(AccessibleStates.Selected);
                     if (tool != null)
                     {
                         Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, tool = " + tool.ToString());
                         User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
                     }
+
                     if (currentSelection == ToolStripItem)
                     {
                         acc.AddState(AccessibleStates.Focused);
@@ -1011,6 +1037,7 @@ namespace System.Windows.Forms.Design
                             {
                                 parentItemDesigner.InitializeDropDown();
                             }
+
                             needRefresh = true;
                         }
                         else if (parentDropDown is ContextMenuStrip)
@@ -1021,6 +1048,7 @@ namespace System.Windows.Forms.Design
                             {
                                 parentDropDownDesigner.ShowMenu(currentSelection);
                             }
+
                             needRefresh = true;
                         }
 
@@ -1084,6 +1112,7 @@ namespace System.Windows.Forms.Design
             {
                 parent = ParentComponent as ToolStrip;
             }
+
             parent.Items.Remove(ToolStripItem);
             host.DestroyComponent(ToolStripItem);
         }
@@ -1253,6 +1282,7 @@ namespace System.Windows.Forms.Design
                     {
                         ToolStripItem.Height = _editorNode.EditorToolStrip.Height;
                     }
+
                     // Refresh the glyphs.
                     if (!dummyItemAdded)
                     {
@@ -1276,6 +1306,7 @@ namespace System.Windows.Forms.Design
                             boundsInAdornerWindow.X += (ToolStripItem.Width - _editorNode.EditorToolStrip.Width) / 2;
                             boundsInAdornerWindow.X++;
                         }
+
                         _editorNode.Bounds = boundsInAdornerWindow;
 
                         // Invalidate the union of the original bounds and the new bounds.
@@ -1303,6 +1334,7 @@ namespace System.Windows.Forms.Design
                             {
                                 ddItem.HideDropDown();
                             }
+
                             // And select the parent... since we cannot show the current selection.
                             _selectionService.SetSelectedComponents(new object[] { ImmediateParent });
                         }

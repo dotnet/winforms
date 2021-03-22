@@ -436,6 +436,7 @@ namespace System.Resources
                 {
                     readerTypeName = readerTypeName.Split(',')[0].Trim();
                 }
+
                 if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
                 {
                     writerTypeName = writerTypeName.Split(',')[0].Trim();
@@ -527,6 +528,7 @@ namespace System.Resources
                             {
                                 _resHeaderVersion = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.ResMimeTypeStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -537,6 +539,7 @@ namespace System.Resources
                             {
                                 _resHeaderMimeType = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.ReaderStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -547,6 +550,7 @@ namespace System.Resources
                             {
                                 _resHeaderReaderType = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.WriterStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -557,6 +561,7 @@ namespace System.Resources
                             {
                                 _resHeaderWriterType = reader.Value.Trim();
                             }
+
                             break;
                     }
                 }

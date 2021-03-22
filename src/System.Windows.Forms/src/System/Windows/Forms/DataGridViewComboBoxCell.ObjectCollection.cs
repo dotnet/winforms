@@ -36,6 +36,7 @@ namespace System.Windows.Forms
                     {
                         comparer = new ItemComparer(owner);
                     }
+
                     return comparer;
                 }
             }
@@ -62,6 +63,7 @@ namespace System.Windows.Forms
                     {
                         items = new ArrayList();
                     }
+
                     return items;
                 }
             }
@@ -202,6 +204,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
+
                     return InnerArray[index];
                 }
                 set
@@ -278,6 +281,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 return InnerArray.IndexOf(value);
             }
 
@@ -342,6 +346,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
+
                 InnerArray.RemoveAt(index);
                 owner.OnItemsCollectionChanged();
             }

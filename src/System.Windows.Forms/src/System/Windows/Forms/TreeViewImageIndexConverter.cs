@@ -135,6 +135,7 @@ namespace System.Windows.Forms
                         {
                             values[i] = i;
                         }
+
                         return new StandardValuesCollection(values);
                     }
                 }

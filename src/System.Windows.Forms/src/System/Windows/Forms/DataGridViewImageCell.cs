@@ -67,6 +67,7 @@ namespace System.Windows.Forms
                 {
                     return (string)description;
                 }
+
                 return string.Empty;
             }
 
@@ -96,6 +97,7 @@ namespace System.Windows.Forms
                 {
                     s_errorBitmap = DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
                 }
+
                 return s_errorBitmap;
             }
         }
@@ -108,6 +110,7 @@ namespace System.Windows.Forms
                 {
                     s_errorIcon = new Icon(typeof(DataGridView), "IconInError");
                 }
+
                 return s_errorIcon;
             }
         }
@@ -137,6 +140,7 @@ namespace System.Windows.Forms
                 {
                     return (DataGridViewImageCellLayout)imageLayout;
                 }
+
                 return DataGridViewImageCellLayout.Normal;
             }
             set
@@ -204,6 +208,7 @@ namespace System.Windows.Forms
                     {
                         _flags = (byte)(_flags & ~CellValueIsIcon);
                     }
+
                     if (DataGridView is not null &&
                         RowIndex != -1 &&
                         DataGridView.NewRowIndex == RowIndex &&
@@ -262,6 +267,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.ValueIsIconInternal = ValueIsIcon;
             dataGridViewCell.Description = Description;
@@ -402,12 +408,14 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (ValueIsIcon)
             {
                 if (!(formattedValue is Icon ico))
                 {
                     ico = ErrorIcon;
                 }
+
                 return ico;
             }
             else
@@ -416,6 +424,7 @@ namespace System.Windows.Forms
                 {
                     img = ErrorBitmap;
                 }
+
                 return img;
             }
         }
@@ -529,6 +538,7 @@ namespace System.Windows.Forms
                 {
                     preferredSize = new Size(1, 1);
                 }
+
                 if (freeDimension == DataGridViewFreeDimension.Height)
                 {
                     preferredSize.Width = 0;
@@ -548,6 +558,7 @@ namespace System.Windows.Forms
                     preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
+
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 preferredSize.Height += borderAndPaddingHeights;
@@ -557,6 +568,7 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
+
             return preferredSize;
         }
 
@@ -627,6 +639,7 @@ namespace System.Windows.Forms
                             bounds.Width,
                             decimal.ToInt32((decimal)imgHeight * bounds.Width / imgWidth));
                     }
+
                     break;
             }
 
@@ -693,6 +706,7 @@ namespace System.Windows.Forms
                         "this is the only alignment left");
                     break;
             }
+
             return imageBounds;
         }
 

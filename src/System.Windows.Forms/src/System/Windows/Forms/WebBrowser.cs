@@ -250,6 +250,7 @@ namespace System.Windows.Forms
                     catch (InvalidCastException)
                     {
                     }
+
                     if (iHTMLDocument2 != null)
                     {
                         IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
@@ -264,6 +265,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return null;
             }
         }
@@ -341,6 +343,7 @@ namespace System.Windows.Forms
                 {
                     value = string.Empty;
                 }
+
                 //string length is a good initial guess for capacity --
                 //if it needs more room, it'll take it.
                 MemoryStream ms = new MemoryStream(value.Length);
@@ -382,6 +385,7 @@ namespace System.Windows.Forms
                         documentTitle = string.Empty;
                     }
                 }
+
                 return documentTitle;
             }
         }
@@ -411,6 +415,7 @@ namespace System.Windows.Forms
                         docType = string.Empty;
                     }
                 }
+
                 return docType;
             }
         }
@@ -429,6 +434,7 @@ namespace System.Windows.Forms
                 {
                     encryptionLevel = WebBrowserEncryptionLevel.Unknown;
                 }
+
                 return encryptionLevel;
             }
         }
@@ -574,6 +580,7 @@ namespace System.Windows.Forms
                 {
                     statusText = string.Empty;
                 }
+
                 return statusText;
             }
         }
@@ -599,6 +606,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 try
                 {
                     return new Uri(urlString);
@@ -614,6 +622,7 @@ namespace System.Windows.Forms
                 {
                     value = null;
                 }
+
                 PerformNavigateHelper(ReadyNavigateToUrl(value), false, null, null, null);
             }
         }
@@ -655,6 +664,7 @@ namespace System.Windows.Forms
             {
                 retVal = false;
             }
+
             return retVal;
         }
 
@@ -675,6 +685,7 @@ namespace System.Windows.Forms
             {
                 retVal = false;
             }
+
             return retVal;
         }
 
@@ -1077,9 +1088,11 @@ namespace System.Windows.Forms
                 {
                     htmlShimManager.Dispose();
                 }
+
                 DetachSink();
                 ActiveXSite.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -1257,6 +1270,7 @@ namespace System.Windows.Forms
                 {
                     htmlShimManager = new HtmlShimManager();
                 }
+
                 return htmlShimManager;
             }
         }
@@ -1403,6 +1417,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);
@@ -1426,11 +1441,13 @@ namespace System.Windows.Forms
                         throw new ObjectDisposedException(GetType().Name);
                     }
                 }
+
                 // We still don't have this.axIWebBrowser2. Throw an exception.
                 if (axIWebBrowser2 is null)
                 {
                     throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
+
                 return axIWebBrowser2;
             }
         }

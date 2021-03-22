@@ -166,6 +166,7 @@ namespace System.Windows.Forms
                     object value = InnerArray.GetEntryObject(index, 0);
                     return _owner.CheckedItems.IndexOfIdentifier(value);
                 }
+
                 return -1;
             }
 

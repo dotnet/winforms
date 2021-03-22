@@ -962,6 +962,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(handle, node.Handle);
             Assert.False(control.IsHandleCreated);
         }
+
         public static IEnumerable<object[]> TreeNode_ImageIndex_TestData()
         {
             // { image index, expected index without image, expected index with image }

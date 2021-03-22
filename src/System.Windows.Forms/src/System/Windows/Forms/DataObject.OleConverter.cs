@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -200,6 +200,7 @@ namespace System.Windows.Forms
                         Ole32.ReleaseStgMedium(ref medium);
                     }
                 }
+
                 return data;
             }
 
@@ -263,6 +264,7 @@ namespace System.Windows.Forms
                                 clipboardImage = (Image)clipboardImage.Clone();
                                 firstImage.Dispose();
                             }
+
                             data = clipboardImage;
                         }
                     }
@@ -290,6 +292,7 @@ namespace System.Windows.Forms
                     {
                         data = GetDataFromOleHGLOBAL(format, out done);
                     }
+
                     if (data is null && !done)
                     {
                         data = GetDataFromOleIStream(format);
@@ -299,6 +302,7 @@ namespace System.Windows.Forms
                 {
                     Debug.Fail(e.ToString());
                 }
+
                 return data;
             }
 
@@ -312,6 +316,7 @@ namespace System.Windows.Forms
                 {
                     throw new ExternalException(SR.ExternalException, (int)HRESULT.E_OUTOFMEMORY);
                 }
+
                 try
                 {
                     int size = Kernel32.GlobalSize(handle);
@@ -378,6 +383,7 @@ namespace System.Windows.Forms
                 {
                     formatter.Binder = new BitmapBinder();
                 }
+
                 formatter.AssemblyFormat = FormatterAssemblyStyle.Simple;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 return formatter.Deserialize(stream);
@@ -587,6 +593,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return baseVar;
             }
 

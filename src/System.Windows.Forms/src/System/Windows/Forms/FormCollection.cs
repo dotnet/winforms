@@ -37,6 +37,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return null;
             }
         }
@@ -54,6 +55,7 @@ namespace System.Windows.Forms
                 {
                     f = (Form)InnerList[index];
                 }
+
                 return f;
             }
         }
@@ -79,6 +81,7 @@ namespace System.Windows.Forms
             {
                 inCollection = InnerList.Contains(form);
             }
+
             return inCollection;
         }
 

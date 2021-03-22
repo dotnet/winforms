@@ -683,7 +683,7 @@ namespace System.Windows.Forms.Tests
                 new HdcDeviceContextAdapter(emf),
                 "Sparkling Cider",
                 SystemFonts.DefaultFont,
-                (Point) default,
+                (Point)default,
                 Color.Red,
                 flags);
 

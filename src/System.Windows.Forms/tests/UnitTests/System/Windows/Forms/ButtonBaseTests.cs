@@ -100,6 +100,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Throws<NullReferenceException>(() => control.PreferredSize);
             }
+
             Assert.False(control.RecreatingHandle);
             Assert.Null(control.Region);
             Assert.True(control.ResizeRedraw);
@@ -1104,7 +1105,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("FlatStyle", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1274,7 +1276,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("FlatStyle", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1515,7 +1518,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Image", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1689,7 +1693,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Image", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1848,7 +1853,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ImageAlign", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1959,7 +1965,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ImageAlign", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3036,7 +3043,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3138,7 +3146,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3275,7 +3284,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("TextAlign", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3398,7 +3408,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("TextAlign", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3506,7 +3517,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("TextImageRelation", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3622,7 +3634,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("TextImageRelation", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3714,7 +3727,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("UseCompatibleTextRendering", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3817,7 +3831,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("UseCompatibleTextRendering", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -3922,7 +3937,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -4045,7 +4061,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -4505,7 +4522,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(control.ImageList);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4556,7 +4574,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(imageList, control.ImageList);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4610,7 +4629,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(control.ImageList);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4657,7 +4677,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(control.ImageList);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4708,7 +4729,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(imageList, control.ImageList);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4762,7 +4784,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Null(control.ImageList);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -7133,7 +7156,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -7242,7 +7266,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Text", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try

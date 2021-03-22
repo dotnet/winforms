@@ -69,6 +69,7 @@ namespace System.Windows.Forms
                     owner.AccessibleName = value;
                 }
             }
+
             public override AccessibleRole Role
             {
                 get
@@ -78,6 +79,7 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
+
                     return AccessibleRole.MenuPopup;
                 }
             }

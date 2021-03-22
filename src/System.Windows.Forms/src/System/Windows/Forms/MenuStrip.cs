@@ -86,6 +86,7 @@ namespace System.Windows.Forms
                            DpiHelper.LogicalToDeviceUnits(new Padding(3, 2, 0, 2), DeviceDpi) :
                            new Padding(3, 2, 0, 2);
                 }
+
                 return DpiHelper.IsPerMonitorV2Awareness ?
                        DpiHelper.LogicalToDeviceUnits(new Padding(6, 2, 0, 2), DeviceDpi) :
                        new Padding(6, 2, 0, 2);
@@ -166,6 +167,7 @@ namespace System.Windows.Forms
             {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);
             }
+
             return nextItem;
         }
 
@@ -214,6 +216,7 @@ namespace System.Windows.Forms
 
                 return true;
             }
+
             return false;
         }
 
@@ -239,6 +242,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 

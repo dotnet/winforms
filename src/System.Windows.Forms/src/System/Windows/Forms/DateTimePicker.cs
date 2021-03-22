@@ -10,8 +10,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
-using SourceGenerated;
 using Microsoft.Win32;
+using SourceGenerated;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -209,6 +209,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
+
                 if (!value.Equals(calendarForeColor))
                 {
                     calendarForeColor = value;
@@ -232,6 +233,7 @@ namespace System.Windows.Forms
                 {
                     return Font;
                 }
+
                 return calendarFont;
             }
 
@@ -284,6 +286,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
+
                 if (!value.Equals(calendarTitleBackColor))
                 {
                     calendarTitleBackColor = value;
@@ -311,6 +314,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
+
                 if (!value.Equals(calendarTitleForeColor))
                 {
                     calendarTitleForeColor = value;
@@ -338,6 +342,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
+
                 if (!value.Equals(calendarTrailingText))
                 {
                     calendarTrailingText = value;
@@ -365,6 +370,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
                                                               "value"));
                 }
+
                 if (!value.Equals(calendarMonthBackground))
                 {
                     calendarMonthBackground = value;
@@ -413,6 +419,7 @@ namespace System.Windows.Forms
                             User32.SendMessageW(this, (User32.WM)DTM.SETSYSTEMTIME, (IntPtr)GDT.NONE);
                         }
                     }
+
                     // this.validTime is used when the DateTimePicker receives date time change notification
                     // from the Win32 control. this.validTime will be used to know when we transition from valid time to unvalid time
                     // also, validTime will be used when ShowCheckBox == false
@@ -644,6 +651,7 @@ namespace System.Windows.Forms
             {
                 return minSupportedDate;
             }
+
             return minDate;
         }
 
@@ -658,6 +666,7 @@ namespace System.Windows.Forms
             {
                 return maxSupportedDate;
             }
+
             return maxDate;
         }
 
@@ -681,6 +690,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDateTime(value), nameof(MinDate)));
                     }
+
                     if (value > MaximumDateTime)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
@@ -711,6 +721,7 @@ namespace System.Windows.Forms
                 {
                     return MaxDateTime;
                 }
+
                 return maxSupportedDateTime;
             }
         }
@@ -735,6 +746,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDateTime(value), nameof(MaxDate)));
                     }
+
                     if (value < MinimumDateTime)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
@@ -769,6 +781,7 @@ namespace System.Windows.Forms
                 {
                     return new DateTime(1753, 1, 1);
                 }
+
                 return minSupportedDateTime;
             }
         }
@@ -1135,6 +1148,7 @@ namespace System.Windows.Forms
                 case Keys.End:
                     return true;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1547,6 +1561,7 @@ namespace System.Windows.Forms
             {
                 validTime = false;
             }
+
             if (value != temp || oldvalid != validTime)
             {
                 OnValueChanged(EventArgs.Empty);
@@ -1570,6 +1585,7 @@ namespace System.Windows.Forms
                     User32.SetWindowLong(new HandleRef(this, handle), User32.GWL.EXSTYLE, new HandleRef(this, (IntPtr)style));
                 }
             }
+
             OnDropDown(EventArgs.Empty);
         }
 
@@ -1618,6 +1634,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case User32.WM.REFLECT | User32.WM.NOTIFY:
                     WmReflectCommand(ref m);

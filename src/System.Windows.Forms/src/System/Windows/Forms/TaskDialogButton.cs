@@ -429,6 +429,7 @@ namespace System.Windows.Forms
             {
                 Enabled = _enabled;
             }
+
             if (_showShieldIcon)
             {
                 ShowShieldIcon = _showShieldIcon;

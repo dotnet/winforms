@@ -10,8 +10,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     public partial class ControlTests : IClassFixture<ThreadExceptionFixture>
     {

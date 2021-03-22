@@ -147,6 +147,7 @@ namespace System.Windows.Forms
                 {
                     rtlLayoutGrip = new RightToLeftLayoutGrip();
                 }
+
                 return rtlLayoutGrip;
             }
         }
@@ -224,6 +225,7 @@ namespace System.Windows.Forms
                         return new Rectangle(statusStripSize.Width - gripWidth, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
                     }
                 }
+
                 return Rectangle.Empty;
             }
         }
@@ -262,6 +264,7 @@ namespace System.Windows.Forms
                     rtlLayoutGrip = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -287,6 +290,7 @@ namespace System.Windows.Forms
                     {
                         controlCollection.RemoveInternal(rtlLayoutGrip);
                     }
+
                     rtlLayoutGrip.Dispose();
                     rtlLayoutGrip = null;
                 }
@@ -301,10 +305,12 @@ namespace System.Windows.Forms
                 {
                     proposedSize.Width = int.MaxValue;
                 }
+
                 if (proposedSize.Height == 1)
                 {
                     proposedSize.Height = int.MaxValue;
                 }
+
                 if (Orientation == Orientation.Horizontal)
                 {
                     return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
@@ -314,6 +320,7 @@ namespace System.Windows.Forms
                     return GetPreferredSizeVertical(this, proposedSize) + Padding.Size;
                 }
             }
+
             return base.GetPreferredSizeCore(proposedSize);
         }
 
@@ -342,6 +349,7 @@ namespace System.Windows.Forms
             {
                 OnSpringTableLayoutCore();
             }
+
             base.OnLayout(levent);
 
             if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollecton != DisplayedItems.Contains(item))))
@@ -426,6 +434,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.SetDisplayedItems();
         }
 
@@ -433,6 +442,7 @@ namespace System.Windows.Forms
         {
             RenderMode = ToolStripRenderMode.System;
         }
+
         internal override bool ShouldSerializeRenderMode()
         {
             // We should NEVER serialize custom.
@@ -460,6 +470,7 @@ namespace System.Windows.Forms
                     settings.ColumnStyles.Clear();
                     settings.RowStyles.Clear();
                 }
+
                 lastOrientation = Orientation;
 
                 if (Orientation == Orientation.Horizontal)
@@ -495,6 +506,7 @@ namespace System.Windows.Forms
                         TableLayoutSettings.RowStyles.Clear();
                         TableLayoutSettings.RowStyles.Add(new RowStyle());
                     }
+
                     TableLayoutSettings.RowCount = 1;
 
                     TableLayoutSettings.RowStyles[0].SizeType = SizeType.Absolute;
@@ -535,6 +547,7 @@ namespace System.Windows.Forms
                         rowStyle.Height = 100; // this width is ignored in AutoSize.
                         rowStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
                     }
+
                     TableLayoutSettings.ColumnCount = 1;
 
                     if (TableLayoutSettings.ColumnStyles.Count > 1 || TableLayoutSettings.ColumnStyles.Count == 0)
@@ -593,6 +606,7 @@ namespace System.Windows.Forms
                         {
                             gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
+
                         User32.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, ref gripLocation, 1);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
@@ -609,6 +623,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.WndProc(ref m);
         }
 
@@ -620,6 +635,7 @@ namespace System.Windows.Forms
                 SetStyle(ControlStyles.SupportsTransparentBackColor, true);
                 BackColor = Color.Transparent;
             }
+
             protected override CreateParams CreateParams
             {
                 get
@@ -629,6 +645,7 @@ namespace System.Windows.Forms
                     return cp;
                 }
             }
+
             protected override void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.WM.NCHITTEST)
@@ -642,6 +659,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 base.WndProc(ref m);
             }
         }

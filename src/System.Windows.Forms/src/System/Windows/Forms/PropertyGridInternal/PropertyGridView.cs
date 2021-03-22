@@ -184,6 +184,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             get => base.BackColor;
             set => base.BackColor = value;
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanCopy
@@ -269,6 +270,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     CommonEditorSetup(btnDropDown);
                     btnDropDown.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                 }
+
                 return btnDropDown;
             }
         }
@@ -299,6 +301,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     btnDialog.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                     CommonEditorSetup(btnDialog);
                 }
+
                 return btnDialog;
             }
         }
@@ -319,6 +322,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     b = scaledBitmap;
                 }
             }
+
             return b;
         }
 
@@ -354,6 +358,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     edit.TabIndex = 1;
                     CommonEditorSetup(edit);
                 }
+
                 return edit;
             }
         }
@@ -395,6 +400,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     listBox.Visible = true;
                     listBox.ItemHeight = RowHeight;
                 }
+
                 return listBox;
             }
         }
@@ -479,6 +485,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     colorRGB /= 2;
                 }
+
                 return Color.FromArgb(colorRGB);
             }
             set
@@ -500,6 +507,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     errorDlg = new GridErrorDlg(OwnerGrid);
                 }
+
                 return errorDlg;
             }
         }
@@ -520,10 +528,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     UpdateUIBasedOnFont(true);
                 }
+
                 if (labelWidth == -1)
                 {
                     SetConstants();
                 }
+
                 return labelWidth;
             }
         }
@@ -554,6 +564,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return false;
                 }
+
                 return true;
             }
         }
@@ -568,6 +579,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     cachedRowHeight = (int)Font.Height + 2;
                 }
+
                 return cachedRowHeight;
             }
         }
@@ -605,6 +617,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     scrollBar.Scroll += new ScrollEventHandler(OnScroll);
                     Controls.Add(scrollBar);
                 }
+
                 return scrollBar;
             }
         }
@@ -725,6 +738,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         Font = Font
                     };
                 }
+
                 return toolTip;
             }
         }
@@ -927,6 +941,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return;
             }
+
             try
             {
                 SetFlag(FlagDropDownClosing, true);
@@ -1028,6 +1043,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     gotfocus = Focus();
                 }
+
                 Edit.Visible = false;
 
                 Edit.SelectionStart = 0;
@@ -1037,12 +1053,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     gotfocus = Focus();
                 }
+
                 DialogButton.Visible = false;
 
                 if (DropDownButton.Focused && !gotfocus)
                 {
                     gotfocus = Focus();
                 }
+
                 DropDownButton.Visible = false;
                 currentEditor = null;
             }
@@ -1086,6 +1104,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         ctl.SetBounds(rectTarget.X, rectTarget.Y,
                                       rectTarget.Width, rectTarget.Height);
                     }
+
                     ctl.Visible = true;
                 }
             }
@@ -1118,6 +1137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     cProps += CountPropsFromOutline(((GridEntry)rgipes[i]).Children);
                 }
             }
+
             return cProps;
         }
 
@@ -1157,6 +1177,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail(e.ToString());
                 bitmap = new Bitmap(scaledIconWidth, scaledIconHeight);
             }
+
             return bitmap;
         }
 
@@ -1472,6 +1493,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Edit.Focus();
                 SelectEdit(false);
             }
+
             return;
         }
 
@@ -1556,6 +1578,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 _fontBold = new Font(Font, FontStyle.Bold);
             }
+
             return _fontBold;
         }
 
@@ -1672,6 +1695,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return -1;
         }
 
@@ -1681,10 +1705,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return this;
             }
+
             if (ServiceProvider is not null)
             {
                 return serviceProvider.GetService(classService);
             }
+
             return null;
         }
 
@@ -1832,6 +1858,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -1855,10 +1882,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             SelectEdit(false);
                         }
+
                         return true;
                     }
                 }
             }
+
             return false;
         }
 
@@ -1947,6 +1976,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         SetExpand(targetEntry, true);
                         rgipes = GetAllGridEntries();
                     }
+
                     count = targetEntry.VisibleChildCount;
                 }
 
@@ -2033,6 +2063,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Debug.Fail(ex.ToString());
             }
+
             allGridEntries = new GridEntryCollection(null, rgipes);
             AddGridEntryEvents(allGridEntries, 0, -1);
             return allGridEntries;
@@ -2066,6 +2097,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             stringMatch = i;
                         }
+
                         // now try .equals if they are both non-null
                         if (value is not null && curValue is not null && curValue.Equals(value))
                         {
@@ -2093,6 +2125,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Debug.Fail(e.ToString());
             }
+
             return -1;
         }
 
@@ -2115,6 +2148,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return helpService;
         }
 
@@ -2124,6 +2158,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return 0;
             }
+
             int pos = ScrollBar.Value;
             return pos;
         }
@@ -2150,8 +2185,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     gridEntry = gridEntry.ParentGridEntry;
                     depth = gridEntry.PropertyDepth;
                 }
+
                 return new GridEntryCollection(null, entries);
             }
+
             return new GridEntryCollection(null, new GridEntry[] { gridEntry });
         }
 
@@ -2170,6 +2207,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return rgipesAll.GetEntry(offset);
                 }
             }
+
             return null;
         }
 
@@ -2225,11 +2263,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     size.Height = sizeWindow.Height;
                 }
             }
+
             if (!GetScrollbarHidden())
             {
                 Size sizeScroll = ScrollBar.Size;
                 size.Width -= sizeScroll.Width;
             }
+
             size.Width -= 2;
             size.Height -= 2;
             return size;
@@ -2310,6 +2350,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return true;
             }
+
             return !ScrollBar.Visible;
         }
 
@@ -2417,8 +2458,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return false;
                     }
+
                     break;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -2437,8 +2480,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return true;
                 }
+
                 cParent = cParent.ParentInternal;
             }
+
             return false;
         }
 
@@ -2460,6 +2505,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView: move not needed, returning");
                 return false;
             }
+
             return true;
         }
 
@@ -2474,8 +2520,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return true;
                 }
+
                 parent2 = parent2.ParentInternal;
             }
+
             return false;
         }
 
@@ -2526,6 +2574,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return;
             }
+
             SetCommitError(ERROR_NONE);
 
             try
@@ -2620,6 +2669,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 toolTip.Dispose();
                 toolTip = null;
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -2633,6 +2683,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Edit.Focus();
                 SelectEdit(false);
             }
+
             SetFlag(FlagDropDownCommit, true);
         }
 
@@ -2746,6 +2797,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 CommonEditorHide();
                 InvalidateRow(selectedRow);
             }
+
             base.OnLostFocus(e);
 
             // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
@@ -2807,12 +2859,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         Edit.HookMouseDown = true;
                     }
+
                     break;
                 default:
                     if (NeedsCommit)
                     {
                         SetCommitError(ERROR_NONE, true);
                     }
+
                     break;
             }
 
@@ -2851,6 +2905,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         equal = 0 == string.Compare((string)value, rgvalue.ToString(), true, CultureInfo.CurrentCulture);
                     }
+
                     if (equal)
                     {
                         object valueNew = null;
@@ -2902,12 +2957,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
             }
+
             // Handle non-expand/collapse case of left & right as up & down
             else if ((ke.KeyCode == Keys.Left || ke.KeyCode == Keys.Right) &&
                      (ke.Modifiers & ~Keys.Shift) != 0)
             {
                 return;
             }
+
             OnKeyDown(sender, ke);
         }
 
@@ -2949,6 +3006,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         found = true;
                     }
                 }
+
                 if (found)
                 {
                     return;
@@ -2966,6 +3024,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Edit.Focus();
                 return;
             }
+
             // change our focus state.
             InvokeLostFocus(this, EventArgs.Empty);
         }
@@ -3007,6 +3066,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     User32.SendMessageW(Edit, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(me.X, me.Y));
                     Edit.SelectAll();
                 }
+
                 rowSelectPos = Point.Empty;
 
                 rowSelectTime = 0;
@@ -3020,6 +3080,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return false;
             }
+
             if (sender == this || sender == OwnerGrid)
             {
                 F4Selection(true);
@@ -3097,6 +3158,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 CloseDropDown();
                 Focus();
             }
+
             return false;
         }
 
@@ -3170,6 +3232,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             MoveSplitterTo(InternalLabelWidth - 3);
                             return;
                         }
+
                         if (gridEntry.InternalExpanded)
                         {
                             SetExpand(gridEntry, false);
@@ -3179,6 +3242,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             // Handle non-expand/collapse case of left & right as up & down
                             SelectGridEntry(GetGridEntryFromRow(selectedRow - 1), true);
                         }
+
                         return;
                     case Keys.Right:
                         if (fControl)
@@ -3187,6 +3251,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             MoveSplitterTo(InternalLabelWidth + 3);
                             return;
                         }
+
                         if (gridEntry.Expandable)
                         {
                             if (gridEntry.InternalExpanded)
@@ -3204,6 +3269,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             // Handle non-expand/collapse case of left & right as up & down
                             SelectGridEntry(GetGridEntryFromRow(selectedRow + 1), true);
                         }
+
                         return;
                     case Keys.Return:
                         if (gridEntry.Expandable)
@@ -3244,6 +3310,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             goto case Keys.Multiply;
                         }
+
                         break;
                     case Keys.Multiply:
                         SetFlag(FlagIsSpecialKey, true);
@@ -3264,6 +3331,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return;
                         }
+
                         if (selectedRow != -1)
                         { // actual paging.
                             int start = GetScrollOffset();
@@ -3295,6 +3363,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             fallingThorugh = true;
                             goto case Keys.V;
                         }
+
                         goto case Keys.C;
                     case Keys.C:
                         // copy text in current property
@@ -3303,6 +3372,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             DoCopyCommand();
                             return;
                         }
+
                         break;
                     case Keys.Delete:
                         // cut text in current property
@@ -3311,6 +3381,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             fallingThorugh = true;
                             goto case Keys.X;
                         }
+
                         break;
                     case Keys.X:
                         // cut text in current property
@@ -3320,6 +3391,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             CommitText("");
                             return;
                         }
+
                         break;
                     case Keys.V:
                         // paste the text
@@ -3327,6 +3399,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             DoPasteCommand();
                         }
+
                         break;
                     case Keys.A:
                         if (fControl && !fAlt && !fShift && Edit.Visible)
@@ -3334,6 +3407,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             Edit.Focus();
                             Edit.SelectAll();
                         }
+
                         break;
                 }
             }
@@ -3457,6 +3531,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SelectGridEntry(gridEntry, false);
                 }
+
                 lastMouseDown = InvalidPosition;
                 gridEntry.Focus = true;
                 SetFlag(FlagNoDefault, false);
@@ -3531,6 +3606,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             tip = gridItem.GetPropertyTextValue();
                         }
+
                         TipRow = rowMoveCur;
                         TipColumn = pt.X;
                     }
@@ -3561,6 +3637,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Cursor = Cursors.Default; // Cursor = null;;
             }
+
             base.OnMouseMove(me);
         }
 
@@ -3579,6 +3656,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return;
                 }
+
                 e.Handled = true;
             }
 
@@ -3764,6 +3842,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     startName = "(null)";
                 }
+
                 string endName = debugIPEEnd?.PropertyLabel;
                 if (endName is null)
                 {
@@ -3869,6 +3948,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return;
             }
+
             int row = GetRowFromGridEntry(gridEntry);
             DoubleClickRow(row, gridEntry.Expandable, ROWLABEL);
         }
@@ -3882,6 +3962,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return;
             }
+
             int row = GetRowFromGridEntry(gridEntry);
             DoubleClickRow(row, gridEntry.Expandable, ROWVALUE);
         }
@@ -3902,6 +3983,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 oldCursor = null;
             }
+
             Cursor = Cursors.WaitCursor;
 
             try
@@ -3982,6 +4064,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SelectGridEntry(selectedGridEntry, true);
                 }
+
                 if (toolTip is not null)
                 {
                     ToolTip.Font = Font;
@@ -4055,6 +4138,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 totalProps = CountPropsFromOutline(topLevelGridEntries);
                 SetConstants();
             }
+
             Invalidate();
         }
 
@@ -4251,6 +4335,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         SetFlag(FlagInPropertySet, false);
                         Edit.DisableMouseHook = false;
                     }
+
                     Refresh();
 
                     // We can't do this because
@@ -4306,6 +4391,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return OnF4(this);
                         }
+
                         break;
 
                     case Keys.Tab:
@@ -4359,6 +4445,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                         DialogButton.Focus();
                                         return true;
                                     }
+
                                     // fall through
                                 }
                                 else
@@ -4374,9 +4461,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                                     Edit.Focus();
                                     return true;
                                 }
+
                                 // fall through
                             }
                         }
+
                         break;
                     case Keys.Up:
                     case Keys.Down:
@@ -4394,9 +4483,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                             SetExpand(selectedGridEntry, !selectedGridEntry.InternalExpanded);
                             return true;
                         }
+
                         break;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -4578,6 +4669,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Invalidate();
                 return;
             }
+
             // in case we added or removed properties
 
             OwnerGrid.ClearValueCaches();
@@ -4761,6 +4853,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         SetScrollOffset(newOffset);
                     }
+
                     Invalidate();
                     SelectGridEntry(gridEntry, false);
                 }
@@ -4884,6 +4977,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Edit.SelectionStart = 0;
                 Edit.SelectionLength = 0;
             }
+
             Edit.AccessibleName = gridEntry.Label;
 
             switch (inheritRenderMode)
@@ -4897,6 +4991,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         Edit.Font = Font;
                     }
+
                     break;
                 case RENDERMODE_LEFTDOT:
                     if (gridEntry.ShouldSerializePropertyValue())
@@ -4904,6 +4999,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         rect.X += (LEFTDOT_SIZE * 2);
                         rect.Width -= (LEFTDOT_SIZE * 2);
                     }
+
                     // nothing
                     break;
                 case RENDERMODE_TRIANGLE:
@@ -5041,6 +5137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         err = "ERROR_MSGBOX_UP";
                         break;
                 }
+
                 Debug.WriteLine("PropertyGridView:SetCommitError(error=" + err + ", capture=" + capture.ToString() + ")");
             }
 #endif
@@ -5093,6 +5190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
                 }
+
                 row = GetRowFromGridEntry(gridEntry);
 
                 SetConstants();
@@ -5174,6 +5272,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return true;
             }
+
             bool success = false;
             try
             {
@@ -5191,6 +5290,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetCommitError(ERROR_NONE);
                 }
             }
+
             return success;
         }
 
@@ -5279,6 +5379,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Edit.SelectionStart = 0;
                 Edit.SelectionLength = 0;
             }
+
             originalTextValue = text;
 
             // Update our reset command.
@@ -5394,6 +5495,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     ScrollBar.LargeChange = visibleRows - 1;
                 }
+
                 ScrollBar.Maximum = Math.Max(0, totalProps - 1);
                 if (fHidden != (totalProps < visibleRows))
                 {
@@ -5411,9 +5513,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                             labelRatio = ((double)GetOurSize().Width / (double)(labelWidth - ptOurLocation.X));
                         }
                     }
+
                     Invalidate();
                 }
             }
+
             return sbChange;
         }
 
@@ -5434,6 +5538,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         topControl = topControl.ParentInternal;
                     }
+
                     if (topControl.Size.Equals(dialog.Size))
                     {
                         dialog.StartPosition = FormStartPosition.Manual;
@@ -5520,6 +5625,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     break;
                 }
+
                 exMessage = ex.Message;
             }
 
@@ -5544,6 +5650,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 SelectGridEntry(selectedGridEntry, true);
             }
+
             SetCommitError(ERROR_THROWN, hooked);
 
             if (revert)
@@ -5602,6 +5709,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     break;
                 }
+
                 exMessage = ex.Message;
             }
 
@@ -5626,6 +5734,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 SelectGridEntry(selectedGridEntry, true);
             }
+
             SetCommitError(ERROR_THROWN, hooked);
 
             if (revert)
@@ -5744,6 +5853,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
                             }
                         }
+
                         if (isScalingRequirementMet)
                         {
                             btnDropDown.Image = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
@@ -5777,6 +5887,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Focus();
             }
+
             return commit;
         }
 
@@ -5818,6 +5929,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // if the Edit has focus, and we have a button, we want the tab as well
                     return true;
                 }
+
                 return OwnerGrid.WantsTab(forward);
             }
             else
@@ -5826,6 +5938,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return true;
                 }
+
                 return OwnerGrid.WantsTab(forward);
             }
         }
@@ -5894,6 +6007,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return false;
         }
 
@@ -5917,6 +6031,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         Edit.Focus();
                         return;
                     }
+
                     break;
 
                 case (int)User32.WM.IME_STARTCOMPOSITION:
@@ -5947,6 +6062,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             }
                         }
                     }
+
                     m.Result = (IntPtr)(flags);
                     return;
 
@@ -5957,6 +6073,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return;
                     }
+
                     lastMouseMove = unchecked((int)(long)m.LParam);
                     break;
 
@@ -6026,6 +6143,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ResetOutline(ent);
                 }
             }
+
             return;
         }
     }

@@ -15,7 +15,7 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class PropertyDescriptorGridEntry : GridEntry
+    internal partial  class PropertyDescriptorGridEntry : GridEntry
     {
         internal PropertyDescriptor _propertyInfo;
 
@@ -168,9 +168,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 //}
                             }
                         }
+
                         _helpKeyword = typeName + "." + _propertyInfo.Name;
                     }
                 }
+
                 return _helpKeyword;
             }
         }
@@ -232,6 +234,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _parensAroundName = ParensAroundNameNo;
                     }
                 }
+
                 return (_parensAroundName == ParensAroundNameYes);
             }
         }
@@ -245,6 +248,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     category = base.PropertyCategory;
                 }
+
                 return category;
             }
         }
@@ -277,6 +281,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     label = "(" + label + ")";
                 }
+
                 return label;
             }
         }
@@ -292,6 +297,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return _propertyInfo.Name;
                 }
+
                 return null;
             }
         }
@@ -331,6 +337,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // clear the flags
                         SetFlagsAndExceptionInfo(0, new ExceptionConverter(), new ExceptionEditor());
                     }
+
                     return e;
                 }
             }
@@ -349,6 +356,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _pvSvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
                     _pvSvcChecked = true;
                 }
+
                 return _pvSvc;
             }
         }
@@ -382,6 +390,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _forceRenderReadOnly = true;
                     }
                 }
+
                 _readOnlyVerified = true;
 
                 if (base.ShouldRenderReadOnly)
@@ -391,6 +400,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return true;
                     }
                 }
+
                 return false;
             }
         }
@@ -411,6 +421,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     converter = _propertyInfo.Converter;
                 }
+
                 return base.TypeConverter;
             }
         }
@@ -464,6 +475,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             _toolTipText = null;
             return base.GetLabelToolTipLocation(mouseX, mouseY);
         }
@@ -479,6 +491,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 target = ((ICustomTypeDescriptor)target).GetPropertyOwner(_propertyInfo);
             }
+
             try
             {
                 return _propertyInfo.GetValue(target);
@@ -575,6 +588,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             _pvUIItems[i].Reset();
                         }
                     }
+
                     _pvUIItems = null;
                     return false;
                 case NOTIFY_CAN_RESET:
@@ -591,8 +605,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             _exceptionConverter = new ExceptionConverter();
                             _exceptionEditor = new ExceptionEditor();
                         }
+
                         return false;
                     }
+
                 case NOTIFY_SHOULD_PERSIST:
                     try
                     {
@@ -607,6 +623,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             _exceptionConverter = new ExceptionConverter();
                             _exceptionEditor = new ExceptionEditor();
                         }
+
                         return false;
                     }
 
@@ -616,6 +633,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                     }
+
                     if (_eventBindings is not null)
                     {
                         EventDescriptor descriptor = _eventBindings.GetEvent(_propertyInfo);
@@ -624,8 +642,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return ViewEvent(obj, null, null, true);
                         }
                     }
+
                     break;
             }
+
             return false;
         }
 
@@ -650,6 +670,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return base.OnMouseClick(x, y, count, button);
         }
 
@@ -680,6 +701,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         s_scaledImageSizeX = DpiHelper.LogicalToDeviceUnitsX(ImageSize);
                         s_scaledImageSizeY = DpiHelper.LogicalToDeviceUnitsY(ImageSize);
                     }
+
                     s_isScalingInitialized = true;
                 }
 
@@ -688,6 +710,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _uiItemRects[i] = new Rectangle(rect.Right - ((s_scaledImageSizeX + 1) * (i + 1)), (rect.Height - s_scaledImageSizeY) / 2, s_scaledImageSizeX, s_scaledImageSizeY);
                     g.DrawImage(_pvUIItems[i].Image, _uiItemRects[i]);
                 }
+
                 GridEntryHost.LabelPaintMargin = (s_scaledImageSizeX + 1) * _pvUIItems.Length;
             }
         }
@@ -736,6 +759,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return oldValue;
                         }
+
                         throw;
                     }
                 }
@@ -768,6 +792,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                     }
+
                     if (_eventBindings is not null)
                     {
                         eventDesc = _eventBindings.GetEvent(_propertyInfo);
@@ -791,6 +816,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 eventObj = objArray.GetValue(0);
                             }
                         }
+
                         eventDesc = TypeDescriptor.GetEvents(eventObj)[_propertyInfo.Name];
                     }
                 }
@@ -850,6 +876,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return null;
                 }
+
                 throw;
             }
             catch
@@ -869,6 +896,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Commit();
                 }
             }
+
             return obj;
         }
 
@@ -984,6 +1012,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
                 }
+
                 if (_eventBindings is not null)
                 {
                     eventdesc = _eventBindings.GetEvent(_propertyInfo);
@@ -1038,6 +1067,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 break;
                             }
                         }
+
                         if (!methodExists)
                         {
                             alwaysNavigate = true;
@@ -1081,6 +1111,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Cancel();
                     trans = null;
                 }
+
                 throw;
             }
             finally
@@ -1090,6 +1121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     trans.Commit();
                 }
             }
+
             return true;
         }
 
@@ -1119,291 +1151,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override GridEntryAccessibleObject GetAccessibilityObject()
         {
             return new PropertyDescriptorGridEntryAccessibleObject(this);
-        }
-
-        protected class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject
-        {
-            private readonly PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;
-
-            public PropertyDescriptorGridEntryAccessibleObject(PropertyDescriptorGridEntry owner) : base(owner)
-            {
-                _owningPropertyDescriptorGridEntry = owner;
-            }
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            /// <summary>
-            ///  Returns the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.NextSibling:
-                        var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                        var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                        bool currentGridEntryFound = false;
-                        return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                        propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                        currentGridEntryFound = false;
-                        return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                    case UiaCore.NavigateDirection.FirstChild:
-                        return GetFirstChild();
-                    case UiaCore.NavigateDirection.LastChild:
-                        return GetLastChild();
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            private UiaCore.IRawElementProviderFragment GetFirstChild()
-            {
-                if (_owningPropertyDescriptorGridEntry is null)
-                {
-                    return null;
-                }
-
-                if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
-                {
-                    return _owningPropertyDescriptorGridEntry.Children.GetEntry(0).AccessibilityObject;
-                }
-
-                var propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
-                {
-                    return null;
-                }
-
-                var selectedGridEntry = propertyGridView.SelectedGridEntry;
-                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
-                {
-                    if (selectedGridEntry.Enumerable &&
-                        propertyGridView.DropDownVisible &&
-                        propertyGridView.DropDownControlHolder?.Component == propertyGridView.DropDownListBox)
-                    {
-                        return propertyGridView.DropDownListBoxAccessibleObject;
-                    }
-
-                    if (propertyGridView.DropDownVisible && propertyGridView.DropDownControlHolder is not null)
-                    {
-                        return propertyGridView.DropDownControlHolder.AccessibilityObject;
-                    }
-
-                    return propertyGridView.EditAccessibleObject;
-                }
-
-                return null;
-            }
-
-            private UiaCore.IRawElementProviderFragment GetLastChild()
-            {
-                if (_owningPropertyDescriptorGridEntry is null)
-                {
-                    return null;
-                }
-
-                if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
-                {
-                    return _owningPropertyDescriptorGridEntry.Children
-                        .GetEntry(_owningPropertyDescriptorGridEntry.ChildCount - 1).AccessibilityObject;
-                }
-
-                var propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
-                {
-                    return null;
-                }
-
-                var selectedGridEntry = propertyGridView.SelectedGridEntry;
-                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
-                {
-                    if (selectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
-                    {
-                        return propertyGridView.DropDownButton.AccessibilityObject;
-                    }
-
-                    return propertyGridView.EditAccessibleObject;
-                }
-
-                return null;
-            }
-
-            private PropertyGridView GetPropertyGridView()
-            {
-                var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                if (propertyGridViewAccessibleObject is null)
-                {
-                    return null;
-                }
-
-                return propertyGridViewAccessibleObject.Owner as PropertyGridView;
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId ||
-                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.Enumerable))
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override void Expand()
-            {
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
-                {
-                    ExpandOrCollapse();
-                }
-            }
-
-            internal override void Collapse()
-            {
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
-                {
-                    ExpandOrCollapse();
-                }
-            }
-
-            private void ExpandOrCollapse()
-            {
-                if (!GetPropertyGridView().IsHandleCreated)
-                {
-                    return;
-                }
-
-                var propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
-                {
-                    return;
-                }
-
-                int row = propertyGridView.GetRowFromGridEntry(_owningPropertyDescriptorGridEntry);
-
-                if (row != -1)
-                {
-                    propertyGridView.PopupDialog(row);
-                }
-            }
-
-            internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            {
-                get
-                {
-                    var propertyGridView = GetPropertyGridView();
-                    if (propertyGridView is null)
-                    {
-                        return UiaCore.ExpandCollapseState.Collapsed;
-                    }
-
-                    if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry &&
-                        ((_owningPropertyDescriptorGridEntry is not null && _owningPropertyDescriptorGridEntry.InternalExpanded)
-                         || propertyGridView.DropDownVisible))
-                    {
-                        return UiaCore.ExpandCollapseState.Expanded;
-                    }
-
-                    return UiaCore.ExpandCollapseState.Collapsed;
-                }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
-                {
-                    return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
-                }
-                else if (propertyID == UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId)
-                {
-                    return string.Empty;
-                }
-                else if (propertyID == UiaCore.UIA.IsValuePatternAvailablePropertyId)
-                {
-                    return true;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-        }
-
-        /// <summary>
-        ///  The exception converter is a type converter that displays an exception to the user.
-        /// </summary>
-        private class ExceptionConverter : TypeConverter
-        {
-            /// <summary>
-            ///  Converts the given object to another type.  The most common types to convert
-            ///  are to and from a string object.  The default implementation will make a call
-            ///  to ToString on the object if the object is valid and if the destination
-            ///  type is string.  If this cannot convert to the destination type, this will
-            ///  throw a NotSupportedException.
-            /// </summary>
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-            {
-                if (destinationType == typeof(string))
-                {
-                    if (value is Exception ex)
-                    {
-                        if (ex.InnerException is not null)
-                        {
-                            ex = ex.InnerException;
-                        }
-                        return ex.Message;
-                    }
-                    return null;
-                }
-                throw GetConvertToException(value, destinationType);
-            }
-        }
-
-        /// <summary>
-        ///  The exception editor displays a message to the user.
-        /// </summary>
-        private class ExceptionEditor : UITypeEditor
-        {
-            public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
-            {
-                if (value is Exception except)
-                {
-                    IUIService uis = null;
-
-                    if (context is not null)
-                    {
-                        uis = (IUIService)context.GetService(typeof(IUIService));
-                    }
-
-                    if (uis is not null)
-                    {
-                        uis.ShowError(except);
-                    }
-                    else
-                    {
-                        string message = except.Message;
-                        if (message is null || message.Length == 0)
-                        {
-                            message = except.ToString();
-                        }
-
-                        RTLAwareMessageBox.Show(null, message, SR.PropertyGridExceptionInfo,
-                            MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
-                    }
-                }
-                return value;
-            }
-
-            /// <summary>
-            ///  Retrieves the editing style of the Edit method.  If the method
-            ///  is not supported, this will return None.
-            /// </summary>
-            public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-            {
-                return UITypeEditorEditStyle.Modal;
-            }
         }
     }
 }

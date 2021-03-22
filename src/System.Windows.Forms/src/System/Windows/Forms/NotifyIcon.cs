@@ -254,6 +254,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
+
                     text = value;
                     if (added)
                     {
@@ -418,6 +419,7 @@ namespace System.Windows.Forms
                     window.ReleaseHandle();
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -586,6 +588,7 @@ namespace System.Windows.Forms
                 {
                     window.CreateHandle(new CreateParams());
                 }
+
                 data.hWnd = window.Handle;
                 data.InfoTitle = tipTitle;
                 data.Info = tipText;
@@ -604,6 +607,7 @@ namespace System.Windows.Forms
                         data.dwInfoFlags = NIIF.NONE;
                         break;
                 }
+
                 Shell32.Shell_NotifyIconW(NIM.MODIFY, ref data);
             }
         }
@@ -658,12 +662,14 @@ namespace System.Windows.Forms
                         window.CreateHandle(new CreateParams());
                     }
                 }
+
                 data.hWnd = window.Handle;
                 if (icon != null)
                 {
                     data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
                 }
+
                 data.uFlags |= NIF.TIP;
                 data.Tip = text;
 
@@ -698,6 +704,7 @@ namespace System.Windows.Forms
                 OnMouseDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
                 doubleClick = true;
             }
+
             OnMouseDown(new MouseEventArgs(button, clicks, 0, 0, 0));
         }
 
@@ -721,6 +728,7 @@ namespace System.Windows.Forms
                 OnClick(new MouseEventArgs(button, 0, 0, 0, 0));
                 OnMouseClick(new MouseEventArgs(button, 0, 0, 0, 0));
             }
+
             doubleClick = false;
         }
 
@@ -769,6 +777,7 @@ namespace System.Windows.Forms
                             {
                                 ShowContextMenu();
                             }
+
                             WmMouseUp(ref msg, MouseButtons.Right);
                             break;
                         case (int)NIN.BALLOONSHOW:
@@ -784,6 +793,7 @@ namespace System.Windows.Forms
                             OnBalloonTipClicked();
                             break;
                     }
+
                     break;
                 case User32.WM.COMMAND:
                     if (IntPtr.Zero == msg.LParam)
@@ -797,6 +807,7 @@ namespace System.Windows.Forms
                     {
                         window.DefWndProc(ref msg);
                     }
+
                     break;
 
                 case User32.WM.DESTROY:

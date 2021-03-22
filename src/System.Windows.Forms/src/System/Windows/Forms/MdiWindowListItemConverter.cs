@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.Collections;
+using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
@@ -33,8 +33,10 @@ namespace System.Windows.Forms
                         list.Add(currentItem);
                     }
                 }
+
                 return new StandardValuesCollection(list);
             }
+
             return base.GetStandardValues(context);
         }
     }

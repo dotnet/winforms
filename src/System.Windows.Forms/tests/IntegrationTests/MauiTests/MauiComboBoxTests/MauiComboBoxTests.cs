@@ -187,10 +187,12 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         public ScenarioResult Verify_OnMeasureItem_receives_correct_arguments(TParams p)
         {
             var _derivedComboBox = new DerivedComboBox();
-            _derivedComboBox.Items.AddRange(new object[] {
+            _derivedComboBox.Items.AddRange(new object[]
+            {
                 "One",
                 "Two",
-                "Three"});
+                "Three"
+            });
             _derivedComboBox.Location = new Point(0, 50);
             Controls.Add(_derivedComboBox);
 
@@ -259,6 +261,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                     return false;
                 }
             }
+
             return true;
         }
 

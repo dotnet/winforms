@@ -28,26 +28,32 @@ namespace System.Windows.Forms
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text) : base(text, null, (EventHandler)null)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(Image image) : base(null, image, (EventHandler)null)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image) : base(text, image, (EventHandler)null)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image, EventHandler onClick) : base(text, image, onClick)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image, params ToolStripItem[] dropDownItems) : base(text, image, dropDownItems)
         {
             Initialize();
@@ -91,6 +97,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  Creates an instance of the object that defines how image and text
         ///  gets laid out in the ToolStripItem
@@ -134,6 +141,7 @@ namespace System.Windows.Forms
                     ShowDropDown(/*mousePush =*/true);
                 }
             }
+
             base.OnMouseDown(e);
         }
 
@@ -151,6 +159,7 @@ namespace System.Windows.Forms
                     Select();
                 }
             }
+
             base.OnMouseUp(e);
         }
 
@@ -159,6 +168,7 @@ namespace System.Windows.Forms
             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
             base.OnMouseLeave(e);
         }
+
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         /// </summary>
@@ -180,6 +190,7 @@ namespace System.Windows.Forms
                 {
                     renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, ForeColor, Font, InternalLayout.TextFormat));
                 }
+
                 if (ShowDropDownArrow)
                 {
                     Rectangle dropDownArrowRect = (InternalLayout is ToolStripDropDownButtonInternalLayout layout) ? layout.DropDownArrowRect : Rectangle.Empty;
@@ -193,6 +204,7 @@ namespace System.Windows.Forms
                     {
                         arrowColor = Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
                     }
+
                     renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, dropDownArrowRect, arrowColor, ArrowDirection.Down));
                 }
             }
@@ -207,6 +219,7 @@ namespace System.Windows.Forms
                 ShowDropDown();
                 return true;
             }
+
             return false;
         }
     }

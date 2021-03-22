@@ -123,6 +123,7 @@ namespace System.Windows.Forms
                     {
                         _minimum = value;
                     }
+
                     if (value < _value)
                     {
                         Value = value;
@@ -163,6 +164,7 @@ namespace System.Windows.Forms
                     {
                         _maximum = value;
                     }
+
                     if (value > _value)
                     {
                         _value = value;

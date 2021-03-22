@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -406,6 +406,7 @@ namespace System.Windows.Forms.Tests
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
         }
+
         public static IEnumerable<object[]> ForeColor_SetWithListView_TestData()
         {
             yield return new object[] { Color.Green, Color.Green };

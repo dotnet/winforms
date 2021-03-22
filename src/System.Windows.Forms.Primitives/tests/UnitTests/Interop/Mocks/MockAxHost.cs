@@ -119,11 +119,13 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Mocks
                     {
                         return (Image)metafile.Clone();
                     }
+
                 case PICTYPE.ENHMETAFILE:
                     using (var metafile = new Metafile((IntPtr)handle, deleteEmf: false))
                     {
                         return (Image)metafile.Clone();
                     }
+
                 case PICTYPE.BITMAP:
                     return Image.FromHbitmap((IntPtr)handle, (IntPtr)paletteHandle);
                 case PICTYPE.NONE:

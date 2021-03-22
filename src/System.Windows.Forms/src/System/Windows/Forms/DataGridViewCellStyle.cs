@@ -49,6 +49,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }
+
             propertyStore = new PropertyStore();
             scope = DataGridViewCellStyleScopes.None;
             BackColor = dataGridViewCellStyle.BackColor;
@@ -63,6 +64,7 @@ namespace System.Windows.Forms
             {
                 FormatProvider = dataGridViewCellStyle.FormatProvider;
             }
+
             AlignmentInternal = dataGridViewCellStyle.Alignment;
             WrapModeInternal = dataGridViewCellStyle.WrapMode;
             Tag = dataGridViewCellStyle.Tag;
@@ -81,6 +83,7 @@ namespace System.Windows.Forms
                 {
                     return (DataGridViewContentAlignment)alignment;
                 }
+
                 return DataGridViewContentAlignment.NotSet;
             }
             set
@@ -101,6 +104,7 @@ namespace System.Windows.Forms
                     default:
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewContentAlignment));
                 }
+
                 AlignmentInternal = value;
             }
         }
@@ -132,6 +136,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetColor(PropBackColor, value);
                 }
+
                 if (!c.Equals(BackColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
@@ -150,6 +155,7 @@ namespace System.Windows.Forms
                 {
                     return Properties.GetObject(PropDataSourceNullValue);
                 }
+
                 return System.DBNull.Value;
             }
             set
@@ -194,6 +200,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(PropFont, value);
                 }
+
                 if ((f is null && value is not null) ||
                     (f is not null && value is null) ||
                     (f is not null && value is not null && !f.Equals(Font)))
@@ -217,6 +224,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetColor(PropForeColor, value);
                 }
+
                 if (!c.Equals(ForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.ForeColor);
@@ -249,6 +257,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetObject(PropFormat, value);
                 }
+
                 if (!format.Equals(Format))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
@@ -293,6 +302,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 return Properties.GetObject(PropDataSourceNullValue) == System.DBNull.Value;
             }
         }
@@ -334,6 +344,7 @@ namespace System.Windows.Forms
                 {
                     return Properties.GetObject(PropNullValue);
                 }
+
                 return string.Empty;
             }
             set
@@ -384,6 +395,7 @@ namespace System.Windows.Forms
                         value.Bottom = Math.Max(0, value.Bottom);
                     }
                 }
+
                 PaddingInternal = value;
             }
         }
@@ -438,6 +450,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetColor(PropSelectionBackColor, value);
                 }
+
                 if (!c.Equals(SelectionBackColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
@@ -459,6 +472,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetColor(PropSelectionForeColor, value);
                 }
+
                 if (!c.Equals(SelectionForeColor))
                 {
                     OnPropertyChanged(DataGridViewCellStylePropertyInternal.Color);
@@ -494,6 +508,7 @@ namespace System.Windows.Forms
                 {
                     return (DataGridViewTriState)wrap;
                 }
+
                 return DataGridViewTriState.NotSet;
             }
             set
@@ -529,54 +544,67 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCellStyle));
             }
+
             if (!dataGridViewCellStyle.BackColor.IsEmpty)
             {
                 BackColor = dataGridViewCellStyle.BackColor;
             }
+
             if (!dataGridViewCellStyle.ForeColor.IsEmpty)
             {
                 ForeColor = dataGridViewCellStyle.ForeColor;
             }
+
             if (!dataGridViewCellStyle.SelectionBackColor.IsEmpty)
             {
                 SelectionBackColor = dataGridViewCellStyle.SelectionBackColor;
             }
+
             if (!dataGridViewCellStyle.SelectionForeColor.IsEmpty)
             {
                 SelectionForeColor = dataGridViewCellStyle.SelectionForeColor;
             }
+
             if (dataGridViewCellStyle.Font is not null)
             {
                 Font = dataGridViewCellStyle.Font;
             }
+
             if (!dataGridViewCellStyle.IsNullValueDefault)
             {
                 NullValue = dataGridViewCellStyle.NullValue;
             }
+
             if (!dataGridViewCellStyle.IsDataSourceNullValueDefault)
             {
                 DataSourceNullValue = dataGridViewCellStyle.DataSourceNullValue;
             }
+
             if (dataGridViewCellStyle.Format.Length != 0)
             {
                 Format = dataGridViewCellStyle.Format;
             }
+
             if (!dataGridViewCellStyle.IsFormatProviderDefault)
             {
                 FormatProvider = dataGridViewCellStyle.FormatProvider;
             }
+
             if (dataGridViewCellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 AlignmentInternal = dataGridViewCellStyle.Alignment;
             }
+
             if (dataGridViewCellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 WrapModeInternal = dataGridViewCellStyle.WrapMode;
             }
+
             if (dataGridViewCellStyle.Tag is not null)
             {
                 Tag = dataGridViewCellStyle.Tag;
             }
+
             if (dataGridViewCellStyle.Padding != Padding.Empty)
             {
                 PaddingInternal = dataGridViewCellStyle.Padding;
@@ -719,105 +747,128 @@ namespace System.Windows.Forms
                 sb.Append(" BackColor=" + BackColor.ToString());
                 firstPropAdded = false;
             }
+
             if (ForeColor != Color.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" ForeColor=" + ForeColor.ToString());
                 firstPropAdded = false;
             }
+
             if (SelectionBackColor != Color.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" SelectionBackColor=" + SelectionBackColor.ToString());
                 firstPropAdded = false;
             }
+
             if (SelectionForeColor != Color.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" SelectionForeColor=" + SelectionForeColor.ToString());
                 firstPropAdded = false;
             }
+
             if (Font is not null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" Font=" + Font.ToString());
                 firstPropAdded = false;
             }
+
             if (!IsNullValueDefault && NullValue is not null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" NullValue=" + NullValue.ToString());
                 firstPropAdded = false;
             }
+
             if (!IsDataSourceNullValueDefault && DataSourceNullValue is not null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" DataSourceNullValue=" + DataSourceNullValue.ToString());
                 firstPropAdded = false;
             }
+
             if (!string.IsNullOrEmpty(Format))
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" Format=" + Format);
                 firstPropAdded = false;
             }
+
             if (WrapMode != DataGridViewTriState.NotSet)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" WrapMode=" + WrapMode.ToString());
                 firstPropAdded = false;
             }
+
             if (Alignment != DataGridViewContentAlignment.NotSet)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" Alignment=" + Alignment.ToString());
                 firstPropAdded = false;
             }
+
             if (Padding != Padding.Empty)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" Padding=" + Padding.ToString());
                 firstPropAdded = false;
             }
+
             if (Tag is not null)
             {
                 if (!firstPropAdded)
                 {
                     sb.Append(',');
                 }
+
                 sb.Append(" Tag=" + Tag.ToString());
                 firstPropAdded = false;
             }
+
             sb.Append(" }");
             return sb.ToString();
         }

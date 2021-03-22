@@ -141,6 +141,7 @@ namespace System.Windows.Forms.Design
             {
                 return SR.BindingFormattingDialogFormatTypeNoFormatting;
             }
+
             if (NumericFormatType.ParseStatic(formatString))
             {
                 return SR.BindingFormattingDialogFormatTypeNumeric;
@@ -197,6 +198,7 @@ namespace System.Windows.Forms.Design
                     {
                         return false;
                     }
+
                 case DateTimeIndex:
                     Debug.Assert(dateTimeFormatsListBox.Visible);
                     if (IsMnemonic(charCode, secondRowLabel.Text))
@@ -208,6 +210,7 @@ namespace System.Windows.Forms.Design
                     {
                         return false;
                     }
+
                 case CustomIndex:
                     Debug.Assert(customStringTextBox.Visible);
                     if (IsMnemonic(charCode, secondRowLabel.Text))
@@ -497,6 +500,7 @@ namespace System.Windows.Forms.Design
                     return SR.BindingFormattingDialogFormatTypeNoFormattingExplanation;
                 }
             }
+
             public override string SampleString
             {
                 get
@@ -504,6 +508,7 @@ namespace System.Windows.Forms.Design
                     return "-1234.5";
                 }
             }
+
             public override bool DropDownVisible
             {
                 get
@@ -511,6 +516,7 @@ namespace System.Windows.Forms.Design
                     return false;
                 }
             }
+
             public override bool ListBoxVisible
             {
                 get
@@ -575,6 +581,7 @@ namespace System.Windows.Forms.Design
                     return SR.BindingFormattingDialogFormatTypeNumericExplanation;
                 }
             }
+
             public override string SampleString
             {
                 get
@@ -582,6 +589,7 @@ namespace System.Windows.Forms.Design
                     return (-1234.5678).ToString(FormatString, CultureInfo.CurrentCulture);
                 }
             }
+
             public override bool DropDownVisible
             {
                 get
@@ -589,6 +597,7 @@ namespace System.Windows.Forms.Design
                     return true;
                 }
             }
+
             public override bool ListBoxVisible
             {
                 get
@@ -973,6 +982,7 @@ namespace System.Windows.Forms.Design
 
                 _owner.dateTimeFormatsListBox.SelectedIndex = selectedIndex;
             }
+
             public override string ToString()
             {
                 return SR.BindingFormattingDialogFormatTypeDateTime;
@@ -1230,6 +1240,7 @@ namespace System.Windows.Forms.Design
                     return true;
                 }
             }
+
             public override bool FormatLabelVisible
             {
                 get
@@ -1237,6 +1248,7 @@ namespace System.Windows.Forms.Design
                     return false;
                 }
             }
+
             public override string FormatString
             {
                 get

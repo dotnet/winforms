@@ -22,6 +22,7 @@ namespace System.Windows.Forms
                 {
                     preferredSize.Width = dropDownMenu.MaxItemSize.Width - dropDownMenu.PaddingToTrim;
                 }
+
                 return preferredSize;
             }
         }

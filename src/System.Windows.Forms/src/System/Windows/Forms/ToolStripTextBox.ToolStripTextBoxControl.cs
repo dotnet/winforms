@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                     return rect;
                 }
             }
+
             private Rectangle AbsoluteClientRectangle
             {
                 get
@@ -70,6 +71,7 @@ namespace System.Windows.Forms
                             return renderer.ColorTable;
                         }
                     }
+
                     return ProfessionalColors.ColorTable;
                 }
             }
@@ -226,6 +228,7 @@ namespace System.Windows.Forms
                 {
                     HookStaticEvents(false);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -275,6 +278,7 @@ namespace System.Windows.Forms
                 // We've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
             }
+
             protected override void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.WM.NCPAINT)

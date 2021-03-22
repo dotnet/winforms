@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Drawing;
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 
 internal static partial class Interop
 {

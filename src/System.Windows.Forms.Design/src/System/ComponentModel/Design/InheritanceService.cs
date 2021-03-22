@@ -214,8 +214,10 @@ namespace System.ComponentModel.Design
                                 _addingAttribute = null;
                             }
                         }
+
                         Debug.Unindent();
                     }
+
                     type = type.BaseType;
                 }
             }
@@ -244,6 +246,7 @@ namespace System.ComponentModel.Design
             {
                 return method.IsPrivate || method.IsAssembly;
             }
+
             Debug.Fail("Unknown member type passed to IgnoreInheritedMember");
             return true;
         }
@@ -258,6 +261,7 @@ namespace System.ComponentModel.Design
             {
                 attr = InheritanceAttribute.Default;
             }
+
             return attr;
         }
 
@@ -288,6 +292,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return type;
         }
 
@@ -301,6 +306,7 @@ namespace System.ComponentModel.Design
                     return service.GetProvider(type);
                 }
             }
+
             return null;
         }
     }

@@ -51,6 +51,7 @@ namespace System.Windows.Forms
                 {
                     return destinationThreadRef.Target as Thread;
                 }
+
                 return null;
             }
             set
@@ -61,6 +62,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         public void Dispose()
         {
             if (controlToSendTo != null)
@@ -69,6 +71,7 @@ namespace System.Windows.Forms
                 {
                     controlToSendTo.Dispose();
                 }
+
                 controlToSendTo = null;
             }
         }
@@ -177,6 +180,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (turnOffAutoInstall)
             {
                 AutoInstall = false;

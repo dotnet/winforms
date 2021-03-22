@@ -45,6 +45,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return Cursors.SizeAll;
             }
+
             return null;
         }
 
@@ -57,6 +58,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
                 }
+
                 return _glyph;
             }
         }

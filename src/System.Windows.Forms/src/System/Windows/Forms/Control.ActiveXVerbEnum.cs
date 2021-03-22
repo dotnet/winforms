@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLine($"{i}: {_verbs[i].lVerb} {_verbs[i].lpszVerbName ?? string.Empty}");
                     }
+
                     Debug.Unindent();
                 }
 #endif

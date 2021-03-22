@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace WinformsControlsTest
 {
@@ -22,6 +22,7 @@ namespace WinformsControlsTest
             get => base.AutoSize;
             set => base.AutoSize = value;
         }
+
         private void CurrentDPILabel_HandleCreated(object sender, EventArgs e)
         {
             SetText();

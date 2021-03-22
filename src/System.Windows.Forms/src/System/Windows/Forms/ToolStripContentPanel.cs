@@ -105,6 +105,7 @@ namespace System.Windows.Forms
                 {
                     ParentInternal.BackColor = Color.Transparent;
                 }
+
                 base.BackColor = value;
             }
         }
@@ -143,6 +144,7 @@ namespace System.Windows.Forms
             get => base.Dock;
             set => base.Dock = value;
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -249,6 +251,7 @@ namespace System.Windows.Forms
                     HandleRendererChanged(this, EventArgs.Empty);
                     rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
                 }
+
                 return rendererSwitcher;
             }
         }

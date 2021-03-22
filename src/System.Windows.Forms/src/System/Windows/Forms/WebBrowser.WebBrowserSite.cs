@@ -49,6 +49,7 @@ namespace System.Windows.Forms
                     pt->X = -1;
                     pt->Y = -1;
                 }
+
                 wb.ShowContextMenu(pt->X, pt->Y);
                 // MSHTML should not display its context menu because we displayed ours
                 return HRESULT.S_OK;

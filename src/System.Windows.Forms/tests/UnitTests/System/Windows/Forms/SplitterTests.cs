@@ -10,8 +10,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     public class SplitterTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -288,6 +288,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -547,6 +548,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Dock", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -615,6 +617,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Dock", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try

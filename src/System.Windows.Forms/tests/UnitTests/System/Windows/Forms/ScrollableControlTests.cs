@@ -1397,7 +1397,7 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { false, null, 1, null };
             yield return new object[] { false, new LayoutEventArgs(null, null), 1, null };
-            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1 , affectedControl };
+            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1, affectedControl };
         }
 
         [WinFormsTheory]
@@ -2543,6 +2543,7 @@ namespace System.Windows.Forms.Tests
             {
                 control.Controls.Add(activeControl.Parent ?? activeControl);
             }
+
             control.ScrollControlIntoView(activeControl);
             Assert.Equal(expectedDisplayRectangle, control.DisplayRectangle);
 

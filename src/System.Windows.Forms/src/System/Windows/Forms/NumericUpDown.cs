@@ -99,6 +99,7 @@ namespace System.Windows.Forms
                 {
                     accelerations = new NumericUpDownAccelerationCollection();
                 }
+
                 return accelerations;
             }
         }
@@ -122,6 +123,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(DecimalPlaces), value, 0, 99));
                 }
+
                 decimalPlaces = value;
                 UpdateEditText();
             }
@@ -322,6 +324,7 @@ namespace System.Windows.Forms
                 {
                     ValidateEditText();
                 }
+
                 return currentValue;
             }
 
@@ -734,6 +737,7 @@ namespace System.Windows.Forms
             {
                 text = num.ToString((ThousandsSeparator ? "N" : "F") + DecimalPlaces.ToString(CultureInfo.CurrentCulture), CultureInfo.CurrentCulture);
             }
+
             return text;
         }
 
@@ -805,6 +809,7 @@ namespace System.Windows.Forms
             {
                 maxDigits = (int)Math.Floor(Math.Log((double)decimal.MaxValue, baseSize));
             }
+
             bool maxDigitsReached = numDigits >= maxDigits;
             decimal testNumber;
 
@@ -846,6 +851,7 @@ namespace System.Windows.Forms
                 {
                     shortText = testNumber.ToString(CultureInfo.CurrentCulture);
                 }
+
                 int shortTextWidth = TextRenderer.MeasureText(shortText, Font).Width;
                 // Adding the width of the one digit that was dropped earlier.
                 // This assumes that no additional thousand separator is added by that digit which is correct.
@@ -882,6 +888,7 @@ namespace System.Windows.Forms
                     largestDigit = i;
                 }
             }
+
             Debug.Assert(largestDigit != -1 && digitWidth != -1, "Failed to find largest digit.");
             return largestDigit;
         }

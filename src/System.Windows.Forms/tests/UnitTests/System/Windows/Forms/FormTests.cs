@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using Xunit;
 using WinForms.Common.Tests;
+using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
@@ -1168,6 +1168,44 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentException>("value", () => control.Parent = parent);
             Assert.NotNull(control.Parent);
             Assert.Same(oldParent, control.MdiParent);
+        }
+
+        [WinFormsFact]
+        public void Form_Parent_ShowIconInMaximized()
+        {
+            using var parent = new Form();
+            using var menuStrip = new MenuStrip();
+            parent.Controls.Add(menuStrip);
+            parent.IsMdiContainer = true;
+            parent.MainMenuStrip = menuStrip;
+            parent.Show();
+            Assert.True(parent.Handle != IntPtr.Zero);
+            using var control = new Form();
+            control.MdiParent = parent;
+            control.Icon = Form.DefaultIcon;
+            Assert.True(control.Handle != IntPtr.Zero);
+            control.Show();
+
+            control.ShowIcon = false;
+            IntPtr hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon == IntPtr.Zero);
+            IntPtr hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon == IntPtr.Zero);
+
+            control.WindowState = FormWindowState.Maximized;
+            control.ShowIcon = false;
+            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon == IntPtr.Zero);
+            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon == IntPtr.Zero);
+            Assert.True(!menuStrip.Items[0].Visible);
+
+            control.ShowIcon = true;
+            hSmallIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            Assert.True(hSmallIcon != IntPtr.Zero);
+            hLargeIcon = User32.SendMessageW(control, User32.WM.GETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+            Assert.True(hLargeIcon != IntPtr.Zero);
+            Assert.True(menuStrip.Items[0].Visible);
         }
 
         public static IEnumerable<object[]> TransparencyKey_Set_TestData()
@@ -2393,6 +2431,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
             Assert.True(control.IsHandleCreated);
         }
+
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Form_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)

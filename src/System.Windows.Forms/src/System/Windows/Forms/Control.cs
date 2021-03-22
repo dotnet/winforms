@@ -94,6 +94,7 @@ namespace System.Windows.Forms
                     {
                         maxFrameCount = 5;
                     }
+
                     int frameIndex = 1;
                     while (frameIndex < maxFrameCount)
                     {
@@ -103,9 +104,11 @@ namespace System.Windows.Forms
                             // log immediate call if in a virtual/recursive call.
                             break;
                         }
+
                         str += new StackTrace(sf).ToString().TrimEnd();
                         frameIndex++;
                     }
+
                     if (frameIndex > 2)
                     {
                         // new CanProcessMnemonic virtual/recursive call stack.
@@ -116,6 +119,7 @@ namespace System.Windows.Forms
                 {
                     str = ex.ToString();
                 }
+
                 Debug.WriteLine(str);
             }
         }
@@ -394,10 +398,12 @@ namespace System.Windows.Forms
             {
                 Margin = DefaultMargin;
             }
+
             if (DefaultMinimumSize != CommonProperties.DefaultMinimumSize)
             {
                 MinimumSize = DefaultMinimumSize;
             }
+
             if (DefaultMaximumSize != CommonProperties.DefaultMaximumSize)
             {
                 MaximumSize = DefaultMaximumSize;
@@ -492,6 +498,7 @@ namespace System.Windows.Forms
                         Debug.Fail("Accessible objects for controls must be derived from ControlAccessibleObject.");
                         return null;
                     }
+
                     Properties.SetObject(s_accessibilityProperty, accessibleObject);
                 }
 
@@ -545,6 +552,7 @@ namespace System.Windows.Forms
                     {
                         accessibleObject = null;
                     }
+
                     break;
             }
 
@@ -733,6 +741,7 @@ namespace System.Windows.Forms
                         Properties.SetObject(s_ambientPropertiesServiceProperty, props);
                     }
                 }
+
                 return props;
             }
         }
@@ -778,6 +787,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
 
@@ -811,6 +821,7 @@ namespace System.Windows.Forms
                 {
                     return (Point)Properties.GetObject(s_autoScrollOffsetProperty);
                 }
+
                 return Point.Empty;
             }
             set
@@ -1029,6 +1040,7 @@ namespace System.Windows.Forms
                             DoubleBuffered = true;
                         }
                     }
+
                     Properties.SetObject(s_backgroundImageLayoutProperty, value);
                     OnBackgroundImageLayoutChanged(EventArgs.Empty);
                 }
@@ -1290,6 +1302,7 @@ namespace System.Windows.Forms
                             _text = WindowText;
                         }
                     }
+
                     cacheTextCounter++;
                 }
                 else
@@ -1300,6 +1313,7 @@ namespace System.Windows.Forms
                         _text = (string)Properties.GetObject(s_acheTextFieldProperty, out found);
                     }
                 }
+
                 Properties.SetInteger(s_cacheTextCountProperty, cacheTextCounter);
             }
         }
@@ -1448,6 +1462,7 @@ namespace System.Windows.Forms
                     controlsCollection = CreateControlsInstance();
                     Properties.SetObject(s_controlsCollectionProperty, controlsCollection);
                 }
+
                 return controlsCollection;
             }
         }
@@ -1508,6 +1523,7 @@ namespace System.Windows.Forms
                 {
                     cp.ExStyle |= (int)User32.WS_EX.CONTROLPARENT;
                 }
+
                 cp.ClassStyle = (int)User32.CS.DBLCLKS;
 
                 if ((_state & States.TopLevel) == 0)
@@ -1766,6 +1782,7 @@ namespace System.Windows.Forms
                     bindings = new ControlBindingsCollection(this);
                     Properties.SetObject(s_bindingsProperty, bindings);
                 }
+
                 return bindings;
             }
         }
@@ -1854,10 +1871,12 @@ namespace System.Windows.Forms
                             color = SystemColors.Control;
                             break;
                         }
+
                         color = control.BackColor;
                         control = control.ParentInternal;
                     }
                 }
+
                 return color;
             }
         }
@@ -1896,6 +1915,7 @@ namespace System.Windows.Forms
                 {
                     fontHandle.Dispose();
                 }
+
                 Properties.SetObject(s_fontHandleWrapperProperty, null);
             }
         }
@@ -2088,6 +2108,7 @@ namespace System.Windows.Forms
 
                 return DefaultFont;
             }
+
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             set
             {
@@ -2336,6 +2357,7 @@ namespace System.Windows.Forms
                 {
                     Properties.SetColor(s_foreColorProperty, value);
                 }
+
                 if (!c.Equals(ForeColor))
                 {
                     OnForeColorChanged(EventArgs.Empty);
@@ -2386,7 +2408,7 @@ namespace System.Windows.Forms
                     Size cachedSize = CommonProperties.xGetPreferredSizeCache(this);
 
                     // If the "default" preferred size is being requested, and we have a cached value for it, return it.
-                    if (!cachedSize.IsEmpty && (proposedSize == LayoutUtils.MaxSize))
+                    if (!cachedSize.IsEmpty && (proposedSize == LayoutUtils.s_maxSize))
                     {
                         return cachedSize;
                     }
@@ -2407,11 +2429,12 @@ namespace System.Windows.Forms
                 prefSize = ApplySizeConstraints(prefSize);
 
                 // If the "default" preferred size was requested, cache the computed value.
-                if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.MaxSize)
+                if (GetExtendedState(ExtendedStates.UserPreferredSizeCache) && proposedSize == LayoutUtils.s_maxSize)
                 {
                     CommonProperties.xSetPreferredSizeCache(this, prefSize);
                 }
             }
+
             return prefSize;
         }
 
@@ -2512,6 +2535,7 @@ namespace System.Windows.Forms
                             {
                                 sb.Capacity = len + 5;
                             }
+
                             UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), sb, sb.Capacity);
 
                             if (sb.ToString() == "#32770")
@@ -2540,6 +2564,8 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlHandleCreatedDescr))]
         public bool IsHandleCreated => _window.Handle != IntPtr.Zero;
+
+        private protected virtual bool IsHoveredWithMouse() => ClientRectangle.Contains(PointToClient(MousePosition));
 
         /// <summary>
         ///  Determines if layout is currently suspended.
@@ -2712,6 +2738,7 @@ namespace System.Windows.Forms
                     CreateParams cp = CreateParams;
                     SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
                 }
+
                 return GetState(States.Mirrored);
             }
         }
@@ -2730,6 +2757,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return true;
         }
 
@@ -2790,6 +2818,7 @@ namespace System.Windows.Forms
                     CommonProperties.SetMargin(this, value);
                     OnMarginChanged(EventArgs.Empty);
                 }
+
                 Debug.Assert(Margin == value, "Error detected while setting Margin.");
             }
         }
@@ -2838,6 +2867,7 @@ namespace System.Windows.Forms
                     // SetMinimumSize causes a layout as a side effect.
                     CommonProperties.SetMinimumSize(this, value);
                 }
+
                 Debug.Assert(MinimumSize == value, "Error detected while setting MinimumSize.");
             }
         }
@@ -3040,6 +3070,11 @@ namespace System.Windows.Forms
         {
         }
 
+        internal virtual void RemoveToolTip(ToolTip toolTip)
+        {
+            // Control doesn't have a specific logic after a toolTip is removed
+        }
+
         private Control ReflectParent
         {
             get => _reflectParent;
@@ -3150,6 +3185,7 @@ namespace System.Windows.Forms
                 {
                     return (BoundsSpecified)(_requiredScaling & RequiredScalingMask);
                 }
+
                 return BoundsSpecified.None;
             }
             set
@@ -3228,6 +3264,7 @@ namespace System.Windows.Forms
                         rightToLeft = (int)DefaultRightToLeft;
                     }
                 }
+
                 return (RightToLeft)rightToLeft;
             }
             set
@@ -3325,14 +3362,17 @@ namespace System.Windows.Forms
                     {
                         OnFontChanged(EventArgs.Empty);
                     }
+
                     if (checkForeColor && !oldForeColor.Equals(ForeColor))
                     {
                         OnForeColorChanged(EventArgs.Empty);
                     }
+
                     if (checkBackColor && !oldBackColor.Equals(BackColor))
                     {
                         OnBackColorChanged(EventArgs.Empty);
                     }
+
                     if (checkCursor && oldCursor.Equals(Cursor))
                     {
                         OnCursorChanged(EventArgs.Empty);
@@ -3547,6 +3587,7 @@ namespace System.Windows.Forms
                 {
                     control = control.ParentInternal;
                 }
+
                 return control;
             }
         }
@@ -3560,6 +3601,7 @@ namespace System.Windows.Forms
                 {
                     control = control.ParentInternal;
                 }
+
                 return control;
             }
         }
@@ -3632,6 +3674,7 @@ namespace System.Windows.Forms
                             (IntPtr)(actionMask | (int)User32.UIS.SET));
                     }
                 }
+
                 return (_uiCuesState & UICuesStates.KeyboardMask) == UICuesStates.KeyboardShow;
             }
         }
@@ -3677,6 +3720,7 @@ namespace System.Windows.Forms
                             (IntPtr)(actionMask | (int)User32.UIS.SET));
                     }
                 }
+
                 return (_uiCuesState & UICuesStates.FocusMask) == UICuesStates.FocusShow;
             }
         }
@@ -3768,6 +3812,7 @@ namespace System.Windows.Forms
                     info = new ControlVersionInfo(this);
                     Properties.SetObject(s_controlVersionInfoProperty, info);
                 }
+
                 return info;
             }
         }
@@ -3821,6 +3866,7 @@ namespace System.Windows.Forms
                 // Couldn't find the thread context, so we don't know the state.  We shouldn't throw.
                 return;
             }
+
             IntPtr threadHandle = ctx.GetHandle();
             bool processed = false;
             // setting default exitcode to 0, though it won't be accessed in current code below due to short-circuit logic in condition (returnValue will be false when exitCode is undefined)
@@ -3833,6 +3879,7 @@ namespace System.Windows.Forms
                 {
                     returnValue = Kernel32.GetExitCodeThread(threadHandle, out exitCode);
                 }
+
                 //If we didn't find the thread, or if GetExitCodeThread failed, we don't know the thread's state:
                 //if we don't know, we shouldn't throw.
                 if ((returnValue.IsTrue() && exitCode != NativeMethods.STILL_ACTIVE) ||
@@ -3843,6 +3890,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
                 }
 
@@ -4580,22 +4628,27 @@ namespace System.Windows.Forms
                 {
                     OnVisibleChanged(EventArgs.Empty);
                 }
+
                 if (!oldFont.Equals(Font))
                 {
                     OnFontChanged(EventArgs.Empty);
                 }
+
                 if (!oldForeColor.Equals(ForeColor))
                 {
                     OnForeColorChanged(EventArgs.Empty);
                 }
+
                 if (!oldBackColor.Equals(BackColor))
                 {
                     OnBackColorChanged(EventArgs.Empty);
                 }
+
                 if (oldRtl != RightToLeft)
                 {
                     OnRightToLeftChanged(EventArgs.Empty);
                 }
+
                 if (Properties.GetObject(s_bindingManagerProperty) is null && Created)
                 {
                     // We do not want to call our parent's BindingContext property here.
@@ -4680,6 +4733,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_updateCount == 0)
             {
                 User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
@@ -4796,6 +4850,7 @@ namespace System.Windows.Forms
             {
                 ActiveXOnFocus(true);
             }
+
             if (_parent is not null)
             {
                 _parent.ChildGotFocus(child);
@@ -4814,11 +4869,13 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 if (ctl == this)
                 {
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -4909,6 +4966,7 @@ namespace System.Windows.Forms
                         {
                             cp.X -= parentClient.X;
                         }
+
                         if (cp.Y != NativeMethods.CW_USEDEFAULT)
                         {
                             cp.Y -= parentClient.Y;
@@ -5005,6 +5063,7 @@ namespace System.Windows.Forms
                             {
                                 ctl.SetParentHandle(Handle);
                             }
+
                             ctl.CreateControl(fIgnoreVisible);
                         }
                     }
@@ -5018,6 +5077,7 @@ namespace System.Windows.Forms
                         _state &= (~States.Created);
                     }
                 }
+
                 OnCreateControl();
             }
         }
@@ -5115,6 +5175,7 @@ namespace System.Windows.Forms
                     {
                         Gdi32.DeleteObject(p);
                     }
+
                     Properties.SetObject(s_backBrushProperty, null);
                 }
             }
@@ -5167,6 +5228,7 @@ namespace System.Windows.Forms
                             ctl._parent = null;
                             ctl.Dispose();
                         }
+
                         Properties.SetObject(s_controlsCollectionProperty, null);
                     }
 
@@ -5187,6 +5249,7 @@ namespace System.Windows.Forms
                 {
                     _window.ForceExitMessageLoop();
                 }
+
                 base.Dispose(disposing);
             }
         }
@@ -5238,6 +5301,7 @@ namespace System.Windows.Forms
                     iwdata = new DataObject();
                     iwdata.SetData(data);
                 }
+
                 dataObject = (IComDataObject)iwdata;
             }
 
@@ -5316,6 +5380,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.ControlBadAsyncResult, nameof(asyncResult));
             }
+
             Debug.Assert(this == entry._caller, "Called BeginInvoke on one control, and the corresponding EndInvoke on a different control");
 
             if (!asyncResult.IsCompleted)
@@ -5337,6 +5402,7 @@ namespace System.Windows.Forms
             {
                 throw entry._exception;
             }
+
             return entry._retVal;
         }
 
@@ -5359,6 +5425,7 @@ namespace System.Windows.Forms
                         Invalidate();
                     }
                 }
+
                 return true;
             }
             else
@@ -5474,6 +5541,7 @@ namespace System.Windows.Forms
             {
                 User32.SetFocus(new HandleRef(this, Handle));
             }
+
             if (Focused && ParentInternal is not null)
             {
                 IContainerControl c = ParentInternal.GetContainerControl();
@@ -5514,6 +5582,7 @@ namespace System.Windows.Forms
 
                 handle = User32.GetAncestor(handle, User32.GA.PARENT);
             }
+
             return null;
         }
 
@@ -5591,6 +5660,15 @@ namespace System.Windows.Forms
             return (ctl == this) ? null : ctl;
         }
 
+        private protected virtual string GetCaptionForTool(ToolTip toolTip)
+        {
+            IKeyboardToolTip host = ToolStripControlHost;
+
+            return host is null
+                ? toolTip.GetCaptionForTool(this)
+                : host.GetCaptionForTool(toolTip);
+        }
+
         /// <summary>
         ///  Retrieves the child control that is located at the specified client
         ///  coordinates.
@@ -5613,6 +5691,7 @@ namespace System.Windows.Forms
             {
                 c = c.ParentInternal;
             }
+
             while (c is not null && !IsFocusManagingContainerControl(c))
             {
                 c = c.ParentInternal;
@@ -5709,6 +5788,7 @@ namespace System.Windows.Forms
                 int localWidth = bounds.Width - adornmentWidth;
                 sw = (int)Math.Round(localWidth * dx) + adornmentWidth;
             }
+
             if ((_controlStyle & ControlStyles.FixedHeight) != ControlStyles.FixedHeight && (specified & BoundsSpecified.Height) != 0)
             {
                 int adornmentHeight = (adornments.bottom - adornments.top);
@@ -5745,8 +5825,10 @@ namespace System.Windows.Forms
                     isDisposing = true;
                     break;
                 }
+
                 up = up._parent;
             }
+
             return isDisposing;
         }
 
@@ -5845,6 +5927,9 @@ namespace System.Windows.Forms
 
             return found;
         }
+
+        private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
+            => ((IKeyboardToolTip)ToolStripControlHost)?.GetNeighboringToolsRectangles() ?? GetOwnNeighboringToolsRectangles();
 
         /// <summary>
         ///  Retrieves the next control in the tab order of child controls.
@@ -6268,9 +6353,11 @@ namespace System.Windows.Forms
                         &rcArea,
                         (_controlStyle & ControlStyles.Opaque) != ControlStyles.Opaque ? BOOL.TRUE : BOOL.FALSE);
                 }
+
                 NotifyInvalidate(rc);
             }
         }
+
         /// <summary>
         ///  Executes the given delegate on the thread that owns this Control's
         ///  underlying window handle.  It is an error to call this on the same thread that
@@ -6333,6 +6420,7 @@ namespace System.Windows.Forms
                 {
                     s_invokeMarshaledCallbackHelperDelegate = new ContextCallback(InvokeMarshaledCallbackHelper);
                 }
+
                 // If there's no ExecutionContext, make sure we have a SynchronizationContext.  There's no
                 // direct check for ExecutionContext: this is as close as we can get.
                 if (SynchronizationContext.Current is null)
@@ -6502,6 +6590,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return false;
         }
 
@@ -6522,6 +6611,7 @@ namespace System.Windows.Forms
 
                 control = control.ParentInternal;
             }
+
             return false;
         }
 
@@ -6578,6 +6668,7 @@ namespace System.Windows.Forms
             {
                 mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS);
             }
+
             return (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & mask) != 0;
         }
 
@@ -6644,6 +6735,7 @@ namespace System.Windows.Forms
                 {
                     Debug.Write("null");
                 }
+
                 Debug.WriteLine(")");
             }
 #endif
@@ -6680,8 +6772,10 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
+
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose && pos == 0, "   ...no & found");
             }
+
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
             return false;
         }
@@ -6788,6 +6882,7 @@ namespace System.Windows.Forms
             {
                 executionContext = ExecutionContext.Capture();
             }
+
             ThreadMethodEntry tme = new ThreadMethodEntry(caller, this, method, args, synchronous, executionContext);
 
             lock (this)
@@ -6823,10 +6918,12 @@ namespace System.Windows.Forms
                 {
                     WaitForWaitHandle(tme.AsyncWaitHandle);
                 }
+
                 if (tme._exception is not null)
                 {
                     ExceptionDispatchInfo.Throw(tme._exception);
                 }
+
                 return tme._retVal;
             }
             else
@@ -6948,6 +7045,7 @@ namespace System.Windows.Forms
                         Gdi32.DeleteObject(p);
                     }
                 }
+
                 Properties.SetObject(s_backBrushProperty, null);
             }
 
@@ -7337,9 +7435,11 @@ namespace System.Windows.Forms
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }
+
                     UpdateZOrder();
                 }
             }
+
             SetState(States.ParentRecreating, false);
 
             // if our parent was initially the the parent who's handle just got recreated, we need
@@ -7525,6 +7625,7 @@ namespace System.Windows.Forms
                     {
                         ctl.OnParentVisibleChanged(e);
                     }
+
                     if (!visible)
                     {
                         ctl.OnParentBecameInvisible();
@@ -7770,6 +7871,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 ListenToUserPreferenceChanged(false /*listen*/);
             }
 
@@ -7788,6 +7890,7 @@ namespace System.Windows.Forms
                         _text = null;
                     }
                 }
+
                 SetAcceptDrops(false);
             }
             catch (Exception ex)
@@ -8291,6 +8394,7 @@ namespace System.Windows.Forms
             {
                 Invalidate();
             }
+
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
             ((EventHandler)Events[s_resizeEvent])?.Invoke(this, e);
         }
@@ -8350,6 +8454,7 @@ namespace System.Windows.Forms
                     controlsCollection[i].OnSystemColorsChanged(EventArgs.Empty);
                 }
             }
+
             Invalidate();
 
             ((EventHandler)Events[s_systemColorsChangedEvent])?.Invoke(this, e);
@@ -8615,11 +8720,13 @@ namespace System.Windows.Forms
                                 {
                                     OnPaintBackground(e);
                                 }
+
                                 break;
                             default:
                                 Debug.Fail("Unknown PaintLayer " + layer);
                                 break;
                         }
+
                         exceptionThrown = false;
                     }
                     finally
@@ -9276,6 +9383,7 @@ namespace System.Windows.Forms
                     RemovePendingMessages(User32.WM.SYSCHAR, User32.WM.SYSCHAR);
                     RemovePendingMessages(User32.WM.IME_CHAR, User32.WM.IME_CHAR);
                 }
+
                 return ke.Handled;
             }
         }
@@ -9378,6 +9486,7 @@ namespace System.Windows.Forms
                 topMostParent = TopMostParent;
                 current = (User32.UISF)User32.SendMessageW(topMostParent, User32.WM.QUERYUISTATE);
             }
+
             User32.UISF toClear = 0;
 
             // if we are here, a key or tab has been pressed on this control.
@@ -9884,6 +9993,7 @@ namespace System.Windows.Forms
                     {
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
+
                     if (accept)
                     {
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + Handle.ToString());
@@ -10009,6 +10119,7 @@ namespace System.Windows.Forms
                 ScaleControl(includedFactor, excludedFactor, requestingControl);
                 ScaleChildControls(includedFactor, excludedFactor, requestingControl);
             }
+
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
         }
 
@@ -10216,6 +10327,7 @@ namespace System.Windows.Forms
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
+
             if (!maxSize.IsEmpty)
             {
                 maxSize -= adornmentSize;
@@ -10264,6 +10376,7 @@ namespace System.Windows.Forms
                 {
                     sw = (int)(Math.Round((_x + _width) * dx)) - sx;
                 }
+
                 int sh = _height;
                 if ((_controlStyle & ControlStyles.FixedHeight) != ControlStyles.FixedHeight)
                 {
@@ -10304,10 +10417,12 @@ namespace System.Windows.Forms
             {
                 size.Width = (int)Math.Round((float)size.Width * x);
             }
+
             if (!GetStyle(ControlStyles.FixedHeight))
             {
                 size.Height = (int)Math.Round((float)size.Height * y);
             }
+
             return size;
         }
 
@@ -10349,9 +10464,8 @@ namespace System.Windows.Forms
 
         private Control GetNextSelectableControl(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap)
         {
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-            if (!Contains(ctl) || !nested && ctl._parent != this)
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            if (!Contains(ctl) ||
+                (!nested && ctl._parent != this))
             {
                 ctl = null;
             }
@@ -10372,6 +10486,7 @@ namespace System.Windows.Forms
                     {
                         return null; //prevent infinite wrapping.
                     }
+
                     alreadyWrapped = true;
                 }
                 else
@@ -10384,10 +10499,12 @@ namespace System.Windows.Forms
                         {
                             continue;
                         }
+
                         return ctl;
                     }
                 }
-            } while (ctl != start);
+            }
+            while (ctl != start);
             return null;
         }
 
@@ -10521,6 +10638,7 @@ namespace System.Windows.Forms
 #endif
                 ParentInternal.SuspendLayout();
             }
+
             try
             {
                 if (_x != x || _y != y || _width != width || _height != height)
@@ -10549,6 +10667,7 @@ namespace System.Windows.Forms
                             {
                                 flags |= User32.SWP.NOMOVE;
                             }
+
                             if (_width == width && _height == height)
                             {
                                 flags |= User32.SWP.NOSIZE;
@@ -10634,6 +10753,7 @@ namespace System.Windows.Forms
             {
                 SetState(States.Created, false);
             }
+
             UpdateRoot();
         }
 
@@ -10672,6 +10792,7 @@ namespace System.Windows.Forms
                     {
                         RecreateHandle();
                     }
+
                     if (!GetTopLevel())
                     {
                         if (value == IntPtr.Zero)
@@ -10692,6 +10813,7 @@ namespace System.Windows.Forms
                             {
                                 _parent.UpdateChildZOrder(this);
                             }
+
                             Application.UnparkHandle(new HandleRef(_window, Handle), _window.DpiAwarenessContext);
                         }
                     }
@@ -10733,6 +10855,11 @@ namespace System.Windows.Forms
             _controlStyle = value ? _controlStyle | flag : _controlStyle & ~flag;
         }
 
+        internal virtual void SetToolTip(ToolTip toolTip)
+        {
+            // Control doesn't have a specific logic after a toolTip is set
+        }
+
         protected void SetTopLevel(bool value)
         {
             if (value && IsActiveX)
@@ -10753,6 +10880,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.TopLevelParentedControl, nameof(value));
                 }
+
                 SetState(States.TopLevel, value);
                 // make sure the handle is created before hooking, otherwise a toplevel control that never
                 // creates its handle will leak.
@@ -10760,12 +10888,14 @@ namespace System.Windows.Forms
                 {
                     ListenToUserPreferenceChanged(value);
                 }
+
                 UpdateStyles();
                 SetParentHandle(IntPtr.Zero);
                 if (value && Visible)
                 {
                     CreateControl();
                 }
+
                 UpdateRoot();
             }
         }
@@ -10839,6 +10969,7 @@ namespace System.Windows.Forms
                         OnVisibleChanged(EventArgs.Empty);
                     }
                 }
+
                 UpdateRoot();
             }
             else
@@ -11043,6 +11174,7 @@ namespace System.Windows.Forms
                             return ContentAlignment.TopLeft;
                     }
                 }
+
                 if ((align & WindowsFormsUtils.AnyMiddleAlign) != 0)
                 {
                     switch (align)
@@ -11065,6 +11197,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return align;
         }
 
@@ -11253,6 +11386,7 @@ namespace System.Windows.Forms
                 }
 #endif
             }
+
             if (newSize)
             {
 #if DEBUG
@@ -11320,10 +11454,12 @@ namespace System.Windows.Forms
                     break;
                 }
             }
+
             if (newIndex > curIndex)
             {
                 newIndex--;
             }
+
             if (newIndex != curIndex)
             {
                 Controls.SetChildIndex(ctl, newIndex);
@@ -11348,6 +11484,7 @@ namespace System.Windows.Forms
                     return;
                 }
             }
+
             ReflectParent = null;
         }
 
@@ -11383,6 +11520,7 @@ namespace System.Windows.Forms
                     break;
                 }
             }
+
             if (User32.GetWindow(new HandleRef(ctl._window, ctl.Handle), User32.GW.HWNDPREV) != prevHandle)
             {
                 _state |= States.NoZOrder;
@@ -11434,10 +11572,12 @@ namespace System.Windows.Forms
                 {
                     cp.Style |= (int)User32.WS.VISIBLE;
                 }
+
                 if (winStyle != cp.Style)
                 {
                     WindowStyle = cp.Style;
                 }
+
                 if (exStyle != cp.ExStyle)
                 {
                     WindowExStyle = cp.ExStyle;
@@ -11541,6 +11681,7 @@ namespace System.Windows.Forms
                     return;
                 }
             }
+
             DefWndProc(ref m);
         }
 
@@ -11640,6 +11781,7 @@ namespace System.Windows.Forms
                     using PaintEventArgs pevent = new PaintEventArgs(dc, Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom));
                     PaintWithErrorHandling(pevent, PaintLayerBackground);
                 }
+
                 m.Result = (IntPtr)1;
             }
             else
@@ -11815,6 +11957,7 @@ namespace System.Windows.Forms
             {
                 _parent.UpdateChildZOrder(this);
             }
+
             UpdateBounds();
 
             // Let any interested sites know that we've now created a handle
@@ -12033,6 +12176,7 @@ namespace System.Windows.Forms
             {
                 DefWndProc(ref m);
             }
+
             OnMouseMove(new MouseEventArgs(MouseButtons, 0, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
         }
 
@@ -12190,6 +12334,7 @@ namespace System.Windows.Forms
                 // treating it as signed
                 p = (IntPtr)(long)ctrlId;
             }
+
             if (!ReflectMessage(p, ref m))
             {
                 // Additional Check For Control .... TabControl truncates the Hwnd value...
@@ -12274,6 +12419,7 @@ namespace System.Windows.Forms
                             bufferedGraphics2.Graphics.FillRectangle(Brushes.Red, band);
                             bufferedGraphics2.Render();
                         }
+
                         Thread.Sleep(50);
                     }
 #endif
@@ -12410,6 +12556,7 @@ namespace System.Windows.Forms
                 {
                     different = true;
                 }
+
                 if ((wp->flags & User32.SWP.NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height))
                 {
                     different = true;
@@ -12442,6 +12589,7 @@ namespace System.Windows.Forms
                     hWnd = User32.GetDlgItem(this, (User32.DialogItemID)PARAM.HIWORD(m.WParam));
                     break;
             }
+
             if (hWnd == IntPtr.Zero || !ReflectMessage(hWnd, ref m))
             {
                 DefWndProc(ref m);
@@ -12715,6 +12863,7 @@ namespace System.Windows.Forms
                     {
                         WmOwnerDraw(ref m);
                     }
+
                     break;
 
                 case User32.WM.ERASEBKGND:
@@ -12734,6 +12883,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.PRINTCLIENT:
@@ -12745,6 +12895,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.SYSCOMMAND:
@@ -12761,6 +12912,7 @@ namespace System.Windows.Forms
                             return;
                         }
                     }
+
                     DefWndProc(ref m);
                     break;
 
@@ -12777,6 +12929,7 @@ namespace System.Windows.Forms
                     {
                         WmOwnerDraw(ref m);
                     }
+
                     break;
 
                 case User32.WM.SETCURSOR:
@@ -12837,6 +12990,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.IME_CHAR:
@@ -12865,6 +13019,7 @@ namespace System.Windows.Forms
                     {
                         SetState(States.DoubleClickFired, true);
                     }
+
                     break;
 
                 case User32.WM.LBUTTONDOWN:
@@ -12881,6 +13036,7 @@ namespace System.Windows.Forms
                     {
                         SetState(States.DoubleClickFired, true);
                     }
+
                     break;
 
                 case User32.WM.MBUTTONDOWN:
@@ -12905,6 +13061,7 @@ namespace System.Windows.Forms
                     {
                         SetState(States.DoubleClickFired, true);
                     }
+
                     break;
 
                 case User32.WM.MOUSELEAVE:
@@ -12955,6 +13112,7 @@ namespace System.Windows.Forms
                     {
                         SetState(States.DoubleClickFired, true);
                     }
+
                     break;
 
                 case User32.WM.RBUTTONDOWN:
@@ -13044,6 +13202,7 @@ namespace System.Windows.Forms
                 {
                     return ArrangedElementCollection.Empty;
                 }
+
                 return controlsCollection;
             }
         }
@@ -13099,14 +13258,17 @@ namespace System.Windows.Forms
                             {
                                 ccs.OnComponentChanging(this, sizeProperty);
                             }
+
                             sizeChanged = true;
                         }
+
                         if (locationProperty is not null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
                         {
                             if (!(site is INestedSite))
                             {
                                 ccs.OnComponentChanging(this, locationProperty);
                             }
+
                             locationChanged = true;
                         }
                     }
@@ -13209,6 +13371,7 @@ namespace System.Windows.Forms
             {
                 pCI->dwFlags |= Ole32.CTRLINFO.EATS_RETURN;
             }
+
             if (IsInputKey(Keys.Escape))
             {
                 pCI->dwFlags |= Ole32.CTRLINFO.EATS_ESCAPE;
@@ -13918,20 +14081,9 @@ namespace System.Windows.Forms
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle() => GetToolNativeScreenRectangle();
 
-        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles()
-        {
-            IKeyboardToolTip host = ToolStripControlHost;
-            if (host is null)
-            {
-                return GetOwnNeighboringToolsRectangles();
-            }
-            else
-            {
-                return host.GetNeighboringToolsRectangles();
-            }
-        }
+        IList<Rectangle> IKeyboardToolTip.GetNeighboringToolsRectangles() => GetNeighboringToolsRectangles();
 
-        bool IKeyboardToolTip.IsHoveredWithMouse() => ClientRectangle.Contains(PointToClient(MousePosition));
+        bool IKeyboardToolTip.IsHoveredWithMouse() => IsHoveredWithMouse();
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
@@ -13951,18 +14103,7 @@ namespace System.Windows.Forms
 
         void IKeyboardToolTip.OnUnhooked(ToolTip toolTip) => OnKeyboardToolTipUnhook(toolTip);
 
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
-        {
-            IKeyboardToolTip host = ToolStripControlHost;
-            if (host is null)
-            {
-                return toolTip.GetCaptionForTool(this);
-            }
-            else
-            {
-                return host.GetCaptionForTool(toolTip);
-            }
-        }
+        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip) => GetCaptionForTool(toolTip);
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {

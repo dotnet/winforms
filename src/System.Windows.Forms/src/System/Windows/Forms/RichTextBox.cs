@@ -37,6 +37,7 @@ namespace System.Windows.Forms
                 {
                     richTextDbg = new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
                 }
+
                 return richTextDbg;
             }
         }
@@ -292,6 +293,7 @@ namespace System.Windows.Forms
                 {
                     return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANREDO)) != 0;
                 }
+
                 return false;
             }
         }
@@ -502,6 +504,7 @@ namespace System.Windows.Forms
             {
                 scrollBarPadding.Height += SystemInformation.HorizontalScrollBarHeight;
             }
+
             if (Multiline && (ScrollBars & RichTextBoxScrollBars.Vertical) != 0)
             {
                 scrollBarPadding.Width += SystemInformation.VerticalScrollBarWidth;
@@ -564,6 +567,7 @@ namespace System.Windows.Forms
             get => base.MaxLength;
             set => base.MaxLength = value;
         }
+
         [DefaultValue(true)]
         public override bool Multiline
         {
@@ -620,6 +624,7 @@ namespace System.Windows.Forms
                 {
                     shortcutsToDisable = new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
                 }
+
                 richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
             }
         }
@@ -872,6 +877,7 @@ namespace System.Windows.Forms
                     pf.wNumbering = PFN.BULLET;
                     pf.dxOffset = Pixel2Twip(bulletIndent, true);
                 }
+
                 // set the format for our current paragraph or selection
                 User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
@@ -984,6 +990,7 @@ namespace System.Windows.Forms
                 {
                     selColor = selectionBackColorToSetOnHandleCreated;
                 }
+
                 return selColor;
             }
             set
@@ -1449,6 +1456,7 @@ namespace System.Windows.Forms
                         {
                             value = string.Empty;
                         }
+
                         StreamIn(value, SF.TEXT | SF.UNICODE);
                         // reset Modified
                         User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
@@ -1559,6 +1567,7 @@ namespace System.Windows.Forms
                     {
                         zoomMultiplier = 1.0f;
                     }
+
                     return zoomMultiplier;
                 }
                 else
@@ -1760,12 +1769,14 @@ namespace System.Windows.Forms
                                                     pBuffer++;
                                                     continue;
                                                 }
+
                                                 *pChars = *pBuffer;
                                                 pChars++;
                                                 pBuffer++;
                                                 consumedCharCount++;
                                             }
                                         }
+
                                         editStream.Write(bytes, 0, consumedCharCount * 2);
                                     }
                                     else
@@ -1785,14 +1796,17 @@ namespace System.Windows.Forms
                                                     pBuffer++;
                                                     continue;
                                                 }
+
                                                 *pChars = *pBuffer;
                                                 pChars++;
                                                 pBuffer++;
                                                 consumedCharCount++;
                                             }
                                         }
+
                                         editStream.Write(bytes, 0, consumedCharCount);
                                     }
+
                                     break;
                             }
 
@@ -1840,7 +1854,8 @@ namespace System.Windows.Forms
                 ret = 1;
             }
 #else
-            catch (IOException) {
+            catch (IOException)
+            {
                 transferred = 0;
                 ret = 1;
             }
@@ -1888,6 +1903,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
             }
+
             if (end < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
@@ -1994,6 +2010,7 @@ namespace System.Windows.Forms
                             foundCursor++;
                         }
                     }
+
                     chrg.cpMax = foundCursor;
                 }
 
@@ -2060,6 +2077,7 @@ namespace System.Windows.Forms
                 start = 0;
                 end = textLen;
             }
+
             if (end == -1)
             {
                 end = textLen;
@@ -2313,6 +2331,7 @@ namespace System.Windows.Forms
             {
                 index = Math.Max(t.Length - 1, 0);
             }
+
             return index;
         }
 
@@ -2410,6 +2429,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(data));
             }
+
             SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             SF flags;
@@ -2676,6 +2696,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 
@@ -3079,6 +3100,7 @@ namespace System.Windows.Forms
                 {
                     cookieVal = OUTPUT | ANSI;
                 }
+
                 if ((flags & SF.RTF) != 0)
                 {
                     cookieVal |= RTF;
@@ -3094,6 +3116,7 @@ namespace System.Windows.Forms
                         cookieVal |= TEXTLF;
                     }
                 }
+
                 es.dwCookie = (UIntPtr)cookieVal;
                 var callback = new EDITSTREAMCALLBACK(EditStreamProc);
                 es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
@@ -3171,6 +3194,7 @@ namespace System.Windows.Forms
                         {
                             pText[index] = '\n';
                         }
+
                         index++;
                     }
                 }
@@ -3232,6 +3256,7 @@ namespace System.Windows.Forms
                 {
                     User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 }
+
                 if (ForeColor.IsSystemColor)
                 {
                     InternalSetForeColor(ForeColor);
@@ -3281,9 +3306,11 @@ namespace System.Windows.Forms
                     {
                         OnLinkClicked(new LinkClickedEventArgs(linktext));
                     }
+
                     m.Result = (IntPtr)1;
                     return;
             }
+
             m.Result = IntPtr.Zero;
             return;
         }
@@ -3399,6 +3426,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         m.Result = (IntPtr)1;   // tell them we did the drop
                         break;
 
@@ -3410,8 +3438,10 @@ namespace System.Windows.Forms
                             {
                                 reqResize->rc.bottom++;
                             }
+
                             OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
                         }
+
                         break;
 
                     case EN.SELCHANGE:
@@ -3444,6 +3474,7 @@ namespace System.Windows.Forms
                                         m.Result = IntPtr.Zero;
                                         return;
                                     }
+
                                     break;
 
                                 // Throw an exception for the following
@@ -3634,6 +3665,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.SETFONT:
@@ -3661,6 +3693,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = (IntPtr)(65536 + 30);
                     }
+
                     break;
 
                 case User32.WM.RBUTTONUP:
@@ -3686,8 +3719,10 @@ namespace System.Windows.Forms
                         {
                             OnVScroll(EventArgs.Empty);
                         }
+
                         break;
                     }
+
                 case User32.WM.HSCROLL:
                     {
                         base.WndProc(ref m);
@@ -3700,8 +3735,10 @@ namespace System.Windows.Forms
                         {
                             OnHScroll(EventArgs.Empty);
                         }
+
                         break;
                     }
+
                 default:
                     base.WndProc(ref m);
                     break;

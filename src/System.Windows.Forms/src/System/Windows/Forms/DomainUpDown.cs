@@ -68,6 +68,7 @@ namespace System.Windows.Forms
                 {
                     _domainItems = new DomainUpDownItemCollection(this);
                 }
+
                 return _domainItems;
             }
         }
@@ -234,6 +235,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return;
@@ -246,6 +248,7 @@ namespace System.Windows.Forms
             {
                 matchIndex = MatchIndex(Text, false, _domainIndex);
             }
+
             if (matchIndex != -1)
             {
                 // Found a match, so select this value
@@ -291,14 +294,17 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return -1;
             }
+
             if (startPosition < 0)
             {
                 startPosition = _domainItems.Count - 1;
             }
+
             if (startPosition >= _domainItems.Count)
             {
                 startPosition = 0;
@@ -339,7 +345,8 @@ namespace System.Windows.Forms
                 {
                     index = 0;
                 }
-            } while (!found && index != startPosition);
+            }
+            while (!found && index != startPosition);
 
             return matchIndex;
         }
@@ -381,9 +388,11 @@ namespace System.Windows.Forms
                         // Select the matching domain item
                         SelectIndex(matchIndex);
                     }
+
                     e.Handled = true;
                 }
             }
+
             base.OnTextBoxKeyPress(source, e);
         }
 
@@ -479,6 +488,7 @@ namespace System.Windows.Forms
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 s += ", SelectedIndex: " + SelectedIndex.ToString(CultureInfo.CurrentCulture);
             }
+
             return s;
         }
 
@@ -492,6 +502,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return;
@@ -503,6 +514,7 @@ namespace System.Windows.Forms
             {
                 matchIndex = MatchIndex(Text, false, _domainIndex);
             }
+
             if (matchIndex != -1)
             {
                 // Found a match, so set the domain index accordingly

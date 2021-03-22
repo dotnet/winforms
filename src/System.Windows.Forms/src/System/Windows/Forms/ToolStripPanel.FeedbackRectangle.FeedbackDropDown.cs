@@ -82,12 +82,14 @@ namespace System.Windows.Forms
                 protected override void OnPaint(PaintEventArgs e)
                 {
                 }
+
                 protected override void OnPaintBackground(PaintEventArgs e)
                 {
                     // respond to everything in WM_ERASEBKGND
                     Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(e.Graphics, this));
                     Renderer.DrawToolStripBorder(new ToolStripRenderEventArgs(e.Graphics, this));
                 }
+
                 protected override void OnOpening(CancelEventArgs e)
                 {
                     base.OnOpening(e);

@@ -43,6 +43,7 @@ namespace System.Windows.Forms
                 parentImageListProperty = value;
             }
         }
+
         /// <summary>
         ///  Gets a value indicating whether this converter can convert an object in the
         ///  given source type to a string using the specified context.
@@ -53,6 +54,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -65,10 +67,12 @@ namespace System.Windows.Forms
             {
                 return (string)value;
             }
+
             if (value is null)
             {
                 return "";
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 

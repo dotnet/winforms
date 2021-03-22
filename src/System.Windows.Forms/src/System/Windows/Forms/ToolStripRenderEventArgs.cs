@@ -103,6 +103,7 @@ namespace System.Windows.Forms
                         // there's no connected rect between a system menu item and a dropdown.
                         return Rectangle.Empty;
                     }
+
                     if (ownerItem != null && ownerItem.ParentInternal != null && !ownerItem.IsOnDropDown)
                     {
                         // translate the item into our coordinate system.

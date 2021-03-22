@@ -234,6 +234,7 @@ namespace System.Windows.Forms
                             break;
                     }
                 }
+
                 return cp;
             }
         }
@@ -869,6 +870,7 @@ namespace System.Windows.Forms
             {
                 _upDownEdit.Bounds = upDownEditBounds;
             }
+
             if (_upDownButtons != null)
             {
                 _upDownButtons.Bounds = upDownButtonsBounds;
@@ -946,8 +948,10 @@ namespace System.Windows.Forms
                         {
                             User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
                         }
+
                         base.WndProc(ref m);
                     }
+
                     break;
                 case User32.WM.KILLFOCUS:
                     DefWndProc(ref m);
@@ -958,8 +962,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetToolTip(ToolTip toolTip, string caption)
+        internal override void SetToolTip(ToolTip toolTip)
         {
+            if (toolTip is null)
+            {
+                return;
+            }
+
+            string caption = toolTip.GetToolTip(this);
             toolTip.SetToolTip(_upDownEdit, caption);
             toolTip.SetToolTip(_upDownButtons, caption);
         }

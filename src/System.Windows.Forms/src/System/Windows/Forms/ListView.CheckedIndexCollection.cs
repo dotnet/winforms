@@ -45,6 +45,7 @@ namespace System.Windows.Forms
                             count++;
                         }
                     }
+
                     return count;
                 }
             }
@@ -62,6 +63,7 @@ namespace System.Windows.Forms
                             indices[index++] = i;
                         }
                     }
+
                     return indices;
                 }
             }
@@ -92,6 +94,7 @@ namespace System.Windows.Forms
                             {
                                 return i;
                             }
+
                             nChecked++;
                         }
                     }
@@ -179,6 +182,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 

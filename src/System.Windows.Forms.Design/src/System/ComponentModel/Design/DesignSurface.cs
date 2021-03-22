@@ -65,6 +65,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(rootComponentType));
             }
+
             BeginLoad(rootComponentType);
         }
 
@@ -79,6 +80,7 @@ namespace System.ComponentModel.Design
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
+
                 return ((IDesignerHost)_host).Container;
             }
         }
@@ -105,6 +107,7 @@ namespace System.ComponentModel.Design
                 {
                     return _loadErrors;
                 }
+
                 return Array.Empty<object>();
             }
         }
@@ -129,6 +132,7 @@ namespace System.ComponentModel.Design
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
+
                 return _serviceContainer;
             }
         }
@@ -166,6 +170,7 @@ namespace System.ComponentModel.Design
                             }
                         }
                     }
+
                     // loader didn't provide any help.  Just generally fail.
                     throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
@@ -265,6 +270,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
+
             BeginLoad(new DefaultDesignerLoader(rootComponentType));
         }
 
@@ -301,6 +307,7 @@ namespace System.ComponentModel.Design
             {
                 designer = TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
             }
+
             return designer;
         }
 
@@ -328,6 +335,7 @@ namespace System.ComponentModel.Design
                 {
                     ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, new Type[] { typeof(IContainer) }, null);
                 }
+
                 if (ctor != null)
                 {
                     instance = TypeDescriptor.CreateInstance(this, type, new Type[] { typeof(IContainer) }, new object[] { ComponentContainer });
@@ -338,6 +346,7 @@ namespace System.ComponentModel.Design
             {
                 instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
             }
+
             return instance;
         }
 
@@ -363,6 +372,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(owningComponent));
             }
+
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }
 
@@ -436,6 +446,7 @@ namespace System.ComponentModel.Design
             {
                 return _serviceContainer.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -502,10 +513,12 @@ namespace System.ComponentModel.Design
                     {
                         newErrors.AddRange(errors);
                     }
+
                     errors = newErrors;
                     successful = false;
                 }
             }
+
             OnLoaded(new LoadedEventArgs(successful, errors));
         }
 
@@ -592,6 +605,7 @@ namespace System.ComponentModel.Design
                 loaderHost.CreateComponent(_type);
                 loaderHost.EndLoad(_type.FullName, true, null);
             }
+
             public override void Dispose()
             {
             }

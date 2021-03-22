@@ -36,7 +36,7 @@ namespace System.Windows.Forms
             None = 0,       // object not being edited
             Object = 1,     // object provided an edit verb and we invoked it
             Host = 2        // we invoked our own edit verb
-        };
+        }
 
         // Enumeration of Selection Styles
         internal enum SelectionStyle
@@ -44,7 +44,7 @@ namespace System.Windows.Forms
             NotSelected = 0,
             Selected = 1,
             Active = 2
-        };
+        }
 
         //
         // Static members:
@@ -99,6 +99,7 @@ namespace System.Windows.Forms
                     using var dc = User32.GetDcScope.ScreenDC;
                     logPixelsX = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                 }
+
                 return logPixelsX;
             }
         }
@@ -113,6 +114,7 @@ namespace System.Windows.Forms
                     using var dc = User32.GetDcScope.ScreenDC;
                     logPixelsY = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                 }
+
                 return logPixelsY;
             }
         }
@@ -130,6 +132,7 @@ namespace System.Windows.Forms
                     return (ISelectionService)o;
                 }
             }
+
             return null;
         }
 

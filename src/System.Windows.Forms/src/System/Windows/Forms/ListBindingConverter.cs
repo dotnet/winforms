@@ -29,6 +29,7 @@ namespace System.Windows.Forms
                 {
                     ctorTypes = new Type[] { typeof(string), typeof(object), typeof(string), typeof(bool), typeof(DataSourceUpdateMode), typeof(object), typeof(string), typeof(IFormatProvider) };
                 }
+
                 return ctorTypes;
             }
         }
@@ -44,6 +45,7 @@ namespace System.Windows.Forms
                 {
                     ctorParamProps = new string[] { null, null, null, "FormattingEnabled", "DataSourceUpdateMode", "NullValue", "FormatString", "FormatInfo", };
                 }
+
                 return ctorParamProps;
             }
         }
@@ -58,6 +60,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -161,10 +164,12 @@ namespace System.Windows.Forms
             if (ctor is null)
             {
                 isComplete = false;
-                ctor = typeof(Binding).GetConstructor(new Type[] {
+                ctor = typeof(Binding).GetConstructor(new Type[]
+                {
                    typeof(string),
                    typeof(object),
-                   typeof(string)});
+                   typeof(string)
+                });
             }
 
             // now fill in the values.
@@ -189,8 +194,10 @@ namespace System.Windows.Forms
                         val = TypeDescriptor.GetProperties(b)[ConstructorParameterProperties[i]].GetValue(b);
                         break;
                 }
+
                 values[i] = val;
             }
+
             return new InstanceDescriptor(ctor, values, isComplete);
         }
     }

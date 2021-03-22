@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -114,6 +115,7 @@ namespace System.Windows.Forms
                     bounds.Y = constrainingBounds.Top;
                 }
             }
+
             return bounds;
         }
 
@@ -142,11 +144,13 @@ namespace System.Windows.Forms
                 {
                     str.Append('&');
                 }
+
                 if (index < text.Length)
                 {
                     str.Append(text[index]);
                 }
             }
+
             return str.ToString();
         }
 
@@ -185,6 +189,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return windowText + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
 #else
             return string.Empty;
@@ -232,10 +237,12 @@ namespace System.Windows.Forms
                         {
                             mnemonic = char.ToLower(text[i + 1], CultureInfo.CurrentCulture);
                         }
+
                         break;
                     }
                 }
             }
+
             return mnemonic;
         }
 
@@ -372,6 +379,7 @@ namespace System.Windows.Forms
                     // there were bits that we shifted out.
                     return false;
                 }
+
                 return (remainder >= minValAfterShift && remainder <= maxValAfterShift);
             }
         }

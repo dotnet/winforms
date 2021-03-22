@@ -20,7 +20,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             yield return new object[] { VisualStyleElement.Button.RadioButton.CheckedHot };
             yield return new object[] { VisualStyleElement.Button.RadioButton.CheckedNormal };
             yield return new object[] { VisualStyleElement.ComboBox.DropDownButton.Hot };
-            yield return new object[] { VisualStyleElement.ComboBox.DropDownButton.Normal};
+            yield return new object[] { VisualStyleElement.ComboBox.DropDownButton.Normal };
             yield return new object[] { VisualStyleElement.CreateElement("BUTTON", 0, int.MinValue) };
             yield return new object[] { VisualStyleElement.CreateElement("BUTTON", 0, int.MaxValue) };
         }
@@ -91,6 +91,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             Assert.True(result);
             Assert.Equal(result, VisualStyleRenderer.IsSupported);
         }
+
         public static IEnumerable<object[]> IsElementDefined_TestData()
         {
             yield return new object[] { VisualStyleElement.Button.PushButton.Hot, true };
@@ -137,7 +138,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             // Don't verify anything, just make sure the interop call succeeds.
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
             using var bitmap = new Bitmap(10, 10);
-            using  Graphics graphics = Graphics.FromImage(bitmap);
+            using Graphics graphics = Graphics.FromImage(bitmap);
             renderer.DrawBackground(graphics, bounds);
             Assert.Equal(0, renderer.LastHResult);
         }

@@ -60,10 +60,12 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowCollection_EnumNotStarted);
                     }
+
                     if (current == owner.Count)
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowCollection_EnumFinished);
                     }
+
                     return owner[current];
                 }
             }

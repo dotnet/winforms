@@ -492,6 +492,7 @@ namespace System.Windows.Forms
                                     item.Checked = true;
                                 }
                             }
+
                             savedCheckedItems = null;
                         }
 
@@ -557,6 +558,7 @@ namespace System.Windows.Forms
                                     item.Checked = true;
                                 }
                             }
+
                             savedCheckedItems = null;
                         }
 
@@ -598,6 +600,7 @@ namespace System.Windows.Forms
                 {
                     checkedIndexCollection = new CheckedIndexCollection(this);
                 }
+
                 return checkedIndexCollection;
             }
         }
@@ -617,6 +620,7 @@ namespace System.Windows.Forms
                 {
                     checkedListViewItemCollection = new CheckedListViewItemCollection(this);
                 }
+
                 return checkedListViewItemCollection;
             }
         }
@@ -744,6 +748,7 @@ namespace System.Windows.Forms
                     //Don't need these styles when mirroring is turned on.
                     cp.ExStyle &= ~(int)(User32.WS_EX.RTLREADING | User32.WS_EX.RIGHT | User32.WS_EX.LEFTSCROLLBAR);
                 }
+
                 return cp;
             }
         }
@@ -834,6 +839,7 @@ namespace System.Windows.Forms
                         return Items[displayIndex];
                     }
                 }
+
                 return null;
             }
             set
@@ -998,6 +1004,7 @@ namespace System.Windows.Forms
                 {
                     groups = new ListViewGroupCollection(this);
                 }
+
                 return groups;
             }
         }
@@ -1090,6 +1097,7 @@ namespace System.Windows.Forms
                         HoverSelection = true;
                         Activation = ItemActivation.OneClick;
                     }
+
                     UpdateExtendedStyles();
                 }
             }
@@ -1142,6 +1150,7 @@ namespace System.Windows.Forms
                 {
                     insertionMark = new ListViewInsertionMark(this);
                 }
+
                 return insertionMark;
             }
         }
@@ -1411,6 +1420,7 @@ namespace System.Windows.Forms
                 {
                     selectedIndexCollection = new SelectedIndexCollection(this);
                 }
+
                 return selectedIndexCollection;
             }
         }
@@ -1430,6 +1440,7 @@ namespace System.Windows.Forms
                 {
                     selectedListViewItemCollection = new SelectedListViewItemCollection(this);
                 }
+
                 return selectedListViewItemCollection;
             }
         }
@@ -1771,6 +1782,7 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
+
                 if (value == TopItem)
                 {
                     return;
@@ -1787,6 +1799,7 @@ namespace System.Windows.Forms
                         EnsureVisible(0);                           // here either, because it causes the listview to go blank rather than displaying anything useful.
                         Scroll(0, value.Index);                     // To work around this, we force the listbox to display the first item, then scroll down to the item
                     }                                               // user is setting as the top item.
+
                     return;                                         //
                 }                                                   //
 
@@ -2236,6 +2249,7 @@ namespace System.Windows.Forms
                     {
                         User32.PostMessageW(this, (User32.WM)LVM.ARRANGE, (IntPtr)value, IntPtr.Zero);
                     }
+
                     break;
 
                 default:
@@ -2310,6 +2324,7 @@ namespace System.Windows.Forms
             {
                 CreateHandle();
             }
+
             UpdateColumnWidths(headerAutoResize);
         }
 
@@ -2319,6 +2334,7 @@ namespace System.Windows.Forms
             {
                 CreateHandle();
             }
+
             SetColumnWidth(columnIndex, headerAutoResize);
         }
 
@@ -2349,6 +2365,7 @@ namespace System.Windows.Forms
                 {
                     savedSelectedItems = new List<ListViewItem>();
                 }
+
                 if (!savedSelectedItems.Contains(lvi))
                 {
                     savedSelectedItems.Add(lvi);
@@ -2375,6 +2392,7 @@ namespace System.Windows.Forms
                 sumOfDisplayIndices += Columns[i].DisplayIndex;
                 Debug.Assert(Columns[i].DisplayIndex > -1 && Columns[i].DisplayIndex < Columns.Count, "display indices out of whack");
             }
+
             int colsCount = Columns.Count;
             Debug.Assert(sumOfDisplayIndices == (colsCount - 1) * colsCount / 2, "display indices out of whack");
         }
@@ -2526,6 +2544,7 @@ namespace System.Windows.Forms
                     ThemingScope.Deactivate(userCookie);
                 }
             }
+
             base.CreateHandle();
 
             // image location
@@ -2722,6 +2741,7 @@ namespace System.Windows.Forms
                         {
                             m.Result = (IntPtr)CDRF.NEWFONT;
                         }
+
                         Debug.Assert(item != null, "Item was null in ITEMPREPAINT");
 
                         CDIS state = nmcd->nmcd.uItemState;
@@ -2844,6 +2864,7 @@ namespace System.Windows.Forms
                                         {
                                             C = ((C >> n) + 1) << n;
                                         }
+
                                         // Copy the adjustment into nmcd->clrText
                                         nmcd->clrText = (nmcd->clrText & (~mask)) | C;
                                         clrAdjusted = true;
@@ -2856,7 +2877,8 @@ namespace System.Windows.Forms
                                         // SystemColors.HotTrack
                                         totalshift += 8;
                                     }
-                                } while (!clrAdjusted);
+                                }
+                                while (!clrAdjusted);
                             }
 
                             if (!haveRenderInfo || riBack.IsEmpty)
@@ -2883,6 +2905,7 @@ namespace System.Windows.Forms
                             {
                                 odCacheFontHandleWrapper.Dispose();
                             }
+
                             odCacheFontHandleWrapper = new FontHandleWrapper(subItemFont);
                             Gdi32.SelectObject(nmcd->nmcd.hdc, odCacheFontHandleWrapper.Handle);
                         }
@@ -2891,10 +2914,12 @@ namespace System.Windows.Forms
                         {
                             m.Result = (IntPtr)CDRF.NEWFONT;
                         }
+
                         if (disposeSubItemFont)
                         {
                             subItemFont.Dispose();
                         }
+
                         return;
 
                     default:
@@ -3047,6 +3072,7 @@ namespace System.Windows.Forms
                         columnHeaders[colIdx].OwnerListview = null;
                         columnHeaders[colIdx].Dispose();
                     }
+
                     columnHeaders = null;
                 }
 
@@ -3085,6 +3111,7 @@ namespace System.Windows.Forms
                         catch (IO.IOException) { }
                         backgroundImageFileName = string.Empty;
                     }
+
                     for (int i = 0; i <= bkImgFileNamesCount; i++)
                     {
                         fi = new IO.FileInfo(bkImgFileNames[i]);
@@ -3123,6 +3150,7 @@ namespace System.Windows.Forms
             {
                 ApplyUpdateCachedItems();
             }
+
             EndUpdateInternal();
         }
 
@@ -3148,6 +3176,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+
             if (IsHandleCreated)
             {
                 User32.SendMessageW(this, (User32.WM)LVM.ENSUREVISIBLE, (IntPtr)index);
@@ -3176,6 +3205,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, string.Format(SR.InvalidArgument, nameof(startIndex), startIndex));
             }
+
             return FindItem(true, text, isPrefixSearch, new Point(0, 0), SearchDirectionHint.Down, startIndex, includeSubItemsInSearch);
         }
 
@@ -3215,16 +3245,20 @@ namespace System.Windows.Forms
                 switch (searchDirection)
                 {
                     case SearchDirectionHint.Up:
+                        x = Math.Max(itemBounds.Left, iconBounds.Left);
                         y = Math.Max(itemBounds.Top, iconBounds.Top) - 1;
                         break;
                     case SearchDirectionHint.Down:
+                        x = Math.Max(itemBounds.Left, iconBounds.Left);
                         y = Math.Max(itemBounds.Top, iconBounds.Top) + 1;
                         break;
                     case SearchDirectionHint.Left:
                         x = Math.Max(itemBounds.Left, iconBounds.Left) - 1;
+                        y = Math.Max(itemBounds.Top, iconBounds.Top);
                         break;
                     case SearchDirectionHint.Right:
                         x = Math.Max(itemBounds.Left, iconBounds.Left) + 1;
+                        y = Math.Max(itemBounds.Top, iconBounds.Top);
                         break;
                     default:
                         Debug.Assert(false, "these are all the search directions");
@@ -3232,7 +3266,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return FindItem(false, string.Empty, false, new Point(x, y), searchDirection, -1, false);
+            return FindItem(false, string.Empty, false, new Point(x, y), searchDirection, 0, false);
         }
 
         private unsafe ListViewItem FindItem(bool isTextSearch, string text, bool isPrefixSearch, Point pt, SearchDirectionHint dir, int startIndex, bool includeSubItemsInSearch)
@@ -3280,6 +3314,7 @@ namespace System.Windows.Forms
                         // we can do this because SearchDirectionHint is set to the VK_*
                         lvFindInfo.vkDirection = (uint)dir;
                     }
+
                     lvFindInfo.lParam = IntPtr.Zero;
                     int index = (int)User32.SendMessageW(
                         this,
@@ -3369,6 +3404,7 @@ namespace System.Windows.Forms
             {
                 rnd = new Random(handle);
             }
+
             return rnd.Next().ToString(CultureInfo.InvariantCulture);
         }
 
@@ -3384,6 +3420,7 @@ namespace System.Windows.Forms
                 result = 0;
                 nextID = 1;
             }
+
             return result;
         }
 
@@ -3417,6 +3454,7 @@ namespace System.Windows.Forms
                 {
                     displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
                 }
+
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
                 return displayIndex;
             }
@@ -3436,6 +3474,7 @@ namespace System.Windows.Forms
 
                     index++;
                 }
+
                 return -1;
             }
         }
@@ -3468,6 +3507,7 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
+
             // Default group it's last group in accessibility and not specified in Groups collection, therefore default group index = Groups.Count
             if (DefaultGroup == owningGroup)
             {
@@ -3590,6 +3630,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+
             //valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
@@ -3653,16 +3694,19 @@ namespace System.Windows.Forms
             {
                 return Rectangle.Empty;
             }
+
             if (itemIndex < 0 || itemIndex >= Items.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
+
             int subItemCount = Items[itemIndex].SubItems.Count;
 
             if (subItemIndex < 0 || subItemIndex >= subItemCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(subItemIndex), subItemIndex, string.Format(SR.InvalidArgument, nameof(subItemIndex), subItemIndex));
             }
+
             //valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
@@ -3869,6 +3913,7 @@ namespace System.Windows.Forms
             {
                 System.Array.Copy(columnHeaders, idx, columnHeaders, idx + 1, columnCount - idx);
             }
+
             columnHeaders[idx] = ch;
             ch.OwnerListview = this;
 
@@ -3894,6 +3939,7 @@ namespace System.Windows.Forms
                 {
                     hdr.DisplayIndexInternal++;
                 }
+
                 indices[i] = hdr.DisplayIndexInternal;
             }
 
@@ -4112,6 +4158,7 @@ namespace System.Windows.Forms
             {
                 return 0;
             }
+
             Debug.Assert(IsHandleCreated, "InsertItemsNative precondition: list-view handle must be created");
 
             // Much more efficient to call the native insert with max + 1, than with max.  The + 1
@@ -4171,6 +4218,7 @@ namespace System.Windows.Forms
                         {
                             Marshal.FreeHGlobal(hGlobalColumns);
                         }
+
                         hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * sizeof(int));
                         maxColumns = lvItem.cColumns;
                     }
@@ -4182,6 +4230,7 @@ namespace System.Windows.Forms
                     {
                         columns[c] = c + 1;
                     }
+
                     Marshal.Copy(columns, 0, lvItem.puColumns, lvItem.cColumns);
 
                     // Inserting an item into a ListView with checkboxes causes one or more
@@ -4243,6 +4292,7 @@ namespace System.Windows.Forms
                 {
                     Marshal.FreeHGlobal(hGlobalColumns);
                 }
+
                 listViewState1[LISTVIEWSTATE1_insertingItemsNatively] = false;
             }
 
@@ -4355,6 +4405,7 @@ namespace System.Windows.Forms
             {
                 SetBackgroundImage();
             }
+
             base.OnBackgroundImageChanged(e);
         }
 
@@ -4602,6 +4653,7 @@ namespace System.Windows.Forms
                     indices[index] = column.DisplayIndex;
                     InsertColumnNative(index++, column);
                 }
+
                 SetDisplayIndices(indices);
             }
 
@@ -4629,6 +4681,7 @@ namespace System.Windows.Forms
             {
                 Sort();
             }
+
             if (Application.ComCtlSupportsVisualStyles && (InsertionMark.Index > 0))
             {
                 InsertionMark.UpdateListView();
@@ -4676,6 +4729,7 @@ namespace System.Windows.Forms
                         savedSelectedItems.Add(lviArr[i]);
                     }
                 }
+
                 Debug.Assert(listItemsArray is null, "listItemsArray not null, even though handle created");
                 ListViewItem[] items = null;
                 ListViewItemCollection tempItems = Items;
@@ -4922,6 +4976,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(c));
             }
+
             c = ForeColor;
             if (c != SystemColors.WindowText)
             {
@@ -4961,6 +5016,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, string.Format(SR.InvalidArgument, nameof(startIndex), startIndex));
                 }
+
                 if (endIndex < 0 || endIndex >= VirtualListSize)
                 {
                     throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, string.Format(SR.InvalidArgument, nameof(endIndex), endIndex));
@@ -4972,15 +5028,18 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, string.Format(SR.InvalidArgument, nameof(startIndex), startIndex));
                 }
+
                 if (endIndex < 0 || endIndex >= Items.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, string.Format(SR.InvalidArgument, nameof(endIndex), endIndex));
                 }
             }
+
             if (startIndex > endIndex)
             {
                 throw new ArgumentException(SR.ListViewStartIndexCannotBeLargerThanEndIndex);
             }
+
             if (IsHandleCreated)
             {
                 int retval = (int)User32.SendMessageW(this, (User32.WM)LVM.REDRAWITEMS, (IntPtr)startIndex, (IntPtr)endIndex);
@@ -4993,6 +5052,7 @@ namespace System.Windows.Forms
                     {
                         rectInvalid = Rectangle.Union(rectInvalid, Items[index].Bounds);
                     }
+
                     if (startIndex > 0)
                     {
                         rectInvalid = Rectangle.Union(rectInvalid, Items[startIndex - 1].Bounds);
@@ -5003,6 +5063,7 @@ namespace System.Windows.Forms
                         rectInvalid.Height += rectInvalid.Y;
                         rectInvalid.X = rectInvalid.Y = 0;
                     }
+
                     if (endIndex < Items.Count - 1)
                     {
                         rectInvalid = Rectangle.Union(rectInvalid, Items[endIndex + 1].Bounds);
@@ -5012,12 +5073,15 @@ namespace System.Windows.Forms
                         rectInvalid.Height += ClientRectangle.Bottom - rectInvalid.Bottom;
                         rectInvalid.Width += ClientRectangle.Right - rectInvalid.Right;
                     }
+
                     if (View == View.LargeIcon)
                     {
                         rectInvalid.Inflate(1, Font.Height + 1);
                     }
+
                     Invalidate(rectInvalid);
                 }
+
                 if (!invalidateOnly)
                 {
                     Update();
@@ -5316,9 +5380,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip, string toolTipCaption)
+        internal override void SetToolTip(ToolTip toolTip)
         {
-            this.toolTipCaption = toolTipCaption;
+            if (toolTip is null)
+            {
+                return;
+            }
+
+            toolTipCaption = toolTip.GetToolTip(this);
 
             // native ListView expects tooltip HWND as a wParam and ignores lParam
             IntPtr oldHandle = User32.SendMessageW(this, (User32.WM)LVM.SETTOOLTIPS, toolTip.Handle, IntPtr.Zero);
@@ -5533,6 +5602,7 @@ namespace System.Windows.Forms
                     s += ", Items[0]: " + txt;
                 }
             }
+
             return s;
         }
 
@@ -5844,6 +5914,7 @@ namespace System.Windows.Forms
                         {
                             lvhti.Item.Focused = true;
                         }
+
                         DefWndProc(ref m);
                     }
                 }
@@ -5876,6 +5947,7 @@ namespace System.Windows.Forms
                                 m.Result = (IntPtr)CDRF.NOTIFYITEMDRAW;
                                 return true; // we are done - don't do default handling
                             }
+
                         case CDDS.ITEMPREPAINT:
                             {
                                 using Graphics g = nmcd->hdc.CreateGraphics();
@@ -6029,6 +6101,7 @@ namespace System.Windows.Forms
                             {
                                 return false;
                             }
+
                             throw;
                         }
                     }
@@ -6084,6 +6157,7 @@ namespace System.Windows.Forms
                         {
                             return false;
                         }
+
                         ColumnReorderedEventArgs chrevent = new ColumnReorderedEventArgs(
                             from,
                             to,
@@ -6114,6 +6188,7 @@ namespace System.Windows.Forms
                                 {
                                     hdr.DisplayIndexInternal -= hdrMovedForward ? 1 : -1;
                                 }
+
                                 indices[i] = hdr.DisplayIndexInternal;
                             }
 
@@ -6223,7 +6298,7 @@ namespace System.Windows.Forms
 
         private void Unhook()
         {
-            foreach(ListViewItem listViewItem in Items)
+            foreach (ListViewItem listViewItem in Items)
             {
                 KeyboardToolTipStateMachine.Instance.Unhook(listViewItem, KeyboardToolTip);
             }
@@ -6247,6 +6322,7 @@ namespace System.Windows.Forms
             {
                 return groupID;
             }
+
             for (int i = 0; i < groups.Count; i++)
             {
                 ListViewGroup targetGroup = groups[i];
@@ -6396,6 +6472,7 @@ namespace System.Windows.Forms
                                 m.Result = (IntPtr)(((int)e.NewValue == 0 ? 0 : 1) == (int)oldState ? 1 : 0);
                             }
                         }
+
                         break;
                     }
 
@@ -6474,6 +6551,7 @@ namespace System.Windows.Forms
                                         OnItemSelectionChanged(lvisce);
                                     }
                                 }
+
                                 // Delay SelectedIndexChanged event because the last item isn't present yet.
                                 if (Items.Count == 0 || Items[Items.Count - 1] != null)
                                 {
@@ -6486,6 +6564,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         break;
                     }
 
@@ -6506,11 +6585,13 @@ namespace System.Windows.Forms
                         OnClick(EventArgs.Empty);
                         OnMouseClick(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
                     }
+
                     if (!listViewState[LISTVIEWSTATE_mouseUpFired])
                     {
                         OnMouseUp(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
+
                     break;
 
                 case (int)NM.DBLCLK:
@@ -6579,6 +6660,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     break;
 
                 case (int)LVN.ODCACHEHINT:
@@ -6742,6 +6824,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     break;
             }
         }
@@ -6799,6 +6882,7 @@ namespace System.Windows.Forms
                         OnDoubleClick(EventArgs.Empty);
                         OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                     }
+
                     if (!listViewState[LISTVIEWSTATE_mouseUpFired])
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
@@ -6830,6 +6914,7 @@ namespace System.Windows.Forms
                         OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
+
                     Capture = false;
                     base.WndProc(ref m);
                     break;
@@ -6853,6 +6938,7 @@ namespace System.Windows.Forms
                     {
                         goto default;  //default handling needed
                     }
+
                 case User32.WM.SETFOCUS:
                     base.WndProc(ref m);
 
@@ -6869,6 +6955,7 @@ namespace System.Windows.Forms
                             Items[0].Focused = true;
                         }
                     }
+
                     break;
                 case User32.WM.MOUSELEAVE:
                     // if the mouse leaves and then re-enters the ListView
@@ -6891,11 +6978,12 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);
                     break;
-            };
+            }
         }
 
         /// <summary>

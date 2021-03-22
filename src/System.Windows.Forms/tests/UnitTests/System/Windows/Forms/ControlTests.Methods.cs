@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -155,6 +155,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             child2.BringToFront();
@@ -196,6 +197,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, child1.Handle);
             int invalidatedCallCount = 0;
@@ -250,6 +252,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -316,6 +319,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int parentInvalidatedCallCount = 0;
@@ -985,7 +989,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1035,7 +1040,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1088,7 +1094,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int child1CallCount = 0;
             child1.Disposed += (sender, e) => child1CallCount++;
@@ -1160,7 +1167,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1214,7 +1222,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1282,7 +1291,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1367,7 +1377,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1463,7 +1474,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int child1CallCount = 0;
             child1.Disposed += (sender, e) => child1CallCount++;
@@ -1603,7 +1615,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1695,7 +1708,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -3773,6 +3787,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childStyleChangedCallCount);
             Assert.Equal(0, childCreatedCallCount);
         }
+
         [WinFormsFact]
         public void Control_InvokeDelegateSameThread_Success()
         {
@@ -4732,6 +4747,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("PreferredSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             control.PerformLayout();
@@ -4996,6 +5012,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("PreferredSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             control.PerformLayout(affectedControl, affectedProperty);
@@ -5287,35 +5304,40 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(keys, actualKeyData);
                 processCmdKeyCallCount++;
                 return processCmdKeyResult;
-            };
+            }
+
             int isInputKeyCallCount = 0;
             bool isInputKeyAction(Keys actualKeyData)
             {
                 Assert.Equal(keys, actualKeyData);
                 isInputKeyCallCount++;
                 return isInputKeyResult;
-            };
+            }
+
             int processDialogKeyCallCount = 0;
             bool processDialogKeyAction(Keys actualKeyData)
             {
                 Assert.Equal(keys, actualKeyData);
                 processDialogKeyCallCount++;
                 return processDialogKeyResult;
-            };
+            }
+
             int isInputCharCallCount = 0;
             bool isInputCharAction(char actualCharCode)
             {
                 Assert.Equal((char)keys, actualCharCode);
                 isInputCharCallCount++;
                 return isInputCharResult;
-            };
+            }
+
             int processDialogCharCallCount = 0;
             bool processDialogCharAction(char actualCharCode)
             {
                 Assert.Equal((char)keys, actualCharCode);
                 processDialogCharCallCount++;
                 return processDialogCharResult;
-            };
+            }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = processCmdKeyAction,
@@ -5414,6 +5436,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = action
@@ -5459,6 +5482,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessDialogCharAction = action
@@ -5506,6 +5530,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessDialogKeyAction = action
@@ -5637,6 +5662,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -5927,6 +5953,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -5985,6 +6012,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = action
@@ -6013,6 +6041,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -6040,6 +6069,7 @@ namespace System.Windows.Forms.Tests
                 parentCallCount++;
                 return parentResult;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = parentAction
@@ -6051,6 +6081,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 Parent = parent,
@@ -6098,6 +6129,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = action
@@ -6873,6 +6905,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             child1.SendToBack();
@@ -6914,6 +6947,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, child1.Handle);
             int invalidatedCallCount = 0;
@@ -6968,6 +7002,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -7034,6 +7069,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int parentInvalidatedCallCount = 0;
@@ -7568,7 +7604,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -7825,7 +7862,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -8423,7 +8461,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -8680,7 +8719,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -9246,7 +9286,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -9558,7 +9599,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11123,7 +11165,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11361,7 +11404,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -11607,7 +11651,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11857,7 +11902,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;

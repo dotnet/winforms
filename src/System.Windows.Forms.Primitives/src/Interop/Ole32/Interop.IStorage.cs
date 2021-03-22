@@ -71,9 +71,9 @@ internal partial class Interop
             // pctime, patime and pmtime are optional
             void SetElementTimes(
                 [MarshalAs(UnmanagedType.LPWStr)] string pwcsName,
-                FILETIME *pctime,
-                FILETIME *patime,
-                FILETIME *pmtime);
+                FILETIME* pctime,
+                FILETIME* patime,
+                FILETIME* pmtime);
 
             void SetClass(ref Guid clsid);
 

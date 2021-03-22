@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.ComponentModel.Com2Interop;
@@ -25,7 +24,7 @@ namespace System.Windows.Forms
 {
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
-    public class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
+    public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
         private readonly DocComment _doccomment;
         private int _dcSizeRatio = -1;
@@ -103,8 +102,8 @@ namespace System.Windows.Forms
 
         private const int ToolStripButtonPaddingY = 9;
         private int _toolStripButtonPaddingY = ToolStripButtonPaddingY;
-        private static readonly Size s_defaultLargeButtonSize = new Size(32, 32);
-        private static readonly Size s_defaultNormalButtonSize = new Size(16, 16);
+        private static readonly Size s_defaultLargeButtonSize = new(32, 32);
+        private static readonly Size s_defaultNormalButtonSize = new(16, 16);
         private static Size s_largeButtonSize = s_defaultLargeButtonSize;
         private static Size s_normalButtonSize = s_defaultNormalButtonSize;
         private static bool s_isScalingInitialized;
@@ -120,45 +119,45 @@ namespace System.Windows.Forms
         private const ushort BatchModeChange = 0x0100;
         private const ushort RefreshingProperties = 0x0200;
 
-        private ushort Flags;
+        private ushort _flags;
 
         private bool GetFlag(ushort flag)
         {
-            return (Flags & flag) != (ushort)0;
+            return (_flags & flag) != (ushort)0;
         }
 
         private void SetFlag(ushort flag, bool value)
         {
             if (value)
             {
-                Flags |= flag;
+                _flags |= flag;
             }
             else
             {
-                Flags &= (ushort)~flag;
+                _flags &= (ushort)~flag;
             }
         }
 
-        private readonly ComponentEventHandler onComponentAdd;
-        private readonly ComponentEventHandler onComponentRemove;
-        private readonly ComponentChangedEventHandler onComponentChanged;
+        private readonly ComponentEventHandler _onComponentAdd;
+        private readonly ComponentEventHandler _onComponentRemove;
+        private readonly ComponentChangedEventHandler _onComponentChanged;
 
         // the cookies for our connection points on objects that support IPropertyNotifySink
         //
-        private AxHost.ConnectionPointCookie[] connectionPointCookies;
+        private AxHost.ConnectionPointCookie[] _connectionPointCookies;
 
-        private static readonly object EventPropertyValueChanged = new object();
-        private static readonly object EventComComponentNameChanged = new object();
-        private static readonly object EventPropertyTabChanged = new object();
-        private static readonly object EventSelectedGridItemChanged = new object();
-        private static readonly object EventPropertySortChanged = new object();
-        private static readonly object EventSelectedObjectsChanged = new object();
+        private static readonly object EventPropertyValueChanged = new();
+        private static readonly object EventComComponentNameChanged = new();
+        private static readonly object EventPropertyTabChanged = new();
+        private static readonly object EventSelectedGridItemChanged = new();
+        private static readonly object EventPropertySortChanged = new();
+        private static readonly object EventSelectedObjectsChanged = new();
 
         public PropertyGrid()
         {
-            onComponentAdd = new ComponentEventHandler(OnComponentAdd);
-            onComponentRemove = new ComponentEventHandler(OnComponentRemove);
-            onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
+            _onComponentAdd = new ComponentEventHandler(OnComponentAdd);
+            _onComponentRemove = new ComponentEventHandler(OnComponentRemove);
+            _onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
 
             SuspendLayout();
             AutoScaleMode = AutoScaleMode.None;
@@ -180,6 +179,7 @@ namespace System.Windows.Forms
                         s_normalButtonSize = LogicalToDeviceUnits(s_defaultNormalButtonSize);
                         s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
                     }
+
                     s_isScalingInitialized = true;
                 }
             }
@@ -261,10 +261,12 @@ namespace System.Windows.Forms
                 {
                     _doccomment.ResumeLayout(false);
                 }
+
                 if (_hotcommands != null)
                 {
                     _hotcommands.ResumeLayout(false);
                 }
+
                 ResumeLayout(true);
             }
         }
@@ -277,6 +279,7 @@ namespace System.Windows.Forms
                 {
                     _designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
                 }
+
                 return _designerHost;
             }
             set
@@ -289,9 +292,9 @@ namespace System.Windows.Forms
                         IComponentChangeService cs = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
                         if (cs != null)
                         {
-                            cs.ComponentAdded -= onComponentAdd;
-                            cs.ComponentRemoved -= onComponentRemove;
-                            cs.ComponentChanged -= onComponentChanged;
+                            cs.ComponentAdded -= _onComponentAdd;
+                            cs.ComponentRemoved -= _onComponentRemove;
+                            cs.ComponentChanged -= _onComponentChanged;
                         }
 
                         IPropertyValueUIService pvSvc = (IPropertyValueUIService)_designerHost.GetService(typeof(IPropertyValueUIService));
@@ -312,9 +315,9 @@ namespace System.Windows.Forms
                         IComponentChangeService cs = (IComponentChangeService)value.GetService(typeof(IComponentChangeService));
                         if (cs != null)
                         {
-                            cs.ComponentAdded += onComponentAdd;
-                            cs.ComponentRemoved += onComponentRemove;
-                            cs.ComponentChanged += onComponentChanged;
+                            cs.ComponentAdded += _onComponentAdd;
+                            cs.ComponentRemoved += _onComponentRemove;
+                            cs.ComponentChanged += _onComponentChanged;
                         }
 
                         value.TransactionOpened += new EventHandler(OnTransactionOpened);
@@ -333,6 +336,7 @@ namespace System.Windows.Forms
                     {
                         _peMain.DesignerHost = value;
                     }
+
                     RefreshTabs(PropertyTabScope.Document);
                 }
             }
@@ -406,6 +410,7 @@ namespace System.Windows.Forms
                     value.CopyTo(attributes, 0);
                     _browsableAttributes = new AttributeCollection(attributes);
                 }
+
                 if (_currentObjects != null && _currentObjects.Length > 0)
                 {
                     if (_peMain != null)
@@ -421,6 +426,7 @@ namespace System.Windows.Forms
                 {
                     _browsableAttributes = new AttributeCollection(new Attribute[] { new BrowsableAttribute(true) });
                 }
+
                 return _browsableAttributes;
             }
         }
@@ -735,6 +741,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     }
                 }
+
                 if (!value)
                 {
                     if (_paintFrozen == 0)
@@ -1108,6 +1115,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 return _currentObjects[0];
             }
             set
@@ -1182,6 +1190,7 @@ namespace System.Windows.Forms
                             {
                                 objTemp = ((ICustomTypeDescriptor)objTemp).GetPropertyOwner(null);
                             }
+
                             Type newType = objTemp.GetType();
 
                             // check if the types are the same.  If they are, and they
@@ -1189,9 +1198,7 @@ namespace System.Windows.Forms
                             // or Guid.Emtpy, assume the classes are different.
                             //
                             if (classesSame &&
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                                (oldType != newType || oldType.IsCOMObject && newType.IsCOMObject))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                                (oldType != newType || (oldType.IsCOMObject && newType.IsCOMObject)))
                             {
                                 classesSame = false;
                             }
@@ -1261,6 +1268,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             SelectViewTabButtonDefault(viewTabButton);
                         }
 
@@ -1309,6 +1317,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         ShowEventsButton(showEvents && _currentObjects.Length > 0);
                         DisplayHotCommands();
 
@@ -1320,6 +1329,7 @@ namespace System.Windows.Forms
                         {
                             EnablePropPageButton(null);
                         }
+
                         OnSelectedObjectsChanged(EventArgs.Empty);
                     }
 
@@ -1355,6 +1365,7 @@ namespace System.Windows.Forms
                             {
                                 Refresh(false);
                             }
+
                             SetFlag(ReInitTab, false);
                         }
                         else
@@ -1380,6 +1391,7 @@ namespace System.Windows.Forms
                 {
                     return Array.Empty<object>();
                 }
+
                 return (object[])_currentObjects.Clone();
             }
         }
@@ -1408,6 +1420,7 @@ namespace System.Windows.Forms
                 {
                     return _peMain;
                 }
+
                 return g;
             }
             set
@@ -1547,6 +1560,7 @@ namespace System.Windows.Forms
                 {
                     SetupToolbar(_viewTabsDirty);
                 }
+
                 Invalidate();
                 _toolStrip.Invalidate();
             }
@@ -1560,6 +1574,7 @@ namespace System.Windows.Forms
                 {
                     return _toolStrip.Renderer;
                 }
+
                 return null;
             }
             set
@@ -1631,11 +1646,13 @@ namespace System.Windows.Forms
             {
                 image.MakeTransparent();
             }
+
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
             if (DpiHelper.IsScalingRequired && (image.Size.Width != s_normalButtonSize.Width || image.Size.Height != s_normalButtonSize.Height))
             {
                 image = DpiHelper.CreateResizedBitmap(image, s_normalButtonSize);
             }
+
             int result = _imageList[NormalButtonSize].Images.Count;
             _imageList[NormalButtonSize].Images.Add(image);
             return result;
@@ -1876,6 +1893,7 @@ namespace System.Windows.Forms
                     {
                         Array.Copy(tabComps, newComps, oldArraySize);
                     }
+
                     newComps[oldArraySize] = component;
                     tab.Components = newComps;
                 }
@@ -1925,6 +1943,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.PropertyGridTabScope);
             }
+
             RemoveTabs(tabScope, true);
         }
 
@@ -1960,7 +1979,7 @@ namespace System.Windows.Forms
 
         private ToolStripSeparator CreateSeparatorButton()
         {
-            ToolStripSeparator button = new ToolStripSeparator();
+            ToolStripSeparator button = new();
             return button;
         }
 
@@ -2032,24 +2051,28 @@ namespace System.Windows.Forms
 
                 // we're good to go!
             }
+
             return tab;
         }
 
-        private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useCheckButtonRole = false)
+        private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useRadioButtonRole = false)
         {
-            PropertyGridToolStripButton button = new PropertyGridToolStripButton
+            PropertyGridToolStripButton button = new PropertyGridToolStripButton(this, useRadioButtonRole)
             {
                 Text = toolTipText,
                 AutoToolTip = true,
                 DisplayStyle = ToolStripItemDisplayStyle.Image,
                 ImageIndex = imageIndex
             };
+
             button.Click += eventHandler;
             button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 
-            if (useCheckButtonRole)
+            if (useRadioButtonRole)
             {
-                button.AccessibleRole = AccessibleRole.CheckButton;
+                // As discussed in https://github.com/dotnet/winforms/issues/4428 issue, set the accessible role
+                // to "RadioButton" instead of "CheckBox" as it better matches the behavior of the button.
+                button.AccessibleRole = AccessibleRole.RadioButton;
             }
 
             return button;
@@ -2154,9 +2177,11 @@ namespace System.Windows.Forms
                     {
                         _designerEventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                     }
+
                     _designerEventService = null;
                     SetFlag(GotDesignerEventService, false);
                 }
+
                 ActiveDesigner = null;
 
                 if (_viewTabs != null)
@@ -2165,6 +2190,7 @@ namespace System.Windows.Forms
                     {
                         _viewTabs[i].Dispose();
                     }
+
                     _viewTabs = null;
                 }
 
@@ -2177,6 +2203,7 @@ namespace System.Windows.Forms
                             _imageList[i].Dispose();
                         }
                     }
+
                     _imageList = null;
                 }
 
@@ -2243,6 +2270,7 @@ namespace System.Windows.Forms
                 {
                     return _hotcommands;
                 }
+
                 useGrid = 0;
             }
 
@@ -2278,6 +2306,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return null;
         }
 
@@ -2411,6 +2440,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             _designerEventService = (IDesignerEventService)GetService(typeof(IDesignerEventService));
             if (_designerEventService != null)
             {
@@ -2467,7 +2497,7 @@ namespace System.Windows.Forms
             Bitmap largeBitmap = null;
             try
             {
-                Bitmap transparentBitmap = new Bitmap(originalBitmap);
+                Bitmap transparentBitmap = new(originalBitmap);
                 largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, s_largeButtonSize);
                 transparentBitmap.Dispose();
 
@@ -2539,6 +2569,7 @@ namespace System.Windows.Forms
                         Array.Copy(tabTypes, 0, newTabs, 0, types);
                         tabTypes = newTabs;
                     }
+
                     tabTypes[types++] = tabAttr.TabClasses[i];
                 }
             }
@@ -2594,6 +2625,7 @@ namespace System.Windows.Forms
             {
                 Array.Copy(tabTypes, 0, returnTypes, 0, types);
             }
+
             return returnTypes;
         }
 
@@ -2603,6 +2635,7 @@ namespace System.Windows.Forms
             {
                 _peDefault = (GridEntry)_currentPropEntries[0];
             }
+
             return _peDefault;
         }
 
@@ -2648,6 +2681,7 @@ namespace System.Windows.Forms
             {
                 obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(null);
             }
+
             return obj;
         }
 
@@ -2657,6 +2691,7 @@ namespace System.Windows.Forms
             {
                 UpdateSelection();
             }
+
             SetFlag(PropertiesChanged, false);
             return _currentPropEntries;
         }
@@ -2677,6 +2712,7 @@ namespace System.Windows.Forms
             {
                 SetActiveControl(_gridView);
             }
+
             _gridView.Focus();
         }
 
@@ -2860,6 +2896,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(BatchModeChange, true);
                 }
+
                 return;
             }
 
@@ -3018,7 +3055,7 @@ namespace System.Windows.Forms
                     {
                         int toolStripWidth = Width;
                         int toolStripHeight = ((LargeButtons) ? s_largeButtonSize : s_normalButtonSize).Height + _toolStripButtonPaddingY;
-                        Rectangle toolStripBounds = new Rectangle(0, 1, toolStripWidth, toolStripHeight);
+                        Rectangle toolStripBounds = new(0, 1, toolStripWidth, toolStripHeight);
                         _toolStrip.Bounds = toolStripBounds;
 
                         int oldY = _gridView.Location.Y;
@@ -3197,6 +3234,7 @@ namespace System.Windows.Forms
                 {
                     Cursor = null;
                 }
+
                 return;
             }
 
@@ -3264,6 +3302,7 @@ namespace System.Windows.Forms
             {
                 OnLayoutInternal(false);
             }
+
             base.OnResize(e);
         }
 
@@ -3407,6 +3446,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 SetFlag(BatchMode, false);
                 if (GetFlag(FullRefreshAfterBatch))
                 {
@@ -3417,6 +3457,7 @@ namespace System.Windows.Forms
                 {
                     Refresh(false);
                 }
+
                 SetFlag(BatchModeChange, false);
             }
         }
@@ -3507,6 +3548,7 @@ namespace System.Windows.Forms
             {
                 FreezePainting = false;
             }
+
             OnButtonClick(sender, e);
         }
 
@@ -3523,6 +3565,7 @@ namespace System.Windows.Forms
             {
                 FreezePainting = false;
             }
+
             OnButtonClick(sender, e);
         }
 
@@ -3570,7 +3613,7 @@ namespace System.Windows.Forms
                     if (success)
                     {
                         if (baseObject is IComponent &&
-                            connectionPointCookies[0] is null)
+                            _connectionPointCookies[0] is null)
                         {
                             ISite site = ((IComponent)baseObject).Site;
                             if (site != null)
@@ -3589,6 +3632,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         throw;
                                     }
 
@@ -3606,6 +3650,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         _gridView.Refresh();
                     }
                 }
@@ -3623,6 +3668,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             OnButtonClick(sender, e);
         }
 
@@ -3707,6 +3753,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
                     }
                     else
@@ -3725,6 +3772,7 @@ namespace System.Windows.Forms
                             {
                                 base.ProcessDialogKey(keyData);
                             }
+
                             return true;
                         }
                         else if (_gridView.FocusInside)
@@ -3772,9 +3820,11 @@ namespace System.Windows.Forms
                                     User32.SetFocus(hWndParent);
                                 }
                             }
+
                             return result;
                         }
                     }
+
                     return true;
                     /* This conflicts with VS tab linking
                     case Keys.Prior: // PAGE_UP
@@ -3791,6 +3841,7 @@ namespace System.Windows.Forms
                         break;
                     */
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -3826,6 +3877,7 @@ namespace System.Windows.Forms
                 {
                     ClearCachedProps();
                 }
+
                 RefreshProperties(clearCached);
                 _gridView.Refresh();
                 DisplayHotCommands();
@@ -3954,6 +4006,7 @@ namespace System.Windows.Forms
                     components = newComponents;
                     tab.Components = components;
                 }
+
                 killTab = (components.Length == 0);
             }
             catch (Exception e)
@@ -4193,6 +4246,7 @@ namespace System.Windows.Forms
                 {
                     _designerSelections = new Hashtable();
                 }
+
                 _designerSelections[_designerHost.GetHashCode()] = _selectedViewTab;
             }
         }
@@ -4286,6 +4340,7 @@ namespace System.Windows.Forms
                     {
                         SetFlag(TabsChanging, false);
                     }
+
                     return true;
                 }
             }
@@ -4377,9 +4432,9 @@ namespace System.Windows.Forms
                 }
 
                 // setup our event handlers
-                EventHandler ehViewTab = new EventHandler(OnViewTabButtonClick);
-                EventHandler ehViewType = new EventHandler(OnViewSortButtonClick);
-                EventHandler ehPP = new EventHandler(OnViewButtonClickPP);
+                EventHandler ehViewTab = new(OnViewTabButtonClick);
+                EventHandler ehViewType = new(OnViewSortButtonClick);
+                EventHandler ehPP = new(OnViewButtonClickPP);
 
                 Bitmap b;
                 int i;
@@ -4410,6 +4465,7 @@ namespace System.Windows.Forms
                         {
                             _bmpAlpha = SortByPropertyImage;
                         }
+
                         alphaIndex = AddImage(_bmpAlpha);
                     }
                     catch (Exception)
@@ -4422,6 +4478,7 @@ namespace System.Windows.Forms
                         {
                             _bmpCategory = SortByCategoryImage;
                         }
+
                         categoryIndex = AddImage(_bmpCategory);
                     }
                     catch (Exception)
@@ -4500,6 +4557,7 @@ namespace System.Windows.Forms
                     {
                         _bmpPropPage = ShowPropertyPageImage;
                     }
+
                     designpg = AddImage(_bmpPropPage);
                 }
                 catch (Exception)
@@ -4532,6 +4590,7 @@ namespace System.Windows.Forms
                 {
                     _toolStrip.Items.Add(buttonList[j] as ToolStripItem);
                 }
+
                 _toolStrip.ResumeLayout();
 
                 if (_viewTabsDirty)
@@ -4641,25 +4700,25 @@ namespace System.Windows.Forms
         private void SinkPropertyNotifyEvents()
         {
             // first clear any existing sinks.
-            for (int i = 0; connectionPointCookies != null && i < connectionPointCookies.Length; i++)
+            for (int i = 0; _connectionPointCookies != null && i < _connectionPointCookies.Length; i++)
             {
-                if (connectionPointCookies[i] != null)
+                if (_connectionPointCookies[i] != null)
                 {
-                    connectionPointCookies[i].Disconnect();
-                    connectionPointCookies[i] = null;
+                    _connectionPointCookies[i].Disconnect();
+                    _connectionPointCookies[i] = null;
                 }
             }
 
             if (_currentObjects is null || _currentObjects.Length == 0)
             {
-                connectionPointCookies = null;
+                _connectionPointCookies = null;
                 return;
             }
 
             // it's okay if our array is too big...we'll just reuse it and ignore the empty slots.
-            if (connectionPointCookies is null || (_currentObjects.Length > connectionPointCookies.Length))
+            if (_connectionPointCookies is null || (_currentObjects.Length > _connectionPointCookies.Length))
             {
-                connectionPointCookies = new AxHost.ConnectionPointCookie[_currentObjects.Length];
+                _connectionPointCookies = new AxHost.ConnectionPointCookie[_currentObjects.Length];
             }
 
             for (int i = 0; i < _currentObjects.Length; i++)
@@ -4672,7 +4731,8 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
+
+                    _connectionPointCookies[i] = new AxHost.ConnectionPointCookie(obj, this, typeof(Ole32.IPropertyNotifySink), /*throwException*/ false);
                 }
                 catch
                 {
@@ -4714,6 +4774,7 @@ namespace System.Windows.Forms
                         nOtherViewsVisible++;
                     }
                 }
+
                 if (nOtherViewsVisible > 0)
                 {
                     _viewTabButtons[PROPERTIES].Visible = true;
@@ -4841,8 +4902,8 @@ namespace System.Windows.Forms
             }
         }
 
-        private string propName;
-        private int dwMsg;
+        private string _propName;
+        private int _dwMsg;
 
         private unsafe void GetDataFromCopyData(IntPtr lparam)
         {
@@ -4850,8 +4911,8 @@ namespace System.Windows.Forms
 
             if (cds != null && cds->lpData != IntPtr.Zero)
             {
-                propName = Marshal.PtrToStringAuto(cds->lpData);
-                dwMsg = (int)cds->dwData;
+                _propName = Marshal.PtrToStringAuto(cds->lpData);
+                _dwMsg = (int)cds->dwData;
             }
         }
 
@@ -4869,6 +4930,7 @@ namespace System.Windows.Forms
                 SetupToolbar(true);
                 SetFlag(SysColorChangeRefresh, true);
             }
+
             base.OnSystemColorsChanged(e);
         }
 
@@ -4908,6 +4970,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanUndo ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
                 case (int)User32.WM.CUT:
                     if ((long)m.LParam == 0)
@@ -4918,6 +4981,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanCut ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
 
                 case (int)User32.WM.COPY:
@@ -4929,6 +4993,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanCopy ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
 
                 case (int)User32.WM.PASTE:
@@ -4940,6 +5005,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = CanPaste ? (IntPtr)1 : (IntPtr)0;
                     }
+
                     return;
 
                 case (int)User32.WM.COPYDATA:
@@ -4952,6 +5018,7 @@ namespace System.Windows.Forms
                         m.Result = (IntPtr)_toolStrip.Items.Count;
                         return;
                     }
+
                     break;
                 case AutomationMessages.PGM_GETBUTTONSTATE:
                     if (_toolStrip != null)
@@ -4968,8 +5035,10 @@ namespace System.Windows.Forms
                                 m.Result = IntPtr.Zero;
                             }
                         }
+
                         return;
                     }
+
                     break;
                 case AutomationMessages.PGM_SETBUTTONSTATE:
                     if (_toolStrip != null)
@@ -5000,8 +5069,10 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return;
                     }
+
                     break;
 
                 case AutomationMessages.PGM_GETBUTTONTEXT:
@@ -5024,8 +5095,10 @@ namespace System.Windows.Forms
                             // write text into test file.
                             m.Result = AutomationMessages.WriteAutomationText(text);
                         }
+
                         return;
                     }
+
                     break;
 
                 case AutomationMessages.PGM_GETTESTINGINFO:
@@ -5037,11 +5110,12 @@ namespace System.Windows.Forms
                     }
 
                 case AutomationMessages.PGM_GETROWCOORDS:
-                    if (m.Msg == dwMsg)
+                    if (m.Msg == _dwMsg)
                     {
-                        m.Result = (IntPtr)_gridView.GetPropertyLocation(propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
+                        m.Result = (IntPtr)_gridView.GetPropertyLocation(_propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
                         return;
                     }
+
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
@@ -5062,710 +5136,12 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     m.Result = (IntPtr)0;
                     return;
             }
 
             base.WndProc(ref m);
-        }
-
-        internal abstract class SnappableControl : Control
-        {
-            protected PropertyGrid ownerGrid;
-            internal bool userSized;
-
-            public abstract int GetOptimalHeight(int width);
-            public abstract int SnapHeightRequest(int request);
-
-            public SnappableControl(PropertyGrid ownerGrid)
-            {
-                this.ownerGrid = ownerGrid;
-                SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            }
-
-            public override Cursor Cursor
-            {
-                get
-                {
-                    return Cursors.Default;
-                }
-                set => base.Cursor = value;
-            }
-
-            protected override void OnControlAdded(ControlEventArgs ce)
-            {
-            }
-
-            public Color BorderColor { get; set; } = SystemColors.ControlDark;
-
-            protected override void OnPaint(PaintEventArgs e)
-            {
-                base.OnPaint(e);
-                Rectangle r = ClientRectangle;
-                r.Width--;
-                r.Height--;
-
-                using var borderPen = BorderColor.GetCachedPenScope();
-                e.Graphics.DrawRectangle(borderPen, r);
-            }
-        }
-
-        public class PropertyTabCollection : ICollection
-        {
-            private readonly PropertyGrid _owner;
-
-            internal PropertyTabCollection(PropertyGrid owner)
-            {
-                _owner = owner;
-            }
-
-            /// <summary>
-            ///  Retrieves the number of member attributes.
-            /// </summary>
-            public int Count
-            {
-                get
-                {
-                    if (_owner is null)
-                    {
-                        return 0;
-                    }
-                    return _owner._viewTabs.Length;
-                }
-            }
-
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
-
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            /// <summary>
-            ///  Retrieves the member attribute with the specified index.
-            /// </summary>
-            public PropertyTab this[int index]
-            {
-                get
-                {
-                    if (_owner is null)
-                    {
-                        throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
-                    }
-                    return _owner._viewTabs[index];
-                }
-            }
-
-            public void AddTabType(Type propertyTabType)
-            {
-                if (_owner is null)
-                {
-                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
-                }
-                _owner.AddTab(propertyTabType, PropertyTabScope.Global);
-            }
-
-            public void AddTabType(Type propertyTabType, PropertyTabScope tabScope)
-            {
-                if (_owner is null)
-                {
-                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
-                }
-                _owner.AddTab(propertyTabType, tabScope);
-            }
-
-            /// <summary>
-            ///  Clears the tabs of the given scope or smaller.
-            ///  tabScope must be PropertyTabScope.Component or PropertyTabScope.Document.
-            /// </summary>
-            public void Clear(PropertyTabScope tabScope)
-            {
-                if (_owner is null)
-                {
-                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
-                }
-                _owner.ClearTabs(tabScope);
-            }
-
-            void ICollection.CopyTo(Array dest, int index)
-            {
-                if (_owner is null)
-                {
-                    return;
-                }
-                if (_owner._viewTabs.Length > 0)
-                {
-                    System.Array.Copy(_owner._viewTabs, 0, dest, index, _owner._viewTabs.Length);
-                }
-            }
-            /// <summary>
-            ///  Creates and retrieves a new enumerator for this collection.
-            /// </summary>
-            public IEnumerator GetEnumerator()
-            {
-                if (_owner is null)
-                {
-                    return Array.Empty<PropertyTab>().GetEnumerator();
-                }
-
-                return _owner._viewTabs.GetEnumerator();
-            }
-
-            public void RemoveTabType(Type propertyTabType)
-            {
-                if (_owner is null)
-                {
-                    throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
-                }
-                _owner.RemoveTab(propertyTabType);
-            }
-        }
-
-        internal class SelectedObjectConverter : ReferenceConverter
-        {
-            public SelectedObjectConverter() : base(typeof(IComponent))
-            {
-            }
-        }
-
-        private class PropertyGridServiceProvider : IServiceProvider
-        {
-            private readonly PropertyGrid _owner;
-
-            public PropertyGridServiceProvider(PropertyGrid owner)
-            {
-                _owner = owner;
-            }
-
-            public object GetService(Type serviceType)
-            {
-                object s = null;
-
-                if (_owner.ActiveDesigner != null)
-                {
-                    s = _owner.ActiveDesigner.GetService(serviceType);
-                }
-
-                if (s is null)
-                {
-                    s = _owner._gridView.GetService(serviceType);
-                }
-
-                if (s is null && _owner.Site != null)
-                {
-                    s = _owner.Site.GetService(serviceType);
-                }
-                return s;
-            }
-        }
-
-        /// <summary>
-        ///  Helper class to support rendering text using either GDI or GDI+.
-        /// </summary>
-        internal static class MeasureTextHelper
-        {
-            public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font)
-            {
-                return MeasureTextSimple(owner, g, text, font, new SizeF(0, 0));
-            }
-
-            public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font, int width)
-            {
-                return MeasureText(owner, g, text, font, new SizeF(width, 999999));
-            }
-
-            public static SizeF MeasureTextSimple(PropertyGrid owner, Graphics g, string text, Font font, SizeF size)
-            {
-                SizeF bindingSize;
-                if (owner.UseCompatibleTextRendering)
-                {
-                    bindingSize = g.MeasureString(text, font, size);
-                }
-                else
-                {
-                    bindingSize = (SizeF)TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), GetTextRendererFlags());
-                }
-
-                return bindingSize;
-            }
-
-            public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font, SizeF size)
-            {
-                SizeF bindingSize;
-                if (owner.UseCompatibleTextRendering)
-                {
-                    bindingSize = g.MeasureString(text, font, size);
-                }
-                else
-                {
-                    TextFormatFlags flags =
-                        GetTextRendererFlags() |
-                        TextFormatFlags.LeftAndRightPadding |
-                        TextFormatFlags.WordBreak |
-                        TextFormatFlags.NoFullWidthCharacterBreak;
-
-                    bindingSize = (SizeF)TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), flags);
-                }
-
-                return bindingSize;
-            }
-
-            public static TextFormatFlags GetTextRendererFlags()
-            {
-                return TextFormatFlags.PreserveGraphicsClipping |
-                        TextFormatFlags.PreserveGraphicsTranslateTransform;
-            }
-        }
-    }
-
-    internal static class AutomationMessages
-    {
-        internal const int PGM_GETBUTTONCOUNT = (int)User32.WM.USER + 0x50;
-        internal const int PGM_GETBUTTONSTATE = (int)User32.WM.USER + 0x52;
-        internal const int PGM_SETBUTTONSTATE = (int)User32.WM.USER + 0x51;
-        internal const int PGM_GETBUTTONTEXT = (int)User32.WM.USER + 0x53;
-        internal const int PGM_GETBUTTONTOOLTIPTEXT = (int)User32.WM.USER + 0x54;
-        internal const int PGM_GETROWCOORDS = (int)User32.WM.USER + 0x55;
-        internal const int PGM_GETVISIBLEROWCOUNT = (int)User32.WM.USER + 0x56;
-        internal const int PGM_GETSELECTEDROW = (int)User32.WM.USER + 0x57;
-        internal const int PGM_SETSELECTEDTAB = (int)User32.WM.USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
-        internal const int PGM_GETTESTINGINFO = (int)User32.WM.USER + 0x59;
-
-        /// <summary>
-        ///  Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where
-        ///  'file id' is a unique id that is return by this method.
-        ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should remove the
-        ///  file after used.
-        /// </summary>
-        public static IntPtr WriteAutomationText(string text)
-        {
-            IntPtr fileId = IntPtr.Zero;
-            string fullFileName = GenerateLogFileName(ref fileId);
-
-            if (fullFileName != null)
-            {
-                try
-                {
-                    FileStream fs = new FileStream(fullFileName, FileMode.Create, FileAccess.Write);
-                    StreamWriter sw = new StreamWriter(fs);
-                    sw.WriteLine(text);
-                    sw.Dispose();
-                    fs.Dispose();
-                }
-                catch
-                {
-                    fileId = IntPtr.Zero;
-                }
-            }
-
-            return fileId;
-        }
-
-        /// <summary>
-        ///  Writes the contents of a test file as text.  This file needs to have the following naming convention:
-        ///  %TEMP%\"Maui.[file id].log", where 'file id' is a unique id sent to this window.
-        ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should create/delete this file.
-        /// </summary>
-        public static string ReadAutomationText(IntPtr fileId)
-        {
-            Debug.Assert(fileId != IntPtr.Zero, "Invalid file Id");
-
-            string text = null;
-
-            if (fileId != IntPtr.Zero)
-            {
-                string fullFileName = GenerateLogFileName(ref fileId);
-                Debug.Assert(File.Exists(fullFileName), "Automation log file does not exist");
-
-                if (File.Exists(fullFileName))
-                {
-                    try
-                    {
-                        FileStream fs = new FileStream(fullFileName, FileMode.Open, FileAccess.Read);
-                        StreamReader sr = new StreamReader(fs);
-                        text = sr.ReadToEnd();
-                        sr.Dispose();
-                        fs.Dispose();
-                    }
-                    catch
-                    {
-                        text = null;
-                    }
-                }
-            }
-
-            return text;
-        }
-
-        /// <summary>
-        ///  Generate log file from id.
-        /// </summary>
-        private static string GenerateLogFileName(ref IntPtr fileId)
-        {
-            string fullFileName = null;
-
-            string filePath = System.Environment.GetEnvironmentVariable("TEMP");
-            Debug.Assert(filePath != null, "Could not get value of the TEMP environment variable");
-
-            if (filePath != null)
-            {
-                if (fileId == IntPtr.Zero) // Create id
-                {
-                    Random rnd = new Random(DateTime.Now.Millisecond);
-                    fileId = new IntPtr(rnd.Next());
-                }
-
-                fullFileName = filePath + "\\Maui" + fileId + ".log";
-            }
-
-            return fullFileName;
-        }
-    }
-
-    /// <summary>
-    ///  Represents the PropertyGrid accessibility object.
-    ///  Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
-    /// </summary>
-    internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject
-    {
-        private readonly PropertyGrid _owningPropertyGrid;
-
-        /// <summary>
-        ///  Initializes new instance of PropertyGridAccessibleObject
-        /// </summary>
-        /// <param name="owningPropertyGrid">The PropertyGrid owning control.</param>
-        public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid)
-        {
-            _owningPropertyGrid = owningPropertyGrid;
-        }
-
-        /// <summary>
-        ///  Return the child element at the specified point, if one exists,
-        ///  otherwise return this element if the point is on this element,
-        ///  otherwise return null.
-        /// </summary>
-        /// <param name="x">x coordinate of point to check</param>
-        /// <param name="y">y coordinate of point to check</param>
-        /// <returns>Return the child element at the specified point, if one exists,
-        ///  otherwise return this element if the point is on this element,
-        ///  otherwise return null.
-        /// </returns>
-        internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
-        {
-            if (!_owningPropertyGrid.IsHandleCreated)
-            {
-                return null;
-            }
-
-            Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
-
-            Control element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
-            if (element != null)
-            {
-                return element.AccessibilityObject;
-            }
-
-            return base.ElementProviderFromPoint(x, y);
-        }
-
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-        {
-            switch (direction)
-            {
-                case UiaCore.NavigateDirection.Parent:
-                    return null;
-                case UiaCore.NavigateDirection.FirstChild:
-                    return GetChildFragment(0);
-                case UiaCore.NavigateDirection.LastChild:
-                    var childFragmentCount = GetChildFragmentCount();
-                    if (childFragmentCount > 0)
-                    {
-                        return GetChildFragment(childFragmentCount - 1);
-                    }
-                    break;
-            }
-
-            return base.FragmentNavigate(direction);
-        }
-
-        /// <summary>
-        ///  Request to return the element in the specified direction regarding the provided child element.
-        /// </summary>
-        /// <param name="childFragment">The child element regarding which the target element is searched.</param>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal UiaCore.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UiaCore.NavigateDirection direction)
-        {
-            switch (direction)
-            {
-                case UiaCore.NavigateDirection.Parent:
-                    return this;
-                case UiaCore.NavigateDirection.NextSibling:
-                    int fragmentCount = GetChildFragmentCount();
-                    int childFragmentIndex = GetChildFragmentIndex(childFragment);
-                    int nextChildFragmentIndex = childFragmentIndex + 1;
-                    if (fragmentCount > nextChildFragmentIndex)
-                    {
-                        return GetChildFragment(nextChildFragmentIndex);
-                    }
-
-                    return null;
-                case UiaCore.NavigateDirection.PreviousSibling:
-                    fragmentCount = GetChildFragmentCount();
-                    childFragmentIndex = GetChildFragmentIndex(childFragment);
-                    if (childFragmentIndex > 0)
-                    {
-                        return GetChildFragment(childFragmentIndex - 1);
-                    }
-
-                    return null;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///  Return the element that is the root node of this fragment of UI.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
-
-        /// <summary>
-        ///  Gets the accessible child corresponding to the specified index.
-        /// </summary>
-        /// <param name="index">The child index.</param>
-        /// <returns>The accessible child.</returns>
-        internal AccessibleObject GetChildFragment(int index)
-        {
-            if (index < 0)
-            {
-                return null;
-            }
-
-            if (_owningPropertyGrid.ToolbarVisible)
-            {
-                if (index == 0)
-                {
-                    return _owningPropertyGrid.ToolbarAccessibleObject;
-                }
-
-                index--;
-            }
-
-            if (_owningPropertyGrid.GridViewVisible)
-            {
-                if (index == 0)
-                {
-                    return _owningPropertyGrid.GridViewAccessibleObject;
-                }
-
-                index--;
-            }
-
-            if (_owningPropertyGrid.CommandsVisible)
-            {
-                if (index == 0)
-                {
-                    return _owningPropertyGrid.HotCommandsAccessibleObject;
-                }
-
-                index--;
-            }
-
-            if (_owningPropertyGrid.HelpVisible)
-            {
-                if (index == 0)
-                {
-                    return _owningPropertyGrid.HelpAccessibleObject;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///  Gets the number of children belonging to an accessible object.
-        /// </summary>
-        /// <returns>The number of children.</returns>
-        internal int GetChildFragmentCount()
-        {
-            int childCount = 0;
-
-            if (_owningPropertyGrid.ToolbarVisible)
-            {
-                childCount++;
-            }
-
-            if (_owningPropertyGrid.GridViewVisible)
-            {
-                childCount++;
-            }
-
-            if (_owningPropertyGrid.CommandsVisible)
-            {
-                childCount++;
-            }
-
-            if (_owningPropertyGrid.HelpVisible)
-            {
-                childCount++;
-            }
-
-            return childCount;
-        }
-
-        /// <summary>
-        ///  Return the element in this fragment which has the keyboard focus,
-        /// </summary>
-        /// <returns>Return the element in this fragment which has the keyboard focus,
-        ///  if any; otherwise return null.</returns>
-        internal override UiaCore.IRawElementProviderFragment GetFocus()
-        {
-            return GetFocused();
-        }
-
-        /// <summary>
-        ///  Gets the child control index.
-        /// </summary>
-        /// <param name="controlAccessibleObject">The control accessible object which index should be found.</param>
-        /// <returns>The child accessible index or -1 if not found.</returns>
-        internal int GetChildFragmentIndex(AccessibleObject controlAccessibleObject)
-        {
-            int childFragmentCount = GetChildFragmentCount();
-            for (int i = 0; i < childFragmentCount; i++)
-            {
-                AccessibleObject childFragment = GetChildFragment(i);
-                if (childFragment == controlAccessibleObject)
-                {
-                    return i;
-                }
-            }
-
-            return -1;
-        }
-
-        internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
-            propertyID switch
-            {
-                UiaCore.UIA.NamePropertyId => Name,
-                _ => base.GetPropertyValue(propertyID),
-            };
-    }
-
-    /// <summary>
-    ///  Represents the PropertyGrid inner ToolStrip control.
-    ///  Is used starting with Accessibility Improvements of level 3.
-    /// </summary>
-    internal class PropertyGridToolStrip : ToolStrip
-    {
-        private readonly PropertyGrid _parentPropertyGrid;
-
-        /// <summary>
-        ///  Initializes new instance of PropertyGridToolStrip control.
-        /// </summary>
-        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-        public PropertyGridToolStrip(PropertyGrid parentPropertyGrid)
-        {
-            _parentPropertyGrid = parentPropertyGrid;
-        }
-
-        /// <summary>
-        ///  Indicates whether or not the control supports UIA Providers via
-        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
-        /// </summary>
-        internal override bool SupportsUiaProviders => true;
-
-        /// <summary>
-        ///  Constructs the new instance of the accessibility object for this control.
-        /// </summary>
-        /// <returns>The accessibility object for this control.</returns>
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new PropertyGridToolStripAccessibleObject(this, _parentPropertyGrid);
-        }
-    }
-
-    /// <summary>
-    ///  Represents the PropertyGridToolStrip control accessibility object.
-    /// </summary>
-    internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject
-    {
-        private readonly PropertyGrid _parentPropertyGrid;
-
-        /// <summary>
-        ///  Constructs new instance of PropertyGridToolStripAccessibleObject
-        /// </summary>
-        /// <param name="owningPropertyGridToolStrip">The PropertyGridToolStrip owning control.</param>
-        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-        public PropertyGridToolStripAccessibleObject(PropertyGridToolStrip owningPropertyGridToolStrip, PropertyGrid parentPropertyGrid) : base(owningPropertyGridToolStrip)
-        {
-            _parentPropertyGrid = parentPropertyGrid;
-        }
-
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-        {
-            if (_parentPropertyGrid.IsHandleCreated &&
-                _parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
-            {
-                UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                if (navigationTarget != null)
-                {
-                    return navigationTarget;
-                }
-            }
-
-            return base.FragmentNavigate(direction);
-        }
-
-        /// <summary>
-        ///  Request value of specified property from an element.
-        /// </summary>
-        /// <param name="propertyID">Identifier indicating the property to return</param>
-        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-        internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            => propertyID switch
-            {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ToolBarControlTypeId,
-                UiaCore.UIA.NamePropertyId => Name,
-                _ => base.GetPropertyValue(propertyID)
-            };
-
-        public override string Name
-        {
-            get
-            {
-                string name = Owner?.AccessibleName;
-                if (name != null)
-                {
-                    return name;
-                }
-
-                return _parentPropertyGrid?.AccessibilityObject.Name;
-            }
         }
     }
 }

@@ -2,17 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Threading;
-using WFCTestLib.Log;
-using ReflectTools;
-using System.Windows.Forms.IntegrationTests.Common;
-using static Interop.Kernel32;
-using static Interop.ComCtl32;
-using static Interop.User32;
 using System.Drawing;
-using static System.Windows.Forms.MonthCalendar;
 using System.Reflection;
+using System.Threading;
+using System.Windows.Forms.IntegrationTests.Common;
+using ReflectTools;
+using WFCTestLib.Log;
+using static System.Windows.Forms.MonthCalendar;
+using static Interop.ComCtl32;
+using static Interop.Kernel32;
 using static Interop.UiaCore;
+using static Interop.User32;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -37,6 +37,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 Calendar.Dispose();
             }
         }
+
         public MauiMonthCalendarTests(string[] args) : base(args)
         {
             this.BringToForeground();

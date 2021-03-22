@@ -106,11 +106,13 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 manager.SerializationComplete += new EventHandler(OnSerializationComplete);
                             }
+
                             if (GetLocalizationLanguage(manager) != CultureInfo.InvariantCulture)
                             {
                                 shouldSerialize = true;
                             }
                         }
+
                         break;
 
                     case CodeDomLocalizationModel.PropertyAssignment:

@@ -17,7 +17,6 @@ namespace System.Windows.Forms.Metafiles
         public Gdi32.LOGPEN lopn;
 
         public override string ToString()
-            => $@"[{nameof(EMRCREATEPEN)}] Index: {ihPen} Style: {lopn.lopnStyle} Width: {lopn.lopnWidth} Color: {
-                lopn.lopnColor.ToSystemColorString()}";
+            => $@"[{nameof(EMRCREATEPEN)}] Index: {ihPen} Style: {lopn.lopnStyle} Width: {lopn.lopnWidth} Color: {lopn.lopnColor.ToSystemColorString()}";
     }
 }

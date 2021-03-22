@@ -166,6 +166,7 @@ namespace System.Windows.Forms.Design.Behavior.Tests
                 {
                     yield return new object[] { snapLine1Filter, margin, false };
                 }
+
                 foreach (var margin in s_Paddings.Except(new[] { snapLine2PaddingFilter }))
                 {
                     yield return new object[] { snapLine1Filter, margin, false };

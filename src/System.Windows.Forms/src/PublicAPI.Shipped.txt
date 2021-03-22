@@ -9825,18 +9825,18 @@ System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics
 System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Font? font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
 System.Windows.Forms.DrawItemEventArgs.Font.get -> System.Drawing.Font?
 System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds, int columnIndex, System.Windows.Forms.ColumnHeader header, System.Windows.Forms.ListViewItemStates state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Font.get -> System.Drawing.Font
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Header.get -> System.Windows.Forms.ColumnHeader
-~System.Windows.Forms.DrawListViewItemEventArgs.DrawListViewItemEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.ListViewItem item, System.Drawing.Rectangle bounds, int itemIndex, System.Windows.Forms.ListViewItemStates state) -> void
-~System.Windows.Forms.DrawListViewItemEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawListViewItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewItem item, System.Windows.Forms.ListViewItem.ListViewSubItem subItem, int itemIndex, int columnIndex, System.Windows.Forms.ColumnHeader header, System.Windows.Forms.ListViewItemStates itemState) -> void
-~System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader
-~System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Font.get -> System.Drawing.Font?
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
+System.Windows.Forms.DrawListViewItemEventArgs.DrawListViewItemEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.ListViewItem! item, System.Drawing.Rectangle bounds, int itemIndex, System.Windows.Forms.ListViewItemStates state) -> void
+System.Windows.Forms.DrawListViewItemEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem!
+System.Windows.Forms.DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewItem? item, System.Windows.Forms.ListViewItem.ListViewSubItem? subItem, int itemIndex, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates itemState) -> void
+System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
+System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 ~System.Windows.Forms.DrawToolTipEventArgs.AssociatedControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.DrawToolTipEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window
 ~System.Windows.Forms.DrawToolTipEventArgs.DrawToolTipEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.IWin32Window associatedWindow, System.Windows.Forms.Control associatedControl, System.Drawing.Rectangle bounds, string toolTipText, System.Drawing.Color backColor, System.Drawing.Color foreColor, System.Drawing.Font font) -> void
@@ -9866,7 +9866,7 @@ System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
 ~System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control control, int padding) -> void
 ~System.Windows.Forms.ErrorProvider.Tag.get -> object
 ~System.Windows.Forms.ErrorProvider.Tag.set -> void
-~System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection
+System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection!
 ~System.Windows.Forms.FileDialog.DefaultExt.get -> string
 ~System.Windows.Forms.FileDialog.DefaultExt.set -> void
 ~System.Windows.Forms.FileDialog.FileName.get -> string
@@ -10493,12 +10493,12 @@ System.Windows.Forms.PaintEventArgs.PaintEventArgs(System.Drawing.Graphics! grap
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
 ~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
 ~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
-~System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab
-~System.Windows.Forms.PropertyTabChangedEventArgs.OldTab.get -> System.Windows.Forms.Design.PropertyTab
-~System.Windows.Forms.PropertyTabChangedEventArgs.PropertyTabChangedEventArgs(System.Windows.Forms.Design.PropertyTab oldTab, System.Windows.Forms.Design.PropertyTab newTab) -> void
-~System.Windows.Forms.PropertyValueChangedEventArgs.ChangedItem.get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.PropertyValueChangedEventArgs.OldValue.get -> object
-~System.Windows.Forms.PropertyValueChangedEventArgs.PropertyValueChangedEventArgs(System.Windows.Forms.GridItem changedItem, object oldValue) -> void
+System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab?
+System.Windows.Forms.PropertyTabChangedEventArgs.OldTab.get -> System.Windows.Forms.Design.PropertyTab?
+System.Windows.Forms.PropertyTabChangedEventArgs.PropertyTabChangedEventArgs(System.Windows.Forms.Design.PropertyTab? oldTab, System.Windows.Forms.Design.PropertyTab? newTab) -> void
+System.Windows.Forms.PropertyValueChangedEventArgs.ChangedItem.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.PropertyValueChangedEventArgs.OldValue.get -> object?
+System.Windows.Forms.PropertyValueChangedEventArgs.PropertyValueChangedEventArgs(System.Windows.Forms.GridItem? changedItem, object? oldValue) -> void
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.get -> string?
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.set -> void
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpNamespace.get -> string?
@@ -10590,10 +10590,10 @@ System.Windows.Forms.SearchForVirtualItemEventArgs.Text.get -> string?
 ~System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage value) -> void
 ~System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
-~System.Windows.Forms.TabControlCancelEventArgs.TabControlCancelEventArgs(System.Windows.Forms.TabPage tabPage, int tabPageIndex, bool cancel, System.Windows.Forms.TabControlAction action) -> void
-~System.Windows.Forms.TabControlCancelEventArgs.TabPage.get -> System.Windows.Forms.TabPage
-~System.Windows.Forms.TabControlEventArgs.TabControlEventArgs(System.Windows.Forms.TabPage tabPage, int tabPageIndex, System.Windows.Forms.TabControlAction action) -> void
-~System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.TabPage
+System.Windows.Forms.TabControlCancelEventArgs.TabControlCancelEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, bool cancel, System.Windows.Forms.TabControlAction action) -> void
+System.Windows.Forms.TabControlCancelEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
+System.Windows.Forms.TabControlEventArgs.TabControlEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, System.Windows.Forms.TabControlAction action) -> void
+System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
 ~System.Windows.Forms.TabPage.ImageKey.get -> string
 ~System.Windows.Forms.TabPage.ImageKey.set -> void
 ~System.Windows.Forms.TabPage.TabPage(string text) -> void
@@ -10977,11 +10977,11 @@ System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~System.Windows.Forms.TreeViewCancelEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeViewCancelEventArgs.TreeViewCancelEventArgs(System.Windows.Forms.TreeNode node, bool cancel, System.Windows.Forms.TreeViewAction action) -> void
-~System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode node) -> void
-~System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode node, System.Windows.Forms.TreeViewAction action) -> void
+System.Windows.Forms.TreeViewCancelEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewCancelEventArgs.TreeViewCancelEventArgs(System.Windows.Forms.TreeNode? node, bool cancel, System.Windows.Forms.TreeViewAction action) -> void
+System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node) -> void
+System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node, System.Windows.Forms.TreeViewAction action) -> void
 System.Windows.Forms.TreeViewHitTestInfo.Node.get -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeViewHitTestInfo.TreeViewHitTestInfo(System.Windows.Forms.TreeNode? hitNode, System.Windows.Forms.TreeViewHitTestLocations hitLocation) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.Message.get -> string

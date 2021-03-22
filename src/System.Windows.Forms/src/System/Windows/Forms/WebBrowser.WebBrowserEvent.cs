@@ -55,6 +55,7 @@ namespace System.Windows.Forms
                     {
                         targetFrameName = string.Empty;
                     }
+
                     if (headers is null)
                     {
                         headers = string.Empty;
@@ -88,6 +89,7 @@ namespace System.Windows.Forms
                         psi.Load(iStream);
                         htmlDocument.Encoding = "unicode";
                     }
+
                     _parent.documentStreamToSetOnLoad = null;
                 }
                 else

@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using System.Windows.Forms.Primitives.Tests.Interop.Mocks;
+using Xunit;
 using static Interop.Ole32;
 using static Interop.User32;
 

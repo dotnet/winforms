@@ -30,6 +30,7 @@ namespace System.Windows.Forms.Design
                 {
                     return item.DropDownItems;
                 }
+
                 return base.AssociatedComponents;
             }
         }

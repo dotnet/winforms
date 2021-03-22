@@ -49,6 +49,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     handler = new ComNativeDescriptor();
                 }
+
                 return handler;
             }
         }
@@ -89,6 +90,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return name;
                 }
+
                 // otherwise fall through...
             }
 
@@ -168,6 +170,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return null;
             }
+
             object[] pVarResult = new object[1];
             if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.S_OK)
             {
@@ -265,6 +268,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 disposeList = new List<object>(3);
                             }
+
                             disposeList.Add(de.Key);
                         }
                     }
@@ -317,6 +321,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     propsInfo.AddExtendedBrowsingHandlers(extendedBrowsingHandlers);
                 }
             }
+
             return propsInfo;
         }
 
@@ -366,6 +371,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return propsInfo.DefaultProperty;
             }
+
             return null;
         }
 
@@ -463,6 +469,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     currentConverter = subConverter;
                 }
+
                 object subEditor = TypeDescriptor.GetEditor(t, editorType);
                 if (subEditor is not null)
                 {

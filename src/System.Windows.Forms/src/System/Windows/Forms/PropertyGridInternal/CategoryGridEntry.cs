@@ -85,6 +85,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ChildCollection = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -136,6 +137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return GridItemType.Category;
             }
         }
+
         public override string HelpKeyword
         {
             get

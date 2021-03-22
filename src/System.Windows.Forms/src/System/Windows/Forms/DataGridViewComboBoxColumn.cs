@@ -35,6 +35,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.AutoComplete;
             }
             set
@@ -71,6 +72,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewComboBoxCell"));
                 }
+
                 base.CellTemplate = value;
                 if (value is not null)
                 {
@@ -100,6 +102,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.DataSource;
             }
             set
@@ -108,6 +111,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 ComboBoxCellTemplate.DataSource = value;
                 if (DataGridView is not null)
                 {
@@ -121,6 +125,7 @@ namespace System.Windows.Forms
                             dataGridViewCell.DataSource = value;
                         }
                     }
+
                     DataGridView.OnColumnCommonChange(Index);
                 }
             }
@@ -139,6 +144,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.DisplayMember;
             }
             set
@@ -147,6 +153,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 ComboBoxCellTemplate.DisplayMember = value;
                 if (DataGridView is not null)
                 {
@@ -160,6 +167,7 @@ namespace System.Windows.Forms
                             dataGridViewCell.DisplayMember = value;
                         }
                     }
+
                     DataGridView.OnColumnCommonChange(Index);
                 }
             }
@@ -176,6 +184,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.DisplayStyle;
             }
             set
@@ -184,6 +193,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 ComboBoxCellTemplate.DisplayStyle = value;
                 if (DataGridView is not null)
                 {
@@ -197,6 +207,7 @@ namespace System.Windows.Forms
                             dataGridViewCell.DisplayStyleInternal = value;
                         }
                     }
+
                     // Calling InvalidateColumn instead of OnColumnCommonChange because DisplayStyle does not affect preferred size.
                     DataGridView.InvalidateColumn(Index);
                 }
@@ -214,6 +225,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.DisplayStyleForCurrentCellOnly;
             }
             set
@@ -222,6 +234,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 ComboBoxCellTemplate.DisplayStyleForCurrentCellOnly = value;
                 if (DataGridView is not null)
                 {
@@ -235,6 +248,7 @@ namespace System.Windows.Forms
                             dataGridViewCell.DisplayStyleForCurrentCellOnlyInternal = value;
                         }
                     }
+
                     // Calling InvalidateColumn instead of OnColumnCommonChange because DisplayStyleForCurrentCellOnly does not affect preferred size.
                     DataGridView.InvalidateColumn(Index);
                 }
@@ -252,6 +266,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.DropDownWidth;
             }
             set
@@ -287,6 +302,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ((DataGridViewComboBoxCell)CellTemplate).FlatStyle;
             }
             set
@@ -306,6 +322,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
                 }
@@ -324,6 +341,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.GetItems(DataGridView);
             }
         }
@@ -341,6 +359,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.ValueMember;
             }
             set
@@ -349,6 +368,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 ComboBoxCellTemplate.ValueMember = value;
                 if (DataGridView is not null)
                 {
@@ -362,6 +382,7 @@ namespace System.Windows.Forms
                             dataGridViewCell.ValueMember = value;
                         }
                     }
+
                     DataGridView.OnColumnCommonChange(Index);
                 }
             }
@@ -378,6 +399,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.MaxDropDownItems;
             }
             set
@@ -413,6 +435,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return ComboBoxCellTemplate.Sorted;
             }
             set
@@ -452,11 +475,13 @@ namespace System.Windows.Forms
 
                 dataGridViewColumn = (DataGridViewComboBoxColumn)System.Activator.CreateInstance(thisType);
             }
+
             if (dataGridViewColumn is not null)
             {
                 base.CloneInternal(dataGridViewColumn);
                 ((DataGridViewComboBoxCell)dataGridViewColumn.CellTemplate).TemplateComboBoxColumn = dataGridViewColumn;
             }
+
             return dataGridViewColumn;
         }
 
@@ -478,6 +503,7 @@ namespace System.Windows.Forms
                         dataGridViewCell.Items.AddRangeInternal(items);
                     }
                 }
+
                 DataGridView.OnColumnCommonChange(Index);
             }
         }

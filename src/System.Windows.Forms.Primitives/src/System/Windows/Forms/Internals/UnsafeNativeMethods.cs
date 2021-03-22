@@ -41,6 +41,7 @@ namespace System.Windows.Forms
                 int capacity = noOfTimes * Kernel32.MAX_PATH < Kernel32.MAX_UNICODESTRING_LEN ? noOfTimes * Kernel32.MAX_PATH : Kernel32.MAX_UNICODESTRING_LEN;
                 buffer.EnsureCapacity(capacity);
             }
+
             buffer.Length = length;
             return buffer;
         }

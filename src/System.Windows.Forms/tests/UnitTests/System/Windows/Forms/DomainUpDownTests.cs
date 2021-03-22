@@ -59,6 +59,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
                 Assert.Equal(new Size(20, control.PreferredHeight), control.PreferredSize);
             }
+
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -1195,10 +1196,10 @@ namespace System.Windows.Forms.Tests
             control.OnSelectedItemChanged(source, eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.SelectedItemChanged -= handler;
-           control.OnSelectedItemChanged(source, eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.SelectedItemChanged -= handler;
+            control.OnSelectedItemChanged(source, eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -1219,10 +1220,10 @@ namespace System.Windows.Forms.Tests
             control.OnSelectedItemChanged(source, eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.SelectedItemChanged -= handler;
-           control.OnSelectedItemChanged(source, eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.SelectedItemChanged -= handler;
+            control.OnSelectedItemChanged(source, eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> UpButton_TestData()

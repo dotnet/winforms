@@ -67,6 +67,7 @@ namespace System.Windows.Forms
                             {
                                 cloned[i] = owner.savedSelectedItems[i];
                             }
+
                             return cloned;
                         }
                         else
@@ -100,6 +101,7 @@ namespace System.Windows.Forms
                         {
                             return owner.savedSelectedItems.Count;
                         }
+
                         return 0;
                     }
                 }
@@ -360,6 +362,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 

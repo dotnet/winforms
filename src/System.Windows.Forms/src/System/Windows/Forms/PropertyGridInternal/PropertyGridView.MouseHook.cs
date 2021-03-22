@@ -136,6 +136,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 {
                                     return (IntPtr)1;
                                 }
+
                                 break;
                         }
                     }
@@ -221,6 +222,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     HookMouseDown = false;
                     //gridView.UnfocusSelection();
                 }
+
                 return false;
             }
 
@@ -251,6 +253,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         // ignore
                     }
+
                     return ret;
                 }
             }

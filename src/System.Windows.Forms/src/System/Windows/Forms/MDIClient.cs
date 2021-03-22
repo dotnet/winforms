@@ -74,6 +74,7 @@ namespace System.Windows.Forms
                         return ParentInternal.BackgroundImageLayout;
                     }
                 }
+
                 return base.BackgroundImageLayout;
             }
             set => base.BackgroundImageLayout = value;
@@ -182,6 +183,7 @@ namespace System.Windows.Forms
             {
                 SetWindowRgn();
             }
+
             base.OnResize(e);
         }
 
@@ -271,6 +273,7 @@ namespace System.Windows.Forms
                                         wp.ptMinPosition.Y = -2;
                                     }
                                 }
+
                                 wp.flags = User32.WPF.SETMINPOSITION;
                                 User32.SetWindowPlacement(child, ref wp);
                             }
@@ -353,6 +356,7 @@ namespace System.Windows.Forms
                     {
                         SetWindowRgn();
                     }
+
                     break;
 
                 case User32.WM.SETFOCUS:
@@ -362,10 +366,12 @@ namespace System.Windows.Forms
                     {
                         childForm = ((Form)ParentInternal).ActiveMdiChildInternal;
                     }
+
                     if (childForm is null && MdiChildren.Length > 0 && MdiChildren[0].IsMdiChildFocusable)
                     {
                         childForm = MdiChildren[0];
                     }
+
                     if (childForm != null && childForm.Visible)
                     {
                         childForm.Active = true;
@@ -381,6 +387,7 @@ namespace System.Windows.Forms
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }
+
             base.WndProc(ref m);
         }
 

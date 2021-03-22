@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design.Serialization
                     GetReflectionTypeFromTypeHelper(manager, typeof(IContainer))
                 };
             }
+
             return _containerConstructor;
         }
 
@@ -70,6 +71,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     props = TypeDescriptor.GetProperties(comp);
                 }
+
                 foreach (PropertyDescriptor property in props)
                 {
                     if (typeof(IComponent).IsAssignableFrom(property.PropertyType) &&
@@ -352,6 +354,7 @@ namespace System.ComponentModel.Design.Serialization
                                 string fullName = typeof(ISupportInitialize).FullName;
                                 supportInitialize = manager.GetType(fullName) != null;
                             }
+
                             Type reflectionType = null;
                             if (supportInitialize)
                             {
@@ -371,11 +374,13 @@ namespace System.ComponentModel.Design.Serialization
                                 string fullName = typeof(IPersistComponentSettings).FullName;
                                 persistSettings = manager.GetType(fullName) != null;
                             }
+
                             if (persistSettings)
                             {
                                 reflectionType = reflectionType ?? GetReflectionTypeHelper(manager, value);
                                 persistSettings = GetReflectionTypeFromTypeHelper(manager, typeof(IPersistComponentSettings)).IsAssignableFrom(reflectionType);
                             }
+
                             // We implement statement caching only for the main code generation phase.  We don't implement it for other
                             // serialization managers.  How do we tell the difference?  The main serialization manager exists as a service.
                             IDesignerSerializationManager mainManager = manager.GetService(typeof(IDesignerSerializationManager)) as IDesignerSerializationManager;
@@ -431,6 +436,7 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                     }
                                 }
+
                                 entry.Component = value;
                                 // we need to link the cached entry with its corresponding component right away, before it's put in the context
                                 // see CodeDomSerializerBase.cs::GetExpression for usage

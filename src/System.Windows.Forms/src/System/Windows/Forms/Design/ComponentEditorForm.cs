@@ -56,6 +56,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new ArgumentException(SR.ComponentEditorFormBadComponent, nameof(component));
             }
+
             this.component = (IComponent)component;
             this.pageTypes = pageTypes;
             dirty = false;
@@ -98,6 +99,7 @@ namespace System.Windows.Forms.Design
                             {
                                 return;
                             }
+
                             throw;
                         }
                     }
@@ -234,6 +236,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             selectorWidth += SELECTOR_PADDING;
 
             string caption = string.Empty;
@@ -246,6 +249,7 @@ namespace System.Windows.Forms.Design
             {
                 caption = SR.ComponentEditorFormPropertiesNoName;
             }
+
             Text = caption;
 
             Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
@@ -307,7 +311,8 @@ namespace System.Windows.Forms.Design
             AcceptButton = okButton;
 
             Controls.Clear();
-            Controls.AddRange(new Control[] {
+            Controls.AddRange(new Control[]
+            {
                 selector,
                 grayStrip,
                 pageHost,

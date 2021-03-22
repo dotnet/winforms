@@ -40,6 +40,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return hitTestCursor;
             }
+
             return null;
         }
 

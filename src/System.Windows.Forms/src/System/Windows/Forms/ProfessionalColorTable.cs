@@ -431,6 +431,7 @@ namespace System.Windows.Forms
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd] = GetAlphaBlendedColorHighRes(null, buttonFace, window, 143);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine] = GetAlphaBlendedColorHighRes(null, buttonShadow, window, 70);
             }
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelected] = (lowResolution) ? SystemColors.ControlLight : highlight;
 
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = buttonFace;

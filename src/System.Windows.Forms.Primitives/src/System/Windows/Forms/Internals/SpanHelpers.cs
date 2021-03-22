@@ -21,6 +21,7 @@ namespace System
             {
                 source = source.Slice(0, destination.Length - 1);
             }
+
             source.CopyTo(destination);
 
             // Null terminate the string

@@ -139,6 +139,7 @@ namespace System.Drawing.Design.Tests
             {
                 mockEditor.Object.PaintValue(value, canvas, rectangle);
             }
+
             mockEditor.Verify(e => e.PaintValue(It.IsAny<PaintValueEventArgs>()), Times.Once());
         }
 

@@ -70,6 +70,7 @@ namespace System.Windows.Forms.Design
                     {
                         pageControl.Deactivate();
                     }
+
                     isActive = value;
                 }
             }

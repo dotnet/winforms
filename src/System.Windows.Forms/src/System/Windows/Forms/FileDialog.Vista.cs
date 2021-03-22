@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -196,6 +194,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return ok;
         }
 
@@ -203,18 +202,12 @@ namespace System.Windows.Forms
         {
             COMDLG_FILTERSPEC[] filterItems = FilterItems;
             HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-            if (!hr.Succeeded())
-            {
-                throw Marshal.GetExceptionForHR((int)hr);
-            }
+            ThrowIfFailed(hr);
 
             if (filterItems.Length > 0)
             {
                 hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
-                if (!hr.Succeeded())
-                {
-                    throw Marshal.GetExceptionForHR((int)hr);
-                }
+                ThrowIfFailed(hr);
             }
         }
 
@@ -242,21 +235,27 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return extensions.ToArray();
         }
 
         private protected static string GetFilePathFromShellItem(IShellItem item)
         {
             HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
-            if (!hr.Succeeded())
-            {
-                throw Marshal.GetExceptionForHR((int)hr);
-            }
-
+            ThrowIfFailed(hr);
             return filename;
         }
 
-        private readonly FileDialogCustomPlacesCollection _customPlaces = new FileDialogCustomPlacesCollection();
+        private static void ThrowIfFailed(HRESULT hr)
+        {
+            if (hr.Failed())
+            {
+                // If we failed, we have a valid exception
+                throw Marshal.GetExceptionForHR((int)hr)!;
+            }
+        }
+
+        private readonly FileDialogCustomPlacesCollection _customPlaces = new();
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

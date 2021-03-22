@@ -5,8 +5,8 @@
 #nullable disable
 
 using System.Drawing;
-using Microsoft.Win32;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
@@ -81,6 +81,7 @@ namespace System.Windows.Forms
                 {
                     s_ielinkColor = GetIEColor(IEAnchorColor);
                 }
+
                 return s_ielinkColor;
             }
         }
@@ -93,9 +94,11 @@ namespace System.Windows.Forms
                 {
                     s_ieactiveLinkColor = GetIEColor(IEAnchorColorHover);
                 }
+
                 return s_ieactiveLinkColor;
             }
         }
+
         public static Color IEVisitedLinkColor
         {
             get
@@ -104,6 +107,7 @@ namespace System.Windows.Forms
                 {
                     s_ievisitedLinkColor = GetIEColor(IEAnchorColorVisited);
                 }
+
                 return s_ievisitedLinkColor;
             }
         }
@@ -143,6 +147,7 @@ namespace System.Windows.Forms
                 {
                     return LinkBehavior.NeverUnderline;
                 }
+
                 if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0)
                 {
                     return LinkBehavior.HoverUnderline;
@@ -203,6 +208,7 @@ namespace System.Windows.Forms
                 {
                     style &= ~FontStyle.Underline;
                 }
+
                 hoverLinkFont = new Font(f, style);
                 linkFont = hoverLinkFont;
             }

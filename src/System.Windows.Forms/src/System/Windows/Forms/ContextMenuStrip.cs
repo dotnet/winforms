@@ -23,6 +23,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(container));
             }
+
             container.Add(this);
         }
 
@@ -79,6 +80,7 @@ namespace System.Windows.Forms
                     contextMenuStrip.Items.Add(menuItem.Clone());
                 }
             }
+
             return contextMenuStrip;
         }
 
@@ -108,6 +110,7 @@ namespace System.Windows.Forms
             {
                 bounds = CalculateDropDownLocation(new Point(x, y), ToolStripDropDownDirection.AboveRight);
             }
+
             bounds = WindowsFormsUtils.ConstrainToBounds(screenBounds, bounds);
 
             Show(bounds.X, bounds.Y);
@@ -119,6 +122,7 @@ namespace System.Windows.Forms
             {
                 WorkingAreaConstrained = true;
             }
+
             base.SetVisibleCore(visible);
         }
     }

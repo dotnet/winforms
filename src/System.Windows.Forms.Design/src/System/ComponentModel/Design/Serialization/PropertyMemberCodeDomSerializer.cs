@@ -66,6 +66,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
+
                 propertyValue = property.GetValue(value);
             }
             catch (Exception e)
@@ -105,14 +106,17 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
+
             if (statements is null)
             {
                 throw new ArgumentNullException(nameof(statements));
@@ -432,10 +436,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));

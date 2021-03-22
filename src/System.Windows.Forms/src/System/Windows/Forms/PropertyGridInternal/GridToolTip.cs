@@ -184,6 +184,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         msg.WParam = IntPtr.Zero;
                     }
+
                     break;
                 case User32.WM.NCHITTEST:
                     // When using v6 common controls, the native tooltip does not end up returning HTTRANSPARENT
@@ -194,6 +195,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     msg.Result = (IntPtr)User32.HT.TRANSPARENT;
                     return;
             }
+
             base.WndProc(ref msg);
         }
     }

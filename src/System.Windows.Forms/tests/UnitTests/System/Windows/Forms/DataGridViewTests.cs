@@ -4,14 +4,14 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using Xunit;
-using WinForms.Common.Tests;
+using System.Data;
 using System.Drawing;
-using System.Windows.Forms.Metafiles;
 using System.Numerics;
+using System.Windows.Forms.Metafiles;
+using WinForms.Common.Tests;
+using Xunit;
 using static System.Windows.Forms.Metafiles.DataHelpers;
 using static Interop;
-using System.Data;
 
 namespace System.Windows.Forms.Tests
 {
@@ -120,7 +120,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ColumnHeadersHeight", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -268,7 +269,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("ColumnHeadersHeight", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1042,7 +1044,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("RowHeadersWidth", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -1196,7 +1199,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("RowHeadersWidth", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try

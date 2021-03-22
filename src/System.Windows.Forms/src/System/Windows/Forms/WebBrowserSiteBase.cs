@@ -99,7 +99,7 @@ namespace System.Windows.Forms
             return HRESULT.E_NOTIMPL;
         }
 
-        unsafe HRESULT IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, XFORMCOORDS dwFlags)
+        unsafe HRESULT IOleControlSite.TransformCoords(Point* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
         {
             if (pPtlHimetric is null || pPtfContainer is null)
             {
@@ -379,6 +379,7 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
+
                             throw;
                         }
 

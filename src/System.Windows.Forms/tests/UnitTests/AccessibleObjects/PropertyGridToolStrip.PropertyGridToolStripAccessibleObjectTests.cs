@@ -7,14 +7,15 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyGridToolStripAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void PropertyGridToolStripAccessibleObject_Ctor_Default()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
-            PropertyGridToolStripAccessibleObject accessibleObject = new PropertyGridToolStripAccessibleObject(propertyGridToolStrip, propertyGrid);
+            PropertyGridToolStrip.PropertyGridToolStripAccessibleObject accessibleObject =
+                new PropertyGridToolStrip.PropertyGridToolStripAccessibleObject(propertyGridToolStrip, propertyGrid);
 
             Assert.Equal(propertyGridToolStrip, accessibleObject.Owner);
             Assert.False(propertyGrid.IsHandleCreated);

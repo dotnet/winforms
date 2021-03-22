@@ -122,6 +122,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (_allowNewIsSet)
             {
                 return _allowNewSetValue;
@@ -621,6 +622,7 @@ namespace System.Windows.Forms
                 _needToSetList = true;
                 RaiseListChangedEvents = false;
             }
+
             _disposedOrFinalized = true;
             base.Dispose(disposing);
         }
@@ -784,6 +786,7 @@ namespace System.Windows.Forms
             {
                 index = ((IList)this).IndexOf(sender);
             }
+
             OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, index));
         }
 
@@ -893,6 +896,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             try
             {
                 _parentsCurrentItemChanging = true;
@@ -1044,6 +1048,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNotAllowed);
             }
+
             if (Position < 0 || Position >= Count)
             {
                 throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNoCurrentItem);
@@ -1136,6 +1141,7 @@ namespace System.Windows.Forms
                         _listExtractedFromEnumerable = true;
                     }
                 }
+
                 // If it's not an IList, IListSource or IEnumerable
                 if (bindingList is null)
                 {
@@ -1235,6 +1241,7 @@ namespace System.Windows.Forms
                 {
                     InnerListSort = Sort;
                 }
+
                 if (Filter is not null)
                 {
                     InnerListFilter = Filter;
@@ -1460,6 +1467,7 @@ namespace System.Windows.Forms
                     {
                         return 0;
                     }
+
                     if (_recursionDetectionFlag)
                     {
                         throw new InvalidOperationException(SR.BindingSourceRecursionDetected);

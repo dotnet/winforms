@@ -25,6 +25,7 @@ namespace AccessibilityTests
             FontDialog fontdialog = new FontDialog();
             fontdialog.ShowDialog();
         }
+
         private void FolderBrowserDialog_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();

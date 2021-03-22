@@ -58,6 +58,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
                 Assert.Equal(new Size(123, control.PreferredHeight), control.PreferredSize);
             }
+
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -628,6 +629,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageChanged += handler;
 
             // Set different.
@@ -689,6 +691,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -3010,6 +3013,29 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public void UpDownBase_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using UpDownBase upDownBase = new SubUpDownBase();
+            using ToolTip toolTip = new ToolTip();
+            upDownBase.CreateControl();
+
+            string actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+            string actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+            Assert.Empty(actualEditToolTipText);
+            Assert.Empty(actualButtonsToolTipText);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(upDownBase, text); // Invokes UpDownBase's SetToolTip inside
+            actualEditToolTipText = toolTip.GetToolTip(upDownBase._upDownEdit);
+            actualButtonsToolTipText = toolTip.GetToolTip(upDownBase._upDownButtons);
+
+            Assert.Equal(text, actualEditToolTipText);
+            Assert.Equal(text, actualButtonsToolTipText);
         }
 
         private class CustomValidateUpDownBase : UpDownBase

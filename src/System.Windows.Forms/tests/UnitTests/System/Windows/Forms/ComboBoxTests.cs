@@ -1430,6 +1430,7 @@ namespace System.Windows.Forms.Tests
             {
                 SendCtrlBackspace(control);
             }
+
             Assert.Equal(expected, control.Text);
         }
 

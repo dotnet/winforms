@@ -22,6 +22,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return parent.DetailsButtonExpanded;
             }
         }
+
         protected override AccessibleObject CreateAccessibilityInstance()
         {
             return new DetailsButtonAccessibleObject(this);

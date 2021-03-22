@@ -4,8 +4,8 @@
 
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -116,8 +116,10 @@ namespace System
                     catch (PlatformNotSupportedException)
                     {
                     }
+
                     s_lazyNonZeroLowerBoundArraySupported = Tuple.Create<bool>(nonZeroLowerBoundArraysSupported);
                 }
+
                 return s_lazyNonZeroLowerBoundArraySupported.Item1;
             }
         }

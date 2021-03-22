@@ -4496,6 +4496,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedContextMenuStrip(rowIndex));
         }
+
         [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_Invoke_ReturnsExpected()
         {
@@ -6569,7 +6570,7 @@ namespace System.Windows.Forms.Tests
                 Times.Exactly(2));
         }
 
-        private class SubDataGridViewCheckBoxCell: DataGridViewCheckBoxCell
+        private class SubDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         {
             public SubDataGridViewCheckBoxCell()
             {
@@ -6637,7 +6638,7 @@ namespace System.Windows.Forms.Tests
                 return base.GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format);
             }
 
-            public new Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) =>  base.GetContentBounds(graphics, cellStyle, rowIndex);
+            public new Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) => base.GetContentBounds(graphics, cellStyle, rowIndex);
 
             public new Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) => base.GetErrorIconBounds(graphics, cellStyle, rowIndex);
 
