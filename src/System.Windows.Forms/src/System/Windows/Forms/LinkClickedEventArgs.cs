@@ -35,9 +35,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the text of the link being clicked.
+        /// Gets the length of the link span being clicked.
         /// </summary>
-        public string? LinkText { get; }
+        public int LinkLength { get; }
 
         /// <summary>
         /// Gets the start of the link span being clicked.
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
         public int LinkStart { get; }
 
         /// <summary>
-        /// Gets the length of the link span being clicked.
+        ///  Gets the text of the link being clicked.
         /// </summary>
-        public int LinkLength { get; }
+        public string? LinkText { get; }
     }
 }
