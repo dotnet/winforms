@@ -341,6 +341,7 @@ namespace System.Windows.Forms
 
                 return new UiaTextRange(new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject), this, start, start);
             }
+
             public override void SetSelection(int start, int end)
             {
                 if (!_owningComboBox.IsHandleCreated)
