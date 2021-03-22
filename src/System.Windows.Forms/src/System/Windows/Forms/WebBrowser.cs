@@ -82,7 +82,7 @@ namespace System.Windows.Forms
             set
             {
                 webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
-                if (webBrowserEvent != null)
+                if (webBrowserEvent is not null)
                 {
                     webBrowserEvent.AllowNavigation = value;
                 }
@@ -239,7 +239,7 @@ namespace System.Windows.Forms
             get
             {
                 object objDoc = AxIWebBrowser2.Document;
-                if (objDoc != null)
+                if (objDoc is not null)
                 {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
                     IHTMLDocument2 iHTMLDocument2 = null;
@@ -251,10 +251,10 @@ namespace System.Windows.Forms
                     {
                     }
 
-                    if (iHTMLDocument2 != null)
+                    if (iHTMLDocument2 is not null)
                     {
                         IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                        if (iHTMLLocation != null)
+                        if (iHTMLLocation is not null)
                         {
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                    Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
+                    Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
                     if (psi is null)
                     {
                         return null;
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
                 else
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         documentTitle = htmlDocument2.GetTitle();
@@ -402,10 +402,10 @@ namespace System.Windows.Forms
             {
                 string docType = string.Empty;
                 HtmlDocument htmlDocument = Document;
-                if (htmlDocument != null)
+                if (htmlDocument is not null)
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         docType = htmlDocument2.GetMimeType();
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     if (!Marshal.IsTypeVisibleFromCom(value.GetType()))
                     {
@@ -618,7 +618,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.ToString().Length == 0)
+                if (value is not null && value.ToString().Length == 0)
                 {
                     value = null;
                 }
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager != null)
+                if (htmlShimManager is not null)
                 {
                     htmlShimManager.Dispose();
                 }
@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms
         protected override void CreateSink()
         {
             object ax = activeXInstance;
-            if (ax != null)
+            if (ax is not null)
             {
                 webBrowserEvent = new WebBrowserEvent(this)
                 {
@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms
         protected override void DetachSink()
         {
             // If we have a cookie get rid of it
-            if (cookie != null)
+            if (cookie is not null)
             {
                 cookie.Disconnect();
                 cookie = null;
@@ -1369,7 +1369,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1387,7 +1387,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip != null)
+                    if (contextMenuStrip is not null)
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }

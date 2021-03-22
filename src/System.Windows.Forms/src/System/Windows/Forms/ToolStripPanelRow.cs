@@ -154,7 +154,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripPanelCell cell = RowManager.GetNextVisibleCell(0, /*forward*/true);
-                if (cell != null && cell.DraggedControl != null)
+                if (cell is not null && cell.DraggedControl is not null)
                 {
                     if (cell.DraggedControl.Stretch)
                     {
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
             }
 
             // fixup for items before it shrinking.
-            if (cellOffsets != null)
+            if (cellOffsets is not null)
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
@@ -609,7 +609,7 @@ namespace System.Windows.Forms
             }
 
             // fixup for items before it shrinking.
-            if (cellOffsets != null)
+            if (cellOffsets is not null)
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
@@ -697,7 +697,7 @@ namespace System.Windows.Forms
         {
             Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
-            if (Orientation == Orientation.Horizontal && ParentInternal != null)
+            if (Orientation == Orientation.Horizontal && ParentInternal is not null)
             {
                 preferredSize.Width = DisplayRectangle.Width;
             }

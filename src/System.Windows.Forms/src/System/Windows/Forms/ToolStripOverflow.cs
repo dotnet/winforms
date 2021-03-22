@@ -34,7 +34,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ParentToolStrip != null)
+                if (ParentToolStrip is not null)
                 {
                     ToolStripItemCollection items = ParentToolStrip.OverflowItems;
                     return items;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ownerItem != null)
+                if (ownerItem is not null)
                 {
                     return ownerItem.ParentToolStrip;
                 }
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
 
         protected override void OnLayout(LayoutEventArgs e)
         {
-            if (ParentToolStrip != null && ParentToolStrip.IsInDesignMode)
+            if (ParentToolStrip is not null && ParentToolStrip.IsInDesignMode)
             {
                 if (FlowLayout.GetFlowDirection(this) != FlowDirection.TopDown)
                 {

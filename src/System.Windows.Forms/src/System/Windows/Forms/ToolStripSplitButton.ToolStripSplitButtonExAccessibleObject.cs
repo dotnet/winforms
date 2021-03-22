@@ -35,7 +35,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningToolStripSplitButton != null)
+                if (_owningToolStripSplitButton is not null)
                 {
                     return true;
                 }
@@ -64,7 +64,7 @@ namespace System.Windows.Forms
 
             internal override void Collapse()
             {
-                if (_owningToolStripSplitButton != null && _owningToolStripSplitButton.DropDown != null && _owningToolStripSplitButton.DropDown.Visible)
+                if (_owningToolStripSplitButton is not null && _owningToolStripSplitButton.DropDown is not null && _owningToolStripSplitButton.DropDown.Visible)
                 {
                     _owningToolStripSplitButton.DropDown.Close();
                 }
