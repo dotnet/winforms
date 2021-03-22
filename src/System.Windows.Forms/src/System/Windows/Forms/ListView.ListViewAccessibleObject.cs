@@ -305,7 +305,28 @@ namespace System.Windows.Forms
                 {
                     if (hitTestInfo.SubItem is not null)
                     {
-                        return hitTestInfo.SubItem.AccessibilityObject;
+                        return _owningListView.View switch
+                        {
+                            View.Details => hitTestInfo.SubItem.AccessibilityObject,
+
+                            // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
+                            // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)
+                            View.Tile => hitTestInfo.SubItem.Index > 0 ? hitTestInfo.SubItem.AccessibilityObject : hitTestInfo.Item.AccessibilityObject,
+                            _ => hitTestInfo.Item.AccessibilityObject
+                        };
+                    }
+
+                    if (_owningListView.View == View.Details)
+                    {
+                        var itemAccessibleObject = (ListViewItem.ListViewItemAccessibleObject)hitTestInfo.Item.AccessibilityObject;
+
+                        for (int i = 1; i < _owningListView.Columns.Count; i++)
+                        {
+                            if (itemAccessibleObject.GetSubItemBounds(i).Contains(point))
+                            {
+                                return itemAccessibleObject.GetDetailsSubItemOrFake(i);
+                            }
+                        }
                     }
 
                     return hitTestInfo.Item.AccessibilityObject;

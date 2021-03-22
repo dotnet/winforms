@@ -211,6 +211,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            internal int Index => _owner is null ? -1 : _owner.SubItems.IndexOf(this);
+
             [SRCategory(nameof(SR.CatData))]
             [Localizable(false)]
             [Bindable(true)]

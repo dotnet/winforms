@@ -16,77 +16,85 @@ namespace System.Windows.Forms
             {
                 private readonly ListView _owningListView;
                 private readonly ListViewItem _owningItem;
-                private readonly ListViewSubItem _owningSubItem;
 
-                public ListViewSubItemAccessibleObject(ListViewSubItem owningSubItem, ListViewItem owningItem)
+                // This is necessary for the "Details" view,  when there is no ListViewSubItem,
+                // but the cell for it is displayed and the user can interact with it.
+                private readonly ListViewSubItem? _owningSubItem;
+
+                public ListViewSubItemAccessibleObject(ListViewSubItem? owningSubItem, ListViewItem owningItem)
                 {
-                    _owningSubItem = owningSubItem ?? throw new ArgumentNullException(nameof(owningSubItem));
+                    _owningSubItem = owningSubItem;
                     _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
-                    _owningListView = owningItem.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
+                    _owningListView = owningItem.ListView ?? owningItem.Group?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 }
 
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                     => _owningListView.AccessibilityObject;
 
+                private int CurrentIndex => _owningSubItem is null
+                    ? ParentInternal.GetFakeSubItemIndex(this)
+                    : _owningSubItem.Index;
+
                 public override Rectangle Bounds
                 {
                     get
                     {
+                        int index = CurrentIndex;
+                        Rectangle bounds = ParentInternal.GetSubItemBounds(index);
+                        if (bounds.IsEmpty)
+                        {
+                            return bounds;
+                        }
+
                         // Previously bounds was provided using MSAA,
                         // but using UIA we found out that SendMessageW work incorrectly.
                         // When we need to get bounds for first sub item it will return width of all item.
-                        int width = _owningSubItem.Bounds.Width;
+                        int width = bounds.Width;
 
-                        if (Column == 0 && _owningItem.SubItems.Count > 1)
+                        if (index == 0 && _owningListView.Columns.Count > 1)
                         {
-                            width = _owningItem.SubItems[Column + 1].Bounds.X - _owningSubItem.Bounds.X;
+                            width = ParentInternal.GetSubItemBounds(subItemIndex: 1).X - bounds.X;
+                        }
+
+                        if (width <= 0)
+                        {
+                            return Rectangle.Empty;
                         }
 
                         return new Rectangle(
-                            _owningListView.AccessibilityObject.Bounds.X + _owningSubItem.Bounds.X,
-                            _owningListView.AccessibilityObject.Bounds.Y + _owningSubItem.Bounds.Y,
-                            width, _owningSubItem.Bounds.Height);
+                            _owningListView.AccessibilityObject.Bounds.X + bounds.X,
+                            _owningListView.AccessibilityObject.Bounds.Y + bounds.Y,
+                            width, bounds.Height);
                     }
                 }
 
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                {
-                    switch (direction)
+                    => direction switch
                     {
-                        case UiaCore.NavigateDirection.Parent:
-                            return _owningItem.AccessibilityObject;
-                        case UiaCore.NavigateDirection.NextSibling:
-                            int nextSubItemIndex = GetCurrentSubItemIndex() + 1;
-                            if (_owningItem.SubItems.Count > nextSubItemIndex)
-                            {
-                                return _owningItem.SubItems[nextSubItemIndex].AccessibilityObject;
-                            }
+                        UiaCore.NavigateDirection.Parent
+                            => ParentInternal,
+                        UiaCore.NavigateDirection.NextSibling
+                            => ParentInternal.GetChildInternal(CurrentIndex + 1),
+                        UiaCore.NavigateDirection.PreviousSibling
+                            => ParentInternal.GetChildInternal(CurrentIndex - 1),
+                        _ => base.FragmentNavigate(direction)
+                    };
 
-                            break;
-                        case UiaCore.NavigateDirection.PreviousSibling:
-                            int previousSubItemIndex = GetCurrentSubItemIndex() - 1;
-                            if (previousSubItemIndex >= 0)
-                            {
-                                return _owningItem.SubItems[previousSubItemIndex].AccessibilityObject;
-                            }
-
-                            break;
-                    }
-
-                    return base.FragmentNavigate(direction);
-                }
+                internal override int Column => CurrentIndex;
 
                 /// <summary>
                 ///  Gets or sets the accessible name.
                 /// </summary>
                 public override string? Name
                 {
-                    get => base.Name ?? _owningSubItem.Text;
+                    get => base.Name ?? _owningSubItem?.Text ?? string.Empty;
                     set => base.Name = value;
                 }
 
-                public override AccessibleObject Parent
-                    => _owningItem.AccessibilityObject;
+                public override AccessibleObject Parent => ParentInternal;
+
+                private ListViewItemAccessibleObject ParentInternal
+                    => (ListViewItemAccessibleObject)_owningItem.AccessibilityObject;
 
                 internal override int[]? RuntimeId
                 {
@@ -103,7 +111,7 @@ namespace System.Windows.Forms
                         runtimeId[1] = owningItemRuntimeId[1];
                         runtimeId[2] = owningItemRuntimeId[2];
                         runtimeId[3] = owningItemRuntimeId[3];
-                        runtimeId[4] = GetCurrentSubItemIndex();
+                        runtimeId[4] = CurrentIndex;
                         return runtimeId;
                     }
                 }
@@ -113,7 +121,7 @@ namespace System.Windows.Forms
                     {
                         // All subitems are "text" except the first.
                         // It can be "edit" if ListView.LabelEdit is true.
-                        UiaCore.UIA.ControlTypePropertyId => _owningListView.LabelEdit && GetCurrentSubItemIndex() == 0
+                        UiaCore.UIA.ControlTypePropertyId => _owningListView.LabelEdit && CurrentIndex == 0
                                                              ? UiaCore.UIA.EditControlTypeId
                                                              : UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.NamePropertyId => Name,
@@ -142,11 +150,7 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderSimple ContainingGrid
                     => _owningListView.AccessibilityObject;
 
-                internal override int Row
-                    => _owningItem.Index;
-
-                internal override int Column
-                    => _owningItem.SubItems.IndexOf(_owningSubItem);
+                internal override int Row => _owningItem.Index;
 
                 internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
                     => new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject };
@@ -163,10 +167,7 @@ namespace System.Windows.Forms
                 }
 
                 private string AutomationId
-                    => string.Format("{0}-{1}", typeof(ListViewItem.ListViewSubItem).Name, GetCurrentSubItemIndex());
-
-                private int GetCurrentSubItemIndex()
-                    => _owningItem.SubItems.IndexOf(_owningSubItem);
+                    => string.Format("{0}-{1}", typeof(ListViewItem.ListViewSubItem).Name, CurrentIndex);
             }
         }
     }

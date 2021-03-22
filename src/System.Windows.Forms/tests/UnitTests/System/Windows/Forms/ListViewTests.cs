@@ -5222,6 +5222,48 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        public static IEnumerable<object[]> ListView_OnSelectedIndexChanged_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool virtualMode in new[] { true, false })
+                {
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (view == View.Tile)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool withinGroup in new[] { true, false })
+                        {
+                            yield return new object[] { view, virtualMode, showGroups, withinGroup };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_OnSelectedIndexChanged_TestData))]
+        public void ListView_OnSelectedIndexChanged_DoesNotInvoke_RaiseAutomationEvent_SecondTime(View view, bool virtualMode, bool showGroups, bool withinGroup)
+        {
+            using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup);
+            ListViewItem listViewItem = listView.Items[0];
+            SubListViewItemAccessibleObject accessibleObject = new SubListViewItemAccessibleObject(listViewItem);
+            listViewItem.TestAccessor().Dynamic._accessibilityObject = accessibleObject;
+            listView.CreateControl();
+            listViewItem.Focused = true;
+            listViewItem.Selected = true;
+
+            Assert.Equal(2, accessibleObject.RaiseAutomationEventCalls);
+
+            listView.CallSelectedIndexChanged();
+
+            Assert.Equal(2, accessibleObject.RaiseAutomationEventCalls);
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }
@@ -5250,6 +5292,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubListView : ListView
         {
+            internal void CallSelectedIndexChanged() => base.OnSelectedIndexChanged(new EventArgs());
+
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
@@ -5311,6 +5355,54 @@ namespace System.Windows.Forms.Tests
             public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+        }
+
+        private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup)
+        {
+            SubListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualMode = virtualMode,
+                VirtualListSize = 2
+            };
+
+            ListViewItem listItem1 = new("Test Item 1");
+            ListViewItem listItem2 = new("Test Item 2");
+
+            if (withinGroup)
+            {
+                ListViewGroup listViewGroup = new("Test");
+                listView.Groups.Add(listViewGroup);
+                listItem2.Group = listViewGroup;
+            }
+
+            listView.Columns.Add(new ColumnHeader() { Name = "Column 1" });
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+            }
+
+            listView.CreateControl();
+
+            return listView;
         }
     }
 }
