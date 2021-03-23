@@ -35,6 +35,7 @@ namespace System.Windows.Forms.Design
                         return SR.DesignerShortcutDockInParent;
                     }
                 }
+
                 return null;
             }
 
@@ -46,6 +47,7 @@ namespace System.Windows.Forms.Design
                 {
                     items.Add(new DesignerActionVerbItem(new DesignerVerb(GetActionName(), OnDockActionClick)));
                 }
+
                 return items;
             }
 

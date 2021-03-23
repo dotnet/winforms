@@ -187,6 +187,7 @@ namespace System.Windows.Forms
                 {
                     Debug.Fail(t.ToString());
                 }
+
                 return Guid.Empty;
             }
 
@@ -215,6 +216,7 @@ namespace System.Windows.Forms
                         _owner.RefreshAllProperties = true;
                         SetFlag(FlagGettterThrew, true);
                     }
+
                     throw;
                 }
                 finally

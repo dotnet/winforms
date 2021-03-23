@@ -54,6 +54,7 @@ namespace System.Windows.Forms
                 {
                     baseVar = dse.data;
                 }
+
                 object original = baseVar;
 
                 if (autoConvert
@@ -72,6 +73,7 @@ namespace System.Windows.Forms
                                 {
                                     baseVar = found.data;
                                 }
+
                                 if (baseVar is not null && !(baseVar is MemoryStream))
                                 {
                                     original = null;
@@ -203,6 +205,7 @@ namespace System.Windows.Forms
                             return true;
                         }
                     }
+
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: returning false");
                     return false;
                 }
@@ -250,6 +253,7 @@ namespace System.Windows.Forms
 
                     baseVar = distinctFormats.ToArray();
                 }
+
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: returing " + baseVar.Length.ToString(CultureInfo.InvariantCulture) + " formats from GetFormats");
                 return baseVar;
             }

@@ -26,6 +26,7 @@ namespace System.Windows.Forms.Design
                 Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
             }
         }
+
         protected override void OnOpening(CancelEventArgs e)
         {
             Groups["StandardList"].Items.Clear();
@@ -44,6 +45,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             foreach (ToolStripItem item in ToolStripDesignerUtils.GetCustomItemMenuItems(_component, _onClick, _convertTo, _serviceProvider))
             {
                 Groups["CustomList"].Items.Add(item);
@@ -55,6 +57,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             base.OnOpening(e);
         }
 
@@ -69,6 +72,7 @@ namespace System.Windows.Forms.Design
                     Close();
                     return true;
             }
+
             return base.ProcessDialogKey(keyData);
         }
     }

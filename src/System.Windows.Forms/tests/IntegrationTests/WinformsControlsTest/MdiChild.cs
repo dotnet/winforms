@@ -40,6 +40,7 @@ namespace WinformsControlsTest
                 MainMenuStrip = null;
             }
         }
+
         private void chkSetParentMenustrip_CheckedChanged(object sender, EventArgs e)
         {
             if (chkSetParentMenustrip.Checked)

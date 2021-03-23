@@ -48,6 +48,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     AssemblyBuilder aBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
                     moduleBuilder = aBuilder.DefineDynamicModule("COM2Interop.Emit");
                 }
+
                 return moduleBuilder;
             }
         }
@@ -395,6 +396,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 refTypeInfo = null;
             }
+
             return null;
         }
 
@@ -468,6 +470,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         hr = (HRESULT)ex.ErrorCode;
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "IDispatch::Invoke(PROPGET, " + pi.Name + ") threw an exception :" + ex.ToString());
                     }
+
                     if (!hr.Succeeded())
                     {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
@@ -493,6 +496,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 props[props.Length - 1] = new Com2AboutBoxPropertyDescriptor();
             }
+
             return props;
         }
 
@@ -639,6 +643,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 addAboutBox = true;
                             }
+
                             continue;
                         }
 
@@ -672,6 +677,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 typeDesc = pFuncDesc->lprgelemdescParam->tdesc;
                             }
                         }
+
                         pi = ProcessDataCore(typeInfo, propInfoList, pFuncDesc->memid, nameDispID, in typeDesc, (VARFLAGS)pFuncDesc->wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
@@ -789,6 +795,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 Debug.Assert(name is not null, "No name for VARDESC member, but GetDocumentation returned S_OK!");
                                 nameString = name;
                             }
+
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding name value=" + nameString);
                             strs.Add(nameString);
                         }
@@ -831,6 +838,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 enumBuilder.DefineLiteral((string)strs[i], vars[i]);
                             }
+
                             Type t = enumBuilder.CreateTypeInfo().AsType();
                             builtEnums[enumName] = t;
                             return t;
@@ -852,6 +860,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             catch
             {
             }
+
             return null;
         }
 
@@ -1028,6 +1037,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         retProps[i] = props[i];
                     }
                 }
+
                 return retProps;
             }
         }

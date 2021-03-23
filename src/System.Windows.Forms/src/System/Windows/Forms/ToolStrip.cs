@@ -241,6 +241,7 @@ namespace System.Windows.Forms
                     bounds.Location = Location;
                     CommonProperties.UpdateSpecifiedBounds(this, bounds.X, bounds.Y, bounds.Width, bounds.Height, BoundsSpecified.Location);
                 }
+
                 base.AutoSize = value;
             }
         }
@@ -335,6 +336,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue);
                     }
+
                     SetToolStripState(STATE_ALLOWITEMREORDER, value);
 
                     //
@@ -557,6 +559,7 @@ namespace System.Windows.Forms
                 {
                     return base.Font;
                 }
+
                 if (_defaultFont is null)
                 {
                     // since toolstrip manager default font is thread static, hold onto a copy of the
@@ -564,6 +567,7 @@ namespace System.Windows.Forms
                     // thread local storage for it.
                     _defaultFont = ToolStripManager.DefaultFont;
                 }
+
                 return _defaultFont;
             }
             set => base.Font = value;
@@ -674,6 +678,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return direction;
             }
             set
@@ -718,6 +723,7 @@ namespace System.Windows.Forms
                         DefaultLayout.SetDock(this, value);
                         UpdateLayoutStyle(Dock);
                     }
+
                     // This will cause the DockChanged event to fire.
                     OnDockChanged(EventArgs.Empty);
                 }
@@ -763,6 +769,7 @@ namespace System.Windows.Forms
                 {
                     _dropTargetManager = new ToolStripDropTargetManager(this);
                 }
+
                 return _dropTargetManager;
             }
             set
@@ -782,6 +789,7 @@ namespace System.Windows.Forms
                 {
                     _displayedItems = new ToolStripItemCollection(this, false);
                 }
+
                 return _displayedItems;
             }
         }
@@ -814,6 +822,7 @@ namespace System.Windows.Forms
                         rect.Height -= gripheight;
                     }
                 }
+
                 return rect;
             }
         }
@@ -861,6 +870,7 @@ namespace System.Windows.Forms
                         Margin = DefaultGripMargin
                     };
                 }
+
                 return _toolStripGrip;
             }
         }
@@ -949,9 +959,11 @@ namespace System.Windows.Forms
                             return true;
                         }
                     }
+
                     SetToolStripState(STATE_HASVISIBLEITEMS, false);
                     return false;
                 }
+
                 // after the handle is created, we start layout... so this state is cached.
                 return GetToolStripState(STATE_HASVISIBLEITEMS);
             }
@@ -1046,6 +1058,7 @@ namespace System.Windows.Forms
                     {
                         item.InvalidateImageListImage();
                     }
+
                     Invalidate();
                 }
             }
@@ -1116,6 +1129,7 @@ namespace System.Windows.Forms
                 {
                     _toolStripItemCollection = new ToolStripItemCollection(this, true);
                 }
+
                 return _toolStripItemCollection;
             }
         }
@@ -1161,6 +1175,7 @@ namespace System.Windows.Forms
                 {
                     _cachedItemHdcInfo = new CachedItemHdcInfo();
                 }
+
                 return _cachedItemHdcInfo;
             }
         }
@@ -1228,6 +1243,7 @@ namespace System.Windows.Forms
                     // handle disposal, parent changed since we last mouse downed.
                     _lastMouseDownedItem = null;
                 }
+
                 return _lastMouseDownedItem;
             }
         }
@@ -1257,6 +1273,7 @@ namespace System.Windows.Forms
                             return ToolStripLayoutStyle.VerticalStackWithOverflow;
                     }
                 }
+
                 return _layoutStyle;
             }
             set
@@ -1274,6 +1291,7 @@ namespace System.Windows.Forms
                             {
                                 _layoutEngine = FlowLayout.Instance;
                             }
+
                             // Orientation really only applies to split stack layout (which swaps based on Dock, ToolStripPanel location)
                             UpdateOrientation(Orientation.Horizontal);
                             break;
@@ -1283,6 +1301,7 @@ namespace System.Windows.Forms
                             {
                                 _layoutEngine = TableLayout.Instance;
                             }
+
                             // Orientation really only applies to split stack layout (which swaps based on Dock, ToolStripPanel location)
                             UpdateOrientation(Orientation.Horizontal);
                             break;
@@ -1306,10 +1325,12 @@ namespace System.Windows.Forms
                                     UpdateLayoutStyle(Dock);
                                 }
                             }
+
                             if (!(_layoutEngine is ToolStripSplitStackLayout))
                             {
                                 _layoutEngine = new ToolStripSplitStackLayout(this);
                             }
+
                             break;
                     }
 
@@ -1317,10 +1338,12 @@ namespace System.Windows.Forms
                     {
                         LayoutSettings = CreateLayoutSettings(_layoutStyle);
                     }
+
                     OnLayoutStyleChanged(EventArgs.Empty);
                 }
             }
         }
+
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
         public event EventHandler LayoutCompleted
@@ -1375,9 +1398,11 @@ namespace System.Windows.Forms
                             SetToolStripState(STATE_MENUAUTOEXPAND, false);
                             return false;
                         }
+
                         return true;
                     }
                 }
+
                 return false;
             }
             set
@@ -1397,6 +1422,7 @@ namespace System.Windows.Forms
                 {
                     _mergeHistoryStack = new Stack<MergeHistory>();
                 }
+
                 return _mergeHistoryStack;
             }
         }
@@ -1409,6 +1435,7 @@ namespace System.Windows.Forms
                 {
                     _mouseHoverTimer = new MouseHoverTimer();
                 }
+
                 return _mouseHoverTimer;
             }
         }
@@ -1429,6 +1456,7 @@ namespace System.Windows.Forms
                     };
                     _toolStripOverflowButton.Size = _toolStripOverflowButton.GetPreferredSize(DisplayRectangle.Size - Padding.Size);
                 }
+
                 return _toolStripOverflowButton;
             }
         }
@@ -1444,6 +1472,7 @@ namespace System.Windows.Forms
                 {
                     _overflowItems = new ToolStripItemCollection(this, false);
                 }
+
                 return _overflowItems;
             }
         }
@@ -1467,6 +1496,7 @@ namespace System.Windows.Forms
                 {
                     _restoreFocusFilter = new RestoreFocusMessageFilter(this);
                 }
+
                 return _restoreFocusFilter;
             }
         }
@@ -1499,6 +1529,7 @@ namespace System.Windows.Forms
                         Properties.SetObject(ToolStrip.s_propToolStripPanelCell, toolStripPanelCell);
                     }
                 }
+
                 return toolStripPanelCell;
             }
         }
@@ -1512,6 +1543,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 return ToolStripPanelCell.ToolStripPanelRow;
             }
             set
@@ -1525,6 +1557,7 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
+
                     cell.ToolStripPanelRow = value;
 
                     if (value != null)
@@ -1547,6 +1580,7 @@ namespace System.Windows.Forms
                         {
                             oldToolStripPanelRow.ControlsInternal.Remove(this);
                         }
+
                         UpdateLayoutStyle(Dock);
                     }
                 }
@@ -1597,10 +1631,12 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (RenderMode == ToolStripRenderMode.ManagerRenderMode)
                 {
                     return ToolStripManager.Renderer;
                 }
+
                 // always return a valid renderer so our paint code
                 // doesn't have to be bogged down by checks for null.
 
@@ -1609,6 +1645,7 @@ namespace System.Windows.Forms
                 {
                     Renderer = ToolStripManager.CreateRenderer(RenderMode);
                 }
+
                 return _renderer;
             }
             set
@@ -1641,20 +1678,24 @@ namespace System.Windows.Forms
                 {
                     return ToolStripRenderMode.ManagerRenderMode;
                 }
+
                 if (_renderer != null && !_renderer.IsAutoGenerated)
                 {
                     return ToolStripRenderMode.Custom;
                 }
+
                 // check the type of the currently set renderer.
                 // types are cached as this may be called frequently.
                 if (_currentRendererType == ToolStripManager.s_professionalRendererType)
                 {
                     return ToolStripRenderMode.Professional;
                 }
+
                 if (_currentRendererType == ToolStripManager.s_systemRendererType)
                 {
                     return ToolStripRenderMode.System;
                 }
+
                 return ToolStripRenderMode.Custom;
             }
             set
@@ -1746,6 +1787,7 @@ namespace System.Windows.Forms
                 {
                     _shortcuts = new Hashtable(1);
                 }
+
                 return _shortcuts;
             }
         }
@@ -1781,6 +1823,7 @@ namespace System.Windows.Forms
                 {
                     toolTip = (ToolTip)Properties.GetObject(ToolStrip.s_propToolTip);
                 }
+
                 return toolTip;
             }
         }
@@ -1855,12 +1898,14 @@ namespace System.Windows.Forms
                         KeyboardActive = true;
                     }
                 }
+
                 if (controlHost != null)
                 {
                     if (_hwndThatLostFocus == IntPtr.Zero)
                     {
                         SnapFocus(User32.GetFocus());
                     }
+
                     controlHost.Control.Select();
                     controlHost.Control.Focus();
                 }
@@ -1927,6 +1972,7 @@ namespace System.Windows.Forms
                             dropDownItem.AutoHide(item);
                         }
                     }
+
                     bool invalidate = false;
                     if (DisplayedItems[i].Selected)
                     {
@@ -1942,6 +1988,7 @@ namespace System.Windows.Forms
                         {
                             region = new Region(regionRect);
                         }
+
                         region.Union(DisplayedItems[i].Bounds);
                     }
                 }
@@ -1965,6 +2012,7 @@ namespace System.Windows.Forms
                     region.Dispose();
                 }
             }
+
             // fire accessibility
             if (IsHandleCreated && item != null)
             {
@@ -1987,6 +2035,7 @@ namespace System.Windows.Forms
                 Invalidate(invalidate);
             }
         }
+
         private void ClearLastMouseDownedItem()
         {
             ToolStripItem lastItem = _lastMouseDownedItem;
@@ -2017,6 +2066,7 @@ namespace System.Windows.Forms
                     {
                         overflow.SuspendLayout();
                     }
+
                     // if there's a problem in config, dont be a leaker.
                     SetToolStripState(STATE_DISPOSINGITEMS, true);
                     _lastMouseDownedItem = null;
@@ -2051,13 +2101,16 @@ namespace System.Windows.Forms
                         {
                             Items[i].Dispose();
                         }
+
                         Items.Clear();
                     }
+
                     // clean up items not in the Items list
                     if (_toolStripGrip != null)
                     {
                         _toolStripGrip.Dispose();
                     }
+
                     if (_toolStripOverflowButton != null)
                     {
                         _toolStripOverflowButton.Dispose();
@@ -2078,6 +2131,7 @@ namespace System.Windows.Forms
                     {
                         exitMenuMode = true;
                     }
+
                     ToolStripManager.ModalMenuFilter.RemoveActiveToolStrip(this);
                     // if we were the last toolstrip in the queue, exit menu mode.
                     if (exitMenuMode && ToolStripManager.ModalMenuFilter.GetActiveToolStrip() is null)
@@ -2097,9 +2151,11 @@ namespace System.Windows.Forms
                     {
                         overflow.ResumeLayout(false);
                     }
+
                     SetToolStripState(STATE_DISPOSINGITEMS, false);
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -2155,6 +2211,7 @@ namespace System.Windows.Forms
         {
             return (_toolStripOverflowButton is null || !_toolStripOverflowButton.HasDropDown) ? null : _toolStripOverflowButton.DropDown as ToolStripOverflow;
         }
+
         internal byte GetMouseId()
         {
             // never return 0 as the mousedown ID, this is the "reset" value.
@@ -2162,8 +2219,10 @@ namespace System.Windows.Forms
             {
                 _mouseDownID++;
             }
+
             return _mouseDownID;
         }
+
         internal virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware)
         {
             if (rtlAware && RightToLeft == RightToLeft.Yes)
@@ -2177,6 +2236,7 @@ namespace System.Windows.Forms
                     direction = ArrowDirection.Right;
                 }
             }
+
             return GetNextItem(start, direction);
         }
 
@@ -2260,7 +2320,8 @@ namespace System.Windows.Forms
                     //ClearAllSelectionsExcept(Items[current]);
                     return DisplayedItems[current];
                 }
-            } while (DisplayedItems[current] != start);
+            }
+            while (DisplayedItems[current] != start);
 
             return null;
         }
@@ -2317,6 +2378,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (!down && otherItem.Bounds.Bottom > selectedItem.Bounds.Top)
                 {
                     // if we are going up the other control has to be above
@@ -2408,6 +2470,7 @@ namespace System.Windows.Forms
             {
                 proposedSize.Width = int.MaxValue;
             }
+
             if (proposedSize.Height == 1)
             {
                 proposedSize.Height = int.MaxValue;
@@ -2423,6 +2486,7 @@ namespace System.Windows.Forms
             {
                 CommonProperties.xClearPreferredSizeCache(this);
             }
+
             return prefSize + newPadding.Size;
         }
 
@@ -2553,6 +2617,7 @@ namespace System.Windows.Forms
             {
                 CommonProperties.xClearPreferredSizeCache(toolStrip);
             }
+
             return maxSize;
         }
 
@@ -2609,6 +2674,7 @@ namespace System.Windows.Forms
                 {
                     MouseHoverTimer.Cancel(_lastMouseActiveItem);
                 }
+
                 try
                 {
                     Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "firing mouse leave on " + _lastMouseActiveItem.ToString());
@@ -2620,6 +2686,7 @@ namespace System.Windows.Forms
                     _lastMouseActiveItem = null;
                 }
             }
+
             ToolStripMenuItem.MenuTimer.HandleToolStripMouseLeave(this);
         }
 
@@ -2688,6 +2755,7 @@ namespace System.Windows.Forms
                     renderer.InitializeItem(Items[i]);
                 }
             }
+
             Invalidate(Controls.Count > 0);
         }
 
@@ -2699,6 +2767,7 @@ namespace System.Windows.Forms
                 LayoutTransaction.DoLayout(this, this, null);
             }
         }
+
         internal void InvalidateTextItems()
         {
             using (new LayoutTransaction(this, this, "ShowKeyboardFocusCues", /*PerformLayout=*/Visible))
@@ -2720,6 +2789,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -2730,6 +2800,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.IsInputChar(charCode);
         }
 
@@ -2747,6 +2818,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -2814,6 +2886,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 SetToolStripState(STATE_LOCATIONCHANGING, false);
                 base.SetBoundsCore(x, y, width, height, specified);
             }
@@ -2886,6 +2959,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (item.ProcessCmdKey(ref m, keyData))
                 {
                     return true;
@@ -2908,12 +2982,14 @@ namespace System.Windows.Forms
                     {
                         handled = ToolStripManager.SelectNextToolStrip(this, /*forward*/false);
                     }
+
                     if (handled)
                     {
                         return true;
                     }
                 }
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 
@@ -2957,6 +3033,7 @@ namespace System.Windows.Forms
                         // shift backspace/backspace work as backspace, which is the same as shift+tab
                         retVal = ProcessTabKey(false);
                     }
+
                     break;
                 case Keys.Tab:
                     // ctrl+tab does nothing
@@ -2964,6 +3041,7 @@ namespace System.Windows.Forms
                     {
                         retVal = ProcessTabKey((keyData & Keys.Shift) == Keys.None);
                     }
+
                     break;
                 case Keys.Left:
                 case Keys.Right:
@@ -2986,6 +3064,7 @@ namespace System.Windows.Forms
                         RestoreFocusInternal();
                         retVal = true;
                     }
+
                     break;
             }
 
@@ -2993,6 +3072,7 @@ namespace System.Windows.Forms
             {
                 return retVal;
             }
+
             Debug.WriteLineIf(s_selectionDebug.TraceVerbose, "[SelectDBG ProcessDialogKey] calling base");
             return base.ProcessDialogKey(keyData);
         }
@@ -3003,6 +3083,7 @@ namespace System.Windows.Forms
             {  // Checking again for security...
                 return;
             }
+
             //
             if (item != null)
             {
@@ -3030,10 +3111,12 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (Focused || ContainsFocus)
             {
                 return ProcessMnemonicInternal(charCode);
             }
+
             bool inMenuMode = ToolStripManager.ModalMenuFilter.InMenuMode;
             if (!inMenuMode && Control.ModifierKeys == Keys.Alt)
             {
@@ -3050,12 +3133,14 @@ namespace System.Windows.Forms
             // we should have processed in the displayed items collection.
             return false;
         }
+
         private bool ProcessMnemonicInternal(char charCode)
         {
             if (!CanProcessMnemonic())
             {  // Checking again for security...
                 return false;
             }
+
             // at this point we assume we can process mnemonics as process mnemonic has filtered for use.
             ToolStripItem startingItem = GetSelectedItem();
             int startIndex = 0;
@@ -3063,6 +3148,7 @@ namespace System.Windows.Forms
             {
                 startIndex = DisplayedItems.IndexOf(startingItem);
             }
+
             startIndex = Math.Max(0, startIndex);
 
             ToolStripItem firstMatch = null;
@@ -3079,11 +3165,13 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 // Only items which display text should be processed
                 if ((currentItem.DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.Text)
                 {
                     continue;
                 }
+
                 // keep track whether we've found a menu item - we'll have to do a
                 // second pass for fake mnemonics in that case.
                 foundMenuItem = (foundMenuItem || (currentItem is ToolStripMenuItem));
@@ -3106,11 +3194,13 @@ namespace System.Windows.Forms
                         {
                             ProcessDuplicateMnemonic(firstMatch, charCode);
                         }
+
                         // we've found two mnemonics, just return.
                         return true;
                     }
                 }
             }
+
             // We've found a singular match.
             if (firstMatch != null)
             {
@@ -3139,6 +3229,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 // Only items which display text should be processed
                 if ((currentItem.DisplayStyle & ToolStripItemDisplayStyle.Text) != ToolStripItemDisplayStyle.Text)
                 {
@@ -3163,6 +3254,7 @@ namespace System.Windows.Forms
                         {
                             ProcessDuplicateMnemonic(firstMatch, charCode);
                         }
+
                         // we've found two mnemonics, just return.
                         return true;
                     }
@@ -3200,6 +3292,7 @@ namespace System.Windows.Forms
                 {
                     forward = !forward;
                 }
+
                 SelectNextToolStripItem(GetSelectedItem(), forward);
                 return true;
             }
@@ -3249,8 +3342,10 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     break;
             }
+
             return retVal;
         }
 
@@ -3336,6 +3431,7 @@ namespace System.Windows.Forms
                 ToolStripManager.CurrentDpi = DeviceDpi;
                 _defaultFont = ToolStripManager.DefaultFont;
             }
+
             if (!IsFontSet())
             {
                 OnFontChanged(EventArgs.Empty);
@@ -3370,6 +3466,7 @@ namespace System.Windows.Forms
                             name = item.Name = ".DropDown";
                         }
                     }
+
                     if (string.IsNullOrEmpty(name))
                     {
                         name = GetType().Name;
@@ -3402,6 +3499,7 @@ namespace System.Windows.Forms
                 // Make sure we unregister ourselves as a drop target
                 DropTargetManager.EnsureUnRegistered(this);
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -3443,19 +3541,23 @@ namespace System.Windows.Forms
             {
                 _lastMouseActiveItem = null;
             }
+
             if (e.Item == LastMouseDownedItem)
             {
                 _lastMouseDownedItem = null;
             }
+
             if (e.Item == _currentlyActiveTooltipItem)
             {
                 UpdateToolTip(null);
             }
+
             if (performLayout)
             {
                 DoLayoutIfHandleCreated(e);
             }
         }
+
         protected override void OnLayout(LayoutEventArgs e)
         {
             LayoutRequired = false;
@@ -3512,6 +3614,7 @@ namespace System.Windows.Forms
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(RestoreFocusFilter);
             }
         }
+
         internal virtual void OnLocationChanging(ToolStripLocationCancelEventArgs e)
         {
             ((ToolStripLocationCancelEventHandler)Events[s_eventLocationChanging])?.Invoke(this, e);
@@ -3536,6 +3639,7 @@ namespace System.Windows.Forms
                     SetToolStripState(STATE_LASTMOUSEDOWNEDITEMCAPTURE, true);
                     Capture = true;
                 }
+
                 MenuAutoExpand = true;
 
                 if (mea != null)
@@ -3544,6 +3648,7 @@ namespace System.Windows.Forms
                     Point itemRelativePoint = item.TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripCoords, ToolStripPointType.ToolStripItemCoords);
                     mea = new MouseEventArgs(mea.Button, mea.Clicks, itemRelativePoint.X, itemRelativePoint.Y, mea.Delta);
                 }
+
                 _lastMouseDownedItem = item;
                 item.FireEvent(mea, ToolStripItemEventType.MouseDown);
             }
@@ -3586,6 +3691,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}", (_lastMouseActiveItem is null) ? "null" : _lastMouseActiveItem.ToString()));
                         item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
+
                     //
 
                     if (!DesignMode)
@@ -3598,6 +3704,7 @@ namespace System.Windows.Forms
             {
                 item = Grip;
             }
+
             if (item != null)
             {
                 Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseMove on: {0}", (item is null) ? "null" : item.ToString()));
@@ -3632,6 +3739,7 @@ namespace System.Windows.Forms
                 // while we're showing a feedback rect, dont cancel moving the toolstrip.
                 Grip.MovingToolStrip = false;
             }
+
             ClearLastMouseDownedItem();
 
             base.OnMouseCaptureChanged(e);
@@ -3652,12 +3760,14 @@ namespace System.Windows.Forms
                     Point itemRelativePoint = item.TranslatePoint(new Point(mea.X, mea.Y), ToolStripPointType.ToolStripCoords, ToolStripPointType.ToolStripItemCoords);
                     mea = new MouseEventArgs(mea.Button, mea.Clicks, itemRelativePoint.X, itemRelativePoint.Y, mea.Delta);
                 }
+
                 item.FireEvent(mea, ToolStripItemEventType.MouseUp);
             }
             else
             {
                 base.OnMouseUp(mea);
             }
+
             ClearLastMouseDownedItem();
         }
 
@@ -3839,10 +3949,12 @@ namespace System.Windows.Forms
                 {
                     Items[i].OnParentRightToLeftChanged(e);
                 }
+
                 if (_toolStripOverflowButton != null)
                 {
                     _toolStripOverflowButton.OnParentRightToLeftChanged(e);
                 }
+
                 if (_toolStripGrip != null)
                 {
                     _toolStripGrip.OnParentRightToLeftChanged(e);
@@ -3873,6 +3985,7 @@ namespace System.Windows.Forms
                         g.ExcludeClip(transparentRegion);
                     }
                 }
+
                 Renderer.DrawToolStripBackground(new ToolStripRenderEventArgs(g, this));
             }
             finally
@@ -3914,6 +4027,7 @@ namespace System.Windows.Forms
             {
                 ScrollInternal(se.OldValue - se.NewValue);
             }
+
             base.OnScroll(se);
         }
 
@@ -4001,18 +4115,24 @@ namespace System.Windows.Forms
 
                     // draw two vertical lines
                     g.DrawLines(SystemPens.ControlText,
-                        new Point[] { new Point(verticalBeamStart, _lastInsertionMarkRect.Y), new Point(verticalBeamStart, _lastInsertionMarkRect.Bottom-1), // first vertical line
-                                  new Point(verticalBeamStart+1, _lastInsertionMarkRect.Y), new Point(verticalBeamStart+1, _lastInsertionMarkRect.Bottom-1), //second  vertical line
+                        new Point[]
+                        {
+                            new Point(verticalBeamStart, _lastInsertionMarkRect.Y), new Point(verticalBeamStart, _lastInsertionMarkRect.Bottom-1), // first vertical line
+                            new Point(verticalBeamStart+1, _lastInsertionMarkRect.Y), new Point(verticalBeamStart+1, _lastInsertionMarkRect.Bottom-1), //second  vertical line
                         });
                     // then two top horizontal
                     g.DrawLines(SystemPens.ControlText,
-                        new Point[] { new Point(start, _lastInsertionMarkRect.Bottom-1), new Point(start + widthOfBeam-1, _lastInsertionMarkRect.Bottom-1), //bottom line
-                                  new Point(start+1, _lastInsertionMarkRect.Bottom -2), new Point(start + widthOfBeam-2, _lastInsertionMarkRect.Bottom-2),//bottom second line
+                        new Point[]
+                        {
+                            new Point(start, _lastInsertionMarkRect.Bottom-1), new Point(start + widthOfBeam-1, _lastInsertionMarkRect.Bottom-1), //bottom line
+                            new Point(start+1, _lastInsertionMarkRect.Bottom -2), new Point(start + widthOfBeam-2, _lastInsertionMarkRect.Bottom-2),//bottom second line
                         });
                     // then two bottom horizontal
                     g.DrawLines(SystemPens.ControlText,
-                         new Point[] {  new Point(start, _lastInsertionMarkRect.Y), new Point(start + widthOfBeam-1, _lastInsertionMarkRect.Y), //top line
-                                    new Point(start+1, _lastInsertionMarkRect.Y+1), new Point(start + widthOfBeam-2, _lastInsertionMarkRect.Y+1)//top second line
+                         new Point[]
+                         {
+                             new Point(start, _lastInsertionMarkRect.Y), new Point(start + widthOfBeam-1, _lastInsertionMarkRect.Y), //top line
+                             new Point(start+1, _lastInsertionMarkRect.Y+1), new Point(start + widthOfBeam-2, _lastInsertionMarkRect.Y+1)//top second line
                          });
                 }
                 else
@@ -4023,19 +4143,25 @@ namespace System.Windows.Forms
 
                     // draw two horizontal lines
                     g.DrawLines(SystemPens.ControlText,
-                        new Point[] { new Point(_lastInsertionMarkRect.X, horizontalBeamStart), new Point(_lastInsertionMarkRect.Right-1, horizontalBeamStart), // first vertical line
-                                      new Point(_lastInsertionMarkRect.X, horizontalBeamStart+1), new Point(_lastInsertionMarkRect.Right-1, horizontalBeamStart+1), //second  vertical line
-                                      });
+                        new Point[]
+                        {
+                            new Point(_lastInsertionMarkRect.X, horizontalBeamStart), new Point(_lastInsertionMarkRect.Right-1, horizontalBeamStart), // first vertical line
+                            new Point(_lastInsertionMarkRect.X, horizontalBeamStart+1), new Point(_lastInsertionMarkRect.Right-1, horizontalBeamStart+1), //second  vertical line
+                        });
                     // then two left vertical
                     g.DrawLines(SystemPens.ControlText,
-                        new Point[] { new Point(_lastInsertionMarkRect.X, start), new Point(_lastInsertionMarkRect.X, start + widthOfBeam-1), //left line
-                                      new Point(_lastInsertionMarkRect.X+1, start+1), new Point(_lastInsertionMarkRect.X+1, start + widthOfBeam-2), //second left line
-                                       });
+                        new Point[]
+                        {
+                            new Point(_lastInsertionMarkRect.X, start), new Point(_lastInsertionMarkRect.X, start + widthOfBeam-1), //left line
+                            new Point(_lastInsertionMarkRect.X+1, start+1), new Point(_lastInsertionMarkRect.X+1, start + widthOfBeam-2), //second left line
+                        });
                     // then two right vertical
                     g.DrawLines(SystemPens.ControlText,
-                         new Point[] { new Point(_lastInsertionMarkRect.Right-1, start), new Point(_lastInsertionMarkRect.Right-1, start + widthOfBeam-1), //right line
-                                      new Point(_lastInsertionMarkRect.Right-2, start+1), new Point(_lastInsertionMarkRect.Right-2, start + widthOfBeam-2), //second right line
-                                      });
+                         new Point[]
+                         {
+                             new Point(_lastInsertionMarkRect.Right-1, start), new Point(_lastInsertionMarkRect.Right-1, start + widthOfBeam-1), //right line
+                             new Point(_lastInsertionMarkRect.Right-2, start+1), new Point(_lastInsertionMarkRect.Right-2, start + widthOfBeam-2), //second right line
+                         });
                 }
             }
         }
@@ -4117,6 +4243,7 @@ namespace System.Windows.Forms
                 {
                     bounds = LayoutUtils.InflateRect(bounds, GripMargin);
                 }
+
                 if (bounds.IntersectsWith(comparisonRect))
                 {
                     return DisplayedItems[i];
@@ -4194,6 +4321,7 @@ namespace System.Windows.Forms
                     focusSuccess = c.Focus();
                 }
             }
+
             _hwndThatLostFocus = IntPtr.Zero;
 
             if (!focusSuccess)
@@ -4251,6 +4379,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(item));
             }
+
             if (item.Owner != this)
             {
                 throw new NotSupportedException(SR.ToolStripCanOnlyPositionItsOwnItems);
@@ -4292,6 +4421,7 @@ namespace System.Windows.Forms
                     lastInfo.Dispose();
                 }
             }
+
             base.SetVisibleCore(visible);
         }
 
@@ -4315,6 +4445,7 @@ namespace System.Windows.Forms
                 _mouseEnterWhenShown = s_invalidMouseEnter;
                 return true;
             }
+
             Debug.WriteLineIf(ToolStripItem.s_mouseDebugging.TraceVerbose, "[TS: ShouldSelectItem] Mouse hasnt actually moved yet.");
 
             return false;
@@ -4333,6 +4464,7 @@ namespace System.Windows.Forms
                     correctParentActiveControl = (c.ActiveControl == this);
                 }
             }
+
             if (directed && correctParentActiveControl)
             {
                 SelectNextToolStripItem(null, forward);
@@ -4413,10 +4545,12 @@ namespace System.Windows.Forms
             {
                 size = LayoutUtils.UnionSizes(size, _toolStripOverflowButton.Bounds.Size);
             }
+
             if (_toolStripGrip != null && _toolStripGrip.Visible)
             {
                 size = LayoutUtils.UnionSizes(size, _toolStripGrip.Bounds.Size);
             }
+
             _largestDisplayedItemSize = size;
         }
 
@@ -4480,6 +4614,7 @@ namespace System.Windows.Forms
                                     // Align.Right items
                                     addItem = (item.Alignment == ToolStripItemAlignment.Right);
                                 }
+
                                 if (addItem)
                                 {
                                     HasVisibleItems = true;
@@ -4498,11 +4633,13 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 ToolStripOverflow overflow = GetOverflow();
                 if (overflow != null)
                 {
                     overflow.LayoutRequired = true;
                 }
+
                 if (OverflowItems.Count == 0)
                 {
                     OverflowButton.Visible = false;
@@ -4783,6 +4920,7 @@ namespace System.Windows.Forms
             {
                 SnapFocus(m.WParam);
             }
+
             if (m.Msg == (int)User32.WM.MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
@@ -4816,6 +4954,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return;
                 }
                 else

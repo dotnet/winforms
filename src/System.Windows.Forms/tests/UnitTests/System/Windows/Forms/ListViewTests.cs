@@ -4313,7 +4313,7 @@ namespace System.Windows.Forms.Tests
                             yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
                         }
                     }
-                };
+                }
             }
         }
 
@@ -4365,7 +4365,7 @@ namespace System.Windows.Forms.Tests
                             yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
                         }
                     }
-                };
+                }
             }
         }
 
@@ -4980,11 +4980,14 @@ namespace System.Windows.Forms.Tests
             using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
             using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
 
-            listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+            {
             columnHeader1,
-            columnHeader2});
+            columnHeader2
+            });
             listView.HideSelection = false;
-            var listItems = new System.Windows.Forms.ListViewItem[] {
+            var listItems = new System.Windows.Forms.ListViewItem[]
+            {
             listViewItem1,
             listViewItem2,
             listViewItem3,
@@ -4993,7 +4996,8 @@ namespace System.Windows.Forms.Tests
             listViewItem6,
             listViewItem7,
             listViewItem8,
-            listViewItem9};
+            listViewItem9
+            };
             listView.Items.AddRange(listItems);
             listView.View = System.Windows.Forms.View.SmallIcon;
             listView.Size = new System.Drawing.Size(200, 200);
@@ -5032,11 +5036,14 @@ namespace System.Windows.Forms.Tests
             using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
             using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
 
-            listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+            {
             columnHeader1,
-            columnHeader2});
+            columnHeader2
+            });
             listView.HideSelection = false;
-            var listItems = new System.Windows.Forms.ListViewItem[] {
+            var listItems = new System.Windows.Forms.ListViewItem[]
+            {
             listViewItem1,
             listViewItem2,
             listViewItem3,
@@ -5045,7 +5052,8 @@ namespace System.Windows.Forms.Tests
             listViewItem6,
             listViewItem7,
             listViewItem8,
-            listViewItem9};
+            listViewItem9
+            };
             listView.Items.AddRange(listItems);
             listView.View = System.Windows.Forms.View.SmallIcon;
             listView.Size = new System.Drawing.Size(200, 200);

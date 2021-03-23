@@ -14,7 +14,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void ListBoxAccessibleObjectTests_Ctor_Default()
         {
             using ListBox listBox = new ListBox();
-            listBox.Items.AddRange(new object[] {
+            listBox.Items.AddRange(new object[]
+            {
                 "a",
                 "b",
                 "c",

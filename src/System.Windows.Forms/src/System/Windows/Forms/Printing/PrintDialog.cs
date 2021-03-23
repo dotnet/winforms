@@ -148,6 +148,7 @@ namespace System.Windows.Forms
                 {
                     settings = new PrinterSettings();
                 }
+
                 return settings;
             }
             set
@@ -221,14 +222,17 @@ namespace System.Windows.Forms
             {
                 flags |= PD.NOCURRENTPAGE;
             }
+
             if (!allowPages)
             {
                 flags |= PD.NOPAGENUMS;
             }
+
             if (!allowPrintToFile)
             {
                 flags |= PD.DISABLEPRINTTOFILE;
             }
+
             if (!allowSelection)
             {
                 flags |= PD.NOSELECTION;
@@ -240,14 +244,17 @@ namespace System.Windows.Forms
             {
                 flags |= PD.PRINTTOFILE;
             }
+
             if (showHelp)
             {
                 flags |= PD.SHOWHELP;
             }
+
             if (!showNetwork)
             {
                 flags |= PD.NONETWORKBUTTON;
             }
+
             if (PrinterSettings.Collate)
             {
                 flags |= PD.COLLATE;
@@ -481,6 +488,7 @@ namespace System.Windows.Forms
                         pageRangeField += 1;
                         *pageRangeField = PrinterSettings.ToPage;
                     }
+
                     data.nPageRanges = 1;
 
                     data.nMinPage = PrinterSettings.MinimumPage;

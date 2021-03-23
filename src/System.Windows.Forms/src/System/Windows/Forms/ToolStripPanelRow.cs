@@ -170,9 +170,11 @@ namespace System.Windows.Forms
                             padding.Top = 0;
                             padding.Bottom = 0;
                         }
+
                         return padding;
                     }
                 }
+
                 return ToolStripPanel.RowMargin;
             }
         }
@@ -322,6 +324,7 @@ namespace System.Windows.Forms
             {
                 controlToBeDragged.ToolStripPanelRow = this;
             }
+
             RowManager.OnControlAdded(control, index);
         }
 
@@ -434,6 +437,7 @@ namespace System.Windows.Forms
                 ApplyCachedBounds();
                 return;
             }
+
             // figure out how much space we actually need to free.
             int spaceToFree = cell.CachedBounds.Right - RowManager.DisplayRectangle.Right;
 
@@ -443,6 +447,7 @@ namespace System.Windows.Forms
                 ApplyCachedBounds();
                 return;
             }
+
             // STEP 1 remove empty space in the row.
 
             // since layout sisuspended, we'll need to watch changes to the margin
@@ -495,11 +500,14 @@ namespace System.Windows.Forms
                             {
                                 cellOffsets = new int[Cells.Count];
                             }
+
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Width - cachedBounds.Width);
                         }
+
                         currentCell.CachedBounds = cachedBounds;
                     }
                 }
+
                 if (spaceToFree <= 0)
                 {
                     break;
@@ -533,6 +541,7 @@ namespace System.Windows.Forms
                 ApplyCachedBounds();
                 return;
             }
+
             // STEP 1 remove empty space in the row.
 
             // since layout sisuspended, we'll need to watch changes to the margin
@@ -585,11 +594,14 @@ namespace System.Windows.Forms
                             {
                                 cellOffsets = new int[Cells.Count];
                             }
+
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Height - cachedBounds.Height);
                         }
+
                         currentCell.CachedBounds = cachedBounds;
                     }
                 }
+
                 if (spaceToFree <= 0)
                 {
                     break;

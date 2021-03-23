@@ -102,9 +102,11 @@ namespace System.Windows.Forms
                 {
                     Debug.Fail("this enum cannot be sequential.");
                 }
+
                 MinValue = actualMinimum;
                 MaxValue = actualMaximum;
             }
+
             public int MinValue;
             public int MaxValue;
         }
@@ -124,6 +126,7 @@ namespace System.Windows.Forms
             {
                 sequentialEnumInfo = enumValueInfo[t] as SequentialEnumInfo;
             }
+
             if (sequentialEnumInfo is null)
             {
                 sequentialEnumInfo = new SequentialEnumInfo(t);
@@ -134,13 +137,16 @@ namespace System.Windows.Forms
                     Debug.Fail("cache is too bloated, clearing out, we need to revisit this.");
                     enumValueInfo.Clear();
                 }
+
                 enumValueInfo[t] = sequentialEnumInfo;
             }
+
             if (minVal != sequentialEnumInfo.MinValue)
             {
                 // put string allocation in the IF block so the common case doesnt build up the string.
                 System.Diagnostics.Debug.Fail("Minimum passed in is not the actual minimum for the enum.  Consider changing the parameters or using a different function.");
             }
+
             if (maxVal != sequentialEnumInfo.MaxValue)
             {
                 // put string allocation in the IF block so the common case doesnt build up the string.

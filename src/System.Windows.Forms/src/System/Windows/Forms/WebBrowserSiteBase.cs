@@ -379,6 +379,7 @@ namespace System.Windows.Forms
                             {
                                 return;
                             }
+
                             throw;
                         }
 

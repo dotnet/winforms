@@ -234,6 +234,7 @@ namespace System.Windows.Forms
                             break;
                     }
                 }
+
                 return cp;
             }
         }
@@ -869,6 +870,7 @@ namespace System.Windows.Forms
             {
                 _upDownEdit.Bounds = upDownEditBounds;
             }
+
             if (_upDownButtons != null)
             {
                 _upDownButtons.Bounds = upDownButtonsBounds;
@@ -946,8 +948,10 @@ namespace System.Windows.Forms
                         {
                             User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
                         }
+
                         base.WndProc(ref m);
                     }
+
                     break;
                 case User32.WM.KILLFOCUS:
                     DefWndProc(ref m);

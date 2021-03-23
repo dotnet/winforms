@@ -97,6 +97,7 @@ namespace System.Windows.Forms
                     default:
                         throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAutoSizeColumnMode));
                 }
+
                 if (_autoSizeMode != value)
                 {
                     if (Visible && DataGridView is not null)
@@ -107,6 +108,7 @@ namespace System.Windows.Forms
                         {
                             throw new InvalidOperationException(SR.DataGridViewColumn_AutoSizeCriteriaCannotUseInvisibleHeaders);
                         }
+
                         if (Frozen &&
                             (value == DataGridViewAutoSizeColumnMode.Fill ||
                              (value == DataGridViewAutoSizeColumnMode.NotSet && DataGridView.AutoSizeColumnsMode == DataGridViewAutoSizeColumnsMode.Fill)))
@@ -115,6 +117,7 @@ namespace System.Windows.Forms
                             throw new InvalidOperationException(SR.DataGridViewColumn_FrozenColumnCannotAutoFill);
                         }
                     }
+
                     DataGridViewAutoSizeColumnMode previousInheritedMode = InheritedAutoSizeMode;
                     bool previousInheritedModeAutoSized = previousInheritedMode != DataGridViewAutoSizeColumnMode.Fill &&
                                                           previousInheritedMode != DataGridViewAutoSizeColumnMode.None &&
@@ -191,6 +194,7 @@ namespace System.Windows.Forms
                 {
                     value = string.Empty;
                 }
+
                 if (value != _dataPropertyName)
                 {
                     _dataPropertyName = value;
@@ -255,12 +259,14 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue));
                     }
+
                     if (DataGridView is not null)
                     {
                         if (value < 0)
                         {
                             throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridViewColumn_DisplayIndexNegative);
                         }
+
                         if (value >= DataGridView.Columns.Count)
                         {
                             throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridViewColumn_DisplayIndexExceedsColumnCount);
@@ -287,6 +293,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, SR.DataGridViewColumn_DisplayIndexTooNegative);
                         }
+
                         _displayIndex = value;
                     }
                 }
@@ -361,10 +368,12 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(FillWeight), value, 0));
                 }
+
                 if (value > (float)ushort.MaxValue)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(FillWeight), value, ushort.MaxValue));
                 }
+
                 if (DataGridView is not null)
                 {
                     DataGridView.OnColumnFillWeightChanging(this, value);
@@ -732,6 +741,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_ColumnBoundToAReadOnlyFieldMustRemainReadOnly);
                 }
+
                 base.ReadOnly = value;
             }
         }
@@ -782,6 +792,7 @@ namespace System.Windows.Forms
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridViewColumn_SortModeAndSelectionModeClash, (value).ToString(), DataGridView.SelectionMode.ToString()));
                         }
+
                         if (value == DataGridViewColumnSortMode.Automatic)
                         {
                             _flags = (byte)(_flags & ~ProgrammaticSort);
@@ -798,6 +809,7 @@ namespace System.Windows.Forms
                         _flags = (byte)(_flags & ~AutomaticSort);
                         _flags = (byte)(_flags & ~ProgrammaticSort);
                     }
+
                     if (DataGridView is not null)
                     {
                         DataGridView.OnColumnSortModeChanged(this);
@@ -894,6 +906,7 @@ namespace System.Windows.Forms
             {
                 CloneInternal(dataGridViewColumn);
             }
+
             return dataGridViewColumn;
         }
 
@@ -965,6 +978,7 @@ namespace System.Windows.Forms
                         return DataGridViewAutoSizeColumnMode.None;
                 }
             }
+
             return _autoSizeMode;
         }
 
@@ -976,6 +990,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_NeedColumnAutoSizingCriteria, "autoSizeColumnMode"));
             }
+
             switch (autoSizeColumnMode)
             {
                 case DataGridViewAutoSizeColumnMode.NotSet:
@@ -1023,11 +1038,13 @@ namespace System.Windows.Forms
                 {
                     preferredCellThickness = HeaderCell.GetPreferredSize(-1).Width;
                 }
+
                 if (preferredColumnThickness < preferredCellThickness)
                 {
                     preferredColumnThickness = preferredCellThickness;
                 }
             }
+
             if ((autoSizeColumnCriteriaInternal & DataGridViewAutoSizeColumnCriteriaInternal.AllRows) != 0)
             {
                 for (rowIndex = dataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -1043,6 +1060,7 @@ namespace System.Windows.Forms
                     {
                         preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredSize(rowIndex).Width;
                     }
+
                     if (preferredColumnThickness < preferredCellThickness)
                     {
                         preferredColumnThickness = preferredCellThickness;
@@ -1066,10 +1084,12 @@ namespace System.Windows.Forms
                     {
                         preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredSize(rowIndex).Width;
                     }
+
                     if (preferredColumnThickness < preferredCellThickness)
                     {
                         preferredColumnThickness = preferredCellThickness;
                     }
+
                     cy += dataGridViewRow.Thickness;
                     rowIndex = dataGridView.Rows.GetNextRow(rowIndex,
                         DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
@@ -1089,15 +1109,18 @@ namespace System.Windows.Forms
                         {
                             preferredCellThickness = dataGridViewRow.Cells[Index].GetPreferredSize(rowIndex).Width;
                         }
+
                         if (preferredColumnThickness < preferredCellThickness)
                         {
                             preferredColumnThickness = preferredCellThickness;
                         }
+
                         cy += dataGridViewRow.Thickness;
                         rowIndex = dataGridView.Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
                     }
                 }
             }
+
             return preferredColumnThickness;
         }
 

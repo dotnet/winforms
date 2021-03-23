@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         private Point _startLocation = Point.Empty;
         private bool _movingToolStrip;
         private Point _lastEndLocation = ToolStrip.s_invalidMouseEnter;
-        private static Size s_dragSize = LayoutUtils.MaxSize;
+        private static Size s_dragSize = LayoutUtils.s_maxSize;
 
         private static readonly Padding _defaultPadding = new Padding(2);
         private const int GripThicknessDefault = 3;
@@ -79,6 +79,7 @@ namespace System.Windows.Forms
                             return;
                         }
                     }
+
                     _movingToolStrip = value;
                     _lastEndLocation = ToolStrip.s_invalidMouseEnter;
                     if (_movingToolStrip)
@@ -120,6 +121,7 @@ namespace System.Windows.Forms
                     preferredSize = new Size(GripThickness, ParentInternal.Height);
                 }
             }
+
             // Constrain ourselves
             if (preferredSize.Width > constrainingSize.Width)
             {
@@ -168,7 +170,7 @@ namespace System.Windows.Forms
                 int deltaX = currentLocation.X - _startLocation.X;
                 deltaX = (deltaX < 0) ? deltaX * -1 : deltaX;
 
-                if (s_dragSize == LayoutUtils.MaxSize)
+                if (s_dragSize == LayoutUtils.s_maxSize)
                 {
                     s_dragSize = SystemInformation.DragSize;
                 }
@@ -188,6 +190,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (MovingToolStrip)
             {
                 if (leftMouseButtonDown)
@@ -201,6 +204,7 @@ namespace System.Windows.Forms
                         ToolStripPanelRow.ToolStripPanel.MoveControl(ParentInternal, /*startLocation,*/endLocation);
                         _lastEndLocation = endLocation;
                     }
+
                     _startLocation = endLocation;
                 }
                 else
@@ -225,6 +229,7 @@ namespace System.Windows.Forms
             {
                 _oldCursor = null;
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -237,10 +242,12 @@ namespace System.Windows.Forms
             {
                 ParentInternal.Cursor = _oldCursor;
             }
+
             if (!MovingToolStrip && LeftMouseButtonIsDown())
             {
                 MovingToolStrip = true;
             }
+
             base.OnMouseLeave(e);
         }
 
@@ -256,6 +263,7 @@ namespace System.Windows.Forms
             {
                 ParentInternal.Cursor = _oldCursor;
             }
+
             ToolStripPanel.ClearDragFeedback();
             MovingToolStrip = false;
             base.OnMouseUp(mea);

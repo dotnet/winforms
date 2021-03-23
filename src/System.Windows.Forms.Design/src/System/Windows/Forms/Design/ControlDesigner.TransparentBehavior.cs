@@ -48,6 +48,7 @@ namespace System.Windows.Forms.Design
                 {
                     _controlRect = _designer.Control.RectangleToScreen(_designer.Control.ClientRectangle);
                 }
+
                 _designer.OnDragEnter(e);
             }
 
@@ -73,6 +74,7 @@ namespace System.Windows.Forms.Design
                     e.Effect = DragDropEffects.None;
                     return;
                 }
+
                 _designer.OnDragOver(e);
             }
 

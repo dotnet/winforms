@@ -33,6 +33,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             {
                 accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
             }
+
             var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
             Assert.Equal(accCellWidthSum, accRowWidth - dataGridView.RowHeadersWidth);
@@ -62,6 +63,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             {
                 accCellWidthSum += dataGridView.Rows[0].Cells[i].AccessibilityObject.BoundingRectangle.Width;
             }
+
             var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
             Assert.Equal(0, accCellWidthSum);

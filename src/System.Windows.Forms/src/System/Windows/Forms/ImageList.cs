@@ -66,6 +66,7 @@ namespace System.Windows.Forms
                     s_maxImageWidth = DpiHelper.LogicalToDeviceUnitsX(MaxDimension);
                     s_maxImageHeight = DpiHelper.LogicalToDeviceUnitsY(MaxDimension);
                 }
+
                 s_isScalingInitialized = true;
             }
         }
@@ -126,6 +127,7 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
+
                 return _nativeImageList.Handle;
             }
         }
@@ -485,6 +487,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             _originals = null;
         }
 
@@ -609,6 +612,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             bool hasAlpha = false;
             unsafe
             {
@@ -628,6 +632,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
             Found:
                 return hasAlpha;
             }
@@ -689,6 +694,7 @@ namespace System.Windows.Forms
 
                             tmpBitmap.Dispose();
                         }
+
                         if (result != null && targetData != null)
                         {
                             result.UnlockBits(targetData);

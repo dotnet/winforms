@@ -19,7 +19,8 @@ namespace System.Windows.Forms
     [Serializable]  // This class participates in resx serialization.
     public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
-        private static readonly int[] borderStyleToOffset = {
+        private static readonly int[] borderStyleToOffset =
+        {
             /*None = */ 0,
             /*Single = */ 1,
             /*Inset = */ 2,
@@ -222,6 +223,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -269,6 +271,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(control));
             }
+
             if (value < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
@@ -285,6 +288,7 @@ namespace System.Windows.Forms
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
+
                 TableLayout.GetLayoutInfo(element).ColumnSpan = value;
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
                 Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
@@ -315,6 +319,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(control));
             }
+
             if (value < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
@@ -331,6 +336,7 @@ namespace System.Windows.Forms
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
+
                 TableLayout.GetLayoutInfo(element).RowSpan = value;
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.RowSpan);
                 Debug.Assert(GetRowSpan(element) == value, "row span should equal to the value we set");
@@ -373,6 +379,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(control));
             }
+
             if (row < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
@@ -449,6 +456,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(control));
             }
+
             if (column < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
@@ -472,6 +480,7 @@ namespace System.Windows.Forms
                 {
                     _stub.SetColumn(control, column);
                 }
+
                 if (rowSpecified)
                 {
                     _stub.SetRow(control, row);
@@ -484,15 +493,18 @@ namespace System.Windows.Forms
                 {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
+
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
                 if (colSpecified)
                 {
                     layoutInfo.ColumnPosition = column;
                 }
+
                 if (rowSpecified)
                 {
                     layoutInfo.RowPosition = row;
                 }
+
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
                 Debug.Assert(!colSpecified || GetColumn(element) == column, "column position shoule equal to what we set");
                 Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
@@ -556,6 +568,7 @@ namespace System.Windows.Forms
                         controlsInfo.Add(controlInfo);
                     }
                 }
+
                 return controlsInfo;
             }
         }

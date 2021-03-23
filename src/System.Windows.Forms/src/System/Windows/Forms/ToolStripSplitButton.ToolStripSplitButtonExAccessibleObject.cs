@@ -87,6 +87,7 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.LastChild:
                         return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[_owningToolStripSplitButton.DropDown.Items.Count - 1].AccessibilityObject : null;
                 }
+
                 return base.FragmentNavigate(direction);
             }
 

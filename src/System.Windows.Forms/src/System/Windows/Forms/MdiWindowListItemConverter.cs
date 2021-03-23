@@ -33,8 +33,10 @@ namespace System.Windows.Forms
                         list.Add(currentItem);
                     }
                 }
+
                 return new StandardValuesCollection(list);
             }
+
             return base.GetStandardValues(context);
         }
     }

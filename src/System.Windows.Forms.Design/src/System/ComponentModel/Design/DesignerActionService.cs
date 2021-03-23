@@ -32,10 +32,12 @@ namespace System.ComponentModel.Design
                 {
                     host.AddService(typeof(DesignerActionService), this);
                 }
+
                 if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
                 {
                     cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
+
                 _selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
             }
 
@@ -61,6 +63,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(comp));
             }
+
             if (designerActionListCollection is null)
             {
                 throw new ArgumentNullException(nameof(designerActionListCollection));
@@ -123,6 +126,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(comp));
             }
+
             return _designerActionLists.Contains(comp);
         }
 
@@ -161,6 +165,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             DesignerActionListCollection result = new DesignerActionListCollection();
             switch (type)
             {
@@ -175,6 +180,7 @@ namespace System.ComponentModel.Design
                     GetComponentServiceActions(component, result);
                     break;
             }
+
             return result;
         }
 
@@ -212,6 +218,7 @@ namespace System.ComponentModel.Design
                             {
                                 _componentToVerbsEventHookedUp[component] = true;
                             }
+
                             foreach (DesignerVerb verb in verbs)
                             {
                                 if (verb is null)
@@ -223,11 +230,13 @@ namespace System.ComponentModel.Design
                                 {
                                     verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
                                 }
+
                                 if (verb.Enabled && verb.Visible)
                                 {
                                     verbsArray.Add(verb);
                                 }
                             }
+
                             if (verbsArray.Count != 0)
                             {
                                 DesignerActionVerbList davl = new DesignerActionVerbList((DesignerVerb[])verbsArray.ToArray(typeof(DesignerVerb)));
@@ -379,10 +388,12 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(comp));
             }
+
             if (actionList is null)
             {
                 throw new ArgumentNullException(nameof(actionList));
             }
+
             if (!_designerActionLists.Contains(comp))
             {
                 return;
@@ -416,6 +427,7 @@ namespace System.ComponentModel.Design
                 {
                     actionLists.Remove(t);
                 }
+
                 OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
             }
         }

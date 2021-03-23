@@ -464,6 +464,7 @@ namespace System.Windows.Forms
             {
                 directory += "\\";
             }
+
             List<string> names = new List<string>();
             do
             {
@@ -475,7 +476,8 @@ namespace System.Windows.Forms
 
                 names.Add(fileName);
                 fileName = charBuffer.GetString();
-            } while (fileName.Length > 0);
+            }
+            while (fileName.Length > 0);
 
             return names.ToArray();
         }
@@ -529,6 +531,7 @@ namespace System.Windows.Forms
                                     // intentionaly not throwing here.
                                 }
                             }
+
                             _ignoreSecondFileOkNotification = false;
                             break;
                         case -604: /* CDN_SHAREVIOLATION */
@@ -554,11 +557,13 @@ namespace System.Windows.Forms
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
+
                             if (!DoFileOk(notify->lpOFN))
                             {
                                 User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                 return NativeMethods.InvalidIntPtr;
                             }
+
                             break;
                     }
                 }
@@ -661,6 +666,7 @@ namespace System.Windows.Forms
 
                         _fileNames[i] = fileName;
                     }
+
                     if (!PromptUserIfAppropriate(fileName))
                     {
                         return false;
@@ -767,6 +773,7 @@ namespace System.Windows.Forms
                 {
                     _charBuffer.PutString(_fileNames[0]);
                 }
+
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 ofn.hwndOwner = hWndOwner;
                 ofn.hInstance = Instance;

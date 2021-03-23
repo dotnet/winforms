@@ -100,6 +100,7 @@ namespace WinformsControlsTest
 
                         checkBox1.Scale(new SizeF(factorX, factorY));
                     }
+
                     m.Result = IntPtr.Zero;
                     break;
             }
@@ -129,6 +130,7 @@ namespace WinformsControlsTest
                     m.Result = (IntPtr)1;
                     break;
             }
+
             base.WndProc(ref m);
         }
     }

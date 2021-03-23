@@ -318,6 +318,7 @@ namespace System.Windows.Forms
                 {
                     s_events.Clear();
                 }
+
                 s_hhook = IntPtr.Zero;
             }
         }
@@ -435,6 +436,7 @@ namespace System.Windows.Forms
                             {
                                 final++;
                             }
+
                             if (final < keysLen)
                             {
                                 // Found the special case, so skip the first '}' in the string. The remainder of the
@@ -479,6 +481,7 @@ namespace System.Windows.Forms
                                 {
                                     j++;
                                 }
+
                                 repeat = int.Parse(keys.Substring(digit, j - digit), CultureInfo.InvariantCulture);
                             }
                         }
@@ -487,6 +490,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentException(SR.SendKeysKeywordDelimError);
                         }
+
                         if (keys[j] != '}')
                         {
                             throw new ArgumentException(SR.InvalidSendKeysRepeat);
@@ -1121,6 +1125,7 @@ namespace System.Windows.Forms
                             {
                                 s_events.Dequeue();
                             }
+
                             s_stopHook = s_events is null || s_events.Count == 0;
                             break;
                         }
@@ -1154,6 +1159,7 @@ namespace System.Windows.Forms
                     UninstallJournalingHook();
                     _gotNextEvent = false;
                 }
+
                 return IntPtr.Zero;
             }
         }

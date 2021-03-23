@@ -73,6 +73,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         cp.Parent = gridView.ParentInternal.Handle;
                     }
+
                     return cp;
                 }
             }
@@ -86,6 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         createNewLink = new LinkLabel();
                         createNewLink.LinkClicked += new LinkLabelLinkClickedEventHandler(OnNewLinkClicked);
                     }
+
                     return createNewLink;
                 }
             }
@@ -153,6 +155,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     createNewLink.Dispose();
                     createNewLink = null;
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -208,6 +211,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         editor = (InstanceCreationEditor)TypeDescriptor.GetEditor(ute, typeof(InstanceCreationEditor));
                     }
                 }
+
                 return editor;
             }
 
@@ -281,11 +285,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return false;
                     }
+
                     if (hWnd == Handle)
                     {
                         return true;
                     }
                 }
+
                 return false;
             }
 
@@ -305,6 +311,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         newSize.Height += ResizeBarSize;
                     }
+
                     try
                     {
                         resizing = true;
@@ -316,6 +323,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         resizing = false;
                         ResumeLayout(false);
                     }
+
                     Left -= (Width - oldWidth);
                 }
             }
@@ -386,6 +394,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return MoveTypeTop;
                 }
+
                 return MoveTypeNone;
             }
 
@@ -408,6 +417,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         gridView.CloseDropDown();
                     }
                 }
+
                 base.OnMouseDown(e);
             }
 
@@ -493,6 +503,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     Invalidate();
                 }
+
                 base.OnMouseMove(e);
             }
 
@@ -561,6 +572,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 gridView.SelectedGridEntry.OnValueReturnKey();
                             }
+
                             return true;
                     }
                 }
@@ -688,6 +700,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     //
                     currentControl.Resize += new EventHandler(OnCurrentControlResize);
                 }
+
                 Enabled = currentControl is not null;
             }
 
@@ -712,6 +725,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         gridView.CloseDropDown();
                     }
+
                     return;
                 }
                 else if (m.Msg == (int)User32.WM.DPICHANGED)

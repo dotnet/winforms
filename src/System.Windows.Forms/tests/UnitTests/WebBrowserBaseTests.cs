@@ -654,6 +654,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(siteBase);
             Assert.NotSame(siteBase, control.CreateWebBrowserSiteBase());
         }
+
         public static IEnumerable<object[]> DrawToBitmap_TestData()
         {
             yield return new object[] { new Rectangle(0, 0, 1, 1) };
@@ -836,6 +837,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessDialogKeyAction = action,

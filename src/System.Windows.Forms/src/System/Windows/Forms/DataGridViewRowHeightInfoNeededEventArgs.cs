@@ -29,6 +29,7 @@ namespace System.Windows.Forms
                 {
                     value = _minimumHeight;
                 }
+
                 if (value > DataGridViewBand.MaxBandThickness)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(Height), value, DataGridViewBand.MaxBandThickness));
@@ -52,6 +53,7 @@ namespace System.Windows.Forms
                 {
                     _height = value;
                 }
+
                 _minimumHeight = value;
             }
         }

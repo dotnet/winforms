@@ -77,6 +77,7 @@ namespace System.Windows.Forms
                                 item = _owningToolStrip.Items[i];
                                 break;
                             }
+
                             myIndex++;
                         }
                     }
@@ -93,6 +94,7 @@ namespace System.Windows.Forms
                                     item = _owningToolStrip.Items[i];
                                     break;
                                 }
+
                                 myIndex++;
                             }
                         }
@@ -108,6 +110,7 @@ namespace System.Windows.Forms
                     {
                         return new ToolStripAccessibleObjectWrapperForItemsOnOverflow(item);
                     }
+
                     return item.AccessibilityObject;
                 }
 
@@ -115,6 +118,7 @@ namespace System.Windows.Forms
                 {
                     return _owningToolStrip.OverflowButton.AccessibilityObject;
                 }
+
                 return null;
             }
 
@@ -137,14 +141,17 @@ namespace System.Windows.Forms
                         count++;
                     }
                 }
+
                 if (_owningToolStrip.Grip.Visible)
                 {
                     count++;
                 }
+
                 if (_owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible)
                 {
                     count++;
                 }
+
                 return count;
             }
 
@@ -277,6 +284,7 @@ namespace System.Windows.Forms
                     {
                         return 0;
                     }
+
                     index = 1;
                 }
 
@@ -294,6 +302,7 @@ namespace System.Windows.Forms
                         {
                             return index;
                         }
+
                         index++;
                     }
                 }
@@ -307,6 +316,7 @@ namespace System.Windows.Forms
                         {
                             return index;
                         }
+
                         index++;
                     }
                 }
@@ -323,6 +333,7 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
+
                     return AccessibleRole.ToolBar;
                 }
             }
@@ -345,6 +356,7 @@ namespace System.Windows.Forms
                         {
                             return GetChildFragment(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildFragmentCount();
@@ -352,6 +364,7 @@ namespace System.Windows.Forms
                         {
                             return GetChildFragment(childCount - 1);
                         }
+
                         break;
                 }
 

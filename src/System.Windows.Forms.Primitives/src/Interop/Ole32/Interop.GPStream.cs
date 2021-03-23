@@ -126,6 +126,7 @@ internal static partial class Interop
                         {
                             _virtualPosition = dlibMove;
                         }
+
                         break;
                     case SeekOrigin.End:
                         if (dlibMove <= 0)
@@ -137,6 +138,7 @@ internal static partial class Interop
                         {
                             _virtualPosition = length + dlibMove;
                         }
+
                         break;
                     case SeekOrigin.Current:
                         if (dlibMove + position <= length)
@@ -148,6 +150,7 @@ internal static partial class Interop
                         {
                             _virtualPosition = dlibMove + position;
                         }
+
                         break;
                 }
 

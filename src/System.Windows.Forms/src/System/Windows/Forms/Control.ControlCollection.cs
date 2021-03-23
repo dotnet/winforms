@@ -93,6 +93,7 @@ namespace System.Windows.Forms
                             nextTabIndex = t + 1;
                         }
                     }
+
                     value._tabIndex = nextTabIndex;
                 }
 
@@ -161,6 +162,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(controls));
                 }
+
                 if (controls.Length > 0)
                 {
 #if DEBUG
@@ -472,6 +474,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.ControlNotChild);
                 }
+
                 return index;
             }
 

@@ -33,6 +33,7 @@ namespace System.Windows.Forms
                 {
                     s = _ownerPropertyGrid.Site.GetService(serviceType);
                 }
+
                 return s;
             }
         }

@@ -25,6 +25,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _daUISvc = serviceProvider.GetService(typeof(DesignerActionUIService)) as DesignerActionUIService;
             }
         }
+
         // THIS should not stay here, creation of a custom command or of the real thing should be handled in the designeractionpanel itself
         public override MenuCommand FindCommand(CommandID commandId)
         {
@@ -44,12 +45,14 @@ namespace System.Windows.Forms.Design.Behavior
                         return dummyMC;
                     }
                 }
+
                 // in case of a ctrl-tab we need to close the DAP
                 if (_daUISvc != null && commandId.Guid == DesignerActionKeyboardBehavior.s_vSStandardCommandSet97 && commandId.ID == 1124)
                 {
                     _daUISvc.HideUI(null);
                 }
             }
+
             return base.FindCommand(commandId); // this will route the request to the parent behavior
         }
     }

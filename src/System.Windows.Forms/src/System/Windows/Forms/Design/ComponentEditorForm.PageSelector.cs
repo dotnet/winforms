@@ -227,8 +227,10 @@ namespace System.Windows.Forms.Design
                                     ColorTranslator.ToWin32(SystemColors.Control),
                                     ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
+
                             m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
                         }
+
                         break;
                     case ComCtl32.CDDS.POSTPAINT:
                         m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;

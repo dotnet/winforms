@@ -13,6 +13,7 @@ namespace System
             {
                 output[i] = transform(span[i]);
             }
+
             return output;
         }
     }

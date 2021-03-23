@@ -191,6 +191,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("FlowBreak", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try

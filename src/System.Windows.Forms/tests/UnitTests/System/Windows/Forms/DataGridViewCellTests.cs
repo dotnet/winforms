@@ -4496,6 +4496,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedContextMenuStrip(rowIndex));
         }
+
         [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_Invoke_ReturnsExpected()
         {

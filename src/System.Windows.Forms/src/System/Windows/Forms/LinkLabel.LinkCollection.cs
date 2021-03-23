@@ -147,6 +147,7 @@ namespace System.Windows.Forms
                 {
                     LinksAdded = true;
                 }
+
                 // check for the special case where the list is in the "magic"
                 // state of having only the default link in it. In that case
                 // we want to clear the list before adding this link.

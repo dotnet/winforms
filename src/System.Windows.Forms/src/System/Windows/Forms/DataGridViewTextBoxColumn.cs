@@ -32,6 +32,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewTextBoxCell"));
                 }
+
                 base.CellTemplate = value;
             }
         }
@@ -47,6 +48,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return TextBoxCellTemplate.MaxInputLength;
             }
             set

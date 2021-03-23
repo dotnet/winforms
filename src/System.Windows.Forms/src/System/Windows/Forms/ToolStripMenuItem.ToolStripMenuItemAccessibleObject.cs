@@ -40,8 +40,10 @@ namespace System.Windows.Forms
                         {
                             state |= AccessibleStates.Checked;
                         }
+
                         return state;
                     }
+
                     return base.State;
                 }
             }

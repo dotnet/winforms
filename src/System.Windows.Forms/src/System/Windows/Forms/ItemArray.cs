@@ -181,6 +181,7 @@ namespace System.Windows.Forms
 
             return _entries[actualIndex];
         }
+
         /// <summary>
         ///  Returns true if the requested state mask is set.
         ///  The index is the actual index to the array.
@@ -276,6 +277,7 @@ namespace System.Windows.Forms
             {
                 _entries[index].State &= ~stateMask;
             }
+
             Version++;
         }
 
@@ -311,6 +313,7 @@ namespace System.Windows.Forms
 
                 return -1; //item1 is null, but item2 is valid (greater)
             }
+
             if (entry2 is null)
             {
                 return 1; //item2 is null, so item 1 is greater

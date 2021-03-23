@@ -48,6 +48,7 @@ namespace System.Windows.Forms
                 OnDropItem(item, _owner.PointToClient(new Point(e.X, e.Y)));
             }
         }
+
         public void OnDragOver(DragEventArgs e)
         {
             Debug.WriteLineIf(ToolStrip.s_itemReorderDebug.TraceVerbose, "OnDragOver: " + e.ToString());
@@ -64,6 +65,7 @@ namespace System.Windows.Forms
                     {
                         _owner.ClearInsertionMark();
                     }
+
                     e.Effect = DragDropEffects.None;
                 }
             }
@@ -179,6 +181,7 @@ namespace System.Windows.Forms
                 _owner.PaintInsertionMark(insertionRect);
                 return true;
             }
+
             return false;
         }
 
@@ -207,11 +210,14 @@ namespace System.Windows.Forms
                         {
                             return _owner.Items.IndexOf(_owner.DisplayedItems[i - 1]);
                         }
+
                         return _owner.Items.IndexOf(_owner.DisplayedItems[i]);
                     }
                 }
+
                 return _owner.Items.IndexOf(_owner.DisplayedItems[_owner.DisplayedItems.Count - 1]);
             }
+
             return -1;
         }
 

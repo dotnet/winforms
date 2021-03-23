@@ -127,6 +127,7 @@ namespace System.ComponentModel
                 {
                     return y is null;
                 }
+
                 if (y != null && x.GetHashCode() == y.GetHashCode())
                 {
                     if (x is WeakReference wX)
@@ -135,6 +136,7 @@ namespace System.ComponentModel
                         {
                             return false;
                         }
+
                         x = wX.Target;
                     }
 
@@ -144,6 +146,7 @@ namespace System.ComponentModel
                         {
                             return false;
                         }
+
                         y = wY.Target;
                     }
 

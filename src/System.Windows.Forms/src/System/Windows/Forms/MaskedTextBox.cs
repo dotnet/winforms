@@ -553,6 +553,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1186,6 +1187,7 @@ namespace System.Windows.Forms
                             {
                                 SetText();
                             }
+
                             SelectionStart = ++caretTestPos;
                         }
                         else
@@ -1634,6 +1636,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return ch;
         }
 
@@ -1653,6 +1656,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return index;
         }
 
@@ -1747,6 +1751,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return pos;
         }
 
@@ -1767,6 +1772,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return size;
         }
 
@@ -1904,6 +1910,7 @@ namespace System.Windows.Forms
                             {
                                 keyCode = Keys.Back;
                             }
+
                             goto default;
 
                         case Keys.Control:
@@ -1919,6 +1926,7 @@ namespace System.Windows.Forms
                                     startPosition = 0;
                                 }
                             }
+
                             goto default;
 
                         default:
@@ -1926,6 +1934,7 @@ namespace System.Windows.Forms
                             {
                                 flagState[HANDLE_KEY_PRESS] = true;
                             }
+
                             break;
                     }
 
@@ -2127,6 +2136,7 @@ namespace System.Windows.Forms
                 flagState[QUERY_BASE_TEXT] = queryBaseText;
             }
         }
+
         /// <summary>
         ///  Replaces the current selection in the text box specified by the startPosition and selectionLen parameters
         ///  with the contents of the supplied string.
@@ -2738,6 +2748,7 @@ namespace System.Windows.Forms
                     throw;
                 }
             }
+
             return true;
         }
 
@@ -2876,6 +2887,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 Debug.Fail(ex.ToString());
                 return;
             }
@@ -2939,6 +2951,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     goto default;
 
                 case (int)WM.IME_ENDCOMPOSITION:
@@ -2950,6 +2963,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     goto default;
 
                 case (int)WM.CUT:
@@ -2957,6 +2971,7 @@ namespace System.Windows.Forms
                     {
                         WmClear();
                     }
+
                     break;
 
                 case (int)WM.COPY:

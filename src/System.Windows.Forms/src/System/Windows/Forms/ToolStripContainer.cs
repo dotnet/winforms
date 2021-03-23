@@ -48,6 +48,7 @@ namespace System.Windows.Forms
                     controlCollection.AddInternal(topPanel);
                     controlCollection.AddInternal(bottomPanel);
                 }
+
                 // else consider throw new exception
             }
             finally
@@ -82,6 +83,7 @@ namespace System.Windows.Forms
             get => base.AutoScrollMinSize;
             set => base.AutoScrollMinSize = value;
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -375,6 +377,7 @@ namespace System.Windows.Forms
             {
                 c.SuspendLayout();
             }
+
             base.OnSizeChanged(e);
             foreach (Control c in Controls)
             {
@@ -392,6 +395,7 @@ namespace System.Windows.Forms
                     c.CreateControl(true);
                 }
             }
+
             base.RecreateHandleCore();
         }
 

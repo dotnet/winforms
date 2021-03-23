@@ -33,6 +33,7 @@ namespace System.Windows.Forms.Design
                         DpiHelper.ScaleBitmapLogicalToDevice(ref s_inheritanceGlyph);
                     }
                 }
+
                 return s_inheritanceGlyph;
             }
         }
@@ -49,6 +50,7 @@ namespace System.Windows.Forms.Design
                     Size size = InheritanceGlyph.Size;
                     s_inheritanceGlyphRect = new Rectangle(0, 0, size.Width, size.Height);
                 }
+
                 return s_inheritanceGlyphRect;
             }
         }

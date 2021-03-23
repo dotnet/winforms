@@ -62,6 +62,7 @@ namespace System.Windows.Forms
                     {
                         _cellCollection = new ArrangedElementCollection(InnerList);
                     }
+
                     return _cellCollection;
                 }
             }
@@ -81,6 +82,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 if (!(value is ISupportToolStripPanel control))
                 {
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
@@ -132,6 +134,7 @@ namespace System.Windows.Forms
                         return true;
                     }
                 }
+
                 return false;
             }
 
@@ -170,8 +173,10 @@ namespace System.Windows.Forms
                     cell = (ToolStripPanelCell)(InnerList[index]);
                     control = cell?.Control;
                 }
+
                 return control;
             }
+
             private int IndexOfControl(Control c)
             {
                 for (int i = 0; i < Count; i++)
@@ -182,6 +187,7 @@ namespace System.Windows.Forms
                         return i;
                     }
                 }
+
                 return -1;
             }
 
@@ -212,6 +218,7 @@ namespace System.Windows.Forms
                         return i;
                     }
                 }
+
                 return -1;
             }
 
@@ -222,6 +229,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 if (!(value is ISupportToolStripPanel control))
                 {
                     throw new NotSupportedException(string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name));
@@ -258,6 +266,7 @@ namespace System.Windows.Forms
                     {
                         layoutTransaction = new LayoutTransaction(ToolStripPanel, ToolStripPanel.ParentInternal, PropertyNames.Parent);
                     }
+
                     try
                     {
                         if (controlToBeDragged != null)

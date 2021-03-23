@@ -406,6 +406,7 @@ namespace System.Windows.Forms.Tests
             subItem.ForeColor = value;
             Assert.Equal(expected, subItem.ForeColor);
         }
+
         public static IEnumerable<object[]> ForeColor_SetWithListView_TestData()
         {
             yield return new object[] { Color.Green, Color.Green };

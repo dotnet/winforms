@@ -59,6 +59,7 @@ namespace System.Windows.Forms.Design
                         filter += "|" + CreateFilterEntry(editor);
                     }
                 }
+
                 _fileDialog.Filter = filter;
             }
 

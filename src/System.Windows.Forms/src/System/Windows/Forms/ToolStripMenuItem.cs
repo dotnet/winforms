@@ -257,6 +257,7 @@ namespace System.Windows.Forms
                     {
                         return GetNativeMenuItemEnabled();
                     }
+
                     return false;
                 }
                 else
@@ -315,10 +316,12 @@ namespace System.Windows.Forms
                                 {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp);
                                 }
+
                                 t_indeterminateCheckedImage = indeterminateCheckedBmp;
                             }
                         }
                     }
+
                     return t_indeterminateCheckedImage;
                 }
                 else if (checkedState == CheckState.Checked)
@@ -338,12 +341,15 @@ namespace System.Windows.Forms
                                 {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp);
                                 }
+
                                 t_checkedImage = checkedBmp;
                             }
                         }
                     }
+
                     return t_checkedImage;
                 }
+
                 return null;
             }
         }
@@ -483,6 +489,7 @@ namespace System.Windows.Forms
                     // prevent use of alt, ctrl, shift modifiers with no key code.
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Keys));
                 }
+
                 Keys originalShortcut = ShortcutKeys;
                 if (originalShortcut != value)
                 {
@@ -495,6 +502,7 @@ namespace System.Windows.Forms
                         {
                             owner.Shortcuts.Remove(originalShortcut);
                         }
+
                         if (owner.Shortcuts.Contains(value))
                         {
                             // last one in wins.
@@ -505,6 +513,7 @@ namespace System.Windows.Forms
                             owner.Shortcuts.Add(value, this);
                         }
                     }
+
                     Properties.SetInteger(s_propShortcutKeys, (int)value);
 
                     if (ShowShortcutKeys && IsOnDropDown)
@@ -652,6 +661,7 @@ namespace System.Windows.Forms
             {
                 menuItem.Size = Size;
             }
+
             return menuItem;
         }
 
@@ -681,6 +691,7 @@ namespace System.Windows.Forms
                     {
                         _lastOwner.Shortcuts.Remove(shortcut);
                     }
+
                     _lastOwner = null;
                     if (MdiForm != null)
                     {
@@ -688,6 +699,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -717,6 +729,7 @@ namespace System.Windows.Forms
                 Debug.Fail("why were we called to fetch native menu item info with nothing assigned?");
                 return null;
             }
+
             string text = null;
 
             // fetch the string length
@@ -756,6 +769,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return text;
         }
 
@@ -943,6 +957,7 @@ namespace System.Windows.Forms
             {
                 ParentInternal.MenuAutoExpand = true;
             }
+
             base.OnDropDownShow(e);
         }
 
@@ -1031,6 +1046,7 @@ namespace System.Windows.Forms
                 MenuTimer.Cancel(this);
                 MenuTimer.Start(this);
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -1062,6 +1078,7 @@ namespace System.Windows.Forms
                     {
                         Owner.Shortcuts.Add(shortcut, this);
                     }
+
                     _lastOwner = Owner;
                 }
             }
@@ -1109,6 +1126,7 @@ namespace System.Windows.Forms
                     {
                         checkRectangle = menuItemInternalLayout.ImageRectangle;
                     }
+
                     if (checkRectangle.Width != 0)
                     {
                         renderer.DrawItemCheck(new ToolStripItemImageRenderEventArgs(g, this, CheckedImage, checkRectangle));
@@ -1206,6 +1224,7 @@ namespace System.Windows.Forms
                     rect.X = Math.Max(rect.X, 0);
                 }
             }
+
             base.SetBounds(rect);
         }
 

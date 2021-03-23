@@ -38,6 +38,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             while (sie.MoveNext())
             {
                 if (string.Equals(sie.Name, "Data", StringComparison.OrdinalIgnoreCase))
@@ -65,6 +66,7 @@ namespace System.Windows.Forms
                             {
                                 ThemingScope.Deactivate(userCookie);
                             }
+
                             if (nativeImageList.Handle == IntPtr.Zero)
                             {
                                 throw new InvalidOperationException(SR.ImageListStreamerLoadFailed);

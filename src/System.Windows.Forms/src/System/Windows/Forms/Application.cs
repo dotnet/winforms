@@ -97,6 +97,7 @@ namespace System.Windows.Forms
                     s_comCtlSupportsVisualStyles = InitializeComCtlSupportsVisualStyles();
                     s_comCtlSupportsVisualStylesInitialized = true;
                 }
+
                 return s_comCtlSupportsVisualStyles;
             }
         }
@@ -174,6 +175,7 @@ namespace System.Windows.Forms
                         // Key is of wrong type: use default value (false)
                     }
                 }
+
                 return s_useEverettThreadAffinity;
             }
         }
@@ -468,6 +470,7 @@ namespace System.Windows.Forms
                 {
                     s_safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
                 }
+
                 return s_safeTopLevelCaptionSuffix;
             }
             set
@@ -494,6 +497,7 @@ namespace System.Windows.Forms
                     // startupPath = Path.GetDirectoryName(sb.ToString());
                     s_startupPath = AppContext.BaseDirectory;
                 }
+
                 return s_startupPath;
             }
         }
@@ -608,6 +612,7 @@ namespace System.Windows.Forms
                     IntPtr.Zero,
                     User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
+
             return BOOL.TRUE;
         }
 
@@ -644,6 +649,7 @@ namespace System.Windows.Forms
                 {
                     s_eventHandlers = new EventHandlerList();
                 }
+
                 s_eventHandlers.AddHandler(key, value);
             }
         }
@@ -656,6 +662,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 s_eventHandlers.RemoveHandler(key, value);
             }
         }
@@ -872,8 +879,10 @@ namespace System.Windows.Forms
                     {
                         e.Cancel = false;
                     }
+
                     return;
                 }
+
                 s_exiting = true;
 
                 try
@@ -890,6 +899,7 @@ namespace System.Windows.Forms
                                 {
                                     e.Cancel = true;
                                 }
+
                                 return;
                             }
                         }
@@ -1019,6 +1029,7 @@ namespace System.Windows.Forms
                     Directory.CreateDirectory(path);
                 }
             }
+
             return path;
         }
 
@@ -1166,18 +1177,21 @@ namespace System.Windows.Forms
                     sb.Append(arguments[argumentIndex]);
                     sb.Append("\" ");
                 }
+
                 if (arguments.Length > 1)
                 {
                     sb.Append('"');
                     sb.Append(arguments[arguments.Length - 1]);
                     sb.Append('"');
                 }
+
                 ProcessStartInfo currentStartInfo = new ProcessStartInfo();
                 currentStartInfo.FileName = ExecutablePath;
                 if (sb.Length > 0)
                 {
                     currentStartInfo.Arguments = sb.ToString();
                 }
+
                 Exit();
                 Process.Start(currentStartInfo);
             }
@@ -1223,6 +1237,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.Win32WindowAlreadyCreated);
             }
+
             Control.UseCompatibleTextRenderingDefault = defaultValue;
         }
 

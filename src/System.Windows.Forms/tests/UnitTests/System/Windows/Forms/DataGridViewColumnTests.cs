@@ -174,6 +174,7 @@ namespace System.Windows.Forms.Tests
                 {
                     yield return new object[] { dataGridMode, true, true, DataGridViewAutoSizeColumnMode.ColumnHeader, DataGridViewAutoSizeColumnMode.ColumnHeader };
                 }
+
                 yield return new object[] { dataGridMode, true, false, DataGridViewAutoSizeColumnMode.ColumnHeader, DataGridViewAutoSizeColumnMode.ColumnHeader };
             }
         }

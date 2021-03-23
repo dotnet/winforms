@@ -23,6 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetAttributes);
@@ -242,6 +243,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         Debug.Fail("Failed to marshal component attribute BSTR " + i.ToString(CultureInfo.InvariantCulture), ex.ToString());
                     }
                 }
+
                 try
                 {
                     Marshal.FreeCoTaskMem(ptr);
@@ -250,6 +252,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     Debug.Fail("Failed to free BSTR array memory", ex.ToString());
                 }
+
                 return strs;
             }
             else
@@ -273,6 +276,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Debug.Fail("Failed to marshal component attribute VARIANT " + i, ex.ToString());
                 }
             }
+
             try
             {
                 Marshal.FreeCoTaskMem((IntPtr)ptr);

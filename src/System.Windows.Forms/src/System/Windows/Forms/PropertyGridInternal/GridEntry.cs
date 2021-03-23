@@ -187,6 +187,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     accessibleObject = GetAccessibilityObject();
                 }
+
                 return accessibleObject;
             }
         }
@@ -238,10 +239,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return (IComponent)owner;
                 }
+
                 if (parentPE is not null)
                 {
                     return parentPE.Component;
                 }
+
                 return null;
             }
         }
@@ -274,6 +277,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return site.Container;
                     }
                 }
+
                 return null;
             }
         }
@@ -286,6 +290,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     childCollection = new GridEntryCollection(this, null);
                 }
+
                 return childCollection;
             }
             set
@@ -298,6 +303,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         childCollection.Dispose();
                         childCollection = null;
                     }
+
                     childCollection = value;
                 }
             }
@@ -311,6 +317,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return Children.Count;
                 }
+
                 return 0;
             }
         }
@@ -323,6 +330,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     CreateChildren();
                 }
+
                 return childCollection;
             }
         }
@@ -335,6 +343,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return parentPE.CurrentTab;
                 }
+
                 return null;
             }
             set
@@ -367,6 +376,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return parentPE.DesignerHost;
                 }
+
                 return null;
             }
             set
@@ -448,6 +458,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return false;
                 }
+
                 return GetFlagSet(FL_EXPAND);
             }
             set
@@ -572,6 +583,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 {
                                     flags |= GridEntry.FLAG_READONLY_EDITABLE;
                                 }
+
                                 break;
                             case UITypeEditorEditStyle.DropDown:
                                 flags |= GridEntry.FLAG_DROPDOWN_EDITABLE;
@@ -657,6 +669,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     str = string.Empty;
                 }
+
                 str += PropertyLabel;
 
                 return str;
@@ -689,6 +702,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return parentPE.GridEntryHost;
                 }
+
                 return null;
             }
             set
@@ -730,6 +744,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     keyWord = parentPE.HelpKeyword;
                 }
+
                 if (keyWord is null)
                 {
                     keyWord = string.Empty;
@@ -775,6 +790,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
                 }
+
                 return (Flags & GridEntry.FLAG_CUSTOM_PAINT) != 0;
             }
         }
@@ -827,6 +843,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return parentPE.Instance;
                 }
+
                 return owner;
             }
         }
@@ -911,6 +928,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return outlineRect;
                 }
+
                 PropertyGridView gridHost = GridEntryHost;
                 Debug.Assert(gridHost is not null, "No propEntryHost!");
                 int outlineSize = gridHost.GetOutlineIconSize();
@@ -1064,6 +1082,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return cacheItems.lastValue;
                 }
+
                 return null;
             }
             set
@@ -1106,6 +1125,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         converter = TypeDescriptor.GetConverter(value);
                     }
                 }
+
                 return converter;
             }
         }
@@ -1133,6 +1153,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return PropertyValue;
             }
+
             // note: we don't do set because of the value class semantics, etc.
         }
 
@@ -1156,12 +1177,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return 0;
                 }
+
                 int count = ChildCount;
                 int totalCount = count;
                 for (int i = 0; i < count; i++)
                 {
                     totalCount += ChildCollection.GetEntry(i).VisibleChildCount;
                 }
+
                 return totalCount;
             }
         }
@@ -1241,6 +1264,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 cacheItems.lastValue = null;
                 cacheItems.useShouldSerialize = false;
             }
+
             if (clearChildren)
             {
                 for (int i = 0; i < ChildCollection.Count; i++)
@@ -1259,6 +1283,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return TypeConverter.ConvertFromString(this, text);
             }
+
             return text;
         }
 
@@ -1290,6 +1315,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail(e.ToString());
                 throw;
             }
+
             return pe;
         }
 
@@ -1318,6 +1344,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     childCollection = new GridEntryCollection(this, Array.Empty<GridEntry>());
                 }
+
                 return false;
             }
 
@@ -1386,6 +1413,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     childCollection = new GridEntryCollection(this, childProps);
                 }
             }
+
             return fExpandable;
         }
 
@@ -1394,6 +1422,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
         protected virtual void Dispose(bool disposing)
         {
             // make sure we don't accidentally
@@ -1499,6 +1528,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return ((GridEntry)obj).ParentGridEntry == ParentGridEntry;
             }
+
             return false;
         }
 
@@ -1542,6 +1572,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return new IComponent[] { component };
             }
+
             return null;
         }
 
@@ -1583,6 +1614,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             cacheItems.lastValueFont = f;
             return cacheItems.lastValueTextWidth;
         }
+
         // To check if text contains multiple lines
         //
         internal bool GetMultipleLines(string valueString)
@@ -1596,6 +1628,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
         }
+
         /// <summary>
         ///  Gets the owner of the current value.  This is usually the value of the
         ///  root entry, which is the object being browsed
@@ -1621,6 +1654,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return new object[] { owner };
             }
+
             return null;
         }
 
@@ -1658,11 +1692,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // make sure we clear any embedded nulls
                 textVal = textVal.Replace((char)0, ' ');
             }
+
             Type type = PropertyType;
             if (type is null)
             {
                 type = typeof(object);
             }
+
             str += FullLabel;
             str += "), property = (" + PropertyLabel + "," + type.AssemblyQualifiedName + "), value = " + "[" + textVal + "], expandable = " + Expandable.ToString() + ", readOnly = " + ShouldRenderReadOnly;
             ;
@@ -1786,6 +1822,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 {
                                     owner = ((ICustomTypeDescriptor)obj).GetPropertyOwner(pd);
                                 }
+
                                 pd.GetValue(owner);
                             }
                             catch (Exception w)
@@ -1794,6 +1831,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 {
                                     Debug.Fail("Bad property '" + peParent.PropertyLabel + "." + pd.Name + "': " + w.ToString());
                                 }
+
                                 hide = true;
                             }
 
@@ -1849,6 +1887,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 #endif
                 Debug.Fail("Failed to get properties: " + e.GetType().Name + "," + e.Message + "\n" + e.StackTrace);
             }
+
             return entries;
         }
 
@@ -1906,6 +1945,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 str = string.Empty;
             }
+
             return str;
         }
 
@@ -1921,6 +1961,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 values.CopyTo(valueArray, 0);
                 return valueArray;
             }
+
             return Array.Empty<object>();
         }
 
@@ -1962,6 +2003,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return parentPE.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -2123,8 +2165,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     outlineRect = Rectangle.Empty;
                     lastPaintWithExplorerStyle = true;
                 }
+
                 PaintOutlineWithExplorerTreeStyle(g, r, (GridEntryHost is not null) ? GridEntryHost.HandleInternal : IntPtr.Zero);
             }
+
             // draw tree-view glyphs as +/-
             else
             {
@@ -2408,9 +2452,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return false;
                     }
+
                     throw;
                 }
             }
+
             return true;
         }
 
@@ -2476,6 +2522,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             OnOutlineClick(EventArgs.Empty);
                         }
+
                         return true;
                     }
                 }
@@ -2488,6 +2535,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     OnLabelClick(EventArgs.Empty);
                 }
+
                 return true;
             }
 
@@ -2503,8 +2551,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     OnValueClick(EventArgs.Empty);
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -2607,6 +2657,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             catch
             {
             }
+
             return false;
         }
 
@@ -2635,6 +2686,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     useShouldSerialize = true
                 };
             }
+
             return cacheItems.lastShouldSerialize;
         }
 
@@ -2652,6 +2704,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         newProps = new PropertyDescriptor[props.Length];
                     }
+
                     newProps[newPos++] = props[i];
                     props[i] = null;
                 }
@@ -2667,8 +2720,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                         newProps[newPos++] = props[i];
                     }
                 }
+
                 props = newProps;
             }
+
             return props;
         }
 
@@ -2777,6 +2832,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             RemoveEventHandler(EVENT_LABEL_CLICK, h);
         }
+
         public virtual void RemoveOnLabelDoubleClick(EventHandler h)
         {
             RemoveEventHandler(EVENT_LABEL_DBLCLICK, h);
@@ -2850,6 +2906,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return;
                     }
                 }
+
                 eventList = new EventEntry(eventList, key, handler);
             }
         }
@@ -2875,6 +2932,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return e.handler;
                     }
                 }
+
                 return null;
             }
         }
@@ -2905,6 +2963,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 prev.next = e.next;
                             }
                         }
+
                         return;
                     }
                 }
@@ -3481,6 +3540,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 result = typeId.ToString();
                 typeIds[typeId] = result;
             }
+
             return result;
         }
 
@@ -3501,6 +3561,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return 1;
             }
+
             return string.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
         }
     }

@@ -78,6 +78,7 @@ namespace System.Windows.Forms
             {
                 MoveToGroup(this[i], null);
             }
+
             Items.Clear();
         }
 

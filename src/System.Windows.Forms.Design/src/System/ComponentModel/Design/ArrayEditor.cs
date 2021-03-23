@@ -47,6 +47,7 @@ namespace System.ComponentModel.Design
             {
                 return editValue;
             }
+
             if (value is null)
             {
                 return null;

@@ -43,6 +43,7 @@ namespace System.Windows.Forms
             {
                 return name;
             }
+
             return base.GetListName();
         }
 

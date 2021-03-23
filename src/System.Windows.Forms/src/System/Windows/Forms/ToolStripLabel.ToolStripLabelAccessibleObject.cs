@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                     {
                         return role;
                     }
+
                     return (_owningToolStripLabel.IsLink) ? AccessibleRole.Link : AccessibleRole.StaticText;
                 }
             }

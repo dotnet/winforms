@@ -83,6 +83,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return (WaitHandle)_resetEvent;
                 }
             }

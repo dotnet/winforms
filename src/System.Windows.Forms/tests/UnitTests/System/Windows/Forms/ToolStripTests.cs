@@ -239,6 +239,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Rectangle(7, 0, 92, 25), control.DisplayRectangle);
                 Assert.Equal(new Size(92, 25), control.MaxItemSize);
             }
+
             Assert.Equal(DockStyle.Top, control.Dock);
             Assert.NotNull(control.DockPadding);
             Assert.Same(control.DockPadding, control.DockPadding);
@@ -954,8 +955,10 @@ namespace System.Windows.Forms.Tests
                 {
                     Assert.Equal("Bounds", e.AffectedProperty);
                 }
+
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1009,6 +1012,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -2471,6 +2475,7 @@ namespace System.Windows.Forms.Tests
                     parentLayoutCallCount++;
                 }
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -2576,6 +2581,7 @@ namespace System.Windows.Forms.Tests
                     parentLayoutCallCount++;
                 }
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -3973,6 +3979,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TextDirection", e.AffectedProperty);
                 layoutCallCount++;
             }
+
             control.Layout += layoutHandler;
 
             try
@@ -4037,6 +4044,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("TextDirection", e.AffectedProperty);
                 layoutCallCount++;
             }
+
             control.Layout += layoutHandler;
 
             try
@@ -4349,7 +4357,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4402,7 +4411,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4461,7 +4471,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int item1CallCount = 0;
             item1.Disposed += (sender, e) => item1CallCount++;
@@ -4531,7 +4542,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -4627,7 +4639,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int item1CallCount = 0;
             item1.Disposed += (sender, e) => item1CallCount++;
@@ -6704,7 +6717,8 @@ namespace System.Windows.Forms.Tests
                 control.OnVisibleChanged(EventArgs.Empty);
                 Assert.Equal(1, callCount);
                 disposedCallCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -6797,6 +6811,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = action

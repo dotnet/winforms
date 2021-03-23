@@ -243,6 +243,7 @@ namespace System.Windows.Forms.Design
                         rules = SelectionRules.Locked | SelectionRules.Visible;
                     }
                 }
+
                 return rules;
             }
         }
@@ -423,6 +424,7 @@ namespace System.Windows.Forms.Design
                         {
                             csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                         }
+
                         _removalNotificationHooked = false;
                     }
 
@@ -516,6 +518,7 @@ namespace System.Windows.Forms.Design
                 {
                     csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                 }
+
                 _removalNotificationHooked = false;
             }
 
@@ -753,6 +756,7 @@ namespace System.Windows.Forms.Design
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperLeft, StandardBehavior, primarySelection));
                     }
+
                     if ((rules & SelectionRules.RightSizeable) != 0)
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperRight, StandardBehavior, primarySelection));
@@ -766,6 +770,7 @@ namespace System.Windows.Forms.Design
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerLeft, StandardBehavior, primarySelection));
                     }
+
                     if ((rules & SelectionRules.RightSizeable) != 0)
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerRight, StandardBehavior, primarySelection));
@@ -1020,6 +1025,7 @@ namespace System.Windows.Forms.Design
                     {
                         csc.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
+
                     _removalNotificationHooked = true;
                 }
             }
@@ -1707,6 +1713,7 @@ namespace System.Windows.Forms.Design
                         OnMouseDragEnd(true);
                     }
                 }
+
                 return;
             }
 
@@ -1760,6 +1767,7 @@ namespace System.Windows.Forms.Design
                     {
                         OnCreateHandle();
                     }
+
                     break;
 
                 case User32.WM.GETOBJECT:
@@ -1793,6 +1801,7 @@ namespace System.Windows.Forms.Design
                     {  // m.lparam != OBJID_CLIENT, so do default message processing
                         DefWndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.MBUTTONDOWN:
@@ -1815,6 +1824,7 @@ namespace System.Windows.Forms.Design
                     {
                         OnMouseHover();
                     }
+
                     break;
                 case User32.WM.MOUSELEAVE:
                     OnMouseLeave();
@@ -1832,6 +1842,7 @@ namespace System.Windows.Forms.Design
                     {
                         button = MouseButtons.Left;
                     }
+
                     if (button == MouseButtons.Left)
                     {
                         // We handle doubleclick messages, and we also process our own simulated double clicks for
@@ -1845,6 +1856,7 @@ namespace System.Windows.Forms.Design
                             OnMouseDoubleClick();
                         }
                     }
+
                     break;
                 case User32.WM.NCLBUTTONDOWN:
                 case User32.WM.LBUTTONDOWN:
@@ -1917,6 +1929,7 @@ namespace System.Windows.Forms.Design
                         _lastMoveScreenX = x;
                         _lastMoveScreenY = y;
                     }
+
                     break;
 
                 case User32.WM.NCMOUSEMOVE:
@@ -1956,6 +1969,7 @@ namespace System.Windows.Forms.Design
                             OnMouseDragMove(x, y);
                         }
                     }
+
                     _lastMoveScreenX = x;
                     _lastMoveScreenY = y;
 
@@ -1965,6 +1979,7 @@ namespace System.Windows.Forms.Design
                     {
                         BaseWndProc(ref m);
                     }
+
                     break;
                 case User32.WM.NCLBUTTONUP:
                 case User32.WM.LBUTTONUP:
@@ -2010,6 +2025,7 @@ namespace System.Windows.Forms.Design
                         DefWndProc(ref m);
                         OnPaintAdornments(e);
                     }
+
                     break;
                 case User32.WM.PAINT:
                     {
@@ -2075,6 +2091,7 @@ namespace System.Windows.Forms.Design
 
                         break;
                     }
+
                 case User32.WM.NCPAINT:
                 case User32.WM.NCACTIVATE:
                     if (m.Msg == (int)User32.WM.NCACTIVATE)
@@ -2103,6 +2120,7 @@ namespace System.Windows.Forms.Design
                             OverlayService.InvalidateOverlays(nonClient);
                         }
                     }
+
                     break;
 
                 case User32.WM.SETCURSOR:
@@ -2122,12 +2140,14 @@ namespace System.Windows.Forms.Design
                     {
                         OnSetCursor();
                     }
+
                     break;
                 case User32.WM.SIZE:
                     if (_thrownException != null)
                     {
                         Control.Invalidate();
                     }
+
                     DefWndProc(ref m);
                     break;
                 case User32.WM.CANCELMODE:
@@ -2158,6 +2178,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     break;
                 case User32.WM.CONTEXTMENU:
                     if (s_inContextMenu)
@@ -2182,8 +2203,10 @@ namespace System.Windows.Forms.Design
                             x = p.X;
                             y = p.Y;
                         }
+
                         OnContextMenu(x, y);
                     }
+
                     break;
                 default:
                     if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
@@ -2197,6 +2220,7 @@ namespace System.Windows.Forms.Design
                         // anyway, so this shouldn't happen. However, we want to prevent this as much as possible.
                         DefWndProc(ref m);
                     }
+
                     break;
             }
         }

@@ -123,6 +123,7 @@ namespace System.Windows.Forms.Design
                     changeParent.Commit();
                     changeParent = null;
                 }
+
                 Cursor.Current = current;
             }
         }
@@ -135,6 +136,7 @@ namespace System.Windows.Forms.Design
             {
                 dock = c.Parent.Dock;
             }
+
             foreach (Control panel in container.Controls)
             {
                 if (panel is ToolStripPanel)
@@ -146,6 +148,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return newParent;
         }
     }

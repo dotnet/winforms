@@ -194,12 +194,14 @@ namespace System.Windows.Forms
                         {
                             return _owningAccessibleObject.GetChild(currentIndex - 1);
                         }
+
                         return null;
                     case UiaCore.NavigateDirection.NextSibling:
                         if (currentIndex >= firstItemIndex && currentIndex < lastItemIndex)
                         {
                             return _owningAccessibleObject.GetChild(currentIndex + 1);
                         }
+
                         return null;
                 }
 

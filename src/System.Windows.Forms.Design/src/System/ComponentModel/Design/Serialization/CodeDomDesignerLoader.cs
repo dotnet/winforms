@@ -650,7 +650,8 @@ namespace System.ComponentModel.Design.Serialization
 
             if (_extenderProviderService != null)
             {
-                _extenderProviders = new IExtenderProvider[] {
+                _extenderProviders = new IExtenderProvider[]
+                {
                     new ModifiersExtenderProvider(),
                     new ModifiersInheritedExtenderProvider()
                 };
@@ -1181,7 +1182,8 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         conflict = true;
                     }
-                } while (conflict);
+                }
+                while (conflict);
             }
             else
             {

@@ -117,6 +117,7 @@ namespace System.Windows.Forms.Design
                         imageTransProperty.SetValue(component, Color.Magenta);
                     }
                 }
+
                 Debug.Assert(dummyIndex != -1, "Why is the index of the Item negative?");
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
                 // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
@@ -133,6 +134,7 @@ namespace System.Windows.Forms.Design
                     newItemTransaction.Cancel();
                     newItemTransaction = null;
                 }
+
                 if (ClientUtils.IsCriticalException(ex))
                 {
                     throw;
@@ -145,6 +147,7 @@ namespace System.Windows.Forms.Design
                     newItemTransaction.Commit();
                     newItemTransaction = null;
                 }
+
                 // turn off Adding/Added events listened to by the ToolStripDesigner...
                 ToolStripDesigner.s_autoAddNewItems = true;
                 // Add the glyphs if the parent is DropDown.

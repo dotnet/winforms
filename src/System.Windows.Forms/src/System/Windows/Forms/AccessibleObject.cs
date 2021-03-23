@@ -577,6 +577,7 @@ namespace System.Windows.Forms
             {
                 return HRESULT.E_NOINTERFACE;
             }
+
             if (ppvObject is null)
             {
                 return HRESULT.E_POINTER;
@@ -1540,6 +1541,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         break;
                     case AccessibleNavigation.Next:
                     case AccessibleNavigation.Down:
@@ -1548,6 +1550,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         break;
                 }
             }

@@ -2733,6 +2733,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expectedHeight, treeView.ItemHeight);
         }
+
         public static IEnumerable<object[]> ItemHeight_Set_TestData()
         {
             yield return new object[] { -1, Control.DefaultFont.Height + 3 };

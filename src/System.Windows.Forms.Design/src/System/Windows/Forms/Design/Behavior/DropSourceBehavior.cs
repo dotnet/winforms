@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design.Behavior
             public Point draggedLocation; //the location of the component after each drag - in AdornerWindow coordinates
             public Image dragImage; //bitblt'd image of control
             public Point positionOffset; //control position offset from primary selection
-        };
+        }
 
         private readonly DragComponent[] dragComponents;
         private ArrayList dragObjects; // used to initialize the DragAssistanceManager
@@ -224,6 +224,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 SetDesignerHost(control);
             }
+
             if (c.Site != null && !(c.Site is INestedSite) && destHost != null)
             {
                 destHost.Container.Add(c);
@@ -366,6 +367,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             name = dragComponents[0].dragComponent.GetType().Name;
                         }
+
                         transDesc = string.Format(performCopy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                     }
                     else
@@ -459,9 +461,11 @@ namespace System.Windows.Forms.Design.Behavior
                                 {
                                     return;
                                 }
+
                                 throw;
                             }
                         }
+
                         // everything is fine, carry on...
                         SetLocationPropertyAndChildIndex(primaryComponentIndex, dragTarget, initialDropPoint,
                                                             shareParent ? dragComponents[primaryComponentIndex].zorderIndex : 0, allowSetChildIndexOnDrop);
@@ -505,6 +509,7 @@ namespace System.Windows.Forms.Design.Behavior
                             {
                                 dragComponents[i].dragComponent = originalControls[i];
                             }
+
                             originalControls = null;
                         }
 
@@ -528,6 +533,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     {
                                         listOfTrayControls.Add(tray.Controls[numberOfOriginalTrayControls + i]);
                                     }
+
                                     tray.UpdatePastePositions(listOfTrayControls);
                                 }
                             }
@@ -540,6 +546,7 @@ namespace System.Windows.Forms.Design.Behavior
                             transSource.Commit();
                             transSource = null;
                         }
+
                         if (transTarget != null)
                         {
                             transTarget.Commit();
@@ -602,10 +609,12 @@ namespace System.Windows.Forms.Design.Behavior
                     ClearAllDragImages();
                     clearDragImageRect = dragImageRect;
                 }
+
                 if (dragAssistanceManager != null)
                 {
                     dragAssistanceManager.EraseSnapLines();
                 }
+
                 return;
             }
 
@@ -697,6 +706,7 @@ namespace System.Windows.Forms.Design.Behavior
                                     {
                                         dragImageRegion.Dispose();
                                     }
+
                                     dragImageRegion = new Region(controlRect);
                                 }
                                 else
@@ -710,12 +720,14 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             graphicsTarget.Dispose();
                         }
+
                         graphicsTarget = behaviorServiceTarget.AdornerWindowGraphics;
 
                         // Always force the dragassistance manager to be created in this case.
                         createNewDragAssistance = true;
                         destHost = newDestHost;
                     }
+
                     lastDropTarget = data.Target;
                 }
 
@@ -732,6 +744,7 @@ namespace System.Windows.Forms.Design.Behavior
                         //erase any snaplines (if we had any)
                         dragAssistanceManager.EraseSnapLines();
                     }
+
                     dragAssistanceManager = new DragAssistanceManager(serviceProviderTarget, graphicsTarget, dragObjects, null, lastEffect == DragDropEffects.Copy);
                 }
 
@@ -757,6 +770,7 @@ namespace System.Windows.Forms.Design.Behavior
                         dragAssistanceManager.OnMouseMove(new Rectangle(-100, -100, 0, 0));/*just an invalid rect - so we won't snap*///);
                     }
                 }
+
                 //if we know our parent is forcing grid sizes
                 else if (!parentGridSize.IsEmpty)
                 {
@@ -798,6 +812,7 @@ namespace System.Windows.Forms.Design.Behavior
                     invalidDragRegion.Union(invalidRegion);
                     behaviorServiceTarget.Invalidate(invalidDragRegion);
                 }
+
                 invalidRegion.Dispose();
                 if (graphicsTarget != null)
                 {
@@ -816,6 +831,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         dropPoint.Offset(-c.Width, 0);
                     }
+
                     if (statusCommandUITarget != null)
                     {
                         statusCommandUITarget.SetStatusInformation(c as Component, dropPoint);
@@ -831,6 +847,7 @@ namespace System.Windows.Forms.Design.Behavior
                 // save off the current mouse position
                 lastFeedbackLocation = mouseLoc;
             }
+
             data.Target = null;
         }
 
@@ -899,8 +916,10 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     continue;
                 }
+
                 a.EnabledInternal = false;
             }
+
             behaviorService.Invalidate();
 
             if (hostChange)
@@ -959,6 +978,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             if (shareParent)
             {
                 Array.Sort(dragComponents, this);
@@ -1002,6 +1022,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 g.Clear(Color.Chartreuse);
             }
+
             ((Bitmap)dragImage).MakeTransparent(Color.Chartreuse);
             // Gotta use 2 using's here... Too bad.
             // Draw each control into the dragimage
@@ -1043,6 +1064,7 @@ namespace System.Windows.Forms.Design.Behavior
                     dragControls.Add(dragComponents[i].dragComponent);
                 }
             }
+
             return dragControls;
         }
 
@@ -1094,6 +1116,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
             }
+
             return true;
         }
 
@@ -1160,11 +1183,13 @@ namespace System.Windows.Forms.Design.Behavior
                             }
                         }
                     }
+
                     if (graphicsTarget != null)
                     {
                         graphicsTarget.Dispose();
                         graphicsTarget = null;
                     }
+
                     cleanedUpDrag = true;
                 }
             }

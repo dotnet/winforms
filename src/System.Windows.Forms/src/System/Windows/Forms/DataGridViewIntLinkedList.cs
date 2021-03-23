@@ -53,6 +53,7 @@ namespace System.Windows.Forms
                         tmp = tmp.Next;
                         tmpIndex--;
                     }
+
                     _lastAccessedElement = tmp;
                     _lastAccessedIndex = index;
                     return tmp.Int;
@@ -64,6 +65,7 @@ namespace System.Windows.Forms
                         _lastAccessedElement = _lastAccessedElement.Next;
                         _lastAccessedIndex++;
                     }
+
                     return _lastAccessedElement.Int;
                 }
             }
@@ -75,6 +77,7 @@ namespace System.Windows.Forms
                     int currentInt = this[index];
                     Debug.Assert(index == _lastAccessedIndex);
                 }
+
                 _lastAccessedElement.Int = value;
             }
         }
@@ -97,6 +100,7 @@ namespace System.Windows.Forms
             {
                 newHead.Next = _headElement;
             }
+
             _headElement = newHead;
             Count++;
             _lastAccessedElement = null;
@@ -123,9 +127,11 @@ namespace System.Windows.Forms
                     _lastAccessedIndex = index;
                     return true;
                 }
+
                 tmp = tmp.Next;
                 index++;
             }
+
             return false;
         }
 
@@ -150,9 +156,11 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 tmp1 = tmp2;
                 tmp2 = tmp2.Next;
             }
+
             if (tmp2.Int == integer)
             {
                 DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
@@ -164,11 +172,13 @@ namespace System.Windows.Forms
                 {
                     tmp1.Next = tmp3;
                 }
+
                 Count--;
                 _lastAccessedElement = null;
                 _lastAccessedIndex = -1;
                 return true;
             }
+
             return false;
         }
 
@@ -181,6 +191,7 @@ namespace System.Windows.Forms
                 tmp2 = tmp2.Next;
                 index--;
             }
+
             DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
             if (tmp1 is null)
             {
@@ -190,6 +201,7 @@ namespace System.Windows.Forms
             {
                 tmp1.Next = tmp3;
             }
+
             Count--;
             _lastAccessedElement = null;
             _lastAccessedIndex = -1;

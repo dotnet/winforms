@@ -269,6 +269,7 @@ namespace System.Windows.Forms.Design.Behavior
                     dropSourceBehavior.CleanupDrag();
                 }
             }
+
             return res;
         }
 
@@ -571,6 +572,7 @@ namespace System.Windows.Forms.Design.Behavior
                         cursor = behavior.Cursor;
                     }
                 }
+
                 SetAppropriateCursor(cursor);
             }
 

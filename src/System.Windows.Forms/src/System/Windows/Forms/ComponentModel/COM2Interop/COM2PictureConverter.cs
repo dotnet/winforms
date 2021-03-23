@@ -86,6 +86,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 _lastManaged = null;
                 _pictureRef = null;
             }
+
             return _lastManaged;
         }
 

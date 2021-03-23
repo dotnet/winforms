@@ -731,6 +731,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             DefWndProc(ref m);
         }
 
@@ -1241,6 +1242,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                         Imm32.ImmReleaseContext(handle, inputContext);
                     }
+
                     break;
             }
 
@@ -1315,7 +1317,8 @@ namespace System.Windows.Forms
         ///              meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
         ///              but to Japanese it is 'alpha' and to Korean it has no meaning.
         /// </summary>
-        private static readonly ImeMode[] japaneseTable = {
+        private static readonly ImeMode[] japaneseTable =
+        {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Off,
@@ -1328,7 +1331,8 @@ namespace System.Windows.Forms
             ImeMode.Alpha
         };
 
-        private static readonly ImeMode[] koreanTable = {
+        private static readonly ImeMode[] koreanTable =
+        {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Alpha,
@@ -1341,7 +1345,8 @@ namespace System.Windows.Forms
             ImeMode.Alpha
         };
 
-        private static readonly ImeMode[] chineseTable = {
+        private static readonly ImeMode[] chineseTable =
+        {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Off,

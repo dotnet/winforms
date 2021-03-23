@@ -423,6 +423,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
+
                     drawMode = value;
                     RecreateHandle();
                     if (drawMode == DrawMode.OwnerDrawVariable)
@@ -621,6 +622,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
                 }
+
                 if (itemHeight != value)
                 {
                     itemHeight = value;
@@ -661,6 +663,7 @@ namespace System.Windows.Forms
                 {
                     itemsCollection = CreateItemCollection();
                 }
+
                 return itemsCollection;
             }
         }
@@ -728,6 +731,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
+
                     multiColumn = value;
                     RecreateHandle();
                 }
@@ -907,6 +911,7 @@ namespace System.Windows.Forms
                         {
                             SelectedItems.SetSelected(currentIndex, false);
                         }
+
                         SelectedItems.SetSelected(value, true);
 
                         if (IsHandleCreated)
@@ -936,6 +941,7 @@ namespace System.Windows.Forms
                         {
                             NativeSetSelected(value, true);
                         }
+
                         OnSelectedIndexChanged(EventArgs.Empty);
                     }
                 }
@@ -958,6 +964,7 @@ namespace System.Windows.Forms
                 {
                     selectedIndices = new SelectedIndexCollection(this);
                 }
+
                 return selectedIndices;
             }
         }
@@ -1019,6 +1026,7 @@ namespace System.Windows.Forms
                 {
                     selectedItems = new SelectedObjectCollection(this);
                 }
+
                 return selectedItems;
             }
         }
@@ -1202,6 +1210,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  Allows to set the width of the tabs between the items in the list box.
         ///  The integer array should have the tab spaces in the ascending order.
@@ -1218,6 +1227,7 @@ namespace System.Windows.Forms
                 {
                     customTabOffsets = new IntegerCollection(this);
                 }
+
                 return customTabOffsets;
             }
         }
@@ -1534,6 +1544,7 @@ namespace System.Windows.Forms
                 {
                     throw new Win32Exception();
                 }
+
                 return sel > 0;
             }
             else
@@ -1542,6 +1553,7 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -1817,6 +1829,7 @@ namespace System.Windows.Forms
             {
                 SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, (IntPtr)columnWidth);
             }
+
             if (drawMode == DrawMode.OwnerDrawFixed)
             {
                 SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
@@ -1856,6 +1869,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (selectedItems != null)
             {
                 if (selectedItems.Count > 0 && selectionMode == SelectionMode.One)
@@ -1864,6 +1878,7 @@ namespace System.Windows.Forms
                     SelectedItems.EnsureUpToDate();
                 }
             }
+
             UpdateHorizontalExtent();
         }
 
@@ -1879,6 +1894,7 @@ namespace System.Windows.Forms
             {
                 itemsCollection = null;
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -1943,6 +1959,7 @@ namespace System.Windows.Forms
                     {
                         focused?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
                     }
+
                     focused?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }
                 else if (ItemsCountIsChanged())
@@ -1990,6 +2007,7 @@ namespace System.Windows.Forms
                 Items.ClearInternal();
                 EndUpdate();
             }
+
             base.OnDataSourceChanged(e);
             RefreshItems();
         }
@@ -2032,8 +2050,10 @@ namespace System.Windows.Forms
                     graphics.Dispose();
                 }
             }
+
             base.Refresh();
         }
+
         /// <summary>
         ///  Reparses the objects, getting new text strings for them.
         /// </summary>
@@ -2134,6 +2154,7 @@ namespace System.Windows.Forms
             {
                 UpdateFontCache();
             }
+
             base.ScaleControl(factor, specified);
         }
 
@@ -2192,6 +2213,7 @@ namespace System.Windows.Forms
                     selectedValueChangedFired = false;
                 }
             }
+
             EndUpdate();
         }
 
@@ -2222,6 +2244,7 @@ namespace System.Windows.Forms
             {
                 NativeSetSelected(index, value);
             }
+
             SelectedItems.Dirty();
             OnSelectedIndexChanged(EventArgs.Empty);
         }
@@ -2278,8 +2301,10 @@ namespace System.Windows.Forms
                     s += ", Items[0]: " + txt;
                 }
             }
+
             return s;
         }
+
         private void UpdateFontCache()
         {
             fontIsChanged = true;
@@ -2292,6 +2317,7 @@ namespace System.Windows.Forms
             {
                 integralHeightAdjust = false;
             }
+
             maxWidth = -1;
             UpdateHorizontalExtent();
             // clear the preferred size cache.
@@ -2307,6 +2333,7 @@ namespace System.Windows.Forms
                 {
                     width = MaxItemWidth;
                 }
+
                 SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, (IntPtr)width);
             }
         }
@@ -2369,6 +2396,7 @@ namespace System.Windows.Forms
                 {
                     SendMessageW(this, (WM)LB.SETTABSTOPS, (IntPtr)wpar, (IntPtr)pOffsets);
                 }
+
                 Invalidate();
             }
         }
@@ -2396,6 +2424,7 @@ namespace System.Windows.Forms
                     {
                         selectedItems.Dirty();
                     }
+
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;
                 case (int)LBN.DBLCLK:
@@ -2475,6 +2504,7 @@ namespace System.Windows.Forms
                     {
                         selectedItems.Dirty();
                     }
+
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
@@ -2539,6 +2569,7 @@ namespace System.Windows.Forms
                             selectedItems.Dirty();
                         }
                     }
+
                     base.WndProc(ref m);
                     break;
 
@@ -2558,6 +2589,7 @@ namespace System.Windows.Forms
                         Height = Math.Max(Height, ItemHeight);
                         fontIsChanged = false;
                     }
+
                     break;
 
                 default:

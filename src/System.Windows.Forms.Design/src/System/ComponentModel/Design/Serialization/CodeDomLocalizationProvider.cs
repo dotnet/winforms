@@ -304,6 +304,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         _defaultLanguage = Application.CurrentCulture;
                     }
+
                     return _defaultLanguage;
                 }
             }

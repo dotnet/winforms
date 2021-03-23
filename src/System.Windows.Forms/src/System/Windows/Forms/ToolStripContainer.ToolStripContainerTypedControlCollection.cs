@@ -28,6 +28,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 if (IsReadOnly)
                 {
                     throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
@@ -38,8 +39,10 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
                 }
+
                 base.Add(value);
             }
+
             public override void Remove(Control value)
             {
                 if (value is ToolStripPanel || value is ToolStripContentPanel)
@@ -52,6 +55,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 base.Remove(value);
             }
 
@@ -72,6 +76,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 base.SetChildIndexInternal(child, newIndex);
             }
         }

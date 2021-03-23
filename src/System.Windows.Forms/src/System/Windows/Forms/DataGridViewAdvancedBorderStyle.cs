@@ -64,6 +64,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "All"));
                 }
+
                 if (!all || top != value)
                 {
                     all = true;
@@ -84,6 +85,7 @@ namespace System.Windows.Forms
                 {
                     return top;
                 }
+
                 return bottom;
             }
             set
@@ -94,6 +96,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Bottom"));
                 }
+
                 BottomInternal = value;
             }
         }
@@ -111,6 +114,7 @@ namespace System.Windows.Forms
                             right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     bottom = value;
                     if (owner is not null)
@@ -129,6 +133,7 @@ namespace System.Windows.Forms
                 {
                     return top;
                 }
+
                 return left;
             }
             set
@@ -139,6 +144,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                 }
+
                 LeftInternal = value;
             }
         }
@@ -154,17 +160,20 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                     }
+
                     if (all)
                     {
                         if (right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
                             right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
                             bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     left = value;
                     if (owner is not null)
@@ -183,6 +192,7 @@ namespace System.Windows.Forms
                 {
                     return top;
                 }
+
                 return right;
             }
             set
@@ -193,6 +203,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                 }
+
                 RightInternal = value;
             }
         }
@@ -208,6 +219,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                     }
+
                     if (all)
                     {
                         if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
@@ -215,6 +227,7 @@ namespace System.Windows.Forms
                             bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     right = value;
                     if (owner is not null)
@@ -239,6 +252,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Top"));
                 }
+
                 TopInternal = value;
             }
         }
@@ -255,11 +269,13 @@ namespace System.Windows.Forms
                         {
                             right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
                             bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     top = value;
                     if (owner is not null)

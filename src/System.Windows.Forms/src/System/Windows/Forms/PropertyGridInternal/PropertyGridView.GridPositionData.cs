@@ -49,10 +49,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                             {
                                 delta = gridView.ScrollBar.Maximum - 1;
                             }
+
                             gridView.SetScrollOffset(delta);
                         }
                     }
                 }
+
                 return entry;
             }
         }

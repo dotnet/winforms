@@ -22,6 +22,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));

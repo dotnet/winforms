@@ -258,6 +258,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(dialog.FileNames, dialog.FileNames);
             }
+
             Assert.Equal(2052, dialog.Options);
 
             // Set same.
@@ -272,6 +273,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Same(dialog.FileNames, dialog.FileNames);
             }
+
             Assert.Equal(2052, dialog.Options);
         }
 

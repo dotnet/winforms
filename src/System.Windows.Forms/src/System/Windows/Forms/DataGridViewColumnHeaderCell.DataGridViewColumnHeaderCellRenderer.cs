@@ -27,6 +27,7 @@ namespace System.Windows.Forms
                     {
                         visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
                     }
+
                     return visualStyleRenderer;
                 }
             }
@@ -45,6 +46,7 @@ namespace System.Windows.Forms
                     cornerClip.Intersect(rectClip);
                     VisualStyleRenderer.DrawBackground(g, bounds, cornerClip);
                 }
+
                 VisualStyleRenderer.SetParameters(s_headerElement.ClassName, s_headerElement.Part, headerState);
                 VisualStyleRenderer.DrawBackground(g, bounds, rectClip);
             }

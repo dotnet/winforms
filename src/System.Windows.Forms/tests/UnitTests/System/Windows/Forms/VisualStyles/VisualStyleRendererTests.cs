@@ -91,6 +91,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
             Assert.True(result);
             Assert.Equal(result, VisualStyleRenderer.IsSupported);
         }
+
         public static IEnumerable<object[]> IsElementDefined_TestData()
         {
             yield return new object[] { VisualStyleElement.Button.PushButton.Hot, true };

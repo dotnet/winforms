@@ -47,6 +47,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Size), value, 0));
                 }
+
                 if (_size != value)
                 {
                     _size = value;

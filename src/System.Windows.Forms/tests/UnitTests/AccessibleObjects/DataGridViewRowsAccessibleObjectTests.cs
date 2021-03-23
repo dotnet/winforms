@@ -31,6 +31,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             {
                 accRowHeightSum += dataGridView.Rows[i].AccessibilityObject.BoundingRectangle.Height;
             }
+
             int accDataGridViewHeight = dataGridView.AccessibilityObject.BoundingRectangle.Height;
             int borders = 2 * dataGridView.BorderWidth; //top border and bottom border
 
@@ -59,6 +60,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             {
                 accRowHeightSum += dataGridView.Rows[i].AccessibilityObject.BoundingRectangle.Height;
             }
+
             int accDataGridViewHeight = dataGridView.AccessibilityObject.BoundingRectangle.Height;
 
             Assert.Equal(0, accDataGridViewHeight);

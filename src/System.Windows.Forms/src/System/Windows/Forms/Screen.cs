@@ -87,6 +87,7 @@ namespace System.Windows.Forms
                     screenDC = Gdi32.CreateDC(deviceName, null, null, IntPtr.Zero);
                 }
             }
+
             hmonitor = monitor;
 
             bitDepth = Gdi32.GetDeviceCaps(screenDC, Gdi32.DeviceCapability.BITSPIXEL);
@@ -202,6 +203,7 @@ namespace System.Windows.Forms
                             return screens[i];
                         }
                     }
+
                     return null;
                 }
                 else
@@ -270,6 +272,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return desktopChangedCount;
             }
         }
@@ -287,6 +290,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -362,6 +366,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromPoint(pt).WorkingArea;
         }
+
         /// <summary>
         ///  Retrieves the working area for the monitor that contains the largest region
         ///  of the specified rectangle.
@@ -370,6 +375,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromRectangle(rect).WorkingArea;
         }
+
         /// <summary>
         ///  Retrieves the working area for the monitor that contains the largest
         ///  region of the specified control.
@@ -387,6 +393,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromPoint(pt).Bounds;
         }
+
         /// <summary>
         ///  Retrieves the bounds of the monitor that contains the largest region of the
         ///  specified rectangle.
@@ -395,6 +402,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromRectangle(rect).Bounds;
         }
+
         /// <summary>
         ///  Retrieves the bounds of the monitor
         ///  that contains the largest region of the specified control.

@@ -28,6 +28,7 @@ namespace System.Windows.Forms
                 {
                     throw new ObjectDisposedException(GetType().Name);
                 }
+
                 return htmlHistory;
             }
         }

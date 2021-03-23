@@ -47,6 +47,7 @@ namespace System.Windows.Forms.Design
                     value = _builderDialog.CellStyle;
                 }
             }
+
             return value;
         }
 

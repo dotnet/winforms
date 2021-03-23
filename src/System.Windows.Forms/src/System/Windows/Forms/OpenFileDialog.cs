@@ -112,6 +112,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.FileDialogBufferTooSmall);
                 }
             }
+
             return result;
         }
 
@@ -128,6 +129,7 @@ namespace System.Windows.Forms
                     results.GetItemAt(i, out IShellItem item);
                     files[unchecked((int)i)] = GetFilePathFromShellItem(item);
                 }
+
                 return files;
             }
             else
@@ -175,6 +177,7 @@ namespace System.Windows.Forms
                 {
                     safePaths[i] = RemoveSensitivePathInformation(fullPaths[i]);
                 }
+
                 return safePaths;
             }
         }

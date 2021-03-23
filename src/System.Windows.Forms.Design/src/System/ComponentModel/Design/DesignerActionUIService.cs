@@ -90,6 +90,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             if (_designerActionService != null)
             {
                 DesignerActionListCollection coll = _designerActionService.GetComponentActions(component);
@@ -104,6 +105,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return false;
         }
     }

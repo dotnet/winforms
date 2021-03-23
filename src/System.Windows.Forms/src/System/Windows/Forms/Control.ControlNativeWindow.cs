@@ -78,6 +78,7 @@ namespace System.Windows.Forms
                 {
                     return _control.GetType().FullName;
                 }
+
                 return base.ToString();
             }
 #endif
@@ -107,6 +108,7 @@ namespace System.Windows.Forms
                                 _control.SetState(States.MouseEnterPending, false);
                             }
                         }
+
                         break;
 
                     case User32.WM.MOUSEWHEEL:

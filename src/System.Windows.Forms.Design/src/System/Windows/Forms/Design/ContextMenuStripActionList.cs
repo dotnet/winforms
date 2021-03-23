@@ -27,6 +27,7 @@ namespace System.Windows.Forms.Design
             {
                 return getProperty.GetValue(_toolStripDropDown);
             }
+
             return null;
         }
 
@@ -106,6 +107,7 @@ namespace System.Windows.Forms.Design
                 items.Add(new DesignerActionPropertyItem("ShowImageMargin", SR.ContextMenuStripActionList_ShowImageMargin, SR.ToolStripActionList_Layout, SR.ContextMenuStripActionList_ShowImageMarginDesc));
                 items.Add(new DesignerActionPropertyItem("ShowCheckMargin", SR.ContextMenuStripActionList_ShowCheckMargin, SR.ToolStripActionList_Layout, SR.ContextMenuStripActionList_ShowCheckMarginDesc));
             }
+
             return items;
         }
     }

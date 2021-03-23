@@ -60,6 +60,7 @@ namespace System.Windows.Forms
                     return; // can't unregister this as a drop target unless everyone is done.
                 }
             }
+
             if (owner.AllowDrop || owner.AllowItemReorder)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "The ToolStrip has AllowDrop or AllowItemReorder set to true - cant unregister");
@@ -121,6 +122,7 @@ namespace System.Windows.Forms
                     lastDropTarget = null;
                 }
             }
+
             if (lastDropTarget != null)
             {
                 Debug.WriteLineIf(DragDropDebug.TraceVerbose, "Calling OnDragEnter on target...");
@@ -266,6 +268,7 @@ namespace System.Windows.Forms
                 {
                     OnDragLeave(EventArgs.Empty);
                 }
+
                 lastDropTarget = newTarget;
                 if (newTarget != null)
                 {

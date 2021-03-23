@@ -44,7 +44,6 @@ namespace System.Windows.Forms.Metafiles
         // The next field brings the size to 108 bytes
         public Size szlMicrometers;     // Size of the reference device in micrometers
 
-        public override string ToString() => $@"[{nameof(ENHMETAHEADER)}] Bounds: {rclBounds} Device Size: {
-            szlDevice} Header Size: {nSize}";
+        public override string ToString() => $@"[{nameof(ENHMETAHEADER)}] Bounds: {rclBounds} Device Size: {szlDevice}Header Size: {nSize}";
     }
 }

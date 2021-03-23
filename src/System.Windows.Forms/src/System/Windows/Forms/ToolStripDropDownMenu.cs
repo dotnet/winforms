@@ -248,6 +248,7 @@ namespace System.Windows.Forms
                         ParentInternal = this
                     };
                 }
+
                 return upScrollButton;
             }
         }
@@ -316,6 +317,7 @@ namespace System.Windows.Forms
 
                 managedDropDown.Items.Add(itemToAdd);
             }
+
             managedDropDown.ResumeLayout();
             return managedDropDown;
         }
@@ -344,6 +346,7 @@ namespace System.Windows.Forms
                         {
                             tabWidth = TextRenderer.MeasureText("\t", Font).Width;
                         }
+
                         menuItemTextSize.Width += tabWidth + shortcutTextSize.Width;
                         menuItemTextSize.Height = Math.Max(menuItemTextSize.Height, shortcutTextSize.Height);
                     }
@@ -456,6 +459,7 @@ namespace System.Windows.Forms
             {
                 checkAndImageMarginWidth = 0;
             }
+
             nextPoint.X = checkAndImageMarginWidth + 1;
 
             // calculate space for image
@@ -550,10 +554,12 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     ScrollInternal(delta);
                     UpdateScrollButtonStatus();
                 }
             }
+
             base.ChangeSelection(nextItem);
         }
 
@@ -583,6 +589,7 @@ namespace System.Windows.Forms
             settings.FlowDirection = FlowDirection.TopDown;
             state[stateShowImageMargin] = true;
         }
+
         protected override void OnLayout(LayoutEventArgs e)
         {
             if (!IsDisposed)
@@ -604,6 +611,7 @@ namespace System.Windows.Forms
             tabWidth = -1;
             base.OnFontChanged(e);
         }
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             base.OnPaintBackground(e);
@@ -735,6 +743,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             ScrollInternal(deltaToScroll);
             scrollAmount = DisplayRectangle.Top - Items[0].Bounds.Top;
             UpdateScrollButtonLocations();
@@ -791,6 +800,7 @@ namespace System.Windows.Forms
                     delta = itemBottom.Bounds.Top - itemTop.Bounds.Top;
                 }
             }
+
             ScrollInternal(delta);
             UpdateScrollButtonLocations();
         }
@@ -846,6 +856,7 @@ namespace System.Windows.Forms
                 {
                     continue;
                 }
+
                 if (DownScrollButton == item)
                 {
                     continue;
