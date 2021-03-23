@@ -163,7 +163,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 PropertyGridView gridHost = GridEntryHost;
 
                 // we call base.PropertyDepth here because we don't want the subratction to happen.
-                return 1 + gridHost.GetOutlineIconSize() + OUTLINE_ICON_PADDING + (base.PropertyDepth * gridHost.GetDefaultOutlineIndent());
+                return 1 + gridHost.GetOutlineIconSize() + OutlineIconPadding + (base.PropertyDepth * gridHost.GetDefaultOutlineIndent());
             }
         }
 
