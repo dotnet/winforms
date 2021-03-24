@@ -37,7 +37,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
 
         private unsafe void MakeLink(RichTextBox control, string text)
         {
-            richTextBox2.Select(control.Text.IndexOf(text), text.Length);
+            control.Select(control.Text.IndexOf(text), text.Length);
 
             var format = new Interop.Richedit.CHARFORMAT2W
             {
@@ -46,9 +46,9 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
                 dwEffects = Interop.Richedit.CFE.LINK,
             };
 
-            Interop.User32.SendMessageW(richTextBox2, (Interop.User32.WM)Interop.Richedit.EM.SETCHARFORMAT, (IntPtr)Interop.Richedit.SCF.SELECTION, ref format);
+            Interop.User32.SendMessageW(control, (Interop.User32.WM)Interop.Richedit.EM.SETCHARFORMAT, (IntPtr)Interop.Richedit.SCF.SELECTION, ref format);
 
-            richTextBox2.Select(0, 0);
+            control.Select(0, 0);
         }
 
         private string ReportLinkClickedEventArgs(object sender, LinkClickedEventArgs e)
