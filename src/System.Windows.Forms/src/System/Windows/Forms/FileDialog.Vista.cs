@@ -71,7 +71,7 @@ namespace System.Windows.Forms
             if (ClientGuid is { } clientGuid)
             {
                 // IFileDialog::SetClientGuid should be called immediately after creation of the dialog object.
-                // https://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
+                // https://docs.microsoft.com/windows/win32/api/shobjidl_core/nf-shobjidl_core-ifiledialog-setclientguid#remarks
                 dialog.SetClientGuid(clientGuid);
             }
 

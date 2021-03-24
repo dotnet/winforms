@@ -39,9 +39,7 @@ namespace System.Windows.Forms.IntegrationTests
         [InlineData(MainFormControlsTabOrder.MultipleControlsButton)]
         [InlineData(MainFormControlsTabOrder.ComboBoxesButton)]
         [InlineData(MainFormControlsTabOrder.DateTimePickerButton)]
-        [InlineData(MainFormControlsTabOrder.FolderBrowserDialogButton)]
-        [InlineData(MainFormControlsTabOrder.ThreadExceptionDialogButton)]
-        [InlineData(MainFormControlsTabOrder.PrintDialogButton)]
+        [InlineData(MainFormControlsTabOrder.DialogsButton)]
         [InlineData(MainFormControlsTabOrder.DataGridViewButton)]
         [InlineData(MainFormControlsTabOrder.TreeViewButton)]
         [InlineData(MainFormControlsTabOrder.ContentAlignmentButton)]
@@ -91,7 +89,9 @@ namespace System.Windows.Forms.IntegrationTests
         public void WinformsControlsTest_ThreadExceptionDialogTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.ThreadExceptionDialogButton);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendTabKeysToProcess(process, 3);
             TestHelpers.SendEnterKeyToProcess(process);
             TestHelpers.SendTabKeysToProcess(process, 2);
             TestHelpers.SendEnterKeyToProcess(process);
