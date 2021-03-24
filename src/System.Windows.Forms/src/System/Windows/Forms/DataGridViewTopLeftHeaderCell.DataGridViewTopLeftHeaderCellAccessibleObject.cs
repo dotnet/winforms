@@ -72,6 +72,7 @@ namespace System.Windows.Forms
                         //
                         return string.Empty;
                     }
+
                     string? strValue = value as string;
                     if (string.IsNullOrEmpty(strValue))
                     {
@@ -170,6 +171,7 @@ namespace System.Windows.Forms
                         {
                             return NavigateForward();
                         }
+
                     case AccessibleNavigation.Next:
                         return NavigateForward();
                     case AccessibleNavigation.Right:
@@ -181,25 +183,10 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                     default:
                         return null;
                 }
-            }
-
-            private AccessibleObject? NavigateForward()
-            {
-                if (Owner is null)
-                {
-                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
-                }
-
-                if (Owner.DataGridView is null || Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
-                {
-                    return null;
-                }
-
-                // return the acc object for the first visible column
-                return Owner.DataGridView.AccessibilityObject.GetChild(0)?.GetChild(1);
             }
 
             public override void Select(AccessibleSelection flags)
@@ -251,6 +238,21 @@ namespace System.Windows.Forms
                 }
             }
 
+            private AccessibleObject? NavigateForward()
+            {
+                if (Owner is null)
+                {
+                    throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
+                }
+
+                if (Owner.DataGridView is null || Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
+                {
+                    return null;
+                }
+
+                // return the acc object for the first visible column
+                return Owner.DataGridView.AccessibilityObject.GetChild(0)?.GetChild(1);
+            }
             #region IRawElementProviderFragment Implementation
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)

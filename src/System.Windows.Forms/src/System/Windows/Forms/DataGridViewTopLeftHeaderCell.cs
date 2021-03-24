@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCell
     {
-        private static readonly VisualStyleElement HeaderElement = VisualStyleElement.Header.Item.Normal;
+        private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
 
         private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginLeft = 1;
         private const byte DATAGRIDVIEWTOPLEFTHEADERCELL_horizontalTextMarginRight = 2;
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
 
                     if (!brushColor.HasTransparency())
                     {
-                        using var brush = brushColor.GetCachedSolidBrushScope();
+                        using RefCountedCache<SolidBrush, Color, Color>.Scope brush = brushColor.GetCachedSolidBrushScope();
                         graphics.FillRectangle(brush, valBounds);
                     }
                 }
@@ -393,19 +393,19 @@ namespace System.Windows.Forms
 
                 if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Inset)
                 {
-                    using var penControlDark = darkColor.GetCachedPenScope();
+                    using RefCountedCache<Pen, Color, Color>.Scope penControlDark = darkColor.GetCachedPenScope();
                     graphics.DrawLine(penControlDark, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                     graphics.DrawLine(penControlDark, bounds.X, bounds.Y, bounds.Right - 1, bounds.Y);
                 }
                 else if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Outset)
                 {
-                    using var penControlLightLight = lightColor.GetCachedPenScope();
+                    using RefCountedCache<Pen, Color, Color>.Scope penControlLightLight = lightColor.GetCachedPenScope();
                     graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.X, bounds.Bottom - 1);
                     graphics.DrawLine(penControlLightLight, bounds.X, bounds.Y, bounds.Right - 1, bounds.Y);
                 }
                 else if (DataGridView.AdvancedColumnHeadersBorderStyle.All == DataGridViewAdvancedCellBorderStyle.InsetDouble)
                 {
-                    using var penControlDark = darkColor.GetCachedPenScope();
+                    using RefCountedCache<Pen, Color, Color>.Scope penControlDark = darkColor.GetCachedPenScope();
                     graphics.DrawLine(penControlDark, bounds.X + 1, bounds.Y + 1, bounds.X + 1, bounds.Bottom - 1);
                     graphics.DrawLine(penControlDark, bounds.X + 1, bounds.Y + 1, bounds.Right - 1, bounds.Y + 1);
                 }
@@ -413,8 +413,5 @@ namespace System.Windows.Forms
         }
 
         public override string ToString() => "DataGridViewTopLeftHeaderCell";
-
-
-
     }
 }

@@ -11,7 +11,7 @@ namespace System.Windows.Forms
     {
         private class DataGridViewTopLeftHeaderCellRenderer
         {
-            private static VisualStyleRenderer? visualStyleRenderer;
+            private static VisualStyleRenderer? s_visualStyleRenderer;
 
             private DataGridViewTopLeftHeaderCellRenderer()
             {
@@ -21,18 +21,18 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (visualStyleRenderer is null)
+                    if (s_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(HeaderElement);
+                        s_visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
                     }
 
-                    return visualStyleRenderer;
+                    return s_visualStyleRenderer;
                 }
             }
 
             public static void DrawHeader(Graphics g, Rectangle bounds, int headerState)
             {
-                VisualStyleRenderer.SetParameters(HeaderElement.ClassName, HeaderElement.Part, headerState);
+                VisualStyleRenderer.SetParameters(s_headerElement.ClassName, s_headerElement.Part, headerState);
                 VisualStyleRenderer.DrawBackground(g, bounds, Rectangle.Truncate(g.ClipBounds));
             }
         }
