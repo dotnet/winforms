@@ -494,7 +494,7 @@ namespace System.Windows.Forms
 
         protected override void OnLayout(LayoutEventArgs e)
         {
-            if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control != null)
+            if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control is not null)
             {
                 if (e.AffectedComponent is ISupportToolStripPanel draggedControl && RowsInternal.Contains(draggedControl.ToolStripPanelRow))
                 {
@@ -634,7 +634,7 @@ namespace System.Windows.Forms
                 {
                     int numRows = RowsInternal.Count;
 
-                    if (controlArray[i] is ISupportToolStripPanel draggedControl && draggedControl.ToolStripPanelRow != null && !draggedControl.IsCurrentlyDragging)
+                    if (controlArray[i] is ISupportToolStripPanel draggedControl && draggedControl.ToolStripPanelRow is not null && !draggedControl.IsCurrentlyDragging)
                     {
                         ToolStripPanelRow row = draggedControl.ToolStripPanelRow;
                         if (row.Bounds.Contains(controlArray[i].Location))
@@ -723,7 +723,7 @@ namespace System.Windows.Forms
 #endif
             FeedbackRectangle oldFeedback = feedbackRect;
             feedbackRect = null;
-            if (oldFeedback != null)
+            if (oldFeedback is not null)
             {
                 oldFeedback.Dispose();
             }
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
             ClearDragFeedback();
 
             // In design mode we get bogus values for client location.
-            if (toolStripToDrag.Site != null && toolStripToDrag.Site.DesignMode && IsHandleCreated)
+            if (toolStripToDrag.Site is not null && toolStripToDrag.Site.DesignMode && IsHandleCreated)
             {
                 if (clientLocation.X < 0 || clientLocation.Y < 0)
                 {
@@ -869,12 +869,12 @@ namespace System.Windows.Forms
             ToolStripPanelRow currentToolStripPanelRow = draggedControl.ToolStripPanelRow;
 
 #if DEBUG
-            bool debugModeOnly_ChangedContainers = currentToolStripPanelRow != null ?
+            bool debugModeOnly_ChangedContainers = currentToolStripPanelRow is not null ?
                                 (currentToolStripPanelRow.ToolStripPanel != this) : true;
 #endif
 
             bool pointInCurrentRow = false;
-            if (currentToolStripPanelRow != null && currentToolStripPanelRow.Visible && currentToolStripPanelRow.ToolStripPanel == this)
+            if (currentToolStripPanelRow is not null && currentToolStripPanelRow.Visible && currentToolStripPanelRow.ToolStripPanel == this)
             {
                 if (toolStripToDrag.IsCurrentlyDragging)
                 {
@@ -932,7 +932,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (previousRow != null /* there was a previous row */
+                    if (previousRow is not null /* there was a previous row */
                         && previousRow.ControlsInternal.Count == 1 /*toolStripToDrag*/
                         && previousRow.ControlsInternal.Contains(toolStripToDrag))
                     {
@@ -966,7 +966,7 @@ namespace System.Windows.Forms
                     // anyone to join it.
                     int index = RowsInternal.IndexOf(row);
 
-                    if (currentToolStripPanelRow != null && currentToolStripPanelRow.ControlsInternal.Count == 1)
+                    if (currentToolStripPanelRow is not null && currentToolStripPanelRow.ControlsInternal.Count == 1)
                     {
                         if (index > 0 && index - 1 == RowsInternal.IndexOf(currentToolStripPanelRow))
                         {
@@ -983,7 +983,7 @@ namespace System.Windows.Forms
                 changedRow = (currentToolStripPanelRow != row);
                 if (!changedRow)
                 {
-                    if (currentToolStripPanelRow != null && currentToolStripPanelRow.ControlsInternal.Count > 1)
+                    if (currentToolStripPanelRow is not null && currentToolStripPanelRow.ControlsInternal.Count > 1)
                     {
                         // force a leave/re-enter to occur.
                         currentToolStripPanelRow.LeaveRow(toolStripToDrag);
@@ -995,7 +995,7 @@ namespace System.Windows.Forms
                 if (changedRow)
                 {
                     Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
-                    if (currentToolStripPanelRow != null)
+                    if (currentToolStripPanelRow is not null)
                     {
                         currentToolStripPanelRow.LeaveRow(toolStripToDrag);
                     }
@@ -1047,7 +1047,7 @@ namespace System.Windows.Forms
         {
             // look for another rafting container.
             ToolStripPanel panel = ToolStripManager.ToolStripPanelFromPoint(toolStripToDrag, screenLocation);
-            if (panel != null)
+            if (panel is not null)
             {
                 using (new LayoutTransaction(panel, panel, null))
                 {
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
                 Rectangle bounds = LayoutUtils.InflateRect(row.Bounds, row.Margin);
 
                 // at this point we may not be sized correctly.  Guess.
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     if (Orientation == Orientation.Horizontal && (bounds.Width == 0))
                     {
@@ -1113,12 +1113,12 @@ namespace System.Windows.Forms
                 ToolStripPanelRow row = RowsInternal[i];
                 foreach (ToolStripPanelCell cell in row.Cells)
                 {
-                    if (cell.Control != null)
+                    if (cell.Control is not null)
                     {
                         ToolStripPanelRow currentlyAssignedRow = ((ISupportToolStripPanel)cell.Control).ToolStripPanelRow;
                         if (currentlyAssignedRow != row)
                         {
-                            int goodRowIndex = (currentlyAssignedRow != null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
+                            int goodRowIndex = (currentlyAssignedRow is not null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
                             if (goodRowIndex == -1)
                             {
                                 Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ToolStripPanelRow has not been assigned!  Should be set to {0}.", i));

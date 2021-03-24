@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_dropDown != null && !_dropDown.IsDisposed)
+                    if (_dropDown is not null && !_dropDown.IsDisposed)
                     {
                         return _dropDown.Visible;
                     }
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                 }
                 set
                 {
-                    if (_dropDown != null && !_dropDown.IsDisposed)
+                    if (_dropDown is not null && !_dropDown.IsDisposed)
                     {
                         _dropDown.Visible = value;
                     }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (disposing)
                 {
-                    if (_dropDown != null)
+                    if (_dropDown is not null)
                     {
                         Visible = false;
                         _dropDown.Dispose();

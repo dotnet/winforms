@@ -401,7 +401,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDropDown(EventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
@@ -412,7 +412,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDropDownClosed(EventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 // PERF,
 

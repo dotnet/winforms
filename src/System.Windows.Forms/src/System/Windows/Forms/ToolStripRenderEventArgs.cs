@@ -104,7 +104,7 @@ namespace System.Windows.Forms
                         return Rectangle.Empty;
                     }
 
-                    if (ownerItem != null && ownerItem.ParentInternal != null && !ownerItem.IsOnDropDown)
+                    if (ownerItem is not null && ownerItem.ParentInternal is not null && !ownerItem.IsOnDropDown)
                     {
                         // translate the item into our coordinate system.
                         Rectangle itemBounds = new Rectangle(ToolStrip.PointToClient(ownerItem.TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords)), ownerItem.Size);

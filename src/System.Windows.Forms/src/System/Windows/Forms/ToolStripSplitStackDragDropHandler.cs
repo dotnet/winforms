@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_owner != null)
+                    if (_owner is not null)
                     {
                         _owner.ClearInsertionMark();
                     }

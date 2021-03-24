@@ -32,7 +32,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleObject element = HitTest((int)x, (int)y);
 
-                    if (element != null)
+                    if (element is not null)
                     {
                         return element;
                     }
