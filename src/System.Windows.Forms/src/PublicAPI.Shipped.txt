@@ -9837,15 +9837,15 @@ System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing
 System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
 System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
-~System.Windows.Forms.DrawToolTipEventArgs.AssociatedControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.DrawToolTipEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window
-~System.Windows.Forms.DrawToolTipEventArgs.DrawToolTipEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.IWin32Window associatedWindow, System.Windows.Forms.Control associatedControl, System.Drawing.Rectangle bounds, string toolTipText, System.Drawing.Color backColor, System.Drawing.Color foreColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.DrawToolTipEventArgs.Font.get -> System.Drawing.Font
-~System.Windows.Forms.DrawToolTipEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawToolTipEventArgs.ToolTipText.get -> string
-~System.Windows.Forms.DrawTreeNodeEventArgs.DrawTreeNodeEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.TreeNode node, System.Drawing.Rectangle bounds, System.Windows.Forms.TreeNodeStates state) -> void
-~System.Windows.Forms.DrawTreeNodeEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawTreeNodeEventArgs.Node.get -> System.Windows.Forms.TreeNode
+System.Windows.Forms.DrawToolTipEventArgs.AssociatedControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.DrawToolTipEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window?
+System.Windows.Forms.DrawToolTipEventArgs.DrawToolTipEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.IWin32Window? associatedWindow, System.Windows.Forms.Control? associatedControl, System.Drawing.Rectangle bounds, string? toolTipText, System.Drawing.Color backColor, System.Drawing.Color foreColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.DrawToolTipEventArgs.Font.get -> System.Drawing.Font?
+System.Windows.Forms.DrawToolTipEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawToolTipEventArgs.ToolTipText.get -> string?
+System.Windows.Forms.DrawTreeNodeEventArgs.DrawTreeNodeEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.TreeNode? node, System.Drawing.Rectangle bounds, System.Windows.Forms.TreeNodeStates state) -> void
+System.Windows.Forms.DrawTreeNodeEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawTreeNodeEventArgs.Node.get -> System.Windows.Forms.TreeNode?
 ~System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object newDataSource, string newDataMember) -> void
 ~System.Windows.Forms.ErrorProvider.CanExtend(object extendee) -> bool
 ~System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl
