@@ -124,7 +124,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(subItems));
                 }
 
-                subItems[i].owner = this;
+                subItems[i]._owner = this;
             }
         }
 
@@ -206,7 +206,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(subItems));
                 }
 
-                subItems[i].owner = this;
+                subItems[i]._owner = this;
             }
         }
 
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms
                 for (int i = 1; i < SubItemCount; i++)
                 {
                     ListViewSubItem newItem = (ListViewSubItem)info.GetValue("SubItem" + i.ToString(CultureInfo.InvariantCulture), typeof(ListViewSubItem));
-                    newItem.owner = this;
+                    newItem._owner = this;
                     newItems[i] = newItem;
                 }
 

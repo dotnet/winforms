@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     ///  It tries to optimize for size first, "get" access second, and
     ///  "set" access third.
     /// </summary>
-    internal class PropertyStore
+    internal partial class PropertyStore
     {
         private static int s_currentKey;
 
@@ -923,46 +923,6 @@ namespace System.Windows.Forms
             public object? Value2;
             public object? Value3;
             public object? Value4;
-        }
-
-        private sealed class ColorWrapper
-        {
-            public Color Color;
-
-            public ColorWrapper(Color color)
-            {
-                Color = color;
-            }
-        }
-
-        private sealed class PaddingWrapper
-        {
-            public Padding Padding;
-
-            public PaddingWrapper(Padding padding)
-            {
-                Padding = padding;
-            }
-        }
-
-        private sealed class RectangleWrapper
-        {
-            public Rectangle Rectangle;
-
-            public RectangleWrapper(Rectangle rectangle)
-            {
-                Rectangle = rectangle;
-            }
-        }
-
-        private sealed class SizeWrapper
-        {
-            public Size Size;
-
-            public SizeWrapper(Size size)
-            {
-                Size = size;
-            }
         }
     }
 }

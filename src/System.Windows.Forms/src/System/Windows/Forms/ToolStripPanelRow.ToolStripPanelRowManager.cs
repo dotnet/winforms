@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                 foreach (Control c in Row.ControlsInternal)
                 {
                     raftingControl = c as ISupportToolStripPanel;
-                    if (raftingControl != null)
+                    if (raftingControl is not null)
                     {
                         if (raftingControl.Stretch)
                         {

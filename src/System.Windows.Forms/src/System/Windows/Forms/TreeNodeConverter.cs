@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (info != null)
+                if (info is not null)
                 {
                     return new InstanceDescriptor(info, args, false);
                 }

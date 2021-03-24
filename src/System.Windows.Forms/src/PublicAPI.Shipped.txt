@@ -200,6 +200,10 @@ System.Windows.Forms.AmbientProperties
 System.Windows.Forms.AmbientProperties.AmbientProperties() -> void
 System.Windows.Forms.AmbientProperties.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.AmbientProperties.BackColor.set -> void
+System.Windows.Forms.AmbientProperties.Cursor.get -> System.Windows.Forms.Cursor?
+System.Windows.Forms.AmbientProperties.Cursor.set -> void
+System.Windows.Forms.AmbientProperties.Font.get -> System.Drawing.Font?
+System.Windows.Forms.AmbientProperties.Font.set -> void
 System.Windows.Forms.AmbientProperties.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.AmbientProperties.ForeColor.set -> void
 System.Windows.Forms.AnchorStyles
@@ -403,6 +407,8 @@ System.Windows.Forms.BindingManagerBase.PositionChanged -> System.EventHandler
 System.Windows.Forms.BindingManagerBase.PullData() -> void
 System.Windows.Forms.BindingManagerBase.PushData() -> void
 System.Windows.Forms.BindingManagerDataErrorEventArgs
+System.Windows.Forms.BindingManagerDataErrorEventArgs.BindingManagerDataErrorEventArgs(System.Exception! exception) -> void
+System.Windows.Forms.BindingManagerDataErrorEventArgs.Exception.get -> System.Exception!
 System.Windows.Forms.BindingManagerDataErrorEventHandler
 System.Windows.Forms.BindingMemberInfo
 System.Windows.Forms.BindingNavigator
@@ -491,6 +497,7 @@ System.Windows.Forms.ButtonBase.AutoEllipsis.set -> void
 System.Windows.Forms.ButtonBase.AutoSizeChanged -> System.EventHandler
 System.Windows.Forms.ButtonBase.ButtonBase() -> void
 System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject
+System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.ButtonBaseAccessibleObject(System.Windows.Forms.Control! owner) -> void
 System.Windows.Forms.ButtonBase.FlatStyle.get -> System.Windows.Forms.FlatStyle
 System.Windows.Forms.ButtonBase.FlatStyle.set -> void
 System.Windows.Forms.ButtonBase.ImageAlign.get -> System.Drawing.ContentAlignment
@@ -551,6 +558,7 @@ System.Windows.Forms.CheckBox.CheckAlign.get -> System.Drawing.ContentAlignment
 System.Windows.Forms.CheckBox.CheckAlign.set -> void
 System.Windows.Forms.CheckBox.CheckBox() -> void
 System.Windows.Forms.CheckBox.CheckBoxAccessibleObject
+System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(System.Windows.Forms.Control! owner) -> void
 System.Windows.Forms.CheckBox.CheckState.get -> System.Windows.Forms.CheckState
 System.Windows.Forms.CheckBox.CheckState.set -> void
 System.Windows.Forms.CheckBox.CheckStateChanged -> System.EventHandler
@@ -984,6 +992,10 @@ System.Windows.Forms.ControlUpdateMode
 System.Windows.Forms.ControlUpdateMode.Never = 1 -> System.Windows.Forms.ControlUpdateMode
 System.Windows.Forms.ControlUpdateMode.OnPropertyChanged = 0 -> System.Windows.Forms.ControlUpdateMode
 System.Windows.Forms.ConvertEventArgs
+System.Windows.Forms.ConvertEventArgs.ConvertEventArgs(object? value, System.Type? desiredType) -> void
+System.Windows.Forms.ConvertEventArgs.DesiredType.get -> System.Type?
+System.Windows.Forms.ConvertEventArgs.Value.get -> object?
+System.Windows.Forms.ConvertEventArgs.Value.set -> void
 System.Windows.Forms.ConvertEventHandler
 System.Windows.Forms.CreateParams
 System.Windows.Forms.CreateParams.ClassStyle.get -> int
@@ -1166,9 +1178,13 @@ System.Windows.Forms.DataGridView.DataBindingComplete -> System.Windows.Forms.Da
 System.Windows.Forms.DataGridView.DataError -> System.Windows.Forms.DataGridViewDataErrorEventHandler
 System.Windows.Forms.DataGridView.DataGridView() -> void
 System.Windows.Forms.DataGridView.DataGridViewAccessibleObject
+System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.DataGridViewAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
 System.Windows.Forms.DataGridView.DataGridViewControlCollection
 System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject
 System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject() -> void
+System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
+System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.get -> System.Windows.Forms.DataGridView?
+System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.set -> void
 System.Windows.Forms.DataGridView.DataMemberChanged -> System.EventHandler
 System.Windows.Forms.DataGridView.DataSourceChanged -> System.EventHandler
 System.Windows.Forms.DataGridView.DefaultCellStyleChanged -> System.EventHandler
@@ -1389,6 +1405,7 @@ System.Windows.Forms.DataGridViewBindingCompleteEventHandler
 System.Windows.Forms.DataGridViewButtonCell
 System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCell() -> void
 System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject
+System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DataGridViewButtonCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 System.Windows.Forms.DataGridViewButtonCell.FlatStyle.get -> System.Windows.Forms.FlatStyle
 System.Windows.Forms.DataGridViewButtonCell.FlatStyle.set -> void
 System.Windows.Forms.DataGridViewButtonCell.UseColumnTextForButtonValue.get -> bool
@@ -1405,6 +1422,9 @@ System.Windows.Forms.DataGridViewCell.ContentBounds.get -> System.Drawing.Rectan
 System.Windows.Forms.DataGridViewCell.DataGridViewCell() -> void
 System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject
 System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DataGridViewCellAccessibleObject() -> void
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DataGridViewCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.get -> System.Windows.Forms.DataGridViewCell?
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.set -> void
 System.Windows.Forms.DataGridViewCell.Dispose() -> void
 System.Windows.Forms.DataGridViewCell.ErrorIconBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.DataGridViewCell.GetContentBounds(int rowIndex) -> System.Drawing.Rectangle
@@ -1523,6 +1543,7 @@ System.Windows.Forms.DataGridViewCheckBoxCell
 System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCell() -> void
 System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCell(bool threeState) -> void
 System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject
+System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DataGridViewCheckBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 System.Windows.Forms.DataGridViewCheckBoxCell.FlatStyle.get -> System.Windows.Forms.FlatStyle
 System.Windows.Forms.DataGridViewCheckBoxCell.FlatStyle.set -> void
 System.Windows.Forms.DataGridViewCheckBoxCell.ThreeState.get -> bool
@@ -1574,6 +1595,7 @@ System.Windows.Forms.DataGridViewColumnEventHandler
 System.Windows.Forms.DataGridViewColumnHeaderCell
 System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCell() -> void
 System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject
+System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DataGridViewColumnHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewColumnHeaderCell? owner) -> void
 System.Windows.Forms.DataGridViewColumnHeaderCell.SortGlyphDirection.get -> System.Windows.Forms.SortOrder
 System.Windows.Forms.DataGridViewColumnHeaderCell.SortGlyphDirection.set -> void
 System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode
@@ -1590,6 +1612,7 @@ System.Windows.Forms.DataGridViewColumnStateChangedEventHandler
 System.Windows.Forms.DataGridViewComboBoxCell
 System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCell() -> void
 System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellAccessibleObject
+System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellAccessibleObject.DataGridViewComboBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 System.Windows.Forms.DataGridViewComboBoxCell.DisplayStyle.get -> System.Windows.Forms.DataGridViewComboBoxDisplayStyle
 System.Windows.Forms.DataGridViewComboBoxCell.DisplayStyle.set -> void
 System.Windows.Forms.DataGridViewComboBoxCell.DisplayStyleForCurrentCellOnly.get -> bool
@@ -1698,6 +1721,7 @@ System.Windows.Forms.DataGridViewImageCell
 System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCell() -> void
 System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCell(bool valueIsIcon) -> void
 System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject
+System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DataGridViewImageCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 System.Windows.Forms.DataGridViewImageCell.ImageLayout.get -> System.Windows.Forms.DataGridViewImageCellLayout
 System.Windows.Forms.DataGridViewImageCell.ImageLayout.set -> void
 System.Windows.Forms.DataGridViewImageCell.ValueIsIcon.get -> bool
@@ -1719,6 +1743,7 @@ System.Windows.Forms.DataGridViewLinkCell.ActiveLinkColor.get -> System.Drawing.
 System.Windows.Forms.DataGridViewLinkCell.ActiveLinkColor.set -> void
 System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCell() -> void
 System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject
+System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DataGridViewLinkCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 System.Windows.Forms.DataGridViewLinkCell.LinkBehavior.get -> System.Windows.Forms.LinkBehavior
 System.Windows.Forms.DataGridViewLinkCell.LinkBehavior.set -> void
 System.Windows.Forms.DataGridViewLinkCell.LinkColor.get -> System.Drawing.Color
@@ -1795,6 +1820,7 @@ System.Windows.Forms.DataGridViewRowEventHandler
 System.Windows.Forms.DataGridViewRowHeaderCell
 System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCell() -> void
 System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject
+System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DataGridViewRowHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewRowHeaderCell? owner) -> void
 System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode
 System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders = 2 -> System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode
 System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders = 3 -> System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode
@@ -1879,6 +1905,7 @@ System.Windows.Forms.DataGridViewSortCompareEventHandler
 System.Windows.Forms.DataGridViewTextBoxCell
 System.Windows.Forms.DataGridViewTextBoxCell.DataGridViewTextBoxCell() -> void
 System.Windows.Forms.DataGridViewTextBoxCell.DataGridViewTextBoxCellAccessibleObject
+System.Windows.Forms.DataGridViewTextBoxCell.DataGridViewTextBoxCellAccessibleObject.DataGridViewTextBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 System.Windows.Forms.DataGridViewTextBoxColumn
 System.Windows.Forms.DataGridViewTextBoxColumn.DataGridViewTextBoxColumn() -> void
 System.Windows.Forms.DataGridViewTextBoxColumn.MaxInputLength.get -> int
@@ -1901,6 +1928,8 @@ System.Windows.Forms.DataSourceUpdateMode.Never = 2 -> System.Windows.Forms.Data
 System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged = 1 -> System.Windows.Forms.DataSourceUpdateMode
 System.Windows.Forms.DataSourceUpdateMode.OnValidation = 0 -> System.Windows.Forms.DataSourceUpdateMode
 System.Windows.Forms.DateBoldEventArgs
+System.Windows.Forms.DateBoldEventArgs.DaysToBold.get -> int[]?
+System.Windows.Forms.DateBoldEventArgs.DaysToBold.set -> void
 System.Windows.Forms.DateBoldEventArgs.Size.get -> int
 System.Windows.Forms.DateBoldEventArgs.StartDate.get -> System.DateTime
 System.Windows.Forms.DateBoldEventHandler
@@ -2067,6 +2096,8 @@ System.Windows.Forms.DragDropEffects.None = 0 -> System.Windows.Forms.DragDropEf
 System.Windows.Forms.DragDropEffects.Scroll = -2147483648 -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs
 System.Windows.Forms.DragEventArgs.AllowedEffect.get -> System.Windows.Forms.DragDropEffects
+System.Windows.Forms.DragEventArgs.Data.get -> System.Windows.Forms.IDataObject?
+System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect) -> void
 System.Windows.Forms.DragEventArgs.Effect.get -> System.Windows.Forms.DragDropEffects
 System.Windows.Forms.DragEventArgs.Effect.set -> void
 System.Windows.Forms.DragEventArgs.KeyState.get -> int
@@ -2077,7 +2108,11 @@ System.Windows.Forms.DrawItemEventArgs
 System.Windows.Forms.DrawItemEventArgs.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.DrawItemEventArgs.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.DrawItemEventArgs.Dispose() -> void
+System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Font? font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state) -> void
+System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Font? font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+System.Windows.Forms.DrawItemEventArgs.Font.get -> System.Drawing.Font?
 System.Windows.Forms.DrawItemEventArgs.ForeColor.get -> System.Drawing.Color
+System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
 System.Windows.Forms.DrawItemEventArgs.Index.get -> int
 System.Windows.Forms.DrawItemEventArgs.State.get -> System.Windows.Forms.DrawItemState
 System.Windows.Forms.DrawItemEventHandler
@@ -2101,9 +2136,13 @@ System.Windows.Forms.DrawListViewColumnHeaderEventArgs.ColumnIndex.get -> int
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawBackground() -> void
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawDefault.get -> bool
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawDefault.set -> void
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawText() -> void
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawText(System.Windows.Forms.TextFormatFlags flags) -> void
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Font.get -> System.Drawing.Font?
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.ForeColor.get -> System.Drawing.Color
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
 System.Windows.Forms.DrawListViewColumnHeaderEventArgs.State.get -> System.Windows.Forms.ListViewItemStates
 System.Windows.Forms.DrawListViewColumnHeaderEventHandler
 System.Windows.Forms.DrawListViewItemEventArgs
@@ -2112,8 +2151,11 @@ System.Windows.Forms.DrawListViewItemEventArgs.DrawBackground() -> void
 System.Windows.Forms.DrawListViewItemEventArgs.DrawDefault.get -> bool
 System.Windows.Forms.DrawListViewItemEventArgs.DrawDefault.set -> void
 System.Windows.Forms.DrawListViewItemEventArgs.DrawFocusRectangle() -> void
+System.Windows.Forms.DrawListViewItemEventArgs.DrawListViewItemEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.ListViewItem! item, System.Drawing.Rectangle bounds, int itemIndex, System.Windows.Forms.ListViewItemStates state) -> void
 System.Windows.Forms.DrawListViewItemEventArgs.DrawText() -> void
 System.Windows.Forms.DrawListViewItemEventArgs.DrawText(System.Windows.Forms.TextFormatFlags flags) -> void
+System.Windows.Forms.DrawListViewItemEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem!
 System.Windows.Forms.DrawListViewItemEventArgs.ItemIndex.get -> int
 System.Windows.Forms.DrawListViewItemEventArgs.State.get -> System.Windows.Forms.ListViewItemStates
 System.Windows.Forms.DrawListViewItemEventHandler
@@ -2124,26 +2166,40 @@ System.Windows.Forms.DrawListViewSubItemEventArgs.DrawBackground() -> void
 System.Windows.Forms.DrawListViewSubItemEventArgs.DrawDefault.get -> bool
 System.Windows.Forms.DrawListViewSubItemEventArgs.DrawDefault.set -> void
 System.Windows.Forms.DrawListViewSubItemEventArgs.DrawFocusRectangle(System.Drawing.Rectangle bounds) -> void
+System.Windows.Forms.DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewItem? item, System.Windows.Forms.ListViewItem.ListViewSubItem? subItem, int itemIndex, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates itemState) -> void
 System.Windows.Forms.DrawListViewSubItemEventArgs.DrawText() -> void
 System.Windows.Forms.DrawListViewSubItemEventArgs.DrawText(System.Windows.Forms.TextFormatFlags flags) -> void
+System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
+System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.DrawListViewSubItemEventArgs.ItemIndex.get -> int
 System.Windows.Forms.DrawListViewSubItemEventArgs.ItemState.get -> System.Windows.Forms.ListViewItemStates
+System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
 System.Windows.Forms.DrawListViewSubItemEventHandler
 System.Windows.Forms.DrawMode
 System.Windows.Forms.DrawMode.Normal = 0 -> System.Windows.Forms.DrawMode
 System.Windows.Forms.DrawMode.OwnerDrawFixed = 1 -> System.Windows.Forms.DrawMode
 System.Windows.Forms.DrawMode.OwnerDrawVariable = 2 -> System.Windows.Forms.DrawMode
 System.Windows.Forms.DrawToolTipEventArgs
+System.Windows.Forms.DrawToolTipEventArgs.AssociatedControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.DrawToolTipEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window?
 System.Windows.Forms.DrawToolTipEventArgs.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.DrawToolTipEventArgs.DrawBackground() -> void
 System.Windows.Forms.DrawToolTipEventArgs.DrawBorder() -> void
 System.Windows.Forms.DrawToolTipEventArgs.DrawText() -> void
 System.Windows.Forms.DrawToolTipEventArgs.DrawText(System.Windows.Forms.TextFormatFlags flags) -> void
+System.Windows.Forms.DrawToolTipEventArgs.DrawToolTipEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.IWin32Window? associatedWindow, System.Windows.Forms.Control? associatedControl, System.Drawing.Rectangle bounds, string? toolTipText, System.Drawing.Color backColor, System.Drawing.Color foreColor, System.Drawing.Font? font) -> void
+System.Windows.Forms.DrawToolTipEventArgs.Font.get -> System.Drawing.Font?
+System.Windows.Forms.DrawToolTipEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawToolTipEventArgs.ToolTipText.get -> string?
 System.Windows.Forms.DrawToolTipEventHandler
 System.Windows.Forms.DrawTreeNodeEventArgs
 System.Windows.Forms.DrawTreeNodeEventArgs.Bounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.DrawTreeNodeEventArgs.DrawDefault.get -> bool
 System.Windows.Forms.DrawTreeNodeEventArgs.DrawDefault.set -> void
+System.Windows.Forms.DrawTreeNodeEventArgs.DrawTreeNodeEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.TreeNode? node, System.Drawing.Rectangle bounds, System.Windows.Forms.TreeNodeStates state) -> void
+System.Windows.Forms.DrawTreeNodeEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DrawTreeNodeEventArgs.Node.get -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.DrawTreeNodeEventArgs.State.get -> System.Windows.Forms.TreeNodeStates
 System.Windows.Forms.DrawTreeNodeEventHandler
 System.Windows.Forms.ErrorBlinkStyle
@@ -2177,6 +2233,7 @@ System.Windows.Forms.FileDialog.CheckPathExists.get -> bool
 System.Windows.Forms.FileDialog.CheckPathExists.set -> void
 System.Windows.Forms.FileDialog.ClientGuid.get -> System.Guid?
 System.Windows.Forms.FileDialog.ClientGuid.set -> void
+System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection!
 System.Windows.Forms.FileDialog.DereferenceLinks.get -> bool
 System.Windows.Forms.FileDialog.DereferenceLinks.set -> void
 System.Windows.Forms.FileDialog.FileOk -> System.ComponentModel.CancelEventHandler
@@ -2229,6 +2286,8 @@ System.Windows.Forms.FlowLayoutSettings.WrapContents.set -> void
 System.Windows.Forms.FolderBrowserDialog
 System.Windows.Forms.FolderBrowserDialog.AutoUpgradeEnabled.get -> bool
 System.Windows.Forms.FolderBrowserDialog.AutoUpgradeEnabled.set -> void
+System.Windows.Forms.FolderBrowserDialog.ClientGuid.get -> System.Guid?
+System.Windows.Forms.FolderBrowserDialog.ClientGuid.set -> void
 System.Windows.Forms.FolderBrowserDialog.FolderBrowserDialog() -> void
 System.Windows.Forms.FolderBrowserDialog.HelpRequest -> System.EventHandler
 System.Windows.Forms.FolderBrowserDialog.RootFolder.get -> System.Environment.SpecialFolder
@@ -2413,8 +2472,13 @@ System.Windows.Forms.GiveFeedbackEventArgs.UseDefaultCursors.set -> void
 System.Windows.Forms.GiveFeedbackEventHandler
 System.Windows.Forms.GridItem
 System.Windows.Forms.GridItem.GridItem() -> void
+System.Windows.Forms.GridItem.Tag.get -> object?
+System.Windows.Forms.GridItem.Tag.set -> void
 System.Windows.Forms.GridItemCollection
 System.Windows.Forms.GridItemCollection.Count.get -> int
+System.Windows.Forms.GridItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.GridItemCollection.this[int index].get -> System.Windows.Forms.GridItem!
+System.Windows.Forms.GridItemCollection.this[string! label].get -> System.Windows.Forms.GridItem?
 System.Windows.Forms.GridItemType
 System.Windows.Forms.GridItemType.ArrayValue = 2 -> System.Windows.Forms.GridItemType
 System.Windows.Forms.GridItemType.Category = 1 -> System.Windows.Forms.GridItemType
@@ -2448,6 +2512,7 @@ System.Windows.Forms.GroupBoxRenderer
 System.Windows.Forms.HScrollBar
 System.Windows.Forms.HScrollBar.HScrollBar() -> void
 System.Windows.Forms.HScrollProperties
+System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 System.Windows.Forms.HandledMouseEventArgs
 System.Windows.Forms.HandledMouseEventArgs.Handled.get -> bool
 System.Windows.Forms.HandledMouseEventArgs.Handled.set -> void
@@ -2537,9 +2602,11 @@ System.Windows.Forms.HtmlElement.TabIndex.set -> void
 System.Windows.Forms.HtmlElementCollection
 System.Windows.Forms.HtmlElementCollection.Count.get -> int
 System.Windows.Forms.HtmlElementErrorEventArgs
+System.Windows.Forms.HtmlElementErrorEventArgs.Description.get -> string!
 System.Windows.Forms.HtmlElementErrorEventArgs.Handled.get -> bool
 System.Windows.Forms.HtmlElementErrorEventArgs.Handled.set -> void
 System.Windows.Forms.HtmlElementErrorEventArgs.LineNumber.get -> int
+System.Windows.Forms.HtmlElementErrorEventArgs.Url.get -> System.Uri!
 System.Windows.Forms.HtmlElementErrorEventHandler
 System.Windows.Forms.HtmlElementEventArgs
 System.Windows.Forms.HtmlElementEventArgs.AltKeyPressed.get -> bool
@@ -2673,14 +2740,28 @@ System.Windows.Forms.ImeMode.OnHalf = 12 -> System.Windows.Forms.ImeMode
 System.Windows.Forms.ImeModeConversion
 System.Windows.Forms.ImeModeConversion.ImeModeConversion() -> void
 System.Windows.Forms.InputLanguage
+System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo!
 System.Windows.Forms.InputLanguage.Handle.get -> System.IntPtr
+System.Windows.Forms.InputLanguage.LayoutName.get -> string!
 System.Windows.Forms.InputLanguageChangedEventArgs
 System.Windows.Forms.InputLanguageChangedEventArgs.CharSet.get -> byte
+System.Windows.Forms.InputLanguageChangedEventArgs.Culture.get -> System.Globalization.CultureInfo!
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage!
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Globalization.CultureInfo! culture, byte charSet) -> void
+System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, byte charSet) -> void
 System.Windows.Forms.InputLanguageChangedEventHandler
 System.Windows.Forms.InputLanguageChangingEventArgs
+System.Windows.Forms.InputLanguageChangingEventArgs.Culture.get -> System.Globalization.CultureInfo!
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage!
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Globalization.CultureInfo! culture, bool sysCharSet) -> void
+System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, bool sysCharSet) -> void
 System.Windows.Forms.InputLanguageChangingEventArgs.SysCharSet.get -> bool
 System.Windows.Forms.InputLanguageChangingEventHandler
 System.Windows.Forms.InputLanguageCollection
+System.Windows.Forms.InputLanguageCollection.Contains(System.Windows.Forms.InputLanguage? value) -> bool
+System.Windows.Forms.InputLanguageCollection.CopyTo(System.Windows.Forms.InputLanguage![]! array, int index) -> void
+System.Windows.Forms.InputLanguageCollection.IndexOf(System.Windows.Forms.InputLanguage? value) -> int
+System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windows.Forms.InputLanguage!
 System.Windows.Forms.InsertKeyMode
 System.Windows.Forms.InsertKeyMode.Default = 0 -> System.Windows.Forms.InsertKeyMode
 System.Windows.Forms.InsertKeyMode.Insert = 1 -> System.Windows.Forms.InsertKeyMode
@@ -2712,7 +2793,9 @@ System.Windows.Forms.ItemCheckedEventArgs
 System.Windows.Forms.ItemCheckedEventHandler
 System.Windows.Forms.ItemDragEventArgs
 System.Windows.Forms.ItemDragEventArgs.Button.get -> System.Windows.Forms.MouseButtons
+System.Windows.Forms.ItemDragEventArgs.Item.get -> object?
 System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button) -> void
+System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button, object? item) -> void
 System.Windows.Forms.ItemDragEventHandler
 System.Windows.Forms.KeyEventArgs
 System.Windows.Forms.KeyEventArgs.Control.get -> bool
@@ -2963,7 +3046,9 @@ System.Windows.Forms.LabelEditEventArgs
 System.Windows.Forms.LabelEditEventArgs.CancelEdit.get -> bool
 System.Windows.Forms.LabelEditEventArgs.CancelEdit.set -> void
 System.Windows.Forms.LabelEditEventArgs.Item.get -> int
+System.Windows.Forms.LabelEditEventArgs.Label.get -> string?
 System.Windows.Forms.LabelEditEventArgs.LabelEditEventArgs(int item) -> void
+System.Windows.Forms.LabelEditEventArgs.LabelEditEventArgs(int item, string? label) -> void
 System.Windows.Forms.LabelEditEventHandler
 System.Windows.Forms.Layout.ArrangedElementCollection
 System.Windows.Forms.Layout.LayoutEngine
@@ -2992,6 +3077,8 @@ System.Windows.Forms.LinkBehavior.HoverUnderline = 2 -> System.Windows.Forms.Lin
 System.Windows.Forms.LinkBehavior.NeverUnderline = 3 -> System.Windows.Forms.LinkBehavior
 System.Windows.Forms.LinkBehavior.SystemDefault = 0 -> System.Windows.Forms.LinkBehavior
 System.Windows.Forms.LinkClickedEventArgs
+System.Windows.Forms.LinkClickedEventArgs.LinkClickedEventArgs(string? linkText) -> void
+System.Windows.Forms.LinkClickedEventArgs.LinkText.get -> string?
 System.Windows.Forms.LinkClickedEventHandler
 System.Windows.Forms.LinkConverter
 System.Windows.Forms.LinkConverter.LinkConverter() -> void
@@ -3087,8 +3174,20 @@ System.Windows.Forms.ListBox.MouseClick -> System.Windows.Forms.MouseEventHandle
 System.Windows.Forms.ListBox.MultiColumn.get -> bool
 System.Windows.Forms.ListBox.MultiColumn.set -> void
 System.Windows.Forms.ListBox.ObjectCollection
+System.Windows.Forms.ListBox.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Contains(object! value) -> bool
+System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
 System.Windows.Forms.ListBox.ObjectCollection.Count.get -> int
+System.Windows.Forms.ListBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.ListBox.ObjectCollection.IndexOf(object! value) -> int
+System.Windows.Forms.ListBox.ObjectCollection.Insert(int index, object! item) -> void
 System.Windows.Forms.ListBox.ObjectCollection.IsReadOnly.get -> bool
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, System.Windows.Forms.ListBox.ObjectCollection! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, object![]! value) -> void
+System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 System.Windows.Forms.ListBox.ObjectCollection.RemoveAt(int index) -> void
 System.Windows.Forms.ListBox.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.ListBox.Padding.set -> void
@@ -3134,6 +3233,8 @@ System.Windows.Forms.ListControl.ListControl() -> void
 System.Windows.Forms.ListControl.SelectedValueChanged -> System.EventHandler
 System.Windows.Forms.ListControl.ValueMemberChanged -> System.EventHandler
 System.Windows.Forms.ListControlConvertEventArgs
+System.Windows.Forms.ListControlConvertEventArgs.ListControlConvertEventArgs(object? value, System.Type? desiredType, object? listItem) -> void
+System.Windows.Forms.ListControlConvertEventArgs.ListItem.get -> object?
 System.Windows.Forms.ListControlConvertEventHandler
 System.Windows.Forms.ListView
 System.Windows.Forms.ListView.Activation.get -> System.Windows.Forms.ItemActivation
@@ -3464,11 +3565,14 @@ System.Windows.Forms.MdiLayout.Cascade = 0 -> System.Windows.Forms.MdiLayout
 System.Windows.Forms.MdiLayout.TileHorizontal = 1 -> System.Windows.Forms.MdiLayout
 System.Windows.Forms.MdiLayout.TileVertical = 2 -> System.Windows.Forms.MdiLayout
 System.Windows.Forms.MeasureItemEventArgs
+System.Windows.Forms.MeasureItemEventArgs.Graphics.get -> System.Drawing.Graphics!
 System.Windows.Forms.MeasureItemEventArgs.Index.get -> int
 System.Windows.Forms.MeasureItemEventArgs.ItemHeight.get -> int
 System.Windows.Forms.MeasureItemEventArgs.ItemHeight.set -> void
 System.Windows.Forms.MeasureItemEventArgs.ItemWidth.get -> int
 System.Windows.Forms.MeasureItemEventArgs.ItemWidth.set -> void
+System.Windows.Forms.MeasureItemEventArgs.MeasureItemEventArgs(System.Drawing.Graphics! graphics, int index) -> void
+System.Windows.Forms.MeasureItemEventArgs.MeasureItemEventArgs(System.Drawing.Graphics! graphics, int index, int itemHeight) -> void
 System.Windows.Forms.MeasureItemEventHandler
 System.Windows.Forms.MenuGlyph
 System.Windows.Forms.MenuGlyph.Arrow = 0 -> System.Windows.Forms.MenuGlyph
@@ -3727,6 +3831,8 @@ System.Windows.Forms.PageSetupDialog.ShowNetwork.set -> void
 System.Windows.Forms.PaintEventArgs
 System.Windows.Forms.PaintEventArgs.ClipRectangle.get -> System.Drawing.Rectangle
 System.Windows.Forms.PaintEventArgs.Dispose() -> void
+System.Windows.Forms.PaintEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.PaintEventArgs.PaintEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipRect) -> void
 System.Windows.Forms.PaintEventArgs.~PaintEventArgs() -> void
 System.Windows.Forms.PaintEventHandler
 System.Windows.Forms.Panel
@@ -4082,11 +4188,24 @@ System.Windows.Forms.PropertySort.Categorized = 2 -> System.Windows.Forms.Proper
 System.Windows.Forms.PropertySort.CategorizedAlphabetical = 3 -> System.Windows.Forms.PropertySort
 System.Windows.Forms.PropertySort.NoSort = 0 -> System.Windows.Forms.PropertySort
 System.Windows.Forms.PropertyTabChangedEventArgs
+System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab?
+System.Windows.Forms.PropertyTabChangedEventArgs.OldTab.get -> System.Windows.Forms.Design.PropertyTab?
+System.Windows.Forms.PropertyTabChangedEventArgs.PropertyTabChangedEventArgs(System.Windows.Forms.Design.PropertyTab? oldTab, System.Windows.Forms.Design.PropertyTab? newTab) -> void
 System.Windows.Forms.PropertyTabChangedEventHandler
 System.Windows.Forms.PropertyValueChangedEventArgs
+System.Windows.Forms.PropertyValueChangedEventArgs.ChangedItem.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.PropertyValueChangedEventArgs.OldValue.get -> object?
+System.Windows.Forms.PropertyValueChangedEventArgs.PropertyValueChangedEventArgs(System.Windows.Forms.GridItem? changedItem, object? oldValue) -> void
 System.Windows.Forms.PropertyValueChangedEventHandler
 System.Windows.Forms.QueryAccessibilityHelpEventArgs
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.get -> string?
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.set -> void
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpNamespace.get -> string?
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpNamespace.set -> void
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpString.get -> string?
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpString.set -> void
 System.Windows.Forms.QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs() -> void
+System.Windows.Forms.QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs(string? helpNamespace, string? helpString, string? helpKeyword) -> void
 System.Windows.Forms.QueryAccessibilityHelpEventHandler
 System.Windows.Forms.QueryContinueDragEventArgs
 System.Windows.Forms.QueryContinueDragEventArgs.Action.get -> System.Windows.Forms.DragAction
@@ -4117,6 +4236,7 @@ System.Windows.Forms.RadioButton.MouseDoubleClick -> System.Windows.Forms.MouseE
 System.Windows.Forms.RadioButton.PerformClick() -> void
 System.Windows.Forms.RadioButton.RadioButton() -> void
 System.Windows.Forms.RadioButton.RadioButtonAccessibleObject
+System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.RadioButtonAccessibleObject(System.Windows.Forms.RadioButton! owner) -> void
 System.Windows.Forms.RadioButton.TabStop.get -> bool
 System.Windows.Forms.RadioButton.TabStop.set -> void
 System.Windows.Forms.RadioButtonRenderer
@@ -4330,6 +4450,8 @@ System.Windows.Forms.ScrollProperties.Maximum.get -> int
 System.Windows.Forms.ScrollProperties.Maximum.set -> void
 System.Windows.Forms.ScrollProperties.Minimum.get -> int
 System.Windows.Forms.ScrollProperties.Minimum.set -> void
+System.Windows.Forms.ScrollProperties.ParentControl.get -> System.Windows.Forms.ScrollableControl?
+System.Windows.Forms.ScrollProperties.ScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 System.Windows.Forms.ScrollProperties.SmallChange.get -> int
 System.Windows.Forms.ScrollProperties.SmallChange.set -> void
 System.Windows.Forms.ScrollProperties.Value.get -> int
@@ -4378,8 +4500,10 @@ System.Windows.Forms.SearchForVirtualItemEventArgs.Index.get -> int
 System.Windows.Forms.SearchForVirtualItemEventArgs.Index.set -> void
 System.Windows.Forms.SearchForVirtualItemEventArgs.IsPrefixSearch.get -> bool
 System.Windows.Forms.SearchForVirtualItemEventArgs.IsTextSearch.get -> bool
+System.Windows.Forms.SearchForVirtualItemEventArgs.SearchForVirtualItemEventArgs(bool isTextSearch, bool isPrefixSearch, bool includeSubItemsInSearch, string? text, System.Drawing.Point startingPoint, System.Windows.Forms.SearchDirectionHint direction, int startIndex) -> void
 System.Windows.Forms.SearchForVirtualItemEventArgs.StartIndex.get -> int
 System.Windows.Forms.SearchForVirtualItemEventArgs.StartingPoint.get -> System.Drawing.Point
+System.Windows.Forms.SearchForVirtualItemEventArgs.Text.get -> string?
 System.Windows.Forms.SearchForVirtualItemEventHandler
 System.Windows.Forms.SecurityIDType
 System.Windows.Forms.SecurityIDType.Alias = 4 -> System.Windows.Forms.SecurityIDType
@@ -4800,10 +4924,14 @@ System.Windows.Forms.TabControlAction.Selected = 1 -> System.Windows.Forms.TabCo
 System.Windows.Forms.TabControlAction.Selecting = 0 -> System.Windows.Forms.TabControlAction
 System.Windows.Forms.TabControlCancelEventArgs
 System.Windows.Forms.TabControlCancelEventArgs.Action.get -> System.Windows.Forms.TabControlAction
+System.Windows.Forms.TabControlCancelEventArgs.TabControlCancelEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, bool cancel, System.Windows.Forms.TabControlAction action) -> void
+System.Windows.Forms.TabControlCancelEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
 System.Windows.Forms.TabControlCancelEventArgs.TabPageIndex.get -> int
 System.Windows.Forms.TabControlCancelEventHandler
 System.Windows.Forms.TabControlEventArgs
 System.Windows.Forms.TabControlEventArgs.Action.get -> System.Windows.Forms.TabControlAction
+System.Windows.Forms.TabControlEventArgs.TabControlEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, System.Windows.Forms.TabControlAction action) -> void
+System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
 System.Windows.Forms.TabControlEventArgs.TabPageIndex.get -> int
 System.Windows.Forms.TabControlEventHandler
 System.Windows.Forms.TabDrawMode
@@ -4826,6 +4954,7 @@ System.Windows.Forms.TabPage.TabIndex.set -> void
 System.Windows.Forms.TabPage.TabIndexChanged -> System.EventHandler
 System.Windows.Forms.TabPage.TabPage() -> void
 System.Windows.Forms.TabPage.TabPageControlCollection
+System.Windows.Forms.TabPage.TabPageControlCollection.TabPageControlCollection(System.Windows.Forms.TabPage! owner) -> void
 System.Windows.Forms.TabPage.TabStop.get -> bool
 System.Windows.Forms.TabPage.TabStop.set -> void
 System.Windows.Forms.TabPage.TabStopChanged -> System.EventHandler
@@ -5365,6 +5494,7 @@ System.Windows.Forms.ToolStripControlHost.TextAlign.set -> void
 System.Windows.Forms.ToolStripControlHost.TextImageRelation.get -> System.Windows.Forms.TextImageRelation
 System.Windows.Forms.ToolStripControlHost.TextImageRelation.set -> void
 System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
+System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject.ToolStripHostedControlAccessibleObject(System.Windows.Forms.Control! toolStripHostedControl, System.Windows.Forms.ToolStripControlHost? toolStripControlHost) -> void
 System.Windows.Forms.ToolStripControlHost.Validated -> System.EventHandler
 System.Windows.Forms.ToolStripControlHost.Validating -> System.ComponentModel.CancelEventHandler
 System.Windows.Forms.ToolStripDropDown
@@ -6102,6 +6232,8 @@ System.Windows.Forms.TreeViewAction.Expand = 4 -> System.Windows.Forms.TreeViewA
 System.Windows.Forms.TreeViewAction.Unknown = 0 -> System.Windows.Forms.TreeViewAction
 System.Windows.Forms.TreeViewCancelEventArgs
 System.Windows.Forms.TreeViewCancelEventArgs.Action.get -> System.Windows.Forms.TreeViewAction
+System.Windows.Forms.TreeViewCancelEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewCancelEventArgs.TreeViewCancelEventArgs(System.Windows.Forms.TreeNode? node, bool cancel, System.Windows.Forms.TreeViewAction action) -> void
 System.Windows.Forms.TreeViewCancelEventHandler
 System.Windows.Forms.TreeViewDrawMode
 System.Windows.Forms.TreeViewDrawMode.Normal = 0 -> System.Windows.Forms.TreeViewDrawMode
@@ -6109,9 +6241,14 @@ System.Windows.Forms.TreeViewDrawMode.OwnerDrawAll = 2 -> System.Windows.Forms.T
 System.Windows.Forms.TreeViewDrawMode.OwnerDrawText = 1 -> System.Windows.Forms.TreeViewDrawMode
 System.Windows.Forms.TreeViewEventArgs
 System.Windows.Forms.TreeViewEventArgs.Action.get -> System.Windows.Forms.TreeViewAction
+System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node) -> void
+System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node, System.Windows.Forms.TreeViewAction action) -> void
 System.Windows.Forms.TreeViewEventHandler
 System.Windows.Forms.TreeViewHitTestInfo
 System.Windows.Forms.TreeViewHitTestInfo.Location.get -> System.Windows.Forms.TreeViewHitTestLocations
+System.Windows.Forms.TreeViewHitTestInfo.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeViewHitTestInfo.TreeViewHitTestInfo(System.Windows.Forms.TreeNode? hitNode, System.Windows.Forms.TreeViewHitTestLocations hitLocation) -> void
 System.Windows.Forms.TreeViewHitTestLocations
 System.Windows.Forms.TreeViewHitTestLocations.AboveClientArea = 256 -> System.Windows.Forms.TreeViewHitTestLocations
 System.Windows.Forms.TreeViewHitTestLocations.BelowClientArea = 512 -> System.Windows.Forms.TreeViewHitTestLocations
@@ -6200,6 +6337,7 @@ System.Windows.Forms.VScrollBar
 System.Windows.Forms.VScrollBar.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.VScrollBar.VScrollBar() -> void
 System.Windows.Forms.VScrollProperties
+System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 System.Windows.Forms.ValidationConstraints
 System.Windows.Forms.ValidationConstraints.Enabled = 2 -> System.Windows.Forms.ValidationConstraints
 System.Windows.Forms.ValidationConstraints.ImmediateChildren = 16 -> System.Windows.Forms.ValidationConstraints
@@ -6851,6 +6989,8 @@ System.Windows.Forms.WebBrowserBase.TextChanged -> System.EventHandler
 System.Windows.Forms.WebBrowserBase.UseWaitCursor.get -> bool
 System.Windows.Forms.WebBrowserBase.UseWaitCursor.set -> void
 System.Windows.Forms.WebBrowserDocumentCompletedEventArgs
+System.Windows.Forms.WebBrowserDocumentCompletedEventArgs.Url.get -> System.Uri?
+System.Windows.Forms.WebBrowserDocumentCompletedEventArgs.WebBrowserDocumentCompletedEventArgs(System.Uri? url) -> void
 System.Windows.Forms.WebBrowserDocumentCompletedEventHandler
 System.Windows.Forms.WebBrowserEncryptionLevel
 System.Windows.Forms.WebBrowserEncryptionLevel.Bit128 = 6 -> System.Windows.Forms.WebBrowserEncryptionLevel
@@ -6861,6 +7001,8 @@ System.Windows.Forms.WebBrowserEncryptionLevel.Insecure = 0 -> System.Windows.Fo
 System.Windows.Forms.WebBrowserEncryptionLevel.Mixed = 1 -> System.Windows.Forms.WebBrowserEncryptionLevel
 System.Windows.Forms.WebBrowserEncryptionLevel.Unknown = 2 -> System.Windows.Forms.WebBrowserEncryptionLevel
 System.Windows.Forms.WebBrowserNavigatedEventArgs
+System.Windows.Forms.WebBrowserNavigatedEventArgs.Url.get -> System.Uri?
+System.Windows.Forms.WebBrowserNavigatedEventArgs.WebBrowserNavigatedEventArgs(System.Uri? url) -> void
 System.Windows.Forms.WebBrowserNavigatedEventHandler
 System.Windows.Forms.WebBrowserNavigatingEventArgs
 System.Windows.Forms.WebBrowserNavigatingEventHandler
@@ -6904,7 +7046,12 @@ abstract System.Windows.Forms.CommonDialog.RunDialog(System.IntPtr hwndOwner) ->
 abstract System.Windows.Forms.Design.ComponentEditorPage.LoadComponent() -> void
 abstract System.Windows.Forms.Design.ComponentEditorPage.SaveComponent() -> void
 abstract System.Windows.Forms.GridItem.GridItemType.get -> System.Windows.Forms.GridItemType
+abstract System.Windows.Forms.GridItem.GridItems.get -> System.Windows.Forms.GridItemCollection!
+abstract System.Windows.Forms.GridItem.Label.get -> string?
+abstract System.Windows.Forms.GridItem.Parent.get -> System.Windows.Forms.GridItem?
+abstract System.Windows.Forms.GridItem.PropertyDescriptor.get -> System.ComponentModel.PropertyDescriptor?
 abstract System.Windows.Forms.GridItem.Select() -> bool
+abstract System.Windows.Forms.GridItem.Value.get -> object?
 abstract System.Windows.Forms.ListControl.RefreshItem(int index) -> void
 abstract System.Windows.Forms.ListControl.SelectedIndex.get -> int
 abstract System.Windows.Forms.ListControl.SelectedIndex.set -> void
@@ -6954,6 +7101,7 @@ override System.Windows.Forms.ButtonBase.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.ButtonBase.Dispose(bool disposing) -> void
 override System.Windows.Forms.ButtonBase.GetPreferredSize(System.Drawing.Size proposedSize) -> System.Drawing.Size
 override System.Windows.Forms.ButtonBase.WndProc(ref System.Windows.Forms.Message m) -> void
+override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
@@ -7044,12 +7192,22 @@ override System.Windows.Forms.DataGridView.BackColor.set -> void
 override System.Windows.Forms.DataGridView.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
 override System.Windows.Forms.DataGridView.BackgroundImageLayout.set -> void
 override System.Windows.Forms.DataGridView.CanEnableIme.get -> bool
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChildCount() -> int
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.DataGridView.DataGridViewControlCollection.Clear() -> void
 override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Bounds.get -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.GetChildCount() -> int
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Name.get -> string!
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
+override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Value.get -> string!
 override System.Windows.Forms.DataGridView.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.DataGridView.DisplayRectangle.get -> System.Drawing.Rectangle
 override System.Windows.Forms.DataGridView.Dispose(bool disposing) -> void
@@ -7066,6 +7224,7 @@ override System.Windows.Forms.DataGridView.SetBoundsCore(int x, int y, int width
 override System.Windows.Forms.DataGridView.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.DataGridViewAdvancedBorderStyle.GetHashCode() -> int
 override System.Windows.Forms.DataGridViewBand.ToString() -> string!
+override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.GetChildCount() -> int
 override System.Windows.Forms.DataGridViewButtonCell.MouseEnterUnsharesRow(int rowIndex) -> bool
@@ -7073,13 +7232,23 @@ override System.Windows.Forms.DataGridViewButtonCell.MouseLeaveUnsharesRow(int r
 override System.Windows.Forms.DataGridViewButtonCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewButtonCell.OnMouseLeave(int rowIndex) -> void
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Bounds.get -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DoDefaultAction() -> void
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetChildCount() -> int
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Name.get -> string?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Select(System.Windows.Forms.AccessibleSelection flags) -> void
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.get -> string?
+override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.set -> void
 override System.Windows.Forms.DataGridViewCell.OnDataGridViewChanged() -> void
 override System.Windows.Forms.DataGridViewCellStyle.GetHashCode() -> int
+override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.GetChildCount() -> int
 override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
@@ -7099,10 +7268,15 @@ override System.Windows.Forms.DataGridViewColumn.Visible.set -> void
 override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.GetHashCode() -> int
 override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.IsDefaultAttribute() -> bool
 override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Bounds.get -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DoDefaultAction() -> void
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Name.get -> string!
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Select(System.Windows.Forms.AccessibleSelection flags) -> void
 override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
+override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Value.get -> string!
 override System.Windows.Forms.DataGridViewComboBoxCell.DetachEditingControl() -> void
 override System.Windows.Forms.DataGridViewComboBoxCell.OnDataGridViewChanged() -> void
 override System.Windows.Forms.DataGridViewComboBoxCell.OnEnter(int rowIndex, bool throughMouseClick) -> void
@@ -7124,8 +7298,13 @@ override System.Windows.Forms.DataGridViewHeaderCell.Resizable.get -> bool
 override System.Windows.Forms.DataGridViewHeaderCell.Selected.get -> bool
 override System.Windows.Forms.DataGridViewHeaderCell.Selected.set -> void
 override System.Windows.Forms.DataGridViewHeaderCell.Visible.get -> bool
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Description.get -> string?
 override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.GetChildCount() -> int
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.get -> string?
+override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.set -> void
+override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.GetChildCount() -> int
 override System.Windows.Forms.DataGridViewLinkCell.MouseLeaveUnsharesRow(int rowIndex) -> bool
@@ -7148,10 +7327,15 @@ override System.Windows.Forms.DataGridViewRow.State.get -> System.Windows.Forms.
 override System.Windows.Forms.DataGridViewRow.Visible.get -> bool
 override System.Windows.Forms.DataGridViewRow.Visible.set -> void
 override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Bounds.get -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DoDefaultAction() -> void
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Name.get -> string?
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
 override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Select(System.Windows.Forms.AccessibleSelection flags) -> void
 override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
+override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Value.get -> string!
 override System.Windows.Forms.DataGridViewTextBoxCell.DetachEditingControl() -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnEnter(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
@@ -7245,10 +7429,12 @@ override System.Windows.Forms.GroupBox.ProcessMnemonic(char charCode) -> bool
 override System.Windows.Forms.GroupBox.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.GroupBox.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.HScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.HScrollBar.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.HtmlDocument.GetHashCode() -> int
 override System.Windows.Forms.HtmlElement.GetHashCode() -> int
 override System.Windows.Forms.HtmlWindow.GetHashCode() -> int
+override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 override System.Windows.Forms.InputLanguage.GetHashCode() -> int
 override System.Windows.Forms.Label.AutoSize.get -> bool
 override System.Windows.Forms.Label.AutoSize.set -> void
@@ -7437,6 +7623,7 @@ override System.Windows.Forms.PropertyManager.SuspendBinding() -> void
 override System.Windows.Forms.PropertyManager.UpdateIsBinding() -> void
 override System.Windows.Forms.RadioButton.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.RadioButton.ProcessMnemonic(char charCode) -> bool
+override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.Role.get -> System.Windows.Forms.AccessibleRole
 override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.State.get -> System.Windows.Forms.AccessibleStates
@@ -7470,15 +7657,26 @@ override System.Windows.Forms.ScrollBar.AutoSize.get -> bool
 override System.Windows.Forms.ScrollBar.AutoSize.set -> void
 override System.Windows.Forms.ScrollBar.BackColor.get -> System.Drawing.Color
 override System.Windows.Forms.ScrollBar.BackColor.set -> void
+override System.Windows.Forms.ScrollBar.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.ScrollBar.BackgroundImage.set -> void
 override System.Windows.Forms.ScrollBar.BackgroundImageLayout.get -> System.Windows.Forms.ImageLayout
 override System.Windows.Forms.ScrollBar.BackgroundImageLayout.set -> void
 override System.Windows.Forms.ScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.ScrollBar.DefaultImeMode.get -> System.Windows.Forms.ImeMode
 override System.Windows.Forms.ScrollBar.DefaultMargin.get -> System.Windows.Forms.Padding
+override System.Windows.Forms.ScrollBar.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.ScrollBar.Font.set -> void
 override System.Windows.Forms.ScrollBar.ForeColor.get -> System.Drawing.Color
 override System.Windows.Forms.ScrollBar.ForeColor.set -> void
 override System.Windows.Forms.ScrollBar.GetScaledBounds(System.Drawing.Rectangle bounds, System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> System.Drawing.Rectangle
+override System.Windows.Forms.ScrollBar.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ScrollBar.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.ScrollBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.ScrollBar.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
+override System.Windows.Forms.ScrollBar.Text.get -> string!
+override System.Windows.Forms.ScrollBar.Text.set -> void
+override System.Windows.Forms.ScrollBar.ToString() -> string!
 override System.Windows.Forms.ScrollBar.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ScrollableControl.DisplayRectangle.get -> System.Drawing.Rectangle
 override System.Windows.Forms.ScrollableControl.DockPaddingEdges.GetHashCode() -> int
@@ -7555,6 +7753,7 @@ override System.Windows.Forms.TabPage.MaximumSize.set -> void
 override System.Windows.Forms.TabPage.MinimumSize.get -> System.Drawing.Size
 override System.Windows.Forms.TabPage.MinimumSize.set -> void
 override System.Windows.Forms.TabPage.SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified) -> void
+override System.Windows.Forms.TabPage.TabPageControlCollection.Add(System.Windows.Forms.Control! value) -> void
 override System.Windows.Forms.TableLayoutPanel.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.TableLayoutPanel.ScaleCore(float dx, float dy) -> void
 override System.Windows.Forms.TableLayoutPanelCellPosition.GetHashCode() -> int
@@ -7831,6 +8030,7 @@ override System.Windows.Forms.UserControl.ValidateChildren() -> bool
 override System.Windows.Forms.UserControl.ValidateChildren(System.Windows.Forms.ValidationConstraints validationConstraints) -> bool
 override System.Windows.Forms.UserControl.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.VScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.VScrollBar.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.VScrollBar.RightToLeft.get -> System.Windows.Forms.RightToLeft
 override System.Windows.Forms.VScrollBar.RightToLeft.set -> void
@@ -7961,6 +8161,7 @@ static System.Windows.Forms.Cursors.VSplit.get -> System.Windows.Forms.Cursor!
 static System.Windows.Forms.Cursors.WaitCursor.get -> System.Windows.Forms.Cursor!
 static System.Windows.Forms.DateTimePicker.MaximumDateTime.get -> System.DateTime
 static System.Windows.Forms.DateTimePicker.MinimumDateTime.get -> System.DateTime
+static System.Windows.Forms.GridItemCollection.Empty -> System.Windows.Forms.GridItemCollection!
 static System.Windows.Forms.GroupBoxRenderer.IsBackgroundPartiallyTransparent(System.Windows.Forms.VisualStyles.GroupBoxState state) -> bool
 static System.Windows.Forms.GroupBoxRenderer.RenderMatchingApplicationState.get -> bool
 static System.Windows.Forms.GroupBoxRenderer.RenderMatchingApplicationState.set -> void
@@ -7970,7 +8171,13 @@ static System.Windows.Forms.ImeContext.GetImeMode(System.IntPtr handle) -> Syste
 static System.Windows.Forms.ImeContext.IsOpen(System.IntPtr handle) -> bool
 static System.Windows.Forms.ImeContext.SetImeStatus(System.Windows.Forms.ImeMode imeMode, System.IntPtr handle) -> void
 static System.Windows.Forms.ImeContext.SetOpenStatus(bool open, System.IntPtr handle) -> void
+static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>!
 static System.Windows.Forms.ImeModeConversion.IsCurrentConversionTableSupported.get -> bool
+static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
+static System.Windows.Forms.InputLanguage.CurrentInputLanguage.set -> void
+static System.Windows.Forms.InputLanguage.DefaultInputLanguage.get -> System.Windows.Forms.InputLanguage!
+static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.CultureInfo! culture) -> System.Windows.Forms.InputLanguage?
+static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection!
 static System.Windows.Forms.LinkArea.operator !=(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.LinkArea.operator ==(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.OSFeature.IsPresent(System.Windows.Forms.SystemParameter enumVal) -> bool
@@ -8643,12 +8850,21 @@ static System.Windows.Forms.VisualStyles.VisualStyleElement.Window.VerticalThumb
 static System.Windows.Forms.VisualStyles.VisualStyleElement.Window.VerticalThumb.Hot.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.Window.VerticalThumb.Normal.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
 static System.Windows.Forms.VisualStyles.VisualStyleElement.Window.VerticalThumb.Pressed.get -> System.Windows.Forms.VisualStyles.VisualStyleElement!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Author.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.ColorScheme.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Company.get -> string!
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.ControlHighlightHot.get -> System.Drawing.Color
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Copyright.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Description.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.DisplayName.get -> string!
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.IsEnabledByUser.get -> bool
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.IsSupportedByOS.get -> bool
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.MinimumColorDepth.get -> int
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Size.get -> string!
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.SupportsFlatMenus.get -> bool
 static System.Windows.Forms.VisualStyles.VisualStyleInformation.TextControlBorder.get -> System.Drawing.Color
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Url.get -> string!
+static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> string!
 static System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsElementDefined(System.Windows.Forms.VisualStyles.VisualStyleElement! element) -> bool
 static System.Windows.Forms.VisualStyles.VisualStyleRenderer.IsSupported.get -> bool
 static System.Windows.Forms.WindowsFormsSynchronizationContext.AutoInstall.get -> bool
@@ -8804,6 +9020,7 @@ virtual System.Windows.Forms.Control.MinimumSize.get -> System.Drawing.Size
 virtual System.Windows.Forms.Control.MinimumSize.set -> void
 virtual System.Windows.Forms.Control.NotifyInvalidate(System.Drawing.Rectangle invalidatedArea) -> void
 virtual System.Windows.Forms.Control.OnCreateControl() -> void
+virtual System.Windows.Forms.Control.OnImeModeChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.Control.OnNotifyMessage(System.Windows.Forms.Message m) -> void
 virtual System.Windows.Forms.Control.PreProcessMessage(ref System.Windows.Forms.Message msg) -> bool
 virtual System.Windows.Forms.Control.ProcessCmdKey(ref System.Windows.Forms.Message msg, System.Windows.Forms.Keys keyData) -> bool
@@ -8981,6 +9198,8 @@ virtual System.Windows.Forms.ListBox.DrawMode.set -> void
 virtual System.Windows.Forms.ListBox.ItemHeight.get -> int
 virtual System.Windows.Forms.ListBox.ItemHeight.set -> void
 virtual System.Windows.Forms.ListBox.ObjectCollection.Clear() -> void
+virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].get -> object!
+virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> void
 virtual System.Windows.Forms.ListBox.SelectionMode.get -> System.Windows.Forms.SelectionMode
 virtual System.Windows.Forms.ListBox.SelectionMode.set -> void
 virtual System.Windows.Forms.ListBox.Sort() -> void
@@ -9071,6 +9290,8 @@ virtual System.Windows.Forms.PropertyGrid.HelpVisible.get -> bool
 virtual System.Windows.Forms.PropertyGrid.HelpVisible.set -> void
 virtual System.Windows.Forms.PropertyGrid.ToolbarVisible.get -> bool
 virtual System.Windows.Forms.PropertyGrid.ToolbarVisible.set -> void
+virtual System.Windows.Forms.ScrollBar.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
+virtual System.Windows.Forms.ScrollBar.OnValueChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.ScrollableControl.AdjustFormScrollbars(bool displayScrollbars) -> void
 virtual System.Windows.Forms.ScrollableControl.AutoScroll.get -> bool
 virtual System.Windows.Forms.ScrollableControl.AutoScroll.set -> void
@@ -9231,10 +9452,6 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Resources.ResXResourceWriter.ResXResourceWriter(System.IO.TextWriter textWriter, System.Func<System.Type, string> typeNameConverter) -> void
 ~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName) -> void
 ~System.Resources.ResXResourceWriter.ResXResourceWriter(string fileName, System.Func<System.Type, string> typeNameConverter) -> void
-System.Windows.Forms.AmbientProperties.Cursor.get -> System.Windows.Forms.Cursor?
-System.Windows.Forms.AmbientProperties.Cursor.set -> void
-System.Windows.Forms.AmbientProperties.Font.get -> System.Drawing.Font?
-System.Windows.Forms.AmbientProperties.Font.set -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Add(string value) -> int
 ~System.Windows.Forms.AutoCompleteStringCollection.AddRange(string[] value) -> void
 ~System.Windows.Forms.AutoCompleteStringCollection.Contains(string value) -> bool
@@ -9307,8 +9524,6 @@ System.Windows.Forms.AmbientProperties.Font.set -> void
 ~System.Windows.Forms.BindingManagerBase.OnDataError(System.Exception e) -> void
 ~System.Windows.Forms.BindingManagerBase.onCurrentChangedHandler -> System.EventHandler
 ~System.Windows.Forms.BindingManagerBase.onPositionChangedHandler -> System.EventHandler
-System.Windows.Forms.BindingManagerDataErrorEventArgs.BindingManagerDataErrorEventArgs(System.Exception! exception) -> void
-System.Windows.Forms.BindingManagerDataErrorEventArgs.Exception.get -> System.Exception!
 ~System.Windows.Forms.BindingMemberInfo.BindingField.get -> string
 ~System.Windows.Forms.BindingMemberInfo.BindingMember.get -> string
 ~System.Windows.Forms.BindingMemberInfo.BindingMemberInfo(string dataMember) -> void
@@ -9347,7 +9562,6 @@ System.Windows.Forms.BindingManagerDataErrorEventArgs.Exception.get -> System.Ex
 ~System.Windows.Forms.BindingSource.Sort.get -> string
 ~System.Windows.Forms.BindingSource.Sort.set -> void
 ~System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding
-System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.ButtonBaseAccessibleObject(System.Windows.Forms.Control! owner) -> void
 ~System.Windows.Forms.ButtonBase.FlatAppearance.get -> System.Windows.Forms.FlatButtonAppearance
 ~System.Windows.Forms.ButtonBase.Image.get -> System.Drawing.Image
 ~System.Windows.Forms.ButtonBase.Image.set -> void
@@ -9355,7 +9569,6 @@ System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.ButtonBaseAccessibleO
 ~System.Windows.Forms.ButtonBase.ImageKey.set -> void
 ~System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList
 ~System.Windows.Forms.ButtonBase.ImageList.set -> void
-System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(System.Windows.Forms.Control! owner) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection
@@ -9501,10 +9714,6 @@ System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.CheckBoxAccessibleObject(
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control control) -> void
-System.Windows.Forms.ConvertEventArgs.ConvertEventArgs(object? value, System.Type? desiredType) -> void
-System.Windows.Forms.ConvertEventArgs.DesiredType.get -> System.Type?
-System.Windows.Forms.ConvertEventArgs.Value.get -> object?
-System.Windows.Forms.ConvertEventArgs.Value.set -> void
 ~System.Windows.Forms.CreateParams.Caption.get -> string
 ~System.Windows.Forms.CreateParams.Caption.set -> void
 ~System.Windows.Forms.CreateParams.ClassName.get -> string
@@ -9525,13 +9734,9 @@ System.Windows.Forms.ConvertEventArgs.Value.set -> void
 ~System.Windows.Forms.DataGridView.CurrentCell.get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridView.CurrentCell.set -> void
 ~System.Windows.Forms.DataGridView.CurrentRow.get -> System.Windows.Forms.DataGridViewRow
-System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.DataGridViewAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
 ~System.Windows.Forms.DataGridView.DataGridViewControlCollection.CopyTo(System.Windows.Forms.Control[] array, int index) -> void
 ~System.Windows.Forms.DataGridView.DataGridViewControlCollection.DataGridViewControlCollection(System.Windows.Forms.DataGridView owner) -> void
 ~System.Windows.Forms.DataGridView.DataGridViewControlCollection.Insert(int index, System.Windows.Forms.Control value) -> void
-System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.DataGridViewTopRowAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
-System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.get -> System.Windows.Forms.DataGridView?
-System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.set -> void
 ~System.Windows.Forms.DataGridView.DataMember.get -> string
 ~System.Windows.Forms.DataGridView.DataMember.set -> void
 ~System.Windows.Forms.DataGridView.DataSource.get -> object
@@ -9568,13 +9773,9 @@ System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.set -
 ~System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewAutoSizeColumnMode previousMode) -> void
 ~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[] previousModes) -> void
 ~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]
-System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DataGridViewButtonCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DataGridViewCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
-System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.get -> System.Windows.Forms.DataGridViewCell?
-System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.set -> void
 ~System.Windows.Forms.DataGridViewCell.EditedFormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCell.ErrorText.get -> string
 ~System.Windows.Forms.DataGridViewCell.ErrorText.set -> void
@@ -9638,7 +9839,6 @@ System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Owner.set
 ~System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCellValueEventArgs.Value.get -> object
 ~System.Windows.Forms.DataGridViewCellValueEventArgs.Value.set -> void
-System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DataGridViewCheckBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object
@@ -9681,10 +9881,8 @@ System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessible
 ~System.Windows.Forms.DataGridViewColumnDividerDoubleClickEventArgs.DataGridViewColumnDividerDoubleClickEventArgs(int columnIndex, System.Windows.Forms.HandledMouseEventArgs e) -> void
 ~System.Windows.Forms.DataGridViewColumnEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewColumnEventArgs.DataGridViewColumnEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
-System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DataGridViewColumnHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewColumnHeaderCell? owner) -> void
 ~System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.DataGridViewColumnStateChangedEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
-System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellAccessibleObject.DataGridViewComboBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Add(object item) -> int
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection value) -> void
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(params object[] items) -> void
@@ -9708,7 +9906,6 @@ System.Windows.Forms.DataGridViewComboBoxCell.DataGridViewComboBoxCellAccessible
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.CellStyle.set -> void
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.DataGridViewEditingControlShowingEventArgs(System.Windows.Forms.Control control, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
-System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DataGridViewImageCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
 ~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Description.get -> string
@@ -9717,7 +9914,6 @@ System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject
 ~System.Windows.Forms.DataGridViewImageColumn.Icon.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Image.get -> System.Drawing.Image
 ~System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
-System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DataGridViewLinkCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
@@ -9752,7 +9948,6 @@ System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.D
 ~System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.set -> void
 ~System.Windows.Forms.DataGridViewRowEventArgs.DataGridViewRowEventArgs(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
 ~System.Windows.Forms.DataGridViewRowEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow
-System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DataGridViewRowHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewRowHeaderCell? owner) -> void
 ~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.DataGridViewRowPostPaintEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, string errorText, System.Windows.Forms.DataGridViewCellStyle inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
 ~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.ErrorText.get -> string
 ~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.Graphics.get -> System.Drawing.Graphics
@@ -9779,12 +9974,9 @@ System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessib
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-System.Windows.Forms.DataGridViewTextBoxCell.DataGridViewTextBoxCellAccessibleObject.DataGridViewTextBoxCellAccessibleObject(System.Windows.Forms.DataGridViewCell? owner) -> void
 ~System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DataGridViewTopLeftHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewTopLeftHeaderCell owner) -> void
 ~System.Windows.Forms.DataObject.DataObject(object data) -> void
 ~System.Windows.Forms.DataObject.DataObject(string format, object data) -> void
-System.Windows.Forms.DateBoldEventArgs.DaysToBold.get -> int[]?
-System.Windows.Forms.DateBoldEventArgs.DaysToBold.set -> void
 ~System.Windows.Forms.DateTimePicker.CalendarFont.get -> System.Drawing.Font
 ~System.Windows.Forms.DateTimePicker.CalendarFont.set -> void
 ~System.Windows.Forms.DateTimePicker.CustomFormat.get -> string
@@ -9819,33 +10011,6 @@ System.Windows.Forms.DateBoldEventArgs.DaysToBold.set -> void
 ~System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
 ~System.Windows.Forms.DomainUpDown.SelectedItem.get -> object
 ~System.Windows.Forms.DomainUpDown.SelectedItem.set -> void
-System.Windows.Forms.DragEventArgs.Data.get -> System.Windows.Forms.IDataObject?
-System.Windows.Forms.DragEventArgs.DragEventArgs(System.Windows.Forms.IDataObject? data, int keyState, int x, int y, System.Windows.Forms.DragDropEffects allowedEffect, System.Windows.Forms.DragDropEffects effect) -> void
-System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Font? font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state) -> void
-System.Windows.Forms.DrawItemEventArgs.DrawItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Font? font, System.Drawing.Rectangle rect, int index, System.Windows.Forms.DrawItemState state, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
-System.Windows.Forms.DrawItemEventArgs.Font.get -> System.Drawing.Font?
-System.Windows.Forms.DrawItemEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.DrawListViewColumnHeaderEventArgs.DrawListViewColumnHeaderEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates state, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font? font) -> void
-System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Font.get -> System.Drawing.Font?
-System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.DrawListViewColumnHeaderEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
-System.Windows.Forms.DrawListViewItemEventArgs.DrawListViewItemEventArgs(System.Drawing.Graphics! graphics, System.Windows.Forms.ListViewItem! item, System.Drawing.Rectangle bounds, int itemIndex, System.Windows.Forms.ListViewItemStates state) -> void
-System.Windows.Forms.DrawListViewItemEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.DrawListViewItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem!
-System.Windows.Forms.DrawListViewSubItemEventArgs.DrawListViewSubItemEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Windows.Forms.ListViewItem? item, System.Windows.Forms.ListViewItem.ListViewSubItem? subItem, int itemIndex, int columnIndex, System.Windows.Forms.ColumnHeader? header, System.Windows.Forms.ListViewItemStates itemState) -> void
-System.Windows.Forms.DrawListViewSubItemEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.DrawListViewSubItemEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
-System.Windows.Forms.DrawListViewSubItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
-System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.Forms.ListViewItem.ListViewSubItem?
-~System.Windows.Forms.DrawToolTipEventArgs.AssociatedControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.DrawToolTipEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window
-~System.Windows.Forms.DrawToolTipEventArgs.DrawToolTipEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.IWin32Window associatedWindow, System.Windows.Forms.Control associatedControl, System.Drawing.Rectangle bounds, string toolTipText, System.Drawing.Color backColor, System.Drawing.Color foreColor, System.Drawing.Font font) -> void
-~System.Windows.Forms.DrawToolTipEventArgs.Font.get -> System.Drawing.Font
-~System.Windows.Forms.DrawToolTipEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawToolTipEventArgs.ToolTipText.get -> string
-~System.Windows.Forms.DrawTreeNodeEventArgs.DrawTreeNodeEventArgs(System.Drawing.Graphics graphics, System.Windows.Forms.TreeNode node, System.Drawing.Rectangle bounds, System.Windows.Forms.TreeNodeStates state) -> void
-~System.Windows.Forms.DrawTreeNodeEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DrawTreeNodeEventArgs.Node.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.ErrorProvider.BindToDataAndErrors(object newDataSource, string newDataMember) -> void
 ~System.Windows.Forms.ErrorProvider.CanExtend(object extendee) -> bool
 ~System.Windows.Forms.ErrorProvider.ContainerControl.get -> System.Windows.Forms.ContainerControl
@@ -9866,7 +10031,6 @@ System.Windows.Forms.DrawListViewSubItemEventArgs.SubItem.get -> System.Windows.
 ~System.Windows.Forms.ErrorProvider.SetIconPadding(System.Windows.Forms.Control control, int padding) -> void
 ~System.Windows.Forms.ErrorProvider.Tag.get -> object
 ~System.Windows.Forms.ErrorProvider.Tag.set -> void
-System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDialogCustomPlacesCollection!
 ~System.Windows.Forms.FileDialog.DefaultExt.get -> string
 ~System.Windows.Forms.FileDialog.DefaultExt.set -> void
 ~System.Windows.Forms.FileDialog.FileName.get -> string
@@ -9884,6 +10048,8 @@ System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDia
 ~System.Windows.Forms.FlowLayoutSettings.SetFlowBreak(object child, bool value) -> void
 ~System.Windows.Forms.FolderBrowserDialog.Description.get -> string
 ~System.Windows.Forms.FolderBrowserDialog.Description.set -> void
+~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.get -> string
+~System.Windows.Forms.FolderBrowserDialog.InitialDirectory.set -> void
 ~System.Windows.Forms.FolderBrowserDialog.SelectedPath.get -> string
 ~System.Windows.Forms.FolderBrowserDialog.SelectedPath.set -> void
 ~System.Windows.Forms.FontDialog.Font.get -> System.Drawing.Font
@@ -9909,12 +10075,6 @@ System.Windows.Forms.FileDialog.CustomPlaces.get -> System.Windows.Forms.FileDia
 ~System.Windows.Forms.Form.RemoveOwnedForm(System.Windows.Forms.Form ownedForm) -> void
 ~System.Windows.Forms.Form.Show(System.Windows.Forms.IWin32Window owner) -> void
 ~System.Windows.Forms.Form.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
-System.Windows.Forms.GridItem.Tag.get -> object?
-System.Windows.Forms.GridItem.Tag.set -> void
-System.Windows.Forms.GridItemCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.GridItemCollection.this[int index].get -> System.Windows.Forms.GridItem!
-System.Windows.Forms.GridItemCollection.this[string! label].get -> System.Windows.Forms.GridItem?
-System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.HelpProvider.Tag.get -> object
 ~System.Windows.Forms.HelpProvider.Tag.set -> void
 ~System.Windows.Forms.HtmlDocument.ActiveElement.get -> System.Windows.Forms.HtmlElement
@@ -9983,8 +10143,6 @@ System.Windows.Forms.HScrollProperties.HScrollProperties(System.Windows.Forms.Sc
 ~System.Windows.Forms.HtmlElementCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.HtmlElementCollection.this[int index].get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElementCollection.this[string elementId].get -> System.Windows.Forms.HtmlElement
-System.Windows.Forms.HtmlElementErrorEventArgs.Description.get -> string!
-System.Windows.Forms.HtmlElementErrorEventArgs.Url.get -> System.Uri!
 ~System.Windows.Forms.HtmlElementEventArgs.EventType.get -> string
 ~System.Windows.Forms.HtmlElementEventArgs.FromElement.get -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.HtmlElement
@@ -10086,24 +10244,8 @@ System.Windows.Forms.HtmlElementErrorEventArgs.Url.get -> System.Uri!
 ~System.Windows.Forms.ImageList.Tag.get -> object
 ~System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-System.Windows.Forms.InputLanguage.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguage.LayoutName.get -> string!
-System.Windows.Forms.InputLanguageChangedEventArgs.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage!
-System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Globalization.CultureInfo! culture, byte charSet) -> void
-System.Windows.Forms.InputLanguageChangedEventArgs.InputLanguageChangedEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, byte charSet) -> void
-System.Windows.Forms.InputLanguageChangingEventArgs.Culture.get -> System.Globalization.CultureInfo!
-System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguage.get -> System.Windows.Forms.InputLanguage!
-System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Globalization.CultureInfo! culture, bool sysCharSet) -> void
-System.Windows.Forms.InputLanguageChangingEventArgs.InputLanguageChangingEventArgs(System.Windows.Forms.InputLanguage! inputLanguage, bool sysCharSet) -> void
-System.Windows.Forms.InputLanguageCollection.Contains(System.Windows.Forms.InputLanguage? value) -> bool
-System.Windows.Forms.InputLanguageCollection.CopyTo(System.Windows.Forms.InputLanguage![]! array, int index) -> void
-System.Windows.Forms.InputLanguageCollection.IndexOf(System.Windows.Forms.InputLanguage? value) -> int
-System.Windows.Forms.InputLanguageCollection.this[int index].get -> System.Windows.Forms.InputLanguage!
 ~System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem item) -> void
-System.Windows.Forms.ItemDragEventArgs.Item.get -> object?
-System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.MouseButtons button, object? item) -> void
 ~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
 ~System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
 ~System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics g, System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
@@ -10113,16 +10255,12 @@ System.Windows.Forms.ItemDragEventArgs.ItemDragEventArgs(System.Windows.Forms.Mo
 ~System.Windows.Forms.Label.ImageKey.set -> void
 ~System.Windows.Forms.Label.ImageList.get -> System.Windows.Forms.ImageList
 ~System.Windows.Forms.Label.ImageList.set -> void
-System.Windows.Forms.LabelEditEventArgs.Label.get -> string?
-System.Windows.Forms.LabelEditEventArgs.LabelEditEventArgs(int item, string? label) -> void
 ~System.Windows.Forms.Layout.ArrangedElementCollection.CopyTo(System.Array array, int index) -> void
 ~System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string
 ~System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.ComponentModel.IComponent affectedComponent, string affectedProperty) -> void
 ~System.Windows.Forms.LayoutEventArgs.LayoutEventArgs(System.Windows.Forms.Control affectedControl, string affectedProperty) -> void
-System.Windows.Forms.LinkClickedEventArgs.LinkClickedEventArgs(string? linkText) -> void
-System.Windows.Forms.LinkClickedEventArgs.LinkText.get -> string?
 ~System.Windows.Forms.LinkLabel.Link.Description.get -> string
 ~System.Windows.Forms.LinkLabel.Link.Description.set -> void
 ~System.Windows.Forms.LinkLabel.Link.Link(int start, int length, object linkData) -> void
@@ -10157,18 +10295,6 @@ System.Windows.Forms.LinkClickedEventArgs.LinkText.get -> string?
 ~System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox owner) -> void
 ~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
-System.Windows.Forms.ListBox.ObjectCollection.Add(object! item) -> int
-System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection! value) -> void
-System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
-System.Windows.Forms.ListBox.ObjectCollection.Contains(object! value) -> bool
-System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
-System.Windows.Forms.ListBox.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.ListBox.ObjectCollection.IndexOf(object! value) -> int
-System.Windows.Forms.ListBox.ObjectCollection.Insert(int index, object! item) -> void
-System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner) -> void
-System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, System.Windows.Forms.ListBox.ObjectCollection! value) -> void
-System.Windows.Forms.ListBox.ObjectCollection.ObjectCollection(System.Windows.Forms.ListBox! owner, object![]! value) -> void
-System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.SelectedIndexCollection(System.Windows.Forms.ListBox owner) -> void
@@ -10201,8 +10327,6 @@ System.Windows.Forms.ListBox.ObjectCollection.Remove(object! value) -> void
 ~System.Windows.Forms.ListControl.SelectedValue.set -> void
 ~System.Windows.Forms.ListControl.ValueMember.get -> string
 ~System.Windows.Forms.ListControl.ValueMember.set -> void
-System.Windows.Forms.ListControlConvertEventArgs.ListControlConvertEventArgs(object? value, System.Type? desiredType, object? listItem) -> void
-System.Windows.Forms.ListControlConvertEventArgs.ListItem.get -> object?
 ~System.Windows.Forms.ListView.CheckedIndexCollection.CheckedIndexCollection(System.Windows.Forms.ListView owner) -> void
 ~System.Windows.Forms.ListView.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListView.CheckedIndices.get -> System.Windows.Forms.ListView.CheckedIndexCollection
@@ -10376,9 +10500,6 @@ System.Windows.Forms.ListControlConvertEventArgs.ListItem.get -> object?
 ~System.Windows.Forms.MaskedTextBox.ValidatingType.set -> void
 ~System.Windows.Forms.MdiClient.ControlCollection.ControlCollection(System.Windows.Forms.MdiClient owner) -> void
 ~System.Windows.Forms.MdiClient.MdiChildren.get -> System.Windows.Forms.Form[]
-System.Windows.Forms.MeasureItemEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.MeasureItemEventArgs.MeasureItemEventArgs(System.Drawing.Graphics! graphics, int index) -> void
-System.Windows.Forms.MeasureItemEventArgs.MeasureItemEventArgs(System.Drawing.Graphics! graphics, int index, int itemHeight) -> void
 ~System.Windows.Forms.MenuStrip.MdiWindowListItem.get -> System.Windows.Forms.ToolStripMenuItem
 ~System.Windows.Forms.MenuStrip.MdiWindowListItem.set -> void
 ~System.Windows.Forms.MonthCalendar.AnnuallyBoldedDates.get -> System.DateTime[]
@@ -10431,8 +10552,6 @@ System.Windows.Forms.MeasureItemEventArgs.MeasureItemEventArgs(System.Drawing.Gr
 ~System.Windows.Forms.PageSetupDialog.PageSettings.set -> void
 ~System.Windows.Forms.PageSetupDialog.PrinterSettings.get -> System.Drawing.Printing.PrinterSettings
 ~System.Windows.Forms.PageSetupDialog.PrinterSettings.set -> void
-System.Windows.Forms.PaintEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.PaintEventArgs.PaintEventArgs(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipRect) -> void
 ~System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image
 ~System.Windows.Forms.PictureBox.ErrorImage.set -> void
 ~System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image
@@ -10493,20 +10612,6 @@ System.Windows.Forms.PaintEventArgs.PaintEventArgs(System.Drawing.Graphics! grap
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
 ~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
 ~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
-System.Windows.Forms.PropertyTabChangedEventArgs.NewTab.get -> System.Windows.Forms.Design.PropertyTab?
-System.Windows.Forms.PropertyTabChangedEventArgs.OldTab.get -> System.Windows.Forms.Design.PropertyTab?
-System.Windows.Forms.PropertyTabChangedEventArgs.PropertyTabChangedEventArgs(System.Windows.Forms.Design.PropertyTab? oldTab, System.Windows.Forms.Design.PropertyTab? newTab) -> void
-System.Windows.Forms.PropertyValueChangedEventArgs.ChangedItem.get -> System.Windows.Forms.GridItem?
-System.Windows.Forms.PropertyValueChangedEventArgs.OldValue.get -> object?
-System.Windows.Forms.PropertyValueChangedEventArgs.PropertyValueChangedEventArgs(System.Windows.Forms.GridItem? changedItem, object? oldValue) -> void
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.get -> string?
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpKeyword.set -> void
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpNamespace.get -> string?
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpNamespace.set -> void
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpString.get -> string?
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.HelpString.set -> void
-System.Windows.Forms.QueryAccessibilityHelpEventArgs.QueryAccessibilityHelpEventArgs(string? helpNamespace, string? helpString, string? helpKeyword) -> void
-System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.RadioButtonAccessibleObject(System.Windows.Forms.RadioButton! owner) -> void
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
 ~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
@@ -10539,14 +10644,10 @@ System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.RadioButtonAccessib
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
 ~System.Windows.Forms.SaveFileDialog.OpenFile() -> System.IO.Stream
 ~System.Windows.Forms.Screen.DeviceName.get -> string
-System.Windows.Forms.ScrollProperties.ParentControl.get -> System.Windows.Forms.ScrollableControl?
-System.Windows.Forms.ScrollProperties.ScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.ScrollableControl.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
 ~System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
 ~System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control activeControl) -> void
 ~System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
-System.Windows.Forms.SearchForVirtualItemEventArgs.SearchForVirtualItemEventArgs(bool isTextSearch, bool isPrefixSearch, bool includeSubItemsInSearch, string? text, System.Drawing.Point startingPoint, System.Windows.Forms.SearchDirectionHint direction, int startIndex) -> void
-System.Windows.Forms.SearchForVirtualItemEventArgs.Text.get -> string?
 ~System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem
 ~System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem
 ~System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem oldSel, System.Windows.Forms.GridItem newSel) -> void
@@ -10590,14 +10691,9 @@ System.Windows.Forms.SearchForVirtualItemEventArgs.Text.get -> string?
 ~System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage value) -> void
 ~System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
-System.Windows.Forms.TabControlCancelEventArgs.TabControlCancelEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, bool cancel, System.Windows.Forms.TabControlAction action) -> void
-System.Windows.Forms.TabControlCancelEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
-System.Windows.Forms.TabControlEventArgs.TabControlEventArgs(System.Windows.Forms.TabPage? tabPage, int tabPageIndex, System.Windows.Forms.TabControlAction action) -> void
-System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.TabPage?
 ~System.Windows.Forms.TabPage.ImageKey.get -> string
 ~System.Windows.Forms.TabPage.ImageKey.set -> void
 ~System.Windows.Forms.TabPage.TabPage(string text) -> void
-~System.Windows.Forms.TabPage.TabPageControlCollection.TabPageControlCollection(System.Windows.Forms.TabPage owner) -> void
 ~System.Windows.Forms.TabPage.ToolTipText.get -> string
 ~System.Windows.Forms.TabPage.ToolTipText.set -> void
 ~System.Windows.Forms.TableLayoutCellPaintEventArgs.TableLayoutCellPaintEventArgs(System.Drawing.Graphics g, System.Drawing.Rectangle clipRectangle, System.Drawing.Rectangle cellBounds, int column, int row) -> void
@@ -10720,7 +10816,6 @@ System.Windows.Forms.TabControlEventArgs.TabPage.get -> System.Windows.Forms.Tab
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
-System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject.ToolStripHostedControlAccessibleObject(System.Windows.Forms.Control! toolStripHostedControl, System.Windows.Forms.ToolStripControlHost? toolStripControlHost) -> void
 ~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~System.Windows.Forms.ToolStripDropDown.ContextMenuStrip.set -> void
 ~System.Windows.Forms.ToolStripDropDown.OverflowButton.get -> System.Windows.Forms.ToolStripOverflowButton
@@ -10977,19 +11072,11 @@ System.Windows.Forms.ToolStripControlHost.ToolStripHostedControlAccessibleObject
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-System.Windows.Forms.TreeViewCancelEventArgs.Node.get -> System.Windows.Forms.TreeNode?
-System.Windows.Forms.TreeViewCancelEventArgs.TreeViewCancelEventArgs(System.Windows.Forms.TreeNode? node, bool cancel, System.Windows.Forms.TreeViewAction action) -> void
-System.Windows.Forms.TreeViewEventArgs.Node.get -> System.Windows.Forms.TreeNode?
-System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node) -> void
-System.Windows.Forms.TreeViewEventArgs.TreeViewEventArgs(System.Windows.Forms.TreeNode? node, System.Windows.Forms.TreeViewAction action) -> void
-System.Windows.Forms.TreeViewHitTestInfo.Node.get -> System.Windows.Forms.TreeNode?
-System.Windows.Forms.TreeViewHitTestInfo.TreeViewHitTestInfo(System.Windows.Forms.TreeNode? hitNode, System.Windows.Forms.TreeViewHitTestLocations hitLocation) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.Message.get -> string
 ~System.Windows.Forms.TypeValidationEventArgs.ReturnValue.get -> object
 ~System.Windows.Forms.TypeValidationEventArgs.TypeValidationEventArgs(System.Type validatingType, bool isValidInput, object returnValue, string message) -> void
 ~System.Windows.Forms.TypeValidationEventArgs.ValidatingType.get -> System.Type
 ~System.Windows.Forms.UpDownBase.DockPadding.get -> System.Windows.Forms.ScrollableControl.DockPaddingEdges
-System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.ScrollableControl? container) -> void
 ~System.Windows.Forms.WebBrowser.Document.get -> System.Windows.Forms.HtmlDocument
 ~System.Windows.Forms.WebBrowser.DocumentStream.get -> System.IO.Stream
 ~System.Windows.Forms.WebBrowser.DocumentStream.set -> void
@@ -11013,10 +11100,6 @@ System.Windows.Forms.VScrollProperties.VScrollProperties(System.Windows.Forms.Sc
 ~System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser host) -> void
 ~System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object
 ~System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-System.Windows.Forms.WebBrowserDocumentCompletedEventArgs.Url.get -> System.Uri?
-System.Windows.Forms.WebBrowserDocumentCompletedEventArgs.WebBrowserDocumentCompletedEventArgs(System.Uri? url) -> void
-System.Windows.Forms.WebBrowserNavigatedEventArgs.Url.get -> System.Uri?
-System.Windows.Forms.WebBrowserNavigatedEventArgs.WebBrowserNavigatedEventArgs(System.Uri? url) -> void
 ~System.Windows.Forms.WebBrowserNavigatingEventArgs.TargetFrameName.get -> string
 ~System.Windows.Forms.WebBrowserNavigatingEventArgs.Url.get -> System.Uri
 ~System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs(System.Uri url, string targetFrameName) -> void
@@ -11027,11 +11110,6 @@ System.Windows.Forms.WebBrowserNavigatedEventArgs.WebBrowserNavigatedEventArgs(S
 ~abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
 ~abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string
 ~abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object feature) -> System.Version
-abstract System.Windows.Forms.GridItem.GridItems.get -> System.Windows.Forms.GridItemCollection!
-abstract System.Windows.Forms.GridItem.Label.get -> string?
-abstract System.Windows.Forms.GridItem.Parent.get -> System.Windows.Forms.GridItem?
-abstract System.Windows.Forms.GridItem.PropertyDescriptor.get -> System.ComponentModel.PropertyDescriptor?
-abstract System.Windows.Forms.GridItem.Value.get -> object?
 ~abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList items) -> void
 ~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
@@ -11089,7 +11167,6 @@ abstract System.Windows.Forms.GridItem.Value.get -> object?
 ~override System.Windows.Forms.ButtonBase.OnVisibleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ButtonBase.Text.get -> string
 ~override System.Windows.Forms.ButtonBase.Text.set -> void
-override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.CheckBox.OnClick(System.EventArgs e) -> void
@@ -11127,6 +11204,8 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.ComboBox.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~override System.Windows.Forms.ComboBox.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
 ~override System.Windows.Forms.ComboBox.OnLostFocus(System.EventArgs e) -> void
+~override System.Windows.Forms.ComboBox.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
+~override System.Windows.Forms.ComboBox.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
 ~override System.Windows.Forms.ComboBox.OnMouseEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.ComboBox.OnMouseLeave(System.EventArgs e) -> void
 ~override System.Windows.Forms.ComboBox.OnParentBackColorChanged(System.EventArgs e) -> void
@@ -11164,17 +11243,7 @@ override System.Windows.Forms.CheckBox.CheckBoxAccessibleObject.DefaultAction.ge
 ~override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.DataGridView.DataGridViewControlCollection.Remove(System.Windows.Forms.Control value) -> void
-override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Name.get -> string!
-override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
@@ -11215,7 +11284,6 @@ override System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Va
 ~override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string
 ~override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.DataGridViewButtonCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewButtonCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewButtonCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11240,15 +11308,6 @@ override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAcces
 ~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DefaultAction.get -> string!
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetFocused() -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.GetSelected() -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Name.get -> string?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.get -> string?
-override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Value.set -> void
 ~override System.Windows.Forms.DataGridViewCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList
 ~override System.Windows.Forms.DataGridViewCellStyle.Equals(object o) -> bool
@@ -11259,7 +11318,6 @@ override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11298,11 +11356,6 @@ override System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCellA
 ~override System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.DefaultAction.get -> string!
-override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Name.get -> string!
-override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHeaderCellAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
@@ -11349,10 +11402,6 @@ override System.Windows.Forms.DataGridViewColumnHeaderCell.DataGridViewColumnHea
 ~override System.Windows.Forms.DataGridViewHeaderCell.ValueType.set -> void
 ~override System.Windows.Forms.DataGridViewImageCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewImageCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.DefaultAction.get -> string!
-override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Description.get -> string?
-override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.get -> string?
-override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessibleObject.Value.set -> void
 ~override System.Windows.Forms.DataGridViewImageCell.DefaultNewRowValue.get -> object
 ~override System.Windows.Forms.DataGridViewImageCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewImageCell.FormattedValueType.get -> System.Type
@@ -11373,7 +11422,6 @@ override System.Windows.Forms.DataGridViewImageCell.DataGridViewImageCellAccessi
 ~override System.Windows.Forms.DataGridViewImageColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewLinkCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewLinkCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.DataGridViewLinkCell.EditType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewLinkCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewLinkCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11411,11 +11459,6 @@ override System.Windows.Forms.DataGridViewLinkCell.DataGridViewLinkCellAccessibl
 ~override System.Windows.Forms.DataGridViewRow.ToString() -> string
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.DefaultAction.get -> string!
-override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Name.get -> string?
-override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
-override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCellAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -11532,7 +11575,6 @@ override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCel
 ~override System.Windows.Forms.GroupBox.Text.get -> string
 ~override System.Windows.Forms.GroupBox.Text.set -> void
 ~override System.Windows.Forms.GroupBox.ToString() -> string
-override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.HelpProvider.ToString() -> string
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
@@ -11549,7 +11591,6 @@ override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Form
 ~override System.Windows.Forms.ImageKeyConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Windows.Forms.ImageKeyConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Windows.Forms.ImageList.ToString() -> string
-override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
@@ -11646,6 +11687,7 @@ override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.ListView.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnHandleDestroyed(System.EventArgs e) -> void
+~override System.Windows.Forms.ListView.OnLostFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnMouseHover(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnMouseLeave(System.EventArgs e) -> void
 ~override System.Windows.Forms.ListView.OnParentChanged(System.EventArgs e) -> void
@@ -11790,7 +11832,6 @@ override System.Windows.Forms.InputLanguage.Equals(object? value) -> bool
 ~override System.Windows.Forms.RadioButton.OnEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.RadioButton.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.RadioButton.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DefaultAction.get -> string!
 ~override System.Windows.Forms.RadioButton.ToString() -> string
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
@@ -11808,17 +11849,6 @@ override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.DefaultAct
 ~override System.Windows.Forms.RichTextBox.Text.set -> void
 ~override System.Windows.Forms.Screen.Equals(object obj) -> bool
 ~override System.Windows.Forms.Screen.ToString() -> string
-override System.Windows.Forms.ScrollBar.BackgroundImage.get -> System.Drawing.Image?
-override System.Windows.Forms.ScrollBar.BackgroundImage.set -> void
-override System.Windows.Forms.ScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
-override System.Windows.Forms.ScrollBar.Font.get -> System.Drawing.Font!
-override System.Windows.Forms.ScrollBar.Font.set -> void
-override System.Windows.Forms.ScrollBar.OnEnabledChanged(System.EventArgs! e) -> void
-override System.Windows.Forms.ScrollBar.OnHandleCreated(System.EventArgs! e) -> void
-override System.Windows.Forms.ScrollBar.OnMouseWheel(System.Windows.Forms.MouseEventArgs! e) -> void
-override System.Windows.Forms.ScrollBar.Text.get -> string!
-override System.Windows.Forms.ScrollBar.Text.set -> void
-override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.ScrollableControl.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.Equals(object other) -> bool
 ~override System.Windows.Forms.ScrollableControl.DockPaddingEdges.ToString() -> string
@@ -11885,10 +11915,12 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.TabControl.OnEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.OnFontChanged(System.EventArgs e) -> void
+~override System.Windows.Forms.TabControl.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.OnHandleDestroyed(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.OnKeyDown(System.Windows.Forms.KeyEventArgs ke) -> void
 ~override System.Windows.Forms.TabControl.OnLeave(System.EventArgs e) -> void
+~override System.Windows.Forms.TabControl.OnLostFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.OnResize(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.OnStyleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.Text.get -> string
@@ -11898,7 +11930,6 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.TabPage.OnEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabPage.OnLeave(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabPage.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.TabPage.TabPageControlCollection.Add(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.TabPage.Text.get -> string
 ~override System.Windows.Forms.TabPage.Text.set -> void
 ~override System.Windows.Forms.TabPage.ToString() -> string
@@ -12174,7 +12205,6 @@ override System.Windows.Forms.ScrollBar.ToString() -> string!
 ~override System.Windows.Forms.UserControl.OnResize(System.EventArgs e) -> void
 ~override System.Windows.Forms.UserControl.Text.get -> string
 ~override System.Windows.Forms.UserControl.Text.set -> void
-override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.WebBrowser.AttachInterfaces(object nativeActiveXObject) -> void
 ~override System.Windows.Forms.WebBrowser.CreateWebBrowserSiteBase() -> System.Windows.Forms.WebBrowserSiteBase
 ~override System.Windows.Forms.WebBrowserBase.BackgroundImage.get -> System.Drawing.Image
@@ -12324,7 +12354,6 @@ override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Form
 ~static System.Windows.Forms.FeatureSupport.IsPresent(string featureClassName, string featureConstName, System.Version minimumVersion) -> bool
 ~static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form
 ~static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font font) -> System.Drawing.SizeF
-static System.Windows.Forms.GridItemCollection.Empty -> System.Windows.Forms.GridItemCollection!
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
@@ -12343,12 +12372,6 @@ static System.Windows.Forms.GridItemCollection.Empty -> System.Windows.Forms.Gri
 ~static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
-static System.Windows.Forms.ImeModeConversion.ImeModeConversionBits.get -> System.Collections.Generic.Dictionary<System.Windows.Forms.ImeMode, System.Windows.Forms.ImeModeConversion>!
-static System.Windows.Forms.InputLanguage.CurrentInputLanguage.get -> System.Windows.Forms.InputLanguage!
-static System.Windows.Forms.InputLanguage.CurrentInputLanguage.set -> void
-static System.Windows.Forms.InputLanguage.DefaultInputLanguage.get -> System.Windows.Forms.InputLanguage!
-static System.Windows.Forms.InputLanguage.FromCulture(System.Globalization.CultureInfo! culture) -> System.Windows.Forms.InputLanguage?
-static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.Windows.Forms.InputLanguageCollection!
 ~static System.Windows.Forms.ListBindingHelper.GetList(object dataSource, string dataMember) -> object
 ~static System.Windows.Forms.ListBindingHelper.GetList(object list) -> object
 ~static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object dataSource, string dataMember, System.ComponentModel.PropertyDescriptor[] listAccessors) -> System.ComponentModel.PropertyDescriptorCollection
@@ -12464,15 +12487,6 @@ static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.
 ~static System.Windows.Forms.TrackBarRenderer.GetRightPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
 ~static System.Windows.Forms.TrackBarRenderer.GetTopPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, System.IntPtr handle) -> System.Windows.Forms.TreeNode
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Author.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.ColorScheme.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Company.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Copyright.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Description.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.DisplayName.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Size.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Url.get -> string!
-static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> string!
 ~static readonly System.Resources.ResXResourceWriter.BinSerializedObjectMimeType -> string
 ~static readonly System.Resources.ResXResourceWriter.ByteArraySerializedObjectMimeType -> string
 ~static readonly System.Resources.ResXResourceWriter.DefaultSerializedObjectMimeType -> string
@@ -12637,7 +12651,6 @@ static System.Windows.Forms.VisualStyles.VisualStyleInformation.Version.get -> s
 ~virtual System.Windows.Forms.Control.OnHandleCreated(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnHandleDestroyed(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnHelpRequested(System.Windows.Forms.HelpEventArgs hevent) -> void
-virtual System.Windows.Forms.Control.OnImeModeChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.Control.OnInvalidated(System.Windows.Forms.InvalidateEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~virtual System.Windows.Forms.Control.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
@@ -13026,8 +13039,6 @@ virtual System.Windows.Forms.Control.OnImeModeChanged(System.EventArgs! e) -> vo
 ~virtual System.Windows.Forms.LinkLabel.OnLinkClicked(System.Windows.Forms.LinkLabelLinkClickedEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.AddItemsCore(object[] value) -> void
 ~virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
-virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].get -> object!
-virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs e) -> void
@@ -13141,8 +13152,6 @@ virtual System.Windows.Forms.ListBox.ObjectCollection.this[int index].set -> voi
 ~virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
-virtual System.Windows.Forms.ScrollBar.OnScroll(System.Windows.Forms.ScrollEventArgs! se) -> void
-virtual System.Windows.Forms.ScrollBar.OnValueChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ScrollableControl.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
 ~virtual System.Windows.Forms.ScrollableControl.ScrollToControl(System.Windows.Forms.Control activeControl) -> System.Drawing.Point
 ~virtual System.Windows.Forms.Splitter.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs sevent) -> void

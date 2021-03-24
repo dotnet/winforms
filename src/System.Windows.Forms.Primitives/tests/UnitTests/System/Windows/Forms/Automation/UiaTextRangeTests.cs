@@ -519,9 +519,25 @@ this is the third line.";
         }
 
         [StaFact]
+        public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_EmptyText()
+        {
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
+            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.TextLength).Returns(0);
+            UiaTextProvider provider = providerMock.Object;
+            UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+            var actual = ((ITextRangeProvider)textRange).GetBoundingRectangles();
+            Assert.Equal(new double[] { 10, 33, 96, 19 }, actual);
+        }
+
+        [StaFact]
         public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_DegenerateRange()
         {
-            IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
             providerMock.Setup(p => p.TextLength).Returns(5);
             UiaTextProvider provider = providerMock.Object;
@@ -533,7 +549,9 @@ this is the third line.";
         [StaFact]
         public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsExpected_for_Endline()
         {
-            IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
             providerMock.Setup(p => p.TextLength).Returns(3);
             providerMock.Setup(p => p.PointToScreen(It.IsAny<Point>())).Returns(Point.Empty);

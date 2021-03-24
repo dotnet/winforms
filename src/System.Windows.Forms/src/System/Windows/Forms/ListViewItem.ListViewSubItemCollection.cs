@@ -112,7 +112,7 @@ namespace System.Windows.Forms
                 }
 
                 EnsureSubItemSpace(1, -1);
-                item.owner = _owner;
+                item._owner = _owner;
                 _owner.subItems[_owner.SubItemCount] = item;
                 _owner.UpdateSubItems(_owner.SubItemCount++);
                 return item;
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(item));
                 }
 
-                item.owner = _owner;
+                item._owner = _owner;
 
                 EnsureSubItemSpace(1, index);
 
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
                 }
 
                 // Remove ourselves as the owner.
-                _owner.subItems[index].owner = null;
+                _owner.subItems[index]._owner = null;
 
                 // Collapse the items
                 for (int i = index + 1; i < _owner.SubItemCount; i++)

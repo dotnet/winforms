@@ -72,7 +72,7 @@ namespace System.Windows.Forms
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
 
-                if (value.treeView != null && value.treeView.Handle != tv.Handle)
+                if (value.treeView is not null && value.treeView.Handle != tv.Handle)
                 {
                     throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
                 }
@@ -280,7 +280,7 @@ namespace System.Windows.Forms
             }
 
             TreeView tv = owner.TreeView;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.BeginUpdate();
             }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
             }
 
             owner.Nodes.FixedIndex = -1;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.EndUpdate();
             }
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
+                    if ((treeNodeCollectionToLookIn[i].Nodes is not null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
                         // If it has a valid child collection, append those results to our collection.
                         foundTreeNodes = FindInternal(key, searchAllChildren, treeNodeCollectionToLookIn[i].Nodes, foundTreeNodes);
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (tv != null && tv.Sorted)
+            if (tv is not null && tv.Sorted)
             {
                 return owner.AddSorted(node);
             }
@@ -406,12 +406,12 @@ namespace System.Windows.Forms
             owner.childCount++;
             node.Realize(false);
 
-            if (tv != null && node == tv.selectedNode)
+            if (tv is not null && node == tv.selectedNode)
             {
                 tv.SelectedNode = node; // communicate this to the handle
             }
 
-            if (tv != null && tv.TreeViewNodeSorter != null)
+            if (tv is not null && tv.TreeViewNodeSorter is not null)
             {
                 tv.Sort();
             }
@@ -544,7 +544,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (tv != null && tv.Sorted)
+            if (tv is not null && tv.Sorted)
             {
                 owner.AddSorted(node);
                 return;

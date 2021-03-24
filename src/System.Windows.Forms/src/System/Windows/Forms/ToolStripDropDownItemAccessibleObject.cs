@@ -46,7 +46,7 @@ namespace System.Windows.Forms
 
         internal override bool IsIAccessibleExSupported()
         {
-            if (owner != null)
+            if (owner is not null)
             {
                 return true;
             }
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
 
         internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
+            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner is not null && owner.Owner is ToolStripDropDown)
             {
                 return !((ToolStripDropDown)owner.Owner).Visible;
             }
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
         internal override void Collapse()
         {
-            if (owner != null && owner.DropDown != null && owner.DropDown.Visible)
+            if (owner is not null && owner.DropDown is not null && owner.DropDown.Visible)
             {
                 owner.DropDown.Close();
             }

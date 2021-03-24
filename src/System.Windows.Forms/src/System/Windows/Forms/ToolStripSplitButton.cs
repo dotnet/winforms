@@ -290,7 +290,7 @@ namespace System.Windows.Forms
                 // For preferred size caching reasons, we need to keep our two
                 // internal layouts (button, dropdown button) in sync.
 
-                if (InternalLayout != null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
+                if (InternalLayout is not null /*if layout is invalid - calls CreateInternalLayout - which resets splitButtonButtonLayout to null*/
                     && _splitButtonButtonLayout is null)
                 {
                     _splitButtonButtonLayout = new ToolStripSplitButtonButtonLayout(this);
@@ -473,7 +473,7 @@ namespace System.Windows.Forms
                 {
                     if (!DropDown.Visible)
                     {
-                        Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
+                        Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                         _openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                         ShowDropDown(/*mousePress = */true);
                     }
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
                 {
                     if (DropDown.Visible)
                     {
-                        Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
+                        Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                         byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                         if (closeMouseId != _openMouseId)
                         {
@@ -560,7 +560,7 @@ namespace System.Windows.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             ToolStripRenderer renderer = Renderer;
-            if (renderer != null)
+            if (renderer is not null)
             {
                 InvalidateSplitButtonLayout();
                 Graphics g = e.Graphics;

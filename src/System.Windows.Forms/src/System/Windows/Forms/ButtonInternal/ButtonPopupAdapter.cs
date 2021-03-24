@@ -141,8 +141,8 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = PaintPopupLayout(e, up: false, 0);
-            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.MaxSize)
-                == PaintPopupLayout(e, up: true, 2).GetPreferredSizeCore(LayoutUtils.MaxSize),
+            Debug.Assert(layout.GetPreferredSizeCore(LayoutUtils.s_maxSize)
+                == PaintPopupLayout(e, up: true, 2).GetPreferredSizeCore(LayoutUtils.s_maxSize),
                 "The state of up should not effect PreferredSize");
             return layout;
         }

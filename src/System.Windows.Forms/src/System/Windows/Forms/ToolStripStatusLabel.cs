@@ -160,7 +160,7 @@ namespace System.Windows.Forms
                 if (spring != value)
                 {
                     spring = value;
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Spring);
                     }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
 

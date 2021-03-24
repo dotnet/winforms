@@ -48,12 +48,12 @@ namespace System.Windows.Forms
                     // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                     // even an empty string (this is the only way to *force* the accessible name to be blank).
                     string name = owner.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
 
-                    if (owner.OwnerItem != null && owner.OwnerItem.AccessibilityObject.Name != null)
+                    if (owner.OwnerItem is not null && owner.OwnerItem.AccessibilityObject.Name is not null)
                     {
                         name = owner.OwnerItem.AccessibilityObject.Name;
                     }

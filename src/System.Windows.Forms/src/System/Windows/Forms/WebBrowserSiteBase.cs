@@ -271,7 +271,7 @@ namespace System.Windows.Forms
 
             *lprcPosRect = Host.Bounds;
             *lprcClipRect = WebBrowserHelper.GetClipRect();
-            if (lpFrameInfo != null)
+            if (lpFrameInfo is not null)
             {
                 lpFrameInfo->cb = (uint)Marshal.SizeOf<OLEINPLACEFRAMEINFO>();
                 lpFrameInfo->fMDIApp = BOOL.FALSE;
@@ -363,11 +363,11 @@ namespace System.Windows.Forms
             try
             {
                 ISite site = Host.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
 
-                    if (changeService != null)
+                    if (changeService is not null)
                     {
                         try
                         {
@@ -398,13 +398,13 @@ namespace System.Windows.Forms
 
         internal void StartEvents()
         {
-            if (connectionPoint != null)
+            if (connectionPoint is not null)
             {
                 return;
             }
 
             object nativeObject = Host.activeXInstance;
-            if (nativeObject != null)
+            if (nativeObject is not null)
             {
                 try
                 {
@@ -422,7 +422,7 @@ namespace System.Windows.Forms
 
         internal void StopEvents()
         {
-            if (connectionPoint != null)
+            if (connectionPoint is not null)
             {
                 connectionPoint.Disconnect();
                 connectionPoint = null;
