@@ -189,7 +189,6 @@ This is a custom link\v #link3#\v0  which is followed by hidden text.\par
         {
             IntPtr pOleInterface = IntPtr.Zero;
             object oleInterface = null;
-            Guid textDocumentIID = typeof(Richedit.ITextDocument).GUID;
 
             try
             {
