@@ -15,7 +15,7 @@ namespace System.Windows.Forms
             //The UriTypeConverter gives back a relative Uri for things like "www.microsoft.com".  If
             //the Uri is relative, we'll try sticking "http://" on the front to see whether that fixes it up.
             Uri uri = base.ConvertFrom(context, culture, value) as Uri;
-            if (uri != null && !string.IsNullOrEmpty(uri.OriginalString) && !uri.IsAbsoluteUri)
+            if (uri is not null && !string.IsNullOrEmpty(uri.OriginalString) && !uri.IsAbsoluteUri)
             {
                 try
                 {

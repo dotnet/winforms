@@ -294,7 +294,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null && ParentInternal != null)
+            if (Owner is not null && ParentInternal is not null)
             {
                 Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }

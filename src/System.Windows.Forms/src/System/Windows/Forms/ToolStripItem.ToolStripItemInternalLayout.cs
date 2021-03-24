@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_currentLayoutOptions != null)
+                    if (_currentLayoutOptions is not null)
                     {
                         return _currentLayoutOptions.GdiTextFormatFlags;
                     }
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                 // bigger than the ToolStrip itself.  Note this is "Parent" not
                 // "Owner" because we care in this instance what we're currently displayed on.
 
-                if (_ownerItem != null)
+                if (_ownerItem is not null)
                 {
                     _lastPreferredSize = _currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
                     return _lastPreferredSize;
@@ -181,7 +181,7 @@ namespace System.Windows.Forms
             {
                 _layoutData = GetLayoutData();
                 ToolStrip parent = ParentInternal;
-                if (parent != null)
+                if (parent is not null)
                 {
                     _parentLayoutData = new ToolStripLayoutData(parent);
                 }
@@ -193,13 +193,13 @@ namespace System.Windows.Forms
 
             internal class ToolStripItemLayoutOptions : ButtonBaseAdapter.LayoutOptions
             {
-                private Size _cachedSize = LayoutUtils.InvalidSize;
-                private Size _cachedProposedConstraints = LayoutUtils.InvalidSize;
+                private Size _cachedSize = LayoutUtils.s_invalidSize;
+                private Size _cachedProposedConstraints = LayoutUtils.s_invalidSize;
 
                 // override GetTextSize to provide simple text caching.
                 protected override Size GetTextSize(Size proposedConstraints)
                 {
-                    if (_cachedSize != LayoutUtils.InvalidSize
+                    if (_cachedSize != LayoutUtils.s_invalidSize
                         && (_cachedProposedConstraints == proposedConstraints
                         || _cachedSize.Width <= proposedConstraints.Width))
                     {
@@ -226,7 +226,7 @@ namespace System.Windows.Forms
                 }
 
                 public bool IsCurrent(ToolStrip toolStrip)
-                    => toolStrip != null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
+                    => toolStrip is not null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
             }
         }
     }

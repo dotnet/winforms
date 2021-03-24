@@ -5645,10 +5645,11 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> OnDrawNode_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new DrawTreeNodeEventArgs(null, null, Rectangle.Empty, TreeNodeStates.Checked) };
 
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
+            yield return new object[] { new DrawTreeNodeEventArgs(graphics, null, Rectangle.Empty, TreeNodeStates.Checked) };
+
             yield return new object[] { new DrawTreeNodeEventArgs(graphics, new TreeNode(), new Rectangle(1, 2, 3, 4), TreeNodeStates.Checked) };
         }
 

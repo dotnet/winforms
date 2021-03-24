@@ -104,7 +104,7 @@ namespace System.Windows.Forms
 
                 ToolStripPanel currentOwner = ToolStripPanel;
 
-                if (currentOwner != null)
+                if (currentOwner is not null)
                 {
                     currentOwner.SuspendLayout();
                 }
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner != null)
+                    if (currentOwner is not null)
                     {
                         currentOwner.ResumeLayout();
                     }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
 
             public virtual void Clear()
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     ToolStripPanel.SuspendLayout();
                 }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (_owner != null)
+                    if (_owner is not null)
                     {
                         ToolStripPanel.ResumeLayout();
                     }
@@ -244,7 +244,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void OnAfterRemove(Control control, int index)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     // unfortunately we dont know the index of the control in the ToolStripPanel's
                     // control collection, as all rows share this collection.
@@ -259,17 +259,17 @@ namespace System.Windows.Forms
 
             private void OnAdd(ISupportToolStripPanel controlToBeDragged, int index)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     LayoutTransaction layoutTransaction = null;
-                    if (ToolStripPanel != null && ToolStripPanel.ParentInternal != null)
+                    if (ToolStripPanel is not null && ToolStripPanel.ParentInternal is not null)
                     {
                         layoutTransaction = new LayoutTransaction(ToolStripPanel, ToolStripPanel.ParentInternal, PropertyNames.Parent);
                     }
 
                     try
                     {
-                        if (controlToBeDragged != null)
+                        if (controlToBeDragged is not null)
                         {
                             controlToBeDragged.ToolStripPanelRow = _owner;
 
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
                     }
                     finally
                     {
-                        if (layoutTransaction != null)
+                        if (layoutTransaction is not null)
                         {
                             layoutTransaction.Dispose();
                         }
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
                     get
                     {
                         ToolStripPanelCell cell = _arrayListEnumerator.Current as ToolStripPanelCell;
-                        Debug.Assert(cell != null, "Expected ToolStripPanel cells only!!!" + _arrayListEnumerator.Current.GetType().ToString());
+                        Debug.Assert(cell is not null, "Expected ToolStripPanel cells only!!!" + _arrayListEnumerator.Current.GetType().ToString());
                         return cell?.Control;
                     }
                 }

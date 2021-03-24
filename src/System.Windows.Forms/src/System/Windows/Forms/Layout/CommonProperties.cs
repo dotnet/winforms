@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Layout
         internal static Rectangle GetSpecifiedBounds(IArrangedElement element)
         {
             Rectangle rectangle = element.Properties.GetRectangle(_specifiedBoundsProperty, out bool found);
-            if (found && rectangle != LayoutUtils.MaxRectangle)
+            if (found && rectangle != LayoutUtils.s_maxRectangle)
             {
                 return rectangle;
             }
@@ -324,7 +324,7 @@ namespace System.Windows.Forms.Layout
                 if (element.Properties.ContainsObject(_specifiedBoundsProperty))
                 {
                     // use MaxRectangle instead of null so we can reuse the SizeWrapper in the property store.
-                    element.Properties.SetRectangle(_specifiedBoundsProperty, LayoutUtils.MaxRectangle);
+                    element.Properties.SetRectangle(_specifiedBoundsProperty, LayoutUtils.s_maxRectangle);
                 }
             }
         }
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.Layout
         ///
         internal static void xClearPreferredSizeCache(IArrangedElement element)
         {
-            element.Properties.SetSize(_preferredSizeCacheProperty, LayoutUtils.InvalidSize);
+            element.Properties.SetSize(_preferredSizeCacheProperty, LayoutUtils.s_invalidSize);
 #if DEBUG
             Debug_ClearProperties(element);
 #endif
@@ -376,7 +376,7 @@ namespace System.Windows.Forms.Layout
         internal static Size xGetPreferredSizeCache(IArrangedElement element)
         {
             Size size = element.Properties.GetSize(_preferredSizeCacheProperty, out bool found);
-            if (found && (size != LayoutUtils.InvalidSize))
+            if (found && (size != LayoutUtils.s_invalidSize))
             {
                 return size;
             }

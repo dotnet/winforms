@@ -277,6 +277,22 @@ namespace System.Windows.Forms.Automation
 
         double[] ITextRangeProvider.GetBoundingRectangles()
         {
+            Rectangle ownerBounds = Drawing.Rectangle.Empty;
+
+            if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is Rectangle boundsPropertyValue)
+            {
+                ownerBounds = boundsPropertyValue;
+            }
+
+            // We accumulate rectangles onto a list.
+            List<Rectangle> rectangles = new List<Rectangle>();
+
+            if (_provider.TextLength == 0)
+            {
+                rectangles.Add(ownerBounds);
+                return _provider.RectListToDoubleArray(rectangles);
+            }
+
             // if this is an end of line
             if (Start == _provider.TextLength)
             {
@@ -296,12 +312,6 @@ namespace System.Windows.Forms.Automation
 
             string text = _provider.Text;
             ValidateEndpoints();
-            Rectangle ownerBounds = Drawing.Rectangle.Empty;
-
-            if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is object boundsPropertyValue)
-            {
-                ownerBounds = (Rectangle)boundsPropertyValue;
-            }
 
             // Get the mapping from client coordinates to screen coordinates.
             Point mapClientToScreen = new Point(ownerBounds.X, ownerBounds.Y);
@@ -309,16 +319,11 @@ namespace System.Windows.Forms.Automation
             // Clip the rectangles to the edit control's formatting rectangle.
             Rectangle clippingRectangle = _provider.BoundingRectangle;
 
-            // We accumulate rectangles onto a list.
-            List<Rectangle> rectangles;
-
             if (_provider.IsMultiline)
             {
                 rectangles = GetMultilineBoundingRectangles(text, mapClientToScreen, clippingRectangle);
                 return _provider.RectListToDoubleArray(rectangles);
             }
-
-            rectangles = new List<Rectangle>();
 
             // Figure out the rectangle for this one line.
             Point startPoint = _provider.GetPositionFromChar(Start);

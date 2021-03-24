@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Tests
             var subItem = new ListViewItem.ListViewSubItem();
             collection.Add(subItem);
             Assert.Same(subItem, Assert.Single(collection));
-            Assert.Equal(item, subItem.owner);
+            Assert.Equal(item, subItem._owner);
         }
 
         [Fact]
@@ -223,7 +223,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, collection.Count);
             Assert.Equal(subItem, collection[0]);
             Assert.Equal(subItem, collection[1]);
-            Assert.Equal(item, subItem.owner);
+            Assert.Equal(item, subItem._owner);
         }
 
         [Fact]
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Tests
             collection.Add(subItem);
             Assert.Same(subItem, collection[0]);
             Assert.Same(subItem, otherCollection[0]);
-            Assert.Equal(item, subItem.owner);
+            Assert.Equal(item, subItem._owner);
         }
 
         [Theory]
@@ -255,7 +255,7 @@ namespace System.Windows.Forms.Tests
             };
             ListViewItem.ListViewSubItem subItem = Assert.Single(collection.Cast<ListViewItem.ListViewSubItem>());
             Assert.Equal(expectedText, subItem.Text);
-            Assert.Equal(item, subItem.owner);
+            Assert.Equal(item, subItem._owner);
         }
 
         public static IEnumerable<object[]> Add_String_Color_Color_Font_TestData()
@@ -279,7 +279,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedForeColor, subItem.ForeColor);
             Assert.Equal(expectedBackColor, subItem.BackColor);
             Assert.Equal(font ?? Control.DefaultFont, subItem.Font);
-            Assert.Equal(item, subItem.owner);
+            Assert.Equal(item, subItem._owner);
         }
 
         [Fact]
@@ -298,7 +298,7 @@ namespace System.Windows.Forms.Tests
             var subItem = new ListViewItem.ListViewSubItem();
             collection.Add(subItem);
             Assert.Same(subItem, Assert.Single(collection));
-            Assert.Equal(item, subItem.owner);
+            Assert.Equal(item, subItem._owner);
         }
 
         [Theory]
@@ -435,12 +435,12 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Same(item, subItem._owner);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-            Assert.Same(item, subItem.owner);
+            Assert.Same(item, subItem._owner);
         }
 
         [Fact]
@@ -629,7 +629,7 @@ namespace System.Windows.Forms.Tests
             collection.Insert(1, subItem);
             Assert.Equal(2, collection.Count);
             Assert.Same(subItem, collection[1]);
-            Assert.Same(item, subItem.owner);
+            Assert.Same(item, subItem._owner);
         }
 
         [Fact]
@@ -678,7 +678,7 @@ namespace System.Windows.Forms.Tests
             collection.Insert(1, subItem);
             Assert.Equal(2, collection.Count);
             Assert.Same(subItem, collection[1]);
-            Assert.Same(item, subItem.owner);
+            Assert.Same(item, subItem._owner);
         }
 
         [Theory]
@@ -715,12 +715,12 @@ namespace System.Windows.Forms.Tests
 
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Null(subItem.owner);
+            Assert.Null(subItem._owner);
 
             // Remove again.
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Null(subItem.owner);
+            Assert.Null(subItem._owner);
         }
 
         [Fact]
@@ -733,12 +733,12 @@ namespace System.Windows.Forms.Tests
 
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Null(subItem.owner);
+            Assert.Null(subItem._owner);
 
             // Remove again.
             collection.Remove(subItem);
             Assert.Empty(collection);
-            Assert.Null(subItem.owner);
+            Assert.Null(subItem._owner);
         }
 
         [Theory]
@@ -772,34 +772,34 @@ namespace System.Windows.Forms.Tests
             // Remove from start.
             collection.RemoveAt(0);
             Assert.Equal(3, collection.Count);
-            Assert.Null(subItem1.owner);
-            Assert.Same(item, subItem2.owner);
-            Assert.Same(item, subItem3.owner);
-            Assert.Same(item, subItem4.owner);
+            Assert.Null(subItem1._owner);
+            Assert.Same(item, subItem2._owner);
+            Assert.Same(item, subItem3._owner);
+            Assert.Same(item, subItem4._owner);
 
             // Remove from middle.
             collection.RemoveAt(1);
             Assert.Equal(2, collection.Count);
-            Assert.Null(subItem1.owner);
-            Assert.Same(item, subItem2.owner);
-            Assert.Null(subItem3.owner);
-            Assert.Same(item, subItem4.owner);
+            Assert.Null(subItem1._owner);
+            Assert.Same(item, subItem2._owner);
+            Assert.Null(subItem3._owner);
+            Assert.Same(item, subItem4._owner);
 
             // Remove from end.
             collection.RemoveAt(1);
             Assert.Single(collection);
-            Assert.Null(subItem1.owner);
-            Assert.Same(item, subItem2.owner);
-            Assert.Null(subItem3.owner);
-            Assert.Null(subItem4.owner);
+            Assert.Null(subItem1._owner);
+            Assert.Same(item, subItem2._owner);
+            Assert.Null(subItem3._owner);
+            Assert.Null(subItem4._owner);
 
             // Remove only.
             collection.RemoveAt(0);
             Assert.Empty(collection);
-            Assert.Null(subItem1.owner);
-            Assert.Null(subItem2.owner);
-            Assert.Null(subItem3.owner);
-            Assert.Null(subItem4.owner);
+            Assert.Null(subItem1._owner);
+            Assert.Null(subItem2._owner);
+            Assert.Null(subItem3._owner);
+            Assert.Null(subItem4._owner);
         }
 
         [Theory]
@@ -847,11 +847,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedCount, collection.Count);
             if (expectedCount == 1)
             {
-                Assert.Same(item, subItem.owner);
+                Assert.Same(item, subItem._owner);
             }
             else
             {
-                Assert.Null(subItem.owner);
+                Assert.Null(subItem._owner);
             }
         }
 
