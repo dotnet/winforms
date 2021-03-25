@@ -1,0 +1,1 @@
+~override System.Windows.Forms.RichTextBox.OnGotFocus(System.EventArgs e) -> void
