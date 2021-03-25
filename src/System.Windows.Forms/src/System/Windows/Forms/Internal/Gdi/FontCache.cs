@@ -49,11 +49,5 @@ namespace System.Windows.Forms
             => entry.Data.Font.TryGetTarget(out Font? currentFont)
                 && key.Font == currentFont
                 && key.Quality == entry.Data.Quality;
-
-        private sealed class FontCacheEntry : CacheEntry
-        {
-            public FontCacheEntry(Data data, bool tracked) : base(data, tracked) { }
-            public override Gdi32.HFONT Object => Data.HFONT;
-        }
     }
 }

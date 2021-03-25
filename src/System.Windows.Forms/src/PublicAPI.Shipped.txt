@@ -9974,7 +9974,7 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.CellValue2.get -> object
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewSortCompareEventArgs.DataGridViewSortCompareEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, object cellValue1, object cellValue2, int rowIndex1, int rowIndex2) -> void
-~System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DataGridViewTopLeftHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewTopLeftHeaderCell owner) -> void
+System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DataGridViewTopLeftHeaderCellAccessibleObject(System.Windows.Forms.DataGridViewTopLeftHeaderCell! owner) -> void
 ~System.Windows.Forms.DataObject.DataObject(object data) -> void
 ~System.Windows.Forms.DataObject.DataObject(string format, object data) -> void
 ~System.Windows.Forms.DateTimePicker.CalendarFont.get -> System.Drawing.Font
@@ -11492,10 +11492,10 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnMouseWheel(System.Windows.Forms.MouseEventArgs e) -> void
 ~override System.Windows.Forms.DataGridViewTextBoxEditingControl.OnTextChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Value.get -> string
+override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Name.get -> string!
+override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.DataGridViewTopLeftHeaderCell.DataGridViewTopLeftHeaderCellAccessibleObject.Value.get -> string!
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewTopLeftHeaderCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
