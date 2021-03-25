@@ -12,20 +12,23 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         public class GridEntryAccessibleObject : AccessibleObject
         {
-            protected GridEntry owner;
+            private readonly GridEntry _owningGridEntry;
+
+            // Used by UIAutomation
+            private int[]? _runtimeId;
+
             private delegate void SelectDelegate(AccessibleSelection flags);
-            private int[]? runtimeId; // Used by UIAutomation
 
             public GridEntryAccessibleObject(GridEntry owner) : base()
             {
                 Debug.Assert(owner is not null, "GridEntryAccessibleObject must have a valid owner GridEntry");
-                this.owner = owner;
+                _owningGridEntry = owner;
             }
 
             public override Rectangle Bounds
             {
                 get => PropertyGridView is not null && PropertyGridView.IsHandleCreated
-                    ? PropertyGridView.AccessibilityGetGridEntryBounds(owner)
+                    ? PropertyGridView.AccessibilityGetGridEntryBounds(_owningGridEntry)
                     : Rectangle.Empty;
             }
 
@@ -33,11 +36,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (!owner.Expandable)
+                    if (!_owningGridEntry.Expandable)
                     {
                         return base.DefaultAction;
                     }
-                    else if (owner.Expanded)
+                    else if (_owningGridEntry.Expanded)
                     {
                         return SR.AccessibleActionCollapse;
                     }
@@ -52,198 +55,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return owner.PropertyDescription;
-                }
-            }
-
-            public override string Help
-            {
-                get
-                {
-                    return owner.PropertyDescription;
-                }
-            }
-
-            /// <summary>
-            ///  Request to return the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                        GridEntry parentGridEntry = owner.ParentGridEntry;
-                        if (parentGridEntry is not null)
-                        {
-                            if (parentGridEntry is SingleSelectRootGridEntry)
-                            {
-                                return owner.OwnerGrid.GridViewAccessibleObject;
-                            }
-                            else
-                            {
-                                return parentGridEntry.AccessibilityObject;
-                            }
-                        }
-
-                        return Parent;
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        return Navigate(AccessibleNavigation.Previous);
-                    case UiaCore.NavigateDirection.NextSibling:
-                        return Navigate(AccessibleNavigation.Next);
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            /// <summary>
-            ///  Return the element that is the root node of this fragment of UI.
-            /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            {
-                get
-                {
-                    return Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                }
-            }
-
-            #region IAccessibleEx - patterns and properties
-
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (owner.Expandable)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    if (owner.GridEntryHost is null || !owner.GridEntryHost.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    if (runtimeId is null)
-                    {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a
-                        // second item can be anything, but it's good to supply HWND
-                        // third and others are optional, but in case of GridItem we need it, to make it unique
-                        // grid items are not controls, they don't have hwnd - we use hwnd of PropertyGridView
-
-                        runtimeId = new int[3];
-                        runtimeId[0] = 0x2a;
-                        runtimeId[1] = (int)(long)owner.GridEntryHost.InternalHandle;
-                        runtimeId[2] = GetHashCode();
-                    }
-
-                    return runtimeId;
-                }
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-
-                        // The accessible hierarchy is changed so we cannot use Button type
-                        // for the grid items to not break automation logic that searches for the first
-                        // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
-                        // button is one of the first children of PropertyGridView.
-                        return UiaCore.UIA.TreeItemControlTypeId;
-                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
-                        return (Object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return string.Empty;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return owner.hasFocus;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return true;
-                    case UiaCore.UIA.AutomationIdPropertyId:
-                        return GetHashCode().ToString();
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case UiaCore.UIA.IsGridItemPatternAvailablePropertyId:
-                    case UiaCore.UIA.IsTableItemPatternAvailablePropertyId:
-                        return true;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    case UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId:
-                        return DefaultAction;
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                switch (patternId)
-                {
-                    case UiaCore.UIA.InvokePatternId:
-                    case UiaCore.UIA.LegacyIAccessiblePatternId:
-                        return true;
-
-                    case UiaCore.UIA.ExpandCollapsePatternId:
-                        if (owner is not null && owner.Expandable)
-                        {
-                            return true;
-                        }
-
-                        break;
-
-                    case UiaCore.UIA.GridItemPatternId:
-                    case UiaCore.UIA.TableItemPatternId:
-                        if (owner is null || owner.OwnerGrid is null || owner.OwnerGrid.SortedByCategories)
-                        {
-                            break;
-                        }
-
-                        // Only top level rows are grid items.
-                        // Sub-items (for instance height in size is not a grid item)
-                        GridEntry parentGridEntry = owner.ParentGridEntry;
-                        if (parentGridEntry is not null && parentGridEntry is SingleSelectRootGridEntry)
-                        {
-                            return true;
-                        }
-
-                        break;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override void Expand()
-            {
-                if (owner.Expandable && owner.Expanded == false)
-                {
-                    owner.Expanded = true;
-                }
-            }
-
-            internal override void Collapse()
-            {
-                if (owner.Expandable && owner.Expanded == true)
-                {
-                    owner.Expanded = false;
+                    return _owningGridEntry.PropertyDescription;
                 }
             }
 
@@ -251,9 +63,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (owner.Expandable)
+                    if (_owningGridEntry.Expandable)
                     {
-                        return owner.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                        return _owningGridEntry.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
                     }
                     else
                     {
@@ -262,13 +74,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            #endregion
-
-            public override void DoDefaultAction()
+            public override string Help
             {
-                if (PropertyGridView is not null && PropertyGridView.IsHandleCreated)
+                get
                 {
-                    owner.OnOutlineClick(EventArgs.Empty);
+                    return _owningGridEntry.PropertyDescription;
                 }
             }
 
@@ -276,7 +86,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return owner?.PropertyLabel;
+                    return _owningGridEntry?.PropertyLabel;
                 }
             }
 
@@ -284,21 +94,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return owner?.GridEntryHost?.AccessibilityObject;
-                }
-            }
-
-            private PropertyGridView? PropertyGridView
-            {
-                get
-                {
-                    var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                    if (propertyGridViewAccessibleObject is not null)
-                    {
-                        return propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                    }
-
-                    return null;
+                    return _owningGridEntry?.GridEntryHost?.AccessibilityObject;
                 }
             }
 
@@ -323,7 +119,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Determine focus
                     //
-                    if (owner.Focus)
+                    if (_owningGridEntry.Focus)
                     {
                         state |= AccessibleStates.Focused;
                     }
@@ -339,9 +135,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Determine expanded/collapsed state
                     //
-                    if (owner.Expandable)
+                    if (_owningGridEntry.Expandable)
                     {
-                        if (owner.Expanded)
+                        if (_owningGridEntry.Expanded)
                         {
                             state |= AccessibleStates.Expanded;
                         }
@@ -353,20 +149,20 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Determine readonly/editable state
                     //
-                    if (owner.ShouldRenderReadOnly)
+                    if (_owningGridEntry.ShouldRenderReadOnly)
                     {
                         state |= AccessibleStates.ReadOnly;
                     }
 
                     // Determine password state
                     //
-                    if (owner.ShouldRenderPassword)
+                    if (_owningGridEntry.ShouldRenderPassword)
                     {
                         state |= AccessibleStates.Protected;
                     }
 
-                    Rectangle entryBounds = this.BoundingRectangle;
-                    Rectangle propertyGridViewBounds = this.PropertyGridView.GetToolNativeScreenRectangle();
+                    Rectangle entryBounds = BoundingRectangle;
+                    Rectangle propertyGridViewBounds = PropertyGridView.GetToolNativeScreenRectangle();
 
                     if (!entryBounds.IntersectsWith(propertyGridViewBounds))
                     {
@@ -381,12 +177,113 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return owner.GetPropertyTextValue();
+                    return _owningGridEntry.GetPropertyTextValue();
                 }
 
                 set
                 {
-                    owner.SetPropertyTextValue(value);
+                    _owningGridEntry.SetPropertyTextValue(value);
+                }
+            }
+
+            internal override int Column => 0;
+
+            internal override UiaCore.IRawElementProviderSimple? ContainingGrid
+            {
+                get => PropertyGridView?.AccessibilityObject;
+            }
+
+            /// <summary>
+            ///  Return the element that is the root node of this fragment of UI.
+            /// </summary>
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+            {
+                get
+                {
+                    return Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                }
+            }
+
+            internal override int Row
+            {
+                get
+                {
+                    if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+                    {
+                        return -1;
+                    }
+
+                    if (parent.Owner is not PropertyGridView gridView)
+                    {
+                        return -1;
+                    }
+
+                    GridEntryCollection? topLevelGridEntries = gridView.TopLevelGridEntries;
+                    if (topLevelGridEntries is null)
+                    {
+                        return -1;
+                    }
+
+                    for (int i = 0; i < topLevelGridEntries.Count; i++)
+                    {
+                        GridItem? topLevelGridEntry = topLevelGridEntries[i];
+                        if (_owningGridEntry == topLevelGridEntry)
+                        {
+                            return i;
+                        }
+                    }
+
+                    return -1;
+                }
+            }
+
+            internal override int[]? RuntimeId
+            {
+                get
+                {
+                    if (_owningGridEntry.GridEntryHost is null || !_owningGridEntry.GridEntryHost.IsHandleCreated)
+                    {
+                        return base.RuntimeId;
+                    }
+
+                    if (_runtimeId is null)
+                    {
+                        // we need to provide a unique ID
+                        // others are implementing this in the same manner
+                        // first item is static - 0x2a
+                        // second item can be anything, but it's good to supply HWND
+                        // third and others are optional, but in case of GridItem we need it, to make it unique
+                        // grid items are not controls, they don't have hwnd - we use hwnd of PropertyGridView
+
+                        _runtimeId = new int[3];
+                        _runtimeId[0] = 0x2a;
+                        _runtimeId[1] = (int)(long)_owningGridEntry.GridEntryHost.InternalHandle;
+                        _runtimeId[2] = GetHashCode();
+                    }
+
+                    return _runtimeId;
+                }
+            }
+
+            private PropertyGridView? PropertyGridView
+            {
+                get
+                {
+                    var propertyGridViewAccessibleObject = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
+                    if (propertyGridViewAccessibleObject is not null)
+                    {
+                        return propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                    }
+
+                    return null;
+                }
+            }
+
+            public override void DoDefaultAction()
+            {
+                if (PropertyGridView is not null && PropertyGridView.IsHandleCreated)
+                {
+                    _owningGridEntry.OnOutlineClick(EventArgs.Empty);
                 }
             }
 
@@ -396,7 +293,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override AccessibleObject? GetFocused()
             {
-                if (owner.Focus)
+                if (_owningGridEntry.Focus)
                 {
                     return this;
                 }
@@ -421,12 +318,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case AccessibleNavigation.Down:
                     case AccessibleNavigation.Right:
                     case AccessibleNavigation.Next:
-                        return parent.Next(owner);
+                        return parent.Next(_owningGridEntry);
 
                     case AccessibleNavigation.Up:
                     case AccessibleNavigation.Left:
                     case AccessibleNavigation.Previous:
-                        return parent.Previous(owner);
+                        return parent.Previous(_owningGridEntry);
 
                     case AccessibleNavigation.FirstChild:
                     case AccessibleNavigation.LastChild:
@@ -464,8 +361,150 @@ namespace System.Windows.Forms.PropertyGridInternal
                 //
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
-                    PropertyGridView.AccessibilitySelect(owner);
+                    PropertyGridView.AccessibilitySelect(_owningGridEntry);
                 }
+            }
+
+            internal override void Collapse()
+            {
+                if (_owningGridEntry.Expandable && _owningGridEntry.Expanded == true)
+                {
+                    _owningGridEntry.Expanded = false;
+                }
+            }
+
+            internal override void Expand()
+            {
+                if (_owningGridEntry.Expandable && _owningGridEntry.Expanded == false)
+                {
+                    _owningGridEntry.Expanded = true;
+                }
+            }
+
+            /// <summary>
+            ///  Request to return the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                switch (direction)
+                {
+                    case UiaCore.NavigateDirection.Parent:
+                        GridEntry parentGridEntry = _owningGridEntry.ParentGridEntry;
+                        if (parentGridEntry is not null)
+                        {
+                            if (parentGridEntry is SingleSelectRootGridEntry)
+                            {
+                                return _owningGridEntry.OwnerGrid.GridViewAccessibleObject;
+                            }
+                            else
+                            {
+                                return parentGridEntry.AccessibilityObject;
+                            }
+                        }
+
+                        return Parent;
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        return Navigate(AccessibleNavigation.Previous);
+                    case UiaCore.NavigateDirection.NextSibling:
+                        return Navigate(AccessibleNavigation.Next);
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                switch (propertyID)
+                {
+                    case UiaCore.UIA.NamePropertyId:
+                        return Name;
+                    case UiaCore.UIA.ControlTypePropertyId:
+
+                        // The accessible hierarchy is changed so we cannot use Button type
+                        // for the grid items to not break automation logic that searches for the first
+                        // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
+                        // button is one of the first children of PropertyGridView.
+                        return UiaCore.UIA.TreeItemControlTypeId;
+                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
+                        return (Object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
+                    case UiaCore.UIA.AccessKeyPropertyId:
+                        return string.Empty;
+                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
+                        return _owningGridEntry.hasFocus;
+                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
+                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                    case UiaCore.UIA.IsEnabledPropertyId:
+                        return true;
+                    case UiaCore.UIA.AutomationIdPropertyId:
+                        return GetHashCode().ToString();
+                    case UiaCore.UIA.HelpTextPropertyId:
+                        return Help ?? string.Empty;
+                    case UiaCore.UIA.IsPasswordPropertyId:
+                        return false;
+                    case UiaCore.UIA.IsOffscreenPropertyId:
+                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case UiaCore.UIA.IsGridItemPatternAvailablePropertyId:
+                    case UiaCore.UIA.IsTableItemPatternAvailablePropertyId:
+                        return true;
+                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
+                        return Role;
+                    case UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId:
+                        return DefaultAction;
+
+                    default:
+                        return base.GetPropertyValue(propertyID);
+                }
+            }
+
+            internal override bool IsIAccessibleExSupported()
+            {
+                if (_owningGridEntry.Expandable)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                switch (patternId)
+                {
+                    case UiaCore.UIA.InvokePatternId:
+                    case UiaCore.UIA.LegacyIAccessiblePatternId:
+                        return true;
+
+                    case UiaCore.UIA.ExpandCollapsePatternId:
+                        if (_owningGridEntry is not null && _owningGridEntry.Expandable)
+                        {
+                            return true;
+                        }
+
+                        break;
+
+                    case UiaCore.UIA.GridItemPatternId:
+                    case UiaCore.UIA.TableItemPatternId:
+                        if (_owningGridEntry is null || _owningGridEntry.OwnerGrid is null || _owningGridEntry.OwnerGrid.SortedByCategories)
+                        {
+                            break;
+                        }
+
+                        // Only top level rows are grid items.
+                        // Sub-items (for instance height in size is not a grid item)
+                        GridEntry parentGridEntry = _owningGridEntry.ParentGridEntry;
+                        if (parentGridEntry is not null && parentGridEntry is SingleSelectRootGridEntry)
+                        {
+                            return true;
+                        }
+
+                        break;
+                }
+
+                return base.IsPatternSupported(patternId);
             }
 
             internal override void SetFocus()
@@ -478,46 +517,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.SetFocus();
 
                 RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
-
-            internal override int Row
-            {
-                get
-                {
-                    if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
-                    {
-                        return -1;
-                    }
-
-                    if (parent.Owner is not PropertyGridView gridView)
-                    {
-                        return -1;
-                    }
-
-                    GridEntryCollection? topLevelGridEntries = gridView.TopLevelGridEntries;
-                    if (topLevelGridEntries is null)
-                    {
-                        return -1;
-                    }
-
-                    for (int i = 0; i < topLevelGridEntries.Count; i++)
-                    {
-                        GridItem? topLevelGridEntry = topLevelGridEntries[i];
-                        if (owner == topLevelGridEntry)
-                        {
-                            return i;
-                        }
-                    }
-
-                    return -1;
-                }
-            }
-
-            internal override int Column => 0;
-
-            internal override UiaCore.IRawElementProviderSimple? ContainingGrid
-            {
-                get => PropertyGridView?.AccessibilityObject;
             }
         }
     }

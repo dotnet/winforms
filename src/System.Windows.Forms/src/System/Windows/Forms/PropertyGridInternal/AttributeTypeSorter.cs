@@ -10,37 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class AttributeTypeSorter : IComparer
     {
-        private static IDictionary? typeIds;
-
-        private static string? GetTypeIdString(Attribute a)
-        {
-            string? result;
-            object? typeId = a.TypeId;
-
-            if (typeId is null)
-            {
-                Debug.Fail("Attribute '" + a.GetType().FullName + "' does not have a typeid.");
-                return "";
-            }
-
-            if (typeIds is null)
-            {
-                typeIds = new Hashtable();
-                result = null;
-            }
-            else
-            {
-                result = typeIds[typeId] as string;
-            }
-
-            if (result is null)
-            {
-                result = typeId.ToString();
-                typeIds[typeId] = result;
-            }
-
-            return result;
-        }
+        private static IDictionary? s_typeIds;
 
         public int Compare(object? obj1, object? obj2)
         {
@@ -61,6 +31,36 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             return string.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
+        }
+
+        private static string? GetTypeIdString(Attribute a)
+        {
+            string? result;
+            object? typeId = a.TypeId;
+
+            if (typeId is null)
+            {
+                Debug.Fail("Attribute '" + a.GetType().FullName + "' does not have a typeid.");
+                return "";
+            }
+
+            if (s_typeIds is null)
+            {
+                s_typeIds = new Hashtable();
+                result = null;
+            }
+            else
+            {
+                result = s_typeIds[typeId] as string;
+            }
+
+            if (result is null)
+            {
+                result = typeId.ToString();
+                s_typeIds[typeId] = result;
+            }
+
+            return result;
         }
     }
 }

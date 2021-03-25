@@ -13,14 +13,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             public string? lastLabel;
             public Font? lastLabelFont;
             public int lastLabelWidth;
-            public string? lastValueString;
-            public Font? lastValueFont;
-            public int lastValueTextWidth;
-            public object? lastValue;
-            public bool useValueString;
             public bool lastShouldSerialize;
-            public bool useShouldSerialize;
+            public object? lastValue;
+            public Font? lastValueFont;
+            public string? lastValueString;
+            public int lastValueTextWidth;
             public bool useCompatTextRendering;
+            public bool useShouldSerialize;
+            public bool useValueString;
         }
     }
 }

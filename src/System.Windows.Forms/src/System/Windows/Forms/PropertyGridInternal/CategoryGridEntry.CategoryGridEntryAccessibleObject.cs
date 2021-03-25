@@ -24,59 +24,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owningCategoryGridEntry = owningCategoryGridEntry;
             }
 
-            /// <summary>
-            ///  Returns the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
-                {
-                    return null;
-                }
-
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                        return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
-                        return parent.GetNextCategory(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        return parent.GetPreviousCategory(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.FirstChild:
-                        return parent.GetFirstChildProperty(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.LastChild:
-                        return parent.GetLastChildProperty(_owningCategoryGridEntry);
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.GridItemPatternId ||
-                    patternId == UiaCore.UIA.TableItemPatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        // To announce expanded collapsed state control type should be appropriate:
-                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-                        return UiaCore.UIA.TreeItemControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
             public override AccessibleRole Role
             {
                 get
@@ -84,6 +31,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return AccessibleRole.ButtonDropDownGrid;
                 }
             }
+
+            // Category is in the first column.
+            internal override int Column => 0;
 
             internal override int Row
             {
@@ -123,7 +73,58 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override int Column => 0; // Category is in the first column.
+            /// <summary>
+            ///  Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+                {
+                    return null;
+                }
+
+                switch (direction)
+                {
+                    case UiaCore.NavigateDirection.Parent:
+                        return Parent;
+                    case UiaCore.NavigateDirection.NextSibling:
+                        return parent.GetNextCategory(_owningCategoryGridEntry);
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        return parent.GetPreviousCategory(_owningCategoryGridEntry);
+                    case UiaCore.NavigateDirection.FirstChild:
+                        return parent.GetFirstChildProperty(_owningCategoryGridEntry);
+                    case UiaCore.NavigateDirection.LastChild:
+                        return parent.GetLastChildProperty(_owningCategoryGridEntry);
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                switch (propertyID)
+                {
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        // To announce expanded collapsed state control type should be appropriate:
+                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
+                        return UiaCore.UIA.TreeItemControlTypeId;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.GridItemPatternId ||
+                    patternId == UiaCore.UIA.TableItemPatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
         }
     }
 }

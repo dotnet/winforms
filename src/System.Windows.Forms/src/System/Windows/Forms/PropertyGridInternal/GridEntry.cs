@@ -2883,11 +2883,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                for (EventEntry e = eventList; e is not null; e = e.next)
+                for (EventEntry e = eventList; e is not null; e = e._next)
                 {
-                    if (e.key == key)
+                    if (e._key == key)
                     {
-                        e.handler = Delegate.Combine(e.handler, handler);
+                        e._handler = Delegate.Combine(e._handler, handler);
                         return;
                     }
                 }
@@ -2910,11 +2910,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             // Locking 'this' here is ok since this is an internal class.
             lock (this)
             {
-                for (EventEntry e = eventList; e is not null; e = e.next)
+                for (EventEntry e = eventList; e is not null; e = e._next)
                 {
-                    if (e.key == key)
+                    if (e._key == key)
                     {
-                        return e.handler;
+                        return e._handler;
                     }
                 }
 
@@ -2932,20 +2932,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                for (EventEntry e = eventList, prev = null; e is not null; prev = e, e = e.next)
+                for (EventEntry e = eventList, prev = null; e is not null; prev = e, e = e._next)
                 {
-                    if (e.key == key)
+                    if (e._key == key)
                     {
-                        e.handler = Delegate.Remove(e.handler, handler);
-                        if (e.handler is null)
+                        e._handler = Delegate.Remove(e._handler, handler);
+                        if (e._handler is null)
                         {
                             if (prev is null)
                             {
-                                eventList = e.next;
+                                eventList = e._next;
                             }
                             else
                             {
-                                prev.next = e.next;
+                                prev._next = e._next;
                             }
                         }
 
