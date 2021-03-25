@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -31,9 +29,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                PropertyGridView.PropertyGridViewAccessibleObject parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+                {
+                    return null;
+                }
 
                 switch (direction)
                 {
@@ -63,7 +64,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -88,19 +89,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                    if (parent is null)
+                    if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
                     {
                         return -1;
                     }
 
-                    var gridView = parent.Owner as PropertyGridView;
-                    if (gridView is null || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
+                    if (parent.Owner is not PropertyGridView gridView || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
                     {
                         return -1;
                     }
 
-                    var topLevelGridEntries = gridView.TopLevelGridEntries;
+                    GridEntryCollection? topLevelGridEntries = gridView.TopLevelGridEntries;
                     if (topLevelGridEntries is null)
                     {
                         return -1;

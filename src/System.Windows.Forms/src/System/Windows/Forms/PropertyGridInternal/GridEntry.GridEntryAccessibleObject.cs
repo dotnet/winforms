@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -16,7 +14,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             protected GridEntry owner;
             private delegate void SelectDelegate(AccessibleSelection flags);
-            private int[] runtimeId; // Used by UIAutomation
+            private int[]? runtimeId; // Used by UIAutomation
 
             public GridEntryAccessibleObject(GridEntry owner) : base()
             {
@@ -31,7 +29,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     : Rectangle.Empty;
             }
 
-            public override string DefaultAction
+            public override string? DefaultAction
             {
                 get
                 {
@@ -71,7 +69,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -102,11 +100,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             {
                 get
                 {
-                    return (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                    return Parent as PropertyGridView.PropertyGridViewAccessibleObject;
                 }
             }
 
@@ -124,7 +122,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {
@@ -152,7 +150,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -268,13 +266,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override void DoDefaultAction()
             {
-                if (PropertyGridView.IsHandleCreated)
+                if (PropertyGridView is not null && PropertyGridView.IsHandleCreated)
                 {
                     owner.OnOutlineClick(EventArgs.Empty);
                 }
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
@@ -282,7 +280,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public override AccessibleObject Parent
+            public override AccessibleObject? Parent
             {
                 get
                 {
@@ -290,7 +288,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            private PropertyGridView PropertyGridView
+            private PropertyGridView? PropertyGridView
             {
                 get
                 {
@@ -316,7 +314,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (!PropertyGridView.IsHandleCreated)
+                    if (PropertyGridView is null || !PropertyGridView.IsHandleCreated)
                     {
                         return AccessibleStates.None;
                     }
@@ -379,7 +377,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public override string Value
+            public override string? Value
             {
                 get
                 {
@@ -396,7 +394,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Returns the currently focused child, if any.
             ///  Returns this if the object itself is focused.
             /// </summary>
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
                 if (owner.Focus)
                 {
@@ -411,10 +409,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Navigate to the next or previous grid entry.
             /// </summary>
-            public override AccessibleObject Navigate(AccessibleNavigation navdir)
+            public override AccessibleObject? Navigate(AccessibleNavigation navdir)
             {
-                PropertyGridView.PropertyGridViewAccessibleObject parent =
-                (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+                {
+                    return null;
+                }
 
                 switch (navdir)
                 {
@@ -440,7 +440,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override void Select(AccessibleSelection flags)
             {
-                if (!PropertyGridView.IsHandleCreated)
+                if (PropertyGridView is null || !PropertyGridView.IsHandleCreated)
                 {
                     return;
                 }
@@ -470,7 +470,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override void SetFocus()
             {
-                if (!PropertyGridView.IsHandleCreated)
+                if (PropertyGridView is null || !PropertyGridView.IsHandleCreated)
                 {
                     return;
                 }
@@ -484,19 +484,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                    if (parent is null)
+                    if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
                     {
                         return -1;
                     }
 
-                    var gridView = parent.Owner as PropertyGridView;
-                    if (gridView is null)
+                    if (parent.Owner is not PropertyGridView gridView)
                     {
                         return -1;
                     }
 
-                    var topLevelGridEntries = gridView.TopLevelGridEntries;
+                    GridEntryCollection? topLevelGridEntries = gridView.TopLevelGridEntries;
                     if (topLevelGridEntries is null)
                     {
                         return -1;
@@ -504,7 +502,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     for (int i = 0; i < topLevelGridEntries.Count; i++)
                     {
-                        var topLevelGridEntry = topLevelGridEntries[i];
+                        GridItem? topLevelGridEntry = topLevelGridEntries[i];
                         if (owner == topLevelGridEntry)
                         {
                             return i;
@@ -517,9 +515,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override int Column => 0;
 
-            internal override UiaCore.IRawElementProviderSimple ContainingGrid
+            internal override UiaCore.IRawElementProviderSimple? ContainingGrid
             {
-                get => PropertyGridView.AccessibilityObject;
+                get => PropertyGridView?.AccessibilityObject;
             }
         }
     }

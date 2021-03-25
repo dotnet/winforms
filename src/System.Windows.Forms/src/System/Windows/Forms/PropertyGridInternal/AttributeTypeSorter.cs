@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
@@ -12,12 +10,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class AttributeTypeSorter : IComparer
     {
-        private static IDictionary typeIds;
+        private static IDictionary? typeIds;
 
-        private static string GetTypeIdString(Attribute a)
+        private static string? GetTypeIdString(Attribute a)
         {
-            string result;
-            object typeId = a.TypeId;
+            string? result;
+            object? typeId = a.TypeId;
 
             if (typeId is null)
             {
@@ -44,10 +42,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             return result;
         }
 
-        public int Compare(object obj1, object obj2)
+        public int Compare(object? obj1, object? obj2)
         {
-            Attribute a1 = obj1 as Attribute;
-            Attribute a2 = obj2 as Attribute;
+            Attribute? a1 = obj1 as Attribute;
+            Attribute? a2 = obj2 as Attribute;
 
             if (a1 is null && a2 is null)
             {

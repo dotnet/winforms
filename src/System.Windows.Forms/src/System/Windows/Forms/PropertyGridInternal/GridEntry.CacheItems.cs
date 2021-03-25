@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -12,13 +10,13 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private class CacheItems
         {
-            public string lastLabel;
-            public Font lastLabelFont;
+            public string? lastLabel;
+            public Font? lastLabelFont;
             public int lastLabelWidth;
-            public string lastValueString;
-            public Font lastValueFont;
+            public string? lastValueString;
+            public Font? lastValueFont;
             public int lastValueTextWidth;
-            public object lastValue;
+            public object? lastValue;
             public bool useValueString;
             public bool lastShouldSerialize;
             public bool useShouldSerialize;
