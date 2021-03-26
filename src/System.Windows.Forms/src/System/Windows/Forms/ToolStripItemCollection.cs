@@ -107,7 +107,7 @@ namespace System.Windows.Forms
 
             SetOwner(value);
             int retVal = InnerList.Add(value);
-            if (_itemsCollection && _owner != null)
+            if (_itemsCollection && _owner is not null)
             {
                 _owner.OnItemAddedInternal(value);
                 _owner.OnItemAdded(new ToolStripItemEventArgs(value));
@@ -184,11 +184,11 @@ namespace System.Windows.Forms
 
             ToolStripOverflow overflow = null;
 
-            if (_owner != null && !_owner.IsDisposingItems)
+            if (_owner is not null && !_owner.IsDisposingItems)
             {
                 _owner.SuspendLayout();
                 overflow = _owner.GetOverflow();
-                if (overflow != null)
+                if (overflow is not null)
                 {
                     overflow.SuspendLayout();
                 }
@@ -203,12 +203,12 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (overflow != null)
+                if (overflow is not null)
                 {
                     overflow.ResumeLayout(false);
                 }
 
-                if (_owner != null && !_owner.IsDisposingItems)
+                if (_owner is not null && !_owner.IsDisposingItems)
                 {
                     _owner.ResumeLayout();
                 }
@@ -329,7 +329,7 @@ namespace System.Windows.Forms
             CheckCanAddOrInsertItem(value);
             SetOwner(value);
             InnerList.Insert(index, value);
-            if (_itemsCollection && _owner != null)
+            if (_itemsCollection && _owner is not null)
             {
                 if (_owner.IsHandleCreated)
                 {
@@ -402,13 +402,13 @@ namespace System.Windows.Forms
             if (_itemsCollection)
             {
                 ToolStrip parent = null;
-                if (item != null)
+                if (item is not null)
                 {
                     parent = item.ParentInternal;
                     item.SetOwner(null);
                 }
 
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     _owner.OnItemRemovedInternal(item);
 
@@ -420,7 +420,7 @@ namespace System.Windows.Forms
                         // dont fire the ItemRemoved event for Overflow
                         // it would fire constantly.... instead clear any state if the item
                         // is really being removed from the master collection.
-                        if (parent != null && parent != _owner)
+                        if (parent is not null && parent != _owner)
                         {
                             parent.OnItemVisibleChanged(e, /*performLayout*/false);
                         }
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
         //
         internal void MoveItem(ToolStripItem value)
         {
-            if (value.ParentInternal != null)
+            if (value.ParentInternal is not null)
             {
                 int indexOfItem = value.ParentInternal.Items.IndexOf(value);
                 if (indexOfItem >= 0)
@@ -503,7 +503,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (value.ParentInternal != null)
+            if (value.ParentInternal is not null)
             {
                 int indexOfItem = value.ParentInternal.Items.IndexOf(value);
 
@@ -525,15 +525,15 @@ namespace System.Windows.Forms
         {
             if (_itemsCollection)
             {
-                if (item != null)
+                if (item is not null)
                 {
-                    if (item.Owner != null)
+                    if (item.Owner is not null)
                     {
                         item.Owner.Items.Remove(item);
                     }
 
                     item.SetOwner(_owner);
-                    if (item.Renderer != null)
+                    if (item.Renderer is not null)
                     {
                         item.Renderer.InitializeItem(item);
                     }

@@ -269,7 +269,7 @@ namespace System.Windows.Forms
                 {
                     List<SettingsStub> stubSettings = toolStripPanelDestinationHash[toolStripPanelName];
 
-                    if (stubSettings != null)
+                    if (stubSettings is not null)
                     {
                         foreach (SettingsStub settings in stubSettings)
                         {
@@ -292,7 +292,7 @@ namespace System.Windows.Forms
 
         private void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
         {
-            if (toolStrip != null)
+            if (toolStrip is not null)
             {
                 toolStrip.Visible = settings.Visible;
                 toolStrip.Size = settings.Size;
@@ -308,7 +308,7 @@ namespace System.Windows.Forms
                     for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++)
                     {
                         Match match = r.Match(keys[i]);
-                        if (match != null && match.Success)
+                        if (match is not null && match.Success)
                         {
                             string key = match.Value;
                             if (!string.IsNullOrEmpty(key) && itemLocationHash.ContainsKey(key))
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
                             continue;
                         }
 
-                        if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
+                        if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
                         {
                             // If it has a valid child collection, append those results to our collection.
                             FindControls(searchAllChildren, controlsToLookIn[i].Controls, foundControls);
@@ -388,7 +388,7 @@ namespace System.Windows.Forms
 
         private string GetSettingsKey(ToolStrip toolStrip)
         {
-            if (toolStrip != null)
+            if (toolStrip is not null)
             {
                 return formKey + "." + toolStrip.Name;
             }

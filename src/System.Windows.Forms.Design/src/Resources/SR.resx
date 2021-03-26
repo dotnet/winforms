@@ -1069,4 +1069,7 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="CellStyleBuilderSelectedPreviewAccName" xml:space="preserve">
     <value>Selected Preview</value>
   </data>
+  <data name="InitialDirectoryEditorLabel" xml:space="preserve">
+    <value>Select the directory that will initially be opened in the dialog.</value>
+  </data>
 </root>

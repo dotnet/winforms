@@ -945,6 +945,11 @@
         <target state="translated">Tylko do odczytu</target>
         <note />
       </trans-unit>
+      <trans-unit id="InitialDirectoryEditorLabel">
+        <source>Select the directory that will initially be opened in the dialog.</source>
+        <target state="translated">Wybierz katalog, który będzie wstępnie otwierany w oknie dialogowym.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
         <target state="translated">„{1}” nie jest prawidłową wartością elementu „{0}”.</target>

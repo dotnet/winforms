@@ -94,7 +94,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner != null)
+                    if (_owner is not null)
                     {
                         return _owner.Selected;
                     }

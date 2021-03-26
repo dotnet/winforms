@@ -25,7 +25,7 @@ namespace System.Windows.Forms
                     ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
                     if (toolStripComboBox is null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
                     {
-                        Debug.Assert(toolStripComboBox != null, "Why are we here and not a toolstrip combo?");
+                        Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
                         return true;
                     }
 
@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
                 private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl toolStripComboBoxControl)
                 {
-                    if (toolStripComboBoxControl != null)
+                    if (toolStripComboBoxControl is not null)
                     {
                         return toolStripComboBoxControl.ColorTable;
                     }

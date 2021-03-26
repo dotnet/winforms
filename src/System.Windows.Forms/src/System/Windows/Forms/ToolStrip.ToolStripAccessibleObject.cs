@@ -36,7 +36,7 @@ namespace System.Windows.Forms
 
                 Point clientHit = _owningToolStrip.PointToClient(new Point(x, y));
                 ToolStripItem item = _owningToolStrip.GetItemAt(clientHit);
-                return ((item != null) && (item.AccessibilityObject != null))
+                return ((item is not null) && (item.AccessibilityObject is not null))
                     ? item.AccessibilityObject
                     : base.HitTest(x, y);
             }

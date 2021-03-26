@@ -40,7 +40,7 @@ namespace System.Windows.Forms
 
             public void BeforeNavigate2(object pDisp, ref object urlObject, ref object flags, ref object targetFrameName, ref object postData, ref object headers, ref bool cancel)
             {
-                Debug.Assert(_parent != null, "Parent should have been set");
+                Debug.Assert(_parent is not null, "Parent should have been set");
                 //Note: we want to allow navigation if we haven't already navigated.
                 if (AllowNavigation || !_haveNavigated)
                 {
@@ -77,13 +77,13 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(urlObject is null || urlObject is string, "invalid url");
                 _haveNavigated = true;
-                if (_parent.documentStreamToSetOnLoad != null && (string)urlObject == "about:blank")
+                if (_parent.documentStreamToSetOnLoad is not null && (string)urlObject == "about:blank")
                 {
                     HtmlDocument htmlDocument = _parent.Document;
-                    if (htmlDocument != null)
+                    if (htmlDocument is not null)
                     {
                         Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                        Debug.Assert(psi != null, "The Document does not implement IPersistStreamInit");
+                        Debug.Assert(psi is not null, "The Document does not implement IPersistStreamInit");
                         Ole32.IStream iStream = (Ole32.IStream)new Ole32.GPStream(
                                                     _parent.documentStreamToSetOnLoad);
                         psi.Load(iStream);
