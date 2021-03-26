@@ -1114,12 +1114,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Закрыть</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Открыть</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -10424,7 +10424,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">Длина текста должна быть меньше 128 символов.</target>
+        <target state="translated">Длина текста должна быть меньше 128 символов.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">

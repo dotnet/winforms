@@ -947,7 +947,7 @@
       </trans-unit>
       <trans-unit id="InitialDirectoryEditorLabel">
         <source>Select the directory that will initially be opened in the dialog.</source>
-        <target state="new">Select the directory that will initially be opened in the dialog.</target>
+        <target state="translated">Wybierz katalog, który będzie wstępnie otwierany w oknie dialogowym.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">

@@ -1114,12 +1114,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Fermer</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Ouvrir</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -10423,7 +10423,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">La longueur du texte doit être inférieure à 128 caractères.</target>
+        <target state="translated">Le texte doit comporter moins de 128 caractères.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">

@@ -1114,12 +1114,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">关闭</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">打开</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
