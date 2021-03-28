@@ -1114,12 +1114,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Kapat</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Aç</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -10423,7 +10423,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">Metin uzunluğu 128 karakterden az olmalı.</target>
+        <target state="translated">Metin uzunluğu 128 karakterden az olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">

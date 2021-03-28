@@ -1114,12 +1114,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Fechar</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Abrir</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -10423,7 +10423,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">O texto deve ter menos de 128 caracteres.</target>
+        <target state="translated">O texto deve conter menos de 128 caracteres.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
