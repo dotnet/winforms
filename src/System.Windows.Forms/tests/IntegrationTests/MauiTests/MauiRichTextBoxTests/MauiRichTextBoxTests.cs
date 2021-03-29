@@ -16,8 +16,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
     public class MauiRichTextBoxTests : ReflectBase
     {
-        private const int tomLink = unchecked((int)0x80000020);
-        private const int tomHidden = unchecked((int)0x80000100);
+        private const int TomLink = unchecked((int)0x80000020);
+        private const int TomHidden = unchecked((int)0x80000100);
 
         private readonly RichTextBox _control;
 
