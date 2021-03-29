@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             _headerAlignment = headerAlignment;
         }
 
-        internal AccessibleObject? AccessibilityObject
+        internal AccessibleObject AccessibilityObject
         {
             get
             {

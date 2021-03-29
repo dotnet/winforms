@@ -74,8 +74,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsCreated()
+        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsCreated_VisualStylesEnabled()
         {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
             using ListView list = new ListView();
             list.CreateControl();
             ListViewGroup listGroup = new ListViewGroup("Group1");
