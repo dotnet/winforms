@@ -65,10 +65,10 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             var displayText = GetTextFromRange(e.LinkStart, e.LinkLength, range =>
             {
                 // Move the cursor to the end of the hidden area we are currently located in.
-                range.EndOf(tomHidden, 0);
+                range.EndOf(TomHidden, 0);
 
                 // Extend the cursor to the end of the display text of the link.
-                range.EndOf(tomLink, 1);
+                range.EndOf(TomLink, 1);
             });
 
             if (displayText != "Click link #2")
@@ -109,10 +109,10 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             var hiddenText = GetTextFromRange(e.LinkStart, e.LinkLength, range =>
             {
                 // Move the cursor to the start of the link we are currently located in.
-                range.StartOf(tomLink, 0);
+                range.StartOf(TomLink, 0);
 
                 // Extend the cursor to the start of the hidden area preceeding the link.
-                range.StartOf(tomHidden, 1);
+                range.StartOf(TomHidden, 1);
             });
 
             if (hiddenText != "#link2#")
@@ -155,10 +155,10 @@ This is a custom link\v #link3#\v0  which is followed by hidden text.\par
             var hiddenText = GetTextFromRange(e.LinkStart, e.LinkLength, range =>
             {
                 // Move the cursor to the end of link we are currently located in.
-                range.EndOf(tomLink, 0);
+                range.EndOf(TomLink, 0);
 
                 // Extend the cursor to the end of the hidden area following the link.
-                range.EndOf(tomHidden, 1);
+                range.EndOf(TomHidden, 1);
             });
 
             if (hiddenText != "#link2#")
