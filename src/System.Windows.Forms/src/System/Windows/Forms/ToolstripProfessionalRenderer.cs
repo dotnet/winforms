@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms
 
         private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
-            e.Graphics.DrawLine(SystemPens.ButtonHighlight, 0, 0, e.ToolStrip.Width, 0);
+            e.Graphics.DrawLine(ColorTable.StatusStripBorder, 0, 0, e.ToolStrip.Width, 0);
         }
 
         private void RenderStatusStripBackground(ToolStripRenderEventArgs e)

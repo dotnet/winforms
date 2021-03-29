@@ -229,6 +229,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
         public virtual Color SeparatorLight => FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight);
 
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripBorderDescr))]
+        public virtual Color StatusStripBorder => FromKnownColor(KnownColors.msocbvcrCBShadow);
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public virtual Color StatusStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
