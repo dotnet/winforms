@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -26,56 +24,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owningCategoryGridEntry = owningCategoryGridEntry;
             }
 
-            /// <summary>
-            ///  Returns the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                PropertyGridView.PropertyGridViewAccessibleObject parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-
-                switch (direction)
-                {
-                    case UiaCore.NavigateDirection.Parent:
-                        return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
-                        return parent.GetNextCategory(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        return parent.GetPreviousCategory(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.FirstChild:
-                        return parent.GetFirstChildProperty(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.LastChild:
-                        return parent.GetLastChildProperty(_owningCategoryGridEntry);
-                }
-
-                return base.FragmentNavigate(direction);
-            }
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.GridItemPatternId ||
-                    patternId == UiaCore.UIA.TableItemPatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        // To announce expanded collapsed state control type should be appropriate:
-                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-                        return UiaCore.UIA.TreeItemControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
             public override AccessibleRole Role
             {
                 get
@@ -84,23 +32,24 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
+            // Category is in the first column.
+            internal override int Column => 0;
+
             internal override int Row
             {
                 get
                 {
-                    var parent = Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                    if (parent is null)
+                    if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
                     {
                         return -1;
                     }
 
-                    var gridView = parent.Owner as PropertyGridView;
-                    if (gridView is null || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
+                    if (parent.Owner is not PropertyGridView gridView || gridView.OwnerGrid is null || !gridView.OwnerGrid.SortedByCategories)
                     {
                         return -1;
                     }
 
-                    var topLevelGridEntries = gridView.TopLevelGridEntries;
+                    GridEntryCollection? topLevelGridEntries = gridView.TopLevelGridEntries;
                     if (topLevelGridEntries is null)
                     {
                         return -1;
@@ -124,7 +73,58 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override int Column => 0; // Category is in the first column.
+            /// <summary>
+            ///  Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent)
+                {
+                    return null;
+                }
+
+                switch (direction)
+                {
+                    case UiaCore.NavigateDirection.Parent:
+                        return Parent;
+                    case UiaCore.NavigateDirection.NextSibling:
+                        return parent.GetNextCategory(_owningCategoryGridEntry);
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        return parent.GetPreviousCategory(_owningCategoryGridEntry);
+                    case UiaCore.NavigateDirection.FirstChild:
+                        return parent.GetFirstChildProperty(_owningCategoryGridEntry);
+                    case UiaCore.NavigateDirection.LastChild:
+                        return parent.GetLastChildProperty(_owningCategoryGridEntry);
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            {
+                switch (propertyID)
+                {
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        // To announce expanded collapsed state control type should be appropriate:
+                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
+                        return UiaCore.UIA.TreeItemControlTypeId;
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.GridItemPatternId ||
+                    patternId == UiaCore.UIA.TableItemPatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
         }
     }
 }
