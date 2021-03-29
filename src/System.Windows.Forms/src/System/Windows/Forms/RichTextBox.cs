@@ -3314,7 +3314,7 @@ namespace System.Windows.Forms
                     string linktext = CharRangeToString(enlink.charrange);
                     if (!string.IsNullOrEmpty(linktext))
                     {
-                        OnLinkClicked(new LinkClickedEventArgs(linktext));
+                        OnLinkClicked(new LinkClickedEventArgs(linktext, enlink.charrange.cpMin, enlink.charrange.cpMax - enlink.charrange.cpMin));
                     }
 
                     m.Result = (IntPtr)1;

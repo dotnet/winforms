@@ -21,6 +21,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("System.Windows.Forms.IntegrationTests.Common, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Maui.IntegrationTests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("MauiMonthCalendarTests, PublicKey=00000000000000000400000000000000")]
+[assembly: InternalsVisibleTo("MauiRichTextBoxTests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("MauiTestsHelper, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("MauiTabControlTests, PublicKey=00000000000000000400000000000000")]
 
