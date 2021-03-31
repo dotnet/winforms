@@ -122,60 +122,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         }
 
         [Scenario(true)]
-        public ScenarioResult MonthCalendar_GetFromPoint_ReturnsCorrectValue(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            CalendarBodyAccessibleObject bodyAccessibleObject = new CalendarBodyAccessibleObject(accessibleObject, 0);
-            MCHITTESTINFO info = new MCHITTESTINFO
-            {
-                uHit = MCHT.CALENDARDAY,
-                iRow = 0
-            };
-            Application.DoEvents();
-            CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
-
-            return new ScenarioResult(cell != null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult CalendarBodyAccessibleObject_GetFromPoint_ReturnsNull_IfCalendarIndexIsIncorrect(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            CalendarBodyAccessibleObject bodyAccessibleObject = new CalendarBodyAccessibleObject(accessibleObject, -10);
-            MCHITTESTINFO info = new MCHITTESTINFO
-            {
-                uHit = MCHT.CALENDARDAY,
-                iRow = 0
-            };
-            Application.DoEvents();
-            CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
-
-            return new ScenarioResult(cell is null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult CalendarBodyAccessibleObject_GetFromPoint_ReturnsNull_IfMCHITTESTINFOIsIncorrect(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            CalendarBodyAccessibleObject bodyAccessibleObject = new CalendarBodyAccessibleObject(accessibleObject, 0);
-            MCHITTESTINFO info = new MCHITTESTINFO
-            {
-                uHit = MCHT.CALENDARDAY,
-                iRow = -10
-            };
-            Application.DoEvents();
-            CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
-
-            return new ScenarioResult(cell is null);
-        }
-
-        [Scenario(true)]
         public ScenarioResult MonthCalendarAccessibleObject_GetCalendarChildAccessibleObject_ReturnsCorrecObject(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);

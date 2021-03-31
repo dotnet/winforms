@@ -835,7 +835,7 @@ namespace System.Windows.Forms
             set => base.Size = value;
         }
 
-        internal override bool SupportsUiaProviders => true;
+        internal override bool SupportsUiaProviders => false;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -2097,9 +2097,6 @@ namespace System.Windows.Forms
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-
-            MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
-            calendarAccessibleObject.RaiseAutomationEventForChild(UiaCore.UIA.AutomationFocusChangedEventId, _selectionStart, _selectionEnd);
 
             if (start.Ticks < _minDate.Ticks || end.Ticks < _minDate.Ticks)
             {

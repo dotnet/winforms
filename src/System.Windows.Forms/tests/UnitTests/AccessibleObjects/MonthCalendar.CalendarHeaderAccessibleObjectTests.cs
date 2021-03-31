@@ -8,13 +8,5 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class MonthCalendarCalendarHeaderAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
-        [WinFormsFact]
-        public void CalendarHeaderAccessibleObject_Name_Get_ReturnsExpected()
-        {
-            using var calendar = new MonthCalendar();
-            MonthCalendar.MonthCalendarAccessibleObject accessibleObject = Assert.IsType<MonthCalendar.MonthCalendarAccessibleObject>(calendar.AccessibilityObject);
-            var headerAccessibleObject = new MonthCalendar.CalendarHeaderAccessibleObject(accessibleObject, 0);
-            Assert.Empty(headerAccessibleObject.Name);
-        }
     }
 }
