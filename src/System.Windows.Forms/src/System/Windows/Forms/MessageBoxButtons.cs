@@ -44,6 +44,12 @@ namespace System.Windows.Forms
         ///  Specifies that the message box contains Retry and Cancel buttons.
         ///  This field is constant.
         /// </summary>
-        RetryCancel = (int)MB.RETRYCANCEL
+        RetryCancel = (int)MB.RETRYCANCEL,
+
+        /// <summary>
+        ///  Specifies that the message box contains Cancel, Try Again, and Continue buttons.
+        ///  This field is constant.
+        /// </summary>
+        CancelTryContinue = (int)MB.CANCELTRYCONTINUE,
     }
 }
