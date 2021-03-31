@@ -10733,12 +10733,17 @@ namespace System.Windows.Forms.Tests
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
 
-        private static string GetClassName(IntPtr hWnd)
+        private static unsafe string GetClassName(IntPtr hWnd)
         {
-            const int MaxClassName = 256;
-            StringBuilder sb = new StringBuilder(MaxClassName);
-            UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), sb, MaxClassName);
-            return sb.ToString();
+            Span<char> buf = stackalloc char[256];
+            string result;
+            fixed (char* valueChars = buf)
+            {
+                _ = UnsafeNativeMethods.GetClassName(new HandleRef(null, hWnd), valueChars, buf.Length);
+                result = buf.SliceAtFirstNull().ToString();
+            }
+
+            return result;
         }
 
         /// <summary>

@@ -800,8 +800,7 @@ namespace System.Windows.Forms
             if (TaskDialogPage.IsNativeStringNullOrEmpty(caption))
             {
                 caption = Path.GetFileName(
-                    UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef)
-                                       .ToString());
+                    UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef));
             }
 
             User32.SetWindowTextW(_handle, caption);
