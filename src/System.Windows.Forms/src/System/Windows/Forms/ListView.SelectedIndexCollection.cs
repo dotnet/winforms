@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems != null)
+                        if (owner.savedSelectedItems is not null)
                         {
                             return owner.savedSelectedItems.Count;
                         }
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems != null || count == 0, "if the count of selectedItems is greater than 0 then the selectedItems should have been saved by now");
+                        Debug.Assert(owner.savedSelectedItems is not null || count == 0, "if the count of selectedItems is greater than 0 then the selectedItems should have been saved by now");
                         for (int i = 0; i < count; i++)
                         {
                             indices[i] = owner.savedSelectedItems[i].Index;
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems != null, "Null selected items collection");
+                        Debug.Assert(owner.savedSelectedItems is not null, "Null selected items collection");
                         return owner.savedSelectedItems[index].Index;
                     }
                 }
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
             public IEnumerator GetEnumerator()
             {
                 int[] indices = IndicesArray;
-                if (indices != null)
+                if (indices is not null)
                 {
                     return indices.GetEnumerator();
                 }

@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 Point p = Owner.PointToClient(new Point(x, y));
                 Link hit = ((LinkLabel)Owner).PointInLink(p.X, p.Y);
 
-                if (hit != null)
+                if (hit is not null)
                 {
                     return new LinkAccessibleObject(hit);
                 }

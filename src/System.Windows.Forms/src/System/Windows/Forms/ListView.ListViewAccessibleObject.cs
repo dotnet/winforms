@@ -40,7 +40,7 @@ namespace System.Windows.Forms
                         // to any of the group and have null as the item.Group value, so these items
                         // are put into the default group and thereby the ListView itself starts
                         // containing Default group.
-                        if (item != null && item.Group is null)
+                        if (item is not null && item.Group is null)
                         {
                             return true;
                         }
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < GetChildCount(); i++)
                     {
                         AccessibleObject? accessibilityObject = GetChild(i);
-                        if (accessibilityObject != null &&
+                        if (accessibilityObject is not null &&
                             accessibilityObject.Bounds.Contains(new Point(x, y)))
                         {
                             return accessibilityObject;
@@ -306,9 +306,9 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                if (hitTestInfo.Item != null)
+                if (hitTestInfo.Item is not null)
                 {
-                    if (hitTestInfo.SubItem != null)
+                    if (hitTestInfo.SubItem is not null)
                     {
                         return hitTestInfo.SubItem.AccessibilityObject;
                     }

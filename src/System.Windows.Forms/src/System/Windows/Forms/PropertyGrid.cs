@@ -257,12 +257,12 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (_doccomment != null)
+                if (_doccomment is not null)
                 {
                     _doccomment.ResumeLayout(false);
                 }
 
-                if (_hotcommands != null)
+                if (_hotcommands is not null)
                 {
                     _hotcommands.ResumeLayout(false);
                 }
@@ -287,10 +287,10 @@ namespace System.Windows.Forms
                 if (value != _designerHost)
                 {
                     SetFlag(ReInitTab, true);
-                    if (_designerHost != null)
+                    if (_designerHost is not null)
                     {
                         IComponentChangeService cs = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
-                        if (cs != null)
+                        if (cs is not null)
                         {
                             cs.ComponentAdded -= _onComponentAdd;
                             cs.ComponentRemoved -= _onComponentRemove;
@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                         }
 
                         IPropertyValueUIService pvSvc = (IPropertyValueUIService)_designerHost.GetService(typeof(IPropertyValueUIService));
-                        if (pvSvc != null)
+                        if (pvSvc is not null)
                         {
                             pvSvc.PropertyUIValueItemsChanged -= new EventHandler(OnNotifyPropertyValueUIItemsChanged);
                         }
@@ -310,10 +310,10 @@ namespace System.Windows.Forms
                         _designerHost = null;
                     }
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         IComponentChangeService cs = (IComponentChangeService)value.GetService(typeof(IComponentChangeService));
-                        if (cs != null)
+                        if (cs is not null)
                         {
                             cs.ComponentAdded += _onComponentAdd;
                             cs.ComponentRemoved += _onComponentRemove;
@@ -325,14 +325,14 @@ namespace System.Windows.Forms
                         SetFlag(BatchMode, false);
 
                         IPropertyValueUIService pvSvc = (IPropertyValueUIService)value.GetService(typeof(IPropertyValueUIService));
-                        if (pvSvc != null)
+                        if (pvSvc is not null)
                         {
                             pvSvc.PropertyUIValueItemsChanged += new EventHandler(OnNotifyPropertyValueUIItemsChanged);
                         }
                     }
 
                     _designerHost = value;
-                    if (_peMain != null)
+                    if (_peMain is not null)
                     {
                         _peMain.DesignerHost = value;
                     }
@@ -411,9 +411,9 @@ namespace System.Windows.Forms
                     _browsableAttributes = new AttributeCollection(attributes);
                 }
 
-                if (_currentObjects != null && _currentObjects.Length > 0)
+                if (_currentObjects is not null && _currentObjects.Length > 0)
                 {
-                    if (_peMain != null)
+                    if (_peMain is not null)
                     {
                         _peMain.BrowsableAttributes = BrowsableAttributes;
                         Refresh(true);
@@ -876,7 +876,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return _gridView != null && _gridView.Visible;
+                return _gridView is not null && _gridView.Visible;
             }
         }
 
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms
 
                 _propertySortValue = value;
 
-                if (selectedGridItem != null)
+                if (selectedGridItem is not null)
                 {
                     try
                     {
@@ -1154,7 +1154,7 @@ namespace System.Windows.Forms
                     bool showEvents = true;
 
                     // validate the array coming in
-                    if (value != null && value.Length > 0)
+                    if (value is not null && value.Length > 0)
                     {
                         for (int count = 0; count < value.Length; count++)
                         {
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
                     }
 
                     // make sure we actually changed something before we inspect tabs
-                    if (_currentObjects != null && value != null &&
+                    if (_currentObjects is not null && value is not null &&
                         _currentObjects.Length == value.Length)
                     {
                         isSame = true;
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms
 
                         // Since we are changing the selection, we need to make sure that the
                         // keywords for the currently selected grid entry gets removed
-                        if (_gridView != null)
+                        if (_gridView is not null)
                         {
                             // TypeResolutionService is needed to access the HelpKeyword. However,
                             // TypeResolutionService might be disposed when project is closing. We
@@ -1245,7 +1245,7 @@ namespace System.Windows.Forms
                             catch (COMException) { }
                         }
 
-                        if (_peMain != null)
+                        if (_peMain is not null)
                         {
                             _peMain.Dispose();
                         }
@@ -1257,7 +1257,7 @@ namespace System.Windows.Forms
                             ToolStripButton viewTabButton = null;
                             RefreshTabs(PropertyTabScope.Component);
                             EnableTabs();
-                            if (tabType != null)
+                            if (tabType is not null)
                             {
                                 for (int i = 0; i < _viewTabs.Length; i++)
                                 {
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms
                         }
 
                         // make sure we've also got events on all the objects
-                        if (showEvents && _viewTabs != null && _viewTabs.Length > EVENTS && (_viewTabs[EVENTS] is EventsTab))
+                        if (showEvents && _viewTabs is not null && _viewTabs.Length > EVENTS && (_viewTabs[EVENTS] is EventsTab))
                         {
                             showEvents = _viewTabButtons[EVENTS].Visible;
                             object tempObj;
@@ -1299,19 +1299,19 @@ namespace System.Windows.Forms
 
                                 Type objType = tempObj.GetType();
 
-                                if (eventTypes != null && eventTypes.Contains(objType))
+                                if (eventTypes is not null && eventTypes.Contains(objType))
                                 {
                                     continue;
                                 }
 
                                 // make sure these things are sited components as well
-                                showEvents = showEvents && (tempObj is IComponent && ((IComponent)tempObj).Site != null);
+                                showEvents = showEvents && (tempObj is IComponent && ((IComponent)tempObj).Site is not null);
 
                                 // make sure we've also got events on all the objects
                                 events = ((EventsTab)_viewTabs[EVENTS]).GetProperties(tempObj, attrs);
-                                showEvents = showEvents && events != null && events.Count > 0;
+                                showEvents = showEvents && events is not null && events.Count > 0;
 
-                                if (showEvents && eventTypes != null)
+                                if (showEvents && eventTypes is not null)
                                 {
                                     eventTypes[objType] = objType;
                                 }
@@ -1350,7 +1350,7 @@ namespace System.Windows.Forms
 
                             // get the active designer, see if we've stashed away state for it.
                             //
-                            if (designerKey != null && _designerSelections != null && _designerSelections.ContainsKey(designerKey.GetHashCode()))
+                            if (designerKey is not null && _designerSelections is not null && _designerSelections.ContainsKey(designerKey.GetHashCode()))
                             {
                                 int nButton = (int)_designerSelections[designerKey.GetHashCode()];
 
@@ -1507,14 +1507,14 @@ namespace System.Windows.Forms
                 if (value)
                 {
                     EnsureLargeButtons();
-                    if (_imageList != null && _imageList[LargeButtonSize] != null)
+                    if (_imageList is not null && _imageList[LargeButtonSize] is not null)
                     {
                         _toolStrip.ImageScalingSize = _imageList[LargeButtonSize].ImageSize;
                     }
                 }
                 else
                 {
-                    if (_imageList != null && _imageList[NormalButtonSize] != null)
+                    if (_imageList is not null && _imageList[NormalButtonSize] is not null)
                     {
                         _toolStrip.ImageScalingSize = _imageList[NormalButtonSize].ImageSize;
                     }
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_toolStrip != null)
+                if (_toolStrip is not null)
                 {
                     return _toolStrip.Renderer;
                 }
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (_toolStrip != null)
+                if (_toolStrip is not null)
                 {
                     _toolStrip.Renderer = value;
                 }
@@ -1790,12 +1790,12 @@ namespace System.Windows.Forms
             PropertyTab tab = null;
             int tabIndex = -1;
 
-            if (_viewTabs != null)
+            if (_viewTabs is not null)
             {
                 // check to see if we've already got a tab of this type
                 for (int i = 0; i < _viewTabs.Length; i++)
                 {
-                    Debug.Assert(_viewTabs[i] != null, "Null item in tab array!");
+                    Debug.Assert(_viewTabs[i] is not null, "Null item in tab array!");
                     if (tabType == _viewTabs[i].GetType())
                     {
                         tab = _viewTabs[i];
@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms
                 // the tabs need service providers. The one we hold onto is not good enough,
                 // so try to get the one off of the component's site.
                 IDesignerHost host = null;
-                if (component != null && component is IComponent && ((IComponent)component).Site != null)
+                if (component is not null && component is IComponent && ((IComponent)component).Site is not null)
                 {
                     host = (IDesignerHost)((IComponent)component).Site.GetService(typeof(IDesignerHost));
                 }
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms
                 }
 
                 // add it at the end of the array
-                if (_viewTabs != null)
+                if (_viewTabs is not null)
                 {
                     tabIndex = _viewTabs.Length;
 
@@ -1878,10 +1878,10 @@ namespace System.Windows.Forms
                 newTabScopes[tabIndex] = type;
                 _viewTabScopes = newTabScopes;
 
-                Debug.Assert(_viewTabs != null, "Tab array destroyed!");
+                Debug.Assert(_viewTabs is not null, "Tab array destroyed!");
             }
 
-            if (tab != null && component != null)
+            if (tab is not null && component is not null)
             {
                 try
                 {
@@ -1919,7 +1919,7 @@ namespace System.Windows.Forms
 
         private void ClearCachedProps()
         {
-            if (_viewTabProps != null)
+            if (_viewTabProps is not null)
             {
                 _viewTabProps.Clear();
             }
@@ -1927,7 +1927,7 @@ namespace System.Windows.Forms
 
         internal void ClearValueCaches()
         {
-            if (_peMain != null)
+            if (_peMain is not null)
             {
                 _peMain.ClearCachedValues();
             }
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms
                     // try a IDesignerHost ctor
                     constructor = tabType.GetConstructor(new Type[] { typeof(IDesignerHost) });
 
-                    if (constructor != null)
+                    if (constructor is not null)
                     {
                         param = host;
                     }
@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms
                     param = Site;
                 }
 
-                if (param != null && constructor != null)
+                if (param is not null && constructor is not null)
                 {
                     tab = (PropertyTab)constructor.Invoke(new object[] { param });
                 }
@@ -2023,9 +2023,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            Debug.Assert(tab != null, "Failed to create tab!");
+            Debug.Assert(tab is not null, "Failed to create tab!");
 
-            if (tab != null)
+            if (tab is not null)
             {
                 // ensure it's a valid tab
                 Bitmap bitmap = tab.Bitmap;
@@ -2094,7 +2094,7 @@ namespace System.Windows.Forms
             // verbs.  If we fail that, we will go straight to the
             // designer.
             //
-            if (_currentObjects != null && _currentObjects.Length > 0)
+            if (_currentObjects is not null && _currentObjects.Length > 0)
             {
                 for (int i = 0; i < _currentObjects.Length; i++)
                 {
@@ -2106,14 +2106,14 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (component != null)
+                if (component is not null)
                 {
                     ISite site = component.Site;
 
-                    if (site != null)
+                    if (site is not null)
                     {
                         IMenuCommandService mcs = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
-                        if (mcs != null)
+                        if (mcs is not null)
                         {
                             // Got the menu command service.  Let it deal with the set of verbs for
                             // this component.
@@ -2130,10 +2130,10 @@ namespace System.Windows.Forms
                             if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent)
                             {
                                 IDesignerHost designerHost = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                                if (designerHost != null)
+                                if (designerHost is not null)
                                 {
                                     IDesigner designer = designerHost.GetDesigner(component);
-                                    if (designer != null)
+                                    if (designer is not null)
                                     {
                                         verbs = new DesignerVerb[designer.Verbs.Count];
                                         designer.Verbs.CopyTo(verbs, 0);
@@ -2148,7 +2148,7 @@ namespace System.Windows.Forms
             // don't show verbs if a prop grid is on the form at design time.
             if (!DesignMode)
             {
-                if (verbs != null && verbs.Length > 0)
+                if (verbs is not null && verbs.Length > 0)
                 {
                     _hotcommands.SetVerbs(component, verbs);
                 }
@@ -2172,8 +2172,8 @@ namespace System.Windows.Forms
                 //
                 if (GetFlag(GotDesignerEventService))
                 {
-                    Debug.Assert(_designerEventService != null, "GetFlag(GotDesignerEventService) inconsistent with designerEventService == null");
-                    if (_designerEventService != null)
+                    Debug.Assert(_designerEventService is not null, "GetFlag(GotDesignerEventService) inconsistent with designerEventService == null");
+                    if (_designerEventService is not null)
                     {
                         _designerEventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
                     }
@@ -2184,7 +2184,7 @@ namespace System.Windows.Forms
 
                 ActiveDesigner = null;
 
-                if (_viewTabs != null)
+                if (_viewTabs is not null)
                 {
                     for (int i = 0; i < _viewTabs.Length; i++)
                     {
@@ -2194,11 +2194,11 @@ namespace System.Windows.Forms
                     _viewTabs = null;
                 }
 
-                if (_imageList != null)
+                if (_imageList is not null)
                 {
                     for (int i = 0; i < _imageList.Length; i++)
                     {
-                        if (_imageList[i] != null)
+                        if (_imageList[i] is not null)
                         {
                             _imageList[i].Dispose();
                         }
@@ -2207,31 +2207,31 @@ namespace System.Windows.Forms
                     _imageList = null;
                 }
 
-                if (_bmpAlpha != null)
+                if (_bmpAlpha is not null)
                 {
                     _bmpAlpha.Dispose();
                     _bmpAlpha = null;
                 }
 
-                if (_bmpCategory != null)
+                if (_bmpCategory is not null)
                 {
                     _bmpCategory.Dispose();
                     _bmpCategory = null;
                 }
 
-                if (_bmpPropPage != null)
+                if (_bmpPropPage is not null)
                 {
                     _bmpPropPage.Dispose();
                     _bmpPropPage = null;
                 }
 
-                if (_peMain != null)
+                if (_peMain is not null)
                 {
                     _peMain.Dispose();
                     _peMain = null;
                 }
 
-                if (_currentObjects != null)
+                if (_currentObjects is not null)
                 {
                     _currentObjects = null;
                     SinkPropertyNotifyEvents();
@@ -2373,13 +2373,13 @@ namespace System.Windows.Forms
             IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
             bool enable = false;
 
-            if (uiSvc != null)
+            if (uiSvc is not null)
             {
                 enable = uiSvc.CanShowComponentEditor(obj);
             }
             else
             {
-                enable = (TypeDescriptor.GetEditor(obj, typeof(ComponentEditor)) != null);
+                enable = (TypeDescriptor.GetEditor(obj, typeof(ComponentEditor)) is not null);
             }
 
             _btnViewPropertyPages.Enabled = enable;
@@ -2389,18 +2389,18 @@ namespace System.Windows.Forms
         // walk through the current tabs to see if they're all valid for this Object
         private void EnableTabs()
         {
-            if (_currentObjects != null)
+            if (_currentObjects is not null)
             {
                 // make sure our toolbars is okay
                 SetupToolbar();
 
-                Debug.Assert(_viewTabs != null, "Invalid tab array");
+                Debug.Assert(_viewTabs is not null, "Invalid tab array");
                 Debug.Assert(_viewTabs.Length == _viewTabScopes.Length && _viewTabScopes.Length == _viewTabButtons.Length, "Uh oh, tab arrays aren't all the same length! tabs=" + _viewTabs.Length.ToString(CultureInfo.InvariantCulture) + ", scopes=" + _viewTabScopes.Length.ToString(CultureInfo.InvariantCulture) + ", buttons=" + _viewTabButtons.Length.ToString(CultureInfo.InvariantCulture));
 
                 // skip the property tab since it's always valid
                 for (int i = 1; i < _viewTabs.Length; i++)
                 {
-                    Debug.Assert(_viewTabs[i] != null, "Invalid tab array entry");
+                    Debug.Assert(_viewTabs[i] is not null, "Invalid tab array entry");
 
                     bool canExtend = true;
                     // make sure the tab is valid for all objects
@@ -2442,7 +2442,7 @@ namespace System.Windows.Forms
             }
 
             _designerEventService = (IDesignerEventService)GetService(typeof(IDesignerEventService));
-            if (_designerEventService != null)
+            if (_designerEventService is not null)
             {
                 SetFlag(GotDesignerEventService, true);
                 _designerEventService.ActiveDesignerChanged += new ActiveDesignerEventHandler(OnActiveDesignerChanged);
@@ -2516,7 +2516,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (_designerHost != null)
+                if (_designerHost is not null)
                 {
                     _designerHost.TransactionOpened -= new EventHandler(OnTransactionOpened);
                     _designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
@@ -2526,7 +2526,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (_designerHost != null)
+                if (_designerHost is not null)
                 {
                     _designerHost.TransactionOpened += new EventHandler(OnTransactionOpened);
                     _designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
@@ -2631,7 +2631,7 @@ namespace System.Windows.Forms
 
         internal GridEntry GetDefaultGridEntry()
         {
-            if (_peDefault is null && _currentPropEntries != null)
+            if (_peDefault is null && _currentPropEntries is not null)
             {
                 _peDefault = (GridEntry)_currentPropEntries[0];
             }
@@ -2723,11 +2723,11 @@ namespace System.Windows.Forms
 
         void IComPropertyBrowser.LoadState(RegistryKey optRoot)
         {
-            if (optRoot != null)
+            if (optRoot is not null)
             {
                 object val = optRoot.GetValue("PbrsAlpha", "0");
 
-                if (val != null && val.ToString().Equals("1"))
+                if (val is not null && val.ToString().Equals("1"))
                 {
                     PropertySort = PropertySort.Alphabetical;
                 }
@@ -2737,10 +2737,10 @@ namespace System.Windows.Forms
                 }
 
                 val = optRoot.GetValue("PbrsShowDesc", "1");
-                HelpVisible = (val != null && val.ToString().Equals("1"));
+                HelpVisible = (val is not null && val.ToString().Equals("1"));
 
                 val = optRoot.GetValue("PbrsShowCommands", "0");
-                CommandsVisibleIfAvailable = (val != null && val.ToString().Equals("1"));
+                CommandsVisibleIfAvailable = (val is not null && val.ToString().Equals("1"));
 
                 val = optRoot.GetValue("PbrsDescHeightRatio", "-1");
 
@@ -2785,12 +2785,12 @@ namespace System.Windows.Forms
         // are offering up any new tabs
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e)
         {
-            if (e.OldDesigner != null && e.OldDesigner == _designerHost)
+            if (e.OldDesigner is not null && e.OldDesigner == _designerHost)
             {
                 ActiveDesigner = null;
             }
 
-            if (e.NewDesigner != null && e.NewDesigner != _designerHost)
+            if (e.NewDesigner is not null && e.NewDesigner != _designerHost)
             {
                 ActiveDesigner = e.NewDesigner;
             }
@@ -2806,12 +2806,12 @@ namespace System.Windows.Forms
             // an OnChanged that isn't the DispID of the property we're currently changing,
             // we need to cause a refresh.
             bool fullRefresh = false;
-            if (_gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry && selectedEntry.PropertyDescriptor != null && selectedEntry.PropertyDescriptor.Attributes != null)
+            if (_gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry && selectedEntry.PropertyDescriptor is not null && selectedEntry.PropertyDescriptor.Attributes is not null)
             {
                 // fish out the DispIdAttribute which will tell us the DispId of the
                 // property that we're changing.
                 DispIdAttribute dispIdAttr = (DispIdAttribute)selectedEntry.PropertyDescriptor.Attributes[(typeof(DispIdAttribute))];
-                if (dispIdAttr != null && !dispIdAttr.IsDefaultAttribute())
+                if (dispIdAttr is not null && !dispIdAttr.IsDefaultAttribute())
                 {
                     fullRefresh = (dispID != (Ole32.DispatchID)dispIdAttr.Value);
                 }
@@ -2984,7 +2984,7 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             OnLayoutInternal(false);
             TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeDescriptorRefreshed);
-            if (_currentObjects != null && _currentObjects.Length > 0)
+            if (_currentObjects is not null && _currentObjects.Length > 0)
             {
                 Refresh(true);
             }
@@ -3210,7 +3210,7 @@ namespace System.Windows.Forms
         protected override void OnMouseDown(MouseEventArgs me)
         {
             SnappableControl target = DividerInside(me.X, me.Y);
-            if (target != null && me.Button == MouseButtons.Left)
+            if (target is not null && me.Button == MouseButtons.Left)
             {
                 // Capture the mouse.
                 Capture = true;
@@ -3226,7 +3226,7 @@ namespace System.Windows.Forms
         {
             if (_dividerMoveY == -1)
             {
-                if (DividerInside(me.X, me.Y) != null)
+                if (DividerInside(me.X, me.Y) is not null)
                 {
                     Cursor = Cursors.HSplit;
                 }
@@ -3394,7 +3394,7 @@ namespace System.Windows.Forms
             bool dropDown = false;
             Type propertyType = changedItem.PropertyDescriptor.PropertyType;
             UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-            if (editor != null)
+            if (editor is not null)
             {
                 dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
             }
@@ -3481,7 +3481,7 @@ namespace System.Windows.Forms
 
         private void OnTypeDescriptorRefreshedInvoke(RefreshEventArgs e)
         {
-            if (_currentObjects != null)
+            if (_currentObjects is not null)
             {
                 for (int i = 0; i < _currentObjects.Length; i++)
                 {
@@ -3572,7 +3572,7 @@ namespace System.Windows.Forms
         private void OnViewButtonClickPP(object sender, EventArgs e)
         {
             if (_btnViewPropertyPages.Enabled &&
-                _currentObjects != null &&
+                _currentObjects is not null &&
                 _currentObjects.Length > 0)
             {
                 object baseObject = _currentObjects[0];
@@ -3584,7 +3584,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (uiSvc != null)
+                    if (uiSvc is not null)
                     {
                         success = uiSvc.ShowComponentEditor(obj, this);
                     }
@@ -3593,7 +3593,7 @@ namespace System.Windows.Forms
                         try
                         {
                             ComponentEditor editor = (ComponentEditor)TypeDescriptor.GetEditor(obj, typeof(ComponentEditor));
-                            if (editor != null)
+                            if (editor is not null)
                             {
                                 if (editor is WindowsFormsComponentEditor)
                                 {
@@ -3616,11 +3616,11 @@ namespace System.Windows.Forms
                             _connectionPointCookies[0] is null)
                         {
                             ISite site = ((IComponent)baseObject).Site;
-                            if (site != null)
+                            if (site is not null)
                             {
                                 IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
 
-                                if (changeService != null)
+                                if (changeService is not null)
                                 {
                                     try
                                     {
@@ -3657,7 +3657,7 @@ namespace System.Windows.Forms
                 catch (Exception ex)
                 {
                     string errString = SR.ErrorPropertyPageFailed;
-                    if (uiSvc != null)
+                    if (uiSvc is not null)
                     {
                         uiSvc.ShowError(ex, errString);
                     }
@@ -3739,7 +3739,7 @@ namespace System.Windows.Forms
                                 {
                                     _hotcommands.Select(false);
                                 }
-                                else if (_peMain != null)
+                                else if (_peMain is not null)
                                 {
                                     _gridView.ReverseFocus();
                                 }
@@ -3764,7 +3764,7 @@ namespace System.Windows.Forms
                         if (_toolStrip.Focused)
                         {
                             // normal stuff, just do the propsheet
-                            if (_peMain != null)
+                            if (_peMain is not null)
                             {
                                 _gridView.Focus();
                             }
@@ -3892,10 +3892,10 @@ namespace System.Windows.Forms
         internal void RefreshProperties(bool clearCached)
         {
             // Clear our current cache so we can do a full refresh.
-            if (clearCached && _selectedViewTab != -1 && _viewTabs != null)
+            if (clearCached && _selectedViewTab != -1 && _viewTabs is not null)
             {
                 PropertyTab tab = _viewTabs[_selectedViewTab];
-                if (tab != null && _viewTabProps != null)
+                if (tab is not null && _viewTabProps is not null)
                 {
                     string tabName = tab.TabName + _propertySortValue.ToString();
                     _viewTabProps.Remove(tabName);
@@ -3922,7 +3922,7 @@ namespace System.Windows.Forms
             // check the component level tabs
             if (tabScope <= PropertyTabScope.Component)
             {
-                if (_currentObjects != null && _currentObjects.Length > 0)
+                if (_currentObjects is not null && _currentObjects.Length > 0)
                 {
                     // get the subset of PropertyTabs that's common to all objects
                     Type[] tabTypes = GetCommonTabs(_currentObjects, PropertyTabScope.Component);
@@ -3938,19 +3938,19 @@ namespace System.Windows.Forms
             }
 
             // check the document level tabs
-            if (tabScope <= PropertyTabScope.Document && _designerHost != null)
+            if (tabScope <= PropertyTabScope.Document && _designerHost is not null)
             {
                 IContainer container = _designerHost.Container;
-                if (container != null)
+                if (container is not null)
                 {
                     ComponentCollection components = container.Components;
-                    if (components != null)
+                    if (components is not null)
                     {
                         foreach (IComponent comp in components)
                         {
                             PropertyTabAttribute attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(comp.GetType())[typeof(PropertyTabAttribute)];
 
-                            if (attribute != null)
+                            if (attribute is not null)
                             {
                                 for (int j = 0; j < attribute.TabClasses.Length; j++)
                                 {
@@ -3993,7 +3993,7 @@ namespace System.Windows.Forms
             try
             {
                 int index = -1;
-                if (components != null)
+                if (components is not null)
                 {
                     index = Array.IndexOf(components, component);
                 }
@@ -4025,7 +4025,7 @@ namespace System.Windows.Forms
         private void RemoveImage(int index)
         {
             _imageList[NormalButtonSize].Images.RemoveAt(index);
-            if (_imageList[LargeButtonSize] != null)
+            if (_imageList[LargeButtonSize] is not null)
             {
                 _imageList[LargeButtonSize].Images.RemoveAt(index);
             }
@@ -4080,7 +4080,7 @@ namespace System.Windows.Forms
             {
                 SetupToolbar();
 
-                Debug.Assert(_viewTabs != null && _viewTabs.Length > 0, "Holy Moly!  We don't have any tabs left!");
+                Debug.Assert(_viewTabs is not null && _viewTabs.Length > 0, "Holy Moly!  We don't have any tabs left!");
 
                 _selectedViewTab = -1;
                 SelectViewTabButtonDefault(selectedButton);
@@ -4095,7 +4095,7 @@ namespace System.Windows.Forms
 
         internal void RemoveTab(int tabIndex, bool setupToolbar)
         {
-            Debug.Assert(_viewTabs != null, "Tab array destroyed!");
+            Debug.Assert(_viewTabs is not null, "Tab array destroyed!");
 
             if (tabIndex >= _viewTabs.Length || tabIndex < 0)
             {
@@ -4114,10 +4114,10 @@ namespace System.Windows.Forms
 
             // Remove this tab from our "last selected" group
             //
-            if (!GetFlag(ReInitTab) && ActiveDesigner != null)
+            if (!GetFlag(ReInitTab) && ActiveDesigner is not null)
             {
                 int hashCode = ActiveDesigner.GetHashCode();
-                if (_designerSelections != null && _designerSelections.ContainsKey(hashCode) && (int)_designerSelections[hashCode] == tabIndex)
+                if (_designerSelections is not null && _designerSelections.ContainsKey(hashCode) && (int)_designerSelections[hashCode] == tabIndex)
                 {
                     _designerSelections.Remove(hashCode);
                 }
@@ -4220,7 +4220,7 @@ namespace System.Windows.Forms
         //
         internal void ReplaceSelectedObject(object oldObject, object newObject)
         {
-            Debug.Assert(oldObject != null && newObject != null && oldObject.GetType() == newObject.GetType());
+            Debug.Assert(oldObject is not null && newObject is not null && oldObject.GetType() == newObject.GetType());
 
             for (int i = 0; i < _currentObjects.Length; ++i)
             {
@@ -4240,7 +4240,7 @@ namespace System.Windows.Forms
 
         private void SaveTabSelection()
         {
-            if (_designerHost != null)
+            if (_designerHost is not null)
             {
                 if (_designerSelections is null)
                 {
@@ -4284,7 +4284,7 @@ namespace System.Windows.Forms
 
         private void SelectViewTabButton(ToolStripButton button, bool updateSelection)
         {
-            Debug.Assert(_viewTabButtons != null, "No view tab buttons to select!");
+            Debug.Assert(_viewTabButtons is not null, "No view tab buttons to select!");
 
             int oldTab = _selectedViewTab;
 
@@ -4571,7 +4571,7 @@ namespace System.Windows.Forms
                 buttonList.Add(_btnViewPropertyPages);
 
                 // Dispose this so it will get recreated for any new buttons.
-                if (_imageList[LargeButtonSize] != null)
+                if (_imageList[LargeButtonSize] is not null)
                 {
                     _imageList[LargeButtonSize].Dispose();
                     _imageList[LargeButtonSize] = null;
@@ -4611,9 +4611,9 @@ namespace System.Windows.Forms
 
         protected void ShowEventsButton(bool value)
         {
-            if (_viewTabs != null && _viewTabs.Length > EVENTS && (_viewTabs[EVENTS] is EventsTab))
+            if (_viewTabs is not null && _viewTabs.Length > EVENTS && (_viewTabs[EVENTS] is EventsTab))
             {
-                Debug.Assert(_viewTabButtons != null && _viewTabButtons.Length > EVENTS && _viewTabButtons[EVENTS] != null, "Events button is not at EVENTS position");
+                Debug.Assert(_viewTabButtons is not null && _viewTabButtons.Length > EVENTS && _viewTabButtons[EVENTS] is not null, "Events button is not at EVENTS position");
                 _viewTabButtons[EVENTS].Visible = value;
                 if (!value && _selectedViewTab == EVENTS)
                 {
@@ -4700,9 +4700,9 @@ namespace System.Windows.Forms
         private void SinkPropertyNotifyEvents()
         {
             // first clear any existing sinks.
-            for (int i = 0; _connectionPointCookies != null && i < _connectionPointCookies.Length; i++)
+            for (int i = 0; _connectionPointCookies is not null && i < _connectionPointCookies.Length; i++)
             {
-                if (_connectionPointCookies[i] != null)
+                if (_connectionPointCookies[i] is not null)
                 {
                     _connectionPointCookies[i].Disconnect();
                     _connectionPointCookies[i] = null;
@@ -4764,7 +4764,7 @@ namespace System.Windows.Forms
         {
             // If the only view available is properties-view, there's no need to show the button.
             //
-            if (_viewTabButtons != null)
+            if (_viewTabButtons is not null)
             {
                 int nOtherViewsVisible = 0;
                 for (int i = 1; i < _viewTabButtons.Length; i++)
@@ -4802,17 +4802,17 @@ namespace System.Windows.Forms
 
             string tabName = _viewTabs[_selectedViewTab].TabName + _propertySortValue.ToString();
 
-            if (_viewTabProps != null && _viewTabProps.ContainsKey(tabName))
+            if (_viewTabProps is not null && _viewTabProps.ContainsKey(tabName))
             {
                 _peMain = (GridEntry)_viewTabProps[tabName];
-                if (_peMain != null)
+                if (_peMain is not null)
                 {
                     _peMain.Refresh();
                 }
             }
             else
             {
-                if (_currentObjects != null && _currentObjects.Length > 0)
+                if (_currentObjects is not null && _currentObjects.Length > 0)
                 {
                     _peMain = (GridEntry)GridEntry.Create(_gridView, _currentObjects, new PropertyGridServiceProvider(this), _designerHost, SelectedTab, _propertySortValue);
                 }
@@ -4828,7 +4828,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (BrowsableAttributes != null)
+                if (BrowsableAttributes is not null)
                 {
                     _peMain.BrowsableAttributes = BrowsableAttributes;
                 }
@@ -4909,7 +4909,7 @@ namespace System.Windows.Forms
         {
             User32.COPYDATASTRUCT* cds = (User32.COPYDATASTRUCT*)lparam;
 
-            if (cds != null && cds->lpData != IntPtr.Zero)
+            if (cds is not null && cds->lpData != IntPtr.Zero)
             {
                 _propName = Marshal.PtrToStringAuto(cds->lpData);
                 _dwMsg = (int)cds->dwData;
@@ -5013,7 +5013,7 @@ namespace System.Windows.Forms
                     m.Result = (IntPtr)1;
                     return;
                 case AutomationMessages.PGM_GETBUTTONCOUNT:
-                    if (_toolStrip != null)
+                    if (_toolStrip is not null)
                     {
                         m.Result = (IntPtr)_toolStrip.Items.Count;
                         return;
@@ -5021,7 +5021,7 @@ namespace System.Windows.Forms
 
                     break;
                 case AutomationMessages.PGM_GETBUTTONSTATE:
-                    if (_toolStrip != null)
+                    if (_toolStrip is not null)
                     {
                         int index = unchecked((int)(long)m.WParam);
                         if (index >= 0 && index < _toolStrip.Items.Count)
@@ -5041,7 +5041,7 @@ namespace System.Windows.Forms
 
                     break;
                 case AutomationMessages.PGM_SETBUTTONSTATE:
-                    if (_toolStrip != null)
+                    if (_toolStrip is not null)
                     {
                         int index = unchecked((int)(long)m.WParam);
                         if (index >= 0 && index < _toolStrip.Items.Count)
@@ -5077,7 +5077,7 @@ namespace System.Windows.Forms
 
                 case AutomationMessages.PGM_GETBUTTONTEXT:
                 case AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
-                    if (_toolStrip != null)
+                    if (_toolStrip is not null)
                     {
                         int index = unchecked((int)(long)m.WParam);
                         if (index >= 0 && index < _toolStrip.Items.Count)

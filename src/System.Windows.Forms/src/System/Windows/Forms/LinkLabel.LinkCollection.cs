@@ -143,7 +143,7 @@ namespace System.Windows.Forms
 
             public int Add(Link value)
             {
-                if (value != null && value.Length != 0)
+                if (value is not null && value.Length != 0)
                 {
                     LinksAdded = true;
                 }
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (_owner._links != null)
+                if (_owner._links is not null)
                 {
                     return _owner._links.GetEnumerator();
                 }

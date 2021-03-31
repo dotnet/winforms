@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         {
             int IComparer.Compare(object link1, object link2)
             {
-                Debug.Assert(link1 != null && link2 != null, "Null objects sent for comparison");
+                Debug.Assert(link1 is not null && link2 is not null, "Null objects sent for comparison");
 
                 int pos1 = ((Link)link1).Start;
                 int pos2 = ((Link)link2).Start;

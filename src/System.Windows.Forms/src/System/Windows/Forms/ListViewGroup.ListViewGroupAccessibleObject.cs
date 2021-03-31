@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
                 // Using item from group for getting of ListView is a workaround for https://github.com/dotnet/winforms/issues/4019
                 _owningListView = owningGroup.ListView
-                    ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView != null
+                    ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView is not null
                         ? _owningGroup.Items[0].ListView
                         : throw new InvalidOperationException(nameof(owningGroup.ListView)));
 
@@ -205,7 +205,7 @@ namespace System.Windows.Forms
 
                 foreach (ListViewItem? item in _owningListView.Items)
                 {
-                    if (item != null && item.Group is null && index-- == 0)
+                    if (item is not null && item.Group is null && index-- == 0)
                     {
                         return item.AccessibilityObject;
                     }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
                     int count = 0;
                     foreach (ListViewItem? item in _owningListView.Items)
                     {
-                        if (item != null && item.Group is null)
+                        if (item is not null && item.Group is null)
                         {
                             count++;
                         }

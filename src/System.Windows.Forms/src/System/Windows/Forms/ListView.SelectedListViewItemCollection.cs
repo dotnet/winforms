@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems != null)
+                        if (owner.savedSelectedItems is not null)
                         {
                             ListViewItem[] cloned = new ListViewItem[owner.savedSelectedItems.Count];
                             for (int i = 0; i < owner.savedSelectedItems.Count; i++)
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems != null)
+                        if (owner.savedSelectedItems is not null)
                         {
                             return owner.savedSelectedItems.Count;
                         }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems != null, "Null selected items collection");
+                        Debug.Assert(owner.savedSelectedItems is not null, "Null selected items collection");
                         return owner.savedSelectedItems[index];
                     }
                 }
@@ -337,7 +337,7 @@ namespace System.Windows.Forms
                 }
 
                 ListViewItem[] items = SelectedItemArray;
-                if (items != null)
+                if (items is not null)
                 {
                     return items.GetEnumerator();
                 }

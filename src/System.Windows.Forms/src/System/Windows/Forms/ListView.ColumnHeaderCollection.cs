@@ -328,7 +328,7 @@ namespace System.Windows.Forms
             public virtual void Clear()
             {
                 // Delete the columns
-                if (owner.columnHeaders != null)
+                if (owner.columnHeaders is not null)
                 {
                     if (owner.View == View.Tile)
                     {
@@ -607,7 +607,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (owner.columnHeaders != null)
+                if (owner.columnHeaders is not null)
                 {
                     return owner.columnHeaders.GetEnumerator();
                 }

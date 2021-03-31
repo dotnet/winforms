@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                     }
 
                     object? systemIAccessibleState = _systemIAccessible?.get_accState(GetChildId());
-                    if (systemIAccessibleState != null)
+                    if (systemIAccessibleState is not null)
                     {
                         return state |= (AccessibleStates)systemIAccessibleState;
                     }
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
                         return base.RuntimeId;
                     }
 
-                    if (_owningGroup != null)
+                    if (_owningGroup is not null)
                     {
                         runtimeId = new int[5];
                         runtimeId[0] = owningListViewRuntimeId[0];
