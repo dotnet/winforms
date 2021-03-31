@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         public ListViewItem(string[] items, int imageIndex) : this()
         {
             ImageIndexer.Index = imageIndex;
-            if (items != null && items.Length > 0)
+            if (items is not null && items.Length > 0)
             {
                 subItems = new ListViewSubItem[items.Length];
                 for (int i = 0; i < items.Length; i++)
@@ -173,7 +173,7 @@ namespace System.Windows.Forms
         public ListViewItem(string[] items, string imageKey) : this()
         {
             ImageIndexer.Key = imageKey;
-            if (items != null && items.Length > 0)
+            if (items is not null && items.Length > 0)
             {
                 subItems = new ListViewSubItem[items.Length];
                 for (int i = 0; i < items.Length; i++)
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
             {
                 if (SubItemCount == 0)
                 {
-                    if (listView != null)
+                    if (listView is not null)
                     {
                         return listView.BackColor;
                     }
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null)
+                if (listView is not null)
                 {
                     return listView.GetItemRect(Index);
                 }
@@ -303,13 +303,13 @@ namespace System.Windows.Forms
             {
                 if (Checked != value)
                 {
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView is not null && listView.IsHandleCreated)
                     {
                         StateImageIndex = value ? 1 : 0;
 
                         // the setter for StateImageIndex calls ItemChecked handler
                         // thus need to verify validity of the listView again
-                        if (listView != null && !listView.UseCompatibleStateImageBehavior)
+                        if (listView is not null && !listView.UseCompatibleStateImageBehavior)
                         {
                             if (!listView.CheckBoxes)
                             {
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     return listView.GetItemState(Index, LVIS.FOCUSED) != 0;
                 }
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     listView.SetItemState(Index, value ? LVIS.FOCUSED : 0, LVIS.FOCUSED);
 
@@ -362,7 +362,7 @@ namespace System.Windows.Forms
             {
                 if (SubItemCount == 0)
                 {
-                    if (listView != null)
+                    if (listView is not null)
                     {
                         return listView.Font;
                     }
@@ -385,7 +385,7 @@ namespace System.Windows.Forms
             {
                 if (SubItemCount == 0)
                 {
-                    if (listView != null)
+                    if (listView is not null)
                     {
                         return listView.ForeColor;
                     }
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
             {
                 if (group != value)
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.Items.Add(this);
                     }
@@ -459,7 +459,7 @@ namespace System.Windows.Forms
 
                 ImageIndexer.Index = value;
 
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     listView.SetItemImage(itemIndex: Index, imageIndex: ImageIndexer.ActualIndex);
                 }
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
             {
                 ImageIndexer.Key = value;
 
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     listView.SetItemImage(Index, ImageIndexer.ActualIndex);
                 }
@@ -497,7 +497,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null)
+                if (listView is not null)
                 {
                     switch (listView.View)
                     {
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
                 if (value != indentCount)
                 {
                     indentCount = value;
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView is not null && listView.IsHandleCreated)
                     {
                         listView.SetItemIndentCount(Index, indentCount);
                     }
@@ -547,7 +547,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null)
+                if (listView is not null)
                 {
                     // if the list is virtual, the ComCtrl control does not keep any information
                     // about any list view items, so we use our cache instead.
@@ -601,7 +601,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     position = listView.GetItemPosition(Index);
                 }
@@ -613,7 +613,7 @@ namespace System.Windows.Forms
                 if (!value.Equals(position))
                 {
                     position = value;
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView is not null && listView.IsHandleCreated)
                     {
                         if (!listView.VirtualMode)
                         {
@@ -656,7 +656,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     return listView.GetItemState(Index, LVIS.SELECTED) != 0;
                 }
@@ -665,7 +665,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     listView.SetItemState(Index, value ? LVIS.SELECTED : 0, LVIS.SELECTED);
 
@@ -675,7 +675,7 @@ namespace System.Windows.Forms
                 else
                 {
                     StateSelected = value;
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView is not null && listView.IsHandleCreated)
                     {
                         // Set the selected state on the list view item only if the list view's Handle is already created.
                         listView.CacheSelectedStateForItem(this, value);
@@ -696,7 +696,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     LVIS state = listView.GetItemState(Index, LVIS.STATEIMAGEMASK);
                     return (((int)state >> 12) - 1);   // index is 1-based
@@ -711,7 +711,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
                 }
 
-                if (listView != null && listView.IsHandleCreated)
+                if (listView is not null && listView.IsHandleCreated)
                 {
                     this.state[s_stateImageMaskSet] = (value == ImageList.Indexer.DefaultIndex ? 0 : 1);
                     LVIS state = (LVIS)((value + 1) << 12);  // index is 1-based
@@ -815,7 +815,7 @@ namespace System.Windows.Forms
                     toolTipText = value;
 
                     // tell the list view about this change
-                    if (listView != null && listView.IsHandleCreated)
+                    if (listView is not null && listView.IsHandleCreated)
                     {
                         listView.ListViewItemToolTipChanged(this);
                     }
@@ -917,7 +917,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void EnsureVisible()
         {
-            if (listView != null && listView.IsHandleCreated)
+            if (listView is not null && listView.IsHandleCreated)
             {
                 listView.EnsureVisible(Index);
             }
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Rectangle GetBounds(ItemBoundsPortion portion)
         {
-            if (listView != null && listView.IsHandleCreated)
+            if (listView is not null && listView.IsHandleCreated)
             {
                 return listView.GetItemRect(Index, portion);
             }
@@ -948,7 +948,7 @@ namespace System.Windows.Forms
 
         public ListViewSubItem GetSubItemAt(int x, int y)
         {
-            if (listView != null && listView.IsHandleCreated && listView.View == View.Details)
+            if (listView is not null && listView.IsHandleCreated && listView.View == View.Details)
             {
                 listView.GetSubItemAt(x, y, out int iItem, out int iSubItem);
                 if (iItem == Index && iSubItem != -1 && iSubItem < SubItems.Count)
@@ -987,7 +987,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateGroupFromName()
         {
-            Debug.Assert(listView != null, "This method is used only when items are parented in a list view");
+            Debug.Assert(listView is not null, "This method is used only when items are parented in a list view");
             Debug.Assert(!listView.VirtualMode, "we need to update the group only when the user specifies the list view items in localizable forms");
             if (string.IsNullOrEmpty(groupName))
             {
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms
 
         internal void UpdateStateFromListView(int displayIndex, bool checkSelection)
         {
-            if (listView != null && listView.IsHandleCreated && displayIndex != -1)
+            if (listView is not null && listView.IsHandleCreated && displayIndex != -1)
             {
                 // Get information from comctl control
                 var lvItem = new LVITEMW
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms
         {
             UpdateStateFromListView(displayIndex, checkSelection);
 
-            if (listView != null && (listView.Site is null || !listView.Site.DesignMode) && group != null)
+            if (listView is not null && (listView.Site is null || !listView.Site.DesignMode) && group is not null)
             {
                 group.Items.Remove(this);
             }
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms
             }
 
             // let image key take precidence
-            if (imageKey != null)
+            if (imageKey is not null)
             {
                 ImageKey = imageKey;
             }
@@ -1239,7 +1239,7 @@ namespace System.Windows.Forms
             info.AddValue(nameof(Font), Font);
             info.AddValue(nameof(ForeColor), ForeColor);
             info.AddValue(nameof(UseItemStyleForSubItems), UseItemStyleForSubItems);
-            if (Group != null)
+            if (Group is not null)
             {
                 info.AddValue(nameof(Group), Group);
             }
@@ -1249,7 +1249,7 @@ namespace System.Windows.Forms
         // the index of the list view item is used in ListView::set_TopItem property
         internal void SetItemIndex(ListView listView, int index)
         {
-            Debug.Assert(listView != null && listView.VirtualMode, "ListViewItem::SetItemIndex should be used only when the list is virtual");
+            Debug.Assert(listView is not null && listView.VirtualMode, "ListViewItem::SetItemIndex should be used only when the list is virtual");
             Debug.Assert(index > -1, "can't set the index on a virtual list view item to -1");
             this.listView = listView;
             lastIndex = index;
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms
         internal void InvalidateListView()
         {
             // The ListItem's state (or a SubItem's state) has changed, so invalidate the ListView control
-            if (listView != null && listView.IsHandleCreated)
+            if (listView is not null && listView.IsHandleCreated)
             {
                 listView.Invalidate();
             }
@@ -1274,7 +1274,7 @@ namespace System.Windows.Forms
 
         internal void UpdateSubItems(int index, int oldCount)
         {
-            if (listView != null && listView.IsHandleCreated)
+            if (listView is not null && listView.IsHandleCreated)
             {
                 int subItemCount = SubItemCount;
                 int itemIndex = Index;

@@ -101,9 +101,9 @@ namespace System.Windows.Forms
         internal void ResetGraphics()
         {
             Graphics? graphics = _event.GetGraphics(create: false);
-            if (_event.Flags.HasFlag(DrawingEventFlags.SaveState) && graphics != null)
+            if (_event.Flags.HasFlag(DrawingEventFlags.SaveState) && graphics is not null)
             {
-                if (_savedGraphicsState != null)
+                if (_savedGraphicsState is not null)
                 {
                     graphics.Restore(_savedGraphicsState);
                     _savedGraphicsState = null;

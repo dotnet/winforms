@@ -142,7 +142,7 @@ namespace System.Windows.Forms
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (ListViewSubItem item in items)
                 {
-                    if (item != null)
+                    if (item is not null)
                     {
                         _owner.subItems[_owner.SubItemCount++] = item;
                     }
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
                 {
-                    if (item != null)
+                    if (item is not null)
                     {
                         _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item);
                     }
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
                 {
-                    if (item != null)
+                    if (item is not null)
                     {
                         _owner.subItems[_owner.SubItemCount++] = new ListViewSubItem(_owner, item, foreColor, backColor, font);
                     }
@@ -440,7 +440,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (_owner.subItems != null)
+                if (_owner.subItems is not null)
                 {
                     return new ArraySubsetEnumerator(_owner.subItems, _owner.SubItemCount);
                 }

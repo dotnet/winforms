@@ -56,7 +56,7 @@ namespace System.Windows.Forms
                         // if the index is currently set higher than the count.
                         return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
                     }
-                    else if (ImageList != null)
+                    else if (ImageList is not null)
                     {
                         return ImageList.Images.IndexOfKey(Key);
                     }

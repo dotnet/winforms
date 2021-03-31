@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                 Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
 
                 Control element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
-                if (element != null)
+                if (element is not null)
                 {
                     return element.AccessibilityObject;
                 }

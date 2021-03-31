@@ -60,14 +60,14 @@ namespace System.Windows.Forms
                 get
                 {
                     var help = base.Help;
-                    if (help != null)
+                    if (help is not null)
                     {
                         return help;
                     }
                     else
                     {
                         var baseType = _ownerMonthCalendar.GetType().BaseType;
-                        if (_ownerMonthCalendar != null && baseType != null)
+                        if (_ownerMonthCalendar is not null && baseType is not null)
                         {
                             return _ownerMonthCalendar.GetType().Name + "(" + baseType.Name + ")";
                         }
@@ -82,7 +82,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string? name = base.Name;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
 
                 AccessibleObject? calendarChildAccessibleObject = GetCalendarChildAccessibleObject(selectionStart, selectionEnd);
 
-                if (calendarChildAccessibleObject != null)
+                if (calendarChildAccessibleObject is not null)
                 {
                     calendarChildAccessibleObject.RaiseAutomationEvent(automationEventId);
 

@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             {
                 object? s = null;
 
-                if (_ownerPropertyGrid.ActiveDesigner != null)
+                if (_ownerPropertyGrid.ActiveDesigner is not null)
                 {
                     s = _ownerPropertyGrid.ActiveDesigner.GetService(serviceType);
                 }
@@ -29,7 +29,7 @@ namespace System.Windows.Forms
                     s = _ownerPropertyGrid._gridView.GetService(serviceType);
                 }
 
-                if (s is null && _ownerPropertyGrid.Site != null)
+                if (s is null && _ownerPropertyGrid.Site is not null)
                 {
                     s = _ownerPropertyGrid.Site.GetService(serviceType);
                 }

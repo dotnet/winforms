@@ -85,7 +85,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Assert(owner.listItemsArray != null, "listItemsArray is null, but the handle isn't created");
+                            Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
                             return (ListViewItem)owner.listItemsArray[displayIndex];
                         }
                     }
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
                     owner.ItemCollectionChangedInMouseDown = true;
                 }
 
-                if (comparer != null ||
+                if (comparer is not null ||
                     ((owner.Sorting != SortOrder.None) && !owner.VirtualMode))
                 {
                     owner.Sort();
@@ -247,8 +247,8 @@ namespace System.Windows.Forms
                         for (int i = 0; i < count; i++)
                         {
                             ListViewItem item = owner.Items[i];
-                            Debug.Assert(item != null, "Failed to get item at index " + i.ToString(CultureInfo.InvariantCulture));
-                            if (item != null)
+                            Debug.Assert(item is not null, "Failed to get item at index " + i.ToString(CultureInfo.InvariantCulture));
+                            if (item is not null)
                             {
                                 // if it's the one we're looking for, ask for the next one
                                 //
@@ -296,13 +296,13 @@ namespace System.Windows.Forms
                         for (int i = 0; i < count; i++)
                         {
                             ListViewItem item = owner.Items[i];
-                            if (item != null)
+                            if (item is not null)
                             {
                                 item.UnHost(i, true);
                             }
                         }
 
-                        Debug.Assert(owner.listItemsArray != null, "listItemsArray is null, but the handle isn't created");
+                        Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
                         owner.listItemsArray.Clear();
                     }
 
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(owner.listItemsArray != null, "listItemsArray is null, but the handle isn't created");
+                    Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
                     return owner.listItemsArray.Contains(item);
                 }
             }
@@ -446,7 +446,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(owner.listItemsArray != null, "listItemsArray is null, but the handle isn't created");
+                    Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
                     owner.listItemsArray.RemoveAt(index);
                 }
 

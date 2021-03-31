@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                         typeof(Color),
                         typeof(Font)
                     });
-                    Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                    Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                     return new InstanceDescriptor(ctor, new object[]
                     {
                         null,
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
                 // Otherwise, just use the text constructor
                 ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
-                Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { null, item.Text }, true);
             }
 

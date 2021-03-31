@@ -70,7 +70,7 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
+                Debug.Assert(reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);
             }
         }
