@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <TargetArchitecture  Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
+    <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
     <Platform Condition="'$(Platform)'==''">$(TargetArchitecture)</Platform>
     <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
   </PropertyGroup>

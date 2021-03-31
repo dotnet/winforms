@@ -35,7 +35,7 @@ jobs:
             _DotNetPublishToBlobFeed : false
             # Code coverage uploads fail on internal PRs
             ${{ if eq(variables['System.TeamProject'], 'public') }}:
-              _Coverage: true
+              _Coverage: false
         Release:
           _BuildConfig: Release
           _Coverage: false
@@ -84,6 +84,18 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc-${{ parameters.targetArchitecture }}.binlog
       displayName: Build
 
+    # Run Interop Tests
+    - script: dotnet test
+        --nologo
+        /p:Configuration=$(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\InteropTest-${{ parameters.targetArchitecture }}.binlog
+        /m:1
+      workingDirectory: src\System.Windows.Forms\tests\InteropTests
+      displayName: Run Interop Tests
+
     # Run Unit Tests
     # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
     - script: eng\cibuild.cmd
@@ -100,14 +112,15 @@ jobs:
     # Run Integration Tests
     # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
     # UI race conditions
-    #- script: eng\cibuild.cmd
-    #    -integrationTest
-    #    -configuration $(_BuildConfig)
-    #    $(_OfficialBuildIdArgs)
-    #    $(_InternalRuntimeDownloadArgs)
-    #    /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
-    #    /m:1
-    #  displayName: Run Integration Tests
+    - script: eng\cibuild.cmd
+        -integrationTest
+        -configuration $(_BuildConfig)
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
+        /m:1
+      displayName: Run Integration Tests
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd
@@ -122,13 +135,13 @@ jobs:
       displayName: Pack, Sign, and Publish
 
     # Upload code coverage data
-    - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
-        eng/CodeCoverage.proj
-        /p:Configuration=$(_BuildConfig)
-        $(_InternalRuntimeDownloadArgs)
-        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage-${{ parameters.targetArchitecture }}.binlog
-      displayName: Upload coverage to codecov.io
-      condition: and(succeeded(), eq(variables._Coverage, 'true'))
+    # - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild -restore
+    #     eng/CodeCoverage.proj
+    #     /p:Configuration=$(_BuildConfig)
+    #     $(_InternalRuntimeDownloadArgs)
+    #     /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage-${{ parameters.targetArchitecture }}.binlog
+    #   displayName: Upload coverage to codecov.io
+    #   condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
     - template: post-build.yml
       parameters:
