@@ -74,12 +74,12 @@ jobs:
       parameters:
         continueOnError: ${{ parameters.continueOnError }}
         dependsOn:
-        - ${{ if ne(parameters.publishBuildAssetsDependsOn, '') }}:
-          - ${{ each job in parameters.publishBuildAssetsDependsOn }}:
-            - ${{ job.job }}
-        - ${{ if eq(parameters.publishBuildAssetsDependsOn, '') }}:
-          - ${{ each job in parameters.jobs }}:
-            - ${{ job.job }}
+        # - ${{ if ne(parameters.publishBuildAssetsDependsOn, '') }}:
+        #   - ${{ each job in parameters.publishBuildAssetsDependsOn }}:
+        #     - ${{ job.job }}
+        # - ${{ if eq(parameters.publishBuildAssetsDependsOn, '') }}:
+        #   - ${{ each job in parameters.jobs }}:
+        #     - ${{ job.job }}
         - ${{ if eq(parameters.enableSourceBuild, true) }}:
           - Source_Build_Complete
         pool:

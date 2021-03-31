@@ -17,9 +17,9 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <Platforms Condition="'$(Platform)' == 'x86'">AnyCPU;x86</Platforms>
-    <TestArchitectures Condition="'$(Platform)' == 'x86'">x86</TestArchitectures>
-    <TestArchitectures Condition="'$(Platform)' != 'x86'">x64;x86</TestArchitectures>
+    <TargetArchitecture  Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
+    <Platform Condition="'$(Platform)'==''">$(TargetArchitecture)</Platform>
+    <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
   </PropertyGroup>
 
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">

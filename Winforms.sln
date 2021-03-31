@@ -145,7 +145,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Source
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Primitives.TestUtilities.Tests", "src\System.Windows.Forms.Primitives\tests\TestUtilities.Tests\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj", "{6EE57002-9965-46E7-A48B-B449969738BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiTabControlTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiTabControlTests\MauiTabControlTests.csproj", "{B8FD66E7-BD6F-4E6F-8199-7CE6149FBE48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiTabControlTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiTabControlTests\MauiTabControlTests.csproj", "{B8FD66E7-BD6F-4E6F-8199-7CE6149FBE48}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiRichTextBoxTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiRichTextBoxTests\MauiRichTextBoxTests.csproj", "{4DC0426D-E4B6-4D83-BB96-38A017A92E47}"
 EndProject
@@ -292,17 +292,7 @@ Global
 		{83634671-CF3A-43B0-B729-42CCBA62DF2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83634671-CF3A-43B0-B729-42CCBA62DF2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|Any CPU.Build.0 = Debug|x86
 		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|Any CPU.ActiveCfg = Release|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|Any CPU.Build.0 = Release|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x86.ActiveCfg = Debug|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x86.Build.0 = Debug|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x86.ActiveCfg = Release|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x86.Build.0 = Release|x86
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x64.ActiveCfg = Debug|x64
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Debug|x64.Build.0 = Debug|x64
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x64.ActiveCfg = Release|x64
-		{C272DA06-B98D-4BB7-B1C4-ECF58F54B224}.Release|x64.Build.0 = Release|x64
 		{2F0973AD-498D-45B6-82ED-CD672F7A03AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2F0973AD-498D-45B6-82ED-CD672F7A03AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F0973AD-498D-45B6-82ED-CD672F7A03AB}.Release|Any CPU.ActiveCfg = Release|Any CPU

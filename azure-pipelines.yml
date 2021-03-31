@@ -4,7 +4,22 @@
 # Parameters ARE available in template expressions, and parameters can have default values,
 # so they can be used to control yaml flow.
 
+# trigger ci builds for completed checkins into main and any release branches
+trigger:
+- main
+- release/*
+- internal/release/*
+
+# trigger ci builds on pull requests into main and any release branches
+pr:
+- main
+- release/*
+- internal/release/*
+- internal/experimental/*
+
 variables:
+  - name: TeamName
+    value: DotNetCore
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
@@ -14,25 +29,134 @@ variables:
   # used for post-build phases, internal builds only
   - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
     - group: DotNet-Winforms-SDLValidation-Params
+    - group: DotNet-Blob-Feed
+    - group: DotNet-Symbol-Server-Pats
   - ${{ if ne(variables['System.TeamProject'], 'public') }}:
     - group: DotNet-MSRC-Storage
     - group: AzureDevOps-Artifact-Feeds-Pats
-  
-# trigger ci builds for completed checkins into main and any release branches
-trigger:
-- master
-- main
-- release/*
-- internal/release/*
 
-# trigger ci builds on pull requests into main and any release branches
-pr:
-- master
-- main
-- release/*
-- internal/release/*
-- internal/experimental/*
+
+  # Produce test-signed build for PR and Public builds
+  - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+    # needed for darc (dependency flow) publishing
+    - name: _PublishType
+      value: none
+    - name: _DotNetPublishToBlobFeed
+      value: false
+    - name: _PublishArgs
+      value: ''
+    - name: _OfficialBuildIdArgs
+      value: ''
+    - name: _InternalRuntimeDownloadArgs
+      value: ''
+    # needed for signing
+    - name: _SignType
+      value: test
+    - name: _SignArgs
+      value: ''
+    - name: _Sign
+      value: false
+
+  # Set up non-PR build from internal project
+  - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    # needed for darc (dependency flow) publishing
+    - name: _PublishType
+      value: blob
+    - name: _DotNetPublishToBlobFeed
+      value: true
+    - name: _PublishBlobFeedUrl
+      value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
+    - name: _PublishArgs
+      value: >-
+            /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
+            /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
+            /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
+            /p:DotNetPublishUsingPipelines=true
+            /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
+            /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
+    - name: _OfficialBuildIdArgs
+      value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+    - ${{ if ne(variables['System.TeamProject'], 'public') }}:
+        - name: _InternalRuntimeDownloadArgs
+          value: >-
+            /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
+            /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
+    # needed for signing
+    - name: _SignType
+      value: real
+    - name: _SignArgs
+      value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
+    - name: _Sign
+      value: true
+
 
 # Call the ci.yml template, which does the real work
 stages:
-- template: /eng/ci.yml
+- stage: Build
+  jobs:
+  - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'), not(startsWith(variables['Build.SourceBranch'], 'refs/heads/experimental'))) }}:
+    - template: /eng/common/templates/job/onelocbuild.yml
+      parameters:
+        CreatePr: false
+        UseCheckedInLocProjectJson: true
+        LclSource: lclFilesfromPackage
+        LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
+
+  # Windows x64
+  - template: /eng/common/templates/job/build.yml
+    parameters:
+      name: Windows_x64
+      publishRidAgnosticPackages: true
+      targetArchitecture: x64
+
+  # Windows x86
+  - template: /eng/common/templates/job/build.yml
+    parameters:
+      name: Windows_x86
+      targetArchitecture: x86
+
+  # Windows arm64
+  - template: /eng/common/templates/job/build.yml
+    parameters:
+      name: Windows_arm64
+      targetArchitecture: arm64
+      disableVSPublish: true
+
+
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+  - stage: PublishAssetRegistry
+    displayName: Publish to Build Asset Registry
+    dependsOn: Build
+    jobs:
+    # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
+    - template: /eng/common/templates/job/publish-build-assets.yml
+      parameters:
+        publishUsingPipelines: true
+        pool:
+          vmImage: vs2017-win2016
+
+
+# Copied from the arcade repo and modified for winforms
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+  - template: /eng/common/templates/post-build/post-build.yml
+    parameters:
+      validateDependsOn: PublishAssetRegistry
+      publishingInfraVersion: 3
+      enableSymbolValidation: false
+      enableSigningValidation: false
+      enableNugetValidation: false
+      enableSourceLinkValidation: false
+      # these param values come from the DotNet-Winforms-SDLValidation-Params azdo variable group
+      SDLValidationParameters:
+        enable: false
+        params: ' -SourceToolsList $(_TsaSourceToolsList)
+        -TsaInstanceURL $(_TsaInstanceURL)
+        -TsaProjectName $(_TsaProjectName)
+        -TsaNotificationEmail $(_TsaNotificationEmail)
+        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
+        -TsaBugAreaPath $(_TsaBugAreaPath)
+        -TsaIterationPath $(_TsaIterationPath)
+        -TsaRepositoryName $(_TsaRepositoryName)
+        -TsaCodebaseName $(_TsaCodebaseName)
+        -TsaOnboard $(_TsaOnboard)
+        -TsaPublish $(_TsaPublish)'
