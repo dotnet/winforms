@@ -7893,6 +7893,8 @@ System.Windows.Forms.DialogResult.None = 0 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.OK = 1 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Retry = 4 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Yes = 6 -> System.Windows.Forms.DialogResult
+System.Windows.Forms.DialogResult.TryAgain = 10 -> System.Windows.Forms.DialogResult
+System.Windows.Forms.DialogResult.Continue = 11 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DockingAttribute
 System.Windows.Forms.DockingAttribute.DockingAttribute() -> void
 System.Windows.Forms.DockingAttribute.DockingAttribute(System.Windows.Forms.DockingBehavior dockingBehavior) -> void
@@ -9452,12 +9454,14 @@ System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore = 2 -> System.Windows.Fo
 System.Windows.Forms.MessageBoxButtons.OK = 0 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.OKCancel = 1 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.RetryCancel = 5 -> System.Windows.Forms.MessageBoxButtons
+System.Windows.Forms.MessageBoxButtons.CancelTryContinue = 6 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.YesNo = 4 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.YesNoCancel = 3 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxDefaultButton.Button1 = 0 -> System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxDefaultButton.Button2 = 256 -> System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxDefaultButton.Button3 = 512 -> System.Windows.Forms.MessageBoxDefaultButton
+System.Windows.Forms.MessageBoxDefaultButton.Button4 = 768 -> System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxIcon
 System.Windows.Forms.MessageBoxIcon.Asterisk = 64 -> System.Windows.Forms.MessageBoxIcon
 System.Windows.Forms.MessageBoxIcon.Error = 16 -> System.Windows.Forms.MessageBoxIcon
