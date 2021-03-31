@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Text;
 using static Interop;
 using static Interop.User32;
 
@@ -16,7 +16,6 @@ namespace System.Windows.Forms
         /// </summary>
         private class AutoCompleteDropDownFinder
         {
-            private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
             private bool _shouldSubClass;
 
@@ -53,11 +52,20 @@ namespace System.Windows.Forms
                 return BOOL.TRUE;
             }
 
-            static string GetClassName(HandleRef hRef)
+            private static unsafe string GetClassName(HandleRef hRef)
             {
-                StringBuilder sb = new StringBuilder(MaxClassName);
-                UnsafeNativeMethods.GetClassName(hRef, sb, MaxClassName);
-                return sb.ToString();
+                Span<char> buffer = stackalloc char[256];
+                fixed (char* valueChars = buffer)
+                {
+                    int result = UnsafeNativeMethods.GetClassName(hRef, valueChars, buffer.Length);
+                    if (result == 0)
+                    {
+                        // probably should localize this.
+                        throw new Win32Exception("Failed to get window class name.");
+                    }
+                }
+
+                return buffer.SliceAtFirstNull().ToString();
             }
         }
     }

@@ -5162,9 +5162,7 @@ namespace System.Windows.Forms
             {
                 // save the image to a temporary file name
                 _backgroundImageFileName = Path.GetTempFileName();
-
                 BackgroundImage.Save(_backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
-
                 lvbkImage.cchImageMax = (uint)(_backgroundImageFileName.Length + 1);
                 lvbkImage.ulFlags = LVBKIF.SOURCE_URL;
                 if (BackgroundImageTiled)

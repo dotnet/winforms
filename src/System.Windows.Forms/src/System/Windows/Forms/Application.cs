@@ -289,8 +289,8 @@ namespace System.Windows.Forms
             {
                 if (s_executablePath is null)
                 {
-                    StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                    s_executablePath = Path.GetFullPath(sb.ToString());
+                    string path = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
+                    s_executablePath = Path.GetFullPath(path);
                 }
 
                 return s_executablePath;

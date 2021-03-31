@@ -11,7 +11,6 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using static Interop;
 using static Interop.Ole32;
 
@@ -1323,24 +1322,27 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else if (errorInfo is null)
                     {
-                        StringBuilder strMessage = new StringBuilder(256);
-
-                        uint result = Kernel32.FormatMessageW(
-                            Kernel32.FormatMessageOptions.FROM_SYSTEM | Kernel32.FormatMessageOptions.IGNORE_INSERTS,
-                            IntPtr.Zero,
-                            (uint)hr,
-                            Kernel32.GetThreadLocale().RawValue,
-                            strMessage,
-                            255,
-                            IntPtr.Zero);
-
-                        if (result == 0)
+                        Span<char> buffer = stackalloc char[256];
+                        fixed (char* valueChars = buffer)
                         {
-                            errorInfo = string.Format(CultureInfo.CurrentCulture, string.Format(SR.DispInvokeFailed, "SetValue", hr));
-                        }
-                        else
-                        {
-                            errorInfo = TrimNewline(strMessage);
+                            uint length = Kernel32.FormatMessageW(
+                                Kernel32.FormatMessageOptions.FROM_SYSTEM |
+                                Kernel32.FormatMessageOptions.IGNORE_INSERTS,
+                                IntPtr.Zero,
+                                (uint)hr,
+                                Kernel32.GetThreadLocale().RawValue,
+                                valueChars,
+                                buffer.Length,
+                                IntPtr.Zero);
+                            if (length == 0)
+                            {
+                                errorInfo = string.Format(CultureInfo.CurrentCulture,
+                                    string.Format(SR.DispInvokeFailed, "SetValue", hr));
+                            }
+                            else
+                            {
+                                errorInfo = TrimNewline(buffer.Slice(0, (int)length).SliceAtFirstNull().ToString());
+                            }
                         }
                     }
 
@@ -1348,7 +1350,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private static string TrimNewline(StringBuilder errorInfo)
+        private static string TrimNewline(string errorInfo)
         {
             int index = errorInfo.Length - 1;
             while (index >= 0 && (errorInfo[index] == '\n' || errorInfo[index] == '\r'))
@@ -1356,7 +1358,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 index--;
             }
 
-            return errorInfo.ToString(0, index + 1);
+            return errorInfo.Substring(0, index + 1);
         }
 
         /// <summary>

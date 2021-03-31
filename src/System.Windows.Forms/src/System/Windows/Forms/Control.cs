@@ -14,7 +14,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
-using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
@@ -2502,7 +2501,7 @@ namespace System.Windows.Forms
             set => SetBounds(_x, _y, _width, value, BoundsSpecified.Height);
         }
 
-        internal bool HostedInWin32DialogManager
+        internal unsafe bool HostedInWin32DialogManager
         {
             get
             {
@@ -2517,22 +2516,20 @@ namespace System.Windows.Forms
                     {
                         IntPtr parentHandle = User32.GetParent(this);
                         IntPtr lastParentHandle = parentHandle;
-
-                        StringBuilder sb = new StringBuilder(32);
-
                         SetState(States.HostedInDialog, false);
-
+                        Span<char> buffer = stackalloc char[256];
                         while (parentHandle != IntPtr.Zero)
                         {
-                            int len = UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), null, 0);
-                            if (len > sb.Capacity)
+                            int length = 0;
+                            fixed (char* valueChars = buffer)
                             {
-                                sb.Capacity = len + 5;
+                                length = UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), valueChars, buffer.Length);
                             }
 
-                            UnsafeNativeMethods.GetClassName(new HandleRef(null, lastParentHandle), sb, sb.Capacity);
+                            string result = buffer.Slice(0, length).SliceAtFirstNull().ToString();
 
-                            if (sb.ToString() == "#32770")
+                            // class name #32770
+                            if (result == "#32770")
                             {
                                 SetState(States.HostedInDialog, true);
                                 break;

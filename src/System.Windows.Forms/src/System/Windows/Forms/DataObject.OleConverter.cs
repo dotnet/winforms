@@ -391,24 +391,24 @@ namespace System.Windows.Forms
             /// </summary>
             private static string[]? ReadFileListFromHandle(IntPtr hdrop)
             {
-                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, null);
+                string? fileName = null;
+                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, ref fileName);
                 if (count == 0)
                 {
                     return null;
                 }
 
-                var sb = new StringBuilder(Kernel32.MAX_PATH);
                 var files = new string[count];
                 for (uint i = 0; i < count; i++)
                 {
-                    uint charlen = Shell32.DragQueryFileW(hdrop, i, sb);
-                    if (charlen == 0)
+                    uint length = Shell32.DragQueryFileW(hdrop, i, ref fileName);
+                    if (length == 0 || string.IsNullOrEmpty(fileName))
                     {
                         continue;
                     }
 
-                    string s = sb.ToString(0, (int)charlen);
-                    files[i] = s;
+                    string fullPath = Path.GetFullPath(fileName);
+                    files[i] = fileName;
                 }
 
                 return files;

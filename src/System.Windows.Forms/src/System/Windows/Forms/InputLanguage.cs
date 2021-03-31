@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Text;
 using Microsoft.Win32;
 using static Interop;
 
@@ -281,15 +280,18 @@ namespace System.Windows.Forms
         ///  Returning null from this method will force us to use the legacy codepath (pulling the text
         ///  directly from the registry).
         /// </summary>
-        private static string? GetLocalizedKeyboardLayoutName(string? layoutDisplayName)
+        private static unsafe string? GetLocalizedKeyboardLayoutName(string? layoutDisplayName)
         {
             if (layoutDisplayName is not null)
             {
-                var sb = new StringBuilder(512);
-                HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
-                if (res == HRESULT.S_OK)
+                Span<char> buf = stackalloc char[512];
+                fixed (char* valueChars = buf)
                 {
-                    return sb.ToString();
+                    if (Shlwapi.SHLoadIndirectString(layoutDisplayName, valueChars, (uint)buf.Length, IntPtr.Zero).Succeeded())
+                    {
+                        string? result = buf.SliceAtFirstNull().ToString();
+                        return result;
+                    }
                 }
             }
 

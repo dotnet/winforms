@@ -300,8 +300,7 @@ namespace System.Windows.Forms
                         throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
                     }
 
-                    StringBuilder pathBuilder = UnsafeNativeMethods.GetModuleFileNameLongPath(new HandleRef(null, moduleHandle));
-                    string path = pathBuilder.ToString();
+                    string path = UnsafeNativeMethods.GetModuleFileNameLongPath(new HandleRef(null, moduleHandle));
                     FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(path);
 
                     Debug.Assert(versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion), "Couldn't get the version info for the richedit dll");
@@ -3395,22 +3394,22 @@ namespace System.Windows.Forms
                         break;
                     case EN.DROPFILES:
                         ENDROPFILES* endropfiles = (ENDROPFILES*)m.LParamInternal;
+                        string path = string.Empty;
 
                         // Only look at the first file.
-                        var path = new StringBuilder(Kernel32.MAX_PATH);
-                        if (Shell32.DragQueryFileW(endropfiles->hDrop, 0, path) != 0)
+                        if (Shell32.DragQueryFileW(endropfiles->hDrop, 0, ref path) != 0)
                         {
                             // Try to load the file as an RTF
                             try
                             {
-                                LoadFile(path.ToString(), RichTextBoxStreamType.RichText);
+                                LoadFile(path, RichTextBoxStreamType.RichText);
                             }
                             catch
                             {
                                 // we failed to load as rich text so try it as plain text
                                 try
                                 {
-                                    LoadFile(path.ToString(), RichTextBoxStreamType.PlainText);
+                                    LoadFile(path, RichTextBoxStreamType.PlainText);
                                 }
                                 catch
                                 {
