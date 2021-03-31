@@ -6746,4 +6746,16 @@ Stack trace where the illegal operation occurred was:
   <data name="ComboboxDropDownButtonOpenName" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="CalendarPreviousButtonAccessibleObjectDescription" xml:space="preserve">
+    <value>Go to previous time frame</value>
+  </data>
+  <data name="CalendarNextButtonAccessibleObjectDescription" xml:space="preserve">
+    <value>Go to next time frame</value>
+  </data>
+  <data name="CalendarTodayLinkAccessibleObjectDescription" xml:space="preserve">
+    <value>Go to and select today's date</value>
+  </data>
+  <data name="MonthCalendarWeekNumberDescription" xml:space="preserve">
+    <value>Week {0}</value>
+  </data>
 </root>

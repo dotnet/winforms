@@ -10,7 +10,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
-    public class MonthCalendarAccessibleObjectTests
+    public class MonthCalendar_MonthCalendarAccessibleObjectTests
     {
         [WinFormsFact]
         public void MonthCalendarAccessibleObject_ctor_ThrowsException_IfOwnerIsNull()
@@ -18,28 +18,8 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Throws<ArgumentNullException>(() => new MonthCalendarAccessibleObject(null));
         }
 
-        [WinFormsFact]
-        public void MonthCalendarAccessibleObject_GetCalendarCell_DoesntThrowException_If_ParentAccessibleObject_IsNull()
-        {
-            using MonthCalendar monthCalendar = new MonthCalendar();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
-            Type type = typeof(MonthCalendarAccessibleObject);
-            MethodInfo method = type.GetMethod("GetCalendarCell", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.Null(method.Invoke(accessibleObject, new object[] { 0, /*parentAccessibleObject*/ null, 0 }));
-        }
-
-        [WinFormsFact]
-        public void MonthCalendarAccessibleObject_GetCalendarRow_DoesntThrowException_If_ParentAccessibleObject_IsNull()
-        {
-            using MonthCalendar monthCalendar = new MonthCalendar();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
-            Type type = typeof(MonthCalendarAccessibleObject);
-            MethodInfo method = type.GetMethod("GetCalendarCell", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.Null(method.Invoke(accessibleObject, new object[] { 0, /*parentAccessibleObject*/ null, 0 }));
-        }
-
         [WinFormsTheory]
-        [InlineData("Test name", (int)UiaCore.UIA.TableControlTypeId)]
+        [InlineData("Test name", (int)UiaCore.UIA.CalendarControlTypeId)]
         [InlineData(null, (int)UiaCore.UIA.CalendarControlTypeId)]
         public void MonthCalendarAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(string name, int expected)
         {

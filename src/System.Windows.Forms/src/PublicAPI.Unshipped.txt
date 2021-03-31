@@ -1,1 +1,1 @@
-
+~override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs e) -> void
