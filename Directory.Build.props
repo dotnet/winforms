@@ -51,6 +51,7 @@
   <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
   <PropertyGroup>
     <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
+    <UserRuntimeConfig Condition="'$(IsTestProject)' == 'true'">$(RepoRoot)eng\runtimeconfig.template.json</UserRuntimeConfig>
   </PropertyGroup>
 
 </Project>
