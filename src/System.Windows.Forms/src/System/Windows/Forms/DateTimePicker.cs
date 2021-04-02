@@ -1200,12 +1200,13 @@ namespace System.Windows.Forms
         {
             base.OnEnabledChanged(e);
 
-            if (IsHandleCreated)
+            if (Application.RenderWithVisualStyles)
             {
-                // There is a bug in the underlying Win32 control which prevents it from correctly redrawing its borders when switching between enabled and disabled state.
-                // The border color is never updated when switching state, so the control will always paint using the color set when the handle was created (either enabled or disabled).
-                // The only way to force the control to update its border color is to force a handle creation.
-                RecreateHandle();
+                // The SysDateTimePick32 control caches the style and uses that directly to determine whether the
+                // border should be drawn disabled when theming (VisualStyles) is enabled. Setting the window
+                // style to itself (which will have the proper WS_DISABLED setting after calling base) will
+                // flush the cached value and render the border as one would expect.
+                User32.SetWindowLong(this, User32.GWL.STYLE, User32.GetWindowLong(this, User32.GWL.STYLE));
             }
         }
 
