@@ -18,6 +18,7 @@ namespace System.Windows.Forms.Tests
             {
                 return;
             }
+
             // create control and form
             using Form form = new Form();
             using DateTimePicker control = new DateTimePicker();
