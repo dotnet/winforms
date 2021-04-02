@@ -17,18 +17,6 @@ namespace WinformsControlsTest
         public DateTimePicker()
         {
             InitializeComponent();
-
-            var checkBox = new CheckBox();
-            checkBox.Checked = true;
-            checkBox.Location = new Point(27, 60);
-            checkBox.Click += CheckBox_Click;
-            checkBox.Text = "Enabled";
-            this.Controls.Add(checkBox);
-        }
-
-        private void CheckBox_Click(object sender, EventArgs e)
-        {
-            dateTimePicker1.Enabled = !dateTimePicker1.Enabled;
         }
     }
 }
