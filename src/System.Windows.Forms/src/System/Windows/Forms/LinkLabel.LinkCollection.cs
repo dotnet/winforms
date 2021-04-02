@@ -323,7 +323,7 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array dest, int index)
             {
-                _owner._links.CopyTo(dest, index);
+                ((ICollection)_owner._links).CopyTo(dest, index);
             }
 
             public IEnumerator GetEnumerator()
