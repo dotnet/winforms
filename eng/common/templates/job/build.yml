@@ -85,15 +85,15 @@ jobs:
       displayName: Build
 
     # Run Interop Tests
-    - script: dotnet test
-       --nologo
-       /p:Configuration=$(_BuildConfig)
-       /p:Platform=${{ parameters.targetArchitecture }}
-       $(_OfficialBuildIdArgs)
-       $(_InternalRuntimeDownloadArgs)
-       /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\InteropTest-${{ parameters.targetArchitecture }}.binlog
-       /m:1
-      displayName: Run Interop Tests
+    # - script: dotnet test
+    #    --nologo
+    #    /p:Configuration=$(_BuildConfig)
+    #    /p:Platform=${{ parameters.targetArchitecture }}
+    #    $(_OfficialBuildIdArgs)
+    #    $(_InternalRuntimeDownloadArgs)
+    #    /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\InteropTest-${{ parameters.targetArchitecture }}.binlog
+    #    /m:1
+    #   displayName: Run Interop Tests
 
     # Run Unit Tests
     # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
