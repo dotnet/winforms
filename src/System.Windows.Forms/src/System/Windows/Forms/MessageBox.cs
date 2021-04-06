@@ -386,10 +386,7 @@ namespace System.Windows.Forms
             try
             {
                 ID mbresult = MessageBoxW(new HandleRef(owner, handle), text, caption, style);
-                return mbresult switch
-                {
-                    _ => (DialogResult)mbresult,
-                };
+                return (DialogResult)mbresult;
             }
             finally
             {
