@@ -61,7 +61,13 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
+                    ListViewSubItem oldSubItem = _owner.subItems[index];
+
                     _owner.subItems[index] = value ?? throw new ArgumentNullException(nameof(value));
+                    value._owner = _owner;
+
+                    oldSubItem._owner = null;
+
                     _owner.UpdateSubItems(index);
                 }
             }
@@ -144,6 +150,7 @@ namespace System.Windows.Forms
                 {
                     if (item is not null)
                     {
+                        item._owner = _owner;
                         _owner.subItems[_owner.SubItemCount++] = item;
                     }
                 }
@@ -204,6 +211,11 @@ namespace System.Windows.Forms
                 int oldCount = _owner.SubItemCount;
                 if (oldCount > 0)
                 {
+                    for (int i = 0; i < oldCount; i++)
+                    {
+                        _owner.SubItems[i]._owner = null;
+                    }
+
                     _owner.SubItemCount = 0;
                     _owner.UpdateSubItems(-1, oldCount);
                 }
