@@ -77,6 +77,7 @@ jobs:
         -restore
         -build
         -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
@@ -100,6 +101,7 @@ jobs:
     - script: eng\cibuild.cmd
         -test
         -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
         /p:TargetArchitecture=${{ parameters.targetArchitecture }}
         $(_OfficialBuildIdArgs)
         $(_InternalRuntimeDownloadArgs)
@@ -112,13 +114,14 @@ jobs:
     # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
     # UI race conditions
     - script: eng\cibuild.cmd
-       -integrationTest
-       -configuration $(_BuildConfig)
-       /p:TargetArchitecture=${{ parameters.targetArchitecture }}
-       $(_OfficialBuildIdArgs)
-       $(_InternalRuntimeDownloadArgs)
-       /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
-       /m:1
+        -integrationTest
+        -configuration $(_BuildConfig)
+        /p:Platform=${{ parameters.targetArchitecture }}
+        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+        $(_OfficialBuildIdArgs)
+        $(_InternalRuntimeDownloadArgs)
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
+        /m:1
       displayName: Run Integration Tests
 
     # Create Nuget package, sign, and publish
