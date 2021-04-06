@@ -16,9 +16,9 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
     <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
-    <Platform Condition="'$(Platform)'==''">$(TargetArchitecture)</Platform>
+    <Platform Condition="'$(Platform)' == 'AnyCPU' or '$(Platform)' == 'Any CPU'">$(TargetArchitecture)</Platform>
     <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
   </PropertyGroup>
 
