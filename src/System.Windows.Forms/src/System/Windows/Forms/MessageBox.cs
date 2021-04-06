@@ -385,8 +385,7 @@ namespace System.Windows.Forms
             Application.BeginModalMessageLoop();
             try
             {
-                ID mbresult = MessageBoxW(new HandleRef(owner, handle), text, caption, style);
-                return (DialogResult)mbresult;
+                return (DialogResult)MessageBoxW(new HandleRef(owner, handle), text, caption, style);
             }
             finally
             {
