@@ -5,8 +5,8 @@
     <Platforms>x86;x64;arm64</Platforms>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
-    <VSTestLogger>trx</VSTestLogger>
-    <VSTestResultsDirectory>$(ArtifactsTestResultsDir)</VSTestResultsDirectory>
+    <!-- <VSTestLogger>trx</VSTestLogger>
+    <VSTestResultsDirectory>$(ArtifactsTestResultsDir)</VSTestResultsDirectory> -->
   </PropertyGroup>
 
   <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" />
@@ -18,20 +18,20 @@
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
   </ItemGroup>
 
-  <!-- <ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
-  </ItemGroup> -->
+  </ItemGroup>
 
-  <ItemGroup>
-    <!-- Workaround for inability to compile dependency for specific platforms from CLI
+  <!-- <ItemGroup>
+    < !- - Workaround for inability to compile dependency for specific platforms from CLI
          Use "Any CPU" build artifacts instead
-     -->
+     - - >
     <Reference Include="$(BaseOutputPath)..\System.Windows.Forms.Primitives\$(Configuration)\$(TargetFramework)\System.Windows.Forms.Primitives.dll" />
     <Reference Include="$(BaseOutputPath)..\System.Windows.Forms\$(Configuration)\$(TargetFramework)\System.Windows.Forms.dll" />
     <Reference Include="$(BaseOutputPath)..\System.Windows.Forms.Primitives.TestUtilities\$(Configuration)\$(TargetFramework)\System.Windows.Forms.Primitives.TestUtilities.dll" />
     <Reference Include="$(BaseOutputPath)..\System.Windows.Forms.TestUtilities\$(Configuration)\$(TargetFramework)\System.Windows.Forms.TestUtilities.dll" />
-  </ItemGroup>
+  </ItemGroup> -->
 
   <ItemGroup>
     <NativeProjectReference Include="NativeTests\CMakeLists.txt" CMakeProject="NativeTests\NativeTests.proj" BuildNative="true" />
