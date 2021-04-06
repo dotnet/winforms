@@ -1195,6 +1195,21 @@ namespace System.Windows.Forms
             base.OnHandleDestroyed(e);
         }
 
+        /// <inheritdoc />
+        protected override void OnEnabledChanged(EventArgs e)
+        {
+            base.OnEnabledChanged(e);
+
+            if (Application.RenderWithVisualStyles)
+            {
+                // The SysDateTimePick32 control caches the style and uses that directly to determine whether the
+                // border should be drawn disabled when theming (VisualStyles) is enabled. Setting the window
+                // style to itself (which will have the proper WS_DISABLED setting after calling base) will
+                // flush the cached value and render the border as one would expect.
+                User32.SetWindowLong(this, User32.GWL.STYLE, User32.GetWindowLong(this, User32.GWL.STYLE));
+            }
+        }
+
         /// <summary>
         ///  Raises the <see cref='ValueChanged'/> event.
         /// </summary>
