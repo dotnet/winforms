@@ -86,14 +86,13 @@ jobs:
 
     # Run Interop Tests
     - script: dotnet test
-        --nologo
-        /p:Configuration=$(_BuildConfig)
-        /p:Platform=${{ parameters.targetArchitecture }}
-        $(_OfficialBuildIdArgs)
-        $(_InternalRuntimeDownloadArgs)
-        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\InteropTest-${{ parameters.targetArchitecture }}.binlog
-        /m:1
-      workingDirectory: src\System.Windows.Forms\tests\InteropTests
+       --nologo
+       /p:Configuration=$(_BuildConfig)
+       /p:Platform=${{ parameters.targetArchitecture }}
+       $(_OfficialBuildIdArgs)
+       $(_InternalRuntimeDownloadArgs)
+       /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\InteropTest-${{ parameters.targetArchitecture }}.binlog
+       /m:1
       displayName: Run Interop Tests
 
     # Run Unit Tests
@@ -113,13 +112,13 @@ jobs:
     # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
     # UI race conditions
     - script: eng\cibuild.cmd
-        -integrationTest
-        -configuration $(_BuildConfig)
-        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
-        $(_OfficialBuildIdArgs)
-        $(_InternalRuntimeDownloadArgs)
-        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
-        /m:1
+       -integrationTest
+       -configuration $(_BuildConfig)
+       /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+       $(_OfficialBuildIdArgs)
+       $(_InternalRuntimeDownloadArgs)
+       /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
+       /m:1
       displayName: Run Integration Tests
 
     # Create Nuget package, sign, and publish
