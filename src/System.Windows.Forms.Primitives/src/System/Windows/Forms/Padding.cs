@@ -10,6 +10,7 @@ namespace System.Windows.Forms
 {
     [TypeConverter(typeof(PaddingConverter))]
     [Serializable] // This type is participating in resx serialization scenarios.
+    [Runtime.CompilerServices.TypeForwardedFrom("System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")]
     public struct Padding
     {
         private bool _all; // Do NOT rename (binary serialization).
