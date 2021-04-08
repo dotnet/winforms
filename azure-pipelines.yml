@@ -73,11 +73,10 @@ variables:
             /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
     - name: _OfficialBuildIdArgs
       value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-    - ${{ if ne(variables['System.TeamProject'], 'public') }}:
-        - name: _InternalRuntimeDownloadArgs
-          value: >-
-            /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
-            /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
+    - name: _InternalRuntimeDownloadArgs
+      value: >-
+        /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
+        /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
     # needed for signing
     - name: _SignType
       value: real
@@ -99,20 +98,20 @@ stages:
         LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
 
   # Windows x64
-  - template: /eng/common/templates/job/build.yml
+  - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_x64
       publishRidAgnosticPackages: true
       targetArchitecture: x64
 
   # Windows x86
-  - template: /eng/common/templates/job/build.yml
+  - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_x86
       targetArchitecture: x86
 
   # Windows arm64
-  - template: /eng/common/templates/job/build.yml
+  - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_arm64
       targetArchitecture: arm64
