@@ -88,20 +88,7 @@ variables:
 
 stages:
 
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-  - stage: OneLocBuild
-    displayName: Publish localizable content to OneLocBuild
-    jobs:
-    - template: /eng/common/templates/job/onelocbuild.yml
-      parameters:
-        CreatePr: false
-        UseCheckedInLocProjectJson: true
-        LclSource: lclFilesfromPackage
-        LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
-
-
 - stage: Build
-  dependsOn: OneLocBuild
   jobs:
 
   # Windows x64
@@ -123,6 +110,18 @@ stages:
       name: Windows_arm64
       targetArchitecture: arm64
       disableVSPublish: true
+
+
+- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+  - stage: OneLocBuild
+    displayName: Publish localizable content to OneLocBuild
+    jobs:
+    - template: /eng/common/templates/job/onelocbuild.yml
+      parameters:
+        CreatePr: false
+        UseCheckedInLocProjectJson: true
+        LclSource: lclFilesfromPackage
+        LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
 
 
 - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
