@@ -2,7 +2,7 @@ parameters:
   name: ''
   targetArchitecture: null
   timeoutInMinutes: 120
-  skipTests: $(SkipTests)
+  skipTests: false
   enableMicrobuild: true
   enablePublishBuildArtifacts: true
   enablePublishTestResults: true

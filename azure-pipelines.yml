@@ -17,6 +17,9 @@ pr:
 variables:
   - name: TeamName
     value: DotNetCore
+  # Skip Running CI tests
+  - name: SkipTests
+    value: false
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
@@ -95,21 +98,22 @@ stages:
   - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_x64
-      publishRidAgnosticPackages: true
       targetArchitecture: x64
+      skipTests: $(SkipTests)
 
   # Windows x86
   - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_x86
       targetArchitecture: x86
+      skipTests: $(SkipTests)
 
   # Windows arm64
   - template: /eng/pipelines/build.yml
     parameters:
       name: Windows_arm64
       targetArchitecture: arm64
-      disableVSPublish: true
+      skipTests: $(SkipTests)
 
 
 - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
