@@ -2,7 +2,6 @@ parameters:
   name: ''
   targetArchitecture: null
   timeoutInMinutes: 120
-  skipTests: false
   enableMicrobuild: true
   enablePublishBuildArtifacts: true
   enablePublishTestResults: true
@@ -94,7 +93,6 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
         /m:1
       displayName: Run Unit Tests
-      condition: and(succeeded(), eq('${{ parameters.skipTests }}', 'true'))
 
     # Run Integration Tests
     # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
@@ -109,7 +107,6 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
         /m:1
       displayName: Run Integration Tests
-      condition: and(succeeded(), eq('${{ parameters.skipTests }}', 'true'))
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd

@@ -17,9 +17,6 @@ pr:
 variables:
   - name: TeamName
     value: DotNetCore
-  # Skip Running CI tests
-  - name: SkipTests
-    value: false
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
