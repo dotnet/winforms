@@ -17,9 +17,9 @@ jobs:
 
     variables:
       ${{ if eq(variables['System.TeamProject'], 'public') }}:
-        - _HelixTargetQueues: ${{ parameters.helixPublicTargetQueues }}
+        _HelixTargetQueues: ${{ parameters.helixPublicTargetQueues }}
       ${{ if ne(variables['System.TeamProject'], 'public') }}:
-        - _HelixTargetQueues: ${{ parameters.helixPublicTargetQueues }}
+        _HelixTargetQueues: ${{ parameters.helixPublicTargetQueues }}
 
     pool:
       ${{ if eq(variables['System.TeamProject'], 'public') }}:
