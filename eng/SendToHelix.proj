@@ -1,0 +1,65 @@
+<Project Sdk="Microsoft.DotNet.Helix.Sdk" DefaultTargets="Test">
+
+  <!--
+
+    This project file is invoked from the ci.yml file as part of the CI build.
+    
+    See https://github.com/dotnet/arcade/blob/master/src/Microsoft.DotNet.Helix/Sdk/Readme.md 
+    for option details.
+    
+    These values provided are defaults (for public builds), but they can be overridden from the command line 
+    by using the /p:Name=Value syntax when calling msbuild.
+
+    To clear a default value from the command line, use /p:Name= or /p:Name=""
+
+    If you want to iterate from your local machine (and avoid waiting for AzDO), you can do so
+    by first setting the following environment variables (the values can be anything):
+
+      SET BUILD_SOURCEBRANCH=helix_test
+      SET BUILD_REPOSITORY_NAME=dotnet-winforms
+      SET SYSTEM_TEAMPROJECT=internal
+      SET BUILD_REASON=PullRequest
+
+    Then, to send to the public helix queue, use the following:
+
+      msbuild .\eng\SendToHelix.proj /p:Platform=x64 /p:HelixTargetQueues=Windows.10.Amd64.Client19H1.Open
+
+    Or, to send to the internal helix queue, use the following:
+
+      msbuild .\eng\SendToHelix.proj /p:Platform=x64 /p:Creator= /p:HelixTargetQueues=Windows.10.Amd64.Client19H1.Xaml /p:HelixAccessToken=<get this from helix.dot.net>
+
+  -->
+
+  <PropertyGroup>
+    <HelixSource>official/winforms</HelixSource> <!-- Change to pr/winforms for PR builds -->
+    <HelixType>type/tests</HelixType>
+    <Creator>winforms</Creator> <!-- Must provide for public builds, must be empty for internal builds -->
+    <HelixAccessToken></HelixAccessToken> <!-- Must provide for internal builds, must be empty for public builds -->
+    <IncludeDotNetCli>true</IncludeDotNetCli>
+    <DotNetCliPackageType>runtime</DotNetCliPackageType>
+    <DotNetCliVersion>$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</DotNetCliVersion>
+    <EnableXUnitReporter>true</EnableXUnitReporter>
+    <XUnitPublishTargetFramework>$(TargetFramework)</XUnitPublishTargetFramework>
+    <XUnitRuntimeTargetFramework>netcoreapp2.0</XUnitRuntimeTargetFramework>
+    <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
+    <XUnitArguments></XUnitArguments>
+  </PropertyGroup>
+
+  <!-- Specify XUnit test projects here -->
+  <ItemGroup>
+    <!-- Successful -->
+    <XUnitProject Include="..\src\**\System.Windows.Forms.SourceGenerators.Tests.csproj"/>
+    <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.TestUtilities.Tests.csproj"/>
+    <XUnitProject Include="..\src\**\System.Windows.Forms.Primitives.Tests.csproj"/>
+    <XUnitProject Include="..\src\**\System.Windows.Forms.Design.Tests.csproj"/>
+    <XUnitProject Include="..\src\**\System.Windows.Forms.Tests.csproj"/>
+
+    <!-- <XUnitProject Include="..\src\**\Microsoft.VisualBasic.Tests.csproj"/> -->
+
+    <!-- <XUnitProject Include="..\src\**\*.Tests.csproj"
+                  Exclude="..\src\**\*.Interop.Tests.csproj"
+      /> -->
+    <!-- <XUnitProject Include="..\src\**\*.IntegrationTests.csproj"/> -->
+  </ItemGroup>
+
+</Project>
