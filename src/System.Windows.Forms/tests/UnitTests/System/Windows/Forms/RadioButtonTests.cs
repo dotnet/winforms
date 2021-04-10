@@ -363,6 +363,22 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        public void RadioButton_CheckAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
+        {
+            using var control = new RadioButton();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        public void RadioRadioButton_CheckAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
+        {
+            using var control = new SubRadioButton();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.CheckAlign = value);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void RadioButton_CreateAccessibilityInstance_Invoke_ReturnsExpected_IfHandleIsCreated(FlatStyle flatStyle)
         {
