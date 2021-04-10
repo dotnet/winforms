@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_DataGridViewRow_DataGridViewElementStates_TestData()
         {
-            yield return new object[] { null, (DataGridViewElementStates)7 };
+            yield return new object[] { new DataGridViewRow(), (DataGridViewElementStates)7 };
             yield return new object[] { new DataGridViewRow(), DataGridViewElementStates.Displayed };
         }
 

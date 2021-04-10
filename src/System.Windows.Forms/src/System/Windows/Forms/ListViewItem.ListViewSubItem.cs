@@ -76,12 +76,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (style != null && style.backColor != Color.Empty)
+                    if (style is not null && style.backColor != Color.Empty)
                     {
                         return style.backColor;
                     }
 
-                    if (_owner != null && _owner.listView != null)
+                    if (_owner is not null && _owner.listView is not null)
                     {
                         return _owner.listView.BackColor;
                     }
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner != null && _owner.listView != null && _owner.listView.IsHandleCreated)
+                    if (_owner is not null && _owner.listView is not null && _owner.listView.IsHandleCreated)
                     {
                         return _owner.listView.GetSubItemRect(_owner.Index, _owner.SubItems.IndexOf(this));
                     }
@@ -123,7 +123,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    Debug.Assert(style is not null, "Should have checked CustomStyle");
                     return !style.backColor.IsEmpty;
                 }
             }
@@ -132,8 +132,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(style != null, "Should have checked CustomStyle");
-                    return style.font != null;
+                    Debug.Assert(style is not null, "Should have checked CustomStyle");
+                    return style.font is not null;
                 }
             }
 
@@ -141,24 +141,24 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(style != null, "Should have checked CustomStyle");
+                    Debug.Assert(style is not null, "Should have checked CustomStyle");
                     return !style.foreColor.IsEmpty;
                 }
             }
 
-            internal bool CustomStyle => style != null;
+            internal bool CustomStyle => style is not null;
 
             [Localizable(true)]
             public Font Font
             {
                 get
                 {
-                    if (style != null && style.font != null)
+                    if (style is not null && style.font is not null)
                     {
                         return style.font;
                     }
 
-                    if (_owner != null && _owner.listView != null)
+                    if (_owner is not null && _owner.listView is not null)
                     {
                         return _owner.listView.Font;
                     }
@@ -184,12 +184,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (style != null && style.foreColor != Color.Empty)
+                    if (style is not null && style.foreColor != Color.Empty)
                     {
                         return style.foreColor;
                     }
 
-                    if (_owner != null && _owner.listView != null)
+                    if (_owner is not null && _owner.listView is not null)
                     {
                         return _owner.listView.ForeColor;
                     }
@@ -269,7 +269,7 @@ namespace System.Windows.Forms
 
             public void ResetStyle()
             {
-                if (style != null)
+                if (style is not null)
                 {
                     style = null;
                     _owner?.InvalidateListView();

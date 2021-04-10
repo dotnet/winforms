@@ -2507,6 +2507,16 @@ namespace System.Windows.Forms
             ((ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            AccessibilityObject.RaiseAutomationNotification(
+                Automation.AutomationNotificationKind.Other,
+                Automation.AutomationNotificationProcessing.MostRecent,
+                Text);
+        }
+
         protected override void OnHandleCreated(EventArgs e)
         {
             // base.OnHandleCreated is called somewhere in the middle of this
@@ -3304,7 +3314,7 @@ namespace System.Windows.Forms
                     string linktext = CharRangeToString(enlink.charrange);
                     if (!string.IsNullOrEmpty(linktext))
                     {
-                        OnLinkClicked(new LinkClickedEventArgs(linktext));
+                        OnLinkClicked(new LinkClickedEventArgs(linktext, enlink.charrange.cpMin, enlink.charrange.cpMax - enlink.charrange.cpMin));
                     }
 
                     m.Result = (IntPtr)1;

@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     public class DataGridViewRowCancelEventArgs : CancelEventArgs
     {
-        public DataGridViewRowCancelEventArgs(DataGridViewRow dataGridViewRow)
+        public DataGridViewRowCancelEventArgs(DataGridViewRow? dataGridViewRow)
         {
             Row = dataGridViewRow;
         }
 
-        public DataGridViewRow Row { get; set; }
+        public DataGridViewRow? Row { get; set; }
     }
 }

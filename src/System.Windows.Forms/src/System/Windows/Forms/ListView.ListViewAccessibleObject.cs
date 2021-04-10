@@ -40,7 +40,7 @@ namespace System.Windows.Forms
                         // to any of the group and have null as the item.Group value, so these items
                         // are put into the default group and thereby the ListView itself starts
                         // containing Default group.
-                        if (item != null && item.Group is null)
+                        if (item is not null && item.Group is null)
                         {
                             return true;
                         }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
             }
 
             private bool OwnerHasGroups
-                => _owningListView.IsHandleCreated && _owningListView.Groups.Count > 0;
+                => _owningListView.IsHandleCreated && ShowGroupAccessibleObject;
 
             internal override int RowCount
                 => _owningListView.Items.Count;
@@ -74,6 +74,9 @@ namespace System.Windows.Forms
                     return runtimeId;
                 }
             }
+
+            // ListViewGroup are not displayed when the ListView is in "List" view
+            private bool ShowGroupAccessibleObject => _owningListView.View != View.List && _owningListView.GroupsEnabled;
 
             internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
@@ -136,7 +139,7 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
-                if (_owningListView.Groups.Count > 0)
+                if (ShowGroupAccessibleObject)
                 {
                     return OwnerHasDefaultGroup ? _owningListView.Groups.Count + 1 : _owningListView.Groups.Count;
                 }
@@ -293,7 +296,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < GetChildCount(); i++)
                     {
                         AccessibleObject? accessibilityObject = GetChild(i);
-                        if (accessibilityObject != null &&
+                        if (accessibilityObject is not null &&
                             accessibilityObject.Bounds.Contains(new Point(x, y)))
                         {
                             return accessibilityObject;
@@ -303,9 +306,9 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                if (hitTestInfo.Item != null)
+                if (hitTestInfo.Item is not null)
                 {
-                    if (hitTestInfo.SubItem != null)
+                    if (hitTestInfo.SubItem is not null)
                     {
                         return hitTestInfo.SubItem.AccessibilityObject;
                     }

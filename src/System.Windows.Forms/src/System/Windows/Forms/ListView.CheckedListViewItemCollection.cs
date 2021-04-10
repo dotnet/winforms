@@ -166,7 +166,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item != null && item.ListView == owner && item.Checked)
+                if (item is not null && item.ListView == owner && item.Checked)
                 {
                     return true;
                 }
@@ -336,7 +336,7 @@ namespace System.Windows.Forms
                 }
 
                 ListViewItem[] items = ItemArray;
-                if (items != null)
+                if (items is not null)
                 {
                     return items.GetEnumerator();
                 }

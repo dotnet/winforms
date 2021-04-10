@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                 // get the property and see if it needs to be serialized.
                 //
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(b)[ConstructorParameterProperties[lastItem]];
-                if (prop != null && prop.ShouldSerializeValue(b))
+                if (prop is not null && prop.ShouldSerializeValue(b))
                 {
                     break;
                 }
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             // Get the ctor info.
             //
             ConstructorInfo ctor = typeof(Binding).GetConstructor(ctorParams);
-            Debug.Assert(ctor != null, "Failed to find Binding ctor for types!");
+            Debug.Assert(ctor is not null, "Failed to find Binding ctor for types!");
             if (ctor is null)
             {
                 isComplete = false;

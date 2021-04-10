@@ -9931,9 +9931,9 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Windows.Forms.DataGridViewRow.HeaderCell.get -> System.Windows.Forms.DataGridViewRowHeaderCell
 ~System.Windows.Forms.DataGridViewRow.HeaderCell.set -> void
 ~System.Windows.Forms.DataGridViewRow.SetValues(params object[] values) -> bool
-~System.Windows.Forms.DataGridViewRowCancelEventArgs.DataGridViewRowCancelEventArgs(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~System.Windows.Forms.DataGridViewRowCancelEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewRowCancelEventArgs.Row.set -> void
+System.Windows.Forms.DataGridViewRowCancelEventArgs.DataGridViewRowCancelEventArgs(System.Windows.Forms.DataGridViewRow? dataGridViewRow) -> void
+System.Windows.Forms.DataGridViewRowCancelEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow?
+System.Windows.Forms.DataGridViewRowCancelEventArgs.Row.set -> void
 ~System.Windows.Forms.DataGridViewRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewRowCollection.DataGridView.get -> System.Windows.Forms.DataGridView
 ~System.Windows.Forms.DataGridViewRowCollection.DataGridViewRowCollection(System.Windows.Forms.DataGridView dataGridView) -> void
@@ -9941,23 +9941,23 @@ virtual System.Windows.Forms.UpDownBase.ValidateEditText() -> void
 ~System.Windows.Forms.DataGridViewRowCollection.List.get -> System.Collections.ArrayList
 ~System.Windows.Forms.DataGridViewRowCollection.SharedRow(int rowIndex) -> System.Windows.Forms.DataGridViewRow
 ~System.Windows.Forms.DataGridViewRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
-~System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs.DataGridViewRowDividerDoubleClickEventArgs(int rowIndex, System.Windows.Forms.HandledMouseEventArgs e) -> void
-~System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.set -> void
-~System.Windows.Forms.DataGridViewRowEventArgs.DataGridViewRowEventArgs(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~System.Windows.Forms.DataGridViewRowEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.DataGridViewRowPostPaintEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, string errorText, System.Windows.Forms.DataGridViewCellStyle inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
-~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DataGridViewRowPostPaintEventArgs.InheritedRowStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewRowPrePaintEventArgs.DataGridViewRowPrePaintEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, string errorText, System.Windows.Forms.DataGridViewCellStyle inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
-~System.Windows.Forms.DataGridViewRowPrePaintEventArgs.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewRowPrePaintEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DataGridViewRowPrePaintEventArgs.InheritedRowStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewRowStateChangedEventArgs.DataGridViewRowStateChangedEventArgs(System.Windows.Forms.DataGridViewRow dataGridViewRow, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
-~System.Windows.Forms.DataGridViewRowStateChangedEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow
+System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
+System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs.DataGridViewRowDividerDoubleClickEventArgs(int rowIndex, System.Windows.Forms.HandledMouseEventArgs! e) -> void
+System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewRowErrorTextNeededEventArgs.ErrorText.set -> void
+System.Windows.Forms.DataGridViewRowEventArgs.DataGridViewRowEventArgs(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> void
+System.Windows.Forms.DataGridViewRowEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow!
+System.Windows.Forms.DataGridViewRowPostPaintEventArgs.DataGridViewRowPostPaintEventArgs(System.Windows.Forms.DataGridView! dataGridView, System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, string? errorText, System.Windows.Forms.DataGridViewCellStyle! inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
+System.Windows.Forms.DataGridViewRowPostPaintEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewRowPostPaintEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DataGridViewRowPostPaintEventArgs.InheritedRowStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridViewRowPrePaintEventArgs.DataGridViewRowPrePaintEventArgs(System.Windows.Forms.DataGridView! dataGridView, System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, string? errorText, System.Windows.Forms.DataGridViewCellStyle! inheritedRowStyle, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
+System.Windows.Forms.DataGridViewRowPrePaintEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewRowPrePaintEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.DataGridViewRowPrePaintEventArgs.InheritedRowStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridViewRowStateChangedEventArgs.DataGridViewRowStateChangedEventArgs(System.Windows.Forms.DataGridViewRow! dataGridViewRow, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
+System.Windows.Forms.DataGridViewRowStateChangedEventArgs.Row.get -> System.Windows.Forms.DataGridViewRow!
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.Contains(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> bool
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void

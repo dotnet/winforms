@@ -55,7 +55,7 @@ namespace System.Windows.Forms
 
             internal ListViewItemCollection(IInnerList innerList)
             {
-                Debug.Assert(innerList != null, "Can't pass in null innerList");
+                Debug.Assert(innerList is not null, "Can't pass in null innerList");
                 this.innerList = innerList;
             }
 
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
                     {
                         this[index] = (ListViewItem)value;
                     }
-                    else if (value != null)
+                    else if (value is not null)
                     {
                         this[index] = new ListViewItem(value.ToString(), -1);
                     }
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                 {
                     return IndexOf(Add((ListViewItem)item));
                 }
-                else if (item != null)
+                else if (item is not null)
                 {
                     return IndexOf(Add(item.ToString()));
                 }
@@ -487,7 +487,7 @@ namespace System.Windows.Forms
                 {
                     Insert(index, (ListViewItem)item);
                 }
-                else if (item != null)
+                else if (item is not null)
                 {
                     Insert(index, item.ToString());
                 }

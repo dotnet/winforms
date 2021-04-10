@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                         if ((int)(State & (LinkState.Hover | LinkState.Active)) != 0)
                         {
                             State &= ~(LinkState.Hover | LinkState.Active);
-                            if (Owner != null)
+                            if (Owner is not null)
                             {
                                 Owner.OverrideCursor = null;
                             }
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                 {
                     if (_length == -1)
                     {
-                        if (Owner != null && !string.IsNullOrEmpty(Owner.Text))
+                        if (Owner is not null && !string.IsNullOrEmpty(Owner.Text))
                         {
                             StringInfo stringInfo = new StringInfo(Owner.Text);
                             return stringInfo.LengthInTextElements - Start;
@@ -95,7 +95,7 @@ namespace System.Windows.Forms
                     if (_length != value)
                     {
                         _length = value;
-                        if (Owner != null)
+                        if (Owner is not null)
                         {
                             Owner.InvalidateTextLayout();
                             Owner.Invalidate();
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                     {
                         _start = value;
 
-                        if (Owner != null)
+                        if (Owner is not null)
                         {
                             Owner._links.Sort(LinkLabel.s_linkComparer);
                             Owner.InvalidateTextLayout();

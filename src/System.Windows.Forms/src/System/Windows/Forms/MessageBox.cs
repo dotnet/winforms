@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 // unfortunately, there's no easy way to obtain handle of a message box.
                 // we'll have to rely on the fact that modal message loops have to pop off in an orderly way.
 
-                if (helpInfoTable != null && helpInfoTable.Length > 0)
+                if (helpInfoTable is not null && helpInfoTable.Length > 0)
                 {
                     // the top of the stack is actually at the end of the array.
                     return helpInfoTable[helpInfoTable.Length - 1];
@@ -364,7 +364,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            if (owner is not null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
             }

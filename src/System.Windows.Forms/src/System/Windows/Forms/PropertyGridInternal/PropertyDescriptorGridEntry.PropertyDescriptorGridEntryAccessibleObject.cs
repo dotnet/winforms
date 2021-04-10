@@ -88,7 +88,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
                 {
-                    return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
+                    return !_owningPropertyDescriptorGridEntry.IsPropertyReadOnly;
                 }
                 else if (propertyID == UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId)
                 {
@@ -107,7 +107,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
                 if (patternId == UiaCore.UIA.ValuePatternId ||
-                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && owner.Enumerable))
+                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && _owningPropertyDescriptorGridEntry.Enumerable))
                 {
                     return true;
                 }

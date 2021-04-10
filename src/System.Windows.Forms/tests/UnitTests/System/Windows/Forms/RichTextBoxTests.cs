@@ -9183,6 +9183,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { new LinkClickedEventArgs(null) };
             yield return new object[] { new LinkClickedEventArgs("") };
             yield return new object[] { new LinkClickedEventArgs("text") };
+            yield return new object[] { new LinkClickedEventArgs("", 10, 0) };
+            yield return new object[] { new LinkClickedEventArgs("text", 10, 4) };
         }
 
         [WinFormsTheory]
@@ -9209,6 +9211,21 @@ namespace System.Windows.Forms.Tests
             control.OnLinkClicked(eventArgs);
             Assert.Equal(1, callCount);
             Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> RichTextBox_InvalidLinkClickedEventArgs_TestData()
+        {
+            yield return new object[] { -1, 0 };
+            yield return new object[] { 0, -1 };
+            yield return new object[] { int.MaxValue, 1 };
+            yield return new object[] { 1, int.MaxValue };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(RichTextBox_InvalidLinkClickedEventArgs_TestData))]
+        public void RichTextBox_InvalidLinkClickedEventArgs_ThrowsArgumentOutOfRangeException(int linkStart, int linkLength)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new LinkClickedEventArgs("text", linkStart, linkLength));
         }
 
         [WinFormsTheory]

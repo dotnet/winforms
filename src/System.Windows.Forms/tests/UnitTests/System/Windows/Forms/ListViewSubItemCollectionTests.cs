@@ -435,12 +435,12 @@ namespace System.Windows.Forms.Tests
 
             collection.Clear();
             Assert.Empty(collection);
-            Assert.Same(item, subItem._owner);
+            Assert.Null(subItem._owner);
 
             // Clear again.
             collection.Clear();
             Assert.Empty(collection);
-            Assert.Same(item, subItem._owner);
+            Assert.Null(subItem._owner);
         }
 
         [Fact]
@@ -876,6 +876,259 @@ namespace System.Windows.Forms.Tests
             var array = new object[] { 1, 2, 3 };
             collection.CopyTo(array, 0);
             Assert.Equal(new object[] { 1, 2, 3 }, array);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_Add_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem = new();
+
+            Assert.Null(subItem._owner);
+
+            listViewItem.SubItems.Add(subItem);
+
+            Assert.Same(listViewItem, subItem._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_Add_String_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+
+            listViewItem.SubItems.Add("Test");
+
+            Assert.Same(listViewItem, listViewItem.SubItems[1]._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_Add_String_Color_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+
+            listViewItem.SubItems.Add("Test", Color.White, Color.Black, SystemFonts.MenuFont);
+
+            Assert.Same(listViewItem, listViewItem.SubItems[1]._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_AddRange_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem1 = new();
+            ListViewItem.ListViewSubItem subItem2 = new();
+
+            Assert.Null(subItem1._owner);
+            Assert.Null(subItem2._owner);
+
+            listViewItem.SubItems.AddRange(new ListViewItem.ListViewSubItem[] { subItem1, subItem2 });
+
+            Assert.Same(listViewItem, subItem1._owner);
+            Assert.Same(listViewItem, subItem2._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_AddRange_String_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+
+            listViewItem.SubItems.AddRange(new string[] { "Test 1", "Test 2" });
+
+            Assert.Same(listViewItem, listViewItem.SubItems[1]._owner);
+            Assert.Same(listViewItem, listViewItem.SubItems[2]._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_AddRange_String_Color_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+
+            listViewItem.SubItems.AddRange(new string[] { "Test 1", "Test 2" }, Color.White, Color.Black, SystemFonts.MenuFont);
+
+            Assert.Same(listViewItem, listViewItem.SubItems[1]._owner);
+            Assert.Same(listViewItem, listViewItem.SubItems[2]._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItem_Clear_RemoveOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem1 = new();
+            ListViewItem.ListViewSubItem subItem2 = new();
+            ListViewItem.ListViewSubItem oldSubItem = listViewItem.SubItems[0];
+
+            listViewItem.SubItems.Add(subItem1);
+            listViewItem.SubItems.Add(subItem2);
+
+            Assert.Same(listViewItem, oldSubItem._owner);
+            Assert.Same(listViewItem, subItem1._owner);
+            Assert.Same(listViewItem, subItem1._owner);
+
+            listViewItem.SubItems.Clear();
+
+            Assert.Same(listViewItem, listViewItem.SubItems[0]._owner);
+            Assert.Null(oldSubItem._owner);
+            Assert.Null(subItem1._owner);
+            Assert.Null(subItem1._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_IList_Add_SetOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem = new();
+
+            Assert.Null(subItem._owner);
+
+            ((IList)listViewItem.SubItems).Add(subItem);
+
+            Assert.Same(listViewItem, subItem._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_IList_Insert_AddOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem1 = new();
+            ListViewItem.ListViewSubItem subItem2 = new();
+            ListViewItem.ListViewSubItem oldSubItem1 = listViewItem.SubItems[0];
+            ListViewItem.ListViewSubItem oldSubItem2 = new();
+            listViewItem.SubItems.Add(oldSubItem2);
+
+            Assert.Null(subItem1._owner);
+            Assert.Null(subItem2._owner);
+            Assert.Same(listViewItem, oldSubItem1._owner);
+            Assert.Same(listViewItem, oldSubItem2._owner);
+
+            ((IList)listViewItem.SubItems).Insert(0, subItem1);
+            ((IList)listViewItem.SubItems).Insert(1, subItem2);
+
+            Assert.Equal(4, listViewItem.SubItems.Count);
+
+            Assert.Same(subItem1, listViewItem.SubItems[0]);
+            Assert.Same(subItem2, listViewItem.SubItems[1]);
+            Assert.Same(oldSubItem1, listViewItem.SubItems[2]);
+            Assert.Same(oldSubItem2, listViewItem.SubItems[3]);
+
+            Assert.Same(listViewItem, oldSubItem1._owner);
+            Assert.Same(listViewItem, oldSubItem2._owner);
+            Assert.Same(listViewItem, subItem1._owner);
+            Assert.Same(listViewItem, subItem2._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_IList_Remove_RemoveOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem oldSubItem = listViewItem.SubItems[0];
+            ListViewItem.ListViewSubItem subItem = new();
+            listViewItem.SubItems.Add(subItem);
+
+            Assert.Same(listViewItem, subItem._owner);
+            Assert.Same(listViewItem, oldSubItem._owner);
+
+            listViewItem.SubItems.Remove(subItem);
+            listViewItem.SubItems.Remove(oldSubItem);
+
+            Assert.Same(listViewItem, listViewItem.SubItems[0]._owner);
+            Assert.Null(subItem._owner);
+            Assert.Null(oldSubItem._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_IList_Set_UpdateOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem = new();
+            ListViewItem.ListViewSubItem oldSubItem = listViewItem.SubItems[0];
+
+            Assert.Same(listViewItem, oldSubItem._owner);
+            Assert.Null(subItem._owner);
+
+            ((IList)listViewItem.SubItems)[0] = subItem;
+
+            Assert.Null(oldSubItem._owner);
+            Assert.Same(listViewItem, subItem._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_Insert_UpdateOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem subItem1 = new();
+            ListViewItem.ListViewSubItem subItem2 = new();
+            ListViewItem.ListViewSubItem defaultSubItem = listViewItem.SubItems[0];
+
+            Assert.Null(subItem1._owner);
+            Assert.Null(subItem2._owner);
+            Assert.Same(listViewItem, defaultSubItem._owner);
+
+            listViewItem.SubItems.Insert(0, subItem1);
+            listViewItem.SubItems.Insert(1, subItem2);
+
+            Assert.Equal(3, listViewItem.SubItems.Count);
+
+            Assert.Same(listViewItem, defaultSubItem._owner);
+            Assert.Same(listViewItem, subItem1._owner);
+            Assert.Same(listViewItem, subItem2._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_Remove_RemoveOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem oldSubItem = listViewItem.SubItems[0];
+            ListViewItem.ListViewSubItem subItem = new();
+            listViewItem.SubItems.Add(subItem);
+
+            Assert.Same(listViewItem, subItem._owner);
+            Assert.Same(listViewItem, oldSubItem._owner);
+
+            listViewItem.SubItems.Remove(subItem);
+            listViewItem.SubItems.Remove(oldSubItem);
+
+            Assert.Null(subItem._owner);
+            Assert.Null(oldSubItem._owner);
+            Assert.Same(listViewItem, listViewItem.SubItems[0]._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_RemoveAt_RemoveOwner()
+        {
+            ListViewItem listViewItem = new();
+            ListViewItem.ListViewSubItem oldSubItem = listViewItem.SubItems[0];
+            ListViewItem.ListViewSubItem subItem = new();
+            listViewItem.SubItems.Add(subItem);
+
+            Assert.Same(listViewItem, subItem._owner);
+            Assert.Same(listViewItem, oldSubItem._owner);
+
+            listViewItem.SubItems.RemoveAt(1);
+            listViewItem.SubItems.RemoveAt(0);
+
+            Assert.Null(subItem._owner);
+            Assert.Null(oldSubItem._owner);
+            Assert.Same(listViewItem, listViewItem.SubItems[0]._owner);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemCollection_RemoveByKey_RemoveOwner()
+        {
+            ListViewItem listViewItem = new("Test 1");
+            ListViewItem.ListViewSubItem oldSubItem = listViewItem.SubItems[0];
+            oldSubItem.Name = "Test 1";
+            ListViewItem.ListViewSubItem subItem = new(listViewItem, "Test 2") { Name = "Test 2"  };
+            listViewItem.SubItems.Add(subItem);
+
+            Assert.Same(listViewItem, subItem._owner);
+            Assert.Same(listViewItem, oldSubItem._owner);
+
+            listViewItem.SubItems.RemoveByKey("Test 2");
+            listViewItem.SubItems.RemoveByKey("Test 1");
+
+            Assert.Null(subItem._owner);
+            Assert.Null(oldSubItem._owner);
+            Assert.Same(listViewItem, listViewItem.SubItems[0]._owner);
         }
     }
 }

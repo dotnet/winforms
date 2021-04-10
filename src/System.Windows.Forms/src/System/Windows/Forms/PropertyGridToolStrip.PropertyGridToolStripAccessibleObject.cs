@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                     _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
                     UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                    if (navigationTarget != null)
+                    if (navigationTarget is not null)
                     {
                         return navigationTarget;
                     }

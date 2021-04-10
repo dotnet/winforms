@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             }
 
             CurrentItem = item;
-            if (item != null)
+            if (item is not null)
             {
                 CurrentItem = item;
                 autoMenuExpandTimer.Interval = item.IsOnDropDown ? slowShow : quickShow;
@@ -143,8 +143,8 @@ namespace System.Windows.Forms
                 InTransition = false;
 
                 // we should roolup if the current item has changed and is selected.
-                bool rollup = forceClose || (CurrentItem != null && CurrentItem != lastSelected && CurrentItem.Selected);
-                if (rollup && lastSelected != null && lastSelected.HasDropDownItems)
+                bool rollup = forceClose || (CurrentItem is not null && CurrentItem != lastSelected && CurrentItem.Selected);
+                if (rollup && lastSelected is not null && lastSelected.HasDropDownItems)
                 {
                     lastSelected.HideDropDown();
                 }
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
                 // we're about to fall off the edge of the toolstrip, something should be selected
                 // at all times while we're InTransition mode - otherwise it looks really funny
                 // to have an auto expanded item
-                if (CurrentItem != null)
+                if (CurrentItem is not null)
                 {
                     CurrentItem.Select();
                 }
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
                     ToolStripMenuItem menuItem = (!(toolStrip.ActiveDropDowns[0] is ToolStripDropDown dropDown)) ? null : dropDown.OwnerItem as ToolStripMenuItem;
-                    if (menuItem != null && menuItem.Pressed)
+                    if (menuItem is not null && menuItem.Pressed)
                     {
                         menuItem.Select();
                     }
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             }
 
             EndTransition(/*forceClose*/false);
-            if (CurrentItem != null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
+            if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
                 Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();
