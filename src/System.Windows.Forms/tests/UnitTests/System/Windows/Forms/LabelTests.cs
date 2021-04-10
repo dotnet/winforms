@@ -285,6 +285,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, layoutCallCount);
             Assert.False(control.IsHandleCreated);
         }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;
