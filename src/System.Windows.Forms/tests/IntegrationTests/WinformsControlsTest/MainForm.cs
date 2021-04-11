@@ -160,6 +160,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.TaskDialogButton,
                 new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show())
+            },
+            {
+                MainFormControlsTabOrder.MessageBoxButton,
+                new InitInfo("MessageBox", (obj, e) => new MessageBoxTest().Show())
             }
         };
 
