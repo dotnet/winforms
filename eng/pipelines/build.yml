@@ -103,7 +103,7 @@ jobs:
         /p:HelixTargetQueues="$(_HelixTargetQueues)"
         /p:Creator=$(_HelixCreator)
         /p:HelixAccessToken=$(_HelixAccessToken)
-        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\SendToHelix.binlog
+        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Helix-${{ parameters.targetArchitecture }}.binlog
       displayName: Run Unit Tests in Helix
       env:
         SYSTEM_ACCESSTOKEN: $(System.AccessToken) # needed to publish helix results to Azure Dev Ops
@@ -157,6 +157,6 @@ jobs:
     #   displayName: Upload coverage to codecov.io
     #   condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
-    # - template: post-build.yml
-    #   parameters:
-    #     name: ${{ parameters.name }}
+    - template: post-build.yml
+      parameters:
+        name: ${{ parameters.name }}

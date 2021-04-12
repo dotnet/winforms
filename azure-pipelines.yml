@@ -117,7 +117,7 @@ stages:
     parameters:
       name: Windows_x64
       targetArchitecture: x64
-      helixPublicTargetQueues: Windows.10.Amd64.Client19H1.Open #;Windows.81.Amd64.Open;Windows.7.Amd64.Open
+      helixPublicTargetQueues: Windows.10.Amd64.Client19H1.Open;Windows.81.Amd64.Open;Windows.7.Amd64.Open
       helixInternalTargetQueues:  Windows.10.Amd64.Client19H1.Xaml #;Windows.81.Amd64;Windows.7.Amd64
 
   # Windows x86
