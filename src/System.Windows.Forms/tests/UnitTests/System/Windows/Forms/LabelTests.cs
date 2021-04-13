@@ -2,9 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Design;
+using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 
@@ -240,6 +242,48 @@ namespace System.Windows.Forms.Tests
             actual = labelDynamic._controlToolTip;
 
             Assert.True(actual);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        public void Label_ImageAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
+        {
+            using var control = new Label();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImageAlign = value);
+        }
+
+        public static IEnumerable<object[]> ImageAlign_Set_TestData()
+        {
+            foreach (bool autoSize in new bool[] { true, false })
+            {
+                foreach (ContentAlignment value in Enum.GetValues(typeof(ContentAlignment)))
+                {
+                    yield return new object[] { autoSize, value };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageAlign_Set_TestData))]
+        public void Label_ImageAlign_Set_GetReturnsExpected(bool autoSize, ContentAlignment value)
+        {
+            using var control = new Label
+            {
+                AutoSize = autoSize
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.ImageAlign = value;
+            Assert.Equal(value, control.ImageAlign);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.ImageAlign = value;
+            Assert.Equal(value, control.ImageAlign);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         public class SubLabel : Label
