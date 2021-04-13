@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Drawing;
 using static Interop;
 
@@ -108,7 +109,13 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (!_owningListView.IsHandleCreated || index < 0 || index >= GetChildCount())
+                if (!_owningListView.IsHandleCreated || index < 0)
+                {
+                    return null;
+                }
+
+                IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
+                if (index >= GetChildCount(visibleGroups))
                 {
                     return null;
                 }
@@ -120,7 +127,7 @@ namespace System.Windows.Forms
 
                 if (!OwnerHasDefaultGroup)
                 {
-                    return _owningListView.Groups[index].AccessibilityObject;
+                    return visibleGroups[index].AccessibilityObject;
                 }
 
                 // Default group has the last index out of the Groups.Count
@@ -129,7 +136,7 @@ namespace System.Windows.Forms
                 // default group is the first before other groups.
                 return index == 0
                     ? _owningListView.DefaultGroup.AccessibilityObject
-                    : _owningListView.Groups[index - 1].AccessibilityObject;
+                    : visibleGroups[index - 1].AccessibilityObject;
             }
 
             public override int GetChildCount()
@@ -139,9 +146,14 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
+                return GetChildCount(GetVisibleGroups());
+            }
+
+            private int GetChildCount(IReadOnlyList<ListViewGroup> visibleGroups)
+            {
                 if (ShowGroupAccessibleObject)
                 {
-                    return OwnerHasDefaultGroup ? _owningListView.Groups.Count + 1 : _owningListView.Groups.Count;
+                    return OwnerHasDefaultGroup ? visibleGroups.Count + 1 : visibleGroups.Count;
                 }
 
                 return _owningListView.Items.Count;
@@ -280,6 +292,26 @@ namespace System.Windows.Forms
                 }
 
                 return selectedItemProviders;
+            }
+
+            internal IReadOnlyList<ListViewGroup> GetVisibleGroups()
+            {
+                List<ListViewGroup> list = new();
+                if (!ShowGroupAccessibleObject)
+                {
+                    return list;
+                }
+
+                foreach (ListViewGroup listViewGroup in _owningListView.Groups)
+                {
+                    if (listViewGroup.AccessibilityObject is ListViewGroup.ListViewGroupAccessibleObject listViewGroupAccessibleObject
+                        && listViewGroupAccessibleObject.GetVisibleItems().Count > 0)
+                    {
+                        list.Add(listViewGroup);
+                    }
+                }
+
+                return list;
             }
 
             public override AccessibleObject? HitTest(int x, int y)

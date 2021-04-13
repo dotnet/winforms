@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
 using System.Drawing;
+using static System.Windows.Forms.ListView;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -13,6 +15,7 @@ namespace System.Windows.Forms
         internal class ListViewGroupAccessibleObject : AccessibleObject
         {
             private readonly ListView _owningListView;
+            private readonly ListViewAccessibleObject _owningListViewAccessibilityObject;
             private readonly ListViewGroup _owningGroup;
             private readonly bool _owningGroupIsDefault;
 
@@ -25,6 +28,9 @@ namespace System.Windows.Forms
                     ?? (owningGroup.Items.Count > 0 && _owningGroup.Items[0].ListView is not null
                         ? _owningGroup.Items[0].ListView
                         : throw new InvalidOperationException(nameof(owningGroup.ListView)));
+
+                _owningListViewAccessibilityObject = _owningListView.AccessibilityObject as ListView.ListViewAccessibleObject
+                    ?? throw new InvalidOperationException(nameof(_owningListView.AccessibilityObject));
 
                 _owningGroupIsDefault = owningGroupIsDefault;
             }
@@ -45,8 +51,8 @@ namespace System.Windows.Forms
                     User32.SendMessageW(_owningListView, (User32.WM)ComCtl32.LVM.GETGROUPRECT, (IntPtr)CurrentIndex, ref groupRect);
 
                     return new Rectangle(
-                        _owningListView.AccessibilityObject.Bounds.X + groupRect.left,
-                        _owningListView.AccessibilityObject.Bounds.Y + groupRect.top,
+                        _owningListViewAccessibilityObject.Bounds.X + groupRect.left,
+                        _owningListViewAccessibilityObject.Bounds.Y + groupRect.top,
                         groupRect.right - groupRect.left,
                         groupRect.bottom - groupRect.top);
                 }
@@ -77,7 +83,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
+                    var owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
                     if (owningListViewRuntimeId is null)
                     {
                         return base.RuntimeId;
@@ -148,6 +154,20 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
+            internal IReadOnlyList<ListViewItem> GetVisibleItems()
+            {
+                List<ListViewItem> visibleItems = new();
+                foreach (ListViewItem listViewItem in _owningGroup.Items)
+                {
+                    if (listViewItem.ListView is not null)
+                    {
+                        visibleItems.Add(listViewItem);
+                    }
+                }
+
+                return visibleItems;
+            }
+
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
@@ -158,11 +178,11 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        return _owningListView.AccessibilityObject;
+                        return _owningListViewAccessibilityObject;
                     case UiaCore.NavigateDirection.NextSibling:
-                        return (_owningListView.AccessibilityObject as ListView.ListViewAccessibleObject)?.GetNextChild(this);
+                        return _owningListViewAccessibilityObject.GetNextChild(this);
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        return (_owningListView.AccessibilityObject as ListView.ListViewAccessibleObject)?.GetPreviousChild(this);
+                        return _owningListViewAccessibilityObject.GetPreviousChild(this);
                     case UiaCore.NavigateDirection.FirstChild:
                         int childCount = GetChildCount();
                         if (childCount > 0)
@@ -195,12 +215,13 @@ namespace System.Windows.Forms
 
                 if (!_owningGroupIsDefault)
                 {
-                    if (index < 0 || index >= _owningGroup.Items.Count)
+                    IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
+                    if (index < 0 || index >= visibleItems.Count)
                     {
                         return null;
                     }
 
-                    return _owningGroup.Items[index].AccessibilityObject;
+                    return visibleItems[index].AccessibilityObject;
                 }
 
                 foreach (ListViewItem? item in _owningListView.Items)
@@ -294,7 +315,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return _owningGroup.Items.Count;
+                    return GetVisibleItems().Count;
                 }
             }
 
