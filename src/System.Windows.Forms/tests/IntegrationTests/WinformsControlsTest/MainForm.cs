@@ -163,7 +163,7 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.MessageBoxButton,
-                new InitInfo("MessageBox", (obj, e) => new MessageBoxTest().Show())
+                new InitInfo("MessageBox", (obj, e) => new MessageBoxes().Show())
             }
         };
 
