@@ -17,7 +17,7 @@ namespace WinformsControlsTest
     public partial class MessageBoxes : Form
     {
         private readonly ToolStripButton _btnOpen;
-        private readonly MessgageBoxProxy _messgageBoxProxy = new MessgageBoxProxy();
+        private readonly MessageBoxProxy _messgageBoxProxy = new MessageBoxProxy();
 
         public MessageBoxes()
         {
@@ -62,7 +62,7 @@ namespace WinformsControlsTest
             _btnOpen.Enabled = propertyGrid1.SelectedObject is not null;
         }
 
-        private class MessgageBoxProxy
+        private class MessageBoxProxy
         {
             public string Caption { get; set; } = "My Caption";
             public string Text { get; set; } = "Opps, I did it again...";
