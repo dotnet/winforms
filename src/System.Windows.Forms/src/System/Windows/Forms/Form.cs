@@ -4243,6 +4243,7 @@ namespace System.Windows.Forms
             if (e.DeviceDpiNew != e.DeviceDpiOld)
             {
                 CommonProperties.xClearAllPreferredSizeCaches(this);
+                _oldDeviceDpi = e.DeviceDpiOld;
 
                 // call any additional handlers
                 ((DpiChangedEventHandler)Events[EVENT_DPI_CHANGED])?.Invoke(this, e);

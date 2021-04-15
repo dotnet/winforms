@@ -326,6 +326,7 @@ namespace System.Windows.Forms
         private LayoutEventArgs _cachedLayoutEventArgs;
         private Queue _threadCallbackList;
         internal int _deviceDpi;
+        internal int _oldDeviceDpi;
 
         // For keeping track of our ui state for focus and keyboard cues. Using a member
         // variable here because we hit this a lot
@@ -373,7 +374,7 @@ namespace System.Windows.Forms
             Properties = new PropertyStore();
 
             // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
-            _deviceDpi = DpiHelper.DeviceDpi;
+            _deviceDpi = _oldDeviceDpi = DpiHelper.DeviceDpi;
 
             _window = new ControlNativeWindow(this);
             RequiredScalingEnabled = true;
@@ -421,8 +422,7 @@ namespace System.Windows.Forms
 
             if (_width != 0 && _height != 0)
             {
-                RECT rect = new RECT();
-                rect.left = rect.right = rect.top = rect.bottom = 0;
+                RECT rect = new (0, 0, 0, 0);
 
                 CreateParams cp = CreateParams;
 
@@ -5737,12 +5737,6 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
         {
-            // We should not include the window adornments in our calculation,
-            // because windows scales them for us.
-            RECT adornments = new RECT(0, 0, 0, 0);
-            CreateParams cp = CreateParams;
-            AdjustWindowRectEx(ref adornments, cp.Style, false, cp.ExStyle);
-
             float dx = factor.Width;
             float dy = factor.Height;
 
@@ -5780,20 +5774,37 @@ namespace System.Windows.Forms
             int sw = bounds.Width;
             int sh = bounds.Height;
 
+            // We should not include the window adornments in our calculation,
+            // because windows scales them for us.
+            var adornmentsBeforeDpiChange = new RECT(0, 0, 0, 0);
+            CreateParams cp = CreateParams;
+
+            // We would need to get old adornments metrics as we will be deducting this from bounds and then scale it.
+            User32.AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false.ToBOOL(), cp.ExStyle, (uint)_oldDeviceDpi);
+
+            // And now, we get new adornments to add to bounds after scaling
+            var adornmentsAfterDpiChange = new RECT(0, 0, 0, 0);
+            if (_oldDeviceDpi != _deviceDpi)
+            {
+                AdjustWindowRectEx(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
+            }
+            else
+            {
+                adornmentsAfterDpiChange = adornmentsBeforeDpiChange;
+            }
+
             // Do this even for auto sized controls.  They'll "snap back", but it is important to size them in case
             // they are anchored.
             if ((_controlStyle & ControlStyles.FixedWidth) != ControlStyles.FixedWidth && (specified & BoundsSpecified.Width) != 0)
             {
-                int adornmentWidth = (adornments.right - adornments.left);
-                int localWidth = bounds.Width - adornmentWidth;
-                sw = (int)Math.Round(localWidth * dx) + adornmentWidth;
+                int localWidth = bounds.Width - adornmentsBeforeDpiChange.Width;
+                sw = (int)Math.Round(localWidth * dx) + adornmentsAfterDpiChange.Width;
             }
 
             if ((_controlStyle & ControlStyles.FixedHeight) != ControlStyles.FixedHeight && (specified & BoundsSpecified.Height) != 0)
             {
-                int adornmentHeight = (adornments.bottom - adornments.top);
-                int localHeight = bounds.Height - adornmentHeight;
-                sh = (int)Math.Round(localHeight * dy) + adornmentHeight;
+                int localHeight = bounds.Height - adornmentsBeforeDpiChange.Height;
+                sh = (int)Math.Round(localHeight * dy) + adornmentsAfterDpiChange.Height;
             }
 
             return new Rectangle(sx, sy, sw, sh);
@@ -6830,7 +6841,7 @@ namespace System.Windows.Forms
 
         private protected void AdjustWindowRectEx(ref RECT rect, int style, bool bMenu, int exStyle)
         {
-            if (DpiHelper.IsPerMonitorV2Awareness)
+            if (DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired)
             {
                 User32.AdjustWindowRectExForDpi(ref rect, style, bMenu.ToBOOL(), exStyle, (uint)_deviceDpi);
             }
@@ -12123,22 +12134,22 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int deviceDpiOld = _deviceDpi;
+                _oldDeviceDpi = _deviceDpi;
                 _deviceDpi = (int)User32.GetDpiForWindow(this);
 
                 // Controls are by default font scaled.
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
-                if (deviceDpiOld != _deviceDpi)
+                if (_oldDeviceDpi != _deviceDpi)
                 {
                     // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
                     Font local = (Font)Properties.GetObject(s_fontProperty);
                     if (local is not null)
                     {
-                        var factor = (float)_deviceDpi / deviceDpiOld;
+                        var factor = (float)_deviceDpi / _oldDeviceDpi;
                         Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
                     }
 
-                    RescaleConstantsForDpi(deviceDpiOld, _deviceDpi);
+                    RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
                 }
             }
 
