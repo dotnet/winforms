@@ -2,51 +2,202 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel.Design.Serialization;
+using System.ComponentModel.Design;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
 namespace System.Windows.Forms.Design
 {
     internal partial class OleDragDropHandler
     {
         protected class ComponentDataObject : IDataObject
         {
+            private IServiceProvider serviceProvider;
+            private object[] components;
+
+            private Stream serializationStream;
+            private object serializationData;
+            private int initialX;
+            private int initialY;
+            private IOleDragClient dragClient;
+            private CfCodeToolboxItem toolboxitemdata;
+
             public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object[] comps, int x, int y)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                this.serviceProvider = sp;
+                this.components = GetComponentList(comps, null, -1);
+                this.initialX = x;
+                this.initialY = y;
+                this.dragClient = dragClient;
             }
 
             public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object serializationData)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                this.serviceProvider = sp;
+                this.serializationData = serializationData;
+                this.dragClient = dragClient;
             }
 
-            public object[] Components => throw new NotImplementedException(SR.NotImplementedByDesign);
+            private Stream SerializationStream
+            {
+                get
+                {
+                    if (serializationStream == null && Components != null)
+                    {
+                        IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
+                        if (ds != null)
+                        {
+
+                            object[] comps = new object[components.Length];
+                            for (int i = 0; i < components.Length; i++)
+                            {
+                                Debug.Assert(components[i] is IComponent, "Item " + components[i].GetType().Name + " is not an IComponent");
+                                comps[i] = (IComponent)components[i];
+                            }
+
+                            object sd = ds.Serialize(comps);
+                            serializationStream = new MemoryStream();
+                            BinaryFormatter formatter = new BinaryFormatter();
+                            formatter.Serialize(serializationStream, sd);
+                            serializationStream.Seek(0, SeekOrigin.Begin);
+                        }
+                    }
+                    return serializationStream;
+                }
+            }
+
+
+            public object[] Components
+            {
+                get
+                {
+                    if (components == null && (serializationStream != null || serializationData != null))
+                    {
+                        Deserialize(null, false);
+                        if (components == null)
+                        {
+                            return new object[0];
+                        }
+                    }
+                    return (object[])components.Clone();
+                }
+            }
+
+            /// <devdoc>
+            /// computes the IDataObject which constitutes this whole toolboxitem for storage in the toolbox.
+            /// </devdoc>
+            private CfCodeToolboxItem NestedToolboxItem
+            {
+                get
+                {
+                    if (toolboxitemdata == null)
+                    {
+                        toolboxitemdata = new CfCodeToolboxItem(this.GetData(OleDragDropHandler.DataFormat));
+                    }
+                    return toolboxitemdata;
+                }
+            }
+
+            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetCopySelection"]/*' />
+            /// <devdoc>
+            ///     Used to retrieve the selection for a copy.  The default implementation
+            ///     retrieves the current selection.
+            /// </devdoc>
+            private object[] GetComponentList(object[] components, ArrayList list, int index)
+            {
+
+                if (serviceProvider == null)
+                {
+                    return components;
+                }
+
+                ISelectionService selSvc = (ISelectionService)this.serviceProvider.GetService(typeof(ISelectionService));
+
+                if (selSvc == null)
+                {
+                    return components;
+                }
+
+                ICollection selectedComponents;
+                if (components == null)
+                    selectedComponents = selSvc.GetSelectedComponents();
+                else
+                    selectedComponents = new ArrayList(components);
+
+
+                IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+                if (host != null)
+                {
+                    ArrayList copySelection = new ArrayList();
+                    foreach (IComponent comp in selectedComponents)
+                    {
+                        copySelection.Add(comp);
+                        GetAssociatedComponents(comp, host, copySelection);
+                    }
+                    selectedComponents = copySelection;
+                }
+                object[] comps = new object[selectedComponents.Count];
+                selectedComponents.CopyTo(comps, 0);
+                return comps;
+            }
+
+            private void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+            {
+                ComponentDesigner designer = host.GetDesigner(component) as ComponentDesigner;
+                if (designer == null)
+                {
+                    return;
+                }
+
+                foreach (IComponent childComp in designer.AssociatedComponents)
+                {
+                    list.Add(childComp);
+                    GetAssociatedComponents(childComp, host, list);
+                }
+            }
 
             public virtual object GetData(string format)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                return GetData(format, false);
             }
 
             public virtual object GetData(string format, bool autoConvert)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                if (format.Equals(OleDragDropHandler.DataFormat))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    SerializationStream.Seek(0, SeekOrigin.Begin);
+                    return formatter.Deserialize(this.SerializationStream);
+                }
+                else if (format.Equals(OleDragDropHandler.NestedToolboxItemFormat))
+                {
+                    NestedToolboxItem.SetDisplayName();
+                    return NestedToolboxItem;
+                }
+                return null;
             }
 
             public virtual object GetData(Type t)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                return GetData(t.FullName);
             }
 
             /// <summary>
-            ///  If the there is data store in the data object associated with
-            ///  format this will return true.
+            ///     If the there is data store in the data object associated with
+            ///     format this will return true.
             /// </summary>
             public bool GetDataPresent(string format, bool autoConvert)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                return Array.IndexOf(GetFormats(), format) != -1;
             }
 
             /// <summary>
-            ///  If the there is data store in the data object associated with
-            ///  format this will return true.
+            ///     If the there is data store in the data object associated with
+            ///     format this will return true.
             /// </summary>
             public bool GetDataPresent(string format)
             {
@@ -54,69 +205,153 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  If the there is data store in the data object associated with
-            ///  format this will return true.
+            ///     If the there is data store in the data object associated with
+            ///     format this will return true.
             /// </summary>
             public bool GetDataPresent(Type format)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                return GetDataPresent(format.FullName, false);
             }
 
             /// <summary>
-            ///  Retrieves a list of all formats stored in this data object.
+            ///     Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats(bool autoConvert)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                return GetFormats();
             }
 
             /// <summary>
-            ///  Retrieves a list of all formats stored in this data object.
+            ///     Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats()
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                return new string[] { OleDragDropHandler.NestedToolboxItemFormat, OleDragDropHandler.DataFormat, DataFormats.Serializable, OleDragDropHandler.ExtraInfoFormat };
             }
 
-            /// <summary>
-            ///  Sets the data to be associated with the specific data format. For
-            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
-            /// </summary>
-            public void SetData(string format, bool autoConvert, object data)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Sets the data to be associated with the specific data format. For
-            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
-            /// </summary>
-            public void SetData(string format, object data)
-            {
-                throw new Exception(SR.DragDropSetDataError);
-            }
-
-            /// <summary>
-            ///  Sets the data to be associated with the specific data format.
-            /// </summary>
-            public void SetData(Type format, object data)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Stores data in the data object. The format assumed is the
-            ///  class of data
-            /// </summary>
-            public void SetData(object data)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
 
             public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+
+                if (serviceProvider == null)
+                {
+                    serviceProvider = this.serviceProvider;
+                }
+
+                IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
+                IDesignerHost host = null;
+                DesignerTransaction trans = null;
+
+                try
+                {
+                    if (serializationData == null)
+                    {
+                        BinaryFormatter formatter = new BinaryFormatter();
+                        serializationData = formatter.Deserialize(SerializationStream);
+                    }
+
+                    if (removeCurrentComponents && components != null)
+                    {
+                        foreach (IComponent removeComp in components)
+                        {
+
+                            if (host == null && removeComp.Site != null)
+                            {
+                                host = (IDesignerHost)removeComp.Site.GetService(typeof(IDesignerHost));
+                                if (host != null)
+                                {
+                                    trans = host.CreateTransaction(SR.GetString(SR.DragDropMoveComponents, components.Length));
+                                }
+                            }
+                            if (host != null)
+                            {
+                                host.DestroyComponent(removeComp);
+                            }
+                        }
+                        components = null;
+                    }
+
+                    ICollection objects = ds.Deserialize(serializationData);
+                    components = new IComponent[objects.Count];
+                    IEnumerator e = objects.GetEnumerator();
+                    int idx = 0;
+
+                    while (e.MoveNext())
+                    {
+                        components[idx++] = (IComponent)e.Current;
+                    }
+
+                    // only do top-level components here,
+                    // because other are already parented.
+                    // otherwise, when we process these
+                    // components it's too hard to know what we
+                    // should be reparenting.
+                    ArrayList topComps = new ArrayList();
+                    for (int i = 0; i < components.Length; i++)
+                    {
+
+                        if (components[i] is Control)
+                        {
+                            Control c = (Control)components[i];
+                            if (c.Parent == null)
+                            {
+                                topComps.Add(components[i]);
+                            }
+                        }
+                        else
+                        {
+                            topComps.Add(components[i]);
+                        }
+                    }
+
+                    components = (object[])topComps.ToArray();
+
+                }
+                finally
+                {
+                    if (trans != null)
+                    {
+                        trans.Commit();
+                    }
+                }
             }
+
+            /// <summary>
+            ///     Sets the data to be associated with the specific data format. For
+            ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
+            /// </summary>
+            public void SetData(string format, bool autoConvert, object data)
+            {
+                SetData(format, data);
+            }
+
+            /// <summary>
+            ///     Sets the data to be associated with the specific data format. For
+            ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
+            /// </summary>
+            public void SetData(string format, object data)
+            {
+                throw new Exception(SR.GetString(SR.DragDropSetDataError));
+            }
+
+            /// <summary>
+            ///     Sets the data to be associated with the specific data format.
+            /// </summary>
+            public void SetData(Type format, object data)
+            {
+                SetData(format.FullName, data);
+            }
+
+            /// <summary>
+            ///     Stores data in the data object. The format assumed is the
+            ///     class of data
+            /// </summary>
+            public void SetData(object data)
+            {
+                SetData(data.GetType(), data);
+            }
+
         }
+
     }
 }

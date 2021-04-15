@@ -1,0 +1,109 @@
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.ComponentModel;
+using System.Collections;
+using System.ComponentModel.Design;
+using System.Drawing;
+
+namespace System.Windows.Forms.Design
+{
+    /// <devdoc>
+    ///    <para>Provides a base implementation of a designer for user controls.</para>
+    /// </devdoc>
+    [
+    ToolboxItemFilter("System.Windows.Forms.UserControl", ToolboxItemFilterType.Custom),
+    ToolboxItemFilter("System.Windows.Forms.MainMenu", ToolboxItemFilterType.Prevent)
+    ]
+    internal class UserControlDocumentDesigner : DocumentDesigner
+    {
+
+        public UserControlDocumentDesigner()
+        {
+            AutoResizeHandles = true;
+        }
+
+        /// <devdoc>
+        ///     On user controls, size == client size.  We do this so we can mess around
+        ///     with the non-client area of the user control when editing menus and not
+        ///     mess up the size property.
+        /// </devdoc>
+        private Size Size
+        {
+            get
+            {
+                return Control.ClientSize;
+            }
+            set
+            {
+                Control.ClientSize = value;
+            }
+        }
+
+        internal override bool CanDropComponents(DragEventArgs de)
+        {
+            bool canDrop = base.CanDropComponents(de);
+
+            if (canDrop)
+            {
+                // Figure out if any of the components in a main menu item.
+                // We don't like main menus on UserControlDocumentDesigner.
+                //
+                OleDragDropHandler ddh = GetOleDragHandler();
+                object[] dragComps = ddh.GetDraggingObjects(de);
+
+                if (dragComps != null)
+                {
+                    IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                    for (int i = 0; i < dragComps.Length; i++)
+                    {
+                        if (host == null || dragComps[i] == null || !(dragComps[i] is IComponent))
+                        {
+                            continue;
+                        }
+
+                        if (dragComps[i] is MainMenu)
+                            return false;
+                    }
+                }
+            }
+
+            return canDrop;
+        }
+
+        /// <include file='doc\UserControlDocumentDesigner.uex' path='docs/doc[@for="UserControlDocumentDesigner.PreFilterProperties"]/*' />
+        /// <devdoc>
+        ///      Allows a designer to filter the set of properties
+        ///      the component it is designing will expose through the
+        ///      TypeDescriptor object.  This method is called
+        ///      immediately before its corresponding "Post" method.
+        ///      If you are overriding this method you should call
+        ///      the base implementation before you perform your own
+        ///      filtering.
+        /// </devdoc>
+        protected override void PreFilterProperties(IDictionary properties)
+        {
+            PropertyDescriptor prop;
+
+            base.PreFilterProperties(properties);
+
+            // Handle shadowed properties
+            //
+            string[] shadowProps = new string[] {
+                "Size"
+            };
+
+            Attribute[] empty = new Attribute[0];
+
+            for (int i = 0; i < shadowProps.Length; i++)
+            {
+                prop = (PropertyDescriptor)properties[shadowProps[i]];
+                if (prop != null)
+                {
+                    properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(UserControlDocumentDesigner), prop, empty);
+                }
+            }
+        }
+    }
+}

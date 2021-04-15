@@ -12,6 +12,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class ScrollableControlDesigner : ParentControlDesigner
     {
+        private SelectionManager selManager;
+
         /// <summary>
         ///  Overrides the base class's GetHitTest method to determine regions of the
         ///  control that should always be UI-Active.  For a form, if it has autoscroll
@@ -19,7 +21,23 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override bool GetHitTest(Point pt)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (base.GetHitTest(pt))
+            {
+                return true;
+            }
+
+            // The scroll bars on a form are "live"
+            //
+            ScrollableControl f = (ScrollableControl)Control;
+            if (f.IsHandleCreated && f.AutoScroll)
+            {
+                int hitTest = (int)NativeMethods.SendMessage(f.Handle, NativeMethods.WM_NCHITTEST, (IntPtr)0, (IntPtr)NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
+                if (hitTest == NativeMethods.HTVSCROLL || hitTest == NativeMethods.HTHSCROLL)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -27,7 +45,33 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            base.WndProc(ref m);
+
+            switch (m.Msg)
+            {
+                case NativeMethods.WM_HSCROLL:
+                case NativeMethods.WM_VSCROLL:
+
+                    // When we scroll, we reposition a control without causing a
+                    // property change event.  Therefore, we must tell the
+                    // SelectionManager to refresh its glyphs.
+                    if (selManager == null)
+                    {
+                        selManager = GetService(typeof(SelectionManager)) as SelectionManager;
+                    }
+
+                    if (selManager != null)
+                    {
+                        selManager.Refresh();
+                    }
+
+                    // Now we must paint our adornments, since the scroll does not
+                    // trigger a paint event
+                    //
+                    Control.Invalidate();
+                    Control.Update();
+                    break;
+            }
         }
     }
 }

@@ -9,12 +9,20 @@ namespace System.Windows.Forms.Design
         // just so we can recognize the ones we create
         protected class ComponentDataObjectWrapper : DataObject
         {
-            public ComponentDataObjectWrapper(ComponentDataObject dataObject) : base(dataObject)
+            ComponentDataObject innerData;
+
+            public ComponentDataObjectWrapper(ComponentDataObject dataObject) : base((IDataObject)dataObject)
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                innerData = dataObject;
             }
 
-            public ComponentDataObject InnerData => throw new NotImplementedException(SR.NotImplementedByDesign);
+            public ComponentDataObject InnerData
+            {
+                get
+                {
+                    return innerData;
+                }
+            }
         }
     }
 }
