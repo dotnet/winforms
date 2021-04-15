@@ -5,12 +5,7 @@
 #nullable enable
 
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Reflection;
 using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
-using static System.ComponentModel.TypeConverter;
 
 namespace WinformsControlsTest
 {
@@ -33,7 +28,8 @@ namespace WinformsControlsTest
             {
                 MessageBox.Show(this, _messgageBoxProxy.Text, _messgageBoxProxy.Caption,
                     _messgageBoxProxy.Buttons, _messgageBoxProxy.Icon,
-                    _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options);
+                    _messgageBoxProxy.DefaultButton, _messgageBoxProxy.Options,
+                    "mspaint.chm", HelpNavigator.KeywordIndex, "ovals");
             };
 
             ToolStrip toolbar = GetToolbar();
