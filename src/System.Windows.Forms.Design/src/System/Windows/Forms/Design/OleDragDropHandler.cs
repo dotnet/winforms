@@ -8,7 +8,7 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
 {
-    internal class OleDragDropHandler
+    internal partial class OleDragDropHandler
     {
         // NOTE: This is only a stub of the .NET Framework OleDragDropHandler. Disabled code that interacted with
         // this class is behind #if FEATURE_OLEDRAGDROPHANDLER
@@ -112,130 +112,6 @@ namespace System.Windows.Forms.Design
         protected virtual void OnInitializeComponent(IComponent comp, int x, int y, int width, int height,
             bool hasLocation, bool hasSize)
         {
-        }
-
-        // just so we can recognize the ones we create
-        protected class ComponentDataObjectWrapper : DataObject
-        {
-            public ComponentDataObjectWrapper(ComponentDataObject dataObject) : base(dataObject)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            public ComponentDataObject InnerData => throw new NotImplementedException(SR.NotImplementedByDesign);
-        }
-
-        protected class ComponentDataObject : IDataObject
-        {
-            public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object[] comps, int x, int y)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object serializationData)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            public object[] Components => throw new NotImplementedException(SR.NotImplementedByDesign);
-
-            public virtual object GetData(string format)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            public virtual object GetData(string format, bool autoConvert)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            public virtual object GetData(Type t)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  If the there is data store in the data object associated with
-            ///  format this will return true.
-            /// </summary>
-            public bool GetDataPresent(string format, bool autoConvert)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  If the there is data store in the data object associated with
-            ///  format this will return true.
-            /// </summary>
-            public bool GetDataPresent(string format)
-            {
-                return GetDataPresent(format, false);
-            }
-
-            /// <summary>
-            ///  If the there is data store in the data object associated with
-            ///  format this will return true.
-            /// </summary>
-            public bool GetDataPresent(Type format)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Retrieves a list of all formats stored in this data object.
-            /// </summary>
-            public string[] GetFormats(bool autoConvert)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Retrieves a list of all formats stored in this data object.
-            /// </summary>
-            public string[] GetFormats()
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Sets the data to be associated with the specific data format. For
-            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
-            /// </summary>
-            public void SetData(string format, bool autoConvert, object data)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Sets the data to be associated with the specific data format. For
-            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
-            /// </summary>
-            public void SetData(string format, object data)
-            {
-                throw new Exception(SR.DragDropSetDataError);
-            }
-
-            /// <summary>
-            ///  Sets the data to be associated with the specific data format.
-            /// </summary>
-            public void SetData(Type format, object data)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            /// <summary>
-            ///  Stores data in the data object. The format assumed is the
-            ///  class of data
-            /// </summary>
-            public void SetData(object data)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
-
-            public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
-            {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
-            }
         }
     }
 }
