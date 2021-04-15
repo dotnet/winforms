@@ -454,7 +454,7 @@ namespace System.Windows.Forms
                         IntPtr hwndInPlaceObject = IntPtr.Zero;
                         if (AXInPlaceObject.GetWindow(&hwndInPlaceObject).Succeeded())
                         {
-                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject));
+                            Application.ParkHandle(new HandleRef(AXInPlaceObject, hwndInPlaceObject), DpiAwarenessContext);
                         }
                     }
 

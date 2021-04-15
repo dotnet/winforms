@@ -1063,8 +1063,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static void ParkHandle(HandleRef handle) => ParkHandle(handle, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
-
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
@@ -1080,8 +1078,6 @@ namespace System.Windows.Forms
                 cxt.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
             }
         }
-
-        internal static void ParkHandle(CreateParams cp) => ParkHandle(cp, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
 
         /// <summary>
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.
