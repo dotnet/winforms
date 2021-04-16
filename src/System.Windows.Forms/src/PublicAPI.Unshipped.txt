@@ -1,5 +1,1 @@
-~override System.Windows.Forms.RichTextBox.OnGotFocus(System.EventArgs e) -> void
-System.Windows.Forms.LinkClickedEventArgs.LinkClickedEventArgs(string? linkText, int linkStart, int linkLength) -> void
-System.Windows.Forms.LinkClickedEventArgs.LinkLength.get -> int
-System.Windows.Forms.LinkClickedEventArgs.LinkStart.get -> int
-~override System.Windows.Forms.DateTimePicker.OnEnabledChanged(System.EventArgs e) -> void
+
