@@ -179,7 +179,10 @@ namespace System.Windows.Forms
                         runtimeId[0] = owningListViewRuntimeId[0];
                         runtimeId[1] = owningListViewRuntimeId[1];
                         runtimeId[2] = 4; // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                        runtimeId[3] = _owningListView.GetGroupIndex(_owningGroup);
+                        runtimeId[3] = _owningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
+                                        ? listViewGroupAccessibleObject.CurrentIndex
+                                        : -1;
+
                         runtimeId[4] = CurrentIndex;
 
                         return runtimeId;

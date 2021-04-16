@@ -26,11 +26,11 @@ namespace System.Windows.Forms
             internal override int ColumnCount
                 => _owningListView.Columns.Count;
 
-            private bool OwnerHasDefaultGroup
+            internal bool OwnerHasDefaultGroup
             {
                 get
                 {
-                    if (!_owningListView.IsHandleCreated || !_owningListView.ShowGroups || _owningListView.VirtualMode)
+                    if (!_owningListView.ShowGroups || _owningListView.VirtualMode)
                     {
                         return false;
                     }
@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             }
 
             // ListViewGroup are not displayed when the ListView is in "List" view
-            private bool ShowGroupAccessibleObject => _owningListView.View != View.List && _owningListView.GroupsEnabled;
+            internal bool ShowGroupAccessibleObject => _owningListView.View != View.List && _owningListView.GroupsEnabled;
 
             internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {

@@ -424,7 +424,7 @@ namespace System.Windows.Forms.Tests
                 {
                     foreach (bool createHandle in new[] { true, false })
                     {
-                        bool expected = showGroups && createHandle;
+                        bool expected = showGroups;
                         yield return new object[] { showGroups, createHandle, expected };
                     }
                 }
