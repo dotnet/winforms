@@ -640,5 +640,353 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(ExpandCollapseState.Expanded, listView.DefaultGroup.AccessibilityObject.ExpandCollapseState);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleGroups(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithEmptyGroups(view);
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+            AccessibleObject listViewGroupWithItems1 = listView.Groups[1].AccessibilityObject;
+            AccessibleObject listViewGroupWithItems2 = listView.Groups[2].AccessibilityObject;
+
+            Assert.Null(listViewGroupWithItems1.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(listViewGroupWithItems2, listViewGroupWithItems1.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(listViewGroupWithItems1, listViewGroupWithItems2.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(listViewGroupWithItems2.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_FragmentNaviage_ReturnsExpected_Sibling_InvisibleGroups_AfterAddingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithEmptyGroups(view);
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+
+            Assert.Null(GetAccessibleObject(1).FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(GetAccessibleObject(2), GetAccessibleObject(1).FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(GetAccessibleObject(1), GetAccessibleObject(2).FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(GetAccessibleObject(2).FragmentNavigate(NavigateDirection.NextSibling));
+
+            ListViewItem listViewItem1 = new();
+            ListViewItem listViewItem2 = new();
+            listView.Items.Add(listViewItem1);
+            listView.Items.Add(listViewItem2);
+            listView.Groups[0].Items.Add(listViewItem1);
+            listView.Groups[3].Items.Add(listViewItem2);
+
+            Assert.Null(GetAccessibleObject(0).FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(GetAccessibleObject(1), GetAccessibleObject(0).FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(GetAccessibleObject(0), GetAccessibleObject(1).FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(GetAccessibleObject(2), GetAccessibleObject(1).FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(GetAccessibleObject(1), GetAccessibleObject(2).FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(GetAccessibleObject(3), GetAccessibleObject(2).FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(GetAccessibleObject(2), GetAccessibleObject(3).FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(GetAccessibleObject(3).FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.True(listView.IsHandleCreated);
+
+            AccessibleObject GetAccessibleObject(int index) => listView.Groups[index].AccessibilityObject;
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleGroups_AfterRemovingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithEmptyGroups(view);
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+            AccessibleObject listViewGroupWithItems1 = listView.Groups[1].AccessibilityObject;
+            AccessibleObject listViewGroupWithItems2 = listView.Groups[2].AccessibilityObject;
+
+            Assert.Null(listViewGroupWithItems1.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Equal(listViewGroupWithItems2, listViewGroupWithItems1.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(listViewGroupWithItems1, listViewGroupWithItems2.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(listViewGroupWithItems2.FragmentNavigate(NavigateDirection.NextSibling));
+
+            listView.Groups[2].Items.RemoveAt(0);
+
+            Assert.Equal(listView.DefaultGroup.AccessibilityObject, listViewGroupWithItems1.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(listViewGroupWithItems1.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_FragmentNaviage_Child_ReturnsExpected_InvisibleItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Equal(listView.Groups[0].Items[2].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_FragmentNaviage_Child_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Equal(listView.Groups[0].Items[2].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+
+            listView.Items.Add(listView.Groups[0].Items[0]);
+            listView.Items.Add(listView.Groups[0].Items[3]);
+
+            Assert.Equal(listView.Groups[0].Items[0].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Equal(listView.Groups[0].Items[3].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_FragmentNaviage_Child_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Equal(listView.Groups[0].Items[2].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+
+            listView.Items.RemoveAt(1);
+
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_GetChildCount_ReturnsExpected_InvisibleItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(2, accessibleObject.GetChildCount());
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_GetChildCount_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(2, accessibleObject.GetChildCount());
+
+            listView.Items.Add(listView.Groups[0].Items[0]);
+            listView.Items.Add(listView.Groups[0].Items[3]);
+
+            Assert.Equal(4, accessibleObject.GetChildCount());
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_GetChildCount_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(2, accessibleObject.GetChildCount());
+
+            listView.Items.RemoveAt(1);
+
+            Assert.Equal(1, accessibleObject.GetChildCount());
+
+            listView.Items.RemoveAt(0);
+
+            Assert.Equal(0, accessibleObject.GetChildCount());
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_GetChild_ReturnsExpected_InvisibleItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.GetChild(0));
+            Assert.Equal(listView.Groups[0].Items[2].AccessibilityObject, accessibleObject.GetChild(1));
+            Assert.Null(accessibleObject.GetChild(2));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_GetChild_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            listView.Items.Add(listView.Groups[0].Items[0]);
+            listView.Items.Add(listView.Groups[0].Items[3]);
+
+            Assert.Equal(listView.Groups[0].Items[0].AccessibilityObject, accessibleObject.GetChild(0));
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.GetChild(1));
+            Assert.Equal(listView.Groups[0].Items[2].AccessibilityObject, accessibleObject.GetChild(2));
+            Assert.Equal(listView.Groups[0].Items[3].AccessibilityObject, accessibleObject.GetChild(3));
+            Assert.Null(accessibleObject.GetChild(4));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewAccessibleObject_GetChild_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
+        {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
+            using ListView listView = GetListViewItemWithInvisibleItems(view);
+            AccessibleObject accessibleObject = listView.Groups[0].AccessibilityObject;
+
+            listView.Items.RemoveAt(1);
+
+            Assert.Equal(listView.Groups[0].Items[1].AccessibilityObject, accessibleObject.GetChild(0));
+            Assert.Null(accessibleObject.GetChild(1));
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        private ListView GetListViewItemWithEmptyGroups(View view)
+        {
+            ListView listView = new ListView() { View = view };
+            listView.CreateControl();
+            ListViewGroup listViewGroupWithoutItems = new("Group without items");
+            ListViewGroup listViewGroupWithItems1 = new("Group with item 1");
+            ListViewGroup listViewGroupWithItems2 = new("Group with item 2");
+            ListViewGroup listViewGroupWithInvisibleItems = new("Group with invisible item");
+            listView.Groups.Add(listViewGroupWithoutItems);
+            listView.Groups.Add(listViewGroupWithItems1);
+            listView.Groups.Add(listViewGroupWithItems2);
+            listView.Groups.Add(listViewGroupWithInvisibleItems);
+            ListViewItem listViewItem1 = new();
+            ListViewItem listViewItem2 = new();
+            ListViewItem listViewItem3 = new();
+            listView.Items.Add(listViewItem1);
+            listView.Items.Add(listViewItem2);
+            listViewGroupWithItems1.Items.Add(listViewItem1);
+            listViewGroupWithItems2.Items.Add(listViewItem2);
+            listViewGroupWithInvisibleItems.Items.Add(listViewItem3);
+
+            return listView;
+        }
+
+        private ListView GetListViewItemWithInvisibleItems(View view)
+        {
+            ListView listView = new ListView() { View = view };
+            listView.CreateControl();
+            ListViewGroup listViewGroup = new("Test group");
+            ListViewItem listViewInvisibleItem1 = new ListViewItem("Invisible item 1");
+            ListViewItem listViewVisibleItem1 = new ListViewItem("Visible item 1");
+            ListViewItem listViewInvisibleItem2 = new ListViewItem("Invisible item 1");
+            ListViewItem listViewVisibleItem2 = new ListViewItem("Visible item 1");
+
+            listView.Groups.Add(listViewGroup);
+            listView.Items.AddRange(new ListViewItem[] { listViewVisibleItem1, listViewVisibleItem2 });
+            listViewGroup.Items.AddRange(new ListViewItem[]
+            {
+                listViewInvisibleItem1, listViewVisibleItem1,
+                listViewVisibleItem2, listViewInvisibleItem2
+            });
+
+            return listView;
+        }
     }
 }
