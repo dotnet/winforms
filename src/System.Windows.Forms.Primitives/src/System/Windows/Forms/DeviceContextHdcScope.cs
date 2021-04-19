@@ -146,8 +146,10 @@ namespace System.Windows.Forms
             bool applyTransform = applyGraphicsState.HasFlag(ApplyGraphicsProperties.TranslateTransform);
             bool applyClipping = applyGraphicsState.HasFlag(ApplyGraphicsProperties.Clipping);
 
+#pragma warning disable SYSLIB0016 // Type or member is obsolete
             // This API is very expensive and cannot be called after GetHdc()
             object[]? data = applyTransform || applyClipping ? (object[])graphics.GetContextInfo() : null;
+#pragma warning restore SYSLIB0016 // Type or member is obsolete
 
             using Region? clipRegion = (Region?)data?[0];
             using Matrix? worldTransform = (Matrix?)data?[1];
