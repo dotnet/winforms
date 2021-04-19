@@ -156,8 +156,10 @@ namespace System.Windows.Forms
                 return;
             }
 
+#pragma warning disable SYSLIB0016 // Type or member is obsolete
             // Check to see if we've actually corrupted the state
             object[] data = (object[])graphics.GetContextInfo();
+#pragma warning restore SYSLIB0016 // Type or member is obsolete
 
             using Region clipRegion = (Region)data[0];
             using Matrix worldTransform = (Matrix)data[1];
