@@ -751,7 +751,7 @@ namespace System.Windows.Forms
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            User32.SCROLLINFO si = new()
+            User32.SCROLLINFO info = new()
             {
                 cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.RANGE | User32.SIF.PAGE,
