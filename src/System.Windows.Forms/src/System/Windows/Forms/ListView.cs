@@ -3501,22 +3501,6 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        internal int GetGroupIndex(ListViewGroup owningGroup)
-        {
-            if (Groups.Count == 0)
-            {
-                return -1;
-            }
-
-            // Default group it's last group in accessibility and not specified in Groups collection, therefore default group index = Groups.Count
-            if (DefaultGroup == owningGroup)
-            {
-                return Groups.Count;
-            }
-
-            return Groups.IndexOf(owningGroup);
-        }
-
         /// <summary>
         ///  Returns the current ListViewItem corresponding to the specific
         ///  x,y co-ordinate.

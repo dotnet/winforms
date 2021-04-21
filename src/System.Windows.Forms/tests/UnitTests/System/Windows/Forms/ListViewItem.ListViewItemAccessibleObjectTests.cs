@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1511,7 +1511,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1546,7 +1546,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
         {
             if (!Application.UseVisualStyles)
             {
