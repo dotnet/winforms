@@ -2778,11 +2778,12 @@ namespace System.Windows.Forms
                         {
                             Rectangle bounds = node.RowBounds;
 
-                            var si = new User32.SCROLLINFO
+                            User32.SCROLLINFO si = new()
                             {
-                                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                                cbSize = (uint)sizeof(User32.SCROLLINFO),
                                 fMask = User32.SIF.POS
                             };
+
                             if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                             {
                                 // need to get the correct bounds if horizontal scroll bar is shown.
