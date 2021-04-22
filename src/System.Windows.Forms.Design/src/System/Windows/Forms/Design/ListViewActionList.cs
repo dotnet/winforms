@@ -70,29 +70,29 @@ namespace System.Windows.Forms.Design
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             items.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
-                SR.GetString(SR.ListViewActionListEditItemsDisplayName),
-                SR.GetString(SR.PropertiesCategoryName),
-                SR.GetString(SR.ListViewActionListEditItemsDescription), true));
+                SR.ListViewActionListEditItemsDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListEditItemsDescription, true));
             items.Add(new DesignerActionMethodItem(this, "InvokeColumnsDialog",
-                SR.GetString(SR.ListViewActionListEditColumnsDisplayName),
-                SR.GetString(SR.PropertiesCategoryName),
-                SR.GetString(SR.ListViewActionListEditColumnsDescription), true));
+                SR.ListViewActionListEditColumnsDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListEditColumnsDescription, true));
             items.Add(new DesignerActionMethodItem(this, "InvokeGroupsDialog",
-                SR.GetString(SR.ListViewActionListEditGroupsDisplayName),
-                SR.GetString(SR.PropertiesCategoryName),
-                SR.GetString(SR.ListViewActionListEditGroupsDescription), true));
+                SR.ListViewActionListEditGroupsDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListEditGroupsDescription, true));
             items.Add(new DesignerActionPropertyItem("View",
-                SR.GetString(SR.ListViewActionListViewDisplayName),
-                SR.GetString(SR.PropertiesCategoryName),
-                SR.GetString(SR.ListViewActionListViewDescription)));
+                SR.ListViewActionListViewDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListViewDescription));
             items.Add(new DesignerActionPropertyItem("SmallImageList",
-                SR.GetString(SR.ListViewActionListSmallImagesDisplayName),
-                SR.GetString(SR.PropertiesCategoryName),
-                SR.GetString(SR.ListViewActionListSmallImagesDescription)));
+                SR.ListViewActionListSmallImagesDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListSmallImagesDescription));
             items.Add(new DesignerActionPropertyItem("LargeImageList",
-                SR.GetString(SR.ListViewActionListLargeImagesDisplayName),
-                SR.GetString(SR.PropertiesCategoryName),
-                SR.GetString(SR.ListViewActionListLargeImagesDescription)));
+                SR.ListViewActionListLargeImagesDisplayName,
+                SR.PropertiesCategoryName,
+                SR.ListViewActionListLargeImagesDescription));
             return items;
         }
     }

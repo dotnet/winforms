@@ -35,8 +35,8 @@ namespace System.Windows.Forms.Design
         public override DesignerActionItemCollection GetSortedActionItems()
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionMethodItem(this, "InvokeNodesDialog", SR.GetString(SR.InvokeNodesDialogDisplayName), SR.GetString(SR.PropertiesCategoryName), SR.GetString(SR.InvokeNodesDialogDescription), true));
-            items.Add(new DesignerActionPropertyItem("ImageList", SR.GetString(SR.ImageListDisplayName), SR.GetString(SR.PropertiesCategoryName), SR.GetString(SR.ImageListDescription)));
+            items.Add(new DesignerActionMethodItem(this, "InvokeNodesDialog", SR.InvokeNodesDialogDisplayName, SR.PropertiesCategoryName, SR.InvokeNodesDialogDescription, true));
+            items.Add(new DesignerActionPropertyItem("ImageList", SR.ImageListDisplayName, SR.PropertiesCategoryName, SR.ImageListDescription));
             return items;
         }
     }

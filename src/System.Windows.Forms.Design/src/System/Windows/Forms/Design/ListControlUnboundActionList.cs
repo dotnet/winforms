@@ -24,9 +24,9 @@ namespace System.Windows.Forms.Design
         {
             DesignerActionItemCollection returnItems = new DesignerActionItemCollection();
             returnItems.Add(new DesignerActionMethodItem(this, "InvokeItemsDialog",
-                SR.GetString(SR.ListControlUnboundActionListEditItemsDisplayName),
-                SR.GetString(SR.ItemsCategoryName),
-                SR.GetString(SR.ListControlUnboundActionListEditItemsDescription), true));
+                SR.ListControlUnboundActionListEditItemsDisplayName,
+                SR.ItemsCategoryName,
+                SR.ListControlUnboundActionListEditItemsDescription, true));
             return returnItems;
         }
     }

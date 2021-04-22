@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Design
                                 host = (IDesignerHost)removeComp.Site.GetService(typeof(IDesignerHost));
                                 if (host != null)
                                 {
-                                    trans = host.CreateTransaction(SR.GetString(SR.DragDropMoveComponents, components.Length));
+                                    trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                                 }
                             }
                             if (host != null)
@@ -331,7 +331,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void SetData(string format, object data)
             {
-                throw new Exception(SR.GetString(SR.DragDropSetDataError));
+                throw new Exception(SR.DragDropSetDataError);
             }
 
             /// <summary>

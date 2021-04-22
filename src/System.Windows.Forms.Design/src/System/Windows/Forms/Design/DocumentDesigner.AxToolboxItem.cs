@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    return SR.GetString(SR.Ax_Control);
+                    return SR.Ax_Control;
                 }
             }
 
@@ -139,12 +139,12 @@ namespace System.Windows.Forms.Design
                     IUIService uiSvc = (IUIService)host.GetService(typeof(IUIService));
                     if (uiSvc == null)
                     {
-                        RTLAwareMessageBox.Show(null, SR.GetString(SR.AxImportFailed), null, MessageBoxButtons.OK, MessageBoxIcon.Error,
+                        RTLAwareMessageBox.Show(null, SR.AxImportFailed, null, MessageBoxButtons.OK, MessageBoxIcon.Error,
                                         MessageBoxDefaultButton.Button1, 0);
                     }
                     else
                     {
-                        uiSvc.ShowError(SR.GetString(SR.AxImportFailed));
+                        uiSvc.ShowError(SR.AxImportFailed);
                     }
                     return new IComponent[0];
                 }
@@ -282,7 +282,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (DocumentDesigner.AxToolSwitch.TraceVerbose)
                         Debug.WriteLine("No registry key found for: " + controlKey);
-                    throw new ArgumentException(SR.GetString(SR.AXNotRegistered, controlKey.ToString()));
+                    throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                 }
 
                 // Load the typelib into memory.
@@ -368,7 +368,7 @@ namespace System.Windows.Forms.Design
                         IntPtr pTlibAttr = NativeMethods.InvalidIntPtr;
                         pTLB.GetLibAttr(out pTlibAttr);
                         if (pTlibAttr == NativeMethods.InvalidIntPtr)
-                            throw new ArgumentException(SR.GetString(SR.AXNotRegistered, controlKey.ToString()));
+                            throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                         else
                         {
                             // Marshal the returned int as a TLibAttr structure
@@ -386,7 +386,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    throw new ArgumentException(SR.GetString(SR.AXNotRegistered, controlKey.ToString()));
+                    throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                 }
 
             }

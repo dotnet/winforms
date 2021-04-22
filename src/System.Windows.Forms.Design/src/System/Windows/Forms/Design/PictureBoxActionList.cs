@@ -35,8 +35,8 @@ namespace System.Windows.Forms.Design
         public override DesignerActionItemCollection GetSortedActionItems()
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionMethodItem(this, "ChooseImage", SR.GetString(SR.ChooseImageDisplayName), SR.GetString(SR.PropertiesCategoryName), SR.GetString(SR.ChooseImageDescription), true));
-            items.Add(new DesignerActionPropertyItem("SizeMode", SR.GetString(SR.SizeModeDisplayName), SR.GetString(SR.PropertiesCategoryName), SR.GetString(SR.SizeModeDescription)));
+            items.Add(new DesignerActionMethodItem(this, "ChooseImage", SR.ChooseImageDisplayName, SR.PropertiesCategoryName, SR.ChooseImageDescription, true));
+            items.Add(new DesignerActionPropertyItem("SizeMode", SR.SizeModeDisplayName, SR.PropertiesCategoryName, SR.SizeModeDescription));
             return items;
         }
     }

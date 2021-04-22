@@ -28,8 +28,7 @@ namespace System.Windows.Forms.Design
         public override DesignerActionItemCollection GetSortedActionItems()
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
-#warning TODO: igveliko
-            items.Add(new DesignerActionPropertyItem("Multiline", "SR.GetString(SR.MultiLineDisplayName), SR.GetString(SR.PropertiesCategoryName), SR.GetString(SR.MultiLineDescription)"));
+            items.Add(new DesignerActionPropertyItem("Multiline", string.Format(SR.MultiLineDisplayName, SR.PropertiesCategoryName, SR.MultiLineDescription)));
             return items;
         }
     }

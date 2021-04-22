@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     if (host != null)
-                        trans = host.CreateTransaction(SR.GetString(SR.DesignerBatchCreateTool, tool.ToString()));
+                        trans = host.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool.ToString()));
                 }
                 catch (CheckoutException cxe)
                 {
@@ -242,7 +242,7 @@ namespace System.Windows.Forms.Design
                             IUIService uiService = (IUIService)GetService(typeof(IUIService));
                             if (uiService != null)
                             {
-                                uiService.ShowMessage(SR.GetString(SR.LocalizingCannotAdd));
+                                uiService.ShowMessage(SR.LocalizingCannotAdd);
                             }
 
                             comps = new IComponent[0];
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.Design
                         }
                         if (uiService != null)
                         {
-                            uiService.ShowError(ex, SR.GetString(SR.FailedToCreateComponent, tool.DisplayName, exceptionMessage));
+                            uiService.ShowError(ex, string.Format(SR.FailedToCreateComponent, tool.DisplayName, exceptionMessage));
                         }
                         else
                         {
@@ -634,7 +634,7 @@ namespace System.Windows.Forms.Design
             DesignerTransaction trans = null;
             if (host != null)
             {
-                trans = host.CreateTransaction(SR.GetString(SR.DragDropDragComponents, components.Length));
+                trans = host.CreateTransaction(string.Format(SR.DragDropDragComponents, components.Length));
             }
             try
             {
@@ -884,7 +884,7 @@ namespace System.Windows.Forms.Design
 
                         try
                         {
-                            trans = host.CreateTransaction(SR.GetString(SR.DragDropDropComponents));
+                            trans = host.CreateTransaction(SR.DragDropDropComponents);
                             if (!localDrag)
                             {
                                 host.Activate();

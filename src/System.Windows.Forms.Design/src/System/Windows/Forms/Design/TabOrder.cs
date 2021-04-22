@@ -302,7 +302,7 @@ namespace System.Windows.Forms.Design
 
                 if (((PropertyDescriptor)tabProperties[ctl]).IsReadOnly)
                 {
-                    drawString.Append(SR.GetString(SR.WindowsFormsTabOrderReadOnly));
+                    drawString.Append(SR.WindowsFormsTabOrderReadOnly);
                     drawString.Append(' ');
                 }
 

@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         public override DesignerActionItemCollection GetSortedActionItems()
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionMethodItem(this, "EditLines", SR.GetString(SR.EditLinesDisplayName), SR.GetString(SR.LinksCategoryName), SR.GetString(SR.EditLinesDescription), true));
+            items.Add(new DesignerActionMethodItem(this, "EditLines", SR.EditLinesDisplayName, SR.LinksCategoryName, SR.EditLinesDescription, true));
             return items;
         }
     }

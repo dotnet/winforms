@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Design
                 //
                 if (value.Width < minGridSize || value.Height < minGridSize ||
                      value.Width > maxGridSize || value.Height > maxGridSize)
-                    throw new ArgumentException(SR.GetString(SR.InvalidArgument,
+                    throw new ArgumentException(string.Format(SR.InvalidArgument,
                                                               "GridSize",
                                                               value.ToString()));
                 gridSize = value;
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms.Design
                 //We will start a designer transaction, send some changing notifications
                 //and swap parents...
                 //
-                ReParentControls(Control, selectedControls, SR.GetString(SR.ParentControlDesignerLassoShortcutRedo, Control.Site.Name), host);
+                ReParentControls(Control, selectedControls, string.Format(SR.ParentControlDesignerLassoShortcutRedo, Control.Site.Name), host);
             }
         }
 
@@ -2749,7 +2749,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
-                    string error = SR.GetString(SR.DesignerCantParentType, component.GetType().Name, Component.GetType().Name);
+                    string error = string.Format(SR.DesignerCantParentType, component.GetType().Name, Component.GetType().Name);
                     if (uiSvc != null)
                     {
                         uiSvc.ShowError(error);

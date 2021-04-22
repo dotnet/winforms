@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design
             _context = context;
             InitializeComponent();
 
-            // Set right to left property according to SR.GetString(SR.RTL) value.
+            // Set right to left property according to SR.RTL value.
             string rtlString = SR.RTL;
 
             if (rtlString.Equals("RTL_False"))

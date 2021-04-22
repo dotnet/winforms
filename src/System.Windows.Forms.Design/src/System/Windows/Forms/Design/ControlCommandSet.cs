@@ -648,11 +648,11 @@ namespace System.Windows.Forms.Design
 
                             if (selSvc.SelectionCount > 1)
                             {
-                                trans = host.CreateTransaction(SR.GetString(SR.DragDropSizeComponents, selSvc.SelectionCount));
+                                trans = host.CreateTransaction(string.Format(SR.DragDropSizeComponents, selSvc.SelectionCount));
                             }
                             else
                             {
-                                trans = host.CreateTransaction(SR.GetString(SR.DragDropSizeComponent, comp.Site.Name));
+                                trans = host.CreateTransaction(string.Format(SR.DragDropSizeComponent, comp.Site.Name));
                             }
 
 
@@ -925,7 +925,7 @@ namespace System.Windows.Forms.Design
 
                         try
                         {
-                            trans = host.CreateTransaction(SR.GetString(SR.CommandSetLockControls, components.Count));
+                            trans = host.CreateTransaction(string.Format(SR.CommandSetLockControls, components.Count));
                             MenuCommand cmd = (MenuCommand)sender;
                             bool targetValue = !cmd.Checked;
 
@@ -1064,11 +1064,11 @@ namespace System.Windows.Forms.Design
 
                     if (cmdID == MenuCommands.BringToFront)
                     {
-                        batchString = SR.GetString(SR.CommandSetBringToFront, selectedComponents.Length);
+                        batchString = string.Format(SR.CommandSetBringToFront, selectedComponents.Length);
                     }
                     else
                     {
-                        batchString = SR.GetString(SR.CommandSetSendToBack, selectedComponents.Length);
+                        batchString = string.Format(SR.CommandSetSendToBack, selectedComponents.Length);
                     }
 
                     // sort the components by their current zOrder

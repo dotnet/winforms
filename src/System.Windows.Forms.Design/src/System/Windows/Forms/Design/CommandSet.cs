@@ -892,11 +892,11 @@ namespace System.Windows.Forms.Design
 
                             if (selSvc.SelectionCount > 1)
                             {
-                                trans = host.CreateTransaction(SR.GetString(SR.DragDropMoveComponents, selSvc.SelectionCount));
+                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, selSvc.SelectionCount));
                             }
                             else
                             {
-                                trans = host.CreateTransaction(SR.GetString(SR.DragDropMoveComponent, comp.Site.Name));
+                                trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
                             }
 
                             try
@@ -1129,7 +1129,7 @@ namespace System.Windows.Forms.Design
 
                     if (host != null)
                     {
-                        trans = host.CreateTransaction(SR.GetString(SR.CommandSetAlignByPrimary, comps.Count));
+                        trans = host.CreateTransaction(string.Format(SR.CommandSetAlignByPrimary, comps.Count));
                     }
 
                     bool firstTry = true;
@@ -1294,7 +1294,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (host != null)
                     {
-                        trans = host.CreateTransaction(SR.GetString(SR.CommandSetAlignToGrid, selectedComponents.Count));
+                        trans = host.CreateTransaction(string.Format(SR.CommandSetAlignToGrid, selectedComponents.Count));
 
                         Control baseComponent = host.RootComponent as Control;
                         if (baseComponent != null)
@@ -1433,11 +1433,11 @@ namespace System.Windows.Forms.Design
 
                         if (cmdID == MenuCommands.CenterHorizontally)
                         {
-                            batchString = SR.GetString(SR.WindowsFormsCommandCenterX, selectedComponents.Count);
+                            batchString = string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count);
                         }
                         else
                         {
-                            batchString = SR.GetString(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
+                            batchString = string.Format(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
                         }
                         trans = host.CreateTransaction(batchString);
                     }
@@ -1620,7 +1620,7 @@ namespace System.Windows.Forms.Design
                     IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
                     if (Utility.ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false) == false)
                     {
-                        uiService?.ShowError(SR.GetString(SR.ClipboardError));
+                        uiService?.ShowError(SR.ClipboardError);
                     }
                 }
                 UpdateClipboardItems(null, null);
@@ -1678,7 +1678,7 @@ namespace System.Windows.Forms.Design
                             try
                             {
 
-                                trans = host.CreateTransaction(SR.GetString(SR.CommandSetCutMultiple, cutCount));
+                                trans = host.CreateTransaction(string.Format(SR.CommandSetCutMultiple, cutCount));
 
                                 // clear the selected components so we aren't browsing them
                                 //
@@ -1799,7 +1799,7 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        uiService?.ShowError(SR.GetString(SR.ClipboardError));
+                        uiService?.ShowError(SR.ClipboardError);
                     }
                 }
             }
@@ -1836,7 +1836,7 @@ namespace System.Windows.Forms.Design
 
 
                         ICollection comps = SelectionService.GetSelectedComponents();
-                        string desc = SR.GetString(SR.CommandSetDelete, comps.Count);
+                        string desc = string.Format(SR.CommandSetDelete, comps.Count);
 
                         DesignerTransaction trans = null;
                         IComponent commonParent = null;
@@ -2141,7 +2141,7 @@ namespace System.Windows.Forms.Design
                     //
                     object data = dataObj.GetData(CF_DESIGNER);
 
-                    using (DesignerTransaction trans = host.CreateTransaction(SR.GetString(SR.CommandSetPaste)))
+                    using (DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste))
                     {
                         byte[] bytes = data as byte[];
                         if (bytes != null)
@@ -2503,7 +2503,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    uiService?.ShowError(SR.GetString(SR.ClipboardError));
+                    uiService?.ShowError(SR.ClipboardError);
                 }
             }
             finally
@@ -2671,7 +2671,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (host != null)
                     {
-                        trans = host.CreateTransaction(SR.GetString(SR.CommandSetSize, selectedObjects.Length));
+                        trans = host.CreateTransaction(string.Format(SR.CommandSetSize, selectedObjects.Length));
                     }
 
                     foreach (object obj in selectedObjects)
@@ -2773,7 +2773,7 @@ namespace System.Windows.Forms.Design
 
                 if (host != null)
                 {
-                    trans = host.CreateTransaction(SR.GetString(SR.CommandSetSizeToGrid, selectedObjects.Length));
+                    trans = host.CreateTransaction(string.Format(SR.CommandSetSizeToGrid, selectedObjects.Length));
 
                     IComponent baseComponent = host.RootComponent;
                     if (baseComponent != null && baseComponent is Control)
@@ -2875,7 +2875,7 @@ namespace System.Windows.Forms.Design
 
                     try
                     {
-                        trans = host.CreateTransaction(SR.GetString(SR.CommandSetPaste, 0));
+                        trans = host.CreateTransaction(string.Format(SR.CommandSetPaste, 0));
 
                         IComponent baseComponent = host.RootComponent;
                         if (baseComponent != null && baseComponent is Control)
@@ -2934,7 +2934,7 @@ namespace System.Windows.Forms.Design
 
                 if (host != null)
                 {
-                    trans = host.CreateTransaction(SR.GetString(SR.CommandSetFormatSpacing, selectedObjects.Length));
+                    trans = host.CreateTransaction(string.Format(SR.CommandSetFormatSpacing, selectedObjects.Length));
 
                     IComponent baseComponent = host.RootComponent;
                     if (baseComponent != null && baseComponent is Control)
@@ -2979,7 +2979,7 @@ namespace System.Windows.Forms.Design
                 }
                 else
                 {
-                    throw new ArgumentException(SR.GetString(SR.CommandSetUnknownSpacingCommand));
+                    throw new ArgumentException(SR.CommandSetUnknownSpacingCommand);
                 }
 
                 SortSelection(selectedObjects, sort);
@@ -4113,7 +4113,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (uiService != null)
                     {
-                        uiService.ShowError(e, SR.GetString(SR.CommandSetError, e.Message));
+                        uiService.ShowError(e, string.Format(SR.CommandSetError, e.Message));
                     }
                     if (ClientUtils.IsCriticalException(e))
                     {
