@@ -16,8 +16,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.ComponentModel;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.Design.Behavior;
-using Microsoft.VisualStudio.Utilities;
-using static Interop.User32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -1016,7 +1015,7 @@ namespace System.Windows.Forms.Design
                         selSvc.SetSelectedComponents(new object[] { baseComp }, SelectionTypes.Replace);
                     }
                 }
-                using (DpiAwareness.EnterDpiScope(DpiAwarenessContext.SystemAware))
+                using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
                 {
                     tabOrder = new TabOrder((IDesignerHost)GetService(typeof(IDesignerHost)));
                 }

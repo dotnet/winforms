@@ -487,6 +487,54 @@ namespace System.Windows.Forms.Design
             }
         }
 
+        // Returns true if the action is successful, false otherwise
+        internal static bool ExecuteSafely(Action action, bool throwOnException)
+        {
+            if (action != null)
+            {
+                try
+                {
+                    action();
+                    return true;
+                }
+                catch
+                {
+                    if (throwOnException)
+                    {
+                        throw;
+                    }
+
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        // This function will return true if call to func is successful, false otherwise
+        // Output of call to func is available in result out parameter        
+        private static bool ExecuteSafely<T>(Func<T> func, bool throwOnException, out T result)
+        {
+            if (func != null)
+            {
+                try
+                {
+                    result = func();
+                    return true;
+                }
+                catch
+                {
+                    if (throwOnException)
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            result = default(T);
+            return false;
+        }
+
         /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.FilterSelection"]/*' />
         /// <devdoc>
         ///     Filters the set of selected components.  The selection service will retrieve all
@@ -772,12 +820,11 @@ namespace System.Windows.Forms.Design
                 {
                     tbx.SelectedToolboxItemUsed();
 
-                    NativeMethods.POINT p = new NativeMethods.POINT();
-                    NativeMethods.GetCursorPos(p);
-                    IntPtr hwnd = NativeMethods.WindowFromPoint(p.x, p.y);
+                    User32.GetCursorPos(out Point p);
+                    IntPtr hwnd = User32.WindowFromPoint(p);
                     if (hwnd != IntPtr.Zero)
                     {
-                        NativeMethods.SendMessage(hwnd, NativeMethods.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
+                        User32.SendMessageW(hwnd, User32.WM.SETCURSOR, hwnd, (IntPtr)User32.HT.CLIENT);
                     }
                     else
                     {
@@ -1618,7 +1665,7 @@ namespace System.Windows.Forms.Design
                     stream.Seek(0, SeekOrigin.Begin);
                     byte[] bytes = stream.GetBuffer();
                     IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
-                    if (Utility.ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false) == false)
+                    if (ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false) == false)
                     {
                         uiService?.ShowError(SR.ClipboardError);
                     }
@@ -1664,7 +1711,7 @@ namespace System.Windows.Forms.Design
                     byte[] bytes = stream.GetBuffer();
                     IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
 
-                    if (Utility.ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false))
+                    if (ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false))
                     {
                         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                         Control commonParent = null;
@@ -2124,7 +2171,7 @@ namespace System.Windows.Forms.Design
                     return;   // nothing we can do here!
 
                 IDataObject dataObj = null;
-                bool clipboardOperationSuccessful = Utility.ExecuteSafely<IDataObject>(() => Clipboard.GetDataObject(), false, out dataObj);
+                bool clipboardOperationSuccessful = ExecuteSafely<IDataObject>(() => Clipboard.GetDataObject(), false, out dataObj);
 
                 if (clipboardOperationSuccessful)
                 {
@@ -2159,7 +2206,7 @@ namespace System.Windows.Forms.Design
                                     BinaryFormatter formatter = new BinaryFormatter();
                                     s.Seek(0, SeekOrigin.Begin);
                                     object serializationData = formatter.Deserialize(s);
-                                    using (DpiAwareness.EnterDpiScope(DpiAwarenessContext.SystemAware))
+                                    using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
                                     {
                                         components = ds.Deserialize(serializationData);
                                     }
@@ -2177,7 +2224,7 @@ namespace System.Windows.Forms.Design
                                 ToolboxItem ti = ts.DeserializeToolboxItem(dataObj, host);
                                 if (ti != null)
                                 {
-                                    using (DpiAwareness.EnterDpiScope(DpiAwarenessContext.SystemAware))
+                                    using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
                                     {
                                         components = ti.CreateComponents(host);
                                     }
@@ -3557,7 +3604,7 @@ namespace System.Windows.Forms.Design
             // Not being inherited.  Now look at the contents of the data
             //
             IDataObject dataObj = null;
-            bool clipboardOperationSuccessful = Utility.ExecuteSafely<IDataObject>(() => Clipboard.GetDataObject(), false, out dataObj);
+            bool clipboardOperationSuccessful = ExecuteSafely<IDataObject>(() => Clipboard.GetDataObject(), false, out dataObj);
 
             bool enable = false;
 

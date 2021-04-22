@@ -8,6 +8,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
 {

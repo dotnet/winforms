@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -111,16 +112,17 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_NCHITTEST:
+                case (int)User32.WM.NCHITTEST:
                     // The group box always fires HTTRANSPARENT, which
                     // causes the message to go to our parent.  We want
                     // the group box's designer to get these messages, however,
                     // so change this.
                     //
                     base.WndProc(ref m);
-                    if (unchecked((int)(long)m.Result) == NativeMethods.HTTRANSPARENT)
+
+                    if (unchecked((int)(long)m.Result) == (int)User32.HT.TRANSPARENT)
                     {
-                        m.Result = (IntPtr)NativeMethods.HTCLIENT;
+                        m.Result = (IntPtr)User32.HT.CLIENT;
                     }
                     break;
 

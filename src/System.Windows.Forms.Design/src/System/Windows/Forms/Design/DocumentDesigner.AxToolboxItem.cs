@@ -13,19 +13,12 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Microsoft.Win32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
     public partial class DocumentDesigner
     {
-        //
-        // <doc>
-        // <desc>
-        //      Toolbox item we implement so we can create ActiveX controls.
-        // </desc>
-        // <internalonly/>
-        // </doc>
-        [Serializable]
         private class AxToolboxItem : ToolboxItem
         {
             private string clsid;
@@ -322,18 +315,19 @@ namespace System.Windows.Forms.Design
                     verKey.Close();
 
                     object o = tlbKey.GetValue("");
-                    tlbGuid = new Guid((string)o);
+
+                    // Try to get the TypeLib's Guid.
+                    //
+                    var tlbGuid = new Guid((string)o);
                     Debug.Assert(!tlbGuid.Equals(Guid.Empty), "No valid Guid found for: " + controlKey);
                     tlbKey.Close();
 
                     try
                     {
-                        pTLB = NativeMethods.LoadRegTypeLib(ref tlbGuid, majorVer, minorVer, Application.CurrentCulture.LCID);
+                        pTLB = Oleaut32.LoadRegTypeLib(ref tlbGuid, majorVer, minorVer, Application.CurrentCulture.LCID);
                     }
                     catch (Exception e)
                     {
-                        if (AxWrapperGen.AxWrapper.Enabled)
-                            Debug.WriteLine("Failed to LoadRegTypeLib: " + e.ToString());
                         if (ClientUtils.IsCriticalException(e))
                         {
                             throw;
@@ -355,7 +349,7 @@ namespace System.Windows.Forms.Design
                         Debug.Assert(inprocServer != null, "No valid InprocServer32 found for: " + controlKey);
                         inprocServerKey.Close();
 
-                        pTLB = NativeMethods.LoadTypeLib(inprocServer);
+                        pTLB = Oleaut32.LoadTypeLib(inprocServer);
                     }
                 }
 

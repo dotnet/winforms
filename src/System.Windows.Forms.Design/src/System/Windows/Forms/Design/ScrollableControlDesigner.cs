@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -31,8 +33,8 @@ namespace System.Windows.Forms.Design
             ScrollableControl f = (ScrollableControl)Control;
             if (f.IsHandleCreated && f.AutoScroll)
             {
-                int hitTest = (int)NativeMethods.SendMessage(f.Handle, NativeMethods.WM_NCHITTEST, (IntPtr)0, (IntPtr)NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
-                if (hitTest == NativeMethods.HTVSCROLL || hitTest == NativeMethods.HTHSCROLL)
+                int hitTest = (int)(long)User32.SendMessageW(f.Handle, User32.WM.NCHITTEST, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+                if (hitTest == (int)User32.HT.VSCROLL || hitTest == (int)User32.HT.HSCROLL)
                 {
                     return true;
                 }
@@ -49,8 +51,8 @@ namespace System.Windows.Forms.Design
 
             switch (m.Msg)
             {
-                case NativeMethods.WM_HSCROLL:
-                case NativeMethods.WM_VSCROLL:
+                case (int)User32.WM.HSCROLL:
+                case (int)User32.WM.VSCROLL:
 
                     // When we scroll, we reposition a control without causing a
                     // property change event.  Therefore, we must tell the

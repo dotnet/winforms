@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Collections;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -17,8 +18,8 @@ namespace System.Windows.Forms.Design
     internal class ListViewDesigner : ControlDesigner
     {
         private DesignerActionListCollection _actionLists;
-        private NativeMethods.HDHITTESTINFO hdrhit = new NativeMethods.HDHITTESTINFO();
-        private bool inShowErrorDialog;
+        private ComCtl32.HDHITTESTINFO _hdrhit;
+        private bool _inShowErrorDialog;
 
 
         /// <include file='doc\ListViewDesigner.uex' path='docs/doc[@for="ListViewDesigner.AssociatedComponents"]/*' />
@@ -81,21 +82,17 @@ namespace System.Windows.Forms.Design
             {
                 Point lvPoint = Control.PointToClient(point);
                 IntPtr hwndList = lv.Handle;
-                IntPtr hwndHit = NativeMethods.ChildWindowFromPointEx(hwndList, lvPoint.X, lvPoint.Y, NativeMethods.CWP_SKIPINVISIBLE);
+                IntPtr hwndHit = User32.ChildWindowFromPointEx(hwndList, lvPoint, User32.CWP.SKIPINVISIBLE);
 
                 if (hwndHit != IntPtr.Zero && hwndHit != hwndList)
                 {
-                    IntPtr hwndHdr = NativeMethods.SendMessage(hwndList, NativeMethods.LVM_GETHEADER, IntPtr.Zero, IntPtr.Zero);
+                    IntPtr hwndHdr = User32.SendMessageW(hwndList, (User32.WM)ComCtl32.LVM.GETHEADER);
                     if (hwndHit == hwndHdr)
                     {
-                        NativeMethods.POINT ptHdr = new NativeMethods.POINT();
-                        ptHdr.x = point.X;
-                        ptHdr.y = point.Y;
-                        NativeMethods.MapWindowPoints(IntPtr.Zero, hwndHdr, ptHdr, 1);
-                        hdrhit.pt_x = ptHdr.x;
-                        hdrhit.pt_y = ptHdr.y;
-                        NativeMethods.SendMessage(hwndHdr, NativeMethods.HDM_HITTEST, IntPtr.Zero, hdrhit);
-                        if (hdrhit.flags == NativeMethods.HHT_ONDIVIDER)
+                        User32.MapWindowPoints(IntPtr.Zero, hwndHdr, ref point, 1);
+                        _hdrhit.pt = point;
+                        User32.SendMessageW(hwndHdr, (User32.WM)ComCtl32.HDM.HITTEST, IntPtr.Zero, ref _hdrhit);
+                        if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
                             return true;
                     }
                 }
@@ -139,16 +136,15 @@ namespace System.Windows.Forms.Design
             base.PreFilterProperties(properties);
         }
 
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
 
             switch (m.Msg)
             {
-
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
-                    NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)Marshal.PtrToStructure(m.LParam, typeof(NativeMethods.NMHDR));
-                    if (nmhdr.code == NativeMethods.HDN_ENDTRACK)
+                case (int)User32.WM.NOTIFY:
+                case (int)User32.WM.REFLECT_NOTIFY:
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
 
                         // Re-codegen if the columns have been resized
@@ -160,20 +156,20 @@ namespace System.Windows.Forms.Design
                         }
                         catch (System.InvalidOperationException ex)
                         {
-                            if (this.inShowErrorDialog)
+                            if (_inShowErrorDialog)
                             {
                                 return;
                             }
 
-                            IUIService uiService = (IUIService)this.Component.Site.GetService(typeof(IUIService));
-                            this.inShowErrorDialog = true;
+                            IUIService uiService = (IUIService)Component.Site.GetService(typeof(IUIService));
+                            _inShowErrorDialog = true;
                             try
                             {
-                                DataGridViewDesigner.ShowErrorDialog(uiService, ex, (ListView)this.Component);
+                                ShowErrorDialog(uiService, ex, (ListView)Component);
                             }
                             finally
                             {
-                                this.inShowErrorDialog = false;
+                                _inShowErrorDialog = false;
                             }
                             return;
                         }
@@ -195,6 +191,25 @@ namespace System.Windows.Forms.Design
                     _actionLists.Add(new ListViewActionList(this));
                 }
                 return _actionLists;
+            }
+        }
+
+        private static void ShowErrorDialog(IUIService uiService, Exception ex, Control control)
+        {
+            if (uiService != null)
+            {
+                uiService.ShowError(ex);
+            }
+            else
+            {
+                string message = ex.Message;
+                if (message == null || message.Length == 0)
+                {
+                    message = ex.ToString();
+                }
+
+                RTLAwareMessageBox.Show(control, message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation,
+                        MessageBoxDefaultButton.Button1, 0);
             }
         }
     }

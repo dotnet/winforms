@@ -1,9 +1,10 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.ComponentModel.Design;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -20,7 +21,7 @@ namespace System.Windows.Forms.Design
         private Message lastKeyDown;
         private ArrayList bufferedChars;
 
-        private const int WM_PRIVATE_POSTCHAR = NativeMethods.WM_USER + 0x1598;
+        private const int WM_PRIVATE_POSTCHAR = (int)User32.WM.USER + 0x1598;
         private bool postCharMessage;
 
         private IMenuCommandService menuCommandSvc;
@@ -85,8 +86,8 @@ namespace System.Windows.Forms.Design
             // Here lets query for the ISupportInSituService.
             // If we find the service then ask if it has a designer which is interested 
             // in getting the keychars by querring the IgnoreMessages.
-            if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST
-               || (m.Msg >= NativeMethods.WM_IME_STARTCOMPOSITION && m.Msg <= NativeMethods.WM_IME_COMPOSITION))
+            if ((m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
+               || (m.Msg >= (int)User32.WM.IME_STARTCOMPOSITION && m.Msg <= (int)User32.WM.IME_COMPOSITION))
             {
                 if (InSituSupportService != null)
                 {
@@ -108,7 +109,7 @@ namespace System.Windows.Forms.Design
 
                     if (!ignoreMessages)
                     {
-                        hWnd = NativeMethods.GetFocus();
+                        hWnd = User32.GetFocus();
                     }
                     else
                     {
@@ -118,46 +119,46 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            hWnd = NativeMethods.GetFocus();
+                            hWnd = User32.GetFocus();
                         }
                     }
                     if (hWnd != m.HWnd)
                     {
                         foreach (BufferedKey bk in bufferedChars)
                         {
-                            if (bk.KeyChar.Msg == NativeMethods.WM_CHAR)
+                            if (bk.KeyChar.Msg == (int)User32.WM.CHAR)
                             {
                                 if (bk.KeyDown.Msg != 0)
                                 {
-                                    NativeMethods.SendMessage(hWnd, NativeMethods.WM_KEYDOWN, bk.KeyDown.WParam, bk.KeyDown.LParam);
+                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown.WParam, bk.KeyDown.LParam);
                                 }
-                                NativeMethods.SendMessage(hWnd, NativeMethods.WM_CHAR, bk.KeyChar.WParam, bk.KeyChar.LParam);
+                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar.WParam, bk.KeyChar.LParam);
                                 if (bk.KeyUp.Msg != 0)
                                 {
-                                    NativeMethods.SendMessage(hWnd, NativeMethods.WM_KEYUP, bk.KeyUp.WParam, bk.KeyUp.LParam);
+                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp.WParam, bk.KeyUp.LParam);
                                 }
                             }
                             else
                             {
-                                NativeMethods.SendMessage(hWnd, bk.KeyChar.Msg, bk.KeyChar.WParam, bk.KeyChar.LParam);
+                                User32.SendMessageW(hWnd, (User32.WM)bk.KeyChar.Msg, bk.KeyChar.WParam, bk.KeyChar.LParam);
                             }
                         }
                     }
                     bufferedChars.Clear();
                     return;
 
-                case NativeMethods.WM_KEYDOWN:
+                case (int)User32.WM.KEYDOWN:
                     this.lastKeyDown = m;
                     break;
 
-                case NativeMethods.WM_IME_ENDCOMPOSITION:
-                case NativeMethods.WM_KEYUP:
+                case (int)User32.WM.IME_ENDCOMPOSITION:
+                case (int)User32.WM.KEYUP:
                     this.lastKeyDown.Msg = 0;
                     break;
 
-                case NativeMethods.WM_CHAR:
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
-                case NativeMethods.WM_IME_COMPOSITION:
+                case (int)User32.WM.CHAR:
+                case (int)User32.WM.IME_STARTCOMPOSITION:
+                case (int)User32.WM.IME_COMPOSITION:
                     if ((Control.ModifierKeys & (Keys.Control | Keys.Alt)) != 0)
                     {
                         break;
@@ -176,7 +177,7 @@ namespace System.Windows.Forms.Design
                         postCharMessage = true;
                         MenuCommandService.GlobalInvoke(StandardCommands.PropertiesWindow);
                     }
-                    else if (ignoreMessages && m.Msg != NativeMethods.WM_IME_COMPOSITION)
+                    else if (ignoreMessages && m.Msg != (int)User32.WM.IME_COMPOSITION)
                     {
                         if (InSituSupportService != null)
                         {
@@ -193,7 +194,7 @@ namespace System.Windows.Forms.Design
 
                     break;
 
-                case NativeMethods.WM_KILLFOCUS:
+                case (int)User32.WM.KILLFOCUS:
                     if (postCharMessage)
                     {
                         // see ASURT 45313
@@ -207,7 +208,7 @@ namespace System.Windows.Forms.Design
                         // we can't use the wParam here because it may not be the actual window that needs
                         // to pick up the strokes.
                         //
-                        UnsafeNativeMethods.PostMessage(target.Handle, WM_PRIVATE_POSTCHAR, IntPtr.Zero, IntPtr.Zero);
+                        User32.PostMessageW(target.Handle, (User32.WM)WM_PRIVATE_POSTCHAR, IntPtr.Zero, IntPtr.Zero);
                         postCharMessage = false;
                     }
                     break;

@@ -5,6 +5,7 @@
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Collections;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -203,8 +204,8 @@ namespace System.Windows.Forms.Design
             ListBox lb = (ListBox)Control;
             if (lb.IsHandleCreated && lb.Items.Count == 0)
             {
-                NativeMethods.SendMessage(lb.Handle, NativeMethods.LB_RESETCONTENT, 0, 0);
-                NativeMethods.SendMessage(lb.Handle, NativeMethods.LB_ADDSTRING, 0, name);
+                User32.SendMessageW(lb, (User32.WM)User32.LB.RESETCONTENT);
+                User32.SendMessageW(lb, (User32.WM)User32.LB.ADDSTRING, IntPtr.Zero, name);
             }
         }
 
@@ -222,7 +223,17 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
+                        // TODO: investigate necessity and possibility of porting databinding infra
+#if DESIGNER_DATABINDING
+                        // Requires:
+                        // - System.Windows.Forms.Design.DataMemberFieldEditor
+                        // - System.Windows.Forms.Design.DesignBindingConverter
+                        // - System.Windows.Forms.Design.DesignBindingEditor
+                        //
                         _actionLists.Add(new ListControlBoundActionList(this));
+#else
+                        _actionLists.Add(new ListControlUnboundActionList(this));
+#endif
                     }
                 }
                 return _actionLists;

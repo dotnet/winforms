@@ -10,6 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -2014,8 +2015,8 @@ namespace System.Windows.Forms.Design
             //
             control.Capture = true;
 
-            NativeMethods.RECT winRect = new NativeMethods.RECT();
-            NativeMethods.GetWindowRect(control.Handle, ref winRect);
+            RECT winRect = default;
+            User32.GetWindowRect(control.Handle, ref winRect);
             Rectangle.FromLTRB(winRect.left, winRect.top, winRect.right, winRect.bottom);
 
             mouseDragFrame = (mouseDragTool == null) ? FrameStyle.Dashed : FrameStyle.Thick;
@@ -2126,11 +2127,11 @@ namespace System.Windows.Forms.Design
             // Set Status Information - but only if the offset is not empty, if it is, the user didn't move the mouse
             if (statusCommandUI != null && !offset.IsEmpty)
             {
-                NativeMethods.POINT location = new NativeMethods.POINT(baseVar.X, baseVar.Y);
-                NativeMethods.MapWindowPoints(IntPtr.Zero, Control.Handle, location, 1);
+                Point location = new(baseVar.X, baseVar.Y);
+                User32.MapWindowPoints(IntPtr.Zero, Control.Handle, ref location, 1);
                 if (statusCommandUI != null)
                 {
-                    statusCommandUI.SetStatusInformation(new Rectangle(location.x, location.y, offset.Width, offset.Height));
+                    statusCommandUI.SetStatusInformation(new Rectangle(location.X, location.Y, offset.Width, offset.Height));
                 }
             }
 
@@ -2357,11 +2358,11 @@ namespace System.Windows.Forms.Design
             // We are looking at the primary control
             if (statusCommandUI != null)
             {
-                NativeMethods.POINT offset = new NativeMethods.POINT(mouseDragOffset.X, mouseDragOffset.Y);
-                NativeMethods.MapWindowPoints(IntPtr.Zero, Control.Handle, offset, 1);
+                Point offset = new(mouseDragOffset.X, mouseDragOffset.Y);
+                User32.MapWindowPoints(IntPtr.Zero, Control.Handle, ref offset, 1);
                 if (statusCommandUI != null)
                 {
-                    statusCommandUI.SetStatusInformation(new Rectangle(offset.x, offset.y, mouseDragOffset.Width, mouseDragOffset.Height));
+                    statusCommandUI.SetStatusInformation(new Rectangle(offset.X, offset.Y, mouseDragOffset.Width, mouseDragOffset.Height));
                 }
             }
 
@@ -2381,8 +2382,10 @@ namespace System.Windows.Forms.Design
                 Rectangle displayRect = Control.DisplayRectangle;
                 Rectangle clientRect = Control.ClientRectangle;
 
-                Rectangle paintRect = new Rectangle(Math.Min(displayRect.X, clientRect.X), Math.Min(displayRect.Y, clientRect.Y),
-                                                     Math.Max(displayRect.Width, clientRect.Width), Math.Max(displayRect.Height, clientRect.Height));
+                Rectangle paintRect = new(Math.Min(displayRect.X, clientRect.X),
+                                          Math.Min(displayRect.Y, clientRect.Y),
+                                          Math.Max(displayRect.Width, clientRect.Width),
+                                          Math.Max(displayRect.Height, clientRect.Height));
 
                 float xlateX = (float)paintRect.X;
                 float xlateY = (float)paintRect.Y;

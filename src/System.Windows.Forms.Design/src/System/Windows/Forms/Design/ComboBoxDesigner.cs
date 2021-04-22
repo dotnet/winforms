@@ -18,7 +18,6 @@ namespace System.Windows.Forms.Design
     {
 
         private EventHandler propChanged = null; // Delegate used to dirty the selectionUIItem when needed.
-        private DesignerActionListCollection _actionLists;
 
         /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.SnapLines"]/*' />
         /// <devdoc>
@@ -130,6 +129,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
+        private DesignerActionListCollection _actionLists;
 
         public override DesignerActionListCollection ActionLists
         {
@@ -138,8 +138,20 @@ namespace System.Windows.Forms.Design
                 if (_actionLists == null)
                 {
                     _actionLists = new DesignerActionListCollection();
+
+                    // TODO: investigate necessity and possibility of porting databinding infra
+#if DESIGNER_DATABINDING
+                    // Requires:
+                    // - System.Windows.Forms.Design.DataMemberFieldEditor
+                    // - System.Windows.Forms.Design.DesignBindingConverter
+                    // - System.Windows.Forms.Design.DesignBindingEditor
+                    //
                     _actionLists.Add(new ListControlBoundActionList(this));
+#else
+                    _actionLists.Add(new ListControlUnboundActionList(this));
+#endif
                 }
+
                 return _actionLists;
             }
         }

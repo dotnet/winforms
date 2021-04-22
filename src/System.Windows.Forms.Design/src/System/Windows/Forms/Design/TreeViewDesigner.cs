@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Diagnostics;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -16,7 +17,7 @@ namespace System.Windows.Forms.Design
     /// </devdoc>
     internal class TreeViewDesigner : ControlDesigner
     {
-        private NativeMethods.TV_HITTESTINFO tvhit = new NativeMethods.TV_HITTESTINFO();
+        private ComCtl32.TVHITTESTINFO tvhit;
         private DesignerActionListCollection _actionLists;
         private TreeView treeView = null;
 
@@ -54,10 +55,9 @@ namespace System.Windows.Forms.Design
         protected override bool GetHitTest(Point point)
         {
             point = Control.PointToClient(point);
-            tvhit.pt_x = point.X;
-            tvhit.pt_y = point.Y;
-            NativeMethods.SendMessage(Control.Handle, NativeMethods.TVM_HITTEST, 0, tvhit);
-            if (tvhit.flags == NativeMethods.TVHT_ONITEMBUTTON)
+            tvhit.pt = point;
+            User32.SendMessageW(Control, (User32.WM)ComCtl32.TVM.HITTEST, IntPtr.Zero, ref tvhit);
+            if (tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON)
                 return true;
             return false;
         }

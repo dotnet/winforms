@@ -56,6 +56,8 @@ namespace System.Windows.Forms.Design
 
         private void OnPropertyValueUIItemInvoke(ITypeDescriptorContext context, PropertyDescriptor descriptor, PropertyValueUIItem invokedItem)
         {
+            // TODO: design a way for consumers to register own AdvancedBindingEditor
+#if DESIGNER_DATABINDING
             LocalUIItem localItem = (LocalUIItem)invokedItem;
             IServiceProvider sop = null;
             Control control = localItem.Binding.Control;
@@ -67,6 +69,7 @@ namespace System.Windows.Forms.Design
             {
                 AdvancedBindingPropertyDescriptor.advancedBindingEditor.EditValue(context, sop, control.DataBindings);
             }
+#endif
         }
 
         public void Dispose()

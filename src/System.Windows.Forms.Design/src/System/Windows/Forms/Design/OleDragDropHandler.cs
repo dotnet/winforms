@@ -10,8 +10,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -25,9 +25,9 @@ namespace System.Windows.Forms.Design
         //
         protected const int AllowLocalMoveOnly = 0x04000000;
 
-        private SelectionUIHandler selectionHandler;
-        private IServiceProvider serviceProvider;
-        private IOleDragClient client;
+        private readonly SelectionUIHandler selectionHandler;
+        private readonly IServiceProvider serviceProvider;
+        private readonly IOleDragClient client;
 
         private bool dragOk;
         private bool forceDrawFrames;
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design
         private static bool freezePainting = false;
         private static Hashtable currentDrags;
 
-        private static CodeMarkers codemarkers = CodeMarkers.Instance;
+        private static readonly CodeMarkers codemarkers = CodeMarkers.Instance;
 
         public const string CF_CODE = "CF_XMLCODE";
         public const string CF_COMPONENTTYPES = "CF_COMPONENTTYPES";
@@ -360,7 +360,7 @@ namespace System.Windows.Forms.Design
                 selSvc.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
             }
 
-            codemarkers.CodeMarker(CodeMarkerEvent.perfFXDesignCreateComponentEnd);
+            codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXDesignCreateComponentEnd);
             return comps;
         }
 
@@ -515,43 +515,31 @@ namespace System.Windows.Forms.Design
             // Copy of ControlPaint.DrawReversibleFrame, see VSWhidbey 581670
             // If ControlPaint ever gets overrloaded, we should replace the code below by calling it:
             // ControlPaint.DrawReversibleFrame(handle, rectangle, backColor, FrameStyle.Thick);
-            // Also, remove extra code from System.Design.NativeMethods, System.Design.SafeNativeMethods
-            // and System.Design.UnsafeNativeMethods
 
             // ------ Duplicate code----------------------------------------------------------
-            int rop2;
+            Gdi32.R2 rop2;
             Color graphicsColor;
 
             if (backColor.GetBrightness() < .5)
             {
-                rop2 = 0xA; // RasterOp.PEN.Invert().XorWith(RasterOp.TARGET);
+                rop2 = Gdi32.R2.NOTXORPEN;
                 graphicsColor = Color.White;
             }
             else
             {
-                rop2 = 0x7; // RasterOp.PEN.XorWith(RasterOp.TARGET);
+                rop2 = Gdi32.R2.XORPEN;
                 graphicsColor = Color.Black;
             }
 
-            IntPtr dc = UnsafeNativeMethods.GetDC(new HandleRef(null, handle));
-            IntPtr pen = SafeNativeMethods.CreatePen(NativeMethods.PS_SOLID, 2, ColorTranslator.ToWin32(backColor));
+            using var dc = new User32.GetDcScope(handle);
+            using var pen = new Gdi32.ObjectScope(Gdi32.CreatePen(Gdi32.PS.SOLID, 2, ColorTranslator.ToWin32(backColor)));
 
-            int prevRop2 = SafeNativeMethods.SetROP2(new HandleRef(null, dc), rop2);
-            IntPtr oldBrush = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, UnsafeNativeMethods.GetStockObject(NativeMethods.HOLLOW_BRUSH)));
-            IntPtr oldPen = SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, pen));
-            SafeNativeMethods.SetBkColor(new HandleRef(null, dc), ColorTranslator.ToWin32(graphicsColor));
-            SafeNativeMethods.Rectangle(new HandleRef(null, dc), rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
+            using var rop2Scope = new Gdi32.SetRop2Scope(dc, rop2);
+            using var brushSelection = new Gdi32.SelectObjectScope(dc, Gdi32.GetStockObject(Gdi32.StockObject.NULL_BRUSH));
+            using var penSelection = new Gdi32.SelectObjectScope(dc, pen);
 
-            SafeNativeMethods.SetROP2(new HandleRef(null, dc), prevRop2);
-            SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, oldBrush));
-            SafeNativeMethods.SelectObject(new HandleRef(null, dc), new HandleRef(null, oldPen));
-
-            if (pen != IntPtr.Zero)
-            {
-                SafeNativeMethods.DeleteObject(new HandleRef(null, pen));
-            }
-
-            UnsafeNativeMethods.ReleaseDC(NativeMethods.NullHandleRef, new HandleRef(null, dc));
+            Gdi32.SetBkColor(dc, ColorTranslator.ToWin32(graphicsColor));
+            Gdi32.Rectangle(dc, rectangle.X, rectangle.Y, rectangle.Right, rectangle.Bottom);
             // ------ Duplicate code----------------------------------------------------------
         }
 
@@ -598,11 +586,11 @@ namespace System.Windows.Forms.Design
             // ensure that the drag can proceed without leaving artifacts lying around.  We should be caling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
             //
-            NativeMethods.MSG msg = new NativeMethods.MSG();
-            while (NativeMethods.PeekMessage(ref msg, IntPtr.Zero, NativeMethods.WM_PAINT, NativeMethods.WM_PAINT, NativeMethods.PM_REMOVE))
+            User32.MSG msg = default;
+            while (User32.PeekMessageW(ref msg, IntPtr.Zero, User32.WM.PAINT, User32.WM.PAINT, User32.PM.REMOVE).IsTrue())
             {
-                NativeMethods.TranslateMessage(ref msg);
-                NativeMethods.DispatchMessage(ref msg);
+                User32.TranslateMessage(ref msg);
+                User32.DispatchMessageW(ref msg);
             }
 
             // don't do any new painting...
@@ -917,7 +905,7 @@ namespace System.Windows.Forms.Design
                                     {
 
                                         oldDesignerControl = client.GetDesignerControl();
-                                        NativeMethods.SendMessage(oldDesignerControl.Handle, NativeMethods.WM_SETREDRAW, 0, 0);
+                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW);
                                     }
 
                                     Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -970,7 +958,7 @@ namespace System.Windows.Forms.Design
                                     if (oldDesignerControl != null)
                                     {
                                         //((ComponentDataObject)dataObj).ShowControls();
-                                        NativeMethods.SendMessage(oldDesignerControl.Handle, NativeMethods.WM_SETREDRAW, 1, 0);
+                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (IntPtr)1);
                                         oldDesignerControl.Invalidate(true);
                                     }
 
@@ -1057,7 +1045,7 @@ namespace System.Windows.Forms.Design
                 dragOk = true;
 
                 // this means it's not us doing the drag
-                if ((int)(de.KeyState & NativeMethods.MK_CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0)
+                if ((int)(de.KeyState & (int)User32.MK.CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0)
                 {
                     de.Effect = DragDropEffects.Copy;
                 }
@@ -1076,7 +1064,9 @@ namespace System.Windows.Forms.Design
             else if (localDrag && de.AllowedEffect != DragDropEffects.None)
             {
                 localDragInside = true;
-                if ((int)(de.KeyState & NativeMethods.MK_CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0 && client.CanModifyComponents)
+                if ((de.KeyState & (int)User32.MK.CONTROL) != 0
+                    && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0
+                    && client.CanModifyComponents)
                 {
                     de.Effect = DragDropEffects.Copy;
                 }
@@ -1128,7 +1118,9 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            bool copy = (int)(de.KeyState & NativeMethods.MK_CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0 && client.CanModifyComponents;
+            bool copy = (de.KeyState & (int)User32.MK.CONTROL) != 0
+                && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0
+                && client.CanModifyComponents;
 
             // we pretend AllowLocalMoveOnly is a normal move when we are over the originating container.
             //

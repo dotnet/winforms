@@ -17,8 +17,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static Interop.User32;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -1225,13 +1224,13 @@ namespace System.Windows.Forms.Design
         ///     Called by the host when we become inactive.  Here we update the
         ///     title bar of our form so it's the inactive color.
         /// </devdoc>
-        private void OnDesignerDeactivate(object sender, EventArgs e)
+        private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, NativeMethods.WM_NCACTIVATE, 0, 0);
-                SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE);
+                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }
 
@@ -1267,10 +1266,10 @@ namespace System.Windows.Forms.Design
             Control ctrl = e.Component as Control;
             if (ctrl != null && ctrl.IsHandleCreated)
             {
-                UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.LocationChange, new HandleRef(ctrl, ctrl.Handle), NativeMethods.OBJID_CLIENT, 0);
+                User32.NotifyWinEvent((int)AccessibleEvents.LocationChange, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
                 if (this.frame.Focused)
                 {
-                    UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), NativeMethods.OBJID_CLIENT, 0);
+                    User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
                 }
             }
         }
@@ -1296,7 +1295,7 @@ namespace System.Windows.Forms.Design
                     if (c != null)
                     {
                         Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, control = " + c.ToString());
-                        UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), NativeMethods.OBJID_CLIENT, 0);
+                        User32.NotifyWinEvent((int)AccessibleEvents.SelectionAdd, new HandleRef(c, c.Handle), User32.OBJID.CLIENT, 0);
                     }
                 }
 
@@ -1304,7 +1303,7 @@ namespace System.Windows.Forms.Design
                 if (primary != null)
                 {
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: Focus, control = " + primary.ToString());
-                    UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), NativeMethods.OBJID_CLIENT, 0);
+                    User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), User32.OBJID.CLIENT, 0);
                 }
 
 
@@ -1599,7 +1598,7 @@ namespace System.Windows.Forms.Design
         /// </devdoc>
         void IToolboxUser.ToolPicked(ToolboxItem tool)
         {
-            using (DpiAwareness.EnterDpiScope(DpiAwarenessContext.SystemAware))
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
                 ToolPicked(tool);
             }
