@@ -9,13 +9,12 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para>
-    ///       Provides a designer for TextBox.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>
+    ///  Provides a designer for TextBox.</para>
+    /// </summary>
     internal class TextBoxDesigner : TextBoxBaseDesigner
     {
-
         private char passwordChar;
 
         private DesignerActionListCollection _actionLists;
@@ -33,15 +32,15 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///      Allows a designer to filter the set of properties
-        ///      the component it is designing will expose through the
-        ///      TypeDescriptor object.  This method is called
-        ///      immediately before its corresponding "Post" method.
-        ///      If you are overriding this method you should call
-        ///      the base implementation before you perform your own
-        ///      filtering.
-        /// </devdoc>
+        /// <summary>
+        ///  Allows a designer to filter the set of properties
+        ///  the component it is designing will expose through the
+        ///  TypeDescriptor object.  This method is called
+        ///  immediately before its corresponding "Post" method.
+        ///  If you are overriding this method you should call
+        ///  the base implementation before you perform your own
+        ///  filtering.
+        /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
             base.PreFilterProperties(properties);
@@ -53,7 +52,7 @@ namespace System.Windows.Forms.Design
                 "PasswordChar"
             };
 
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
 
             for (int i = 0; i < shadowProps.Length; i++)
             {
@@ -65,17 +64,17 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
-        ///     of PasswordChar it will return the systemp password char.  However, the value of PasswordChar is 
-        ///     cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
-        ///     So in the case both properties are set, we need to serialize the real PasswordChar value as well.
-        /// </devdoc>
+        /// <summary>
+        ///  Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
+        ///  of PasswordChar it will return the systemp password char.  However, the value of PasswordChar is
+        ///  cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
+        ///  So in the case both properties are set, we need to serialize the real PasswordChar value as well.
+        /// </summary>
         private char PasswordChar
         {
             get
             {
-                TextBox tb = this.Control as TextBox;
+                TextBox tb = Control as TextBox;
                 Debug.Assert(tb != null, "Designed control is not a TextBox.");
 
                 if (tb.UseSystemPasswordChar)
@@ -89,7 +88,7 @@ namespace System.Windows.Forms.Design
             }
             set
             {
-                TextBox tb = this.Control as TextBox;
+                TextBox tb = Control as TextBox;
                 Debug.Assert(tb != null, "Designed control is not a TextBox.");
 
                 passwordChar = value;
@@ -97,5 +96,4 @@ namespace System.Windows.Forms.Design
             }
         }
     }
-
 }

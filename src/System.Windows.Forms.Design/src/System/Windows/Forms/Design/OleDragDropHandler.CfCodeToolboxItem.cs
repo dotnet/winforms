@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -20,36 +19,34 @@ namespace System.Windows.Forms.Design
         internal class CfCodeToolboxItem : ToolboxItem
         {
             private object serializationData;
-            private static int template = 0;
-            bool displaynameset = false;
+            private static int template;
+            bool displaynameset;
 
             public CfCodeToolboxItem(object serializationData) : base()
             {
                 this.serializationData = serializationData;
             }
 
-
-            [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             private CfCodeToolboxItem(SerializationInfo info, StreamingContext context)
             {
                 Deserialize(info, context);
             }
 
-            /// <devdoc>
-            /// </devdoc>
+            /// <summary>
+            /// </summary>
             public void SetDisplayName()
             {
                 if (!displaynameset)
                 {
                     displaynameset = true;
-                    this.DisplayName = "Template" + (++template).ToString(CultureInfo.CurrentCulture);
+                    DisplayName = "Template" + (++template).ToString(CultureInfo.CurrentCulture);
                 }
             }
 
-            /// <devdoc>
-            /// <para>Saves the state of this <see cref='System.Drawing.Design.ToolboxItem'/> to
-            ///    the specified serialization info.</para>
-            /// </devdoc>
+            /// <summary>
+            /// <para>Saves the state of this <see cref='ToolboxItem'/> to
+            ///  the specified serialization info.</para>
+            /// </summary>
             protected override void Serialize(SerializationInfo info, StreamingContext context)
             {
                 base.Serialize(info, context);
@@ -59,10 +56,10 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            /// <devdoc>
-            /// <para>Loads the state of this <see cref='System.Drawing.Design.ToolboxItem'/>
+            /// <summary>
+            /// <para>Loads the state of this <see cref='ToolboxItem'/>
             /// from the stream.</para>
-            /// </devdoc>
+            /// </summary>
             protected override void Deserialize(SerializationInfo info, StreamingContext context)
             {
                 base.Deserialize(info, context);
@@ -96,9 +93,9 @@ namespace System.Windows.Forms.Design
                         components.Add(obj);
                     }
                 }
+
                 IComponent[] componentsArray = new IComponent[components.Count];
                 components.CopyTo(componentsArray, 0);
-
 
                 ArrayList trayComponents = null;
 
@@ -139,7 +136,7 @@ namespace System.Windows.Forms.Design
                             Control childControl = component as Control;
                             Form form = childControl as Form;
                             if (childControl != null
-                                && !(form != null && form.TopLevel) // Don't add top-level forms                            
+                                && !(form != null && form.TopLevel) // Don't add top-level forms
                                 && childControl.Parent == null)
                             {
                                 defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
@@ -149,12 +146,11 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-
                 // VSWhidbey 516338 - When creating an item for the tray, template items will have
                 // an old location stored in them, so they may show up on top of other items.
-                // So we need to call UpdatePastePositions for each one to get the tray to 
+                // So we need to call UpdatePastePositions for each one to get the tray to
                 // arrange them properly.
-                //                
+                //
                 ComponentTray tray = (ComponentTray)host.GetService(typeof(ComponentTray));
 
                 if (tray != null)
@@ -169,6 +165,7 @@ namespace System.Windows.Forms.Design
                             {
                                 trayComponents = new ArrayList();
                             }
+
                             trayComponents.Add(c);
                         }
                     }

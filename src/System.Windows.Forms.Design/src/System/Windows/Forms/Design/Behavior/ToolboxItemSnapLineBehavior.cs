@@ -8,51 +8,46 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
 {
-    /// <include file='doc\ToolboxItemSnapLineBehavior.uex' path='docs/doc[@for="ToolboxItemSnapLineBehavior"]/*' />
-    /// <devdoc>
-    ///     This class implements the behavior provided by DocumentDesigner
-    ///     when the user is dragging a valid toolbox item.  Here, we'll render a
-    ///     default 'box' beneath the cursor that snaps to edges of other 
-    ///     components on the designer's surface.
-    /// </devdoc>
+    /// <summary>
+    ///  This class implements the behavior provided by DocumentDesigner
+    ///  when the user is dragging a valid toolbox item.  Here, we'll render a
+    ///  default 'box' beneath the cursor that snaps to edges of other
+    ///  components on the designer's surface.
+    /// </summary>
     internal class ToolboxItemSnapLineBehavior : Behavior
     {
-
-        private IServiceProvider serviceProvider;//used for snaplines
-        private BehaviorService behaviorService;//pointer to our big & bad service
-        private ControlDesigner designer;//used for snaplines as well
+        private readonly IServiceProvider serviceProvider;//used for snaplines
+        private readonly BehaviorService behaviorService;//pointer to our big & bad service
+        private readonly ControlDesigner designer;//used for snaplines as well
         private bool isPushed;//used to track if this is currently on the stack or not
         private Rectangle lastRectangle;//cache the last mouse loc - so we can ignore when mouse doesn't move
         private Point lastOffset;//cache the last snap so we know where to create our control if dropped
         private DragAssistanceManager dragManager; //used to apply snaplines when dragging a new tool rect on the designer's surface
-        private bool targetAllowsSnapLines;//indicates if the drop target allows snaplines (flowpanels don't for ex)  
-        private StatusCommandUI statusCommandUI; //used to update the StatusBar Information.
-        private bool targetAllowsDragBox;    //indicates if the drop target allows the generic drag box to be drawn
+        private readonly bool targetAllowsSnapLines;//indicates if the drop target allows snaplines (flowpanels don't for ex)
+        private readonly StatusCommandUI statusCommandUI; //used to update the StatusBar Information.
+        private readonly bool targetAllowsDragBox;    //indicates if the drop target allows the generic drag box to be drawn
 
-        /// <include file='doc\ToolboxItemSnapLineBehavior.uex' path='docs/doc[@for="ToolboxItemSnapLineBehavior.ToolboxItemSnapLineBehavior"]/*' />
-        /// <devdoc>
-        ///     Constructor that caches the designer (which invoked us) and a ptr
-        ///     to the BehaviorService.
-        /// </devdoc>
+        /// <summary>
+        ///  Constructor that caches the designer (which invoked us) and a ptr
+        ///  to the BehaviorService.
+        /// </summary>
         public ToolboxItemSnapLineBehavior(IServiceProvider serviceProvider, BehaviorService behaviorService)
         {
             this.serviceProvider = serviceProvider;
             this.behaviorService = behaviorService;
-            this.designer = null;
-            this.isPushed = false;
-            this.lastRectangle = Rectangle.Empty;
-            this.lastOffset = Point.Empty;
+            designer = null;
+            isPushed = false;
+            lastRectangle = Rectangle.Empty;
+            lastOffset = Point.Empty;
             statusCommandUI = new StatusCommandUI(serviceProvider);
-            this.targetAllowsDragBox = true;
+            targetAllowsDragBox = true;
             targetAllowsSnapLines = true;
-
         }
 
         public ToolboxItemSnapLineBehavior(IServiceProvider serviceProvider, BehaviorService behaviorService, ControlDesigner controlDesigner)
             : this(serviceProvider, behaviorService)
         {
-
-            this.designer = controlDesigner;
+            designer = controlDesigner;
             //check to see if the current designer participate with SnapLines
             if (controlDesigner != null && !controlDesigner.ParticipatesWithSnapLines)
             {
@@ -63,23 +58,20 @@ namespace System.Windows.Forms.Design.Behavior
         public ToolboxItemSnapLineBehavior(IServiceProvider serviceProvider, BehaviorService behaviorService, ControlDesigner controlDesigner, bool allowDragBox)
             : this(serviceProvider, behaviorService, controlDesigner)
         {
-
-            this.designer = controlDesigner;
-            this.targetAllowsDragBox = allowDragBox;
+            designer = controlDesigner;
+            targetAllowsDragBox = allowDragBox;
         }
 
-        /// <include file='doc\ToolboxItemSnapLineBehavior.uex' path='docs/doc[@for="ToolboxItemSnapLineBehavior.IsPushed"]/*' />
-        /// <devdoc>
-        ///     OnDragDrop can be overridden so that a Behavior can specify its own
-        ///     Drag/Drop rules.
-        ///     CONSIDER: Should we have the BehaivorService fire push/pop events on Behaviors???
-        /// </devdoc>
+        /// <summary>
+        ///  OnDragDrop can be overridden so that a Behavior can specify its own
+        ///  Drag/Drop rules.
+        ///  CONSIDER: Should we have the BehaivorService fire push/pop events on Behaviors???
+        /// </summary>
         public bool IsPushed
         {
             get
             {
                 return isPushed;
-
             }
             set
             {
@@ -113,15 +105,14 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
-        /// <devdoc>
-        ///     Called on a DragDrop - this generates our extra drag info
-        ///     to pass along to the base class.  Basically, we get the 
-        ///     last-rendered snaplines before the drop and attempt to 
-        ////    identify to which direction the mouse was snapped.
-        /// </devdoc>
+        /// <summary>
+        ///  Called on a DragDrop - this generates our extra drag info
+        ///  to pass along to the base class.  Basically, we get the
+        ///  last-rendered snaplines before the drop and attempt to
+        ///  identify to which direction the mouse was snapped.
+        /// </summary>
         private ToolboxSnapDragDropEventArgs CreateToolboxSnapArgs(DragEventArgs e, Point mouseLoc)
         {
-
             //we're trying to set these two vars here...
             ToolboxSnapDragDropEventArgs.SnapDirection snapDirections = ToolboxSnapDragDropEventArgs.SnapDirection.None;
             Point offset = Point.Empty;
@@ -153,6 +144,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Right;
                                 offset.X = lastRectangle.Right - mouseLoc.X;
                             }
+
                             horizontalComponentIdentified = true;
                         }
                         else if (!verticalComponentIdentified && line.y1 == line.y2)
@@ -170,6 +162,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Bottom;
                                 offset.Y = lastRectangle.Bottom - mouseLoc.Y;
                             }
+
                             verticalComponentIdentified = true;
                         }
                     }
@@ -191,6 +184,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Bottom;
                                 offset.Y = lastRectangle.Bottom - mouseLoc.Y;
                             }
+
                             verticalComponentIdentified = true;
                         }
                         else if (!horizontalComponentIdentified && line.y1 == line.y2)
@@ -208,6 +202,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Right;
                                 offset.X = lastRectangle.Right - mouseLoc.X;
                             }
+
                             horizontalComponentIdentified = true;
                         }
                     }
@@ -226,6 +221,7 @@ namespace System.Windows.Forms.Design.Behavior
                 snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Left;
                 offset.X = lastRectangle.Left - mouseLoc.X;
             }
+
             if (!verticalComponentIdentified)
             {
                 snapDirections |= ToolboxSnapDragDropEventArgs.SnapDirection.Top;
@@ -236,33 +232,32 @@ namespace System.Windows.Forms.Design.Behavior
             return new ToolboxSnapDragDropEventArgs(snapDirections, offset, e);
         }
 
-        /// <include file='doc\ToolboxItemSnapLineBehavior.uex' path='docs/doc[@for="ToolboxItemSnapLineBehavior.GenerateNewToolSnapLines"]/*' />
-        /// <devdoc>
-        ///     Used when dragging a new tool rect on the designer's surface -
-        ///     this will return some generic snaplines Allowing the rect to 
-        ///     snap to existing control edges on the surface.
-        /// </devdoc>
+        /// <summary>
+        ///  Used when dragging a new tool rect on the designer's surface -
+        ///  this will return some generic snaplines Allowing the rect to
+        ///  snap to existing control edges on the surface.
+        /// </summary>
         private SnapLine[] GenerateNewToolSnapLines(Rectangle r)
         {
-            return new SnapLine[] {new SnapLine(SnapLineType.Left, r.Left),
-                               new SnapLine(SnapLineType.Right, r.Right),
-                               new SnapLine(SnapLineType.Bottom, r.Bottom),
-                               new SnapLine(SnapLineType.Top, r.Top),
-                               new SnapLine(SnapLineType.Horizontal, r.Top -4, SnapLine.MarginTop, SnapLinePriority.Always),
-                               new SnapLine(SnapLineType.Horizontal, r.Bottom + 3, SnapLine.MarginBottom, SnapLinePriority.Always),
-                               new SnapLine(SnapLineType.Vertical, r.Left -4, SnapLine.MarginLeft, SnapLinePriority.Always),
-                               new SnapLine(SnapLineType.Vertical, r.Right + 3, SnapLine.MarginRight, SnapLinePriority.Always)};
-
+            return new SnapLine[]
+            {
+                new SnapLine(SnapLineType.Left, r.Left),
+                new SnapLine(SnapLineType.Right, r.Right),
+                new SnapLine(SnapLineType.Bottom, r.Bottom),
+                new SnapLine(SnapLineType.Top, r.Top),
+                new SnapLine(SnapLineType.Horizontal, r.Top -4, SnapLine.MarginTop, SnapLinePriority.Always),
+                new SnapLine(SnapLineType.Horizontal, r.Bottom + 3, SnapLine.MarginBottom, SnapLinePriority.Always),
+                new SnapLine(SnapLineType.Vertical, r.Left -4, SnapLine.MarginLeft, SnapLinePriority.Always),
+                new SnapLine(SnapLineType.Vertical, r.Right + 3, SnapLine.MarginRight, SnapLinePriority.Always)
+            };
         }
 
-        /// <include file='doc\ToolboxItemSnapLineBehavior.uex' path='docs/doc[@for="ToolboxItemSnapLineBehavior.OnDragDrop"]/*' />
-        /// <devdoc>
-        ///     OnDragDrop can be overridden so that a Behavior can specify its own
-        ///     Drag/Drop rules.
-        /// </devdoc>
+        /// <summary>
+        ///  OnDragDrop can be overridden so that a Behavior can specify its own
+        ///  Drag/Drop rules.
+        /// </summary>
         public override void OnDragDrop(Glyph g, DragEventArgs e)
         {
-
             behaviorService.PopBehavior(this);
 
             try
@@ -286,7 +281,6 @@ namespace System.Windows.Forms.Design.Behavior
         // VSWhidbey #487816
         public void OnBeginDrag()
         {
-
             Adorner bodyAdorner = null;
             SelectionManager selMgr = (SelectionManager)serviceProvider.GetService(typeof(SelectionManager));
             if (selMgr != null)
@@ -311,12 +305,10 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 bodyAdorner.Glyphs.Remove(glyph);
             }
-
         }
 
         public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
         {
-
             bool altKeyPressed = Control.ModifierKeys == Keys.Alt;
 
             if (altKeyPressed && dragManager != null)
@@ -335,7 +327,6 @@ namespace System.Windows.Forms.Design.Behavior
             //don't do anything if the loc is the same
             if (newRectangle != lastRectangle)
             {
-
                 if (dragManager != null && targetAllowsSnapLines && !altKeyPressed)
                 {
                     lastOffset = dragManager.OnMouseMove(newRectangle, GenerateNewToolSnapLines(newRectangle));
@@ -388,6 +379,5 @@ namespace System.Windows.Forms.Design.Behavior
 
             return retValue;
         }
-
     }
 }

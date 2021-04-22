@@ -7,15 +7,13 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para>
-    ///       Provides a designer that can design components
-    ///       that extend ButtonBase.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>
+    ///  Provides a designer that can design components
+    ///  that extend ButtonBase.</para>
+    /// </summary>
     internal class RadioButtonDesigner : ButtonBaseDesigner
     {
-
-
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
             base.InitializeNewComponent(defaultValues);
@@ -26,9 +24,7 @@ namespace System.Windows.Forms.Design
             {
                 prop.SetValue(Component, true);
             }
-
         }
-
     }
 }
 

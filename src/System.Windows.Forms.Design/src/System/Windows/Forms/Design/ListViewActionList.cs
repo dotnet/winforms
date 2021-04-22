@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design
 {
     internal class ListViewActionList : DesignerActionList
     {
-        private ComponentDesigner _designer;
+        private readonly ComponentDesigner _designer;
         public ListViewActionList(ComponentDesigner designer) : base(designer.Component)
         {
             _designer = designer;

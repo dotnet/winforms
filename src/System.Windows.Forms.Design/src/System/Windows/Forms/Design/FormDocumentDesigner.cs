@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 ArrayList snapLines = null;
-                base.AddPaddingSnapLines(ref snapLines);
+                AddPaddingSnapLines(ref snapLines);
                 if (snapLines is null)
                 {
                     Debug.Fail("why did base.AddPaddingSnapLines return null?");
@@ -261,8 +261,8 @@ namespace System.Windows.Forms.Design
                     return;
                 }
 
-                float percY = ((float)newVar.Height) / ((float)baseVar.Height);
-                float percX = ((float)newVar.Width) / ((float)baseVar.Width);
+                float percY = newVar.Height / ((float)baseVar.Height);
+                float percX = newVar.Width / ((float)baseVar.Width);
                 form.Scale(percX, percY);
             }
         }
@@ -287,8 +287,8 @@ namespace System.Windows.Forms.Design
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 if (cs != null)
                 {
-                    cs.ComponentAdded -= new ComponentEventHandler(this.OnComponentAdded);
-                    cs.ComponentRemoved -= new ComponentEventHandler(this.OnComponentRemoved);
+                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 }
             }
 
@@ -337,8 +337,8 @@ namespace System.Windows.Forms.Design
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs != null)
             {
-                cs.ComponentAdded += new ComponentEventHandler(this.OnComponentAdded);
-                cs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             }
         }
 

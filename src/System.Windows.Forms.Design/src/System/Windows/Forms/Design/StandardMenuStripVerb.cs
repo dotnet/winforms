@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Here is where all the fun stuff starts.  We create the structure and apply the naming here.
         /// </summary>
-        private void CreateStandardMenuStrip(System.ComponentModel.Design.IDesignerHost host, MenuStrip tool)
+        private void CreateStandardMenuStrip(IDesignerHost host, MenuStrip tool)
         {
             // build the static menu items structure.
             string[][] menuItemNames = new string[][]

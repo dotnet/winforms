@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
@@ -14,9 +13,9 @@ using System.Text;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///     This class encapsulates the tab order UI for our form designer.
-    /// </devdoc>
+    /// <summary>
+    ///  This class encapsulates the tab order UI for our form designer.
+    /// </summary>
     [DesignTimeVisible(false)]
     [ToolboxItem(false)]
     internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
@@ -27,21 +26,21 @@ namespace System.Windows.Forms.Design
         private Rectangle[] tabGlyphs;
         private ArrayList tabComplete;
         private Hashtable tabNext;
-        private Font tabFont;
-        private StringBuilder drawString;
-        private Brush highlightTextBrush;
-        private Pen highlightPen;
-        private int selSize;
-        private Hashtable tabProperties;
-        private Region region = null;
-        private MenuCommand[] commands;
-        private MenuCommand[] newCommands;
-        private string decimalSep;
+        private readonly Font tabFont;
+        private readonly StringBuilder drawString;
+        private readonly Brush highlightTextBrush;
+        private readonly Pen highlightPen;
+        private readonly int selSize;
+        private readonly Hashtable tabProperties;
+        private Region region;
+        private readonly MenuCommand[] commands;
+        private readonly MenuCommand[] newCommands;
+        private readonly string decimalSep;
 
-        /// <devdoc>
-        ///     Creates a new tab order control that displays the tab order
-        ///     UI for a form.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates a new tab order control that displays the tab order
+        ///  UI for a form.
+        /// </summary>
         public TabOrder(IDesignerHost host)
         {
             this.host = host;
@@ -55,8 +54,9 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                tabFont = Control.DefaultFont;
+                tabFont = DefaultFont;
             }
+
             tabFont = new Font(tabFont, FontStyle.Bold);
 
             // And compute the proper highlight dimensions.
@@ -80,7 +80,6 @@ namespace System.Windows.Forms.Design
             {
                 decimalSep = ".";
             }
-
 
             tabProperties = new Hashtable();
 
@@ -106,7 +105,8 @@ namespace System.Windows.Forms.Design
                 hs.AddContextAttribute("Keyword", "TabOrderView", HelpKeywordType.FilterKeyword);
             }
 
-            commands = new MenuCommand[] {
+            commands = new MenuCommand[]
+            {
                 new MenuCommand(new EventHandler(OnKeyCancel),
                                 MenuCommands.KeyCancel),
 
@@ -132,7 +132,8 @@ namespace System.Windows.Forms.Design
                                 MenuCommands.KeySelectPrevious),
             };
 
-            newCommands = new MenuCommand[] {
+            newCommands = new MenuCommand[]
+            {
                 new MenuCommand(new EventHandler(OnKeyDefault),
                                 MenuCommands.KeyTabOrderSelect),
             };
@@ -161,16 +162,15 @@ namespace System.Windows.Forms.Design
             IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
             if (cs != null)
             {
-                cs.ComponentAdded += new ComponentEventHandler(this.OnComponentAddRemove);
-                cs.ComponentRemoved += new ComponentEventHandler(this.OnComponentAddRemove);
-                cs.ComponentChanged += new ComponentChangedEventHandler(this.OnComponentChanged);
+                cs.ComponentAdded += new ComponentEventHandler(OnComponentAddRemove);
+                cs.ComponentRemoved += new ComponentEventHandler(OnComponentAddRemove);
+                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.Dispose"]/*' />
-        /// <devdoc>
-        ///     Called when it is time for the tab order UI to go away.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when it is time for the tab order UI to go away.
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -210,9 +210,9 @@ namespace System.Windows.Forms.Design
                     IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
                     if (cs != null)
                     {
-                        cs.ComponentAdded -= new ComponentEventHandler(this.OnComponentAddRemove);
-                        cs.ComponentRemoved -= new ComponentEventHandler(this.OnComponentAddRemove);
-                        cs.ComponentChanged -= new ComponentChangedEventHandler(this.OnComponentChanged);
+                        cs.ComponentAdded -= new ComponentEventHandler(OnComponentAddRemove);
+                        cs.ComponentRemoved -= new ComponentEventHandler(OnComponentAddRemove);
+                        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
 
                     IHelpService hs = (IHelpService)host.GetService(typeof(IHelpService));
@@ -224,23 +224,21 @@ namespace System.Windows.Forms.Design
                     host = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.DrawTabs"]/*' />
-        /// <devdoc>
-        ///     this function does double duty:  it draws the tabs if fRegion is false, or it
-        ///     computes control region rects if fRegion is true (both require that we essentially
-        ///     "draw" the tabs)
-        /// </devdoc>
+        /// <summary>
+        ///  this function does double duty:  it draws the tabs if fRegion is false, or it
+        ///  computes control region rects if fRegion is true (both require that we essentially
+        ///  "draw" the tabs)
+        /// </summary>
         private void DrawTabs(IList tabs, Graphics gr, bool fRegion)
         {
             IEnumerator e = tabs.GetEnumerator();
             int iCtl = 0;
             Control ctl;
             Control parent;
-            Rectangle rc = Rectangle.Empty;
-            Size sz = Size.Empty;
             string str;
 
             Font font = tabFont;
@@ -279,6 +277,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
+            Rectangle rc;
             while (e.MoveNext())
             {
                 ctl = (Control)e.Current;
@@ -307,7 +306,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 str = drawString.ToString();
-                sz = Size.Ceiling(gr.MeasureString(str, font));
+                var sz = Size.Ceiling(gr.MeasureString(str, font));
                 rc.Width = sz.Width + 2;
                 rc.Height = sz.Height + 2;
 
@@ -343,6 +342,7 @@ namespace System.Windows.Forms.Design
                     foreBrush.Dispose();
                 }
             }
+
             if (fRegion)
             {
                 ctl = (Control)host.RootComponent;
@@ -352,11 +352,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.GetControlAtPoint"]/*' />
-        /// <devdoc>
-        ///     returns a control in the given tab vector that is at the given point, in
-        ///     screen coords.
-        /// </devdoc>
+        /// <summary>
+        ///  returns a control in the given tab vector that is at the given point, in
+        ///  screen coords.
+        /// </summary>
         private Control GetControlAtPoint(IList tabs, int x, int y)
         {
             IEnumerator e = tabs.GetEnumerator();
@@ -382,14 +381,14 @@ namespace System.Windows.Forms.Design
                     ctlFound = ctl;
                 }
             }
+
             return ctlFound;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.GetConvertedBounds"]/*' />
-        /// <devdoc>
-        ///     returns a rectangle in our own client space that represents the bounds
-        ///     if the given control
-        /// </devdoc>
+        /// <summary>
+        ///  returns a rectangle in our own client space that represents the bounds
+        ///  if the given control
+        /// </summary>
         private Rectangle GetConvertedBounds(Control ctl)
         {
             Control parent = ctl.Parent;
@@ -399,12 +398,11 @@ namespace System.Windows.Forms.Design
             return rc;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.GetMaxControlCount"]/*' />
-        /// <devdoc>
-        ///     returns the maximum valid control count for the given control.  This
-        ///     may be less than Control.getControlCount() because of invisible controls
-        ///     and our own control
-        /// </devdoc>
+        /// <summary>
+        ///  returns the maximum valid control count for the given control.  This
+        ///  may be less than Control.getControlCount() because of invisible controls
+        ///  and our own control
+        /// </summary>
         private int GetMaxControlCount(Control ctl)
         {
             int count = 0;
@@ -416,15 +414,15 @@ namespace System.Windows.Forms.Design
                     count++;
                 }
             }
+
             return count;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.GetSitedParent"]/*' />
-        /// <devdoc>
-        ///     Retrieves the next parent control that would be usable
-        ///     by the tab order UI.  We only want parents that are
-        ///     sited by the designer host.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the next parent control that would be usable
+        ///  by the tab order UI.  We only want parents that are
+        ///  sited by the designer host.
+        /// </summary>
         private Control GetSitedParent(Control child)
         {
             Control parent = child.Parent;
@@ -445,16 +443,16 @@ namespace System.Windows.Forms.Design
                 {
                     break;
                 }
+
                 parent = parent.Parent;
             }
 
             return parent;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.GetTabbing"]/*' />
-        /// <devdoc>
-        ///     recursively fills the given tab vector with a control list
-        /// </devdoc>
+        /// <summary>
+        ///  recursively fills the given tab vector with a control list
+        /// </summary>
         private void GetTabbing(Control ctl, IList tabs)
         {
             Control ctlTab;
@@ -462,7 +460,7 @@ namespace System.Windows.Forms.Design
             // Now actually count the controls.  We add them to the list in reverse
             // order because the Controls collection is in z-order, and our list
             // needs to be in reverse z-order.  When done, we want this list to be
-            // in z-order from back-most to top-most, and from parent-most to 
+            // in z-order from back-most to top-most, and from parent-most to
             // child-most.
             //
             int cnt = ctl.Controls.Count;
@@ -482,13 +480,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.GetTabbable"]/*' />
-        /// <devdoc>
-        ///     returns true if this component should show up in our tab list
-        /// </devdoc>
+        /// <summary>
+        ///  returns true if this component should show up in our tab list
+        /// </summary>
         private bool GetTabbable(Control control)
         {
-
             for (Control c = control; c != null; c = c.Parent)
             {
                 if (!c.Visible)
@@ -512,11 +508,10 @@ namespace System.Windows.Forms.Design
             return true;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnComponentAddRemove"]/*' />
-        /// <devdoc>
-        ///     Called in response to a component add or remove event.  Here we re-aquire our
-        ///     set of tabs.
-        /// </devdoc>
+        /// <summary>
+        ///  Called in response to a component add or remove event.  Here we re-aquire our
+        ///  set of tabs.
+        /// </summary>
         private void OnComponentAddRemove(object sender, ComponentEventArgs ce)
         {
             ctlHover = null;
@@ -527,23 +522,25 @@ namespace System.Windows.Forms.Design
             {
                 tabComplete.Clear();
             }
+
             if (tabNext != null)
             {
                 tabNext.Clear();
             }
+
             if (region != null)
             {
                 region.Dispose();
                 region = null;
             }
+
             Invalidate();
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnComponentChanged"]/*' />
-        /// <devdoc>
-        ///      Called in response to a component change event.  Here we update our
-        ///      tab order and redraw.
-        /// </devdoc>
+        /// <summary>
+        ///  Called in response to a component change event.  Here we update our
+        ///  tab order and redraw.
+        /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs ce)
         {
             tabControls = null;
@@ -553,13 +550,13 @@ namespace System.Windows.Forms.Design
                 region.Dispose();
                 region = null;
             }
+
             Invalidate();
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnKeyCancel"]/*' />
-        /// <devdoc>
-        ///      Closes the tab order UI.
-        /// </devdoc>
+        /// <summary>
+        ///  Closes the tab order UI.
+        /// </summary>
         private void OnKeyCancel(object sender, EventArgs e)
         {
             IMenuCommandService mcs = (IMenuCommandService)host.GetService(typeof(IMenuCommandService));
@@ -575,10 +572,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnKeyDefault"]/*' />
-        /// <devdoc>
-        ///      Sets the current tab order selection.
-        /// </devdoc>
+        /// <summary>
+        ///  Sets the current tab order selection.
+        /// </summary>
         private void OnKeyDefault(object sender, EventArgs e)
         {
             if (ctlHover != null)
@@ -588,40 +584,36 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnKeyNext"]/*' />
-        /// <devdoc>
-        ///      Selects the next component in the tab order.
-        /// </devdoc>
+        /// <summary>
+        ///  Selects the next component in the tab order.
+        /// </summary>
         private void OnKeyNext(object sender, EventArgs e)
         {
             RotateControls(true);
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnKeyPrevious"]/*' />
-        /// <devdoc>
-        ///      Selects the previous component in the tab order.
-        /// </devdoc>
+        /// <summary>
+        ///  Selects the previous component in the tab order.
+        /// </summary>
         private void OnKeyPrevious(object sender, EventArgs e)
         {
             RotateControls(false);
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseDoubleClick"]/*' />
-        /// <devdoc>
-        ///     This is called when the user double clicks on a component.  The typical
-        ///     behavior is to create an event handler for the component's default event
-        ///     and nativagate to the handler.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called when the user double clicks on a component.  The typical
+        ///  behavior is to create an event handler for the component's default event
+        ///  and nativagate to the handler.
+        /// </summary>
         public virtual void OnMouseDoubleClick(IComponent component)
         {
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseDown"]/*' />
-        /// <devdoc>
-        ///     This is called when a mouse button is depressed.  This will perform
-        ///     the default drag action for the selected components,  which is to
-        ///     move those components around by the mouse.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called when a mouse button is depressed.  This will perform
+        ///  the default drag action for the selected components,  which is to
+        ///  move those components around by the mouse.
+        /// </summary>
         public virtual void OnMouseDown(IComponent component, MouseButtons button, int x, int y)
         {
             if (ctlHover != null)
@@ -630,12 +622,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseDown1"]/*' />
-        /// <devdoc>
-        ///     Overrides control.OnMouseDown.  Here we set the tab index.  We must
-        ///     do this as well as the above OnMouseDown to take into account clicks
-        ///     in the tab index numbers.
-        /// </devdoc>
+        /// <summary>
+        ///  Overrides control.OnMouseDown.  Here we set the tab index.  We must
+        ///  do this as well as the above OnMouseDown to take into account clicks
+        ///  in the tab index numbers.
+        /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -645,19 +636,17 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseHover"]/*' />
-        /// <devdoc>
-        ///     This is called when the mouse momentarially hovers over the
-        ///     view for the given component.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called when the mouse momentarially hovers over the
+        ///  view for the given component.
+        /// </summary>
         public virtual void OnMouseHover(IComponent component)
         {
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseMove"]/*' />
-        /// <devdoc>
-        ///     This is called for each movement of the mouse.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called for each movement of the mouse.
+        /// </summary>
         public virtual void OnMouseMove(IComponent component, int x, int y)
         {
             if (tabControls != null)
@@ -667,19 +656,17 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseMove1"]/*' />
-        /// <devdoc>
-        ///     Overrides control.  We update our cursor here.  We must do this
-        ///     as well as the OnSetCursor to take into account mouse movements
-        ///     over the tab index numbers.
-        /// </devdoc>
+        /// <summary>
+        ///  Overrides control.  We update our cursor here.  We must do this
+        ///  as well as the OnSetCursor to take into account mouse movements
+        ///  over the tab index numbers.
+        /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
 
             if (tabGlyphs != null)
             {
-
                 Control ctl = null;
 
                 for (int i = 0; i < tabGlyphs.Length; i++)
@@ -698,11 +685,10 @@ namespace System.Windows.Forms.Design
             SetAppropriateCursor();
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnMouseUp"]/*' />
-        /// <devdoc>
-        ///     This is called when the user releases the mouse from a component.
-        ///     This will update the UI to reflect the release of the mouse.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called when the user releases the mouse from a component.
+        ///  This will update the UI to reflect the release of the mouse.
+        /// </summary>
         public virtual void OnMouseUp(IComponent component, MouseButtons button)
         {
         }
@@ -718,52 +704,53 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.Default;
             }
         }
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnSetCursor"]/*' />
-        /// <devdoc>
-        ///     This is called when the cursor for the given component should be updated.
-        ///     The mouse is always over the given component's view when this is called.
-        /// </devdoc>
+
+        /// <summary>
+        ///  This is called when the cursor for the given component should be updated.
+        ///  The mouse is always over the given component's view when this is called.
+        /// </summary>
         public virtual void OnSetCursor(IComponent component)
         {
             SetAppropriateCursor();
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OnPaint"]/*' />
-        /// <devdoc>
-        ///     Paints the tab control.
-        /// </devdoc>
+        /// <summary>
+        ///  Paints the tab control.
+        /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
 
             if (null == tabControls)
             {
-
                 tabControls = new ArrayList();
                 GetTabbing((Control)host.RootComponent, tabControls);
                 tabGlyphs = new Rectangle[tabControls.Count];
             }
+
             if (null == tabComplete)
             {
                 tabComplete = new ArrayList();
             }
+
             if (null == tabNext)
             {
                 tabNext = new Hashtable();
             }
+
             if (null == region)
             {
                 DrawTabs(tabControls, e.Graphics, true);
             }
+
             DrawTabs(tabControls, e.Graphics, false);
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OverrideInvoke"]/*' />
-        /// <devdoc>
-        ///     CommandSet will check with this handler on each status update
-        ///     to see if the handler wants to override the availability of
-        ///     this command.
-        /// </devdoc>
+        /// <summary>
+        ///  CommandSet will check with this handler on each status update
+        ///  to see if the handler wants to override the availability of
+        ///  this command.
+        /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
             for (int i = 0; i < commands.Length; i++)
@@ -778,15 +765,13 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.OverrideStatus"]/*' />
-        /// <devdoc>
-        ///     CommandSet will check with this handler on each status update
-        ///     to see if the handler wants to override the availability of
-        ///     this command.
-        /// </devdoc>
+        /// <summary>
+        ///  CommandSet will check with this handler on each status update
+        ///  to see if the handler wants to override the availability of
+        ///  this command.
+        /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
-
             for (int i = 0; i < commands.Length; i++)
             {
                 if (commands[i].CommandID.Equals(cmd.CommandID))
@@ -810,11 +795,10 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.RotateControls"]/*' />
-        /// <devdoc>
-        ///     Called when the keyboard has been pressed to rotate us
-        ///     through the control list.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the keyboard has been pressed to rotate us
+        ///  through the control list.
+        /// </summary>
         private void RotateControls(bool forward)
         {
             Control ctl = ctlHover;
@@ -830,16 +814,15 @@ namespace System.Windows.Forms.Design
                 if (GetTabbable(ctl))
                     break;
             }
+
             SetNewHover(ctl);
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.SetNewHover"]/*' />
-        /// <devdoc>
-        ///     Establishes a new hover control.
-        /// </devdoc>
+        /// <summary>
+        ///  Establishes a new hover control.
+        /// </summary>
         private void SetNewHover(Control ctl)
         {
-
             if (ctlHover != ctl)
             {
                 if (null != ctlHover)
@@ -849,6 +832,7 @@ namespace System.Windows.Forms.Design
                         region.Dispose();
                         region = null;
                     }
+
                     Rectangle rc = GetConvertedBounds(ctlHover);
                     rc.Inflate(selSize, selSize);
                     Invalidate(rc);
@@ -863,6 +847,7 @@ namespace System.Windows.Forms.Design
                         region.Dispose();
                         region = null;
                     }
+
                     Rectangle rc = GetConvertedBounds(ctlHover);
                     rc.Inflate(selSize, selSize);
                     Invalidate(rc);
@@ -870,13 +855,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\TabOrder.uex' path='docs/doc[@for="TabOrder.SetNextTabIndex"]/*' />
-        /// <devdoc>
-        ///     sets up the next tab index for the given control
-        /// </devdoc>
+        /// <summary>
+        ///  sets up the next tab index for the given control
+        /// </summary>
         // Standard 'catch all - rethrow critical' exception pattern
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void SetNextTabIndex(Control ctl)
         {
             if (tabControls != null)
@@ -898,7 +880,6 @@ namespace System.Windows.Forms.Design
                     PropertyDescriptor prop = (PropertyDescriptor)tabProperties[ctl];
                     if (prop != null)
                     {
-
                         int newIndex = index + 1;
 
                         if (prop.IsReadOnly)

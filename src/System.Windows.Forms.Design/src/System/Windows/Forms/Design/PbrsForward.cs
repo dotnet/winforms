@@ -10,10 +10,8 @@ namespace System.Windows.Forms.Design
 {
     internal partial class PbrsForward : IWindowTarget
     {
-
-        private Control target;
-        private IWindowTarget oldTarget;
-
+        private readonly Control target;
+        private readonly IWindowTarget oldTarget;
 
         // we save the last key down so we can recreate the last message if we need to activate
         // the properties window...
@@ -26,18 +24,17 @@ namespace System.Windows.Forms.Design
 
         private IMenuCommandService menuCommandSvc;
 
-        private IServiceProvider sp;
+        private readonly IServiceProvider sp;
 
-        private bool ignoreMessages = false;
+        private bool ignoreMessages;
 
         public PbrsForward(Control target, IServiceProvider sp)
         {
             this.target = target;
-            this.oldTarget = target.WindowTarget;
+            oldTarget = target.WindowTarget;
             this.sp = sp;
             target.WindowTarget = this;
         }
-
 
         private IMenuCommandService MenuCommandService
         {
@@ -47,6 +44,7 @@ namespace System.Windows.Forms.Design
                 {
                     menuCommandSvc = (IMenuCommandService)sp.GetService(typeof(IMenuCommandService));
                 }
+
                 return menuCommandSvc;
             }
         }
@@ -64,19 +62,16 @@ namespace System.Windows.Forms.Design
             target.WindowTarget = oldTarget;
         }
 
-
-        /// <include file='doc\IWindowTarget.uex' path='docs/doc[@for="IWindowTarget.OnHandleChange"]/*' />
-        /// <devdoc>
-        ///      Called when the window handle of the control has changed.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the window handle of the control has changed.
+        /// </summary>
         void IWindowTarget.OnHandleChange(IntPtr newHandle)
         {
         }
 
-        /// <include file='doc\IWindowTarget.uex' path='docs/doc[@for="IWindowTarget.OnMessage"]/*' />
-        /// <devdoc>
-        ///      Called to do control-specific processing for this window.
-        /// </devdoc>
+        /// <summary>
+        ///  Called to do control-specific processing for this window.
+        /// </summary>
         void IWindowTarget.OnMessage(ref Message m)
         {
             // Get the Designer for the currently selected item on the Designer...
@@ -84,7 +79,7 @@ namespace System.Windows.Forms.Design
             ignoreMessages = false;
 
             // Here lets query for the ISupportInSituService.
-            // If we find the service then ask if it has a designer which is interested 
+            // If we find the service then ask if it has a designer which is interested
             // in getting the keychars by querring the IgnoreMessages.
             if ((m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                || (m.Msg >= (int)User32.WM.IME_STARTCOMPOSITION && m.Msg <= (int)User32.WM.IME_COMPOSITION))
@@ -105,8 +100,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     // recreate the keystroke to the newly activated window
-                    IntPtr hWnd = IntPtr.Zero;
-
+                    IntPtr hWnd;
                     if (!ignoreMessages)
                     {
                         hWnd = User32.GetFocus();
@@ -122,6 +116,7 @@ namespace System.Windows.Forms.Design
                             hWnd = User32.GetFocus();
                         }
                     }
+
                     if (hWnd != m.HWnd)
                     {
                         foreach (BufferedKey bk in bufferedChars)
@@ -132,6 +127,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown.WParam, bk.KeyDown.LParam);
                                 }
+
                                 User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar.WParam, bk.KeyChar.LParam);
                                 if (bk.KeyUp.Msg != 0)
                                 {
@@ -144,16 +140,17 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     bufferedChars.Clear();
                     return;
 
                 case (int)User32.WM.KEYDOWN:
-                    this.lastKeyDown = m;
+                    lastKeyDown = m;
                     break;
 
                 case (int)User32.WM.IME_ENDCOMPOSITION:
                 case (int)User32.WM.KEYUP:
-                    this.lastKeyDown.Msg = 0;
+                    lastKeyDown.Msg = 0;
                     break;
 
                 case (int)User32.WM.CHAR:
@@ -168,6 +165,7 @@ namespace System.Windows.Forms.Design
                     {
                         bufferedChars = new ArrayList();
                     }
+
                     bufferedChars.Add(new BufferedKey(lastKeyDown, m, lastKeyDown));
 
                     if (!ignoreMessages && MenuCommandService != null)
@@ -202,7 +200,7 @@ namespace System.Windows.Forms.Design
                         // any activity that's in the queue to settle down before our characters are posted.
                         // to the queue.
                         //
-                        // we post because we need to allow the focus to actually happen before we send 
+                        // we post because we need to allow the focus to actually happen before we send
                         // our strokes so we know where to send them
                         //
                         // we can't use the wParam here because it may not be the actual window that needs
@@ -211,14 +209,14 @@ namespace System.Windows.Forms.Design
                         User32.PostMessageW(target.Handle, (User32.WM)WM_PRIVATE_POSTCHAR, IntPtr.Zero, IntPtr.Zero);
                         postCharMessage = false;
                     }
+
                     break;
             }
 
-            if (this.oldTarget != null)
+            if (oldTarget != null)
             {
                 oldTarget.OnMessage(ref m);
             }
         }
-
     }
 }

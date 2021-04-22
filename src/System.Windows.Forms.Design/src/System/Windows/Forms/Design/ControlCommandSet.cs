@@ -1,225 +1,209 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Design;
-using System.Runtime.InteropServices;
-using System.ComponentModel;
 using System.Diagnostics;
-using System;
 using System.Collections;
-using Microsoft.Win32;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Windows.Forms;
-using System.Windows.Forms.ComponentModel;
-using System.Windows.Forms.Design;
 using System.Windows.Forms.Design.Behavior;
 using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///      This class implements menu commands that are specific to designers that
-    ///      manipulate controls.
-    /// </devdoc>
+    /// <summary>
+    ///  This class implements menu commands that are specific to designers that
+    ///  manipulate controls.
+    /// </summary>
     internal class ControlCommandSet : CommandSet
     {
-        private CommandSetItem[] commandSet;
+        private readonly CommandSetItem[] commandSet;
         private TabOrder tabOrder;
-        private Control baseControl;
+        private readonly Control baseControl;
         private StatusCommandUI statusCommandUI; //used to update the StatusBarInfo.
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.ControlCommandSet"]/*' />
-        /// <devdoc>
-        ///     Creates a new CommandSet object.  This object implements the set
-        ///     of commands that the UI.Win32 form designer offers.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates a new CommandSet object.  This object implements the set
+        ///  of commands that the UI.Win32 form designer offers.
+        /// </summary>
 
         // Since we don't override GetService it is okay to suppress this.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ControlCommandSet(ISite site) : base(site)
         {
-
             statusCommandUI = new StatusCommandUI(site);
 
             // Establish our set of commands
             //
-            commandSet = new CommandSetItem[] {
-
+            commandSet = new CommandSetItem[]
+            {
                 // Allignment commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuAlignByPrimary),
-                                  MenuCommands.AlignLeft, true),
+                                  StandardCommands.AlignLeft, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuAlignByPrimary),
-                                  MenuCommands.AlignTop, true),
+                                  StandardCommands.AlignTop, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusControlsOnlySelectionAndGrid),
                                   new EventHandler(OnMenuAlignToGrid),
-                                  MenuCommands.AlignToGrid, true),
+                                  StandardCommands.AlignToGrid, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuAlignByPrimary),
-                                  MenuCommands.AlignBottom, true),
+                                  StandardCommands.AlignBottom, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuAlignByPrimary),
-                                  MenuCommands.AlignHorizontalCenters, true),
+                                  StandardCommands.AlignHorizontalCenters, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuAlignByPrimary),
-                                  MenuCommands.AlignRight, true),
+                                  StandardCommands.AlignRight, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuAlignByPrimary),
-                                  MenuCommands.AlignVerticalCenters, true),
-
+                                  StandardCommands.AlignVerticalCenters, true),
 
                 // Centering commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusControlsOnlySelection),
                                   new EventHandler(OnMenuCenterSelection),
-                                  MenuCommands.CenterHorizontally, true),
+                                  StandardCommands.CenterHorizontally, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusControlsOnlySelection),
                                   new EventHandler(OnMenuCenterSelection),
-                                  MenuCommands.CenterVertically, true),
-
+                                  StandardCommands.CenterVertically, true),
 
                 // Spacing commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.HorizSpaceConcatenate, true),
+                                  StandardCommands.HorizSpaceConcatenate, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.HorizSpaceDecrease, true),
+                                  StandardCommands.HorizSpaceDecrease, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.HorizSpaceIncrease, true),
+                                  StandardCommands.HorizSpaceIncrease, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.HorizSpaceMakeEqual, true),
+                                  StandardCommands.HorizSpaceMakeEqual, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.VertSpaceConcatenate, true),
+                                  StandardCommands.VertSpaceConcatenate, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.VertSpaceDecrease, true),
+                                  StandardCommands.VertSpaceDecrease, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.VertSpaceIncrease, true),
+                                  StandardCommands.VertSpaceIncrease, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectNonContained),
                                   new EventHandler(OnMenuSpacingCommand),
-                                  MenuCommands.VertSpaceMakeEqual, true),
-
+                                  StandardCommands.VertSpaceMakeEqual, true),
 
                 // Sizing commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuSizingCommand),
-                                  MenuCommands.SizeToControl, true),
+                                  StandardCommands.SizeToControl, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuSizingCommand),
-                                  MenuCommands.SizeToControlWidth, true),
+                                  StandardCommands.SizeToControlWidth, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
                                   new EventHandler(OnMenuSizingCommand),
-                                  MenuCommands.SizeToControlHeight, true),
+                                  StandardCommands.SizeToControlHeight, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusControlsOnlySelectionAndGrid),
                                   new EventHandler(OnMenuSizeToGrid),
-                                  MenuCommands.SizeToGrid, true),
-
+                                  StandardCommands.SizeToGrid, true),
 
                 // Z-Order commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusZOrder),
                                   new EventHandler(OnMenuZOrderSelection),
-                                  MenuCommands.BringToFront, true),
+                                  StandardCommands.BringToFront, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusZOrder),
                                   new EventHandler(OnMenuZOrderSelection),
-                                  MenuCommands.SendToBack, true),
+                                  StandardCommands.SendToBack, true),
 
                 // Miscellaneous commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusShowGrid),
                                   new EventHandler(OnMenuShowGrid),
-                                  MenuCommands.ShowGrid, true),
+                                  StandardCommands.ShowGrid, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusSnapToGrid),
                                   new EventHandler(OnMenuSnapToGrid),
-                                  MenuCommands.SnapToGrid, true),
+                                  StandardCommands.SnapToGrid, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusAnyControls),
                                   new EventHandler(OnMenuTabOrder),
-                                  MenuCommands.TabOrder, true),
+                                  StandardCommands.TabOrder, true),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusLockControls),
                                   new EventHandler(OnMenuLockControls),
-                                  MenuCommands.LockControls, true),
-
+                                  StandardCommands.LockControls, true),
 
                 // Keyboard commands
                 new CommandSetItem(
@@ -283,7 +267,6 @@ namespace System.Windows.Forms.Design
                                   MenuCommands.KeySelectPrevious),
             };
 
-
             if (MenuService != null)
             {
                 for (int i = 0; i < commandSet.Length; i++)
@@ -303,14 +286,12 @@ namespace System.Windows.Forms.Design
                     baseControl = comp;
                 }
             }
-
         }
 
-
-        /// <devdoc>
-        ///     Ensures there are no items in the selection that are children of another item in the selection
-        ///     
-        /// </devdoc>
+        /// <summary>
+        ///  Ensures there are no items in the selection that are children of another item in the selection
+        ///
+        /// </summary>
         private bool CheckSelectionParenting()
         {
             ICollection sel = SelectionService.GetSelectedComponents();
@@ -324,6 +305,7 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
+
                 itemHash.Add(obj, obj);
             }
 
@@ -346,7 +328,6 @@ namespace System.Windows.Forms.Design
                 //
                 for (Control parent = c.Parent; parent != null; parent = parent.Parent)
                 {
-
                     // if this parent has already been okayed, skip it.
                     //
                     if (parent == okParent)
@@ -366,16 +347,15 @@ namespace System.Windows.Forms.Design
                 //
                 okParent = c.Parent;
             }
+
             return true;
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.Dispose"]/*' />
-        /// <devdoc>
-        ///     Disposes of this object, removing all commands from the menu service.
-        /// </devdoc>
+        /// <summary>
+        ///  Disposes of this object, removing all commands from the menu service.
+        /// </summary>
 
         // We don't need to Dispose baseControl
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public override void Dispose()
         {
             if (MenuService != null)
@@ -386,29 +366,29 @@ namespace System.Windows.Forms.Design
                     commandSet[i].Dispose();
                 }
             }
+
             if (tabOrder != null)
             {
                 tabOrder.Dispose();
                 tabOrder = null;
             }
+
             statusCommandUI = null;
             base.Dispose();
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.GetSnapInformation"]/*' />
-        /// <devdoc>
-        ///      Retrieves the snap information for the given component.  
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the snap information for the given component.
+        /// </summary>
         protected override void GetSnapInformation(IDesignerHost host, IComponent component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty)
         {
-
             IComponent currentSnapComponent = null;
             IContainer container = component.Site.Container;
             PropertyDescriptor gridSizeProp = null;
             PropertyDescriptor currentSnapProp = null;
             PropertyDescriptorCollection props;
 
-            // This implementation is specific to controls.  It looks in the parent hierarchy for an object with a 
+            // This implementation is specific to controls.  It looks in the parent hierarchy for an object with a
             // snap property.  If it fails to find one, it just gets the base component.
             //
             Control ctrl = component as Control;
@@ -475,13 +455,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnKeyCancel"]/*' />
-        /// <devdoc>
-        ///     Called for the two cancel commands we support.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for the two cancel commands we support.
+        /// </summary>
         protected override bool OnKeyCancel(object sender)
         {
-
             // The base implementation here just checks to see if we are dragging.
             // If we are, then we abort the drag.
             //
@@ -496,14 +474,12 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        /// <include file='doc\SelectionBehavior.uex' path='docs/doc[@for="SelectionBehavior.GenerateSnapLines"]/*' />
-        /// <devdoc>
-        ///     Builds up an array of snaplines used during resize to adjust/snap
-        ///     the controls bounds.
-        /// </devdoc>        
+        /// <summary>
+        ///  Builds up an array of snaplines used during resize to adjust/snap
+        ///  the controls bounds.
+        /// </summary>
         private ArrayList GenerateSnapLines(SelectionRules rules, Control primaryControl, int directionOffsetX, int directionOffsetY)
         {
-
             ArrayList lines = new ArrayList(2);
 
             Point pt = BehaviorService.ControlToAdornerWindow(primaryControl);
@@ -546,19 +522,14 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-
             return lines;
         }
 
-
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnKeySize"]/*' />
-        /// <devdoc>
-        ///     Called for the various sizing commands we support.
-        /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
+        /// <summary>
+        ///  Called for the various sizing commands we support.
+        /// </summary>
         protected void OnKeySize(object sender, EventArgs e)
         {
-
             // Arrow keys.  Begin a drag if the selection isn't locked.
             //
             ISelectionService selSvc = SelectionService;
@@ -574,7 +545,6 @@ namespace System.Windows.Forms.Design
                         ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
                         if (des != null && ((des.SelectionRules & SelectionRules.Locked) == 0))
                         {
-
                             //Possibly flip our size adjustments depending on the dock prop of the control.
                             //EX: If the control is docked right, then shift+left arrow will cause
                             //the control's width to decrease when it should increase
@@ -643,8 +613,7 @@ namespace System.Windows.Forms.Design
                                 Debug.Fail("Unknown command mapped to OnKeySize: " + cmd.ToString());
                             }
 
-                            DesignerTransaction trans = null;
-
+                            DesignerTransaction trans;
                             if (selSvc.SelectionCount > 1)
                             {
                                 trans = host.CreateTransaction(string.Format(SR.DragDropSizeComponents, selSvc.SelectionCount));
@@ -654,14 +623,12 @@ namespace System.Windows.Forms.Design
                                 trans = host.CreateTransaction(string.Format(SR.DragDropSizeComponent, comp.Site.Name));
                             }
 
-
                             try
                             {
                                 //if we can find the behaviorservice, then we can use it and the SnapLineEngine to help us
                                 //move these controls...
                                 if (BehaviorService != null)
                                 {
-
                                     Control primaryControl = comp as Control;
 
                                     bool useSnapLines = BehaviorService.UseSnapLines;
@@ -675,7 +642,6 @@ namespace System.Windows.Forms.Design
                                     //If we CTRL+Arrow and we're using SnapLines - snap to the next location
                                     if (invertSnap && useSnapLines)
                                     {
-
                                         ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
 
                                         //create our snapline engine
@@ -709,7 +675,7 @@ namespace System.Windows.Forms.Design
 
                                         // If the parent is mirrored then we need to negate moveOffsetX.
                                         // This is because moveOffsetX assumes that the origin
-                                        // is upper left. That is, when moveOffsetX is positive, we 
+                                        // is upper left. That is, when moveOffsetX is positive, we
                                         // are moving right, negative when moving left.
 
                                         // The parent container's origin depends on its mirroring property.
@@ -724,13 +690,12 @@ namespace System.Windows.Forms.Design
                                         {
                                             moveOffsetX *= -1;
                                         }
-
                                     }
+
                                     //if we used a regular arrow key and we're in SnapToGrid mode...
 
                                     else if (!invertSnap && !useSnapLines)
                                     {
-
                                         bool snapOn = false;
                                         Size snapSize = Size.Empty;
                                         IComponent snapComponent = null;
@@ -754,7 +719,7 @@ namespace System.Windows.Forms.Design
 
                                                 // If the parent is mirrored then we need to negate moveOffsetX.
                                                 // This is because moveOffsetX assumes that the origin
-                                                // is upper left. That is, when moveOffsetX is positive, we 
+                                                // is upper left. That is, when moveOffsetX is positive, we
                                                 // are moving right, negative when moving left.
 
                                                 // The parent container's origin depends on its mirroring property.
@@ -778,11 +743,11 @@ namespace System.Windows.Forms.Design
                                                 {
                                                     moveOffsetX = newRect.Width - primaryControl.Width;
                                                 }
+
                                                 if (moveOffsetY != 0)
                                                 {
                                                     moveOffsetY = newRect.Height - primaryControl.Height;
                                                 }
-
                                             }
                                         }
                                         else
@@ -794,7 +759,6 @@ namespace System.Windows.Forms.Design
                                                 moveOffsetX *= -1;
                                             }
                                         }
-
                                     }
                                     else
                                     {
@@ -803,12 +767,10 @@ namespace System.Windows.Forms.Design
                                         {
                                             moveOffsetX *= -1;
                                         }
-
                                     }
 
                                     foreach (IComponent component in selSvc.GetSelectedComponents())
                                     {
-
                                         des = host.GetDesigner(component) as ControlDesigner;
                                         if (des != null && ((des.SelectionRules & rules) != rules))
                                         {
@@ -820,7 +782,6 @@ namespace System.Windows.Forms.Design
 
                                         if (control != null)
                                         {
-
                                             int offsetY = moveOffsetY; //we don't want to change moveOFfsetY for all subsequent controls, so cache it off
 
                                             if (checkForIntegralHeight)
@@ -828,7 +789,7 @@ namespace System.Windows.Forms.Design
                                                 PropertyDescriptor propIntegralHeight = TypeDescriptor.GetProperties(component)["IntegralHeight"];
                                                 if (propIntegralHeight != null)
                                                 {
-                                                    Object value = propIntegralHeight.GetValue(component);
+                                                    object value = propIntegralHeight.GetValue(component);
                                                     if (value is bool && (bool)value == true)
                                                     {
                                                         PropertyDescriptor propItemHeight = TypeDescriptor.GetProperties(component)["ItemHeight"];
@@ -852,7 +813,7 @@ namespace System.Windows.Forms.Design
                                         //change the Status information ....
                                         if (control == selSvc.PrimarySelection && statusCommandUI != null)
                                         {
-                                            statusCommandUI.SetStatusInformation(control as Component);
+                                            statusCommandUI.SetStatusInformation(control);
                                         }
                                     }
                                 }
@@ -874,17 +835,15 @@ namespace System.Windows.Forms.Design
                                     dragManager.RenderSnapLinesInternal();
                                 }
                             }
-
                         }
                     }
                 }
             }
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnKeySelect"]/*' />
-        /// <devdoc>
-        ///     Called for selection via the tab key.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for selection via the tab key.
+        /// </summary>
         protected void OnKeySelect(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -892,19 +851,17 @@ namespace System.Windows.Forms.Design
             RotateTabSelection(reverse);
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnKeySelect"]/*' />
-        /// <devdoc>
-        ///     Called for selection via the tab key.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for selection via the tab key.
+        /// </summary>
         protected override void OnKeyMove(object sender, EventArgs e)
         {
             base.OnKeyMove(sender, e);
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnMenuLockControls"]/*' />
-        /// <devdoc>
-        ///     Called when the lock controls menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the lock controls menu item is selected.
+        /// </summary>
         protected void OnMenuLockControls(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -928,8 +885,7 @@ namespace System.Windows.Forms.Design
                             MenuCommand cmd = (MenuCommand)sender;
                             bool targetValue = !cmd.Checked;
 
-
-                            // do the change                        
+                            // do the change
                             bool firstTry = true;
                             foreach (IComponent comp in components)
                             {
@@ -939,6 +895,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     continue;
                                 }
+
                                 if (prop.IsReadOnly)
                                 {
                                     continue;
@@ -949,6 +906,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     return;
                                 }
+
                                 firstTry = false;
 
                                 // do the change
@@ -971,22 +929,19 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
 #if UNUSED
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnMenuNever"]/*' />
-        /// <devdoc>
-        ///     This should never be called.  It is a placeholder for
-        ///     menu items that we temporarially want to disable.
-        /// </devdoc>
+        /// <summary>
+        ///  This should never be called.  It is a placeholder for
+        ///  menu items that we temporarially want to disable.
+        /// </summary>
         private void OnMenuNever(object sender, EventArgs e) {
             Debug.Fail("This menu item should never be invoked.");
         }
 #endif
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnMenuTabOrder"]/*' />
-        /// <devdoc>
-        ///     Called to display or destroy the tab order UI.
-        /// </devdoc>
+        /// <summary>
+        ///  Called to display or destroy the tab order UI.
+        /// </summary>
         private void OnMenuTabOrder(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -998,11 +953,12 @@ namespace System.Windows.Forms.Design
                     tabOrder.Dispose();
                     tabOrder = null;
                 }
+
                 cmd.Checked = false;
             }
             else
             {
-                //if we're creating a tab order view, set the focus to the base comp, 
+                //if we're creating a tab order view, set the focus to the base comp,
                 //this prevents things such as the menu editor service getting broken.
                 //
                 ISelectionService selSvc = SelectionService;
@@ -1015,6 +971,7 @@ namespace System.Windows.Forms.Design
                         selSvc.SetSelectedComponents(new object[] { baseComp }, SelectionTypes.Replace);
                     }
                 }
+
                 using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
                 {
                     tabOrder = new TabOrder((IDesignerHost)GetService(typeof(IDesignerHost)));
@@ -1024,11 +981,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnMenuZOrderSelection"]/*' />
-        /// <devdoc>
-        ///     Called when the zorder->send to back menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the zorder->send to back menu item is selected.
+        /// </summary>
         private void OnMenuZOrderSelection(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -1040,13 +995,13 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             ArrayList layoutParentList = new ArrayList();
             ArrayList parentList = new ArrayList();
             Cursor oldCursor = Cursor.Current;
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-
 
                 IComponentChangeService ccs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 IDesignerHost designerHost = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -1061,7 +1016,7 @@ namespace System.Windows.Forms.Design
                     object[] selectedComponents = new object[sel.Count];
                     sel.CopyTo(selectedComponents, 0);
 
-                    if (cmdID == MenuCommands.BringToFront)
+                    if (cmdID == StandardCommands.BringToFront)
                     {
                         batchString = string.Format(SR.CommandSetBringToFront, selectedComponents.Length);
                     }
@@ -1075,16 +1030,14 @@ namespace System.Windows.Forms.Design
 
                     trans = designerHost.CreateTransaction(batchString);
 
-
                     if (selectedComponents.Length > 0)
                     {
-
                         int len = selectedComponents.Length;
                         for (int i = len - 1; i >= 0; i--)
                         {
                             Control control = selectedComponents[i] as Control;
                             // Check for NestedComponents like SplitterPanels.
-                            // If SplitterPanel is selected and you choose the SendToBack (or BringToFront) option then it should 
+                            // If SplitterPanel is selected and you choose the SendToBack (or BringToFront) option then it should
                             // perform the operation on the Owner (namely SplitContainer)
                             IComponent selComp = selectedComponents[i] as IComponent;
                             if (selComp != null)
@@ -1100,6 +1053,7 @@ namespace System.Windows.Forms.Design
                                     }
                                 }
                             }
+
                             if (control != null)
                             {
                                 Control parent = control.Parent;
@@ -1115,7 +1069,7 @@ namespace System.Windows.Forms.Design
                                                 controlsProp = TypeDescriptor.GetProperties(parent)["Controls"];
                                                 if (controlsProp != null)
                                                 {
-                                                    // For a perf improvement, we will 
+                                                    // For a perf improvement, we will
                                                     // call OnComponentChanging only once per parent to make sure we do not do unnecessaru serialization for Undo
                                                     //this makes bulk operations way faster (see bug 532657)
 
@@ -1123,7 +1077,6 @@ namespace System.Windows.Forms.Design
                                                     ccs.OnComponentChanging(parent, controlsProp);
                                                 }
                                             }
-
                                         }
                                         catch (CheckoutException ex)
                                         {
@@ -1134,12 +1087,14 @@ namespace System.Windows.Forms.Design
                                                     trans.Cancel();
                                                 return;
                                             }
+
                                             throw;
                                         }
                                     }
+
                                     if (!layoutParentList.Contains(parent))
                                     {
-                                        // For a perf improvement, we will 
+                                        // For a perf improvement, we will
                                         // suspendlayout on parentControls.
                                         // Calling BringToFront() forces a layout on the parent each time
                                         // so for many controls this will happen a lot.
@@ -1150,9 +1105,10 @@ namespace System.Windows.Forms.Design
                                 }
                             }
                         }
+
                         for (int i = len - 1; i >= 0; i--)
                         {
-                            if (cmdID == MenuCommands.BringToFront)
+                            if (cmdID == StandardCommands.BringToFront)
                             {
                                 // we do this backwards to maintain zorder
                                 Control otherControl = selectedComponents[len - i - 1] as Control;
@@ -1162,7 +1118,7 @@ namespace System.Windows.Forms.Design
                                     otherControl.BringToFront();
                                 }
                             }
-                            else if (cmdID == MenuCommands.SendToBack)
+                            else if (cmdID == StandardCommands.SendToBack)
                             {
                                 Control control = selectedComponents[i] as Control;
                                 if (control != null)
@@ -1187,6 +1143,7 @@ namespace System.Windows.Forms.Design
                                 ccs.OnComponentChanged(parent, controlsProp, null, null);
                             }
                         }
+
                         foreach (Control parent in layoutParentList)
                         {
                             parent.ResumeLayout();
@@ -1203,12 +1160,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnStatusAnyControls"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled when there is one or more controls on the design
-        ///     surface.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled when there is one or more controls on the design
+        ///  surface.
+        /// </summary>
         protected void OnStatusAnyControls(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -1217,26 +1173,25 @@ namespace System.Windows.Forms.Design
             {
                 enabled = true;
             }
+
             cmd.Enabled = enabled;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusControlsOnlySelection"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled when one or more objects are selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled when one or more objects are selected.
+        /// </summary>
         protected void OnStatusControlsOnlySelection(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
             cmd.Enabled = (selCount > 0) && controlsOnlySelection;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusControlsOnlySelectionAndGrid"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled when one or more objects are selected and
-        ///     SnapToGrid is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled when one or more objects are selected and
+        ///  SnapToGrid is selected.
+        /// </summary>
         protected void OnStatusControlsOnlySelectionAndGrid(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -1256,11 +1211,10 @@ namespace System.Windows.Forms.Design
 
             cmd.Enabled = controlsOnlySelection;
             cmd.Checked = false;
-            PropertyDescriptor lockedProp = null;
 
             //Get the locked property of the base control first...
             //
-            lockedProp = TypeDescriptor.GetProperties(baseControl)["Locked"];
+            PropertyDescriptor lockedProp = TypeDescriptor.GetProperties(baseControl)["Locked"];
             if (lockedProp != null && ((bool)lockedProp.GetValue(baseControl)) == true)
             {
                 cmd.Checked = true;
@@ -1287,32 +1241,30 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnStatusMultiSelect"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled when more than one object is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled when more than one object is selected.
+        /// </summary>
         protected void OnStatusMultiSelect(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
             cmd.Enabled = controlsOnlySelection && selCount > 1;
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnStatusMultiSelectPrimary"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled when more than one object is selected and one
-        ///     of them is marked as the primary selection.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled when more than one object is selected and one
+        ///  of them is marked as the primary selection.
+        /// </summary>
         protected void OnStatusMultiSelectPrimary(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
             cmd.Enabled = controlsOnlySelection && selCount > 1 && primarySelection != null;
         }
 
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Ensures that all the selected controls have the same parent.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Ensures that all the selected controls have the same parent.
+        /// </summary>
         private void OnStatusMultiSelectNonContained(object sender, EventArgs e)
         {
             OnStatusMultiSelect(sender, e);
@@ -1323,23 +1275,19 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnStatusShowGrid"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  This event handler is
-        ///     dedicated to the ShowGrid item.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  This event handler is
+        ///  dedicated to the ShowGrid item.
+        /// </summary>
         protected void OnStatusShowGrid(object sender, EventArgs e)
         {
-
             if (site != null)
             {
-
                 IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
 
                 if (host != null)
                 {
-
                     IComponent baseComponent = host.RootComponent;
                     if (baseComponent != null && baseComponent is Control)
                     {
@@ -1354,20 +1302,16 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
-
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnStatusSnapToGrid"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  This event handler is
-        ///     dedicated to the SnapToGrid item.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  This event handler is
+        ///  dedicated to the SnapToGrid item.
+        /// </summary>
         protected void OnStatusSnapToGrid(object sender, EventArgs e)
         {
             if (site != null)
             {
-
                 IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
 
@@ -1387,18 +1331,16 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnStatusZOrder"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled for zordering.  The rules are:
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled for zordering.  The rules are:
         ///
-        ///      1) More than one component on the form
-        ///      2) At least one Control-derived component must be selected
-        ///      3) The form must not be selected
-        /// </devdoc>
+        ///  1) More than one component on the form
+        ///  2) At least one Control-derived component must be selected
+        ///  3) The form must not be selected
+        /// </summary>
         private void OnStatusZOrder(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -1444,21 +1386,19 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-
                 cmd.Enabled = enable;
                 return;
             }
+
             cmd.Enabled = false;
         }
 
-
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.OnUpdateCommandStatus"]/*' />
-        /// <devdoc>
-        ///      This is called when the selection has changed.  Anyone using CommandSetItems
-        ///      that need to update their status based on selection changes should override
-        ///      this and update their own commands at this time.  The base implementaion
-        ///      runs through all base commands and calls UpdateStatus on them.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called when the selection has changed.  Anyone using CommandSetItems
+        ///  that need to update their status based on selection changes should override
+        ///  this and update their own commands at this time.  The base implementaion
+        ///  runs through all base commands and calls UpdateStatus on them.
+        /// </summary>
         protected override void OnUpdateCommandStatus()
         {
             // Now whip through all of the commands and ask them to update.
@@ -1467,18 +1407,16 @@ namespace System.Windows.Forms.Design
             {
                 commandSet[i].UpdateStatus();
             }
+
             base.OnUpdateCommandStatus();
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.RotateParentSelection"]/*' />
-        /// <devdoc>
-        ///     Rotates the selection to the next parent element.  If backwards is
-        ///     set, this will rotate to the first child element.
-        /// </devdoc>
+        /// <summary>
+        ///  Rotates the selection to the next parent element.  If backwards is
+        ///  set, this will rotate to the first child element.
+        /// </summary>
         private void RotateParentSelection(bool backwards)
         {
-
-            Control current = null;
             object next = null;
 
             ISelectionService selSvc = SelectionService;
@@ -1492,6 +1430,7 @@ namespace System.Windows.Forms.Design
             IContainer container = host.Container;
 
             Control component = selSvc.PrimarySelection as Control;
+            Control current;
             if (component != null)
             {
                 current = component;
@@ -1526,19 +1465,21 @@ namespace System.Windows.Forms.Design
                     {
                         controlSiteContainer = DesignerUtils.CheckForNestedContainer(nextControl.Site.Container); // ...necessary to support SplitterPanel components
                     }
+
                     if (nextControl == null || nextControl.Site == null || controlSiteContainer != container)
                     {
                         next = current;
                     }
                 }
             }
+
             selSvc.SetSelectedComponents(new object[] { next }, SelectionTypes.Replace);
         }
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.RotateTabSelection"]/*' />
-        /// <devdoc>
-        ///     Rotates the selection to the element next in the tab index.  If backwards
-        ///     is set, this will rotate to the previous tab index.
-        /// </devdoc>
+
+        /// <summary>
+        ///  Rotates the selection to the element next in the tab index.  If backwards
+        ///  is set, this will rotate to the previous tab index.
+        /// </summary>
         private void RotateTabSelection(bool backwards)
         {
             Control ctl;
@@ -1552,12 +1493,13 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             baseCtl = (Control)host.RootComponent;
 
             // We must handle two cases of logic here.  We are responsible for handling
             // selection within ourself, and also for components on the tray.  For our
             // own tabbing around, we want to go by tab-order.  When we get to the end
-            // of the form, however, we go by selection order into the tray.  And, 
+            // of the form, however, we go by selection order into the tray.  And,
             // when we're at the end of the tray we start back at the form.  We must
             // reverse this logic to go backwards.
 
@@ -1566,8 +1508,7 @@ namespace System.Windows.Forms.Design
 
             if (targetSelection == null && ctl != null && (baseCtl.Contains(ctl) || baseCtl == currentSelection))
             {
-
-                // Our current selection is a control.  Select the next control in 
+                // Our current selection is a control.  Select the next control in
                 // the z-order.
                 //
                 while (null != (ctl = GetNextControlInTab(baseCtl, ctl, !backwards)))
@@ -1593,7 +1534,7 @@ namespace System.Windows.Forms.Design
                         ControlDesigner controlDesigner = host.GetDesigner(selection) as ControlDesigner;
                         // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again
                         // through compoenent tray since here we select only Components. Hence only
-                        // components that have ComponentDesigners should be selected via the ComponentTray. 
+                        // components that have ComponentDesigners should be selected via the ComponentTray.
                         while (controlDesigner != null)
                         {
                             // if the targetSelection from the Tray is a control .. try the next one.
@@ -1609,20 +1550,21 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 if (targetSelection == null)
                 {
                     targetSelection = baseCtl;
                 }
             }
+
             selSvc.SetSelectedComponents(new object[] { targetSelection }, SelectionTypes.Replace);
         }
 
         private Control GetNextControlInTab(Control basectl, Control ctl, bool forward)
         {
-
             if (forward)
             {
-                Control.ControlCollection ctlControls = (Control.ControlCollection)ctl.Controls;
+                Control.ControlCollection ctlControls = ctl.Controls;
 
                 if (ctlControls != null && ctlControls.Count > 0)
                 {
@@ -1637,6 +1579,7 @@ namespace System.Windows.Forms.Design
                             found = ctlControls[c];
                         }
                     }
+
                     return found;
                 }
 
@@ -1653,7 +1596,7 @@ namespace System.Windows.Forms.Design
                     //
                     int parentControlCount = 0;
 
-                    Control.ControlCollection parentControls = (Control.ControlCollection)p.Controls;
+                    Control.ControlCollection parentControls = p.Controls;
 
                     if (parentControls != null)
                     {
@@ -1662,7 +1605,6 @@ namespace System.Windows.Forms.Design
 
                     for (int c = 0; c < parentControlCount; c++)
                     {
-
                         // The logic for this is a bit lengthy, so I have broken it into separate
                         // caluses:
 
@@ -1670,19 +1612,16 @@ namespace System.Windows.Forms.Design
                         //
                         if (parentControls[c] != ctl)
                         {
-
                             // We are interested in controls with >= tab indexes to ctl.  We must include those
                             // controls with equal indexes to account for duplicate indexes.
                             //
                             if (parentControls[c].TabIndex >= targetIndex)
                             {
-
                                 // Check to see if this control replaces the "best match" we've already
                                 // found.
                                 //
                                 if (found == null || found.TabIndex > parentControls[c].TabIndex)
                                 {
-
                                     // Finally, check to make sure that if this tab index is the same as ctl,
                                     // that we've already encountered ctl in the z-order.  If it isn't the same,
                                     // than we're more than happy with it.
@@ -1715,7 +1654,6 @@ namespace System.Windows.Forms.Design
             {
                 if (ctl != basectl)
                 {
-
                     int targetIndex = ctl.TabIndex;
                     bool hitCtl = false;
                     Control found = null;
@@ -1726,7 +1664,7 @@ namespace System.Windows.Forms.Design
                     //
                     int parentControlCount = 0;
 
-                    Control.ControlCollection parentControls = (Control.ControlCollection)p.Controls;
+                    Control.ControlCollection parentControls = p.Controls;
 
                     if (parentControls != null)
                     {
@@ -1735,7 +1673,6 @@ namespace System.Windows.Forms.Design
 
                     for (int c = parentControlCount - 1; c >= 0; c--)
                     {
-
                         // The logic for this is a bit lengthy, so I have broken it into separate
                         // caluses:
 
@@ -1743,19 +1680,16 @@ namespace System.Windows.Forms.Design
                         //
                         if (parentControls[c] != ctl)
                         {
-
                             // We are interested in controls with <= tab indexes to ctl.  We must include those
                             // controls with equal indexes to account for duplicate indexes.
                             //
                             if (parentControls[c].TabIndex <= targetIndex)
                             {
-
                                 // Check to see if this control replaces the "best match" we've already
                                 // found.
                                 //
                                 if (found == null || found.TabIndex < parentControls[c].TabIndex)
                                 {
-
                                     // Finally, check to make sure that if this tab index is the same as ctl,
                                     // that we've already encountered ctl in the z-order.  If it isn't the same,
                                     // than we're more than happy with it.
@@ -1798,11 +1732,10 @@ namespace System.Windows.Forms.Design
 
                 // We found a control.  Walk into this control to find the proper sub control within it to select.
                 //
-                Control.ControlCollection ctlControls = (Control.ControlCollection)ctl.Controls;
+                Control.ControlCollection ctlControls = ctl.Controls;
 
                 while (ctlControls != null && ctlControls.Count > 0)
                 {
-
                     Control found = null;
 
                     // Cycle through the controls in reverse z-order looking for the one with the highest
@@ -1815,29 +1748,26 @@ namespace System.Windows.Forms.Design
                             found = ctlControls[c];
                         }
                     }
+
                     ctl = found;
 
-                    ctlControls = (Control.ControlCollection)ctl.Controls;
+                    ctlControls = ctl.Controls;
                 }
             }
 
             return ctl == basectl ? null : ctl;
         }
 
-        /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.ControlComparer"]/*' />
-        /// <devdoc>
-        ///    <para>Compares two controls for equality.</para>
-        /// </devdoc>
+        /// <summary>
+        ///  <para>Compares two controls for equality.</para>
+        /// </summary>
         private class ControlComparer : IComparer
         {
-
-            /// <include file='doc\ControlCommandSet.uex' path='docs/doc[@for="ControlCommandSet.ControlComparer.Compare"]/*' />
-            /// <devdoc>
-            ///    <para>Compares two controls for equality.</para>
-            /// </devdoc>
+            /// <summary>
+            ///  <para>Compares two controls for equality.</para>
+            /// </summary>
             public int Compare(object x, object y)
             {
-
                 // we want to sort items here based on their z-order
                 //
 

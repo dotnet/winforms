@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design
                 {
                     BackColor = Color.Transparent,
                     ForeColor = ActionPanel.TitleBarTextColor,
-                    TextAlign = Drawing.ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
                     UseMnemonic = false
                 };
 
@@ -44,7 +44,7 @@ namespace System.ComponentModel.Design
                 {
                     BackColor = Color.Transparent,
                     ForeColor = ActionPanel.TitleBarTextColor,
-                    TextAlign = Drawing.ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
                     UseMnemonic = false
                 };
 

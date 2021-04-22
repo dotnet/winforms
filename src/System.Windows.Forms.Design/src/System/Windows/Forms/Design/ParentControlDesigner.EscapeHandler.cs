@@ -8,31 +8,27 @@ namespace System.Windows.Forms.Design
 {
     public partial class ParentControlDesigner
     {
-        /// <include file='doc\ParentControlDesigner.uex' path='docs/doc[@for="ParentControlDesigner.EscapeHandler"]/*' />
-        /// <devdoc>
-        ///      This class overrides the escape command so that we can escape
-        ///      out of our private drags.
-        /// </devdoc>
+        /// <summary>
+        ///  This class overrides the escape command so that we can escape
+        ///  out of our private drags.
+        /// </summary>
         private class EscapeHandler : IMenuStatusHandler
         {
-            private ParentControlDesigner designer;
+            private readonly ParentControlDesigner designer;
 
-            /// <include file='doc\ParentControlDesigner.uex' path='docs/doc[@for="ParentControlDesigner.EscapeHandler.EscapeHandler"]/*' />
-            /// <devdoc>
-            ///      Creates a new escape handler.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new escape handler.
+            /// </summary>
             public EscapeHandler(ParentControlDesigner designer)
             {
                 this.designer = designer;
-
             }
 
-            /// <include file='doc\ParentControlDesigner.uex' path='docs/doc[@for="ParentControlDesigner.EscapeHandler.OverrideInvoke"]/*' />
-            /// <devdoc>
-            ///     CommandSet will check with this handler on each status update
-            ///     to see if the handler wants to override the availability of
-            ///     this command.
-            /// </devdoc>
+            /// <summary>
+            ///  CommandSet will check with this handler on each status update
+            ///  to see if the handler wants to override the availability of
+            ///  this command.
+            /// </summary>
             public bool OverrideInvoke(MenuCommand cmd)
             {
                 if (cmd.CommandID.Equals(MenuCommands.KeyCancel))
@@ -44,12 +40,11 @@ namespace System.Windows.Forms.Design
                 return false;
             }
 
-            /// <include file='doc\ParentControlDesigner.uex' path='docs/doc[@for="ParentControlDesigner.EscapeHandler.OverrideStatus"]/*' />
-            /// <devdoc>
-            ///     CommandSet will check with this handler on each status update
-            ///     to see if the handler wants to override the availability of
-            ///     this command.
-            /// </devdoc>
+            /// <summary>
+            ///  CommandSet will check with this handler on each status update
+            ///  to see if the handler wants to override the availability of
+            ///  this command.
+            /// </summary>
             public bool OverrideStatus(MenuCommand cmd)
             {
                 if (cmd.CommandID.Equals(MenuCommands.KeyCancel))

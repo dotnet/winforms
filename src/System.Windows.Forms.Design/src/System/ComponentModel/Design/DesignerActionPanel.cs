@@ -879,7 +879,7 @@ namespace System.ComponentModel.Design
             {
                 if (_lines[i] is TextBoxPropertyLine line)
                 {
-                    editXPos = Math.Max(editXPos, ((TextBoxPropertyLine)line).GetEditRegionXPos());
+                    editXPos = Math.Max(editXPos, line.GetEditRegionXPos());
                 }
             }
 

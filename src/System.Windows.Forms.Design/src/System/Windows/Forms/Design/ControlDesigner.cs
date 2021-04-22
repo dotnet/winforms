@@ -162,7 +162,7 @@ namespace System.Windows.Forms.Design
         protected virtual bool EnableDragRect => false;
 
         /// <summary>
-        ///     Gets / Sets this controls locked property
+        ///  Gets / Sets this controls locked property
         /// </summary>
         private bool Locked
         {
@@ -880,9 +880,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Demand creates the StandardBehavior related to this
-        ///     ControlDesigner.  This is used to associate the designer's
-        ///     selection glyphs to a common Behavior (resize in this case).
+        ///  Demand creates the StandardBehavior related to this
+        ///  ControlDesigner.  This is used to associate the designer's
+        ///  selection glyphs to a common Behavior (resize in this case).
         /// </summary>
         internal virtual Behavior.Behavior StandardBehavior => _resizeBehavior ??= new ResizeBehavior(Component.Site);
 
@@ -1599,10 +1599,10 @@ namespace System.Windows.Forms.Design
         ///
         ///  1.  If the toolbox service has a tool selected, it will allow the toolbox service to set the cursor.
         ///  2.  If the selection UI service shows a locked selection, or if there is no location property on the
-        ///       control, then the default arrow will be set.
+        ///  control, then the default arrow will be set.
         ///  3.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
         ///  4.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four
-        ///       headed arrow.
+        ///  headed arrow.
         /// </remarks>
         protected virtual void OnSetCursor()
         {

@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Items OnClick event, to select the Parent Control.
             /// </summary>
-            protected override void OnClick(System.EventArgs e)
+            protected override void OnClick(EventArgs e)
             {
                 if (_serviceProvider.GetService(typeof(ISelectionService)) is ISelectionService selectionService)
                 {

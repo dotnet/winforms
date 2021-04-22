@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design
 {
     internal class TreeViewActionList : DesignerActionList
     {
-        private TreeViewDesigner _designer;
+        private readonly TreeViewDesigner _designer;
         public TreeViewActionList(TreeViewDesigner designer) : base(designer.Component)
         {
             _designer = designer;

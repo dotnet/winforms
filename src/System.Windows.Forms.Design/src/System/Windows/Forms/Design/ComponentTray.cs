@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Design
 
         private void ResetTrayControls()
         {
-            ControlCollection children = (ControlCollection)Controls;
+            ControlCollection children = Controls;
             if (children is null)
             {
                 return;
@@ -655,7 +655,7 @@ namespace System.Windows.Forms.Design
 
         void ISelectionUIHandler.ShowContextMenu(IComponent component)
         {
-            Point cur = Control.MousePosition;
+            Point cur = MousePosition;
             OnContextMenu(cur.X, cur.Y, true);
         }
 
@@ -1153,8 +1153,8 @@ namespace System.Windows.Forms.Design
 
                 if (mouseDragTool != null)
                 {
-                    Debug.Assert(0 != (int)(de.AllowedEffect & (DragDropEffects.Move | DragDropEffects.Copy)), "DragDropEffect.Move | .Copy isn't allowed?");
-                    if ((int)(de.AllowedEffect & DragDropEffects.Move) != 0)
+                    Debug.Assert(0 != (de.AllowedEffect & (DragDropEffects.Move | DragDropEffects.Copy)), "DragDropEffect.Move | .Copy isn't allowed?");
+                    if ((de.AllowedEffect & DragDropEffects.Move) != 0)
                     {
                         de.Effect = DragDropEffects.Move;
                     }
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms.Design
         {
             if (mouseDragTool != null)
             {
-                Debug.Assert(0 != (int)(de.AllowedEffect & DragDropEffects.Copy), "DragDropEffect.Move isn't allowed?");
+                Debug.Assert(0 != (de.AllowedEffect & DragDropEffects.Copy), "DragDropEffect.Move isn't allowed?");
                 de.Effect = DragDropEffects.Copy;
             }
             else
@@ -1672,7 +1672,7 @@ namespace System.Windows.Forms.Design
                     if (x == -1 && y == -1)
                     {
                         // for shift-F10
-                        Point mouse = Control.MousePosition;
+                        Point mouse = MousePosition;
                         x = mouse.X;
                         y = mouse.Y;
                     }
@@ -1713,7 +1713,7 @@ namespace System.Windows.Forms.Design
                     IMenuCommandService mcs = MenuService;
                     if (mcs != null)
                     {
-                        tabOrderCommand = mcs.FindCommand(MenuCommands.TabOrder);
+                        tabOrderCommand = mcs.FindCommand(StandardCommands.TabOrder);
                     }
                 }
 
@@ -2629,7 +2629,7 @@ namespace System.Windows.Forms.Design
                         if (x == -1 && y == -1)
                         {
                             // for shift-F10
-                            Point mouse = Control.MousePosition;
+                            Point mouse = MousePosition;
                             x = mouse.X;
                             y = mouse.Y;
                         }
@@ -2993,14 +2993,14 @@ namespace System.Windows.Forms.Design
                 {
                     if (dataObj is ComponentDataObjectWrapper cdow)
                     {
-                        ComponentDataObject cdo = (ComponentDataObject)cdow.InnerData;
+                        ComponentDataObject cdo = cdow.InnerData;
                         comps = cdo.Components;
                     }
                     else
                     {
                         try
                         {
-                            object serializationData = dataObj.GetData(OleDragDropHandler.DataFormat, true);
+                            object serializationData = dataObj.GetData(DataFormat, true);
                             if (serializationData is null)
                             {
                                 return false;

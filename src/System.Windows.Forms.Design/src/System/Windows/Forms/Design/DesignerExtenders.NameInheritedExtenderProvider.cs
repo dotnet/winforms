@@ -8,27 +8,25 @@ namespace System.Windows.Forms.Design
 {
     internal partial class DesignerExtenders
     {
-        /// <devdoc>
-        ///      This extender provider offers up read-only versions of "Name" property
-        ///      for inherited components.
-        /// </devdoc>
+        /// <summary>
+        ///  This extender provider offers up read-only versions of "Name" property
+        ///  for inherited components.
+        /// </summary>
         private class NameInheritedExtenderProvider : NameExtenderProvider
         {
-
-            /// <devdoc>
-            ///      Creates a new DocumentInheritedExtenderProvider.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new DocumentInheritedExtenderProvider.
+            /// </summary>
             internal NameInheritedExtenderProvider()
             {
             }
 
-            /// <devdoc>
-            ///     Determines if ths extender provider can extend the given object.  We extend
-            ///     all objects, so we always return true.
-            /// </devdoc>
+            /// <summary>
+            ///  Determines if ths extender provider can extend the given object.  We extend
+            ///  all objects, so we always return true.
+            /// </summary>
             public override bool CanExtend(object o)
             {
-
                 // We never extend the root
                 //
                 IComponent baseComp = GetBaseComponent(o);

@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
@@ -114,7 +113,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by
-        ///  the <see cref='System.Windows.Forms.Design.ComponentDocumentDesigner' />.
+        ///  the <see cref='ComponentDocumentDesigner' />.
         /// </summary>
         protected override void Dispose(bool disposing)
         {

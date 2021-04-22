@@ -35,7 +35,7 @@ namespace System.ComponentModel.Design
                     BackColor = Color.Transparent,
                     LinkBehavior = LinkBehavior.HoverUnderline,
                     LinkColor = ActionPanel.LinkColor,
-                    TextAlign = Drawing.ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
                     UseMnemonic = false,
                     VisitedLinkColor = ActionPanel.LinkColor
                 };

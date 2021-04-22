@@ -22,29 +22,26 @@ namespace System.Windows.Forms.Design
         private class AxToolboxItem : ToolboxItem
         {
             private string clsid;
-            private Type axctlType = null;
-            private string version = String.Empty;
+            private Type axctlType;
+            private string version = string.Empty;
 
             public AxToolboxItem(string clsid) : base(typeof(AxHost))
             {
                 this.clsid = clsid;
-                this.Company = null; //we don't get any company info for ax controls.
+                Company = null; //we don't get any company info for ax controls.
                 LoadVersionInfo();
             }
 
             // Since we don't call the base constructor here, which does call Deserialize which we
             // override, we should be okay.
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             private AxToolboxItem(SerializationInfo info, StreamingContext context)
             {
                 Deserialize(info, context);
-
             }
 
-            /// <include file='doc\ToolboxItem.uex' path='docs/doc[@for="ToolboxItem.ComponentType"]/*' />
-            /// <devdoc>
-            ///     The Component Type is ".Net Component" -- unless otherwise specified by a derived toolboxitem
-            /// </devdoc>
+            /// <summary>
+            ///  The Component Type is ".Net Component" -- unless otherwise specified by a derived toolboxitem
+            /// </summary>
             public override string ComponentType
             {
                 get
@@ -75,18 +72,17 @@ namespace System.Windows.Forms.Design
                         version = (string)verKey.GetValue("");
                         verKey.Close();
                     }
+
                     key.Close();
                 }
             }
 
-            /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.AxToolboxItem.CreateComponentsCore"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// <para>Creates an instance of the ActiveX control. Calls VS7 project system
             /// to generate the wrappers if they are needed..</para>
-            /// </devdoc>
+            /// </summary>
             protected override IComponent[] CreateComponentsCore(IDesignerHost host)
             {
-                IComponent[] comps = null;
                 Debug.Assert(host != null, "Designer host is null!!!");
 
                 // Get the DTE References object
@@ -102,7 +98,7 @@ namespace System.Windows.Forms.Design
                         args[0] = "{" + tlibAttr.guid.ToString() + "}";
                         args[1] = (int)tlibAttr.wMajorVerNum;
                         args[2] = (int)tlibAttr.wMinorVerNum;
-                        args[3] = (int)tlibAttr.lcid;
+                        args[3] = tlibAttr.lcid;
 
                         args[4] = "";
                         object tlbRef = references.GetType().InvokeMember("AddActiveX", BindingFlags.InvokeMethod | BindingFlags.Public | BindingFlags.Instance, null, references, args, CultureInfo.InvariantCulture);
@@ -113,16 +109,15 @@ namespace System.Windows.Forms.Design
                         Debug.Assert(axRef != null, "Null reference returned by AddActiveX (aximp) by the project system for: " + clsid);
 
                         axctlType = GetAxTypeFromReference(axRef, host);
-
                     }
                     catch (TargetInvocationException tie)
                     {
-                        Debug.WriteLineIf(DocumentDesigner.AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + tie.InnerException);
+                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + tie.InnerException);
                         throw tie.InnerException;
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLineIf(DocumentDesigner.AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + e);
+                        Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + e);
                         throw;
                     }
                 }
@@ -139,10 +134,11 @@ namespace System.Windows.Forms.Design
                     {
                         uiSvc.ShowError(SR.AxImportFailed);
                     }
-                    return new IComponent[0];
+
+                    return Array.Empty<IComponent>();
                 }
 
-                comps = new IComponent[1];
+                var comps = new IComponent[1];
                 try
                 {
                     comps[0] = host.CreateComponent(axctlType);
@@ -157,22 +153,21 @@ namespace System.Windows.Forms.Design
                 return comps;
             }
 
-            /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.AxToolboxItem.Deserialize"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// <para>Loads the state of this 'AxToolboxItem'
             /// from the stream.</para>
-            /// </devdoc>
+            /// </summary>
             protected override void Deserialize(SerializationInfo info, StreamingContext context)
             {
                 base.Deserialize(info, context);
                 clsid = info.GetString("Clsid");
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets hold of the DTE Reference object and from there, opens the assembly of the
             /// ActiveX control we want to create. It then walks through all AxHost derived classes
             /// in that assembly, and returns the type that matches our control's CLSID.</para>
-            /// </devdoc>
+            /// </summary>
             private Type GetAxTypeFromReference(object reference, IDesignerHost host)
             {
                 string path = (string)reference.GetType().InvokeMember("Path", BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance, null, reference, null, CultureInfo.InvariantCulture);
@@ -197,10 +192,10 @@ namespace System.Windows.Forms.Design
                 return GetAxTypeFromAssembly(a);
             }
 
-            /// <devdoc>
-            /// <para>Walks through all AxHost derived classes in the given assembly, 
+            /// <summary>
+            /// <para>Walks through all AxHost derived classes in the given assembly,
             /// and returns the type that matches our control's CLSID.</para>
-            /// </devdoc>
+            /// </summary>
             private Type GetAxTypeFromAssembly(Assembly a)
             {
                 Type[] types = a.GetTypes();
@@ -217,7 +212,7 @@ namespace System.Windows.Forms.Design
                     Debug.Assert(attrs != null && attrs.Length == 1, "Invalid number of GuidAttributes found on: " + t.FullName);
 
                     AxHost.ClsidAttribute guid = (AxHost.ClsidAttribute)attrs[0];
-                    if (String.Equals(guid.Value, clsid, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(guid.Value, clsid, StringComparison.OrdinalIgnoreCase))
                     {
                         return t;
                     }
@@ -226,19 +221,18 @@ namespace System.Windows.Forms.Design
                 return null;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the References collection object from the designer host. The steps are:
-            ///     Get the ProjectItem from the IDesignerHost.
-            ///     Get the Containing Project of the ProjectItem.
-            ///     Get the VSProject of the Containing Project.
-            ///     Get the References property of the VSProject.</para>
-            /// </devdoc>
+            ///  Get the ProjectItem from the IDesignerHost.
+            ///  Get the Containing Project of the ProjectItem.
+            ///  Get the VSProject of the Containing Project.
+            ///  Get the References property of the VSProject.</para>
+            /// </summary>
             private object GetReferences(IDesignerHost host)
             {
                 Debug.Assert(host != null, "Null Designer Host");
 
                 Type type;
-                object ext = null;
                 type = Type.GetType("EnvDTE.ProjectItem, " + AssemblyRef.EnvDTE);
 
                 if (type == null)
@@ -246,7 +240,7 @@ namespace System.Windows.Forms.Design
                     return null;
                 }
 
-                ext = host.GetService(type);
+                object ext = host.GetService(type);
                 if (ext == null)
                     return null;
 
@@ -264,16 +258,16 @@ namespace System.Windows.Forms.Design
                 return references;
             }
 
-            /// <devdoc>
+            /// <summary>
             /// <para>Gets the TypeLibAttr corresponding to the TLB containing our ActiveX control.</para>
-            /// </devdoc>
+            /// </summary>
             private TYPELIBATTR GetTypeLibAttr()
             {
                 string controlKey = "CLSID\\" + clsid;
                 RegistryKey key = Registry.ClassesRoot.OpenSubKey(controlKey);
                 if (key == null)
                 {
-                    if (DocumentDesigner.AxToolSwitch.TraceVerbose)
+                    if (AxToolSwitch.TraceVerbose)
                         Debug.WriteLine("No registry key found for: " + controlKey);
                     throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                 }
@@ -281,10 +275,6 @@ namespace System.Windows.Forms.Design
                 // Load the typelib into memory.
                 //
                 ITypeLib pTLB = null;
-
-                // Try to get the TypeLib's Guid.
-                //
-                Guid tlbGuid = Guid.Empty;
 
                 // Open the key for the TypeLib
                 //
@@ -297,20 +287,23 @@ namespace System.Windows.Forms.Design
                     RegistryKey verKey = key.OpenSubKey("Version");
                     Debug.Assert(verKey != null, "No version registry key found for: " + controlKey);
 
-                    short majorVer = -1;
-                    short minorVer = -1;
                     string ver = (string)verKey.GetValue("");
                     int dot = ver.IndexOf('.');
+
+                    short majorVer;
+
+                    short minorVer;
                     if (dot == -1)
                     {
-                        majorVer = Int16.Parse(ver, CultureInfo.InvariantCulture);
+                        majorVer = short.Parse(ver, CultureInfo.InvariantCulture);
                         minorVer = 0;
                     }
                     else
                     {
-                        majorVer = Int16.Parse(ver.Substring(0, dot), CultureInfo.InvariantCulture);
-                        minorVer = Int16.Parse(ver.Substring(dot + 1, ver.Length - dot - 1), CultureInfo.InvariantCulture);
+                        majorVer = short.Parse(ver.Substring(0, dot), CultureInfo.InvariantCulture);
+                        minorVer = short.Parse(ver.Substring(dot + 1, ver.Length - dot - 1), CultureInfo.InvariantCulture);
                     }
+
                     Debug.Assert(majorVer > 0 && minorVer >= 0, "No Major version number found for: " + controlKey);
                     verKey.Close();
 
@@ -333,7 +326,6 @@ namespace System.Windows.Forms.Design
                             throw;
                         }
                     }
-
                 }
 
                 // Try to load the TLB directly from the InprocServer32.
@@ -382,17 +374,15 @@ namespace System.Windows.Forms.Design
                 {
                     throw new ArgumentException(string.Format(SR.AXNotRegistered, controlKey.ToString()));
                 }
-
             }
 
-            /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.AxToolboxItem.Serialize"]/*' />
-            /// <devdoc>
+            /// <summary>
             /// <para>Saves the state of this 'AxToolboxItem' to
-            ///    the specified serialization info.</para>
-            /// </devdoc>
+            ///  the specified serialization info.</para>
+            /// </summary>
             protected override void Serialize(SerializationInfo info, StreamingContext context)
             {
-                if (DocumentDesigner.AxToolSwitch.TraceVerbose)
+                if (AxToolSwitch.TraceVerbose)
                     Debug.WriteLine("Serializing AxToolboxItem:" + clsid);
                 base.Serialize(info, context);
                 info.AddValue("Clsid", clsid);

@@ -7,26 +7,25 @@ using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///     This class provides the Modifiers property to components.  It is shared between
-    ///     the document designer and the component document designer.
-    /// </devdoc>
+    /// <summary>
+    ///  This class provides the Modifiers property to components.  It is shared between
+    ///  the document designer and the component document designer.
+    /// </summary>
     internal partial class DesignerExtenders
     {
-
         private IExtenderProvider[] providers;
         private IExtenderProviderService extenderService;
 
-        /// <include file='doc\DesignerExtenders.uex' path='docs/doc[@for="DesignerExtenders.AddExtenderProviders"]/*' />
-        /// <devdoc>
-        ///     This is called by a root designer to add the correct extender providers.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called by a root designer to add the correct extender providers.
+        /// </summary>
         public DesignerExtenders(IExtenderProviderService ex)
         {
-            this.extenderService = ex;
+            extenderService = ex;
             if (providers == null)
             {
-                providers = new IExtenderProvider[] {
+                providers = new IExtenderProvider[]
+                {
                     new NameExtenderProvider(),
                     new NameInheritedExtenderProvider()
                 };
@@ -38,11 +37,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\DesignerExtenders.uex' path='docs/doc[@for="DesignerExtenders.RemoveExtenderProviders"]/*' />
-        /// <devdoc>
-        ///      This is called at the appropriate time to remove any extra extender
-        ///      providers previously added to the designer host.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called at the appropriate time to remove any extra extender
+        ///  providers previously added to the designer host.
+        /// </summary>
         public void Dispose()
         {
             if (extenderService != null && providers != null)

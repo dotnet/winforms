@@ -9,20 +9,19 @@ using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///     The RichTextBoxDesigner provides rich designtime behavior for the
-    ///     RichTextBox control.
-    /// </devdoc>
+    /// <summary>
+    ///  The RichTextBoxDesigner provides rich designtime behavior for the
+    ///  RichTextBox control.
+    /// </summary>
     internal class RichTextBoxDesigner : TextBoxBaseDesigner
     {
-
         private DesignerActionListCollection _actionLists;
 
-        /// <devdoc>
-        ///     Called when the designer is intialized.  This allows the designer to provide some
-        ///     meaningful default values in the control.  The default implementation of this
-        ///     sets the control's text to its name.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the designer is intialized.  This allows the designer to provide some
+        ///  meaningful default values in the control.  The default implementation of this
+        ///  sets the control's text to its name.
+        /// </summary>
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
             base.InitializeNewComponent(defaultValues);
@@ -47,20 +46,20 @@ namespace System.Windows.Forms.Design
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new RichTextBoxActionList(this));
                 }
+
                 return _actionLists;
             }
         }
 
-        /// <include file='doc\ControlDesigner.uex' path='docs/doc[@for="ControlDesigner.PreFilterProperties"]/*' />
-        /// <devdoc>
-        ///      Allows a designer to filter the set of properties
-        ///      the component it is designing will expose through the
-        ///      TypeDescriptor object.  This method is called
-        ///      immediately before its corresponding "Post" method.
-        ///      If you are overriding this method you should call
-        ///      the base implementation before you perform your own
-        ///      filtering.
-        /// </devdoc>
+        /// <summary>
+        ///  Allows a designer to filter the set of properties
+        ///  the component it is designing will expose through the
+        ///  TypeDescriptor object.  This method is called
+        ///  immediately before its corresponding "Post" method.
+        ///  If you are overriding this method you should call
+        ///  the base implementation before you perform your own
+        ///  filtering.
+        /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
             base.PreFilterProperties(properties);
@@ -69,11 +68,12 @@ namespace System.Windows.Forms.Design
 
             // Handle shadowed properties
             //
-            string[] shadowProps = new string[] {
+            string[] shadowProps = new string[]
+            {
                 "Text"
             };
 
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
 
             for (int i = 0; i < shadowProps.Length; i++)
             {
@@ -85,10 +85,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     Accessor for Text. We need to replace "\r\n" with "\n" in the designer before deciding whether 
-        ///     the old value & new value match.
-        /// </devdoc>
+        /// <summary>
+        ///  Accessor for Text. We need to replace "\r\n" with "\n" in the designer before deciding whether
+        ///  the old value and new value match.
+        /// </summary>
         private string Text
         {
             get
@@ -102,6 +102,7 @@ namespace System.Windows.Forms.Design
                 {
                     value = value.Replace("\r\n", "\n");
                 }
+
                 if (oldText != value)
                 {
                     Control.Text = value;

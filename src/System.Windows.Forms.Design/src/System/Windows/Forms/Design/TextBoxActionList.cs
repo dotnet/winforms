@@ -32,5 +32,4 @@ namespace System.Windows.Forms.Design
             return items;
         }
     }
-
 }

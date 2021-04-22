@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,12 +9,8 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
 using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 using static Interop;
@@ -28,7 +24,6 @@ namespace System.Windows.Forms.Design
     [ToolboxItemFilter("System.Windows.Forms")]
     public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner, IToolboxUser, IOleDragClient
     {
-
         private DesignerFrame frame;
         private ControlCommandSet commandSet;
         private InheritanceService inheritanceService;
@@ -39,14 +34,14 @@ namespace System.Windows.Forms.Design
         private DesignerExtenders designerExtenders;
         private InheritanceUI inheritanceUI;
         private PbrsForward pbrsFwd;
-        private ArrayList suspendedComponents = null;
-        private UndoEngine undoEngine = null;
+        private ArrayList suspendedComponents;
+        private UndoEngine undoEngine;
         private bool initializing;   // is the designer initializing?
 
         //used to keep the state of the tab order view
         //
-        private bool queriedTabOrder = false;
-        private MenuCommand tabOrderCommand = null;
+        private bool queriedTabOrder;
+        private MenuCommand tabOrderCommand;
 
         static internal IDesignerSerializationManager manager;
 
@@ -55,26 +50,24 @@ namespace System.Windows.Forms.Design
         private ComponentTray componentTray;
 
         private int trayHeight = 80;
-        private bool trayLargeIcon = false;
-        private bool trayAutoArrange = false;
-        private bool trayLayoutSuspended = false;
+        private bool trayLargeIcon;
+        private bool trayAutoArrange;
+        private bool trayLayoutSuspended;
 
         // ActiveX support
         //
-        private static Guid htmlDesignTime = new Guid("73CEF3DD-AE85-11CF-A406-00AA00C00940");
+        private static readonly Guid htmlDesignTime = new Guid("73CEF3DD-AE85-11CF-A406-00AA00C00940");
 
-        private Hashtable axTools = null;
-        private static TraceSwitch AxToolSwitch = new TraceSwitch("AxTool", "ActiveX Toolbox Tracing");
-        private static readonly string axClipFormat = "CLSID";
-        private ToolboxItemCreatorCallback toolboxCreator = null;
+        private Hashtable axTools;
+        private static readonly TraceSwitch AxToolSwitch = new TraceSwitch("AxTool", "ActiveX Toolbox Tracing");
+        private const string AxClipFormat = "CLSID";
+        private ToolboxItemCreatorCallback toolboxCreator;
 
-
-
-        /// <devdoc>
-        ///     Property shadow for ContainerControl's AutoScaleDimenions.  We shadow here so it
-        ///     always returns the CurrentAutoScaleDimensions for the control. This way the control's
-        ///     state always adapts to the current font / monitor.
-        /// </devdoc>
+        /// <summary>
+        ///  Property shadow for ContainerControl's AutoScaleDimenions.  We shadow here so it
+        ///  always returns the CurrentAutoScaleDimensions for the control. This way the control's
+        ///  state always adapts to the current font / monitor.
+        /// </summary>
         private SizeF AutoScaleDimensions
         {
             get
@@ -84,6 +77,7 @@ namespace System.Windows.Forms.Design
                 {
                     return c.CurrentAutoScaleDimensions;
                 }
+
                 Debug.Fail("AutoScaleDimensions should not be shadowed on non-ContainerControl objects.");
                 return SizeF.Empty;
             }
@@ -97,11 +91,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     Property shadow for ContainerControl's AutoScaleMode.  We shadow here so it
-        ///     never gets to the control; it can be very distracting if you change the font
-        ///     and have the form you're designing suddenly move on you.
-        /// </devdoc>
+        /// <summary>
+        ///  Property shadow for ContainerControl's AutoScaleMode.  We shadow here so it
+        ///  never gets to the control; it can be very distracting if you change the font
+        ///  and have the form you're designing suddenly move on you.
+        /// </summary>
         private AutoScaleMode AutoScaleMode
         {
             get
@@ -111,12 +105,13 @@ namespace System.Windows.Forms.Design
                 {
                     return c.AutoScaleMode;
                 }
+
                 Debug.Fail("AutoScaleMode should not be shadowed on non-ContainerControl objects.");
                 return AutoScaleMode.Inherit;
             }
             set
             {
-                ShadowProperties["AutoScaleMode"] = value;
+                ShadowProperties[nameof(AutoScaleMode)] = value;
                 ContainerControl c = Control as ContainerControl;
                 if (c != null && c.AutoScaleMode != value)
                 {
@@ -133,9 +128,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     BackColor property on control.  We shadow this property at design time.
-        /// </devdoc>
+        /// <summary>
+        ///  BackColor property on control.  We shadow this property at design time.
+        /// </summary>
         private Color BackColor
         {
             get
@@ -144,28 +139,29 @@ namespace System.Windows.Forms.Design
             }
             set
             {
-                ShadowProperties["BackColor"] = value;
+                ShadowProperties[nameof(BackColor)] = value;
                 if (value.IsEmpty)
                 {
                     value = SystemColors.Control;
                 }
+
                 Control.BackColor = value;
             }
         }
 
-        /// <devdoc>
-        ///     Location property on control.  We shadow this property at design time.
-        /// </devdoc>
+        /// <summary>
+        ///  Location property on control.  We shadow this property at design time.
+        /// </summary>
         [DefaultValue(typeof(Point), "0, 0")]
         private Point Location
         {
             get
             {
-                return (Point)ShadowProperties["Location"];
+                return (Point)ShadowProperties[nameof(Location)];
             }
             set
             {
-                ShadowProperties["Location"] = value;
+                ShadowProperties[nameof(Location)] = value;
             }
         }
 
@@ -183,10 +179,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///      Determines if the tab order UI is active.  When tab order is active, we don't want to forward
-        ///      any WndProc messages to the menu editor service (those are all non-selectable components)
-        /// </devdoc>
+        /// <summary>
+        ///  Determines if the tab order UI is active.  When tab order is active, we don't want to forward
+        ///  any WndProc messages to the menu editor service (those are all non-selectable components)
+        /// </summary>
         private bool TabOrderActive
         {
             get
@@ -196,7 +192,7 @@ namespace System.Windows.Forms.Design
                     queriedTabOrder = true;
                     IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
                     if (menuCommandService != null)
-                        tabOrderCommand = menuCommandService.FindCommand(MenuCommands.TabOrder);
+                        tabOrderCommand = menuCommandService.FindCommand(StandardCommands.TabOrder);
                 }
 
                 if (tabOrderCommand != null)
@@ -208,8 +204,8 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [DefaultValue(true)]
         private bool TrayAutoArrange
         {
@@ -228,8 +224,8 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [DefaultValue(false)]
         private bool TrayLargeIcon
         {
@@ -248,8 +244,8 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
+        /// <summary>
+        /// </summary>
         [DefaultValue(80)]
         private int TrayHeight
         {
@@ -275,12 +271,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.IOleDragClient.GetControlForComponent"]/*' />
         /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// Retrieves the control view instance for the given component.
         /// For Win32 designer, this will often be the component itself.
-        /// </devdoc>
+        /// </summary>
         Control IOleDragClient.GetControlForComponent(object component)
         {
             Control c = GetControl(component);
@@ -336,26 +331,25 @@ namespace System.Windows.Forms.Design
 
         private ToolboxItem CreateAxToolboxItem(IDataObject dataObject)
         {
-            AxToolboxItem tool = null;
-
             // Read the stream out of the dataobject and get hold of the CLSID of the Toolbox item.
             //
-            MemoryStream stm = (MemoryStream)dataObject.GetData(axClipFormat, true);
+            MemoryStream stm = (MemoryStream)dataObject.GetData(AxClipFormat, true);
             int len = (int)stm.Length;
             byte[] bytes = new byte[len];
             stm.Read(bytes, 0, len);
 
-            string clsid = System.Text.Encoding.Default.GetString(bytes);
+            string clsid = Text.Encoding.Default.GetString(bytes);
             int index = clsid.IndexOf("}");
             clsid = clsid.Substring(0, index + 1);
             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tCLSID of the Toolbox item: " + clsid);
 
-            // Look to see if we can find the Control key for this CLSID. If present, create a 
+            // Look to see if we can find the Control key for this CLSID. If present, create a
             // new AxToolboxItem and add it to the cache.
             //
             if (IsSupportedActiveXControl(clsid))
             {
-                // Look to see if we have already cached the ToolboxItem. 
+                AxToolboxItem tool;
+                // Look to see if we have already cached the ToolboxItem.
                 //
                 if (axTools != null)
                 {
@@ -373,6 +367,7 @@ namespace System.Windows.Forms.Design
                 {
                     axTools = new Hashtable();
                 }
+
                 axTools.Add(clsid, tool);
                 Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "\tAdded AxToolboxItem");
                 return tool;
@@ -385,10 +380,7 @@ namespace System.Windows.Forms.Design
 
         private ToolboxItem CreateCfCodeToolboxItem(IDataObject dataObject)
         {
-
-            object serializationData = null;
-
-            serializationData = dataObject.GetData(OleDragDropHandler.NestedToolboxItemFormat, false);
+            object serializationData = dataObject.GetData(OleDragDropHandler.NestedToolboxItemFormat, false);
             if (serializationData != null)
             {
                 return (ToolboxItem)serializationData;
@@ -416,7 +408,6 @@ namespace System.Windows.Forms.Design
 
                 if (host != null)
                 {
-
                     //Remove Adorner Window which hosts DropDowns.
                     ToolStripAdornerWindowService toolWindow = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
                     if (toolWindow != null)
@@ -447,15 +438,15 @@ namespace System.Windows.Forms.Design
                     IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                     if (cs != null)
                     {
-                        cs.ComponentAdded -= new ComponentEventHandler(this.OnComponentAdded);
-                        cs.ComponentChanged -= new ComponentChangedEventHandler(this.OnComponentChanged);
-                        cs.ComponentRemoved -= new ComponentEventHandler(this.OnComponentRemoved);
+                        cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+                        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                        cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                     }
 
                     if (undoEngine != null)
                     {
-                        undoEngine.Undoing -= new EventHandler(this.OnUndoing);
-                        undoEngine.Undone -= new EventHandler(this.OnUndone);
+                        undoEngine.Undoing -= new EventHandler(OnUndoing);
+                        undoEngine.Undone -= new EventHandler(OnUndone);
                     }
 
                     if (toolboxCreator != null)
@@ -465,15 +456,15 @@ namespace System.Windows.Forms.Design
                         if (toolbox != null)
                         {
                             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CLSID ToolboxItemCreator");
-                            toolbox.RemoveCreator(axClipFormat, host);
+                            toolbox.RemoveCreator(AxClipFormat, host);
 
                             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CF_CODE ToolboxItemCreator");
                             toolbox.RemoveCreator(OleDragDropHandler.DataFormat, host);
 
                             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Removing DocumentDesigner as CF_TOOLBOXITEM ToolboxItemCreator");
                             toolbox.RemoveCreator(OleDragDropHandler.NestedToolboxItemFormat, host);
-
                         }
+
                         toolboxCreator = null;
                     }
                 }
@@ -481,7 +472,7 @@ namespace System.Windows.Forms.Design
                 ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
                 if (ss != null)
                 {
-                    ss.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                    ss.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
 
                 if (behaviorService != null)
@@ -506,14 +497,15 @@ namespace System.Windows.Forms.Design
                             sws.RemoveSplitWindow(componentTray);
                         }
                     }
+
                     componentTray.Dispose();
                     componentTray = null;
                 }
 
-                if (this.pbrsFwd != null)
+                if (pbrsFwd != null)
                 {
-                    this.pbrsFwd.Dispose();
-                    this.pbrsFwd = null;
+                    pbrsFwd.Dispose();
+                    pbrsFwd = null;
                 }
 
                 if (frame != null)
@@ -542,7 +534,6 @@ namespace System.Windows.Forms.Design
 
                 if (designBindingValueUIHandler != null)
                 {
-
                     IPropertyValueUIService pvUISvc = (IPropertyValueUIService)GetService(typeof(IPropertyValueUIService));
                     if (pvUISvc != null)
                     {
@@ -564,7 +555,6 @@ namespace System.Windows.Forms.Design
                 {
                     axTools.Clear();
                 }
-
 
                 if (host != null)
                 {
@@ -591,12 +581,10 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override GlyphCollection GetGlyphs(GlyphSelectionType selectionType)
         {
-
             GlyphCollection glyphs = new GlyphCollection();
 
             if (selectionType != GlyphSelectionType.NotSelected)
             {
-
                 Point loc = BehaviorService.ControlToAdornerWindow((Control)Component);
                 Rectangle translatedBounds = new Rectangle(loc, ((Control)Component).Size);
                 bool primarySelection = (selectionType == GlyphSelectionType.SelectedPrimary);
@@ -635,6 +623,7 @@ namespace System.Windows.Forms.Design
                     glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Left));
                     glyphs.Add(new LockedBorderGlyph(translatedBounds, SelectionBorderGlyphType.Right));
                 }
+
                 // we check if the control is a form because we only want to disable resizing
                 // for components that are not Forms.
                 else if (autoSize && (mode == AutoSizeMode.GrowAndShrink) && !(Control is Form))
@@ -651,7 +640,6 @@ namespace System.Windows.Forms.Design
 
                 else
                 {
-
                     glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleRight, StandardBehavior, primarySelection));
                     glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerRight, StandardBehavior, primarySelection));
                     glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.MiddleBottom, StandardBehavior, primarySelection));
@@ -665,13 +653,13 @@ namespace System.Windows.Forms.Design
             return glyphs;
         }
 
-        /// <devdoc>
-        ///      Examines the current selection for a suitable frame designer.  This
-        ///      is used when we are creating a new component so we know what control
-        ///      to parent the component to.  This will always return a frame designer,
-        ///      and may walk all the way up the control parent chain to this designer
-        ///      if it needs to.
-        /// </devdoc>
+        /// <summary>
+        ///  Examines the current selection for a suitable frame designer.  This
+        ///  is used when we are creating a new component so we know what control
+        ///  to parent the component to.  This will always return a frame designer,
+        ///  and may walk all the way up the control parent chain to this designer
+        ///  if it needs to.
+        /// </summary>
         private ParentControlDesigner GetSelectedParentControlDesigner()
         {
             ISelectionService s = (ISelectionService)GetService(typeof(ISelectionService));
@@ -738,14 +726,13 @@ namespace System.Windows.Forms.Design
             return parentControlDesigner;
         }
 
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.GetToolSupported"]/*' />
-        /// <devdoc>
-        ///      Determines if the given tool is supported by this designer.
-        ///      If a tool is supported then it will be enabled in the toolbox
-        ///      when this designer regains focus.  Otherwise, it will be disabled.
-        ///      Once a tool is marked as enabled or disabled it may not be
-        ///      queried again.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines if the given tool is supported by this designer.
+        ///  If a tool is supported then it will be enabled in the toolbox
+        ///  when this designer regains focus.  Otherwise, it will be disabled.
+        ///  Once a tool is marked as enabled or disabled it may not be
+        ///  queried again.
+        /// </summary>
         protected virtual bool GetToolSupported(ToolboxItem tool)
         {
             return true;
@@ -757,7 +744,6 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override void Initialize(IComponent component)
         {
-
             initializing = true;
             base.Initialize(component);
             initializing = false;
@@ -784,7 +770,7 @@ namespace System.Windows.Forms.Design
                 host.Activated += new EventHandler(OnDesignerActivate);
                 host.Deactivated += new EventHandler(OnDesignerDeactivate);
 
-                ServiceCreatorCallback callback = new ServiceCreatorCallback(this.OnCreateService);
+                ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
                 host.AddService(typeof(IEventHandlerService), callback);
 
                 // M3.2 CONTROL ARRAY IS CUT
@@ -795,10 +781,9 @@ namespace System.Windows.Forms.Design
                 //
                 frame = new DesignerFrame(component.Site);
 
-                IOverlayService os = (IOverlayService)frame;
+                IOverlayService os = frame;
                 host.AddService(typeof(IOverlayService), os);
                 host.AddService(typeof(ISplitWindowService), frame);
-
 
                 behaviorService = new BehaviorService(Component.Site, frame);
                 host.AddService(typeof(BehaviorService), behaviorService);
@@ -813,9 +798,9 @@ namespace System.Windows.Forms.Design
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 if (cs != null)
                 {
-                    cs.ComponentAdded += new ComponentEventHandler(this.OnComponentAdded);
-                    cs.ComponentChanged += new ComponentChangedEventHandler(this.OnComponentChanged);
-                    cs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                    cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                    cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                    cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
 
                 // We must do the ineritance scan early, but not so early that we haven't hooked events
@@ -850,13 +835,13 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Add the DocumentDesigner as a creator of CLSID toolbox items.
-                //                
+                //
                 IToolboxService toolbox = (IToolboxService)host.GetService(typeof(IToolboxService));
                 if (toolbox != null)
                 {
                     Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Adding DocumentDesigner as CLSID ToolboxItemCreator");
-                    toolboxCreator = new ToolboxItemCreatorCallback(this.OnCreateToolboxItem);
-                    toolbox.AddCreator(toolboxCreator, axClipFormat, host);
+                    toolboxCreator = new ToolboxItemCreatorCallback(OnCreateToolboxItem);
+                    toolbox.AddCreator(toolboxCreator, AxClipFormat, host);
                     toolbox.AddCreator(toolboxCreator, OleDragDropHandler.DataFormat, host);
                     toolbox.AddCreator(toolboxCreator, OleDragDropHandler.NestedToolboxItemFormat, host);
                 }
@@ -865,7 +850,7 @@ namespace System.Windows.Forms.Design
                 // want to do it before we're done, however, or else the dimensions of the selection rectangle
                 // could be off because during load, change events are not fired.
                 //
-                host.LoadComplete += new EventHandler(this.OnLoadComplete);
+                host.LoadComplete += new EventHandler(OnLoadComplete);
             }
 
             // Setup our menu command structure.
@@ -875,10 +860,10 @@ namespace System.Windows.Forms.Design
 
             // Finally hook the designer view into the frame.  We do this last because the frame may
             // cause the control to be created, and if this happens before the inheritance scan we
-            // will subclass the inherited controls before we get a chance to attach designers.  
+            // will subclass the inherited controls before we get a chance to attach designers.
             //
             frame.Initialize(Control);
-            this.pbrsFwd = new PbrsForward(frame, component.Site);
+            pbrsFwd = new PbrsForward(frame, component.Site);
 
             // And force some shadow properties that we change in the course of
             // initializing the form.
@@ -886,10 +871,10 @@ namespace System.Windows.Forms.Design
             Location = new Point(0, 0);
         }
 
-        /// <devdoc>
-        ///     Checks to see if the give CLSID is an ActiveX control
-        ///     that we support.  This ignores designtime controls.
-        /// </devdoc>
+        /// <summary>
+        ///  Checks to see if the give CLSID is an ActiveX control
+        ///  that we support.  This ignores designtime controls.
+        /// </summary>
         private bool IsSupportedActiveXControl(string clsid)
         {
             RegistryKey key = null;
@@ -901,7 +886,6 @@ namespace System.Windows.Forms.Design
                 key = Registry.ClassesRoot.OpenSubKey(controlKey);
                 if (key != null)
                 {
-
                     // ASURT 36817:
                     // We are not going to support design-time controls for this revision. We use the guids under
                     // HKCR\Component Categories to decide which categories to avoid. Currently the only one is
@@ -966,7 +950,7 @@ namespace System.Windows.Forms.Design
                     Control root = host.RootComponent as Control;
                     if (root != null)
                     {
-                        Control rootParent = root.Parent as Control;
+                        Control rootParent = root.Parent;
                         if (rootParent != null)
                         {
                             rootParent.SuspendLayout();
@@ -977,14 +961,13 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///      Called when a component is added to the design container.
-        ///      If the component isn't a control, this will demand create
-        ///      the component tray and add the component to it.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when a component is added to the design container.
+        ///  If the component isn't a control, this will demand create
+        ///  the component tray and add the component to it.
+        /// </summary>
         private void OnComponentAdded(object source, ComponentEventArgs ce)
         {
-
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             if (host != null)
             {
@@ -998,7 +981,7 @@ namespace System.Windows.Forms.Design
 
                 // LETS SEE IF WE ARE TOOLSTRIP in which case we want to get added
                 // to the componentTray even though this is a control..
-                // We should think of implementing an interface so that we can have many more 
+                // We should think of implementing an interface so that we can have many more
                 // controls behaving like this.
                 //
                 ToolStripDesigner td = host.GetDesigner(component) as ToolStripDesigner;
@@ -1019,7 +1002,6 @@ namespace System.Windows.Forms.Design
                 if (addControl &&
                     TypeDescriptor.GetAttributes(component).Contains(DesignTimeVisibleAttribute.Yes))
                 {
-
                     if (componentTray == null)
                     {
                         ISplitWindowService sws = (ISplitWindowService)GetService(typeof(ISplitWindowService));
@@ -1049,19 +1031,18 @@ namespace System.Windows.Forms.Design
                             trayLayoutSuspended = true;
                             componentTray.SuspendLayout();
                         }
+
                         componentTray.AddComponent(component);
                     }
                 }
-
-
             }
         }
 
-        /// <devdoc>
-        ///      Called when a component is removed from the design container.
-        ///      Here we check to see there are no more components on the tray
-        ///      and if not, we will remove the tray.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when a component is removed from the design container.
+        ///  Here we check to see there are no more components on the tray
+        ///  and if not, we will remove the tray.
+        /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
             // ToolStrip is designableAsControl but has a ComponentTray Entry ... so special case it out.
@@ -1081,13 +1062,12 @@ namespace System.Windows.Forms.Design
                         {
                             host.RemoveService(typeof(ComponentTray));
                         }
+
                         componentTray.Dispose();
                         componentTray = null;
                     }
                 }
             }
-
-
         }
 
         /// <summary>
@@ -1102,7 +1082,6 @@ namespace System.Windows.Forms.Design
                 ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
                 if (selSvc != null)
                 {
-
                     // Here we check to see if we're the only component selected.  If not, then
                     // we'll display the standard component menu.
                     //
@@ -1110,6 +1089,7 @@ namespace System.Windows.Forms.Design
                     {
                         mcs.ShowContextMenu(MenuCommands.ContainerMenu, x, y);
                     }
+
                     // Try to see if the component selected has a contextMenuStrip to show
                     else
                     {
@@ -1127,9 +1107,9 @@ namespace System.Windows.Forms.Design
                                 }
                             }
                         }
+
                         mcs.ShowContextMenu(MenuCommands.SelectionMenu, x, y);
                     }
-
                 }
             }
         }
@@ -1146,9 +1126,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     Creates some of the more infrequently used services we offer.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates some of the more infrequently used services we offer.
+        /// </summary>
         private object OnCreateService(IServiceContainer container, Type serviceType)
         {
             if (serviceType == typeof(IEventHandlerService))
@@ -1157,6 +1137,7 @@ namespace System.Windows.Forms.Design
                 {
                     eventHandlerService = new EventHandlerService(frame);
                 }
+
                 return eventHandlerService;
             }
             else if (serviceType == typeof(ToolStripAdornerWindowService))
@@ -1164,15 +1145,14 @@ namespace System.Windows.Forms.Design
                 return new ToolStripAdornerWindowService(Component.Site, frame);
             }
 
-
             Debug.Fail("Called back to create a service we don't know how to create: " + serviceType.Name);
             return null;
         }
 
-        /// <devdoc>
-        ///      Called when our document becomes active.  We paint our form's
-        ///      border the appropriate color here.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when our document becomes active.  We paint our form's
+        ///  border the appropriate color here.
+        /// </summary>
         private ToolboxItem OnCreateToolboxItem(object serializedData, string format)
         {
             Debug.WriteLineIf(AxToolSwitch.TraceVerbose, "Checking to see if: " + format + " is supported.");
@@ -1187,7 +1167,7 @@ namespace System.Windows.Forms.Design
 
             // CLSID format.
             //
-            if (format.Equals(axClipFormat))
+            if (format.Equals(AxClipFormat))
             {
                 return CreateAxToolboxItem(dataObject);
             }
@@ -1203,10 +1183,10 @@ namespace System.Windows.Forms.Design
             return null;
         }
 
-        /// <devdoc>
-        ///      Called when our document becomes active.  Here we try to
-        ///      select the appropriate toolbox tab.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when our document becomes active.  Here we try to
+        ///  select the appropriate toolbox tab.
+        /// </summary>
         private void OnDesignerActivate(object source, EventArgs evevent)
         {
             if (undoEngine == null)
@@ -1214,16 +1194,16 @@ namespace System.Windows.Forms.Design
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine != null)
                 {
-                    undoEngine.Undoing += new EventHandler(this.OnUndoing);
-                    undoEngine.Undone += new EventHandler(this.OnUndone);
+                    undoEngine.Undoing += new EventHandler(OnUndoing);
+                    undoEngine.Undone += new EventHandler(OnUndone);
                 }
             }
         }
 
-        /// <devdoc>
-        ///     Called by the host when we become inactive.  Here we update the
-        ///     title bar of our form so it's the inactive color.
-        /// </devdoc>
+        /// <summary>
+        ///  Called by the host when we become inactive.  Here we update the
+        ///  title bar of our form so it's the inactive color.
+        /// </summary>
         private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
@@ -1234,16 +1214,14 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
-        /// <devdoc>
-        ///     Called when the designer is finished loading.  Here we select the form.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the designer is finished loading.  Here we select the form.
+        /// </summary>
         private void OnLoadComplete(object sender, EventArgs e)
         {
-
             // Remove the handler; we're done looking at this.
             //
-            ((IDesignerHost)sender).LoadComplete -= new EventHandler(this.OnLoadComplete);
+            ((IDesignerHost)sender).LoadComplete -= new EventHandler(OnLoadComplete);
 
             // Restore the tray layout.
             //
@@ -1255,7 +1233,7 @@ namespace System.Windows.Forms.Design
             ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
             if (ss != null)
             {
-                ss.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                ss.SelectionChanged += new EventHandler(OnSelectionChanged);
                 ss.SetSelectedComponents(new object[] { Component }, SelectionTypes.Replace);
                 Debug.Assert(ss.PrimarySelection == Component, "Bug in selection service:  form should have primary selection.");
             }
@@ -1267,23 +1245,22 @@ namespace System.Windows.Forms.Design
             if (ctrl != null && ctrl.IsHandleCreated)
             {
                 User32.NotifyWinEvent((int)AccessibleEvents.LocationChange, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
-                if (this.frame.Focused)
+                if (frame.Focused)
                 {
                     User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), User32.OBJID.CLIENT, 0);
                 }
             }
         }
 
-        /// <devdoc>
-        ///      Called by the selection service when the selection has changed.  We do a number 
-        ///      of selection-related things here.
-        /// </devdoc>
-        private void OnSelectionChanged(Object sender, EventArgs e)
+        /// <summary>
+        ///  Called by the selection service when the selection has changed.  We do a number
+        ///  of selection-related things here.
+        /// </summary>
+        private void OnSelectionChanged(object sender, EventArgs e)
         {
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
             if (svc != null)
             {
-
                 ICollection selComponents = svc.GetSelectedComponents();
 
                 // Setup the correct active accessibility selection / focus data
@@ -1306,7 +1283,6 @@ namespace System.Windows.Forms.Design
                     User32.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(primary, primary.Handle), User32.OBJID.CLIENT, 0);
                 }
 
-
                 // see if there are visual controls selected.  If so, we add a context attribute.
                 // Otherwise, we remove the attribute.  We do not count the form.
                 //
@@ -1315,7 +1291,8 @@ namespace System.Windows.Forms.Design
                 if (hs != null)
                 {
                     ushort type = 0;
-                    string[] types = new string[] {
+                    string[] types = new string[]
+                    {
                         "VisualSelection",
                         "NonVisualSelection",
                         "MixedSelection"
@@ -1352,19 +1329,18 @@ namespace System.Windows.Forms.Design
                     {
                         hs.AddContextAttribute("Keyword", types[type - 1], HelpKeywordType.GeneralKeyword);
                     }
-
                 }
             }
         }
 
         /// <summary>
-        ///      Allows a designer to filter the set of properties
-        ///      the component it is designing will expose through the
-        ///      TypeDescriptor object.  This method is called
-        ///      immediately before its corresponding "Post" method.
-        ///      If you are overriding this method you should call
-        ///      the base implementation before you perform your own
-        ///      filtering.
+        ///  Allows a designer to filter the set of properties
+        ///  the component it is designing will expose through the
+        ///  TypeDescriptor object.  This method is called
+        ///  immediately before its corresponding "Post" method.
+        ///  If you are overriding this method you should call
+        ///  the base implementation before you perform your own
+        ///  filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -1389,15 +1365,16 @@ namespace System.Windows.Forms.Design
                                                                 BrowsableAttribute.Yes,
                                                                 DesignOnlyAttribute.No);
 
-
             // Handle shadowed properties
             //
-            string[] shadowProps = new string[] {
-                    "Location",
-                    "BackColor"
-                };
+            string[] shadowProps = new string[]
+            {
+                "Location",
+                "BackColor"
+            };
 
-            string[] noBrowseProps = new string[] {
+            string[] noBrowseProps = new string[]
+            {
                 "Anchor",
                 "Dock",
                 "TabIndex",
@@ -1405,7 +1382,7 @@ namespace System.Windows.Forms.Design
                 "Visible"
             };
 
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
 
             for (int i = 0; i < shadowProps.Length; i++)
             {
@@ -1438,9 +1415,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     Resets the back color to be based on the parent's back color.
-        /// </devdoc>
+        /// <summary>
+        ///  Resets the back color to be based on the parent's back color.
+        /// </summary>
         private void ResetBackColor()
         {
             BackColor = Color.Empty;
@@ -1467,12 +1444,12 @@ namespace System.Windows.Forms.Design
             // to be a bit sleazy here and trick the inheritance engine
             // to think that these properties currently have their
             // default values.
-            return !initializing && ShadowProperties.Contains("AutoScaleMode");
+            return !initializing && ShadowProperties.Contains(nameof(AutoScaleMode));
         }
 
-        /// <devdoc>
-        ///     Returns true if the BackColor property should be persisted in code gen.
-        /// </devdoc>
+        /// <summary>
+        ///  Returns true if the BackColor property should be persisted in code gen.
+        /// </summary>
         private bool ShouldSerializeBackColor()
         {
             // We push Color.Empty into our shadow cash during
@@ -1481,7 +1458,7 @@ namespace System.Windows.Forms.Design
             // back color to stop it from walking the parent chain.
             // But, we want it to look like we didn't push a color
             // so code gen won't write out "Color.Control"
-            if (!ShadowProperties.Contains("BackColor") || ((Color)ShadowProperties["BackColor"]).IsEmpty)
+            if (!ShadowProperties.Contains(nameof(BackColor)) || ((Color)ShadowProperties[nameof(BackColor)]).IsEmpty)
             {
                 return false;
             }
@@ -1490,13 +1467,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///      This will be called when the user double-clicks on a
-        ///      toolbox item.  The document designer should create
-        ///      a component for the given tool.
+        ///  This will be called when the user double-clicks on a
+        ///  toolbox item.  The document designer should create
+        ///  a component for the given tool.
         /// </summary>
         protected virtual void ToolPicked(ToolboxItem tool)
         {
-
             // If the tab order UI is showing, don't allow us to place a tool.
             //
             IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
@@ -1538,18 +1514,16 @@ namespace System.Windows.Forms.Design
                     throw;
                 }
             }
-
         }
 
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.IRootDesigner.SupportedTechnologies"]/*' />
         /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// The list of technologies that this designer can support
         /// for its view.  Examples of different technologies are
         /// WinForms and Web Forms.  Other object models can be
         /// supported at design time, but they most be able to
         /// provide a view in one of the supported technologies.
-        /// </devdoc>
+        /// </summary>
         ViewTechnology[] IRootDesigner.SupportedTechnologies
         {
             get
@@ -1558,24 +1532,24 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.IRootDesigner.GetView"]/*' />
         /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// The view for this document.  The designer
         /// should assume that the view will be shown shortly
         /// after this call is made and make any necessary
         /// preparations.
-        /// </devdoc>
+        /// </summary>
 
         //We can live with this one. We have obsoleted some of the enum values. This method
         //only takes on argument, so it is pretty obvious what argument is bad.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
         object IRootDesigner.GetView(ViewTechnology technology)
         {
             if (technology != ViewTechnology.Default && technology != (ViewTechnology)1)
             {
                 throw new ArgumentException();
             }
+
             return frame;
         }
 
@@ -1591,11 +1565,10 @@ namespace System.Windows.Forms.Design
             return GetToolSupported(tool);
         }
 
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.IToolboxUser.ToolPicked"]/*' />
         /// <internalonly/>
-        /// <devdoc>
+        /// <summary>
         /// <para>Selects the specified tool.</para>
-        /// </devdoc>
+        /// </summary>
         void IToolboxUser.ToolPicked(ToolboxItem tool)
         {
             using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))

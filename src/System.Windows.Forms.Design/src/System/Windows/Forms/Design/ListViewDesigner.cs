@@ -11,23 +11,21 @@ using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///      This is the designer for the list view control.  It implements hit testing for
-    ///      the items in the list view.
-    /// </devdoc>
+    /// <summary>
+    ///  This is the designer for the list view control.  It implements hit testing for
+    ///  the items in the list view.
+    /// </summary>
     internal class ListViewDesigner : ControlDesigner
     {
         private DesignerActionListCollection _actionLists;
         private ComCtl32.HDHITTESTINFO _hdrhit;
         private bool _inShowErrorDialog;
 
-
-        /// <include file='doc\ListViewDesigner.uex' path='docs/doc[@for="ListViewDesigner.AssociatedComponents"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves a list of associated components.  These are components that should be incluced in a cut or copy operation on this component.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        ///  <para>
+        ///  Retrieves a list of associated components.  These are components that should be incluced in a cut or copy operation on this component.
+        ///  </para>
+        /// </summary>
         public override ICollection AssociatedComponents
         {
             get
@@ -37,6 +35,7 @@ namespace System.Windows.Forms.Design
                 {
                     return lv.Columns;
                 }
+
                 return base.AssociatedComponents;
             }
         }
@@ -67,14 +66,11 @@ namespace System.Windows.Forms.Design
                     HookChildHandles(Control.Handle);
                 }
             }
-
         }
 
-
-        /// <include file='doc\ListViewDesigner.uex' path='docs/doc[@for="ListViewDesigner.GetHitTest"]/*' />
-        /// <devdoc>
-        ///      We override GetHitTest to make the header in report view UI-active.
-        /// </devdoc>
+        /// <summary>
+        ///  We override GetHitTest to make the header in report view UI-active.
+        /// </summary>
         protected override bool GetHitTest(Point point)
         {
             ListView lv = (ListView)Component;
@@ -97,14 +93,14 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
         public override void Initialize(IComponent component)
         {
-
             ListView lv = (ListView)component;
-            this.OwnerDraw = lv.OwnerDraw;
+            OwnerDraw = lv.OwnerDraw;
             lv.OwnerDraw = false;
             lv.UseCompatibleStateImageBehavior = false;
 
@@ -123,14 +119,14 @@ namespace System.Windows.Forms.Design
 
             if (ownerDrawProp != null)
             {
-                properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, new Attribute[0]);
+                properties["OwnerDraw"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), ownerDrawProp, Array.Empty<Attribute>());
             }
 
             PropertyDescriptor viewProp = (PropertyDescriptor)properties["View"];
 
             if (viewProp != null)
             {
-                properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, new Attribute[0]);
+                properties["View"] = TypeDescriptor.CreateProperty(typeof(ListViewDesigner), viewProp, Array.Empty<Attribute>());
             }
 
             base.PreFilterProperties(properties);
@@ -138,7 +134,6 @@ namespace System.Windows.Forms.Design
 
         protected unsafe override void WndProc(ref Message m)
         {
-
             switch (m.Msg)
             {
                 case (int)User32.WM.NOTIFY:
@@ -146,7 +141,6 @@ namespace System.Windows.Forms.Design
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
                     if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
-
                         // Re-codegen if the columns have been resized
                         //
                         try
@@ -154,7 +148,7 @@ namespace System.Windows.Forms.Design
                             IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                             componentChangeService.OnComponentChanged(Component, null, null, null);
                         }
-                        catch (System.InvalidOperationException ex)
+                        catch (InvalidOperationException ex)
                         {
                             if (_inShowErrorDialog)
                             {
@@ -171,15 +165,16 @@ namespace System.Windows.Forms.Design
                             {
                                 _inShowErrorDialog = false;
                             }
+
                             return;
                         }
                     }
+
                     break;
             }
 
             base.WndProc(ref m);
         }
-
 
         public override DesignerActionListCollection ActionLists
         {
@@ -190,6 +185,7 @@ namespace System.Windows.Forms.Design
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new ListViewActionList(this));
                 }
+
                 return _actionLists;
             }
         }

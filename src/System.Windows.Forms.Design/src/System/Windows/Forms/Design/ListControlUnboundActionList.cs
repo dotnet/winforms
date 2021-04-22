@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design
 {
     internal class ListControlUnboundActionList : DesignerActionList
     {
-        private ComponentDesigner _designer;
+        private readonly ComponentDesigner _designer;
 
         public ListControlUnboundActionList(ComponentDesigner designer) : base(designer.Component)
         {

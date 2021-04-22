@@ -8,26 +8,23 @@ using System.Runtime.Versioning;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///      This class handles all design time behavior for the panel class.  This
-    ///      draws a visible border on the panel if it doesn't have a border so the
-    ///      user knows where the boundaries of the panel lie.
-    /// </devdoc>
+    /// <summary>
+    ///  This class handles all design time behavior for the panel class.  This
+    ///  draws a visible border on the panel if it doesn't have a border so the
+    ///  user knows where the boundaries of the panel lie.
+    /// </summary>
     internal class PanelDesigner : ScrollableControlDesigner
     {
-
-
         public PanelDesigner()
         {
             AutoResizeHandles = true;
         }
 
-        /// <include file='doc\PanelDesigner.uex' path='docs/doc[@for="PanelDesigner.DrawBorder"]/*' />
-        /// <devdoc>
-        ///      This draws a nice border around our panel.  We need
-        ///      this because the panel can have no border and you can't
-        ///      tell where it is.
-        /// </devdoc>
+        /// <summary>
+        ///  This draws a nice border around our panel.  We need
+        ///  this because the panel can have no border and you can't
+        ///  tell where it is.
+        /// </summary>
         /// <internalonly/>
         protected virtual void DrawBorder(Graphics graphics)
         {
@@ -43,18 +40,15 @@ namespace System.Windows.Forms.Design
             rc.Width--;
             rc.Height--;
 
-
             graphics.DrawRectangle(pen, rc);
             pen.Dispose();
         }
 
-
-        /// <include file='doc\PanelDesigner.uex' path='docs/doc[@for="PanelDesigner.OnPaintAdornments"]/*' />
-        /// <devdoc>
-        ///      Overrides our base class.  Here we check to see if there
-        ///      is no border on the panel.  If not, we draw one so that
-        ///      the panel shape is visible at design time.
-        /// </devdoc>
+        /// <summary>
+        ///  Overrides our base class.  Here we check to see if there
+        ///  is no border on the panel.  If not, we draw one so that
+        ///  the panel shape is visible at design time.
+        /// </summary>
         protected override void OnPaintAdornments(PaintEventArgs pe)
         {
             Panel panel = (Panel)Component;
@@ -67,10 +61,9 @@ namespace System.Windows.Forms.Design
             base.OnPaintAdornments(pe);
         }
 
-
-        /// <devdoc>
-        ///      Creates a Dashed-Pen of appropriate color.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates a Dashed-Pen of appropriate color.
+        /// </summary>
         protected Pen BorderPen
         {
             [ResourceExposure(ResourceScope.Process)]

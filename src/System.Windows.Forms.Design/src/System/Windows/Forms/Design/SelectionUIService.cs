@@ -243,7 +243,7 @@ namespace System.Windows.Forms.Design
         {
             // Determine a nice name for the drag operation
             string transactionName;
-            if ((int)(rules & SelectionRules.Moveable) != 0)
+            if ((rules & SelectionRules.Moveable) != 0)
             {
                 if (objects.Length > 1)
                 {
@@ -267,7 +267,7 @@ namespace System.Windows.Forms.Design
                     transactionName = string.Format(SR.DragDropMoveComponent, name);
                 }
             }
-            else if ((int)(rules & SelectionRules.AllSizeable) != 0)
+            else if ((rules & SelectionRules.AllSizeable) != 0)
             {
                 if (objects.Length > 1)
                 {
@@ -531,7 +531,7 @@ namespace System.Windows.Forms.Design
                     {
                         SelectionRules rules = SelectionRules.None;
                         // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-                        _ctrlSelect = (Control.ModifierKeys & Keys.Control) != Keys.None;
+                        _ctrlSelect = (ModifierKeys & Keys.Control) != Keys.None;
                         if (!_ctrlSelect)
                         {
                             _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
@@ -1193,7 +1193,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                selection = (object[])list.ToArray();
+                selection = list.ToArray();
             }
 
             return selection ?? (Array.Empty<object>());

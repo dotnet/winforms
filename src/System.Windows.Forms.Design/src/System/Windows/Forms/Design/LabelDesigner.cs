@@ -11,24 +11,22 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para>
-    ///       Provides a designer that can design components
-    ///       that extend TextBoxBase.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>
+    ///  Provides a designer that can design components
+    ///  that extend TextBoxBase.</para>
+    /// </summary>
     internal class LabelDesigner : ControlDesigner
     {
-
         public LabelDesigner()
         {
             AutoResizeHandles = true;
         }
 
-        /// <include file='doc\LabelDesigner.uex' path='docs/doc[@for="LabelDesigner.SnapLines"]/*' />
-        /// <devdoc>
-        ///     Adds a baseline SnapLine to the list of SnapLines related
-        ///     to this control.
-        /// </devdoc>
+        /// <summary>
+        ///  Adds a baseline SnapLine to the list of SnapLines related
+        ///  to this control.
+        /// </summary>
         public override IList SnapLines
         {
             get
@@ -87,7 +85,6 @@ namespace System.Windows.Forms.Design
                                     break;
                                 }
                             }
-
                         }
                         else
                         {
@@ -137,12 +134,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\LabelDesigner.uex' path='docs/doc[@for="LabelDesigner.SelectionRules"]/*' />
-        /// <devdoc>
-        ///     Retrieves a set of rules concerning the movement capabilities of a component.
-        ///     This should be one or more flags from the SelectionRules class.  If no designer
-        ///     provides rules for a component, the component will not get any UI services.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves a set of rules concerning the movement capabilities of a component.
+        ///  This should be one or more flags from the SelectionRules class.  If no designer
+        ///  provides rules for a component, the component will not get any UI services.
+        /// </summary>
         public override SelectionRules SelectionRules
         {
             get

@@ -9,10 +9,10 @@ using System.Drawing.Drawing2D;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///     This class handles all design time behavior for the group box class.  Group
-    ///     boxes may contain sub-components and therefore use the frame designer.
-    /// </devdoc>
+    /// <summary>
+    ///  This class handles all design time behavior for the group box class.  Group
+    ///  boxes may contain sub-components and therefore use the frame designer.
+    /// </summary>
     internal class PictureBoxDesigner : ControlDesigner
     {
         private DesignerActionListCollection _actionLists;
@@ -22,13 +22,11 @@ namespace System.Windows.Forms.Design
             AutoResizeHandles = true;
         }
 
-
-        /// <include file='doc\PictureBoxDesigner.uex' path='docs/doc[@for="PictureBoxDesigner.DrawBorder"]/*' />
-        /// <devdoc>
-        ///      This draws a nice border around our pictureBox.  We need
-        ///      this because the pictureBox can have no border and you can't
-        ///      tell where it is.
-        /// </devdoc>
+        /// <summary>
+        ///  This draws a nice border around our pictureBox.  We need
+        ///  this because the pictureBox can have no border and you can't
+        ///  tell where it is.
+        /// </summary>
         /// <internalonly/>
         private void DrawBorder(Graphics graphics)
         {
@@ -58,12 +56,11 @@ namespace System.Windows.Forms.Design
             pen.Dispose();
         }
 
-        /// <include file='doc\PictureBoxDesigner.uex' path='docs/doc[@for="PictureBoxDesigner.OnPaintAdornments"]/*' />
-        /// <devdoc>
-        ///      Overrides our base class.  Here we check to see if there
-        ///      is no border on the pictureBox.  If not, we draw one so that
-        ///      the pictureBox shape is visible at design time.
-        /// </devdoc>
+        /// <summary>
+        ///  Overrides our base class.  Here we check to see if there
+        ///  is no border on the pictureBox.  If not, we draw one so that
+        ///  the pictureBox shape is visible at design time.
+        /// </summary>
         protected override void OnPaintAdornments(PaintEventArgs pe)
         {
             PictureBox pictureBox = (PictureBox)Component;
@@ -76,12 +73,11 @@ namespace System.Windows.Forms.Design
             base.OnPaintAdornments(pe);
         }
 
-        /// <include file='doc\PictureBoxDesigner.uex' path='docs/doc[@for="PictureBoxDesigner.SelectionRules"]/*' />
-        /// <devdoc>
-        ///     Retrieves a set of rules concerning the movement capabilities of a component.
-        ///     This should be one or more flags from the SelectionRules class.  If no designer
-        ///     provides rules for a component, the component will not get any UI services.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves a set of rules concerning the movement capabilities of a component.
+        ///  This should be one or more flags from the SelectionRules class.  If no designer
+        ///  provides rules for a component, the component will not get any UI services.
+        /// </summary>
         public override SelectionRules SelectionRules
         {
             get
@@ -104,7 +100,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         public override DesignerActionListCollection ActionLists
         {
             get
@@ -114,6 +109,7 @@ namespace System.Windows.Forms.Design
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new PictureBoxActionList(this));
                 }
+
                 return _actionLists;
             }
         }

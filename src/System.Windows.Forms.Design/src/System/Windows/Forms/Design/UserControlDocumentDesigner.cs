@@ -9,23 +9,22 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para>Provides a base implementation of a designer for user controls.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>Provides a base implementation of a designer for user controls.</para>
+    /// </summary>
     [ToolboxItemFilter("System.Windows.Forms.UserControl", ToolboxItemFilterType.Custom)]
     internal class UserControlDocumentDesigner : DocumentDesigner
     {
-
         public UserControlDocumentDesigner()
         {
             AutoResizeHandles = true;
         }
 
-        /// <devdoc>
-        ///     On user controls, size == client size.  We do this so we can mess around
-        ///     with the non-client area of the user control when editing menus and not
-        ///     mess up the size property.
-        /// </devdoc>
+        /// <summary>
+        ///  On user controls, size == client size.  We do this so we can mess around
+        ///  with the non-client area of the user control when editing menus and not
+        ///  mess up the size property.
+        /// </summary>
         private Size Size
         {
             get
@@ -38,16 +37,15 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\UserControlDocumentDesigner.uex' path='docs/doc[@for="UserControlDocumentDesigner.PreFilterProperties"]/*' />
-        /// <devdoc>
-        ///      Allows a designer to filter the set of properties
-        ///      the component it is designing will expose through the
-        ///      TypeDescriptor object.  This method is called
-        ///      immediately before its corresponding "Post" method.
-        ///      If you are overriding this method you should call
-        ///      the base implementation before you perform your own
-        ///      filtering.
-        /// </devdoc>
+        /// <summary>
+        ///  Allows a designer to filter the set of properties
+        ///  the component it is designing will expose through the
+        ///  TypeDescriptor object.  This method is called
+        ///  immediately before its corresponding "Post" method.
+        ///  If you are overriding this method you should call
+        ///  the base implementation before you perform your own
+        ///  filtering.
+        /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
             PropertyDescriptor prop;
@@ -56,11 +54,12 @@ namespace System.Windows.Forms.Design
 
             // Handle shadowed properties
             //
-            string[] shadowProps = new string[] {
+            string[] shadowProps = new string[]
+            {
                 "Size"
             };
 
-            Attribute[] empty = new Attribute[0];
+            Attribute[] empty = Array.Empty<Attribute>();
 
             for (int i = 0; i < shadowProps.Length; i++)
             {

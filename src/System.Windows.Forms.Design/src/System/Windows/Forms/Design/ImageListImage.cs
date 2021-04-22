@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
                 return new ImageListImage((new Icon(stream)).ToBitmap());
             }
 
-            return new ImageListImage((Bitmap)Bitmap.FromStream(stream));
+            return new ImageListImage((Bitmap)Image.FromStream(stream));
         }
     }
 }

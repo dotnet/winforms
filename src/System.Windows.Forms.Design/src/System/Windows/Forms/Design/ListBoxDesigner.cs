@@ -9,14 +9,12 @@ using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner"]/*' />
-    /// <devdoc>
-    ///      This class handles all design time behavior for the list box class.
-    ///      It adds a sample item to the list box at design time.
-    /// </devdoc>
+    /// <summary>
+    ///  This class handles all design time behavior for the list box class.
+    ///  It adds a sample item to the list box at design time.
+    /// </summary>
     internal class ListBoxDesigner : ControlDesigner
     {
-
         private DesignerActionListCollection _actionLists;
 
         public bool IntegralHeight
@@ -29,7 +27,7 @@ namespace System.Windows.Forms.Design
             {
                 ShadowProperties["IntegralHeight"] = value;
 
-                ListBox listBox = (ListBox)this.Component;
+                ListBox listBox = (ListBox)Component;
                 if ((listBox.Dock != DockStyle.Fill) &&
                     (listBox.Dock != DockStyle.Left) &&
                     (listBox.Dock != DockStyle.Right))
@@ -43,11 +41,11 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                return ((ListBox)this.Component).Dock;
+                return ((ListBox)Component).Dock;
             }
             set
             {
-                ListBox listBox = (ListBox)this.Component;
+                ListBox listBox = (ListBox)Component;
                 if ((value == DockStyle.Fill) || (value == DockStyle.Left) || (value == DockStyle.Right))
                 {
                     // VSO 159543
@@ -59,8 +57,8 @@ namespace System.Windows.Forms.Design
                 {
                     listBox.Dock = value;
                     // VSO 159543
-                    // Restore the IntegralHeight after we dock. Order is necessary here. Setting IntegralHeight will 
-                    // potentially resize the control height, but we don't want to base the height on the dock. 
+                    // Restore the IntegralHeight after we dock. Order is necessary here. Setting IntegralHeight will
+                    // potentially resize the control height, but we don't want to base the height on the dock.
                     // Instead, undock the control first, so the IntegralHeight is based on the restored size.
                     listBox.IntegralHeight = (bool)ShadowProperties["IntegralHeight"];
                 }
@@ -72,25 +70,23 @@ namespace System.Windows.Forms.Design
             PropertyDescriptor integralHeightProp = (PropertyDescriptor)properties["IntegralHeight"];
             if (integralHeightProp != null)
             {
-                properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, new Attribute[0]);
+                properties["IntegralHeight"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), integralHeightProp, Array.Empty<Attribute>());
             }
 
             PropertyDescriptor dockProp = (PropertyDescriptor)properties["Dock"];
             if (dockProp != null)
             {
-                properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, new Attribute[0]);
+                properties["Dock"] = TypeDescriptor.CreateProperty(typeof(ListBoxDesigner), dockProp, Array.Empty<Attribute>());
             }
 
             base.PreFilterProperties(properties);
         }
 
-        /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner.Dispose"]/*' />
-        /// <devdoc>
-        ///      Destroys this designer.
-        /// </devdoc>
+        /// <summary>
+        ///  Destroys this designer.
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
-
             if (disposing)
             {
                 // Now, hook the component rename event so we can update the text in the
@@ -99,24 +95,24 @@ namespace System.Windows.Forms.Design
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
                 if (cs != null)
                 {
-                    cs.ComponentRename -= new ComponentRenameEventHandler(this.OnComponentRename);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(this.OnComponentChanged);
+                    cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                 }
             }
+
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner.Initialize"]/*' />
-        /// <devdoc>
-        ///     Called by the host when we're first initialized.
-        /// </devdoc>
+        /// <summary>
+        ///  Called by the host when we're first initialized.
+        /// </summary>
         public override void Initialize(IComponent component)
         {
             base.Initialize(component);
 
             ListBox listBox = component as ListBox;
             if (null != listBox)
-                this.IntegralHeight = listBox.IntegralHeight;
+                IntegralHeight = listBox.IntegralHeight;
 
             AutoResizeHandles = true;
 
@@ -126,10 +122,9 @@ namespace System.Windows.Forms.Design
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs != null)
             {
-                cs.ComponentRename += new ComponentRenameEventHandler(this.OnComponentRename);
-                cs.ComponentChanged += new ComponentChangedEventHandler(this.OnComponentChanged);
+                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
             }
-
         }
 
         public override void InitializeNewComponent(IDictionary defaultValues)
@@ -137,7 +132,7 @@ namespace System.Windows.Forms.Design
             base.InitializeNewComponent(defaultValues);
 
             // in Whidbey, formattingEnabled is true
-            ((ListBox)this.Component).FormattingEnabled = true;
+            ((ListBox)Component).FormattingEnabled = true;
 
             // VSWhidbey 497239 - Setting FormattingEnabled clears the text we set in
             // OnCreateHandle so let's set it here again. We need to keep setting the text in
@@ -147,14 +142,12 @@ namespace System.Windows.Forms.Design
             {
                 UpdateControlName(nameProp.GetValue(Component).ToString());
             }
-
         }
 
-        /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner.OnComponentRename"]/*' />
-        /// <devdoc>
-        ///      Raised when a component's name changes.  Here we update the contents of the list box
-        ///      if we are displaying the component's name in it.
-        /// </devdoc>
+        /// <summary>
+        ///  Raised when a component's name changes.  Here we update the contents of the list box
+        ///  if we are displaying the component's name in it.
+        /// </summary>
         private void OnComponentRename(object sender, ComponentRenameEventArgs e)
         {
             if (e.Component == Component)
@@ -163,11 +156,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner.OnComponentChanged"]/*' />
-        /// <devdoc>
-        ///      Raised when ComponentChanges. We listen to this to check if the "Items" propertychanged.
-        ///      and if so .. then update the Text within the ListBox.
-        /// </devdoc>
+        /// <summary>
+        ///  Raised when ComponentChanges. We listen to this to check if the "Items" propertychanged.
+        ///  and if so .. then update the Text within the ListBox.
+        /// </summary>
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
             if (e.Component == Component && e.Member != null && e.Member.Name == "Items")
@@ -180,10 +172,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner.OnCreateHandle"]/*' />
-        /// <devdoc>
-        ///      This is called immediately after the control handle has been created.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called immediately after the control handle has been created.
+        /// </summary>
         protected override void OnCreateHandle()
         {
             base.OnCreateHandle();
@@ -194,11 +185,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ListBoxDesigner.uex' path='docs/doc[@for="ListBoxDesigner.UpdateControlName"]/*' />
-        /// <devdoc>
-        ///      Updates the name being displayed on this control.  This will do nothing if
-        ///      the control has items in it.
-        /// </devdoc>
+        /// <summary>
+        ///  Updates the name being displayed on this control.  This will do nothing if
+        ///  the control has items in it.
+        /// </summary>
         private void UpdateControlName(string name)
         {
             ListBox lb = (ListBox)Control;
@@ -209,7 +199,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         public override DesignerActionListCollection ActionLists
         {
             get
@@ -217,7 +206,7 @@ namespace System.Windows.Forms.Design
                 if (_actionLists == null)
                 {
                     _actionLists = new DesignerActionListCollection();
-                    if (this.Component is CheckedListBox)
+                    if (Component is CheckedListBox)
                     {
                         _actionLists.Add(new ListControlUnboundActionList(this));
                     }
@@ -236,6 +225,7 @@ namespace System.Windows.Forms.Design
 #endif
                     }
                 }
+
                 return _actionLists;
             }
         }

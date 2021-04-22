@@ -16,8 +16,8 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public abstract class Behavior
     {
-        private bool _callParentBehavior;
-        private BehaviorService? _behaviorService;
+        private readonly bool _callParentBehavior;
+        private readonly BehaviorService? _behaviorService;
 
         protected Behavior()
         {
@@ -102,9 +102,9 @@ namespace System.Windows.Forms.Design.Behavior
         ///  PushCaptureBehavior.  If it does so, it will be notified through OnLoseCapture when capture is lost.
         ///  Generally the behavior pops itself at this time. Capture is lost when one of the following occurs:
         ///
-        ///   1. Someone else requests capture.
-        ///   2. Another behavior is pushed.
-        ///   3. This behavior is popped.
+        ///  1. Someone else requests capture.
+        ///  2. Another behavior is pushed.
+        ///  3. This behavior is popped.
         ///
         ///  In each of these cases OnLoseCapture on the behavior will be called.
         /// </summary>

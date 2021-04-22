@@ -354,8 +354,6 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         result = arrayCreate;
                     }
-
-                    serialized = true;
                 }
             }
             else if (valuesToSerialize.Count > 0)
@@ -494,7 +492,7 @@ namespace System.ComponentModel.Design.Serialization
                                 expression = new CodeCastExpression(elementType, expression);
                             }
 
-                            arrayCreate.Initializers.Add((CodeExpression)expression);
+                            arrayCreate.Initializers.Add(expression);
                         }
                         else
                         {

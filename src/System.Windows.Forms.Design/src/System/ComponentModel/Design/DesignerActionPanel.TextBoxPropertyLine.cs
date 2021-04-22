@@ -215,7 +215,7 @@ namespace System.ComponentModel.Design
                     {
                         for (int i = 0; i < standardValues.Count; i++)
                         {
-                            if (object.Equals(Value, standardValues[i]))
+                            if (Equals(Value, standardValues[i]))
                             {
                                 if (i < standardValues.Count - 1)
                                 {
@@ -245,7 +245,7 @@ namespace System.ComponentModel.Design
                     {
                         for (int i = 0; i < standardValues.Count; i++)
                         {
-                            if (object.Equals(Value, standardValues[i]))
+                            if (Equals(Value, standardValues[i]))
                             {
                                 if (i > 0)
                                 {

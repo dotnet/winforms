@@ -10,34 +10,33 @@ using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///      This is the designer for tree view controls.  It inherits
-    ///      from the base control designer and adds live hit testing
-    ///      capabilites for the tree view control.
-    /// </devdoc>
+    /// <summary>
+    ///  This is the designer for tree view controls.  It inherits
+    ///  from the base control designer and adds live hit testing
+    ///  capabilites for the tree view control.
+    /// </summary>
     internal class TreeViewDesigner : ControlDesigner
     {
         private ComCtl32.TVHITTESTINFO tvhit;
         private DesignerActionListCollection _actionLists;
-        private TreeView treeView = null;
+        private TreeView treeView;
 
         public TreeViewDesigner()
         {
             AutoResizeHandles = true;
         }
 
-
-        /// <devdoc>
-        ///      Disposes of this object.
-        /// </devdoc>
+        /// <summary>
+        ///  Disposes of this object.
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 if (treeView != null)
                 {
-                    treeView.AfterExpand -= new System.Windows.Forms.TreeViewEventHandler(TreeViewInvalidate);
-                    treeView.AfterCollapse -= new System.Windows.Forms.TreeViewEventHandler(TreeViewInvalidate);
+                    treeView.AfterExpand -= new TreeViewEventHandler(TreeViewInvalidate);
+                    treeView.AfterCollapse -= new TreeViewEventHandler(TreeViewInvalidate);
                     treeView = null;
                 }
             }
@@ -45,13 +44,12 @@ namespace System.Windows.Forms.Design
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\TreeViewDesigner.uex' path='docs/doc[@for="TreeViewDesigner.GetHitTest"]/*' />
-        /// <devdoc>
-        ///    <para>Allows your component to support a design time user interface. A TabStrip
-        ///       control, for example, has a design time user interface that allows the user
-        ///       to click the tabs to change tabs. To implement this, TabStrip returns
-        ///       true whenever the given point is within its tabs.</para>
-        /// </devdoc>
+        /// <summary>
+        ///  <para>Allows your component to support a design time user interface. A TabStrip
+        ///  control, for example, has a design time user interface that allows the user
+        ///  to click the tabs to change tabs. To implement this, TabStrip returns
+        ///  true whenever the given point is within its tabs.</para>
+        /// </summary>
         protected override bool GetHitTest(Point point)
         {
             point = Control.PointToClient(point);
@@ -69,8 +67,8 @@ namespace System.Windows.Forms.Design
             Debug.Assert(treeView != null, "TreeView is null in TreeViewDesigner");
             if (treeView != null)
             {
-                treeView.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(TreeViewInvalidate);
-                treeView.AfterCollapse += new System.Windows.Forms.TreeViewEventHandler(TreeViewInvalidate);
+                treeView.AfterExpand += new TreeViewEventHandler(TreeViewInvalidate);
+                treeView.AfterCollapse += new TreeViewEventHandler(TreeViewInvalidate);
             }
         }
 
@@ -91,6 +89,7 @@ namespace System.Windows.Forms.Design
                     _actionLists = new DesignerActionListCollection();
                     _actionLists.Add(new TreeViewActionList(this));
                 }
+
                 return _actionLists;
             }
         }

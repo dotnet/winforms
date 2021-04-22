@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != Dock)
                 {
-                    ChangeProperty(nameof(Dock), (object)value);
+                    ChangeProperty(nameof(Dock), value);
                 }
             }
         }
@@ -120,7 +120,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != RenderMode)
                 {
-                    ChangeProperty(nameof(RenderMode), (object)value);
+                    ChangeProperty(nameof(RenderMode), value);
                 }
             }
         }
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != GripStyle)
                 {
-                    ChangeProperty(nameof(GripStyle), (object)value);
+                    ChangeProperty(nameof(GripStyle), value);
                 }
             }
         }

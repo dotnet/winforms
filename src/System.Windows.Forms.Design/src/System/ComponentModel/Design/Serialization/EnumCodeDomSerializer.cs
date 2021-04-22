@@ -76,7 +76,7 @@ namespace System.ComponentModel.Design.Serialization
                     foreach (Enum term in values)
                     {
                         string termString = enumConverter?.ConvertToString(term);
-                        CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
+                        CodeExpression newExpression = !string.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
                         if (newExpression != null)
                         {

@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design
                 ReferenceEventClosure key = new ReferenceEventClosure(component, this);
                 string oldName = (string)ds.GetValue(key);
 
-                if (object.ReferenceEquals(oldName, name))
+                if (ReferenceEquals(oldName, name))
                 {
                     return;
                 }

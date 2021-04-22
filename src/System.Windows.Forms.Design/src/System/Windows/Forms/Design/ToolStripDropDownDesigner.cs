@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  The ToolStripItems are the associated components.   We want those to come with in any cut, copy opreations.
         /// </summary>
-        public override System.Collections.ICollection AssociatedComponents
+        public override ICollection AssociatedComponents
         {
             get => ((ToolStrip)Component).Items;
         }
@@ -655,7 +655,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            Control parent = designMenu.Parent as Control;
+            Control parent = designMenu.Parent;
             if (parent is Form parentForm)
             {
                 parentFormDesigner = host.GetDesigner(parentForm) as FormDocumentDesigner;
@@ -754,7 +754,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
         /// </summary>
-        internal class ContextMenuStripBehavior : System.Windows.Forms.Design.Behavior.Behavior
+        internal class ContextMenuStripBehavior : Behavior.Behavior
         {
             readonly ToolStripMenuItem _item;
             internal ContextMenuStripBehavior(ToolStripMenuItem menuItem)

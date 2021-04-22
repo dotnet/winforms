@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Design
     {
         class LocalUIItem : PropertyValueUIItem
         {
-            Binding binding;
+            readonly Binding binding;
 
             internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(handler.OnPropertyValueUIItemInvoke), GetToolTip(binding))
             {
@@ -37,10 +37,12 @@ namespace System.Windows.Forms.Design
                         name = comp.Site.Name;
                     }
                 }
+
                 if (name.Length == 0)
                 {
                     name = "(List)";
                 }
+
                 name += " - " + binding.BindingMemberInfo.BindingMember;
                 return name;
             }

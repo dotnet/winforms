@@ -9,7 +9,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
+    ///  Provides a design-time editor for specifying the <see cref='Control.Anchor' />
     ///  property.
     /// </summary>
     [CLSCompliant(false)]

@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// <seealso cref='BehaviorServiceAdornerCollection' />
     public sealed class BehaviorServiceAdornerCollection : CollectionBase
     {
-        private BehaviorService behaviorService;
+        private readonly BehaviorService behaviorService;
 
         /// <summary>
         ///  Initializes a new instance of <see cref='BehaviorServiceAdornerCollection' />.
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public BehaviorServiceAdornerCollection(BehaviorServiceAdornerCollection value)
         {
-            this.AddRange(value);
+            AddRange(value);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </param>
         public BehaviorServiceAdornerCollection(Adorner[] value)
         {
-            this.AddRange(value);
+            AddRange(value);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <returns>
         ///  The index at which the new element was inserted.
         /// </returns>
-        /// <seealso cref='BehaviorServiceAdornerCollection.AddRange(Adorner[])' />
+        /// <seealso cref='AddRange(Adorner[])' />
         public int Add(Adorner value)
         {
             value.BehaviorService = behaviorService;
@@ -98,7 +98,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             for (int i = 0; (i < value.Length); i = (i + 1))
             {
-                this.Add(value[i]);
+                Add(value[i]);
             }
         }
 
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             for (int i = 0; (i < value.Count); i = (i + 1))
             {
-                this.Add(value[i]);
+                Add(value[i]);
             }
         }
 

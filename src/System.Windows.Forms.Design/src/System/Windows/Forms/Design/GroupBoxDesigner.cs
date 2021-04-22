@@ -7,34 +7,32 @@ using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///     This class handles all design time behavior for the group box class.  Group
-    ///     boxes may contain sub-components and therefore use the frame designer.
-    /// </devdoc>
+    /// <summary>
+    ///  This class handles all design time behavior for the group box class.  Group
+    ///  boxes may contain sub-components and therefore use the frame designer.
+    /// </summary>
     internal class GroupBoxDesigner : ParentControlDesigner
     {
-
         private InheritanceUI inheritanceUI;
 
-        /// <devdoc>
+        /// <summary>
         /// Determines the default location for a control added to this designer.
         /// it is usualy (0,0), but may be modified if the container has special borders, etc.
-        /// </devdoc>
+        /// </summary>
         protected override Point DefaultControlLocation
         {
             get
             {
-                GroupBox gb = (GroupBox)this.Control;
+                GroupBox gb = (GroupBox)Control;
                 return new Point(gb.DisplayRectangle.X, gb.DisplayRectangle.Y);
             }
         }
 
 #if TESTVALUEUI
-        /// <include file='doc\GroupBoxDesigner.uex' path='docs/doc[@for="GroupBoxDesigner.Initialize"]/*' />
-        /// <devdoc>
-        ///     Initializes the designer with the given component.  The designer can
-        ///     get the component's site and request services from it in this call.
-        /// </devdoc>
+        /// <summary>
+        ///  Initializes the designer with the given component.  The designer can
+        ///  get the component's site and request services from it in this call.
+        /// </summary>
         public override void Initialize(IComponent component) {
             base.Initialize(component);
             
@@ -67,17 +65,16 @@ namespace System.Windows.Forms.Design
         
 #endif
 
-        /// <include file='doc\GroupBoxDesigner.uex' path='docs/doc[@for="GroupBoxDesigner.OnPaintAdornments"]/*' />
-        /// <devdoc>
-        ///      We override this because even though we still want to 
-        ///      offset our grid for our display rectangle, we still want
-        ///      to align to our parent's grid - so we don't look funny
-        /// </devdoc>
+        /// <summary>
+        ///  We override this because even though we still want to
+        ///  offset our grid for our display rectangle, we still want
+        ///  to align to our parent's grid - so we don't look funny
+        /// </summary>
         protected override void OnPaintAdornments(PaintEventArgs pe)
         {
             if (DrawGrid)
             {
-                Control control = (Control)Control;
+                Control control = Control;
                 Rectangle rectangle = Control.DisplayRectangle;
 
                 rectangle.Width++; // gpr: FillRectangle with a TextureBrush comes up one pixel short
@@ -101,13 +98,12 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\GroupBoxDesigner.uex' path='docs/doc[@for="GroupBoxDesigner.WndProc"]/*' />
-        /// <devdoc>
-        ///      We override our base class's WndProc here because
-        ///      the group box always returns HTTRANSPARENT.  This
-        ///      causes the mouse to go "through" the group box, but
-        ///      that's not what we want at design time.
-        /// </devdoc>
+        /// <summary>
+        ///  We override our base class's WndProc here because
+        ///  the group box always returns HTTRANSPARENT.  This
+        ///  causes the mouse to go "through" the group box, but
+        ///  that's not what we want at design time.
+        /// </summary>
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -124,6 +120,7 @@ namespace System.Windows.Forms.Design
                     {
                         m.Result = (IntPtr)User32.HT.CLIENT;
                     }
+
                     break;
 
                 default:
@@ -131,7 +128,6 @@ namespace System.Windows.Forms.Design
                     break;
             }
         }
-
 
 #if TESTVALUEUI
         

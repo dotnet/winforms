@@ -11,39 +11,35 @@ namespace System.Windows.Forms.Design
 {
     public partial class DocumentDesigner
     {
-        /// <devdoc>
-        ///      Document designer's version of the inheritance service.  For UI
-        ///      components, we will allow private controls if those controls are
-        ///      children of our document, since they will be visible.
-        /// </devdoc>
+        /// <summary>
+        ///  Document designer's version of the inheritance service.  For UI
+        ///  components, we will allow private controls if those controls are
+        ///  children of our document, since they will be visible.
+        /// </summary>
         private class DocumentInheritanceService : InheritanceService
         {
-            private DocumentDesigner designer;
+            private readonly DocumentDesigner designer;
 
-            /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.DocumentInheritanceService.DocumentInheritanceService"]/*' />
-            /// <devdoc>
-            ///      Creates a new document inheritance service.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new document inheritance service.
+            /// </summary>
             public DocumentInheritanceService(DocumentDesigner designer)
             {
                 this.designer = designer;
             }
 
-            /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.DocumentInheritanceService.IgnoreInheritedMember"]/*' />
-            /// <devdoc>
-            ///    <para>Indicates the inherited members to ignore.</para>
-            /// </devdoc>
+            /// <summary>
+            ///  <para>Indicates the inherited members to ignore.</para>
+            /// </summary>
             protected override bool IgnoreInheritedMember(MemberInfo member, IComponent component)
             {
-
+                FieldInfo field = member as FieldInfo;
+                MethodInfo method = member as MethodInfo;
                 // We allow private members if they are controls on our design surface or
                 // derive from Menu.
                 //
-                bool privateMember = false;
-                Type memberType = null;
-
-                FieldInfo field = member as FieldInfo;
-                MethodInfo method = member as MethodInfo;
+                bool privateMember;
+                Type memberType;
                 if (field != null)
                 {
                     privateMember = field.IsPrivate || field.IsAssembly;
@@ -75,6 +71,7 @@ namespace System.Windows.Forms.Design
                         {
                             child = (Control)method.Invoke(component, null);
                         }
+
                         Control parent = designer.Control;
 
                         while (child != null && child != parent)

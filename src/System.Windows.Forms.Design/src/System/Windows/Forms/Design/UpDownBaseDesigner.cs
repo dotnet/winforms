@@ -8,25 +8,23 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para>
-    ///       Provides a designer that can design components
-    ///       that extend UpDownBase.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>
+    ///  Provides a designer that can design components
+    ///  that extend UpDownBase.</para>
+    /// </summary>
     internal class UpDownBaseDesigner : ControlDesigner
     {
-
         public UpDownBaseDesigner()
         {
             AutoResizeHandles = true;
         }
 
-        /// <include file='doc\UpDownBaseDesigner.uex' path='docs/doc[@for="UpDownBaseDesigner.SelectionRules"]/*' />
-        /// <devdoc>
-        ///     Retrieves a set of rules concerning the movement capabilities of a component.
-        ///     This should be one or more flags from the SelectionRules class.  If no designer
-        ///     provides rules for a component, the component will not get any UI services.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves a set of rules concerning the movement capabilities of a component.
+        ///  This should be one or more flags from the SelectionRules class.  If no designer
+        ///  provides rules for a component, the component will not get any UI services.
+        /// </summary>
         public override SelectionRules SelectionRules
         {
             get
@@ -37,17 +35,16 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\UpDownBaseDesigner.uex' path='docs/doc[@for="UpDownBaseDesigner.SnapLines"]/*' />
-        /// <devdoc>
-        ///     Adds a baseline SnapLine to the list of SnapLines related to this control.
-        /// </devdoc>
+        /// <summary>
+        ///  Adds a baseline SnapLine to the list of SnapLines related to this control.
+        /// </summary>
         public override IList SnapLines
         {
             get
             {
                 ArrayList snapLines = base.SnapLines as ArrayList;
 
-                int baseline = DesignerUtils.GetTextBaseline(Control, System.Drawing.ContentAlignment.TopLeft);
+                int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
                 BorderStyle borderStyle = BorderStyle.Fixed3D;
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
@@ -65,13 +62,11 @@ namespace System.Windows.Forms.Design
                     baseline += 2;
                 }
 
-
                 snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
                 return snapLines;
             }
         }
-
     }
 }
 

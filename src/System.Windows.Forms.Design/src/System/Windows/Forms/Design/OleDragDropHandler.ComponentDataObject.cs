@@ -16,28 +16,28 @@ namespace System.Windows.Forms.Design
     {
         protected class ComponentDataObject : IDataObject
         {
-            private IServiceProvider serviceProvider;
+            private readonly IServiceProvider serviceProvider;
             private object[] components;
 
             private Stream serializationStream;
             private object serializationData;
-            private int initialX;
-            private int initialY;
-            private IOleDragClient dragClient;
+            private readonly int initialX;
+            private readonly int initialY;
+            private readonly IOleDragClient dragClient;
             private CfCodeToolboxItem toolboxitemdata;
 
             public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object[] comps, int x, int y)
             {
-                this.serviceProvider = sp;
-                this.components = GetComponentList(comps, null, -1);
-                this.initialX = x;
-                this.initialY = y;
+                serviceProvider = sp;
+                components = GetComponentList(comps, null, -1);
+                initialX = x;
+                initialY = y;
                 this.dragClient = dragClient;
             }
 
             public ComponentDataObject(IOleDragClient dragClient, IServiceProvider sp, object serializationData)
             {
-                this.serviceProvider = sp;
+                serviceProvider = sp;
                 this.serializationData = serializationData;
                 this.dragClient = dragClient;
             }
@@ -51,7 +51,6 @@ namespace System.Windows.Forms.Design
                         IDesignerSerializationService ds = (IDesignerSerializationService)serviceProvider.GetService(typeof(IDesignerSerializationService));
                         if (ds != null)
                         {
-
                             object[] comps = new object[components.Length];
                             for (int i = 0; i < components.Length; i++)
                             {
@@ -66,10 +65,10 @@ namespace System.Windows.Forms.Design
                             serializationStream.Seek(0, SeekOrigin.Begin);
                         }
                     }
+
                     return serializationStream;
                 }
             }
-
 
             public object[] Components
             {
@@ -80,42 +79,42 @@ namespace System.Windows.Forms.Design
                         Deserialize(null, false);
                         if (components == null)
                         {
-                            return new object[0];
+                            return Array.Empty<object>();
                         }
                     }
+
                     return (object[])components.Clone();
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// computes the IDataObject which constitutes this whole toolboxitem for storage in the toolbox.
-            /// </devdoc>
+            /// </summary>
             private CfCodeToolboxItem NestedToolboxItem
             {
                 get
                 {
                     if (toolboxitemdata == null)
                     {
-                        toolboxitemdata = new CfCodeToolboxItem(this.GetData(OleDragDropHandler.DataFormat));
+                        toolboxitemdata = new CfCodeToolboxItem(GetData(DataFormat));
                     }
+
                     return toolboxitemdata;
                 }
             }
 
-            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetCopySelection"]/*' />
-            /// <devdoc>
-            ///     Used to retrieve the selection for a copy.  The default implementation
-            ///     retrieves the current selection.
-            /// </devdoc>
+            /// <summary>
+            ///  Used to retrieve the selection for a copy.  The default implementation
+            ///  retrieves the current selection.
+            /// </summary>
             private object[] GetComponentList(object[] components, ArrayList list, int index)
             {
-
                 if (serviceProvider == null)
                 {
                     return components;
                 }
 
-                ISelectionService selSvc = (ISelectionService)this.serviceProvider.GetService(typeof(ISelectionService));
+                ISelectionService selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
 
                 if (selSvc == null)
                 {
@@ -128,7 +127,6 @@ namespace System.Windows.Forms.Design
                 else
                     selectedComponents = new ArrayList(components);
 
-
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
                 if (host != null)
                 {
@@ -138,8 +136,10 @@ namespace System.Windows.Forms.Design
                         copySelection.Add(comp);
                         GetAssociatedComponents(comp, host, copySelection);
                     }
+
                     selectedComponents = copySelection;
                 }
+
                 object[] comps = new object[selectedComponents.Count];
                 selectedComponents.CopyTo(comps, 0);
                 return comps;
@@ -167,17 +167,18 @@ namespace System.Windows.Forms.Design
 
             public virtual object GetData(string format, bool autoConvert)
             {
-                if (format.Equals(OleDragDropHandler.DataFormat))
+                if (format.Equals(DataFormat))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     SerializationStream.Seek(0, SeekOrigin.Begin);
-                    return formatter.Deserialize(this.SerializationStream);
+                    return formatter.Deserialize(SerializationStream);
                 }
-                else if (format.Equals(OleDragDropHandler.NestedToolboxItemFormat))
+                else if (format.Equals(NestedToolboxItemFormat))
                 {
                     NestedToolboxItem.SetDisplayName();
                     return NestedToolboxItem;
                 }
+
                 return null;
             }
 
@@ -187,8 +188,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     If the there is data store in the data object associated with
-            ///     format this will return true.
+            ///  If the there is data store in the data object associated with
+            ///  format this will return true.
             /// </summary>
             public bool GetDataPresent(string format, bool autoConvert)
             {
@@ -196,8 +197,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     If the there is data store in the data object associated with
-            ///     format this will return true.
+            ///  If the there is data store in the data object associated with
+            ///  format this will return true.
             /// </summary>
             public bool GetDataPresent(string format)
             {
@@ -205,8 +206,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     If the there is data store in the data object associated with
-            ///     format this will return true.
+            ///  If the there is data store in the data object associated with
+            ///  format this will return true.
             /// </summary>
             public bool GetDataPresent(Type format)
             {
@@ -214,7 +215,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Retrieves a list of all formats stored in this data object.
+            ///  Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats(bool autoConvert)
             {
@@ -222,17 +223,15 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Retrieves a list of all formats stored in this data object.
+            ///  Retrieves a list of all formats stored in this data object.
             /// </summary>
             public string[] GetFormats()
             {
-                return new string[] { OleDragDropHandler.NestedToolboxItemFormat, OleDragDropHandler.DataFormat, DataFormats.Serializable, OleDragDropHandler.ExtraInfoFormat };
+                return new string[] { NestedToolboxItemFormat, DataFormat, DataFormats.Serializable, ExtraInfoFormat };
             }
-
 
             public void Deserialize(IServiceProvider serviceProvider, bool removeCurrentComponents)
             {
-
                 if (serviceProvider == null)
                 {
                     serviceProvider = this.serviceProvider;
@@ -254,7 +253,6 @@ namespace System.Windows.Forms.Design
                     {
                         foreach (IComponent removeComp in components)
                         {
-
                             if (host == null && removeComp.Site != null)
                             {
                                 host = (IDesignerHost)removeComp.Site.GetService(typeof(IDesignerHost));
@@ -263,11 +261,13 @@ namespace System.Windows.Forms.Design
                                     trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
                                 }
                             }
+
                             if (host != null)
                             {
                                 host.DestroyComponent(removeComp);
                             }
                         }
+
                         components = null;
                     }
 
@@ -289,7 +289,6 @@ namespace System.Windows.Forms.Design
                     ArrayList topComps = new ArrayList();
                     for (int i = 0; i < components.Length; i++)
                     {
-
                         if (components[i] is Control)
                         {
                             Control c = (Control)components[i];
@@ -304,8 +303,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    components = (object[])topComps.ToArray();
-
+                    components = topComps.ToArray();
                 }
                 finally
                 {
@@ -317,8 +315,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Sets the data to be associated with the specific data format. For
-            ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
+            ///  Sets the data to be associated with the specific data format. For
+            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
             /// </summary>
             public void SetData(string format, bool autoConvert, object data)
             {
@@ -326,8 +324,8 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Sets the data to be associated with the specific data format. For
-            ///     a listing of predefined formats see System.Windows.Forms.DataFormats.
+            ///  Sets the data to be associated with the specific data format. For
+            ///  a listing of predefined formats see System.Windows.Forms.DataFormats.
             /// </summary>
             public void SetData(string format, object data)
             {
@@ -335,7 +333,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Sets the data to be associated with the specific data format.
+            ///  Sets the data to be associated with the specific data format.
             /// </summary>
             public void SetData(Type format, object data)
             {
@@ -343,15 +341,13 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Stores data in the data object. The format assumed is the
-            ///     class of data
+            ///  Stores data in the data object. The format assumed is the
+            ///  class of data
             /// </summary>
             public void SetData(object data)
             {
                 SetData(data.GetType(), data);
             }
-
         }
-
     }
 }

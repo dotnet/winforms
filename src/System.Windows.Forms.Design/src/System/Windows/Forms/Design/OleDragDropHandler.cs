@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
@@ -18,7 +17,7 @@ namespace System.Windows.Forms.Design
     internal partial class OleDragDropHandler
     {
         // This is a bit that we stuff into the DoDragDrop
-        // to indicate that the thing that is being dragged should only 
+        // to indicate that the thing that is being dragged should only
         // be allowed to be moved in the current DropTarget (e.g. parent designer).
         // We use this for interited components that can be modified (e.g. location/size) changed
         // but not removed from their parent.
@@ -31,13 +30,13 @@ namespace System.Windows.Forms.Design
 
         private bool dragOk;
         private bool forceDrawFrames;
-        private bool localDrag = false;
-        private bool localDragInside = false;
+        private bool localDrag;
+        private bool localDragInside;
         private Point localDragOffset = Point.Empty;
         private DragDropEffects localDragEffect;
         private object[] dragComps;
         private Point dragBase = Point.Empty;
-        private static bool freezePainting = false;
+        private static bool freezePainting;
         private static Hashtable currentDrags;
 
         private static readonly CodeMarkers codemarkers = CodeMarkers.Instance;
@@ -83,14 +82,17 @@ namespace System.Windows.Forms.Design
             {
                 return null;
             }
+
             return currentDrags[data] as IComponent;
         }
+
         private static void AddCurrentDrag(IDataObject data, IComponent component)
         {
             if (currentDrags == null)
             {
                 currentDrags = new Hashtable();
             }
+
             currentDrags[data] = component;
         }
 
@@ -107,8 +109,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         protected virtual bool CanDropDataObject(IDataObject dataObj)
         {
             if (dataObj != null)
@@ -120,16 +120,19 @@ namespace System.Windows.Forms.Design
                     {
                         return false;
                     }
+
                     bool dropOk = true;
                     for (int i = 0; dropOk && i < dragObjs.Length; i++)
                     {
                         dropOk = dropOk && (dragObjs[i] is IComponent) && client.IsDropOk((IComponent)dragObjs[i]);
                     }
+
                     return dropOk;
                 }
+
                 try
                 {
-                    object serializationData = dataObj.GetData(OleDragDropHandler.DataFormat, false);
+                    object serializationData = dataObj.GetData(DataFormat, false);
 
                     if (serializationData == null)
                     {
@@ -153,10 +156,12 @@ namespace System.Windows.Forms.Design
                             {
                                 continue;
                             }
+
                             dropOk = dropOk && client.IsDropOk((IComponent)o);
                             if (!dropOk)
                                 break;
                         }
+
                         return dropOk;
                     }
                 }
@@ -169,6 +174,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -188,27 +194,23 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\OleDragDropHandler.uex' path='docs/doc[@for="OleDragDropHandler.CreateTool"]/*' />
-        /// <devdoc>
-        ///      This is the worker method of all CreateTool methods.  It is the only one
-        ///      that can be overridden.
-        /// </devdoc>
+        /// <summary>
+        ///  This is the worker method of all CreateTool methods.  It is the only one
+        ///  that can be overridden.
+        /// </summary>
         public IComponent[] CreateTool(ToolboxItem tool, Control parent, int x, int y, int width, int height, bool hasLocation, bool hasSize)
         {
             return CreateTool(tool, parent, x, y, width, height, hasLocation, hasSize, null);
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public IComponent[] CreateTool(ToolboxItem tool, Control parent, int x, int y, int width, int height, bool hasLocation, bool hasSize, ToolboxSnapDragDropEventArgs e)
         {
-
             // Services we will need
             //
             IToolboxService toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
             ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            IComponent[] comps = new IComponent[0];
+            IComponent[] comps = Array.Empty<IComponent>();
 
             Cursor oldCursor = Cursor.Current;
             Cursor.Current = Cursors.WaitCursor;
@@ -233,9 +235,8 @@ namespace System.Windows.Forms.Design
                 {
                     try
                     {
-
-                        // First check if we are currently in localization mode (i.e., language is non-default). 
-                        // If so, we should not permit addition of new components. This is an intentional 
+                        // First check if we are currently in localization mode (i.e., language is non-default).
+                        // If so, we should not permit addition of new components. This is an intentional
                         // change from Everett - see VSWhidbey #292249.
                         if (host != null && CurrentlyLocalizing(host.RootComponent))
                         {
@@ -245,7 +246,7 @@ namespace System.Windows.Forms.Design
                                 uiService.ShowMessage(SR.LocalizingCannotAdd);
                             }
 
-                            comps = new IComponent[0];
+                            comps = Array.Empty<IComponent>();
                             return comps;
                         }
 
@@ -261,6 +262,7 @@ namespace System.Windows.Forms.Design
                         {
                             x += width;
                         }
+
                         if (hasLocation)
                             defaultValues["Location"] = new Point(x, y);
                         if (hasSize)
@@ -275,7 +277,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (checkoutEx == CheckoutException.Canceled)
                         {
-                            comps = new IComponent[0];
+                            comps = Array.Empty<IComponent>();
                         }
                         else
                         {
@@ -294,19 +296,22 @@ namespace System.Windows.Forms.Design
                     {
                         IUIService uiService = (IUIService)GetService(typeof(IUIService));
 
-                        string exceptionMessage = String.Empty;
+                        string exceptionMessage = string.Empty;
                         if (ex.InnerException != null)
                         {
                             exceptionMessage = ex.InnerException.ToString();
                         }
-                        if (String.IsNullOrEmpty(exceptionMessage))
+
+                        if (string.IsNullOrEmpty(exceptionMessage))
                         {
                             exceptionMessage = ex.ToString();
                         }
+
                         if (ex is InvalidOperationException)
                         {
                             exceptionMessage = ex.Message;
                         }
+
                         if (uiService != null)
                         {
                             uiService.ShowError(ex, string.Format(SR.FailedToCreateComponent, tool.DisplayName, exceptionMessage));
@@ -319,7 +324,7 @@ namespace System.Windows.Forms.Design
 
                     if (comps == null)
                     {
-                        comps = new IComponent[0];
+                        comps = Array.Empty<IComponent>();
                     }
                 }
                 finally
@@ -336,6 +341,7 @@ namespace System.Windows.Forms.Design
                 {
                     trans.Commit();
                 }
+
                 Cursor.Current = oldCursor;
             }
 
@@ -357,6 +363,7 @@ namespace System.Windows.Forms.Design
                         selectComps.Remove(comps[i]);
                     }
                 }
+
                 selSvc.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
             }
 
@@ -364,19 +371,19 @@ namespace System.Windows.Forms.Design
             return comps;
         }
 
-        /// <devdoc>
-        ///      Determines whether we are currently in localization mode - i.e., language is not (Default).
-        /// </devdoc>
+        /// <summary>
+        ///  Determines whether we are currently in localization mode - i.e., language is not (Default).
+        /// </summary>
         private bool CurrentlyLocalizing(IComponent rootComponent)
         {
             if (rootComponent != null)
             {
                 PropertyDescriptor prop = TypeDescriptor.GetProperties(rootComponent)["Language"];
 
-                if (prop != null && prop.PropertyType == typeof(System.Globalization.CultureInfo))
+                if (prop != null && prop.PropertyType == typeof(Globalization.CultureInfo))
                 {
-                    System.Globalization.CultureInfo ci = (System.Globalization.CultureInfo)prop.GetValue(rootComponent);
-                    if (!ci.Equals(System.Globalization.CultureInfo.InvariantCulture))
+                    Globalization.CultureInfo ci = (Globalization.CultureInfo)prop.GetValue(rootComponent);
+                    if (!ci.Equals(Globalization.CultureInfo.InvariantCulture))
                     {
                         return true;
                     }
@@ -406,17 +413,13 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private Point DrawDragFrames(object[] comps,
                                      Point oldOffset, DragDropEffects oldEffect,
                                      Point newOffset, DragDropEffects newEffect,
                                      bool drawAtNewOffset)
         {
             Control comp;
-            Rectangle newRect = Rectangle.Empty;
             Control parentControl = client.GetDesignerControl();
-
 
             if (selectionHandler == null)
             {
@@ -431,7 +434,7 @@ namespace System.Windows.Forms.Design
 
             for (int i = 0; i < comps.Length; i++)
             {
-                comp = (Control)client.GetControlForComponent(comps[i]);
+                comp = client.GetControlForComponent(comps[i]);
 
                 Color backColor = SystemColors.Control;
                 try
@@ -457,10 +460,11 @@ namespace System.Windows.Forms.Design
                     readOnlyLocation = loc.IsReadOnly;
                 }
 
+                Rectangle newRect;
                 // first, undraw the old rect
                 if (!oldOffset.IsEmpty)
                 {
-                    if ((int)(oldEffect & DragDropEffects.Move) == 0 ||
+                    if ((oldEffect & DragDropEffects.Move) == 0 ||
                         !readOnlyLocation)
                     {
                         newRect = comp.Bounds;
@@ -474,6 +478,7 @@ namespace System.Windows.Forms.Design
                         {
                             newRect.Offset(oldOffset.X, oldOffset.Y);
                         }
+
                         newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
                         DrawReversibleFrame(parentControl.Handle, newRect, backColor);
                     }
@@ -481,7 +486,7 @@ namespace System.Windows.Forms.Design
 
                 if (!newOffset.IsEmpty)
                 {
-                    if ((int)(oldEffect & DragDropEffects.Move) == 0 ||
+                    if ((oldEffect & DragDropEffects.Move) == 0 ||
                         !readOnlyLocation)
                     {
                         newRect = comp.Bounds;
@@ -494,6 +499,7 @@ namespace System.Windows.Forms.Design
                         {
                             newRect.Offset(newOffset.X, newOffset.Y);
                         }
+
                         newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
                         DrawReversibleFrame(parentControl.Handle, newRect, backColor);
                     }
@@ -510,7 +516,6 @@ namespace System.Windows.Forms.Design
                 rectangle.Width = 5;
             if (rectangle.Height == 0)
                 rectangle.Height = 5;
-
 
             // Copy of ControlPaint.DrawReversibleFrame, see VSWhidbey 581670
             // If ControlPaint ever gets overrloaded, we should replace the code below by calling it:
@@ -551,8 +556,7 @@ namespace System.Windows.Forms.Design
                 return true;
             }
 
-
-            Control c = (Control)client.GetDesignerControl();
+            Control c = client.GetDesignerControl();
 
             localDrag = true;
             localDragInside = false;
@@ -624,6 +628,7 @@ namespace System.Windows.Forms.Design
             {
                 trans = host.CreateTransaction(string.Format(SR.DragDropDragComponents, components.Length));
             }
+
             try
             {
                 effect = c.DoDragDrop(data, allowedEffects);
@@ -651,7 +656,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            bool isMove = ((int)(effect & DragDropEffects.Move)) != 0 || ((int)((int)effect & AllowLocalMoveOnly)) != 0;
+            bool isMove = (effect & DragDropEffects.Move) != 0 || ((int)effect & AllowLocalMoveOnly) != 0;
 
             // since the EndDrag will clear this
             bool isLocalMove = isMove && localDragInside;
@@ -669,12 +674,10 @@ namespace System.Windows.Forms.Design
                     // cancel the drag if we aren't doing a local move
                     selectionUISvc.EndDrag(!isLocalMove);
                 }
-
             }
 
             if (!localDragOffset.IsEmpty && effect != DragDropEffects.None)
             {
-
                 DrawDragFrames(dragComps, localDragOffset, localDragEffect,
                                Point.Empty, DragDropEffects.None, false);
             }
@@ -748,12 +751,11 @@ namespace System.Windows.Forms.Design
                 de.AllowedEffect == DragDropEffects.None ||
                 (!localDrag && !dragOk))
             {
-
                 de.Effect = DragDropEffects.None;
                 return;
             }
 
-            bool localMoveOnly = ((int)((int)de.AllowedEffect & AllowLocalMoveOnly)) != 0 && localDragInside;
+            bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && localDragInside;
 
             // if we are dragging inside the local dropsource/target, and and AllowLocalMoveOnly flag is set,
             // we just consider this a normal move.
@@ -801,7 +803,6 @@ namespace System.Windows.Forms.Design
 
                 if (dragOk || (localDragInside && de.Effect == DragDropEffects.Copy))
                 {
-
                     // add em to this parent.
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     IContainer container = host.RootComponent.Site.Container;
@@ -825,12 +826,13 @@ namespace System.Windows.Forms.Design
                         {
                             // this causes new elements to be created
                             //
-                            cdo.Deserialize(serviceProvider, (int)(de.Effect & DragDropEffects.Copy) == 0);
+                            cdo.Deserialize(serviceProvider, (de.Effect & DragDropEffects.Copy) == 0);
                         }
                         else
                         {
                             collapseChildren = true;
                         }
+
                         updateLocation = true;
                         components = cdo.Components;
 
@@ -838,17 +840,15 @@ namespace System.Windows.Forms.Design
                         {
                             components = GetTopLevelComponents(components);
                         }
-
                     }
                     else
                     {
-
-                        object serializationData = dataObj.GetData(OleDragDropHandler.DataFormat, true);
+                        object serializationData = dataObj.GetData(DataFormat, true);
 
                         if (serializationData == null)
                         {
                             Debug.Fail("data object didn't return any data, so how did we allow the drop?");
-                            components = new IComponent[0];
+                            components = Array.Empty<IComponent>();
                         }
                         else
                         {
@@ -863,7 +863,6 @@ namespace System.Windows.Forms.Design
                     // the the mouse pointer
                     if (components != null && components.Length > 0)
                     {
-
                         Debug.Assert(container != null, "Didn't get a container from the site!");
                         string name;
                         IComponent comp = null;
@@ -880,10 +879,8 @@ namespace System.Windows.Forms.Design
 
                             ArrayList selectComps = new ArrayList();
 
-
                             for (int i = 0; i < components.Length; i++)
                             {
-
                                 comp = components[i] as IComponent;
 
                                 if (comp == null)
@@ -903,7 +900,6 @@ namespace System.Windows.Forms.Design
                                     Control oldDesignerControl = null;
                                     if (updateLocation)
                                     {
-
                                         oldDesignerControl = client.GetDesignerControl();
                                         User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW);
                                     }
@@ -945,7 +941,6 @@ namespace System.Windows.Forms.Design
 
                                     if (updateLocation)
                                     {
-
                                         ParentControlDesigner parentDesigner = client as ParentControlDesigner;
                                         if (parentDesigner != null)
                                         {
@@ -973,6 +968,7 @@ namespace System.Windows.Forms.Design
                                     {
                                         break;
                                     }
+
                                     throw;
                                 }
                             }
@@ -996,7 +992,6 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-
                 if (localDragInside)
                 {
                     ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
@@ -1012,10 +1007,9 @@ namespace System.Windows.Forms.Design
                             Rectangle offset = new Rectangle(de.X - dragBase.X, de.Y - dragBase.Y, 0, 0);
                             selectionUISvc.DragMoved(offset);
                         }
-
                     }
-
                 }
+
                 dragOk = false;
             }
             finally
@@ -1028,71 +1022,67 @@ namespace System.Windows.Forms.Design
         {
             /*
             this causes focus rects to be drawn, which we don't want to happen.
-                
+
             Control dragHost = client.GetDesignerControl();
-            
+
             if (dragHost != null && dragHost.CanSelect) {
                 dragHost.Focus();
             }*/
 
             if (!localDrag && CanDropDataObject(de.Data) && de.AllowedEffect != DragDropEffects.None)
             {
-
                 if (!client.CanModifyComponents)
                 {
                     return;
                 }
+
                 dragOk = true;
 
                 // this means it's not us doing the drag
-                if ((int)(de.KeyState & (int)User32.MK.CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0)
+                if ((de.KeyState & (int)User32.MK.CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != 0)
                 {
                     de.Effect = DragDropEffects.Copy;
                 }
-                else if ((de.AllowedEffect & DragDropEffects.Move) != (DragDropEffects)0)
+                else if ((de.AllowedEffect & DragDropEffects.Move) != 0)
                 {
                     de.Effect = DragDropEffects.Move;
                 }
                 else
                 {
-
                     de.Effect = DragDropEffects.None;
                     return;
                 }
-
             }
             else if (localDrag && de.AllowedEffect != DragDropEffects.None)
             {
                 localDragInside = true;
                 if ((de.KeyState & (int)User32.MK.CONTROL) != 0
-                    && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0
+                    && (de.AllowedEffect & DragDropEffects.Copy) != 0
                     && client.CanModifyComponents)
                 {
                     de.Effect = DragDropEffects.Copy;
                 }
 
-                bool localMoveOnly = ((int)((int)de.AllowedEffect & AllowLocalMoveOnly)) != 0 && localDragInside;
+                bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && localDragInside;
 
                 if (localMoveOnly)
                 {
                     de.Effect |= (DragDropEffects)AllowLocalMoveOnly;
                 }
 
-                if ((de.AllowedEffect & DragDropEffects.Move) != (DragDropEffects)0)
+                if ((de.AllowedEffect & DragDropEffects.Move) != 0)
                 {
                     de.Effect |= DragDropEffects.Move;
                 }
             }
             else
             {
-
                 de.Effect = DragDropEffects.None;
             }
         }
 
         public void DoOleDragLeave()
         {
-
             if (localDrag || forceDrawFrames)
             {
                 localDragInside = false;
@@ -1104,8 +1094,10 @@ namespace System.Windows.Forms.Design
                     dragBase = Point.Empty;
                     dragComps = null;
                 }
+
                 forceDrawFrames = false;
             }
+
             dragOk = false;
         }
 
@@ -1119,20 +1111,20 @@ namespace System.Windows.Forms.Design
             }
 
             bool copy = (de.KeyState & (int)User32.MK.CONTROL) != 0
-                && (de.AllowedEffect & DragDropEffects.Copy) != (DragDropEffects)0
+                && (de.AllowedEffect & DragDropEffects.Copy) != 0
                 && client.CanModifyComponents;
 
             // we pretend AllowLocalMoveOnly is a normal move when we are over the originating container.
             //
-            bool localMoveOnly = ((int)((int)de.AllowedEffect & AllowLocalMoveOnly)) != 0 && localDragInside;
-            bool move = (de.AllowedEffect & DragDropEffects.Move) != (DragDropEffects)0 || localMoveOnly;
+            bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && localDragInside;
+            bool move = (de.AllowedEffect & DragDropEffects.Move) != 0 || localMoveOnly;
 
             if ((copy || move) && (localDrag || forceDrawFrames))
             {
-                // draw the shadow rects.
-                Point newOffset = Point.Empty;
                 Point convertedPoint = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
 
+                // draw the shadow rects.
+                Point newOffset;
                 if (forceDrawFrames)
                 {
                     newOffset = convertedPoint;
@@ -1160,8 +1152,6 @@ namespace System.Windows.Forms.Design
                     localDragEffect = de.Effect;
                 }
             }
-
-
 
             if (copy)
             {
@@ -1234,6 +1224,7 @@ namespace System.Windows.Forms.Design
             {
                 comps = new ArrayList(comps);
             }
+
             IList compList = (IList)comps;
             ArrayList topLevel = new ArrayList();
             foreach (object comp in compList)

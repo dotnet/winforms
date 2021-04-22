@@ -14,11 +14,10 @@ namespace System.Windows.Forms.Design
 
             public BufferedKey(Message keyDown, Message keyChar, Message keyUp)
             {
-                this.KeyChar = keyChar;
-                this.KeyDown = keyDown;
-                this.KeyUp = keyUp;
+                KeyChar = keyChar;
+                KeyDown = keyDown;
+                KeyUp = keyUp;
             }
         }
-
     }
 }

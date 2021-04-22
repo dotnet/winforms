@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
         private readonly IUIService _uiService;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.DesignerFrame'/> class.
+        ///  Initializes a new instance of the <see cref='DesignerFrame'/> class.
         /// </summary>
         public DesignerFrame(ISite site)
         {
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Design
                     if ((msg == User32.WM.VSCROLL) || (msg == User32.WM.HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        User32.SendMessageW(_designerRegion.Handle, (User32.WM)msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
+                        User32.SendMessageW(_designerRegion.Handle, msg, (IntPtr)PARAM.ToInt((int)wScrollNotify, 0), IntPtr.Zero);
                         return;
                     }
 
@@ -602,7 +602,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            public class OverlayControlAccessibleObject : Control.ControlAccessibleObject
+            public class OverlayControlAccessibleObject : ControlAccessibleObject
             {
                 public OverlayControlAccessibleObject(OverlayControl owner) : base(owner)
                 {

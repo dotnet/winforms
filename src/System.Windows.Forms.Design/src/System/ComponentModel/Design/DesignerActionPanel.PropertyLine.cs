@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    if (!object.Equals(_value, newValue))
+                    if (!Equals(_value, newValue))
                     {
                         PropertyDescriptor.SetValue(_actionList, newValue);
                         // Update the value we're caching

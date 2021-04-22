@@ -4,27 +4,23 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms.Design
 {
     internal partial class DesignerExtenders
     {
-        /// <devdoc>
-        ///     This is the base extender provider for all winform document
-        ///     designers.  It provides the "Name" property.
-        /// </devdoc>
-        [
-        ProvideProperty("Name", typeof(IComponent))
-        ]
+        /// <summary>
+        ///  This is the base extender provider for all winform document
+        ///  designers.  It provides the "Name" property.
+        /// </summary>
+        [ProvideProperty("Name", typeof(IComponent))]
         private class NameExtenderProvider : IExtenderProvider
         {
-
             private IComponent baseComponent;
 
-            /// <devdoc>
-            ///      Creates a new DocumentExtenderProvider.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new DocumentExtenderProvider.
+            /// </summary>
             internal NameExtenderProvider()
             {
             }
@@ -43,16 +39,16 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return baseComponent;
             }
 
-            /// <devdoc>
-            ///     Determines if ths extender provider can extend the given object.  We extend
-            ///     all objects, so we always return true.
-            /// </devdoc>
+            /// <summary>
+            ///  Determines if ths extender provider can extend the given object.  We extend
+            ///  all objects, so we always return true.
+            /// </summary>
             public virtual bool CanExtend(object o)
             {
-
                 // We always extend the root
                 //
                 IComponent baseComp = GetBaseComponent(o);
@@ -72,18 +68,15 @@ namespace System.Windows.Forms.Design
                 return true;
             }
 
-            /// <devdoc>
-            ///     This is an extender property that we offer to all components
-            ///     on the form.  It implements the "Name" property.
-            /// </devdoc>
-            [
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            ParenthesizePropertyName(true),
-            MergableProperty(false),
-            SRDescriptionAttribute(nameof(SR.DesignerPropName)),
-            Category("Design")
-            ]
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            /// <summary>
+            ///  This is an extender property that we offer to all components
+            ///  on the form.  It implements the "Name" property.
+            /// </summary>
+            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+            [ParenthesizePropertyName(true)]
+            [MergableProperty(false)]
+            [SRDescription(nameof(SR.DesignerPropName))]
+            [Category("Design")]
             public virtual string GetName(IComponent comp)
             {
                 ISite site = comp.Site;
@@ -91,14 +84,14 @@ namespace System.Windows.Forms.Design
                 {
                     return site.Name;
                 }
+
                 return null;
             }
 
-            /// <devdoc>
-            ///     This is an extender property that we offer to all components
-            ///     on the form.  It implements the "Name" property.
-            /// </devdoc>
-            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            /// <summary>
+            ///  This is an extender property that we offer to all components
+            ///  on the form.  It implements the "Name" property.
+            /// </summary>
             public void SetName(IComponent comp, string newName)
             {
                 ISite site = comp.Site;

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Configuration;
 using System.Drawing.Configuration;
 using System.IO;
@@ -15,7 +14,6 @@ namespace System.Drawing
     /// </summary>
     internal static class BitmapSelector
     {
-
         /// <summary>
         /// Gets the bitmap ID suffix defined in the application configuration, or string.Empty if
         /// the suffix is not specified.  Internal for unit tests
@@ -38,10 +36,11 @@ namespace System.Drawing
                         var value = section.BitmapSuffix;
                         if (value != null && value is string)
                         {
-                            _suffix = (string)value;
+                            _suffix = value;
                         }
                     }
                 }
+
                 return _suffix;
             }
             set
@@ -96,6 +95,7 @@ namespace System.Drawing
             catch (FileNotFoundException)
             {
             }
+
             return stream;
         }
 
@@ -114,6 +114,7 @@ namespace System.Drawing
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -249,6 +250,5 @@ namespace System.Drawing
         {
             return new Bitmap(GetResourceStream(type, originalName));
         }
-
     }
 }

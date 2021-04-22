@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -861,17 +860,17 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (Marshal.SystemDefaultCharSize == 1)
             {
-                bytes = System.Text.Encoding.Default.GetBytes(text);
-                nullBytes = System.Text.Encoding.Default.GetBytes(nullChar);
+                bytes = Text.Encoding.Default.GetBytes(text);
+                nullBytes = Text.Encoding.Default.GetBytes(nullChar);
             }
             else
             {
-                bytes = System.Text.Encoding.Unicode.GetBytes(text);
-                nullBytes = System.Text.Encoding.Unicode.GetBytes(nullChar);
+                bytes = Text.Encoding.Unicode.GetBytes(text);
+                nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
             }
 
             Marshal.Copy(bytes, 0, m.LParam, bytes.Length);
-            Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + (long)bytes.Length)), nullBytes.Length);
+            Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + bytes.Length)), nullBytes.Length);
             m.Result = (IntPtr)((bytes.Length + nullBytes.Length) / Marshal.SystemDefaultCharSize);
         }
 

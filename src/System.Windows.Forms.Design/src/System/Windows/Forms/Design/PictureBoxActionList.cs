@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design
 {
     internal class PictureBoxActionList : DesignerActionList
     {
-        private PictureBoxDesigner _designer;
+        private readonly PictureBoxDesigner _designer;
         public PictureBoxActionList(PictureBoxDesigner designer) : base(designer.Component)
         {
             _designer = designer;

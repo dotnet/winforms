@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Design
             return;
         }
 
-        System.Windows.Forms.DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
+        DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
             IUIService uiSvc = (IUIService)((IServiceProvider)this).GetService(typeof(IUIService));
             if (uiSvc != null)

@@ -10,14 +10,13 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para>
-    ///       Provides a designer that can design components
-    ///       that extend ButtonBase.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>
+    ///  Provides a designer that can design components
+    ///  that extend ButtonBase.</para>
+    /// </summary>
     internal class ButtonBaseDesigner : ControlDesigner
     {
-
         // private DesignerActionListCollection _actionlists;
 
         public ButtonBaseDesigner()
@@ -40,15 +39,12 @@ namespace System.Windows.Forms.Design
                     prop.SetValue(Component, true);
                 }
             }
-
-
         }
 
-        /// <include file='doc\ButtonBaseDesigner.uex' path='docs/doc[@for="ButtonBaseDesigner.SnapLines"]/*' />
-        /// <devdoc>
-        ///     Adds a baseline SnapLine to the list of SnapLines related
-        ///     to this control.
-        /// </devdoc>
+        /// <summary>
+        ///  Adds a baseline SnapLine to the list of SnapLines related
+        ///  to this control.
+        /// </summary>
         public override IList SnapLines
         {
             get
@@ -199,7 +195,6 @@ namespace System.Windows.Forms.Design
 
         private int DefaultBaselineOffset(ContentAlignment alignment, FlatStyle flatStyle)
         {
-
             if ((alignment & DesignerUtils.AnyMiddleAlignment) != 0)
             {
                 return 0;

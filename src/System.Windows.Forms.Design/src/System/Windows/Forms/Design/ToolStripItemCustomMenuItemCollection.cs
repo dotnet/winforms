@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -131,7 +130,7 @@ namespace System.Windows.Forms.Design
                 {
                     checkedToolStripMenuItem = CreateBooleanItem("C&hecked", "Checked");
                     showShortcutKeysToolStripMenuItem = CreateBooleanItem("ShowShortcut&Keys", "ShowShortcutKeys");
-                    AddRange(new System.Windows.Forms.ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
+                    AddRange(new ToolStripItem[] { checkedToolStripMenuItem, showShortcutKeysToolStripMenuItem });
                 }
                 else
                 {
@@ -180,10 +179,10 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    AddRange(new System.Windows.Forms.ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
+                    AddRange(new ToolStripItem[] { alignmentToolStripMenuItem, displayStyleToolStripMenuItem, });
                 }
 
-                toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+                toolStripSeparator1 = new ToolStripSeparator();
                 Add(toolStripSeparator1);
             }
 
@@ -198,7 +197,7 @@ namespace System.Windows.Forms.Design
                 DropDown = ToolStripDesignerUtils.GetNewItemDropDown(ParentTool, currentItem, new EventHandler(AddNewItemClick), false, serviceProvider, true)
             };
 
-            AddRange(new System.Windows.Forms.ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
+            AddRange(new ToolStripItem[] { convertToolStripMenuItem, insertToolStripMenuItem });
 
             if (currentItem is ToolStripDropDownItem)
             {
@@ -427,7 +426,6 @@ namespace System.Windows.Forms.Design
                 if (newItemTransaction != null)
                 {
                     newItemTransaction.Commit();
-                    newItemTransaction = null;
                 }
             }
         }
@@ -473,7 +471,6 @@ namespace System.Windows.Forms.Design
                 if (newItemTransaction != null)
                 {
                     newItemTransaction.Commit();
-                    newItemTransaction = null;
                 }
             }
         }
@@ -519,7 +516,6 @@ namespace System.Windows.Forms.Design
                 if (newItemTransaction != null)
                 {
                     newItemTransaction.Commit();
-                    newItemTransaction = null;
                 }
             }
         }
@@ -593,7 +589,6 @@ namespace System.Windows.Forms.Design
                 if (newItemTransaction != null)
                 {
                     newItemTransaction.Commit();
-                    newItemTransaction = null;
                 }
             }
         }

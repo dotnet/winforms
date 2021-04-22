@@ -9,9 +9,9 @@ namespace System.Windows.Forms.Design
         // just so we can recognize the ones we create
         protected class ComponentDataObjectWrapper : DataObject
         {
-            ComponentDataObject innerData;
+            readonly ComponentDataObject innerData;
 
-            public ComponentDataObjectWrapper(ComponentDataObject dataObject) : base((IDataObject)dataObject)
+            public ComponentDataObjectWrapper(ComponentDataObject dataObject) : base(dataObject)
             {
                 innerData = dataObject;
             }

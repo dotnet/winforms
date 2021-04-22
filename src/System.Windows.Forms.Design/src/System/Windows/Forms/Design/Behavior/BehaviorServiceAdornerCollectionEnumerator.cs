@@ -8,13 +8,13 @@ namespace System.Windows.Forms.Design.Behavior
 {
     public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
     {
-        private IEnumerator baseEnumerator;
-        private IEnumerable temp;
+        private readonly IEnumerator baseEnumerator;
+        private readonly IEnumerable temp;
 
         public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
         {
-            this.temp = ((IEnumerable)(mappings));
-            this.baseEnumerator = temp.GetEnumerator();
+            temp = mappings;
+            baseEnumerator = temp.GetEnumerator();
         }
 
         public Adorner Current

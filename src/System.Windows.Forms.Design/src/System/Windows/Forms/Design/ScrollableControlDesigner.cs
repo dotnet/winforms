@@ -39,6 +39,7 @@ namespace System.Windows.Forms.Design
                     return true;
                 }
             }
+
             return false;
         }
 

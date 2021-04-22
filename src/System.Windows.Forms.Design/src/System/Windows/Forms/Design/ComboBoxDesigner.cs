@@ -9,21 +9,19 @@ using System.Windows.Forms.Design.Behavior;
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
-    ///    <para> 
-    ///       Provides a designer that can design components
-    ///       that extend ComboBox.</para>
-    /// </devdoc>
+    /// <summary>
+    ///  <para>
+    ///  Provides a designer that can design components
+    ///  that extend ComboBox.</para>
+    /// </summary>
     internal class ComboBoxDesigner : ControlDesigner
     {
+        private EventHandler propChanged; // Delegate used to dirty the selectionUIItem when needed.
 
-        private EventHandler propChanged = null; // Delegate used to dirty the selectionUIItem when needed.
-
-        /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.SnapLines"]/*' />
-        /// <devdoc>
-        ///     Adds a baseline SnapLine to the list of SnapLines related
-        ///     to this control.
-        /// </devdoc>
+        /// <summary>
+        ///  Adds a baseline SnapLine to the list of SnapLines related
+        ///  to this control.
+        /// </summary>
         public override IList SnapLines
         {
             get
@@ -31,7 +29,7 @@ namespace System.Windows.Forms.Design
                 ArrayList snapLines = base.SnapLines as ArrayList;
 
                 //a single text-baseline for the label (and linklabel) control
-                int baseline = DesignerUtils.GetTextBaseline(Control, System.Drawing.ContentAlignment.TopLeft);
+                int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
                 baseline += 3;
                 snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
 
@@ -39,10 +37,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.Dispose"]/*' />
-        /// <devdoc>
-        ///      Disposes of this object.
-        /// </devdoc>
+        /// <summary>
+        ///  Disposes of this object.
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -57,10 +54,9 @@ namespace System.Windows.Forms.Design
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.Initialize"]/*' />
-        /// <devdoc>
-        ///     Called by the host when we're first initialized.
-        /// </devdoc>
+        /// <summary>
+        ///  Called by the host when we're first initialized.
+        /// </summary>
         public override void Initialize(IComponent component)
         {
             base.Initialize(component);
@@ -68,20 +64,19 @@ namespace System.Windows.Forms.Design
             AutoResizeHandles = true;
 
             // Hook up the property change notification so that we can dirty the SelectionUIItem when needed.
-            propChanged = new EventHandler(this.OnControlPropertyChanged);
+            propChanged = new EventHandler(OnControlPropertyChanged);
             ((ComboBox)Control).StyleChanged += propChanged;
         }
 
-        /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.InitializeNewComponent"]/*' />
-        /// <devdoc>
-        ///   We override this so we can clear the text field set by controldesigner.
-        /// </devdoc>
+        /// <summary>
+        ///  We override this so we can clear the text field set by controldesigner.
+        /// </summary>
         public override void InitializeNewComponent(IDictionary defaultValues)
         {
             base.InitializeNewComponent(defaultValues);
 
             // in Whidbey, formattingEnabled is TRUE
-            ((ComboBox)this.Component).FormattingEnabled = true;
+            ((ComboBox)Component).FormattingEnabled = true;
 
             PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
             if (textProp != null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
@@ -90,10 +85,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.OnControlPropertyChanged"]/*' />
-        /// <devdoc>
-        ///      For controls, we sync their property changed event so our component can track their location.
-        /// </devdoc>
+        /// <summary>
+        ///  For controls, we sync their property changed event so our component can track their location.
+        /// </summary>
         private void OnControlPropertyChanged(object sender, EventArgs e)
         {
             if (BehaviorService != null)
@@ -102,12 +96,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\ComboBoxDesigner.uex' path='docs/doc[@for="ComboBoxDesigner.SelectionRules"]/*' />
-        /// <devdoc>
-        ///     Retrieves a set of rules concerning the movement capabilities of a component.
-        ///     This should be one or more flags from the SelectionRules class.  If no designer
-        ///     provides rules for a component, the component will not get any UI services.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves a set of rules concerning the movement capabilities of a component.
+        ///  This should be one or more flags from the SelectionRules class.  If no designer
+        ///  provides rules for a component, the component will not get any UI services.
+        /// </summary>
         public override SelectionRules SelectionRules
         {
             get

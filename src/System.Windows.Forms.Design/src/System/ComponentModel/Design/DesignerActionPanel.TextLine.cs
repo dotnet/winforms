@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design
                 {
                     BackColor = Color.Transparent,
                     ForeColor = ActionPanel.LabelForeColor,
-                    TextAlign = Drawing.ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
                     UseMnemonic = false
                 };
                 controls.Add(_label);

@@ -103,12 +103,10 @@ namespace System.ComponentModel.Design.Serialization
                 // reflecting model.  In this case we'll skip it and fall through to the
                 // property assignment model.
                 bool skipPropertyReflect = false;
-                ExtenderProvidedPropertyAttribute attr = null;
 
                 if (desc != null)
                 {
-                    attr = desc.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
-
+                    var attr = desc.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
                     if (attr != null && attr.ExtenderProperty != null)
                     {
                         skipPropertyReflect = true;

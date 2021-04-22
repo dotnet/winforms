@@ -2,40 +2,33 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Design;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
-using System.Windows.Forms;
 using System.Windows.Forms.Design.Behavior;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Collections;
-using Microsoft.Win32;
-using System.Windows.Forms.ComponentModel;
-using Microsoft.VisualStudio.Utilities;
+using static Interop;
 
 namespace System.Windows.Forms.Design
 {
-    /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet"]/*' />
-    /// <devdoc>
-    ///      This class implements the standard set of menu commands for
-    ///      the form designer.  This set of command is shared between
-    ///      the form designer (and other UI-based form packages), and
-    ///      composition designer, which doesn't manipulate controls.
-    ///      Therefore, this set of command should only contain commands
-    ///      that are common to both functions.
-    /// </devdoc>
+    /// <summary>
+    ///  This class implements the standard set of menu commands for
+    ///  the form designer.  This set of command is shared between
+    ///  the form designer (and other UI-based form packages), and
+    ///  composition designer, which doesn't manipulate controls.
+    ///  Therefore, this set of command should only contain commands
+    ///  that are common to both functions.
+    /// </summary>
     /// <internalonly/>
     internal class CommandSet : IDisposable
     {
         protected ISite site;
-        private CommandSetItem[] commandSet;
+        private readonly CommandSetItem[] commandSet;
         private IMenuCommandService menuService;
         private IEventHandlerService eventService;
 
@@ -59,17 +52,16 @@ namespace System.Windows.Forms.Design
         private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2"; // See VSWhidbey #172531
 
         //these are used for snapping control via keyboard movement
-        protected DragAssistanceManager dragManager = null;//point to the snapline engine (only valid between keydown and timer expiration)
+        protected DragAssistanceManager dragManager;//point to the snapline engine (only valid between keydown and timer expiration)
         private Timer snapLineTimer;//used to track the time from when a snapline is rendered until it should expire
         private BehaviorService behaviorService;//demand created pointer to the behaviorservice
         private StatusCommandUI statusCommandUI; //Used to update the statusBar Information.
-        private IUIService uiService;
+        private readonly IUIService uiService;
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CommandSet"]/*' />
-        /// <devdoc>
-        ///     Creates a new CommandSet object.  This object implements the set
-        ///     of commands that the UI.Win32 form designer offers.
-        /// </devdoc>
+        /// <summary>
+        ///  Creates a new CommandSet object.  This object implements the set
+        ///  of commands that the UI.Win32 form designer offers.
+        /// </summary>
         public CommandSet(ISite site)
         {
             this.site = site;
@@ -77,14 +69,14 @@ namespace System.Windows.Forms.Design
             eventService = (IEventHandlerService)site.GetService(typeof(IEventHandlerService));
             Debug.Assert(eventService != null, "Command set must have the event service.  Is command set being initialized too early?");
 
-            eventService.EventHandlerChanged += new EventHandler(this.OnEventHandlerChanged);
+            eventService.EventHandlerChanged += new EventHandler(OnEventHandlerChanged);
 
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
 
             if (host != null)
             {
-                host.Activated += new EventHandler(this.UpdateClipboardItems);
+                host.Activated += new EventHandler(UpdateClipboardItems);
             }
 
             statusCommandUI = new StatusCommandUI(site);
@@ -93,44 +85,43 @@ namespace System.Windows.Forms.Design
 
             // Establish our set of commands
             //
-            commandSet = new CommandSetItem[] {
-
+            commandSet = new CommandSetItem[]
+            {
                 // Editing commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusDelete),
                                   new EventHandler(OnMenuDelete),
-                                  MenuCommands.Delete,
+                                  StandardCommands.Delete,
                                   uiService),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusCopy),
                                   new EventHandler(OnMenuCopy),
-                                  MenuCommands.Copy,
+                                  StandardCommands.Copy,
                                   uiService),
 
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusCut),
                                   new EventHandler(OnMenuCut),
-                                  MenuCommands.Cut,
+                                  StandardCommands.Cut,
                                   uiService),
 
                 new ImmediateCommandSetItem(
                                            this,
                                            new EventHandler(OnStatusPaste),
                                            new EventHandler(OnMenuPaste),
-                                           MenuCommands.Paste,
+                                           StandardCommands.Paste,
                                            uiService),
-
 
                 // Miscellaneous commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusSelectAll),
                                   new EventHandler(OnMenuSelectAll),
-                                  MenuCommands.SelectAll, true,
+                                  StandardCommands.SelectAll, true,
                                   uiService),
 
                 new CommandSetItem(
@@ -223,7 +214,7 @@ namespace System.Windows.Forms.Design
             Debug.Assert(selectionService != null, "CommandSet relies on the selection service, which is unavailable.");
             if (selectionService != null)
             {
-                selectionService.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
 
             menuService = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
@@ -245,15 +236,11 @@ namespace System.Windows.Forms.Design
             {
                 ds.SetValue(typeof(CommandID), new CommandID(new Guid("BA09E2AF-9DF2-4068-B2F0-4C7E5CC19E2F"), 0));
             }
-
-
         }
 
-
-
-        /// <devdoc>
-        ///      Demand creates a pointer to the BehaviorService
-        /// </devdoc>
+        /// <summary>
+        ///  Demand creates a pointer to the BehaviorService
+        /// </summary>
         protected BehaviorService BehaviorService
         {
             get
@@ -262,15 +249,15 @@ namespace System.Windows.Forms.Design
                 {
                     behaviorService = GetService(typeof(BehaviorService)) as BehaviorService;
                 }
+
                 return behaviorService;
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.MenuService"]/*' />
-        /// <devdoc>
-        ///      Retrieves the menu command service, which the command set
-        ///      typically uses quite a bit.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the menu command service, which the command set
+        ///  typically uses quite a bit.
+        /// </summary>
         protected IMenuCommandService MenuService
         {
             get
@@ -284,11 +271,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.SelectionService"]/*' />
-        /// <devdoc>
-        ///      Retrieves the selection service, which the command set
-        ///      typically uses quite a bit.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the selection service, which the command set
+        ///  typically uses quite a bit.
+        /// </summary>
         protected ISelectionService SelectionService
         {
             get
@@ -297,20 +283,19 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         protected int SelectionVersion
         {
             get
             {
-                return this.selectionVersion;
+                return selectionVersion;
             }
         }
 
-        /// <devdoc>
-        ///     This property demand creates our snaplinetimer used to
-        ///     track how long we'll leave snaplines on the screen before
-        ///     erasing them
-        /// </devdoc>
+        /// <summary>
+        ///  This property demand creates our snaplinetimer used to
+        ///  track how long we'll leave snaplines on the screen before
+        ///  erasing them
+        /// </summary>
         protected Timer SnapLineTimer
         {
             get
@@ -320,20 +305,19 @@ namespace System.Windows.Forms.Design
                     //instantiate our snapline timer
                     snapLineTimer = new Timer();
                     snapLineTimer.Interval = DesignerUtils.SNAPELINEDELAY;
-                    snapLineTimer.Tick += new EventHandler(this.OnSnapLineTimerExpire);
+                    snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
                 }
+
                 return snapLineTimer;
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CheckComponentEditor"]/*' />
-        /// <devdoc>
-        ///     Checks if an object supports ComponentEditors, and optionally launches
-        ///     the editor.
-        /// </devdoc>
+        /// <summary>
+        ///  Checks if an object supports ComponentEditors, and optionally launches
+        ///  the editor.
+        /// </summary>
         private bool CheckComponentEditor(object obj, bool launchEditor)
         {
-
             if (obj is IComponent)
             {
                 try
@@ -364,6 +348,7 @@ namespace System.Windows.Forms.Design
                             {
                                 return false;
                             }
+
                             throw;
                         }
                         catch
@@ -376,15 +361,13 @@ namespace System.Windows.Forms.Design
                     WindowsFormsComponentEditor winEditor = editor as WindowsFormsComponentEditor;
                     if (winEditor != null)
                     {
-
                         IWin32Window parent = null;
 
                         //REVIEW: This smells wrong
                         if (obj is IWin32Window)
                         {
-
 #pragma warning disable 1717 // assignment to self
-                            parent = (IWin32Window)parent;
+                            parent = parent;
 #pragma warning restore 1717
 
                         }
@@ -402,6 +385,7 @@ namespace System.Windows.Forms.Design
                         //
                         changeService.OnComponentChanged(obj, null, null, null);
                     }
+
                     return true;
                 }
                 catch (Exception ex)
@@ -409,21 +393,18 @@ namespace System.Windows.Forms.Design
                     if (ClientUtils.IsCriticalException(ex))
                     {
                         throw;
-
                     }
                 }
-
             }
+
             return false;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.Dispose"]/*' />
-        /// <devdoc>
-        ///     Disposes of this object, removing all commands from the menu service.
-        /// </devdoc>
+        /// <summary>
+        ///  Disposes of this object, removing all commands from the menu service.
+        /// </summary>
 
         // We don't need to Dispose snapLineTimer
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public virtual void Dispose()
         {
             if (menuService != null)
@@ -433,18 +414,19 @@ namespace System.Windows.Forms.Design
                     menuService.RemoveCommand(commandSet[i]);
                     commandSet[i].Dispose();
                 }
+
                 menuService = null;
             }
 
             if (selectionService != null)
             {
-                selectionService.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 selectionService = null;
             }
 
             if (eventService != null)
             {
-                eventService.EventHandlerChanged -= new EventHandler(this.OnEventHandlerChanged);
+                eventService.EventHandlerChanged -= new EventHandler(OnEventHandlerChanged);
                 eventService = null;
             }
 
@@ -452,13 +434,13 @@ namespace System.Windows.Forms.Design
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
             if (host != null)
             {
-                host.Activated -= new EventHandler(this.UpdateClipboardItems);
+                host.Activated -= new EventHandler(UpdateClipboardItems);
             }
 
             if (snapLineTimer != null)
             {
                 snapLineTimer.Stop();
-                snapLineTimer.Tick -= new EventHandler(this.OnSnapLineTimerExpire);
+                snapLineTimer.Tick -= new EventHandler(OnSnapLineTimerExpire);
                 snapLineTimer = null;
             }
 
@@ -467,13 +449,11 @@ namespace System.Windows.Forms.Design
             site = null;
         }
 
-
-        /// <devdoc>
-        ///     Properly cleans up our drag engine.
-        /// </devdoc>
+        /// <summary>
+        ///  Properly cleans up our drag engine.
+        /// </summary>
         protected void EndDragManager()
         {
-
             if (dragManager != null)
             {
                 if (snapLineTimer != null)
@@ -512,7 +492,7 @@ namespace System.Windows.Forms.Design
         }
 
         // This function will return true if call to func is successful, false otherwise
-        // Output of call to func is available in result out parameter        
+        // Output of call to func is available in result out parameter
         private static bool ExecuteSafely<T>(Func<T> func, bool throwOnException, out T result)
         {
             if (func != null)
@@ -535,32 +515,29 @@ namespace System.Windows.Forms.Design
             return false;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.FilterSelection"]/*' />
-        /// <devdoc>
-        ///     Filters the set of selected components.  The selection service will retrieve all
-        ///     components that are currently selected.  This method allows you to filter this
-        ///     set down to components that match your criteria.  The selectionRules parameter
-        ///     must contain one or more flags from the SelectionRules class.  These flags
-        ///     allow you to constrain the set of selected objects to visible, movable,
-        ///     sizeable or all objects.
-        /// </devdoc>
+        /// <summary>
+        ///  Filters the set of selected components.  The selection service will retrieve all
+        ///  components that are currently selected.  This method allows you to filter this
+        ///  set down to components that match your criteria.  The selectionRules parameter
+        ///  must contain one or more flags from the SelectionRules class.  These flags
+        ///  allow you to constrain the set of selected objects to visible, movable,
+        ///  sizeable or all objects.
+        /// </summary>
         private object[] FilterSelection(object[] components, SelectionRules selectionRules)
         {
             object[] selection = null;
 
             if (components == null)
-                return new object[0];
+                return Array.Empty<object>();
 
             // Mask off any selection object that doesn't adhere to the given ruleset.
             // We can ignore this if the ruleset is zero, as all components would be accepted.
             //
             if (selectionRules != SelectionRules.None)
             {
-
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 if (host != null)
                 {
-
                     ArrayList list = new ArrayList();
 
                     foreach (IComponent comp in components)
@@ -573,18 +550,16 @@ namespace System.Windows.Forms.Design
                     }
 
                     selection = list.ToArray();
-
                 }
             }
 
-            return selection == null ? new object[0] : selection;
+            return selection == null ? Array.Empty<object>() : selection;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetCopySelection"]/*' />
-        /// <devdoc>
-        ///     Used to retrieve the selection for a copy.  The default implementation
-        ///     retrieves the current selection.
-        /// </devdoc>
+        /// <summary>
+        ///  Used to retrieve the selection for a copy.  The default implementation
+        ///  retrieves the current selection.
+        /// </summary>
         protected virtual ICollection GetCopySelection()
         {
             ICollection selectedComponents = SelectionService.GetSelectedComponents();
@@ -599,12 +574,13 @@ namespace System.Windows.Forms.Design
                     sort = true;
                     break;
                 }
-
             }
+
             if (sort)
             {
                 SortSelection(comps, SORT_ZORDER);
             }
+
             selectedComponents = comps;
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             if (host != null)
@@ -615,6 +591,7 @@ namespace System.Windows.Forms.Design
                     copySelection.Add(comp);
                     GetAssociatedComponents(comp, host, copySelection);
                 }
+
                 selectedComponents = copySelection;
             }
 
@@ -639,12 +616,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
-
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetLocation"]/*' />
-        /// <devdoc>
-        ///     Used to retrieve the current location of the given component.
-        /// </devdoc>
+        /// <summary>
+        ///  Used to retrieve the current location of the given component.
+        /// </summary>
         private Point GetLocation(IComponent comp)
         {
             PropertyDescriptor prop = GetProperty(comp, "Location");
@@ -664,35 +638,34 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return Point.Empty;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetProperty"]/*' />
-        /// <devdoc>
-        ///     Retrieves the given property on the given component.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the given property on the given component.
+        /// </summary>
         protected PropertyDescriptor GetProperty(object comp, string propName)
         {
             return TypeDescriptor.GetProperties(comp)[propName];
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetService"]/*' />
-        /// <devdoc>
-        ///      Retrieves the requested service.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the requested service.
+        /// </summary>
         protected virtual object GetService(Type serviceType)
         {
             if (site != null)
             {
                 return site.GetService(serviceType);
             }
+
             return null;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetSize"]/*' />
-        /// <devdoc>
-        ///     Used to retrieve the current size of the given component.
-        /// </devdoc>
+        /// <summary>
+        ///  Used to retrieve the current size of the given component.
+        /// </summary>
         private Size GetSize(IComponent comp)
         {
             PropertyDescriptor prop = GetProperty(comp, "Size");
@@ -700,33 +673,29 @@ namespace System.Windows.Forms.Design
             {
                 return (Size)prop.GetValue(comp);
             }
+
             return Size.Empty;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.GetSnapInformation"]/*' />
-        /// <devdoc>
-        ///      Retrieves the snap information for the given component.
-        /// </devdoc>
+        /// <summary>
+        ///  Retrieves the snap information for the given component.
+        /// </summary>
         protected virtual void GetSnapInformation(IDesignerHost host, IComponent component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty)
         {
+            PropertyDescriptorCollection props;
 
             // This implementation is shared by all.  It just looks for snap properties on the base component.
             //
-            IComponent currentSnapComponent = null;
-            PropertyDescriptor gridSizeProp = null;
-            PropertyDescriptor currentSnapProp = null;
-            PropertyDescriptorCollection props;
-
-            currentSnapComponent = host.RootComponent;
+            IComponent currentSnapComponent = host.RootComponent;
             props = TypeDescriptor.GetProperties(currentSnapComponent);
 
-            currentSnapProp = props["SnapToGrid"];
+            PropertyDescriptor currentSnapProp = props["SnapToGrid"];
             if (currentSnapProp != null && currentSnapProp.PropertyType != typeof(bool))
             {
                 currentSnapProp = null;
             }
 
-            gridSizeProp = props["GridSize"];
+            PropertyDescriptor gridSizeProp = props["GridSize"];
             if (gridSizeProp != null && gridSizeProp.PropertyType != typeof(Size))
             {
                 gridSizeProp = null;
@@ -747,13 +716,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CanCheckout"]/*' />
-        /// <devdoc>
-        ///      Called before doing any change to multiple controls
-        ///     to check if we have the right to make any change
-        ///     otherwise we would get a checkout message for each control we call setvalue on
-        /// </devdoc>
+        /// <summary>
+        ///  Called before doing any change to multiple controls
+        ///  to check if we have the right to make any change
+        ///  otherwise we would get a checkout message for each control we call setvalue on
+        /// </summary>
         protected bool CanCheckout(IComponent comp)
         {
             // look if it's ok to change
@@ -772,35 +739,32 @@ namespace System.Windows.Forms.Design
                     throw;
                 }
             }
+
             return true;
         }
 
-
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnEventHandlerChanged"]/*' />
-        /// <devdoc>
-        ///      Called by the event handler service when the current event handler
-        ///      has changed.  Here we invalidate all of our menu items so that
-        ///      they can pick up the new event handler.
-        /// </devdoc>
+        /// <summary>
+        ///  Called by the event handler service when the current event handler
+        ///  has changed.  Here we invalidate all of our menu items so that
+        ///  they can pick up the new event handler.
+        /// </summary>
         private void OnEventHandlerChanged(object sender, EventArgs e)
         {
             OnUpdateCommandStatus();
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnKeyCancel"]/*' />
-        /// <devdoc>
-        ///     Called for the two cancel commands we support.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for the two cancel commands we support.
+        /// </summary>
         private void OnKeyCancel(object sender, EventArgs e)
         {
             OnKeyCancel(sender);
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnKeyCancel1"]/*' />
-        /// <devdoc>
-        ///     Called for the two cancel commands we support.  Returns true
-        ///     If we did anything with the cancel, or false if not.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for the two cancel commands we support.  Returns true
+        ///  If we did anything with the cancel, or false if not.
+        /// </summary>
         protected virtual bool OnKeyCancel(object sender)
         {
             bool handled = false;
@@ -830,6 +794,7 @@ namespace System.Windows.Forms.Design
                     {
                         Cursor.Current = Cursors.Default;
                     }
+
                     handled = true;
                 }
             }
@@ -837,13 +802,11 @@ namespace System.Windows.Forms.Design
             return handled;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnKeyDefault"]/*' />
-        /// <devdoc>
-        ///      Called for the "default" command, typically the Enter key.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for the "default" command, typically the Enter key.
+        /// </summary>
         protected void OnKeyDefault(object sender, EventArgs e)
         {
-
             // Return key.  Handle it like a double-click on the
             // primary selection
             //
@@ -868,10 +831,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnKeyMove"]/*' />
-        /// <devdoc>
-        ///      Called for all cursor movement commands.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for all cursor movement commands.
+        /// </summary>
         protected virtual void OnKeyMove(object sender, EventArgs e)
         {
             // Arrow keys.  Begin a drag if the selection isn't locked.
@@ -952,7 +914,6 @@ namespace System.Windows.Forms.Design
                                 //move these controls...
                                 if (BehaviorService != null)
                                 {
-
                                     Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponenTray)
 
                                     bool useSnapLines = BehaviorService.UseSnapLines;
@@ -967,7 +928,6 @@ namespace System.Windows.Forms.Design
                                     //Don't snap if we are moving a component in the ComponentTray
                                     if (invertSnap && useSnapLines && primaryControl != null)
                                     {
-
                                         ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
 
                                         //create our snapline engine
@@ -1000,11 +960,11 @@ namespace System.Windows.Forms.Design
                                             moveOffsetX *= -1;
                                         }
                                     }
+
                                     //if we used a regular arrow key and we're in SnapToGrid mode...
 
                                     else if (!invertSnap && !useSnapLines)
                                     {
-
                                         bool snapOn = false;
                                         Size snapSize = Size.Empty;
                                         IComponent snapComponent = null;
@@ -1019,7 +979,6 @@ namespace System.Windows.Forms.Design
 
                                         if (snapOn && !snapSize.IsEmpty)
                                         {
-
                                             moveOffsetX *= snapSize.Width;
                                             moveOffsetY *= snapSize.Height;
 
@@ -1046,6 +1005,7 @@ namespace System.Windows.Forms.Design
                                                     {
                                                         moveOffsetX *= -1;
                                                     }
+
                                                     loc.Offset(moveOffsetX, moveOffsetY);
 
                                                     loc = parentDesigner.GetSnappedPoint(loc);
@@ -1055,12 +1015,12 @@ namespace System.Windows.Forms.Design
                                                     {
                                                         moveOffsetX = loc.X - primaryControl.Location.X;
                                                     }
+
                                                     if (moveOffsetY != 0)
                                                     {
                                                         moveOffsetY = loc.Y - primaryControl.Location.Y;
                                                     }
                                                 }
-
                                             }
                                         }
                                         else
@@ -1071,7 +1031,6 @@ namespace System.Windows.Forms.Design
                                                 moveOffsetX *= -1;
                                             }
                                         }
-
                                     }
                                     else
                                     {
@@ -1084,7 +1043,6 @@ namespace System.Windows.Forms.Design
                                     SelectionRules rules = SelectionRules.Moveable | SelectionRules.Visible;
                                     foreach (IComponent component in selSvc.GetSelectedComponents())
                                     {
-
                                         ControlDesigner des = host.GetDesigner(component) as ControlDesigner;
                                         if (des != null && ((des.SelectionRules & rules) != rules))
                                         {
@@ -1108,7 +1066,6 @@ namespace System.Windows.Forms.Design
                                             statusCommandUI.SetStatusInformation(component as Component);
                                         }
                                     }
-
                                 }
                             }
                             finally
@@ -1133,14 +1090,12 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuAlignByPrimary"]/*' />
-        /// <devdoc>
-        ///     Called for all alignment operations that key off of a primary
-        ///     selection.
-        /// </devdoc>
+        /// <summary>
+        ///  Called for all alignment operations that key off of a primary
+        ///  selection.
+        /// </summary>
         protected void OnMenuAlignByPrimary(object sender, EventArgs e)
         {
-
             MenuCommand cmd = (MenuCommand)sender;
             CommandID id = cmd.CommandID;
 
@@ -1164,7 +1119,6 @@ namespace System.Windows.Forms.Design
                 //
                 ICollection comps = SelectionService.GetSelectedComponents();
 
-
                 // Inform the designer that we are about to monkey with a ton
                 // of properties.
                 //
@@ -1173,7 +1127,6 @@ namespace System.Windows.Forms.Design
                 DesignerTransaction trans = null;
                 try
                 {
-
                     if (host != null)
                     {
                         trans = host.CreateTransaction(string.Format(SR.CommandSetAlignByPrimary, comps.Count));
@@ -1183,7 +1136,6 @@ namespace System.Windows.Forms.Design
                     Point loc = Point.Empty;
                     foreach (object obj in comps)
                     {
-
                         if (obj == primarySelection)
                         {
                             continue;
@@ -1224,10 +1176,10 @@ namespace System.Windows.Forms.Design
                         // Skip all components that don't have size if we're
                         // doing a size operation.
                         //
-                        if (id.Equals(MenuCommands.AlignBottom) ||
-                            id.Equals(MenuCommands.AlignHorizontalCenters) ||
-                            id.Equals(MenuCommands.AlignVerticalCenters) ||
-                            id.Equals(MenuCommands.AlignRight))
+                        if (id.Equals(StandardCommands.AlignBottom) ||
+                            id.Equals(StandardCommands.AlignHorizontalCenters) ||
+                            id.Equals(StandardCommands.AlignVerticalCenters) ||
+                            id.Equals(StandardCommands.AlignRight))
                         {
                             if (sizeProp == null || sizeProp.IsReadOnly)
                             {
@@ -1237,45 +1189,50 @@ namespace System.Windows.Forms.Design
 
                         // Align bottom
                         //
-                        if (id.Equals(MenuCommands.AlignBottom))
+                        if (id.Equals(StandardCommands.AlignBottom))
                         {
                             loc = (Point)locProp.GetValue(comp);
                             Size size = (Size)sizeProp.GetValue(comp);
                             loc.Y = primaryLocation.Y + primarySize.Height - size.Height;
                         }
+
                         // Align horizontal centers
                         //
-                        else if (id.Equals(MenuCommands.AlignHorizontalCenters))
+                        else if (id.Equals(StandardCommands.AlignHorizontalCenters))
                         {
                             loc = (Point)locProp.GetValue(comp);
                             Size size = (Size)sizeProp.GetValue(comp);
                             loc.Y = primarySize.Height / 2 + primaryLocation.Y - size.Height / 2;
                         }
+
                         // Align left
                         //
-                        else if (id.Equals(MenuCommands.AlignLeft))
+                        else if (id.Equals(StandardCommands.AlignLeft))
                         {
                             loc = (Point)locProp.GetValue(comp);
                             loc.X = primaryLocation.X;
                         }
+
                         // Align right
                         //
-                        else if (id.Equals(MenuCommands.AlignRight))
+                        else if (id.Equals(StandardCommands.AlignRight))
                         {
                             loc = (Point)locProp.GetValue(comp);
                             Size size = (Size)sizeProp.GetValue(comp);
                             loc.X = primaryLocation.X + primarySize.Width - size.Width;
                         }
+
                         // Align top
                         //
-                        else if (id.Equals(MenuCommands.AlignTop))
+                        else if (id.Equals(StandardCommands.AlignTop))
                         {
                             loc = (Point)locProp.GetValue(comp);
                             loc.Y = primaryLocation.Y;
                         }
+
                         // Align vertical centers
                         //
-                        else if (id.Equals(MenuCommands.AlignVerticalCenters))
+                        else if (id.Equals(StandardCommands.AlignVerticalCenters))
                         {
                             loc = (Point)locProp.GetValue(comp);
                             Size size = (Size)sizeProp.GetValue(comp);
@@ -1290,8 +1247,8 @@ namespace System.Windows.Forms.Design
                         {
                             return;
                         }
-                        firstTry = false;
 
+                        firstTry = false;
 
                         locProp.SetValue(comp, loc);
                     }
@@ -1310,16 +1267,12 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuAlignToGrid"]/*' />
-        /// <devdoc>
-        ///     Called when the align->to grid menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the align->to grid menu item is selected.
+        /// </summary>
         protected void OnMenuAlignToGrid(object sender, EventArgs e)
         {
             Size gridSize = Size.Empty;
-            PropertyDescriptor locProp = null;
-            PropertyDescriptor lockedProp = null;
-            Point loc = Point.Empty;
             int delta;
 
             if (SelectionService == null)
@@ -1351,21 +1304,21 @@ namespace System.Windows.Forms.Design
                             {
                                 gridSize = (Size)prop.GetValue(baseComponent);
                             }
+
                             if (prop == null || gridSize.IsEmpty)
                             {
                                 //bail silently here
                                 return;
                             }
                         }
-
                     }
+
                     bool firstTry = true;
                     // for each component, we round to the nearest snap offset for x and y
                     foreach (object comp in selectedComponents)
                     {
-
                         // first check to see if the component is locked, if so - don't move it...
-                        lockedProp = GetProperty(comp, "Locked");
+                        PropertyDescriptor lockedProp = GetProperty(comp, "Locked");
                         if (lockedProp != null && ((bool)lockedProp.GetValue(comp)) == true)
                         {
                             continue;
@@ -1385,14 +1338,15 @@ namespace System.Windows.Forms.Design
                         }
 
                         // get the location property
-                        locProp = GetProperty(comp, "Location");
+                        PropertyDescriptor locProp = GetProperty(comp, "Location");
 
                         // get the current value
                         if (locProp == null || locProp.IsReadOnly)
                         {
                             continue;
                         }
-                        loc = (Point)locProp.GetValue(comp);
+
+                        var loc = (Point)locProp.GetValue(comp);
 
                         // round the x to the snap size
                         delta = loc.X % gridSize.Width;
@@ -1416,12 +1370,12 @@ namespace System.Windows.Forms.Design
                             loc.Y += (gridSize.Height - delta);
                         }
 
-
                         // look if it's ok to change
                         if (firstTry && !CanCheckout(component))
                         {
                             return;
                         }
+
                         firstTry = false;
 
                         // set the value
@@ -1442,13 +1396,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuCenterSelection"]/*' />
-        /// <devdoc>
-        ///     Called when the center horizontally or center vertically menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the center horizontally or center vertically menu item is selected.
+        /// </summary>
         protected void OnMenuCenterSelection(object sender, EventArgs e)
         {
-
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
 
@@ -1478,7 +1430,7 @@ namespace System.Windows.Forms.Design
                     {
                         string batchString;
 
-                        if (cmdID == MenuCommands.CenterHorizontally)
+                        if (cmdID == StandardCommands.CenterHorizontally)
                         {
                             batchString = string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count);
                         }
@@ -1486,21 +1438,21 @@ namespace System.Windows.Forms.Design
                         {
                             batchString = string.Format(SR.WindowsFormsCommandCenterY, selectedComponents.Count);
                         }
+
                         trans = host.CreateTransaction(batchString);
                     }
 
                     //subhag calculate the union REctangle : ASURT 67753
                     //
-                    int top = Int32.MaxValue;
-                    int left = Int32.MaxValue;
-                    int right = Int32.MinValue;
-                    int bottom = Int32.MinValue;
+                    int top = int.MaxValue;
+                    int left = int.MaxValue;
+                    int right = int.MinValue;
+                    int bottom = int.MinValue;
 
                     foreach (object obj in selectedComponents)
                     {
                         if (obj is Control)
                         {
-
                             IComponent comp = (IComponent)obj;
                             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
 
@@ -1583,7 +1535,6 @@ namespace System.Windows.Forms.Design
                     {
                         if (obj is Control)
                         {
-
                             IComponent comp = (IComponent)obj;
                             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
 
@@ -1595,25 +1546,27 @@ namespace System.Windows.Forms.Design
 
                             loc = (Point)locProp.GetValue(comp);
 
-                            if (cmdID == MenuCommands.CenterHorizontally)
+                            if (cmdID == StandardCommands.CenterHorizontally)
                             {
                                 if (shiftRight)
                                     loc.X += deltaX;
                                 else
                                     loc.X -= deltaX;
                             }
-                            else if (cmdID == MenuCommands.CenterVertically)
+                            else if (cmdID == StandardCommands.CenterVertically)
                             {
                                 if (shiftBottom)
                                     loc.Y += deltaY;
                                 else
                                     loc.Y -= deltaY;
                             }
+
                             // look if it's ok to change the first time
                             if (firstTry && !CanCheckout(comp))
                             {
                                 return;
                             }
+
                             firstTry = false;
                             // do the change
                             locProp.SetValue(comp, loc);
@@ -1634,10 +1587,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuCopy"]/*' />
-        /// <devdoc>
-        ///     Called when the copy menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the copy menu item is selected.
+        /// </summary>
         protected void OnMenuCopy(object sender, EventArgs e)
         {
             if (SelectionService == null)
@@ -1670,6 +1622,7 @@ namespace System.Windows.Forms.Design
                         uiService?.ShowError(SR.ClipboardError);
                     }
                 }
+
                 UpdateClipboardItems(null, null);
             }
             finally
@@ -1678,13 +1631,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuCut"]/*' />
-        /// <devdoc>
-        ///     Called when the cut menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the cut menu item is selected.
+        /// </summary>
         protected void OnMenuCut(object sender, EventArgs e)
         {
-
             if (SelectionService == null)
             {
                 return;
@@ -1724,16 +1675,14 @@ namespace System.Windows.Forms.Design
                             ArrayList designerList = new ArrayList();
                             try
                             {
-
                                 trans = host.CreateTransaction(string.Format(SR.CommandSetCutMultiple, cutCount));
 
                                 // clear the selected components so we aren't browsing them
                                 //
-                                SelectionService.SetSelectedComponents(new object[0], SelectionTypes.Replace);
+                                SelectionService.SetSelectedComponents(Array.Empty<object>(), SelectionTypes.Replace);
 
                                 object[] selComps = new object[selectedComponents.Count];
                                 selectedComponents.CopyTo(selComps, 0);
-
 
                                 for (int i = 0; i < selComps.Length; i++)
                                 {
@@ -1745,6 +1694,7 @@ namespace System.Windows.Forms.Design
                                     {
                                         continue;
                                     }
+
                                     //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                     // see bug 488115
                                     Control c = obj as Control;
@@ -1762,8 +1712,8 @@ namespace System.Windows.Forms.Design
                                             }
                                         }
                                     }
-
                                 }
+
                                 // go backward so we destroy parents before children
 
                                 for (int i = 0; i < selComps.Length; i++)
@@ -1792,7 +1742,6 @@ namespace System.Windows.Forms.Design
 
                                         if (selectedControl.Parent != commonParent && !commonParent.Contains(selectedControl))
                                         {
-
                                             // look for internal parenting
                                             if (selectedControl == commonParent || selectedControl.Contains(commonParent))
                                             {
@@ -1803,9 +1752,7 @@ namespace System.Windows.Forms.Design
                                                 commonParent = null;
                                             }
                                         }
-
                                     }
-
 
                                     if (component != null)
                                     {
@@ -1831,7 +1778,6 @@ namespace System.Windows.Forms.Design
                                         des.ResumeChangingEvents();
                                     }
                                 }
-
                             }
 
                             if (commonParent != null)
@@ -1856,10 +1802,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuDelete"]/*' />
-        /// <devdoc>
-        ///     Called when the delete menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the delete menu item is selected.
+        /// </summary>
         protected void OnMenuDelete(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -1878,9 +1823,7 @@ namespace System.Windows.Forms.Design
 
                     if (host != null)
                     {
-
                         IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-
 
                         ICollection comps = SelectionService.GetSelectedComponents();
                         string desc = string.Format(SR.CommandSetDelete, comps.Count);
@@ -1892,7 +1835,7 @@ namespace System.Windows.Forms.Design
                         try
                         {
                             trans = host.CreateTransaction(desc);
-                            SelectionService.SetSelectedComponents(new object[0], SelectionTypes.Replace);
+                            SelectionService.SetSelectedComponents(Array.Empty<object>(), SelectionTypes.Replace);
                             foreach (object obj in comps)
                             {
                                 IComponent comp = obj as IComponent;
@@ -1900,6 +1843,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     continue;
                                 }
+
                                 //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                 // see bug 488115
                                 Control c = obj as Control;
@@ -1917,8 +1861,8 @@ namespace System.Windows.Forms.Design
                                         }
                                     }
                                 }
-
                             }
+
                             foreach (object obj in comps)
                             {
                                 // If it's not a component, we can't delete it.  It also may have already been deleted
@@ -1946,7 +1890,6 @@ namespace System.Windows.Forms.Design
                                     }
                                     else
                                     {
-
                                         // if this is not a Control, see if we can get an ITreeDesigner from it,
                                         // and figure out the Component from that.
                                         //
@@ -1960,6 +1903,7 @@ namespace System.Windows.Forms.Design
                                             }
                                         }
                                     }
+
                                     commonParentSet = (commonParent != null);
                                 }
                                 else if (commonParent != null)
@@ -1971,7 +1915,6 @@ namespace System.Windows.Forms.Design
 
                                         if (selectedControl.Parent != controlCommonParent && !controlCommonParent.Contains(selectedControl))
                                         {
-
                                             // look for internal parenting
                                             if (selectedControl == controlCommonParent || selectedControl.Contains(controlCommonParent))
                                             {
@@ -1984,6 +1927,7 @@ namespace System.Windows.Forms.Design
                                                 {
                                                     controlCommonParent = controlCommonParent.Parent;
                                                 }
+
                                                 commonParent = controlCommonParent;
                                             }
                                         }
@@ -1998,7 +1942,6 @@ namespace System.Windows.Forms.Design
                                         //
                                         if (designer != null && commonParentDesigner != null && designer.Parent != commonParentDesigner)
                                         {
-
                                             ArrayList designerChain = new ArrayList();
                                             ArrayList parentDesignerChain = new ArrayList();
 
@@ -2036,12 +1979,12 @@ namespace System.Windows.Forms.Design
                                                     {
                                                         break;
                                                     }
+
                                                     commonParentDesigner = (ITreeDesigner)shorterList[shortIndex];
                                                     shortIndex--;
                                                     longIndex--;
                                                 }
                                             }
-
 
                                             // alright, what have we got?
                                             //
@@ -2055,7 +1998,6 @@ namespace System.Windows.Forms.Design
                                             }
                                         }
                                     }
-
                                 }
 
                                 ArrayList al = new ArrayList();
@@ -2064,6 +2006,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     changeService.OnComponentChanging(comp, null);
                                 }
+
                                 host.DestroyComponent((IComponent)obj);
                             }
                         }
@@ -2083,14 +2026,11 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-
                         if (commonParent != null && SelectionService.PrimarySelection == null)
                         {
-
                             ITreeDesigner commonParentDesigner = host.GetDesigner(commonParent) as ITreeDesigner;
                             if (commonParentDesigner != null && commonParentDesigner.Children != null)
                             {
-
                                 // choose the first child of the common parent if it has any.
                                 //
                                 foreach (IDesigner designer in commonParentDesigner.Children)
@@ -2118,9 +2058,11 @@ namespace System.Windows.Forms.Design
                                     {
                                         controlCommonParent = controlCommonParent.Parent;
                                     }
+
                                     commonParent = controlCommonParent;
                                 }
                             }
+
                             if (commonParent != null)
                             {
                                 SelectionService.SetSelectedComponents(new object[] { commonParent }, SelectionTypes.Replace);
@@ -2146,13 +2088,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuPaste"]/*' />
-        /// <devdoc>
-        ///     Called when the paste menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the paste menu item is selected.
+        /// </summary>
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2301:DoNotCallBinaryFormatterDeserializeWithoutFirstSettingBinaryFormatterBinder", Justification = "data is trusted")]
+        [Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2301:DoNotCallBinaryFormatterDeserializeWithoutFirstSettingBinaryFormatterBinder", Justification = "data is trusted")]
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -2160,7 +2100,7 @@ namespace System.Windows.Forms.Design
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                // If a control fails to get pasted; then we should remember its associatedComponents 
+                // If a control fails to get pasted; then we should remember its associatedComponents
                 // so that they are not pasted.
                 // Refer VsWhidbey : 477583
                 ICollection associatedCompsOfFailedContol = null;
@@ -2171,7 +2111,7 @@ namespace System.Windows.Forms.Design
                     return;   // nothing we can do here!
 
                 IDataObject dataObj = null;
-                bool clipboardOperationSuccessful = ExecuteSafely<IDataObject>(() => Clipboard.GetDataObject(), false, out dataObj);
+                bool clipboardOperationSuccessful = ExecuteSafely(() => Clipboard.GetDataObject(), false, out dataObj);
 
                 if (clipboardOperationSuccessful)
                 {
@@ -2196,7 +2136,6 @@ namespace System.Windows.Forms.Design
                             MemoryStream s = new MemoryStream(bytes);
                             if (s != null)
                             {
-
                                 // CF_DESIGNER was put on the clipboard by us using the designer
                                 // serialization service.
                                 //
@@ -2256,7 +2195,6 @@ namespace System.Windows.Forms.Design
                             IDesigner designer = null;
                             bool dragClient = false;
 
-
                             IComponent baseComponent = host.RootComponent;
                             selectedComponent = (IComponent)SelectionService.PrimarySelection;
 
@@ -2285,7 +2223,6 @@ namespace System.Windows.Forms.Design
 
                             foreach (object obj in components)
                             {
-
                                 name = null;
                                 curComp = obj as IComponent;
 
@@ -2364,9 +2301,9 @@ namespace System.Windows.Forms.Design
                                     {
                                         continue;
                                     }
+
                                     //store associatedComponents.
                                     designerComps = cDesigner.AssociatedComponents;
-
 
                                     ComponentDesigner parentCompDesigner = ((ITreeDesigner)cDesigner).Parent as ComponentDesigner;
                                     Component parentComp = null;
@@ -2407,7 +2344,7 @@ namespace System.Windows.Forms.Design
                                             associatedCompsOfFailedContol = designerComps;
                                             // now we will jump out of the using block and call trans.Dispose()
                                             // which in turn calls trans.Cancel for an uncommited transaction,
-                                            // We want to cancel the transaction because otherwise we'll have 
+                                            // We want to cancel the transaction because otherwise we'll have
                                             // un-parented controls
                                             return;
                                         }
@@ -2417,28 +2354,25 @@ namespace System.Windows.Forms.Design
                                         {
                                             controls.Add(designerControl);
                                         }
+
                                         // Select the newly Added top level component
                                         if ((TypeDescriptor.GetAttributes(curComp).Contains(DesignTimeVisibleAttribute.Yes)) || curComp is ToolStripItem)
                                         {
                                             selectComps.Add(curComp);
                                         }
-
                                     }
+
                                     // if Parent is not selected... select the curcomp.
                                     else if (associatedComps.Contains(curComp) && Array.IndexOf(allComponents, parentComp) == -1)
                                     {
                                         selectComps.Add(curComp);
                                     }
 
-
-
-
                                     Control c = curComp as Control;
                                     bool changeName = false;
 
                                     if (c != null)
                                     {
-
                                         // if the text is the same as the name, remember it.
                                         // After we add the control, we'll update the text with
                                         // the new name.
@@ -2469,12 +2403,11 @@ namespace System.Windows.Forms.Design
                                 }
                             }
 
-
                             // Find those controls that have ControlDesigners and center them on the designer surface
                             ArrayList compsWithControlDesigners = new ArrayList();
                             foreach (Control c in controls)
                             {
-                                IDesigner des = host.GetDesigner((IComponent)c);
+                                IDesigner des = host.GetDesigner(c);
                                 if (des is ControlDesigner)
                                 {
                                     compsWithControlDesigners.Add(c);
@@ -2531,13 +2464,13 @@ namespace System.Windows.Forms.Design
                             }
 
                             // finally select all the components we added
-                            SelectionService.SetSelectedComponents((object[])selectComps.ToArray(), SelectionTypes.Replace);
+                            SelectionService.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
 
                             // and bring them to the front - but only if we can mess with the Z-order. VSWhidbey 515990
                             ParentControlDesigner parentControlDesigner = designer as ParentControlDesigner;
                             if (parentControlDesigner != null && parentControlDesigner.AllowSetChildIndexOnDrop)
                             {
-                                MenuCommand btf = MenuService.FindCommand(MenuCommands.BringToFront);
+                                MenuCommand btf = MenuService.FindCommand(StandardCommands.BringToFront);
                                 if (btf != null)
                                 {
                                     btf.Invoke();
@@ -2566,10 +2499,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuSelectAll"]/*' />
-        /// <devdoc>
-        ///     Called when the select all menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the select all menu item is selected.
+        /// </summary>
         protected void OnMenuSelectAll(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -2578,7 +2510,6 @@ namespace System.Windows.Forms.Design
                 Cursor.Current = Cursors.WaitCursor;
                 if (site != null)
                 {
-
                     Debug.Assert(SelectionService != null, "We need the SelectionService, but we can't find it!");
                     if (SelectionService == null)
                     {
@@ -2594,7 +2525,7 @@ namespace System.Windows.Forms.Design
                         object[] selComps;
                         if (components == null || components.Count == 0)
                         {
-                            selComps = new IComponent[0];
+                            selComps = Array.Empty<IComponent>();
                         }
                         else
                         {
@@ -2609,6 +2540,7 @@ namespace System.Windows.Forms.Design
                                 selComps[j++] = comp;
                             }
                         }
+
                         SelectionService.SetSelectedComponents(selComps, SelectionTypes.Replace);
                     }
                 }
@@ -2619,16 +2551,13 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuShowGrid"]/*' />
-        /// <devdoc>
-        ///     Called when the show grid menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the show grid menu item is selected.
+        /// </summary>
         protected void OnMenuShowGrid(object sender, EventArgs e)
         {
-
             if (site != null)
             {
-
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
 
@@ -2661,10 +2590,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuSizingCommand"]/*' />
-        /// <devdoc>
-        ///     Handles the various size to commands.
-        /// </devdoc>
+        /// <summary>
+        ///  Handles the various size to commands.
+        /// </summary>
         protected void OnMenuSizingCommand(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -2700,9 +2628,10 @@ namespace System.Windows.Forms.Design
                         //if we couldn't get a valid size for our primary selection, we'll fail silently
                         return;
                     }
-                    primarySize = (Size)sizeProp.GetValue(component);
 
+                    primarySize = (Size)sizeProp.GetValue(component);
                 }
+
                 if (selPrimary == null)
                 {
                     return;
@@ -2723,7 +2652,6 @@ namespace System.Windows.Forms.Design
 
                     foreach (object obj in selectedObjects)
                     {
-
                         if (obj.Equals(selPrimary))
                             continue;
 
@@ -2752,17 +2680,15 @@ namespace System.Windows.Forms.Design
 
                         itemSize = (Size)sizeProp.GetValue(comp);
 
-                        if (cmdID == MenuCommands.SizeToControlHeight ||
-                            cmdID == MenuCommands.SizeToControl)
+                        if (cmdID == StandardCommands.SizeToControlHeight ||
+                            cmdID == StandardCommands.SizeToControl)
                         {
-
                             itemSize.Height = primarySize.Height;
                         }
 
-                        if (cmdID == MenuCommands.SizeToControlWidth ||
-                            cmdID == MenuCommands.SizeToControl)
+                        if (cmdID == StandardCommands.SizeToControlWidth ||
+                            cmdID == StandardCommands.SizeToControl)
                         {
-
                             itemSize.Width = primarySize.Width;
                         }
 
@@ -2783,13 +2709,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuSizeToGrid"]/*' />
-        /// <devdoc>
-        ///     Called when the size->to grid menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the size->to grid menu item is selected.
+        /// </summary>
         protected void OnMenuSizeToGrid(object sender, EventArgs e)
         {
-
             if (SelectionService == null)
             {
                 return;
@@ -2808,7 +2732,6 @@ namespace System.Windows.Forms.Design
                 object[] selectedObjects = new object[sel.Count];
                 sel.CopyTo(selectedObjects, 0);
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
-
 
                 Size size = Size.Empty;
                 Point loc = Point.Empty;
@@ -2837,7 +2760,6 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (object obj in selectedObjects)
                     {
-
                         IComponent comp = obj as IComponent;
 
                         if (obj == null)
@@ -2875,17 +2797,16 @@ namespace System.Windows.Forms.Design
                 {
                     trans.Commit();
                 }
+
                 Cursor.Current = oldCursor;
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuDesignerProperties"]/*' />
-        /// <devdoc>
-        ///     Called when the properties menu item is selected on the Context menu
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the properties menu item is selected on the Context menu
+        /// </summary>
         protected void OnMenuDesignerProperties(object sender, EventArgs e)
         {
-
             // first, look if the currently selected object has a component editor...
             object obj = SelectionService.PrimarySelection;
 
@@ -2897,23 +2818,22 @@ namespace System.Windows.Forms.Design
             IMenuCommandService menuSvc = (IMenuCommandService)GetService(typeof(IMenuCommandService));
             if (menuSvc != null)
             {
-                if (menuSvc.GlobalInvoke(MenuCommands.PropertiesWindow))
+                if (menuSvc.GlobalInvoke(StandardCommands.PropertiesWindow))
                 {
                     return;
                 }
             }
+
             Debug.Assert(false, "Invoking pbrs command failed");
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuSnapToGrid"]/*' />
-        /// <devdoc>
-        ///     Called when the snap to grid menu item is selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the snap to grid menu item is selected.
+        /// </summary>
         protected void OnMenuSnapToGrid(object sender, EventArgs e)
         {
             if (site != null)
             {
-
                 IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
 
                 if (host != null)
@@ -2943,17 +2863,14 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnMenuSpacingCommand"]/*' />
-        /// <devdoc>
-        ///     Called when a spacing command is selected
+        /// <summary>
+        ///  Called when a spacing command is selected
         ///
-        /// </devdoc>
+        /// </summary>
         protected void OnMenuSpacingCommand(object sender, EventArgs e)
         {
-
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
             DesignerTransaction trans = null;
@@ -3010,17 +2927,17 @@ namespace System.Windows.Forms.Design
 
                 // Must sort differently if we're horizontal or vertical...
                 //
-                if (cmdID == MenuCommands.HorizSpaceConcatenate ||
-                    cmdID == MenuCommands.HorizSpaceDecrease ||
-                    cmdID == MenuCommands.HorizSpaceIncrease ||
-                    cmdID == MenuCommands.HorizSpaceMakeEqual)
+                if (cmdID == StandardCommands.HorizSpaceConcatenate ||
+                    cmdID == StandardCommands.HorizSpaceDecrease ||
+                    cmdID == StandardCommands.HorizSpaceIncrease ||
+                    cmdID == StandardCommands.HorizSpaceMakeEqual)
                 {
                     sort = SORT_HORIZONTAL;
                 }
-                else if (cmdID == MenuCommands.VertSpaceConcatenate ||
-                         cmdID == MenuCommands.VertSpaceDecrease ||
-                         cmdID == MenuCommands.VertSpaceIncrease ||
-                         cmdID == MenuCommands.VertSpaceMakeEqual)
+                else if (cmdID == StandardCommands.VertSpaceConcatenate ||
+                         cmdID == StandardCommands.VertSpaceDecrease ||
+                         cmdID == StandardCommands.VertSpaceIncrease ||
+                         cmdID == StandardCommands.VertSpaceMakeEqual)
                 {
                     sort = SORT_VERTICAL;
                 }
@@ -3038,17 +2955,15 @@ namespace System.Windows.Forms.Design
                 if (primary != null)
                     primaryIndex = Array.IndexOf(selectedObjects, primary);
 
-
                 // And compute delta values for Make Equal
-                if (cmdID == MenuCommands.HorizSpaceMakeEqual ||
-                    cmdID == MenuCommands.VertSpaceMakeEqual)
+                if (cmdID == StandardCommands.HorizSpaceMakeEqual ||
+                    cmdID == StandardCommands.VertSpaceMakeEqual)
                 {
                     int total, n;
 
                     total = 0;
                     for (n = 0; n < selectedObjects.Length; n++)
                     {
-
                         curSize = Size.Empty;
 
                         IComponent component = selectedObjects[n] as IComponent;
@@ -3089,6 +3004,7 @@ namespace System.Windows.Forms.Design
                                 curSizeDesc = GetProperty(curComp, "Size");
                                 curLocDesc = GetProperty(curComp, "Location");
                             }
+
                             lastComp = curComp;
 
                             if (curLocDesc != null)
@@ -3121,13 +3037,13 @@ namespace System.Windows.Forms.Design
                         curComp = selectedObjects[n] as IComponent;
                         if (curComp != null)
                         {
-
                             // only get the descriptors if we've changed component types
                             if (lastComp == null || curComp.GetType() != lastComp.GetType())
                             {
                                 curSizeDesc = GetProperty(curComp, "Size");
                                 curLocDesc = GetProperty(curComp, "Location");
                             }
+
                             lastComp = curComp;
 
                             if (curLocDesc != null)
@@ -3165,11 +3081,11 @@ namespace System.Windows.Forms.Design
                         {
                             nEqualDelta = (lastSize.Height + lastLoc.Y - curLoc.Y - total) / (selectedObjects.Length - 1);
                         }
+
                         if (nEqualDelta < 0)
                             nEqualDelta = 0;
                     }
                 }
-
 
                 curComp = lastComp = null;
 
@@ -3186,7 +3102,6 @@ namespace System.Windows.Forms.Design
                 //
                 for (int n = 0; n < selectedObjects.Length; n++)
                 {
-
                     curComp = (IComponent)selectedObjects[n];
 
                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
@@ -3259,11 +3174,11 @@ namespace System.Windows.Forms.Design
                         continue;
                     }
 
-                    if (cmdID == MenuCommands.HorizSpaceConcatenate && n > 0)
+                    if (cmdID == StandardCommands.HorizSpaceConcatenate && n > 0)
                     {
                         curLoc.X = lastLoc.X + lastSize.Width;
                     }
-                    else if (cmdID == MenuCommands.HorizSpaceDecrease)
+                    else if (cmdID == StandardCommands.HorizSpaceDecrease)
                     {
                         if (primaryIndex < n)
                         {
@@ -3278,7 +3193,7 @@ namespace System.Windows.Forms.Design
                                 curLoc.X = primaryLoc.X;
                         }
                     }
-                    else if (cmdID == MenuCommands.HorizSpaceIncrease)
+                    else if (cmdID == StandardCommands.HorizSpaceIncrease)
                     {
                         if (primaryIndex < n)
                         {
@@ -3288,17 +3203,16 @@ namespace System.Windows.Forms.Design
                         {
                             curLoc.X -= grid.Width * (primaryIndex - n);
                         }
-
                     }
-                    else if (cmdID == MenuCommands.HorizSpaceMakeEqual && n > 0)
+                    else if (cmdID == StandardCommands.HorizSpaceMakeEqual && n > 0)
                     {
                         curLoc.X = lastLoc.X + lastSize.Width + nEqualDelta;
                     }
-                    else if (cmdID == MenuCommands.VertSpaceConcatenate && n > 0)
+                    else if (cmdID == StandardCommands.VertSpaceConcatenate && n > 0)
                     {
                         curLoc.Y = lastLoc.Y + lastSize.Height;
                     }
-                    else if (cmdID == MenuCommands.VertSpaceDecrease)
+                    else if (cmdID == StandardCommands.VertSpaceDecrease)
                     {
                         if (primaryIndex < n)
                         {
@@ -3313,7 +3227,7 @@ namespace System.Windows.Forms.Design
                                 curLoc.Y = primaryLoc.Y;
                         }
                     }
-                    else if (cmdID == MenuCommands.VertSpaceIncrease)
+                    else if (cmdID == StandardCommands.VertSpaceIncrease)
                     {
                         if (primaryIndex < n)
                         {
@@ -3324,7 +3238,7 @@ namespace System.Windows.Forms.Design
                             curLoc.Y -= grid.Height * (primaryIndex - n);
                         }
                     }
-                    else if (cmdID == MenuCommands.VertSpaceMakeEqual && n > 0)
+                    else if (cmdID == StandardCommands.VertSpaceMakeEqual && n > 0)
                     {
                         curLoc.Y = lastLoc.Y + lastSize.Height + nEqualDelta;
                     }
@@ -3343,18 +3257,17 @@ namespace System.Windows.Forms.Design
                 {
                     trans.Commit();
                 }
+
                 Cursor.Current = oldCursor;
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnSelectionChanged"]/*' />
-        /// <devdoc>
-        ///     Called when the current selection changes.  Here we determine what
-        ///     commands can and can't be enabled.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when the current selection changes.  Here we determine what
+        ///  commands can and can't be enabled.
+        /// </summary>
         protected void OnSelectionChanged(object sender, EventArgs e)
         {
-
             if (SelectionService == null/*: UNDONE: BehaviorWork  || SelectionUIService == null*/)
             {
                 return;
@@ -3401,17 +3314,17 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             OnUpdateCommandStatus();
         }
 
-        /// <devdoc>
-        ///     When this timer expires, this tells us that we need to
-        ///     erase any snaplines we have drawn.  First, we need
-        ///     to marshal this back to the correct thread.
-        /// </devdoc>
+        /// <summary>
+        ///  When this timer expires, this tells us that we need to
+        ///  erase any snaplines we have drawn.  First, we need
+        ///  to marshal this back to the correct thread.
+        /// </summary>
         private void OnSnapLineTimerExpire(object sender, EventArgs e)
         {
-
             Control marshalControl = BehaviorService.AdornerWindowControl;
 
             if (marshalControl != null && marshalControl.IsHandleCreated)
@@ -3420,43 +3333,40 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     Called when our snapline timer expires - this method has been call
-        ///     has been properly marshalled back to the correct thread.
-        /// </devdoc>
+        /// <summary>
+        ///  Called when our snapline timer expires - this method has been call
+        ///  has been properly marshalled back to the correct thread.
+        /// </summary>
         private void OnSnapLineTimerExpireMarshalled(object sender, EventArgs e)
         {
             snapLineTimer.Stop();
             EndDragManager();
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusAlways"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are always enabled.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are always enabled.
+        /// </summary>
         protected void OnStatusAlways(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
             cmd.Enabled = true;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusAnySelection"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event
-        ///     handler are enabled when one or more objects are selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event
+        ///  handler are enabled when one or more objects are selected.
+        /// </summary>
         protected void OnStatusAnySelection(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
             cmd.Enabled = selCount > 0;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusCopy"]/*' />
-        /// <devdoc>
-        ///      Status for the copy command.  This is enabled when
-        ///      there is something juicy selected.
-        /// </devdoc>
+        /// <summary>
+        ///  Status for the copy command.  This is enabled when
+        ///  there is something juicy selected.
+        /// </summary>
         protected void OnStatusCopy(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -3470,7 +3380,6 @@ namespace System.Windows.Forms.Design
 
                 if (selSvc != null)
                 {
-
                     // There must also be a component in the mix, and not the base component
                     //
                     ICollection selectedComponents = selSvc.GetSelectedComponents();
@@ -3496,12 +3405,11 @@ namespace System.Windows.Forms.Design
             cmd.Enabled = enable;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusCut"]/*' />
-        /// <devdoc>
-        ///      Status for the cut command.  This is enabled when
-        ///      there is something juicy selected and that something
-        ///      does not contain any inherited components.
-        /// </devdoc>
+        /// <summary>
+        ///  Status for the cut command.  This is enabled when
+        ///  there is something juicy selected and that something
+        ///  does not contain any inherited components.
+        /// </summary>
         protected void OnStatusCut(object sender, EventArgs e)
         {
             OnStatusDelete(sender, e);
@@ -3511,12 +3419,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusDelete"]/*' />
-        /// <devdoc>
-        ///      Status for the delete command.  This is enabled when there
-        ///      is something selected and that something does not contain
-        ///      inherited components.
-        /// </devdoc>
+        /// <summary>
+        ///  Status for the delete command.  This is enabled when there
+        ///  is something selected and that something does not contain
+        ///  inherited components.
+        /// </summary>
         protected void OnStatusDelete(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -3555,23 +3462,20 @@ namespace System.Windows.Forms.Design
 
         // Let's keep this in case we need it in the future
         
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusNYI"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event are
-        ///     considered to be not yet implemented and are disabled.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event are
+        ///  considered to be not yet implemented and are disabled.
+        /// </summary>
         protected void OnStatusNYI(object sender, EventArgs e) {
             MenuCommand cmd = (MenuCommand)sender;
             cmd.Enabled = false;
         }
 #endif
 
-
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnStatusPaste"]/*' />
-        /// <devdoc>
-        ///     Determines the status of a menu command.  Commands with this event are
-        ///     enabled when there is something yummy on the clipboard.
-        /// </devdoc>
+        /// <summary>
+        ///  Determines the status of a menu command.  Commands with this event are
+        ///  enabled when there is something yummy on the clipboard.
+        /// </summary>
         protected void OnStatusPaste(object sender, EventArgs e)
         {
             MenuCommand cmd = (MenuCommand)sender;
@@ -3582,12 +3486,10 @@ namespace System.Windows.Forms.Design
             //
             if (primarySelection != null)
             {
-
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
 
                 if (host != null && host.GetDesigner(primarySelection) is ParentControlDesigner)
                 {
-
                     // This component is a target for our paste operation.  We must ensure
                     // that it is not privately inherited.
                     //
@@ -3604,7 +3506,7 @@ namespace System.Windows.Forms.Design
             // Not being inherited.  Now look at the contents of the data
             //
             IDataObject dataObj = null;
-            bool clipboardOperationSuccessful = ExecuteSafely<IDataObject>(() => Clipboard.GetDataObject(), false, out dataObj);
+            bool clipboardOperationSuccessful = ExecuteSafely(() => Clipboard.GetDataObject(), false, out dataObj);
 
             bool enable = false;
 
@@ -3637,7 +3539,6 @@ namespace System.Windows.Forms.Design
 
         protected virtual void OnStatusSelectAll(object sender, EventArgs e)
         {
-
             MenuCommand cmd = (MenuCommand)sender;
 
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -3645,16 +3546,14 @@ namespace System.Windows.Forms.Design
             cmd.Enabled = host.Container.Components.Count > 1;
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.OnUpdateCommandStatus"]/*' />
-        /// <devdoc>
-        ///      This is called when the selection has changed.  Anyone using CommandSetItems
-        ///      that need to update their status based on selection changes should override
-        ///      this and update their own commands at this time.  The base implementaion
-        ///      runs through all base commands and calls UpdateStatus on them.
-        /// </devdoc>
+        /// <summary>
+        ///  This is called when the selection has changed.  Anyone using CommandSetItems
+        ///  that need to update their status based on selection changes should override
+        ///  this and update their own commands at this time.  The base implementaion
+        ///  runs through all base commands and calls UpdateStatus on them.
+        /// </summary>
         protected virtual void OnUpdateCommandStatus()
         {
-
             // Now whip through all of the commands and ask them to update.
             //
             for (int i = 0; i < commandSet.Length; i++)
@@ -3663,11 +3562,11 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <devdoc>
-        ///     This method grows the objects collection by one.  It prepends the
-        ///     collection with a string[] which contains the component names in order
-        ///     for each component in the list.
-        /// </devdoc>
+        /// <summary>
+        ///  This method grows the objects collection by one.  It prepends the
+        ///  collection with a string[] which contains the component names in order
+        ///  for each component in the list.
+        /// </summary>
         private ICollection PrependComponentNames(ICollection objects)
         {
             object[] newObjects = new object[objects.Count + 1];
@@ -3684,8 +3583,10 @@ namespace System.Windows.Forms.Design
                     {
                         name = comp.Site.Name;
                     }
+
                     names.Add(name);
                 }
+
                 newObjects[idx++] = o;
             }
 
@@ -3695,17 +3596,13 @@ namespace System.Windows.Forms.Design
             return newObjects;
         }
 
-
-
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.SortSelection"]/*' />
-        /// <devdoc>
-        ///     called by the formatting commands when we need a given selection array sorted.
-        ///     Sorting the array sorts by x from left to right, and by Y from top to bottom.
-        /// </devdoc>
+        /// <summary>
+        ///  called by the formatting commands when we need a given selection array sorted.
+        ///  Sorting the array sorts by x from left to right, and by Y from top to bottom.
+        /// </summary>
         private void SortSelection(object[] selectedObjects, int nSortBy)
         {
-            IComparer comp = null;
-
+            IComparer comp;
             switch (nSortBy)
             {
                 case SORT_HORIZONTAL:
@@ -3720,6 +3617,7 @@ namespace System.Windows.Forms.Design
                 default:
                     return;
             }
+
             Array.Sort(selectedObjects, comp);
         }
 
@@ -3735,12 +3633,11 @@ namespace System.Windows.Forms.Design
         private void TestCommandPaste(string[] args) {
             this.OnMenuPaste(null, EventArgs.Empty);
         }
-#endif        
+#endif
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.UpdateClipboardItems"]/*' />
-        /// <devdoc>
-        ///     Common function that updates the status of clipboard menu items only
-        /// </devdoc>
+        /// <summary>
+        ///  Common function that updates the status of clipboard menu items only
+        /// </summary>
         private void UpdateClipboardItems(object s, EventArgs e)
         {
             int itemCount = 0;
@@ -3748,9 +3645,9 @@ namespace System.Windows.Forms.Design
             for (int i = 0; itemCount < 3 && i < commandSet.Length; i++)
             {
                 curItem = commandSet[i];
-                if (curItem.CommandID == MenuCommands.Paste ||
-                    curItem.CommandID == MenuCommands.Copy ||
-                    curItem.CommandID == MenuCommands.Cut)
+                if (curItem.CommandID == StandardCommands.Paste ||
+                    curItem.CommandID == StandardCommands.Copy ||
+                    curItem.CommandID == StandardCommands.Cut)
                 {
                     itemCount++;
                     curItem.UpdateStatus();
@@ -3780,14 +3677,17 @@ namespace System.Windows.Forms.Design
                 {
                     min.X = loc.X;
                 }
+
                 if (min.Y > loc.Y)
                 {
                     min.Y = loc.Y;
                 }
+
                 if (max.X < loc.X + size.Width)
                 {
                     max.X = loc.X + size.Width;
                 }
+
                 if (max.Y < loc.Y + size.Height)
                 {
                     max.Y = loc.Y + size.Height;
@@ -3809,7 +3709,6 @@ namespace System.Windows.Forms.Design
             //
             if (parentControl != null)
             {
-
                 bool bumpIt;
                 bool wrapped = false;
                 Size parentSize = parentControl.ClientSize;
@@ -3832,7 +3731,6 @@ namespace System.Windows.Forms.Design
                     //
                     foreach (Control child in parentControl.Controls)
                     {
-
                         Rectangle childBounds = child.Bounds;
 
                         if (controls.Contains(child))
@@ -3862,7 +3760,6 @@ namespace System.Windows.Forms.Design
 
                         if (pasteControlBounds.Equals(childBounds))
                         {
-
                             bumpIt = true;
 
                             if (gridSize.IsEmpty)
@@ -3877,6 +3774,7 @@ namespace System.Windows.Forms.Design
                                         gridSize = (Size)gs.GetValue(baseComponent);
                                     }
                                 }
+
                                 if (gridSize.IsEmpty)
                                 {
                                     gridSize.Width = 8;
@@ -3921,10 +3819,12 @@ namespace System.Windows.Forms.Design
                                     wrapped = true;
                                 }
                             }
+
                             break;
                         }
                     }
-                } while (bumpIt);
+                }
+                while (bumpIt);
 
                 offset.Offset(parentOffset.X, parentOffset.Y);
             }
@@ -3936,6 +3836,7 @@ namespace System.Windows.Forms.Design
             {
                 parentControl.SuspendLayout();
             }
+
             try
             {
                 foreach (Control c in controls)
@@ -3952,7 +3853,6 @@ namespace System.Windows.Forms.Design
                     parentControl.ResumeLayout();
                 }
             }
-
         }
 
         private void UpdatePasteTabIndex(Control componentControl, object parentComponent)
@@ -3990,26 +3890,24 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CommandSetItem"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///     We extend MenuCommand for our command set items.  A command set item
-        ///     is a menu command with an added delegate that is used to determine the
-        ///     flags for the menu item.  We have different classes of delegates here.
-        ///     For example, many  menu items may be enabled when there is at least
-        ///     one object selected, while others are only enabled if there is more than
-        ///     one object or if there is a primary selection.
-        /// </devdoc>
+        /// <summary>
+        ///  We extend MenuCommand for our command set items.  A command set item
+        ///  is a menu command with an added delegate that is used to determine the
+        ///  flags for the menu item.  We have different classes of delegates here.
+        ///  For example, many  menu items may be enabled when there is at least
+        ///  one object selected, while others are only enabled if there is more than
+        ///  one object or if there is a primary selection.
+        /// </summary>
         protected class CommandSetItem : MenuCommand
         {
-            private EventHandler statusHandler;
-            private IEventHandlerService eventService;
-            private IUIService uiService;
+            private readonly EventHandler statusHandler;
+            private readonly IEventHandlerService eventService;
+            private readonly IUIService uiService;
 
-
-            private CommandSet commandSet;
+            private readonly CommandSet commandSet;
             private static Hashtable commandStatusHash;       // list of the command statuses we are tracking.
-            private bool updatingCommand = false; // flag we set when we're updating the command so we don't call back on the status handler.
+            private bool updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
 
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : this(commandSet, statusHandler, invokeHandler, id, false, uiService)
             {
@@ -4023,20 +3921,17 @@ namespace System.Windows.Forms.Design
             {
             }
 
-            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CommandSetItem.CommandSetItem"]/*' />
-            /// <devdoc>
-            ///     Creates a new CommandSetItem.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new CommandSetItem.
+            /// </summary>
 
             // Per SBurke...
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, bool optimizeStatus, IUIService uiService)
             : base(invokeHandler, id)
             {
                 this.uiService = uiService;
-                this.eventService = commandSet.eventService;
+                eventService = commandSet.eventService;
                 this.statusHandler = statusHandler;
-
 
                 // when we optimize, it's because status is fully based on selection.
                 // so what we do is only call the status handler once per selection change to prevent
@@ -4046,7 +3941,6 @@ namespace System.Windows.Forms.Design
                 //
                 if (optimizeStatus && statusHandler != null)
                 {
-
                     // we use this as our sentinel of when we're doing this.
                     //
                     this.commandSet = commandSet;
@@ -4062,15 +3956,15 @@ namespace System.Windows.Forms.Design
                     }
 
                     //
-                    // UNDONE:CommandSetItem is put in a static hashtable, and CommandSetItem 
-                    // references CommandSet, CommandSet reference FormDesigner. If we don't 
-                    // remove the CommandSetItem from the static hashtable, FormDesigner is 
-                    // leaked. This demonstrates a bad design. We should not keep a static 
-                    // hashtable for all the items, instead, we should keep a hashtable per 
-                    // Designer. When designer is disposed, all command items got disposed 
-                    // automatically. However, at this time, we would pick a simple way with 
+                    // UNDONE:CommandSetItem is put in a static hashtable, and CommandSetItem
+                    // references CommandSet, CommandSet reference FormDesigner. If we don't
+                    // remove the CommandSetItem from the static hashtable, FormDesigner is
+                    // leaked. This demonstrates a bad design. We should not keep a static
+                    // hashtable for all the items, instead, we should keep a hashtable per
+                    // Designer. When designer is disposed, all command items got disposed
+                    // automatically. However, at this time, we would pick a simple way with
                     // low risks to fix this.
-                    // 
+                    //
                     // if this handler isn't already in there, add it.
                     //
                     StatusState state = commandStatusHash[statusHandler] as StatusState;
@@ -4079,14 +3973,14 @@ namespace System.Windows.Forms.Design
                         state = new StatusState();
                         commandStatusHash.Add(statusHandler, state);
                     }
+
                     state.refCount++;
                 }
-
             }
 
-            /// <devdoc>
+            /// <summary>
             /// Checks if the status for this command is valid, meaning we don't need to call the status handler.
-            /// </devdoc>
+            /// </summary>
             private bool CommandStatusValid
             {
                 get
@@ -4102,19 +3996,16 @@ namespace System.Windows.Forms.Design
                             return true;
                         }
                     }
+
                     return false;
                 }
             }
 
-
-            /// <devdoc>
+            /// <summary>
             /// Applys the cached status to this item.
-            ///
-            /// </devdco>
+            /// </summary>
             private void ApplyCachedStatus()
             {
-
-
                 if (commandSet != null && commandStatusHash.Contains(statusHandler))
                 {
                     try
@@ -4135,10 +4026,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CommandSetItem.Invoke"]/*' />
-            /// <devdoc>
-            ///     This may be called to invoke the menu item.
-            /// </devdoc>
+            /// <summary>
+            ///  This may be called to invoke the menu item.
+            /// </summary>
             public override void Invoke()
             {
                 // We allow outside parties to override the availability of particular menu commands.
@@ -4162,17 +4052,17 @@ namespace System.Windows.Forms.Design
                     {
                         uiService.ShowError(e, string.Format(SR.CommandSetError, e.Message));
                     }
+
                     if (ClientUtils.IsCriticalException(e))
                     {
                         throw;
                     }
                 }
-
             }
 
-            ///<devdoc>
+            ///<summary>
             /// Only pass this down to the base when we're not doing the cached update.
-            ///</devdoc>
+            ///</summary>
             protected override void OnCommandChanged(EventArgs e)
             {
                 if (!updatingCommand)
@@ -4181,15 +4071,15 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            ///<devdoc>
+            ///<summary>
             /// Saves the status for this command to the statusstate that's stored in the hashtable
             /// based on our status handler delegate.
-            ///</devdoc>
+            ///</summary>
             private void SaveCommandStatus()
             {
                 if (commandSet != null)
                 {
-                    StatusState state = null;
+                    StatusState state;
 
                     // see if we need to create one of these StatusState dudes.
                     //
@@ -4208,13 +4098,11 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.CommandSetItem.UpdateStatus"]/*' />
-            /// <devdoc>
-            ///     Called when the status of this command should be re-queried.
-            /// </devdoc>
+            /// <summary>
+            ///  Called when the status of this command should be re-queried.
+            /// </summary>
             public void UpdateStatus()
             {
-
                 // We allow outside parties to override the availability of particular menu commands.
                 //
                 if (eventService != null)
@@ -4228,7 +4116,6 @@ namespace System.Windows.Forms.Design
 
                 if (statusHandler != null)
                 {
-
                     // if we need to update our status,
                     // call the status handler.  otherwise,
                     // get the cached status and push it into this
@@ -4252,10 +4139,9 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-
-            /// <devdoc>
+            /// <summary>
             /// Remove this command item from the static hashtable to avoid leaking this object.
-            /// </devdoc>
+            /// </summary>
             public virtual void Dispose()
             {
                 StatusState state = commandStatusHash[statusHandler] as StatusState;
@@ -4269,13 +4155,12 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             /// This class saves the state for a given command.  It keeps track of the results
             /// of the last status handler invocation and what "selection version" that happened on.
-            /// </devdoc>
+            /// </summary>
             private class StatusState
             {
-
                 // these are the command's possible values.
                 //
                 private const int Enabled = 0x01;
@@ -4284,16 +4169,16 @@ namespace System.Windows.Forms.Design
                 private const int Supported = 0x08;
                 private const int NeedsUpdate = 0x10;
 
-                private int selectionVersion = 0; // the version of the selection that this was initialized with.
+                private int selectionVersion; // the version of the selection that this was initialized with.
                 private int statusFlags = NeedsUpdate; // our flags.
 
                 // Multiple CommandSetItem instances can share a same status handler within a designer host.
                 // We use a simple ref count to make sure the CommandSetItem can be properly removed.
-                internal int refCount = 0;
+                internal int refCount;
 
-                /// <devdoc>
+                /// <summary>
                 /// Just what it says...
-                /// </devdoc>
+                /// </summary>
                 public int SelectionVersion
                 {
                     get
@@ -4302,9 +4187,9 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                /// <devdoc>
+                /// <summary>
                 /// Pushes the state stored in this object into the given command item.
-                /// </devdoc>
+                /// </summary>
                 internal void ApplyState(CommandSetItem item)
                 {
                     Debug.Assert((statusFlags & NeedsUpdate) != NeedsUpdate, "Updating item when StatusState is not valid.");
@@ -4315,10 +4200,10 @@ namespace System.Windows.Forms.Design
                     item.Supported = ((statusFlags & Supported) == Supported);
                 }
 
-                /// <devdoc>
+                /// <summary>
                 /// Updates this status object  with the state from the given item,
                 /// and saves teh seletion version.
-                /// </devdoc>
+                /// </summary>
                 internal void SaveState(CommandSetItem item, int version)
                 {
                     selectionVersion = version;
@@ -4327,14 +4212,17 @@ namespace System.Windows.Forms.Design
                     {
                         statusFlags |= Enabled;
                     }
+
                     if (item.Visible)
                     {
                         statusFlags |= Visible;
                     }
+
                     if (item.Checked)
                     {
                         statusFlags |= Checked;
                     }
+
                     if (item.Supported)
                     {
                         statusFlags |= Supported;
@@ -4343,29 +4231,25 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.ImmediateCommandSetItem"]/*' />
         /// <internalonly/>
-        /// <devdoc>
-        ///      The immediate command set item is used for commands that cannot be cached.  Commands
-        ///      such as Paste that get outside stimulus cannot be cached by our menu system, so
-        ///      they get an ImmediateCommandSetItem instead of a CommandSetItem.
-        /// </devdoc>
+        /// <summary>
+        ///  The immediate command set item is used for commands that cannot be cached.  Commands
+        ///  such as Paste that get outside stimulus cannot be cached by our menu system, so
+        ///  they get an ImmediateCommandSetItem instead of a CommandSetItem.
+        /// </summary>
         protected class ImmediateCommandSetItem : CommandSetItem
         {
-
-            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.ImmediateCommandSetItem.ImmediateCommandSetItem"]/*' />
-            /// <devdoc>
-            ///     Creates a new ImmediateCommandSetItem.
-            /// </devdoc>
+            /// <summary>
+            ///  Creates a new ImmediateCommandSetItem.
+            /// </summary>
             public ImmediateCommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService)
             : base(commandSet, statusHandler, invokeHandler, id, uiService)
             {
             }
 
-            /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.ImmediateCommandSetItem.OleStatus"]/*' />
-            /// <devdoc>
-            ///      Overrides OleStatus in MenuCommand to invoke our status handler first.
-            /// </devdoc>
+            /// <summary>
+            ///  Overrides OleStatus in MenuCommand to invoke our status handler first.
+            /// </summary>
             public override int OleStatus
             {
                 get
@@ -4376,10 +4260,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.ComponentLeftCompare"]/*' />
-        /// <devdoc>
-        ///      Component comparer that compares the left property of a component.
-        /// </devdoc>
+        /// <summary>
+        ///  Component comparer that compares the left property of a component.
+        /// </summary>
         private class ComponentLeftCompare : IComparer
         {
             public int Compare(object p, object q)
@@ -4400,10 +4283,9 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <include file='doc\CommandSet.uex' path='docs/doc[@for="CommandSet.ComponentTopCompare"]/*' />
-        /// <devdoc>
-        ///      Component comparer that compares the top property of a component.
-        /// </devdoc>
+        /// <summary>
+        ///  Component comparer that compares the top property of a component.
+        /// </summary>
         private class ComponentTopCompare : IComparer
         {
             public int Compare(object p, object q)
@@ -4426,7 +4308,6 @@ namespace System.Windows.Forms.Design
 
         private class ControlZOrderCompare : IComparer
         {
-
             public int Compare(object p, object q)
             {
                 if (p == null)
@@ -4454,6 +4335,7 @@ namespace System.Windows.Forms.Design
                 {
                     return c1.Parent.Controls.GetChildIndex(c1) - c1.Parent.Controls.GetChildIndex(c2);
                 }
+
                 return 1;
             }
         }
@@ -4483,6 +4365,5 @@ namespace System.Windows.Forms.Design
                 return c1.TabIndex - c2.TabIndex;
             }
         }
-
     }
 }
