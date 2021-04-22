@@ -1,6 +1,8 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
+
+#nullable enable
 
 using System.ComponentModel;
 using System.Drawing;
@@ -14,13 +16,13 @@ namespace System.Windows.Forms.Design.Behavior
     public class ControlBodyGlyph : ComponentGlyph
     {
         private Rectangle _bounds;                  //bounds of the related control
-        private readonly Cursor _hitTestCursor;    //cursor used to hit test
-        private readonly IComponent _component;
+        private readonly Cursor? _hitTestCursor;    //cursor used to hit test
+        private readonly IComponent? _component;
 
         /// <summary>
         ///  Standard Constructor.
         /// </summary>
-        public ControlBodyGlyph(Rectangle bounds, Cursor cursor, IComponent relatedComponent, ControlDesigner designer)
+        public ControlBodyGlyph(Rectangle bounds, Cursor? cursor, IComponent? relatedComponent, ControlDesigner? designer)
             : base(relatedComponent, new ControlDesigner.TransparentBehavior(designer))
         {
             _bounds = bounds;
@@ -28,7 +30,7 @@ namespace System.Windows.Forms.Design.Behavior
             _component = relatedComponent;
         }
 
-        public ControlBodyGlyph(Rectangle bounds, Cursor cursor, IComponent relatedComponent, Behavior behavior)
+        public ControlBodyGlyph(Rectangle bounds, Cursor? cursor, IComponent? relatedComponent, Behavior? behavior)
             : base(relatedComponent, behavior)
         {
             _bounds = bounds;
@@ -46,7 +48,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  AND the component is Visible (controls on some tab pages may
         ///  not be, for ex) then it is a positive hit test.
         /// </summary>
-        public override Cursor GetHitTest(Point p)
+        public override Cursor? GetHitTest(Point p)
         {
             bool isVisible = (_component is Control control) ? control.Visible : true; /*non-controls are always visible here*/
 
