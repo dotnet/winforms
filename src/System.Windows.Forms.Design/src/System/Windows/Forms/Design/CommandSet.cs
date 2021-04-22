@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Design
                             {
                                 return false;
                             }
-                            throw coEx;
+                            throw;
                         }
                         catch
                         {
@@ -721,7 +721,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (chkex == CheckoutException.Canceled)
                         return false;
-                    throw chkex;
+                    throw;
                 }
             }
             return true;

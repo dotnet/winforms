@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Design
                     catch (Exception e)
                     {
                         Debug.WriteLineIf(DocumentDesigner.AxToolSwitch.TraceVerbose, "Generating Ax References failed: " + e);
-                        throw e;
+                        throw;
                     }
                 }
 
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Design
                 catch (Exception e)
                 {
                     Debug.Fail("Could not create type: " + e);
-                    throw e;
+                    throw;
                 }
 
                 Debug.Assert(comps[0] != null, "Could not create instance of ActiveX control wrappers!!!");

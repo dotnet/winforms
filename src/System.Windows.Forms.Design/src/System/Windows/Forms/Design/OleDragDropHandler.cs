@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Design
                     if (cxe == CheckoutException.Canceled)
                         return comps;
 
-                    throw cxe;
+                    throw;
                 }
 
                 try
