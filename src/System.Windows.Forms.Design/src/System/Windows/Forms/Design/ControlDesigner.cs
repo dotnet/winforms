@@ -35,6 +35,7 @@ namespace System.Windows.Forms.Design
                                                             //  ...which would cause a cycle.
         private bool _hasLocation;                          // Do we have a location property?
         private bool _locationChecked;                      // And did we check it
+        private bool _locked;                               // Signifies if this control is locked or not
         private bool _enabledchangerecursionguard;
 
         // Behavior work
@@ -70,7 +71,11 @@ namespace System.Windows.Forms.Design
         private bool _removalNotificationHooked;
         private bool _revokeDragDrop = true;
         private bool _hadDragDrop;
+
+        private DesignerControlCollection _controls;
+
         private static bool s_inContextMenu;
+
         private DockingActionList _dockingAction;
         private StatusCommandUI _statusCommandUI;           // UI for setting the StatusBar Information..
         private Dictionary<IntPtr, bool> _subclassedChildren;
@@ -78,6 +83,37 @@ namespace System.Windows.Forms.Design
         protected BehaviorService BehaviorService => _behaviorService ??= GetService<BehaviorService>();
 
         internal bool ForceVisible { get; set; } = true;
+
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        private DesignerControlCollection Controls => _controls ??= new DesignerControlCollection(Control);
+
+        private Point Location
+        {
+            get
+            {
+                Point loc = Control.Location;
+
+                ScrollableControl p = Control.Parent as ScrollableControl;
+                if (p != null)
+                {
+                    Point pt = p.AutoScrollPosition;
+                    loc.Offset(-pt.X, -pt.Y);
+                }
+
+                return loc;
+            }
+            set
+            {
+                ScrollableControl p = Control.Parent as ScrollableControl;
+                if (p != null)
+                {
+                    Point pt = p.AutoScrollPosition;
+                    value.Offset(pt.X, pt.Y);
+                }
+
+                Control.Location = value;
+            }
+        }
 
         /// <summary>
         ///  Retrieves a list of associated components. These are components that should be incluced
@@ -124,6 +160,38 @@ namespace System.Windows.Forms.Design
         ///  Determines whether drag rects can be drawn on this designer.
         /// </summary>
         protected virtual bool EnableDragRect => false;
+
+        /// <summary>
+        ///     Gets / Sets this controls locked property
+        /// </summary>
+        private bool Locked
+        {
+            get => _locked;
+            set
+            {
+                if (_locked != value)
+                {
+                    _locked = value;
+                }
+            }
+        }
+
+        private string Name
+        {
+            get
+            {
+                return Component.Site.Name;
+            }
+            set
+            {
+                // don't do anything here during loading, if a refactor changed it we don't want to do anything
+                IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+                if (host == null || (host != null && !host.Loading))
+                {
+                    Component.Site.Name = value;
+                }
+            }
+        }
 
         /// <summary>
         ///  Returns the parent component for this control designer. The default implementation just checks to see if
@@ -265,6 +333,9 @@ namespace System.Windows.Forms.Design
             return (new Point(Math.Abs(nativeOffset.X - offset.X), nativeOffset.Y - offset.Y));
         }
 
+        /// <summary>
+        ///  Per AutoSize spec, determines if a control is resizable.
+        /// </summary>
         private bool IsResizableConsiderAutoSize(PropertyDescriptor autoSizeProp, PropertyDescriptor autoSizeModeProp)
         {
             object component = Component;
@@ -713,7 +784,7 @@ namespace System.Windows.Forms.Design
             bool primarySelection = (selectionType == GlyphSelectionType.SelectedPrimary);
             SelectionRules rules = SelectionRules;
 
-            if ((Locked) || (InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+            if (Locked || (InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
             {
                 // the lock glyph
                 glyphs.Add(new LockedHandleGlyph(translatedBounds, primarySelection));
@@ -808,6 +879,11 @@ namespace System.Windows.Forms.Design
             return glyphs;
         }
 
+        /// <summary>
+        ///     Demand creates the StandardBehavior related to this
+        ///     ControlDesigner.  This is used to associate the designer's
+        ///     selection glyphs to a common Behavior (resize in this case).
+        /// </summary>
         internal virtual Behavior.Behavior StandardBehavior => _resizeBehavior ??= new ResizeBehavior(Component.Site);
 
         internal virtual bool SerializePerformLayout => false;
@@ -1057,6 +1133,9 @@ namespace System.Windows.Forms.Design
             set => ShadowProperties[nameof(AllowDrop)] = value;
         }
 
+        /// <summary>
+        ///  Accessor method for the enabled property on control. We shadow this property at design time.
+        /// </summary>
         private bool Enabled
         {
             get => (bool)ShadowProperties[nameof(Enabled)];
@@ -1566,8 +1645,6 @@ namespace System.Windows.Forms.Design
 
             Cursor.Current = Cursors.SizeAll;
         }
-
-        private bool Locked { get; set; }
 
         /// <summary>
         ///  Allows a designer to filter the set of properties the component it is designing will expose through the

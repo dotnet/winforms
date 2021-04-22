@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.ComponentModel.Design;
 using System.Drawing;
 
@@ -14,6 +16,9 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public abstract class Behavior
     {
+        private bool _callParentBehavior;
+        private BehaviorService? _behaviorService;
+
         protected Behavior()
         {
         }
@@ -22,30 +27,75 @@ namespace System.Windows.Forms.Design.Behavior
         ///  `true` if the parentBehavior should be called if it exists. The parentBehavior is the next behavior on
         ///  the behaviorService stack.If true, <paramref name="behaviorService"/> must be non-null.
         /// </param>
-        protected Behavior(bool callParentBehavior, BehaviorService behaviorService)
+        protected Behavior(bool callParentBehavior, BehaviorService? behaviorService)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if ((callParentBehavior == true) && (behaviorService == null))
+            {
+                throw new ArgumentException(null, nameof(behaviorService));
+            }
+
+            _callParentBehavior = callParentBehavior;
+            _behaviorService = behaviorService;
         }
 
-        private Behavior GetNextBehavior => throw new NotImplementedException(SR.NotImplementedByDesign);
+        private Behavior? GetNextBehavior => _behaviorService?.GetNextBehavior(this);
 
         /// <summary>
         ///  The cursor that should be displayed for this behavior.
         /// </summary>
-        public virtual Cursor Cursor => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual Cursor Cursor => Cursors.Default;
 
         /// <summary>
         ///  Rerturning true from here indicates to the BehaviorService that all MenuCommands the designer receives
         ///  should have their state set to 'Enabled = false' when this Behavior is active.
         /// </summary>
-        public virtual bool DisableAllCommands => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool DisableAllCommands
+        {
+            get
+            {
+                if (_callParentBehavior && GetNextBehavior != null)
+                {
+                    return GetNextBehavior.DisableAllCommands;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         ///  Called from the BehaviorService, this function provides an opportunity for the Behavior to return its
         ///  own custom MenuCommand thereby intercepting this message.
         /// </summary>
-        public virtual MenuCommand FindCommand(CommandID commandId)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual MenuCommand? FindCommand(CommandID commandId)
+        {
+            try
+            {
+                if (_callParentBehavior && GetNextBehavior != null)
+                {
+                    return GetNextBehavior.FindCommand(commandId);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch //Catch any exception and return null MenuCommand.
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        ///  The heuristic we will follow when any of these methods are called
+        ///  is that we will attempt to pass the message along to the glyph.
+        ///  This is a helper method to ensure validity before forwarding the message.
+        /// </summary>
+        private Behavior? GetGlyphBehavior(Glyph? g)
+        {
+            return g?.Behavior != null && g.Behavior != this ? g.Behavior : null;
+        }
 
         /// <summary>
         ///  A behavior can request mouse capture through the behavior service by pushing itself with
@@ -58,8 +108,17 @@ namespace System.Windows.Forms.Design.Behavior
         ///
         ///  In each of these cases OnLoseCapture on the behavior will be called.
         /// </summary>
-        public virtual void OnLoseCapture(Glyph g, EventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnLoseCapture(Glyph? g, EventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnLoseCapture(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnLoseCapture(g, e);
+            }
+        }
 
         /// <summary>
         ///  When any MouseDown message enters the BehaviorService's AdornerWindow (nclbuttondown, lbuttondown,
@@ -67,8 +126,21 @@ namespace System.Windows.Forms.Design.Behavior
         ///  Returning 'true' from this function signifies that the Message was 'handled' by the Behavior and should
         ///  not continue to be processed.
         /// </summary>
-        public virtual bool OnMouseDoubleClick(Glyph g, MouseButtons button, Point mouseLoc)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseDoubleClick(Glyph? g, MouseButtons button, Point mouseLoc)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseDoubleClick(g, button, mouseLoc);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseDoubleClick(g, button, mouseLoc);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///  When any MouseDown message enters the BehaviorService's AdornerWindow (nclbuttondown, lbuttondown,
@@ -76,37 +148,102 @@ namespace System.Windows.Forms.Design.Behavior
         ///  Returning 'true' from this function signifies that the Message was 'handled' by the Behavior and
         ///  should not continue to be processed.
         /// </summary>
-        public virtual bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseDown(Glyph? g, MouseButtons button, Point mouseLoc)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseDown(g, button, mouseLoc);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseDown(g, button, mouseLoc);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///  When the mouse pointer's location is positively hit-tested with a different Glyph than previous
         ///  hit-tests, this event is fired on the Behavior associated with the Glyph.
         /// </summary>
-        public virtual bool OnMouseEnter(Glyph g)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseEnter(Glyph? g)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseEnter(g);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseEnter(g);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///  When a MouseHover message enters the BehaviorService's AdornerWindow it is first passed here, to the
         ///  top-most Behavior in the BehaviorStack.  Returning 'true' from this function signifies that the Message
         ///  was 'handled' by the Behavior and should not continue to be processed.
         /// </summary>
-        public virtual bool OnMouseHover(Glyph g, Point mouseLoc)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseHover(Glyph? g, Point mouseLoc)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseHover(g, mouseLoc);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseHover(g, mouseLoc);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///  When the mouse pointer leaves a positively hit-tested Glyph with a valid Behavior, this method is invoked.
         /// </summary>
-        public virtual bool OnMouseLeave(Glyph g)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseLeave(Glyph? g)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseLeave(g);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseLeave(g);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///  When any MouseMove message enters the BehaviorService's AdornerWindow (mousemove, ncmousemove) it is
         ///  first passed here, to the top-most Behavior in the BehaviorStack.  Returning 'true' from this method
         ///  signifies that the Message was 'handled' by the Behavior and should not continue to be processed.
         /// </summary>
-        public virtual bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseMove(Glyph? g, MouseButtons button, Point mouseLoc)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseMove(g, button, mouseLoc);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseMove(g, button, mouseLoc);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         ///  When any MouseUp message enters the BehaviorService's AdornerWindow
@@ -115,45 +252,116 @@ namespace System.Windows.Forms.Design.Behavior
         ///  'true' from this function signifies that the Message was 'handled' by
         ///  the Behavior and should not continue to be processed.
         /// </summary>
-        public virtual bool OnMouseUp(Glyph g, MouseButtons button)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual bool OnMouseUp(Glyph? g, MouseButtons button)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                return GetNextBehavior.OnMouseUp(g, button);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                return behavior.OnMouseUp(g, button);
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         // OLE DragDrop virtual methods
 
         /// <summary>
         ///  OnDragDrop can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
-        public virtual void OnDragDrop(Glyph g, DragEventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnDragDrop(Glyph? g, DragEventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnDragDrop(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnDragDrop(g, e);
+            }
+        }
 
         /// <summary>
         ///  OnDragEnter can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
-        public virtual void OnDragEnter(Glyph g, DragEventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnDragEnter(Glyph? g, DragEventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnDragEnter(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnDragEnter(g, e);
+            }
+        }
 
         /// <summary>
         ///  OnDragLeave can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
-        public virtual void OnDragLeave(Glyph g, EventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnDragLeave(Glyph? g, EventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnDragLeave(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnDragLeave(g, e);
+            }
+        }
 
         /// <summary>
         ///  OnDragOver can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
-        public virtual void OnDragOver(Glyph g, DragEventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnDragOver(Glyph? g, DragEventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnDragOver(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnDragOver(g, e);
+            }
+            else if (e.Effect != DragDropEffects.None)
+            {
+                e.Effect = (Control.ModifierKeys == Keys.Control) ? DragDropEffects.Copy : DragDropEffects.Move;
+            }
+        }
 
         /// <summary>
         ///  OnGiveFeedback can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
-        public virtual void OnGiveFeedback(Glyph g, GiveFeedbackEventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnGiveFeedback(Glyph? g, GiveFeedbackEventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnGiveFeedback(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnGiveFeedback(g, e);
+            }
+        }
 
         /// <summary>
         ///  QueryContinueDrag can be overridden so that a Behavior can specify its own Drag/Drop rules.
         /// </summary>
-        public virtual void OnQueryContinueDrag(Glyph g, QueryContinueDragEventArgs e)
-            => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual void OnQueryContinueDrag(Glyph? g, QueryContinueDragEventArgs e)
+        {
+            if (_callParentBehavior && GetNextBehavior != null)
+            {
+                GetNextBehavior.OnQueryContinueDrag(g, e);
+            }
+            else if (GetGlyphBehavior(g) is Behavior behavior)
+            {
+                behavior.OnQueryContinueDrag(g, e);
+            }
+        }
     }
 }

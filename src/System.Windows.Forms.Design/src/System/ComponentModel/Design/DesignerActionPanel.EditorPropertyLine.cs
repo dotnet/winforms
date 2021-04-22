@@ -26,7 +26,8 @@ namespace System.ComponentModel.Design
             private bool _ignoreNextSelectChange;
             private bool _ignoreDropDownValue;
 
-            public EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+            public EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+                : base(serviceProvider, actionPanel)
             {
             }
 
@@ -52,8 +53,9 @@ namespace System.ComponentModel.Design
                         IntegralHeight = false,
                         Font = ActionPanel.Font
                     };
-
+                    listBox.SelectedIndexChanged += new EventHandler(OnListBoxSelectedIndexChanged);
                     listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
+
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
                     if (standardValues != null)
                     {
@@ -106,6 +108,7 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
+                        listBox.SelectedIndexChanged -= new EventHandler(OnListBoxSelectedIndexChanged);
                         listBox.KeyDown -= new KeyEventHandler(OnListBoxKeyDown);
                     }
 
@@ -122,7 +125,11 @@ namespace System.ComponentModel.Design
             protected override void AddControls(List<Control> controls)
             {
                 base.AddControls(controls);
+
                 _button = new EditorButton();
+                _button.Click += new EventHandler(OnButtonClick);
+                _button.GotFocus += new EventHandler(OnButtonGotFocus);
+
                 controls.Add(_button);
             }
 
@@ -157,16 +164,19 @@ namespace System.ComponentModel.Design
 
                 // If we can't convert from string, we are readonly because we can't convert the user's input
                 bool converterReadOnly = !PropertyDescriptor.Converter.CanConvertFrom(TypeDescriptorContext, typeof(string));
+
                 // If standard values are supported and are exclusive, we are readonly
                 bool standardValuesExclusive =
                     PropertyDescriptor.Converter.GetStandardValuesSupported(TypeDescriptorContext) &&
                     PropertyDescriptor.Converter.GetStandardValuesExclusive(TypeDescriptorContext);
+
                 return converterReadOnly || standardValuesExclusive;
             }
 
             public override Size LayoutControls(int top, int width, bool measureOnly)
             {
                 Size size = base.LayoutControls(top, width, measureOnly);
+
                 if (!measureOnly)
                 {
                     int buttonHeight = EditRegionSize.Height - EditorLineButtonPadding * 2 - 1;
@@ -222,7 +232,9 @@ namespace System.ComponentModel.Design
             protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
             {
                 _editor = (UITypeEditor)PropertyDescriptor.GetEditor(typeof(UITypeEditor));
+
                 base.OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
+
                 if (_editor != null)
                 {
                     _button.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
@@ -245,6 +257,7 @@ namespace System.ComponentModel.Design
                 _button.TabStop = _button.Ellipsis;
                 _button.TabIndex = currentTabIndex++;
                 _button.AccessibleRole = (_button.Ellipsis ? AccessibleRole.PushButton : AccessibleRole.ButtonDropDown);
+
                 _button.AccessibleDescription = EditControl.AccessibleDescription;
                 _button.AccessibleName = EditControl.AccessibleName;
             }
@@ -252,6 +265,7 @@ namespace System.ComponentModel.Design
             protected override void OnReadOnlyTextBoxLabelClick(object sender, MouseEventArgs e)
             {
                 base.OnReadOnlyTextBoxLabelClick(sender, e);
+
                 if (e.Button == MouseButtons.Left)
                 {
                     if (ActionPanel.DropDownActive)
@@ -269,6 +283,7 @@ namespace System.ComponentModel.Design
             protected override void OnValueChanged()
             {
                 base.OnValueChanged();
+
                 _swatch = null;
                 if (_hasSwatch)
                 {
@@ -279,6 +294,7 @@ namespace System.ComponentModel.Design
             public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
             {
                 base.PaintLine(g, lineWidth, lineHeight);
+
                 if (_hasSwatch)
                 {
                     if (_swatch is null)
@@ -300,7 +316,10 @@ namespace System.ComponentModel.Design
 
             protected internal override bool ProcessDialogKey(Keys keyData)
             {
-                // Do this here rather than in OnKeyDown because if hierarchy is properly set, VS is going to eat the F4 in PreProcessMessage, preventing it from ever getting to an OnKeyDown on this control. Doing it here also allow to not hook up to multiple events for each button.
+                // Do this here rather than in OnKeyDown because if hierarchy is properly set,
+                // VS is going to eat the F4 in PreProcessMessage, preventing it from ever
+                // getting to an OnKeyDown on this control. Doing it here also allow to not
+                // hook up to multiple events for each button.
                 if (!_button.Focused && !_button.Ellipsis)
                 {
                     if ((keyData == (Keys.Alt | Keys.Down)) || (keyData == (Keys.Alt | Keys.Up)) || (keyData == Keys.F4))
@@ -330,7 +349,9 @@ namespace System.ComponentModel.Design
             private void ShowDropDown(Control hostedControl, Color borderColor)
             {
                 hostedControl.Width = Math.Max(hostedControl.Width, EditRegionSize.Width - 2);
+
                 _dropDownHolder = new DropDownHolder(hostedControl, ActionPanel, borderColor, ActionPanel.Font, this);
+
                 if (ActionPanel.RightToLeft != RightToLeft.Yes)
                 {
                     Rectangle editorBounds = new Rectangle(Point.Empty, EditRegionSize);
@@ -338,6 +359,7 @@ namespace System.ComponentModel.Design
                     Point editorLocation = ActionPanel.PointToScreen(EditRegionLocation);
                     Rectangle rectScreen = Screen.FromRectangle(ActionPanel.RectangleToScreen(editorBounds)).WorkingArea;
                     dropDownSize.Width = Math.Max(editorBounds.Width + 1, dropDownSize.Width);
+
                     editorLocation.X = Math.Min(rectScreen.Right - dropDownSize.Width, // min = right screen edge clip
                         Math.Max(rectScreen.X, editorLocation.X + editorBounds.Right - dropDownSize.Width)); // max = left screen edge clip
                     editorLocation.Y += editorBounds.Y;
@@ -355,11 +377,13 @@ namespace System.ComponentModel.Design
                 else
                 {
                     _dropDownHolder.RightToLeft = ActionPanel.RightToLeft;
+
                     Rectangle editorBounds = new Rectangle(Point.Empty, EditRegionSize);
                     Size dropDownSize = _dropDownHolder.Size;
                     Point editorLocation = ActionPanel.PointToScreen(EditRegionLocation);
                     Rectangle rectScreen = Screen.FromRectangle(ActionPanel.RectangleToScreen(editorBounds)).WorkingArea;
                     dropDownSize.Width = Math.Max(editorBounds.Width + 1, dropDownSize.Width);
+
                     editorLocation.X = Math.Min(rectScreen.Right - dropDownSize.Width, // min = right screen edge clip
                         Math.Max(rectScreen.X, editorLocation.X - editorBounds.Width)); // max = left screen edge clip
                     editorLocation.Y += editorBounds.Y;
@@ -415,7 +439,8 @@ namespace System.ComponentModel.Design
             #region IServiceProvider implementation
             object IServiceProvider.GetService(Type serviceType)
             {
-                // Inject this class as the IWindowsFormsEditroService so drop-down custom editors can work
+                // Inject this class as the IWindowsFormsEditroService
+                // so drop-down custom editors can work
                 if (serviceType == typeof(IWindowsFormsEditorService))
                 {
                     return this;
@@ -428,7 +453,9 @@ namespace System.ComponentModel.Design
             private class DropDownHolder : FlyoutDialog
             {
                 private readonly EditorPropertyLine _parent;
-                public DropDownHolder(Control hostedControl, Control parentControl, Color borderColor, Font font, EditorPropertyLine parent) : base(hostedControl, parentControl, borderColor, font)
+
+                public DropDownHolder(Control hostedControl, Control parentControl, Color borderColor, Font font, EditorPropertyLine parent)
+                    : base(hostedControl, parentControl, borderColor, font)
                 {
                     _parent = parent;
                     _parent.ActionPanel.SetDropDownActive(true);
@@ -476,6 +503,7 @@ namespace System.ComponentModel.Design
                     try
                     {
                         Controls.Add(hostedControl);
+
                         int width = Math.Max(_hostedControl.Width, SystemInformation.MinimumWindowSize.Width);
                         int height = Math.Max(_hostedControl.Height, SystemInformation.MinimizedWindowSize.Height);
                         if (!borderColor.IsEmpty)
@@ -745,7 +773,9 @@ namespace System.ComponentModel.Design
                                 try
                                 {
                                     Bitmap arrowBitmap = icon.ToBitmap();
-                                    // Make sure we draw properly under high contrast by re-mapping the arrow color to the WindowText color
+
+                                    // Make sure we draw properly under high contrast by re-mapping
+                                    // the arrow color to the WindowText color
                                     ImageAttributes attrs = new ImageAttributes();
                                     try
                                     {

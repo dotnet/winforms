@@ -16,8 +16,10 @@ namespace System.ComponentModel.Design
             private Label _label;
             private DesignerActionTextItem _textItem;
 
-            public TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+            public TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+                : base(serviceProvider, actionPanel)
             {
+                actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
             }
 
             public sealed override string FocusId

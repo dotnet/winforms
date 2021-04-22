@@ -14,7 +14,8 @@ namespace System.ComponentModel.Design
         {
             private CheckBox _checkBox;
 
-            public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+            public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+                : base(serviceProvider, actionPanel)
             {
             }
 
@@ -23,11 +24,13 @@ namespace System.ComponentModel.Design
                 _checkBox = new CheckBox
                 {
                     BackColor = Color.Transparent,
-                    CheckAlign = Drawing.ContentAlignment.MiddleLeft
+                    CheckAlign = ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    UseMnemonic = false,
+                    ForeColor = ActionPanel.LabelForeColor
                 };
-                _checkBox.TextAlign = Drawing.ContentAlignment.MiddleLeft;
-                _checkBox.UseMnemonic = false;
-                _checkBox.ForeColor = ActionPanel.LabelForeColor;
+                _checkBox.CheckedChanged += new EventHandler(OnCheckBoxCheckedChanged);
+
                 controls.Add(_checkBox);
             }
 

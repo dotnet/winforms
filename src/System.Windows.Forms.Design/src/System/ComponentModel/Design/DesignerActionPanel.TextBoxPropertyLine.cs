@@ -22,7 +22,8 @@ namespace System.ComponentModel.Design
             private Point _editRegionRelativeLocation;
             private Size _editRegionSize;
 
-            public TextBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+            public TextBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+                : base(serviceProvider, actionPanel)
             {
             }
 
@@ -52,28 +53,33 @@ namespace System.ComponentModel.Design
                 {
                     BackColor = Color.Transparent,
                     ForeColor = ActionPanel.LabelForeColor,
-                    TextAlign = Drawing.ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
                     UseMnemonic = false
                 };
+
                 _readOnlyTextBoxLabel = new EditorLabel
                 {
                     BackColor = Color.Transparent,
                     ForeColor = SystemColors.WindowText,
                     TabStop = true,
-                    TextAlign = Drawing.ContentAlignment.TopLeft,
+                    TextAlign = ContentAlignment.TopLeft,
                     UseMnemonic = false,
                     Visible = false
                 };
                 _readOnlyTextBoxLabel.MouseClick += new MouseEventHandler(OnReadOnlyTextBoxLabelClick);
+                _readOnlyTextBoxLabel.Enter += new EventHandler(OnReadOnlyTextBoxLabelEnter);
+                _readOnlyTextBoxLabel.Leave += new EventHandler(OnReadOnlyTextBoxLabelLeave);
                 _readOnlyTextBoxLabel.KeyDown += new KeyEventHandler(OnReadOnlyTextBoxLabelKeyDown);
 
                 _textBox = new TextBox
                 {
                     BorderStyle = BorderStyle.None,
-                    TextAlign = System.Windows.Forms.HorizontalAlignment.Left,
+                    TextAlign = HorizontalAlignment.Left,
                     Visible = false
                 };
+                _textBox.TextChanged += new EventHandler(OnTextBoxTextChanged);
                 _textBox.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
+                _textBox.LostFocus += new EventHandler(OnTextBoxLostFocus);
 
                 controls.Add(_readOnlyTextBoxLabel);
                 controls.Add(_textBox);
@@ -343,8 +349,10 @@ namespace System.ComponentModel.Design
                 protected override void OnGotFocus(EventArgs e)
                 {
                     base.OnGotFocus(e);
+
                     // Since we are not a standard focusable control, we have to raise our own accessibility events.
-                    // objectID = OBJID_WINDOW, childID = CHILDID_SELF - 1 (the -1 is because WinForms always adds 1 to the value) (these consts are defined in winuser.h)
+                    // objectID = OBJID_WINDOW, childID = CHILDID_SELF - 1 (the -1 is because WinForms always adds 1 to the value)
+                    // (these consts are defined in winuser.h)
                     AccessibilityNotifyClients(AccessibleEvents.Focus, 0, -1);
                 }
 
@@ -361,7 +369,8 @@ namespace System.ComponentModel.Design
 
                 private sealed class EditorLabelAccessibleObject : ControlAccessibleObject
                 {
-                    public EditorLabelAccessibleObject(EditorLabel owner) : base(owner)
+                    public EditorLabelAccessibleObject(EditorLabel owner)
+                        : base(owner)
                     {
                     }
 

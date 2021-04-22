@@ -51,19 +51,33 @@ namespace System.Windows.Forms.Design.Behavior
 
             //sync the BehaviorService's begindrag event
             behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
+
             //sync the BehaviorService's Synchronize event
-            behaviorService.Synchronize += new EventHandler(OnSynchronize);
-            selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
+            behaviorService.Synchronize += new EventHandler(this.OnSynchronize);
+
+
+            selSvc.SelectionChanged += new EventHandler(this.OnSelectionChanged);
             rootComponent = (Control)designerHost.RootComponent;
 
-            // create and add both of our adorners, one for selection, one for bodies
+            //create and add both of our adorners, 
+            //one for selection, one for bodies
             selectionAdorner = new Adorner();
             bodyAdorner = new Adorner();
             behaviorService.Adorners.Add(bodyAdorner);
             behaviorService.Adorners.Add(selectionAdorner); //adding this will cause the adorner to get setup with a ptr to the beh.svc.
 
             componentToDesigner = new Hashtable();
+
+            IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
+            if (cs != null)
+            {
+                cs.ComponentAdded += new ComponentEventHandler(this.OnComponentAdded);
+                cs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+                cs.ComponentChanged += new ComponentChangedEventHandler(this.OnComponentChanged);
+            }
+
             designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
+
             // designeraction UI
             if (designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
             {
@@ -188,6 +202,14 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (serviceProvider != null)
             {
+                IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
+                if (cs != null)
+                {
+                    cs.ComponentAdded -= new ComponentEventHandler(this.OnComponentAdded);
+                    cs.ComponentChanged -= new ComponentChangedEventHandler(this.OnComponentChanged);
+                    cs.ComponentRemoved -= new ComponentEventHandler(this.OnComponentRemoved);
+                }
+
                 if (selSvc != null)
                 {
                     selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
@@ -332,14 +354,18 @@ namespace System.Windows.Forms.Design.Behavior
                 smaller = curSelectionBounds;
             }
 
-            // we need to make sure all of the rects in the smaller array are  accounted for.  Any that don't intersect a rect in the larger array need to be included in the region to repaint.
+            // we need to make sure all of the rects in the smaller array are 
+            // accounted for.  Any that don't intersect a rect in the larger
+            // array need to be included in the region to repaint.
             bool[] intersected = new bool[smaller.Length];
             for (int i = 0; i < smaller.Length; i++)
             {
                 intersected[i] = false;
             }
 
-            // determine which rects in the larger array need to be included in the region to invalidate by intersecting with rects in the smaller array.
+            // determine which rects in the larger array need to be
+            // included in the region to invalidate by intersecting
+            // with rects in the smaller array.
             for (int l = 0; l < larger.Length; l++)
             {
                 bool largeIntersected = false;
@@ -378,7 +404,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             using (Graphics g = behaviorService.AdornerWindowGraphics)
             {
-                //If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
+                // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
                 if (toRefresh.IsEmpty(g) && primarySelection != null && !primarySelection.Equals(prevPrimarySelection))
                 {
                     for (int i = 0; i < curSelectionBounds.Length; i++)
@@ -404,18 +430,23 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         private void OnSelectionChanged(object sender, EventArgs e)
         {
-            // Note: selectionChanging would guard against a re-entrant code... Since we dont want to be in messed up state when adding new Glyphs.
+            // Note: selectionChanging would guard against a re-entrant code...
+            // Since we dont want to be in messed up state when adding new Glyphs. 
             if (!selectionChanging)
             {
                 selectionChanging = true;
+
                 selectionAdorner.Glyphs.Clear();
                 bodyAdorner.Glyphs.Clear();
+
                 ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
                 object primarySelection = selSvc.PrimarySelection;
-                //add all control glyphs to all controls on rootComp
+
+                //add all control glyphs to all controls on rootComp                                 
                 curCompIndex = 0;
                 curSelectionBounds = new Rectangle[selComps.Count];
                 AddAllControlGlyphs(rootComponent, selComps, primarySelection);
+
                 if (prevSelectionBounds != null)
                 {
                     Region toUpdate = DetermineRegionToRefresh(primarySelection);
@@ -429,7 +460,8 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 else
                 {
-                    // There was no previous selection, so just invalidate the current selection
+                    // There was no previous selection, so just invalidate
+                    // the current selection
                     if (curSelectionBounds.Length > 0)
                     {
                         Rectangle toUpdate = curSelectionBounds[0];

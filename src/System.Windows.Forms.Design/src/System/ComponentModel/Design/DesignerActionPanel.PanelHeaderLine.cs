@@ -19,8 +19,10 @@ namespace System.ComponentModel.Design
             private Label _subtitleLabel;
             private bool _formActive;
 
-            public PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
+            public PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+                : base(serviceProvider, actionPanel)
             {
+                actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
             }
 
             public sealed override string FocusId
@@ -48,6 +50,10 @@ namespace System.ComponentModel.Design
 
                 controls.Add(_titleLabel);
                 controls.Add(_subtitleLabel);
+
+                // TODO: Need to figure out how to unhook these events. Perhaps have Initialize() and Cleanup() methods.
+                ActionPanel.FormActivated += new EventHandler(OnFormActivated);
+                ActionPanel.FormDeactivate += new EventHandler(OnFormDeactivate);
             }
 
             public sealed override void Focus()
@@ -68,6 +74,7 @@ namespace System.ComponentModel.Design
                 {
                     _titleLabel.Location = new Point(LineLeftMargin, top + PanelHeaderVerticalPadding);
                     _titleLabel.Size = titleSize;
+
                     _subtitleLabel.Location = new Point(LineLeftMargin, top + PanelHeaderVerticalPadding * 2 + titleSize.Height);
                     _subtitleLabel.Size = subtitleSize;
                 }
@@ -120,11 +127,13 @@ namespace System.ComponentModel.Design
             {
                 _actionList = actionList;
                 _panelHeaderItem = (DesignerActionPanelHeaderItem)actionItem;
+
                 _titleLabel.Text = _panelHeaderItem.DisplayName;
                 _titleLabel.TabIndex = currentTabIndex++;
                 _subtitleLabel.Text = _panelHeaderItem.Subtitle;
                 _subtitleLabel.TabIndex = currentTabIndex++;
                 _subtitleLabel.Visible = (_subtitleLabel.Text.Length != 0);
+
                 // Force the font to update
                 OnParentControlFontChanged(null, EventArgs.Empty);
             }
