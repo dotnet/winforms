@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Reflection;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace System.Windows.Forms.Design
 {
@@ -86,22 +85,6 @@ namespace System.Windows.Forms.Design
                         // If it is a child of our designer, we don't want to ignore this member.
                         //
                         if (child != null)
-                        {
-                            return false;
-                        }
-                    }
-                    else if (typeof(Menu).IsAssignableFrom(memberType))
-                    {
-                        object menu = null;
-                        if (field != null)
-                        {
-                            menu = field.GetValue(component);
-                        }
-                        else if (method != null)
-                        {
-                            menu = method.Invoke(component, null);
-                        }
-                        if (menu != null)
                         {
                             return false;
                         }

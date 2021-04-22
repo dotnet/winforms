@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -50,12 +50,6 @@ namespace System.Windows.Forms.Design
         private MenuCommand tabOrderCommand = null;
 
         static internal IDesignerSerializationManager manager;
-
-        //our menu editor service
-        //
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.menuEditorService"]/*' />
-        protected IMenuEditorService menuEditorService = null;
-
 
         // The component tray
         //
@@ -483,12 +477,6 @@ namespace System.Windows.Forms.Design
                         }
                         toolboxCreator = null;
                     }
-                }
-
-                if (menuEditorService != null)
-                {
-                    host.RemoveService(typeof(IMenuEditorService));
-                    menuEditorService = null;
                 }
 
                 ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
@@ -1003,9 +991,6 @@ namespace System.Windows.Forms.Design
             {
                 IComponent component = ce.Component;
 
-                //if the component is a contextMenu - we'll start of the service
-                EnsureMenuEditorService(ce.Component);
-
                 bool addControl = true;
 
                 // This is the mirror to logic in ParentControlDesigner.  The component should be
@@ -1370,69 +1355,6 @@ namespace System.Windows.Forms.Design
                     }
 
                 }
-                // Activate / deactivate the menu editor.
-                //
-                if (menuEditorService != null)
-                    DoProperMenuSelection(selComponents);
-            }
-        }
-
-        internal virtual void DoProperMenuSelection(ICollection selComponents)
-        {
-
-            foreach (object obj in selComponents)
-            {
-                ContextMenu cm = obj as ContextMenu;
-
-                if (cm != null)
-                {
-                    menuEditorService.SetMenu((Menu)obj);
-                }
-                else
-                {
-                    MenuItem item = obj as MenuItem;
-                    if (item != null)
-                    {
-                        //before we set the selection, we need to check if the item belongs the current menu,
-                        //if not, we need to set the menu editor to the appropiate menu, then set selection
-                        //
-                        MenuItem parent = item;
-                        while (parent.Parent is MenuItem)
-                        {
-                            parent = (MenuItem)parent.Parent;
-                        }
-
-                        if (menuEditorService.GetMenu() != parent.Parent)
-                        {
-                            menuEditorService.SetMenu(parent.Parent);
-                        }
-
-                        //ok, here we have the correct editor selected for this item.
-                        //Now, if there's only one item selected, then let the editor service know,
-                        //if there is more than one - then the selection was done through the
-                        //menu editor and we don't need to tell it
-                        if (selComponents.Count == 1)
-                        {
-                            menuEditorService.SetSelection(item);
-                        }
-                    }
-                    //Here, something is selected, but the menuservice isn't interested
-                    //so, we'll collapse our active menu accordingly
-                    else
-                        menuEditorService.SetMenu(null);
-                }
-            }
-        }
-
-        /// <summary>
-        ///      Determines if a MenuEditorService has already been started.  If not,
-        ///      this method will create a new instance of the service.
-        /// </summary>
-        protected virtual void EnsureMenuEditorService(IComponent c)
-        {
-            if (menuEditorService == null && c is ContextMenu)
-            {
-                menuEditorService = (IMenuEditorService)GetService(typeof(IMenuEditorService));
             }
         }
 
@@ -1665,7 +1587,6 @@ namespace System.Windows.Forms.Design
         ///  Once a tool is marked as enabled or disabled it may not be
         ///  queried again.
         /// </summary>
-        [CLSCompliant(false)]
         bool IToolboxUser.GetToolSupported(ToolboxItem tool)
         {
             return GetToolSupported(tool);
@@ -1681,51 +1602,6 @@ namespace System.Windows.Forms.Design
             using (DpiAwareness.EnterDpiScope(DpiAwarenessContext.SystemAware))
             {
                 ToolPicked(tool);
-            }
-        }
-
-
-        /// <devdoc>
-        ///     Handles the WM_WINDOWPOSCHANGING message
-        /// </devdoc>
-        /// <internalonly/>
-        private unsafe void WmWindowPosChanged(ref Message m)
-        {
-
-            NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS*)m.LParam;
-
-            if ((wp->flags & NativeMethods.SWP_NOSIZE) == 0 && menuEditorService != null)
-            {
-                BehaviorService.SyncSelection();
-            }
-        }
-
-        /// <include file='doc\DocumentDesigner.uex' path='docs/doc[@for="DocumentDesigner.WndProc"]/*' />
-        /// <devdoc>
-        ///      Overrides our base class WndProc to provide support for
-        ///      the menu editor service.
-        /// </devdoc>
-        protected override void WndProc(ref Message m)
-        {
-            if (menuEditorService != null)
-            {
-                // We want to pass the messages to the menu editor unless the taborder view is active
-                // and the message will activate the menu editor (wm_ncXbuttondown messages)
-                //
-                if (!(TabOrderActive && (m.Msg == NativeMethods.WM_NCLBUTTONDOWN || m.Msg == NativeMethods.WM_NCRBUTTONDOWN)))
-                {
-                    if (menuEditorService.MessageFilter(ref m))
-                    {
-                        return;
-                    }
-                }
-            }
-
-            base.WndProc(ref m);
-
-            if (m.Msg == NativeMethods.WM_WINDOWPOSCHANGED)
-            {
-                WmWindowPosChanged(ref m);
             }
         }
     }
