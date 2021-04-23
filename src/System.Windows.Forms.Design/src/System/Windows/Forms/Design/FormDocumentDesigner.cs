@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design
     internal class FormDocumentDesigner : DocumentDesigner
     {
         private Size _autoScaleBaseSize = Size.Empty;
-        private bool _inAutoscale;
         private bool _initializing;
         private bool _autoSize;
         private ToolStripAdornerWindowService _toolStripAdornerWindowService;
@@ -264,15 +263,7 @@ namespace System.Windows.Forms.Design
 
                 float percY = ((float)newVar.Height) / ((float)baseVar.Height);
                 float percX = ((float)newVar.Width) / ((float)baseVar.Width);
-                try
-                {
-                    _inAutoscale = true;
-                    form.Scale(percX, percY);
-                }
-                finally
-                {
-                    _inAutoscale = false;
-                }
+                form.Scale(percX, percY);
             }
         }
 
