@@ -17,22 +17,24 @@ namespace System.Windows.Forms
         {
             private readonly ListView _owningListView;
             private readonly ListViewItem _owningItem;
-            private readonly ListViewGroup? _owningGroup;
             private readonly IAccessible? _systemIAccessible;
 
-            public ListViewItemAccessibleObject(ListViewItem owningItem, ListViewGroup? owningGroup)
+            public ListViewItemAccessibleObject(ListViewItem owningItem)
             {
                 _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
-                _owningListView = owningItem.ListView ?? owningGroup?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
-                _owningGroup = owningGroup;
+                _owningListView = owningItem.ListView ?? owningItem.Group?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 _systemIAccessible = _owningListView.AccessibilityObject.GetSystemIAccessibleInternal();
             }
+
+            private ListViewGroup? OwningGroup => _owningListView.GroupsDisplayed
+                ? _owningItem.Group ?? _owningListView.DefaultGroup
+                : null;
 
             private string AutomationId
                 => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
 
             public override Rectangle Bounds
-                => ShowGroupAccessibleObject && _owningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                => !_owningListView.IsHandleCreated || OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
                     ? Rectangle.Empty
                     : new Rectangle(
                         _owningListView.AccessibilityObject.Bounds.X + _owningItem.Bounds.X,
@@ -109,8 +111,8 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                ListViewGroupAccessibleObject? owningGroupAccessibleObject = ShowGroupAccessibleObject && _owningGroup is not null
-                    ? (ListViewGroupAccessibleObject)_owningGroup.AccessibilityObject
+                ListViewGroupAccessibleObject? owningGroupAccessibleObject = ShowGroupAccessibleObject && OwningGroup is not null
+                    ? (ListViewGroupAccessibleObject)OwningGroup.AccessibilityObject
                     : null;
                 switch (direction)
                 {
@@ -173,13 +175,13 @@ namespace System.Windows.Forms
                         return base.RuntimeId;
                     }
 
-                    if (_owningGroup is not null)
+                    if (OwningGroup is not null)
                     {
                         runtimeId = new int[5];
                         runtimeId[0] = owningListViewRuntimeId[0];
                         runtimeId[1] = owningListViewRuntimeId[1];
                         runtimeId[2] = 4; // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                        runtimeId[3] = _owningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
+                        runtimeId[3] = OwningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
                                         ? listViewGroupAccessibleObject.CurrentIndex
                                         : -1;
 

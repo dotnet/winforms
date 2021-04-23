@@ -5112,7 +5112,7 @@ namespace System.Windows.Forms.Tests
         {
             public int RaiseAutomationEventCalls;
 
-            public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem, null)
+            public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem)
             {
             }
 
