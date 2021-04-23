@@ -61,7 +61,9 @@ namespace System.Windows.Forms.Design
                             object sd = ds.Serialize(comps);
                             serializationStream = new MemoryStream();
                             BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                             formatter.Serialize(serializationStream, sd);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                             serializationStream.Seek(0, SeekOrigin.Begin);
                         }
                     }
@@ -171,7 +173,9 @@ namespace System.Windows.Forms.Design
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
                     SerializationStream.Seek(0, SeekOrigin.Begin);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     return formatter.Deserialize(SerializationStream);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 }
                 else if (format.Equals(NestedToolboxItemFormat))
                 {
@@ -246,7 +250,9 @@ namespace System.Windows.Forms.Design
                     if (serializationData == null)
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                         serializationData = formatter.Deserialize(SerializationStream);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                     }
 
                     if (removeCurrentComponents && components != null)

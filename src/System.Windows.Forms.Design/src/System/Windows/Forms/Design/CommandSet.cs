@@ -1613,7 +1613,9 @@ namespace System.Windows.Forms.Design
                     object serializationData = ds.Serialize(selectedComponents);
                     MemoryStream stream = new MemoryStream();
                     BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     formatter.Serialize(stream, serializationData);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                     stream.Seek(0, SeekOrigin.Begin);
                     byte[] bytes = stream.GetBuffer();
                     IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
@@ -1657,7 +1659,9 @@ namespace System.Windows.Forms.Design
                     object serializationData = ds.Serialize(selectedComponents);
                     MemoryStream stream = new MemoryStream();
                     BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     formatter.Serialize(stream, serializationData);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                     stream.Seek(0, SeekOrigin.Begin);
                     byte[] bytes = stream.GetBuffer();
                     IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
@@ -2144,7 +2148,9 @@ namespace System.Windows.Forms.Design
                                 {
                                     BinaryFormatter formatter = new BinaryFormatter();
                                     s.Seek(0, SeekOrigin.Begin);
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                                     object serializationData = formatter.Deserialize(s);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                                     using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
                                     {
                                         components = ds.Deserialize(serializationData);
