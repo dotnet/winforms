@@ -37,6 +37,26 @@ namespace System.Windows.Forms
                 InitHandle(ownerControl);
             }
 
+            // If the control is used as an item of a ToolStrip via ToolStripControlHost,
+            // its accessible object should provide info about the owning ToolStrip and items-siblings
+            // to build a correct ToolStrip accessibility tree.
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                if (Owner.ToolStripControlHost is not ToolStripControlHost host)
+                {
+                    return base.FragmentNavigate(direction);
+                }
+
+                if (direction == UiaCore.NavigateDirection.Parent
+                    || direction == UiaCore.NavigateDirection.PreviousSibling
+                    || direction == UiaCore.NavigateDirection.NextSibling)
+                {
+                    return host.AccessibilityObject.FragmentNavigate(direction);
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
             private void InitHandle(Control ownerControl)
             {
                 if (ownerControl.IsHandleCreated)
@@ -540,6 +560,12 @@ namespace System.Windows.Forms
                     return provider;
                 }
             }
+
+            // If the control is used as an item of a ToolStrip via ToolStripControlHost,
+            // its accessible object should provide info about the owning ToolStrip
+            // to build a correct ToolStrip accessibility tree.
+            private protected override UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot
+                => Owner.ToolStripControlHost?.Owner?.AccessibilityObject;
 
             public override string ToString()
                 => $"{nameof(ControlAccessibleObject)}: Owner = {Owner?.ToString() ?? "null"}";

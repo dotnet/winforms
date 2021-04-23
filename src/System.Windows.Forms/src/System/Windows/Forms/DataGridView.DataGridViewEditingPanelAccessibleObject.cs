@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                         return _ownerDataGridView.EditingControlAccessibleObject;
                 }
 
-                return null;
+                return base.FragmentNavigate(direction);
             }
 
             internal override void SetFocus()

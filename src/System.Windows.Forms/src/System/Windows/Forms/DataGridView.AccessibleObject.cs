@@ -409,7 +409,7 @@ namespace System.Windows.Forms
                         break;
                 }
 
-                return null;
+                return base.FragmentNavigate(direction);
             }
 
             internal override void SetFocus()
