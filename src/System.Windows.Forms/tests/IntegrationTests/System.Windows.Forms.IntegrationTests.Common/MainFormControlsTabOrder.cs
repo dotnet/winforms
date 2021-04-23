@@ -32,6 +32,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         FileDialogButton,
         ErrorProviderButton,
         TaskDialogButton,
-        MessageBoxButton
+        MessageBoxButton,
+        ToolStripsButton
     }
 }
