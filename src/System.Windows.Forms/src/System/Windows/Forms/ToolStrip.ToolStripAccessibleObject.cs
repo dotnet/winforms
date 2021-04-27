@@ -155,7 +155,7 @@ namespace System.Windows.Forms
                 return count;
             }
 
-            internal AccessibleObject GetChildFragment(int fragmentIndex, bool getOverflowItem = false)
+            internal AccessibleObject GetChildFragment(int fragmentIndex, UiaCore.NavigateDirection direction, bool getOverflowItem = false)
             {
                 ToolStripItemCollection items = getOverflowItem ? _owningToolStrip.OverflowItems : _owningToolStrip.DisplayedItems;
                 int childFragmentCount = items.Count;
@@ -172,6 +172,11 @@ namespace System.Windows.Forms
                     {
                         if (item is ToolStripControlHost controlHostItem)
                         {
+                            if (ShouldItemBeSkipped(controlHostItem.Control))
+                            {
+                                return GetFollowingChildFragment(fragmentIndex, items, direction);
+                            }
+
                             return controlHostItem.ControlAccessibilityObject;
                         }
 
@@ -186,6 +191,11 @@ namespace System.Windows.Forms
                     {
                         if (item is ToolStripControlHost controlHostItem)
                         {
+                            if (ShouldItemBeSkipped(controlHostItem.Control))
+                            {
+                                return GetFollowingChildFragment(fragmentIndex, items, direction);
+                            }
+
                             return controlHostItem.ControlAccessibilityObject;
                         }
 
@@ -204,6 +214,64 @@ namespace System.Windows.Forms
                 }
 
                 return _owningToolStrip.OverflowItems.Count;
+            }
+
+            /// <summary>
+            ///  Returns the next or the previous ToolStrip item, that is considered a valid navigation fragment (e.g. a control,
+            ///  that supports UIA providers and not a <see cref="ToolStripControlHost"/>). This method removes hosted ToolStrip
+            ///  items that are native controls (their accessible objects are provided by Windows),
+            ///  from the accessibility tree. It's necessary, because hosted native controls internally add accessible objects
+            ///  to the accessibility tree, and thus create duplicated. To avoid duplicates, remove hosted items with native accessibility objects from the tree.
+            /// </summary>
+            private AccessibleObject GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
+            {
+                switch (direction)
+                {
+                    // "direction" is not used for navigation. This method is helper only.
+                    // FirstChild, LastChild are used when searching non-native hosted child items of the ToolStrip.
+                    // NextSibling, PreviousSibling are used when searching an item siblings.
+                    case UiaCore.NavigateDirection.FirstChild:
+                    case UiaCore.NavigateDirection.NextSibling:
+                        for (int i = index + 1; i < items.Count; i++)
+                        {
+                            ToolStripItem item = items[i];
+                            if (item is ToolStripControlHost controlHostItem)
+                            {
+                                if (ShouldItemBeSkipped(controlHostItem.Control))
+                                {
+                                    continue;
+                                }
+
+                                return controlHostItem.ControlAccessibilityObject;
+                            }
+
+                            return item.AccessibilityObject;
+                        }
+
+                        break;
+
+                    case UiaCore.NavigateDirection.LastChild:
+                    case UiaCore.NavigateDirection.PreviousSibling:
+                        for (int i = index - 1; i >= 0; i--)
+                        {
+                            ToolStripItem item = items[i];
+                            if (item is ToolStripControlHost controlHostItem)
+                            {
+                                if (ShouldItemBeSkipped(controlHostItem.Control))
+                                {
+                                    continue;
+                                }
+
+                                return controlHostItem.ControlAccessibilityObject;
+                            }
+
+                            return item.AccessibilityObject;
+                        }
+
+                        break;
+                }
+
+                return null;
             }
 
             internal int GetChildFragmentCount()
@@ -338,6 +406,11 @@ namespace System.Windows.Forms
                 }
             }
 
+            private bool ShouldItemBeSkipped(Control hostedControl)
+                => hostedControl is null
+                    || !hostedControl.SupportsUiaProviders
+                    || (hostedControl is Label label && string.IsNullOrEmpty(label.Text));
+
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             {
                 get
@@ -354,7 +427,7 @@ namespace System.Windows.Forms
                         int childCount = GetChildFragmentCount();
                         if (childCount > 0)
                         {
-                            return GetChildFragment(0);
+                            return GetChildFragment(0, direction);
                         }
 
                         break;
@@ -362,7 +435,7 @@ namespace System.Windows.Forms
                         childCount = GetChildFragmentCount();
                         if (childCount > 0)
                         {
-                            return GetChildFragment(childCount - 1);
+                            return GetChildFragment(childCount - 1, direction);
                         }
 
                         break;
