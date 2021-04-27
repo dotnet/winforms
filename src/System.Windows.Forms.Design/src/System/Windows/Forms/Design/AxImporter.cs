@@ -50,7 +50,9 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  The strong name used for the generated assemblies.
             /// </summary>
+#pragma warning disable SYSLIB0017 // Type or member is obsolete, see https://github.com/dotnet/runtime/pull/50941
             public StrongNameKeyPair keyPair;
+#pragma warning restore SYSLIB0017 // Type or member is obsolete
 
             /// <summary>
             ///  Flag that controls whether we should output errors in the MSBuild format.
