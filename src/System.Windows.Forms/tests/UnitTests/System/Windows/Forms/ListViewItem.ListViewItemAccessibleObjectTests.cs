@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
             list.Items.Add(listItem);
 
             Type type = listItem.AccessibilityObject.GetType();
-            ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(ListViewItem)});
+            ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(ListViewItem) });
             Assert.NotNull(ctor);
             Assert.Throws<TargetInvocationException>(() => ctor.Invoke(new object[] { null }));
 
