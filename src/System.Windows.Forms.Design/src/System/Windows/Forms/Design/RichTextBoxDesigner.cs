@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Design
             //
             string[] shadowProps = new string[]
             {
-                "Text"
+                nameof(Text)
             };
 
             Attribute[] empty = Array.Empty<Attribute>();

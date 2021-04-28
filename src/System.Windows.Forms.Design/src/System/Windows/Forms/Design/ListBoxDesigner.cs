@@ -21,11 +21,11 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                return (bool)ShadowProperties["IntegralHeight"];
+                return (bool)ShadowProperties[nameof(IntegralHeight)];
             }
             set
             {
-                ShadowProperties["IntegralHeight"] = value;
+                ShadowProperties[nameof(IntegralHeight)] = value;
 
                 ListBox listBox = (ListBox)Component;
                 if ((listBox.Dock != DockStyle.Fill) &&
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Design
                     // Restore the IntegralHeight after we dock. Order is necessary here. Setting IntegralHeight will
                     // potentially resize the control height, but we don't want to base the height on the dock.
                     // Instead, undock the control first, so the IntegralHeight is based on the restored size.
-                    listBox.IntegralHeight = (bool)ShadowProperties["IntegralHeight"];
+                    listBox.IntegralHeight = (bool)ShadowProperties[nameof(IntegralHeight)];
                 }
             }
         }

@@ -15,16 +15,16 @@ namespace System.Windows.Forms.Design
 {
     internal partial class OleDragDropHandler
     {
-        [Serializable]
+        [Serializable] // designer related
         internal class CfCodeToolboxItem : ToolboxItem
         {
-            private object serializationData;
-            private static int template;
-            bool displaynameset;
+            private object _serializationData;
+            private static int s_template;
+            private bool _displayNameSet;
 
             public CfCodeToolboxItem(object serializationData) : base()
             {
-                this.serializationData = serializationData;
+                this._serializationData = serializationData;
             }
 
             private CfCodeToolboxItem(SerializationInfo info, StreamingContext context)
@@ -36,10 +36,10 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void SetDisplayName()
             {
-                if (!displaynameset)
+                if (!_displayNameSet)
                 {
-                    displaynameset = true;
-                    DisplayName = "Template" + (++template).ToString(CultureInfo.CurrentCulture);
+                    _displayNameSet = true;
+                    DisplayName = "Template" + (++s_template).ToString(CultureInfo.CurrentCulture);
                 }
             }
 
@@ -50,9 +50,9 @@ namespace System.Windows.Forms.Design
             protected override void Serialize(SerializationInfo info, StreamingContext context)
             {
                 base.Serialize(info, context);
-                if (serializationData != null)
+                if (_serializationData != null)
                 {
-                    info.AddValue("CfCodeToolboxItem.serializationData", serializationData);
+                    info.AddValue("CfCodeToolboxItem.serializationData", _serializationData);
                 }
             }
 
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (entry.Name == "CfCodeToolboxItem.serializationData")
                     {
-                        serializationData = entry.Value;
+                        _serializationData = entry.Value;
                         break;
                     }
                 }
@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Design
 
                 // Deserialize to components collection
                 //
-                ICollection objects = ds.Deserialize(serializationData);
+                ICollection objects = ds.Deserialize(_serializationData);
                 ArrayList components = new ArrayList();
                 foreach (object obj in objects)
                 {
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Design
                 //
                 if (defaultValues == null)
                     defaultValues = new Hashtable();
-                Control parentControl = parentControl = defaultValues["Parent"] as Control;
+                Control parentControl = defaultValues["Parent"] as Control;
                 if (parentControl != null)
                 {
                     ParentControlDesigner parentControlDesigner = host.GetDesigner(parentControl) as ParentControlDesigner;

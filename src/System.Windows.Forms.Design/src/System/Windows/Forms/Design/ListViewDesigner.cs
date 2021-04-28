@@ -44,11 +44,11 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                return (bool)ShadowProperties["OwnerDraw"];
+                return (bool)ShadowProperties[nameof(OwnerDraw)];
             }
             set
             {
-                ShadowProperties["OwnerDraw"] = value;
+                ShadowProperties[nameof(OwnerDraw)] = value;
             }
         }
 
