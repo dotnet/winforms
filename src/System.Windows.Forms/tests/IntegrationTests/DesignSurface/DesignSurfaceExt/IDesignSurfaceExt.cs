@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.Design;
+﻿using System.ComponentModel.Design;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
@@ -21,8 +20,11 @@ namespace DesignSurfaceExt
         void UseNoGuides();
 
         //- method usefull to create control without the ToolBox facility
-        IComponent CreateRootComponent(Type controlType, Size controlSize);
-        Control CreateControl(Type controlType, Size controlSize, Point controlLocation);
+        TControl CreateRootComponent<TControl>(Size controlSize)
+            where TControl : Control, IComponent;
+
+        TControl CreateControl<TControl>(Size controlSize, Point controlLocation)
+            where TControl : Control;
 
         //- Get the UndoEngineExtended object
         UndoEngineExt GetUndoEngineExt();

@@ -82,7 +82,8 @@ namespace DesignSurfaceExt
             return _undoEngine;
         }
 
-        public IComponent CreateRootComponent(Type controlType, Size controlSize)
+        public TControl CreateRootComponent<TControl>(Size controlSize)
+            where TControl : Control, IComponent
         {
             try
             {
@@ -104,9 +105,9 @@ namespace DesignSurfaceExt
                 //- if the component has not a designer
                 //- then rollback (return without do nothing)
                 //- else do the initialization
-                BeginLoad(controlType);
+                BeginLoad(typeof(TControl));
                 if (LoadErrors.Count > 0)
-                    throw new Exception("the BeginLoad() failed! Some error during " + controlType.ToString() + " loding");
+                    throw new Exception("the BeginLoad() failed! Some error during " + typeof(TControl).FullName + " loding");
                 //-
                 //-
                 //- step.3
@@ -148,7 +149,7 @@ namespace DesignSurfaceExt
                     throw new Exception("Undefined Host Type: " + hostType.ToString());
                 }
 
-                return ihost.RootComponent;
+                return (TControl)ihost.RootComponent;
             }//end_try
             catch (Exception ex)
             {
@@ -156,36 +157,16 @@ namespace DesignSurfaceExt
             }//end_catch
         }
 
-        public Control CreateControl(Type controlType, Size controlSize, Point controlLocation)
+        public TControl CreateControl<TControl>(Size controlSize, Point controlLocation)
+            where TControl : Control
         {
             try
             {
                 //- step.1
-                //- get the IDesignerHost
-                //- if we are not able to get it
-                //- then rollback (return without do nothing)
-                IDesignerHost host = GetIDesignerHost();
-                if (null == host)
-                    return null;
-                //- check if the root component has already been set
-                //- if not so then rollback (return without do nothing)
-                if (null == host.RootComponent)
-                    return null;
-                //-
-                //-
-                //- step.2
-                //- create a new component and initialize it via its designer
-                //- if the component has not a designer
-                //- then rollback (return without do nothing)
-                //- else do the initialization
-                IComponent newComp = host.CreateComponent(controlType);
+                IComponent newComp = CreateComponent<TControl>(out IDesignerHost host);
                 if (null == newComp)
                     return null;
-                IDesigner designer = host.GetDesigner(newComp);
-                if (null == designer)
-                    return null;
-                if (designer is IComponentInitializer)
-                    ((IComponentInitializer)designer).InitializeNewComponent(null);
+
                 //-
                 //-
                 //- step.3
@@ -205,11 +186,58 @@ namespace DesignSurfaceExt
                 //- adding the control to the DesignSurface's root component
                 //- and return the control just created to let further initializations
                 ((Control)newComp).Parent = host.RootComponent as Control;
-                return newComp as Control;
+
+                return (TControl)newComp;
             }//end_try
             catch (Exception ex)
             {
                 throw new Exception(_Name_ + "::CreateControl() - Exception: (see Inner Exception)", ex);
+            }//end_catch
+        }
+
+        public TComponent CreateComponent<TComponent>()
+            where TComponent : IComponent
+        {
+            return CreateComponent<TComponent>(out IDesignerHost _);
+        }
+
+        private TComponent CreateComponent<TComponent>(out IDesignerHost host)
+            where TComponent : IComponent
+        {
+            try
+            {
+                //- step.1
+                //- get the IDesignerHost
+                //- if we are not able to get it
+                //- then rollback (return without do nothing)
+                host = GetIDesignerHost();
+                if (null == host)
+                    return default;
+                //- check if the root component has already been set
+                //- if not so then rollback (return without do nothing)
+                if (null == host.RootComponent)
+                    return default;
+                //-
+                //-
+                //- step.2
+                //- create a new component and initialize it via its designer
+                //- if the component has not a designer
+                //- then rollback (return without do nothing)
+                //- else do the initialization
+                IComponent newComp = host.CreateComponent(typeof(TComponent));
+                if (null == newComp)
+                    return default;
+                IDesigner designer = host.GetDesigner(newComp);
+                if (null == designer)
+                    return default;
+                if (designer is IComponentInitializer)
+                    ((IComponentInitializer)designer).InitializeNewComponent(null);
+
+                return (TComponent)newComp;
+            }//end_try
+            catch (Exception ex)
+            {
+                throw new Exception($"{_Name_}::{nameof(CreateComponent)} - Exception: (see Inner Exception)", ex);
             }//end_catch
         }
 

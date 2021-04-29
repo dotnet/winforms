@@ -34,7 +34,7 @@ namespace TestConsole
             //- enable the UndoEngines
             for (int i = 0; i < tabControl1.TabCount; i++)
             {
-                IDesignSurfaceExt isurf = (IDesignSurfaceExt)_listOfDesignSurface[i];
+                IDesignSurfaceExt isurf = _listOfDesignSurface[i];
                 isurf.GetUndoEngineExt().Enabled = true;
             }
 
@@ -59,8 +59,7 @@ namespace TestConsole
             IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
             if (null != isurf)
             {
-                ISelectionService selectionService = null;
-                selectionService = isurf.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
+                ISelectionService selectionService = isurf.GetIDesignerHost().GetService(typeof(ISelectionService)) as ISelectionService;
                 propertyGrid.SelectedObject = selectionService.PrimarySelection;
             }
         }
@@ -108,71 +107,102 @@ namespace TestConsole
                 {
                     case 1:
                         {
-                            rootComponent = (Form)surface.CreateRootComponent(typeof(Form), new Size(400, 400));
+                            rootComponent = surface.CreateRootComponent<Form>(new Size(400, 400));
                             rootComponent.BackColor = Color.Gray;
                             rootComponent.Text = "Root Component hosted by the DesignSurface N.1";
                             //- step.3
                             //- create some Controls at DesignTime
-                            TextBox t1 = (TextBox)surface.CreateControl(typeof(TextBox), new Size(200, 20), new Point(10, 200));
-                            Button b1 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(10, 10));
-                            Button b2 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(100, 100));
+                            TextBox t1 = surface.CreateControl<TextBox>(new Size(200, 23), new Point(172, 12));
+                            Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(172, 63));
+                            CustomButton b2 = surface.CreateControl<CustomButton>(new Size(200, 40), new Point(100, 200));
                             b1.Text = "I'm the first Button";
                             b2.Text = "I'm the second Button";
                             b1.BackColor = Color.LightGray;
                             b2.BackColor = Color.LightGreen;
+
+                            RadioButton rb1 = surface.CreateControl<RadioButton>(new Size(120, 22), new Point(12, 21));
+                            rb1.Text = "Check me!";
+                            RadioButton rb2 = surface.CreateControl<RadioButton>(new Size(120, 22), new Point(12, 50));
+                            rb2.Text = "No, check me!";
+                            rb2.Checked = true;
+
+                            Panel pnl = surface.CreateControl<Panel>(new Size(130, 100), new Point(12, 21));
+                            pnl.BackColor = Color.Aquamarine;
+                            rb1.Parent = pnl;
+                            rb2.Parent = pnl;
+
+                            PictureBox pb1 = surface.CreateControl<PictureBox>(new Size(64, 64), new Point(24, 166));
+                            pb1.Image = new Icon("painter.ico").ToBitmap();
+
+                            ContextMenuStrip cm1 = surface.CreateComponent<ContextMenuStrip>();
                         }
 
                         break;
                     case 2:
                         {
-                            rootComponent = (Form)surface.CreateRootComponent(typeof(Form), new Size(640, 480));
+                            rootComponent = surface.CreateRootComponent<Form>(new Size(640, 480));
                             rootComponent.BackColor = Color.Yellow;
                             rootComponent.Text = "Root Component hosted by the DesignSurface N.2";
                             //- step.3
                             //- create some Controls at DesignTime
-                            TextBox t1 = (TextBox)surface.CreateControl(typeof(TextBox), new Size(200, 20), new Point(10, 10));
-                            Button b1 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(10, 40));
-                            Label l1 = (Label)surface.CreateControl(typeof(Label), new Size(200, 120), new Point(100, 100));
+                            TextBox t1 = surface.CreateControl<TextBox>(new Size(200, 20), new Point(10, 10));
+                            Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 40));
+                            Label l1 = surface.CreateControl<Label>(new Size(200, 120), new Point(48, 100));
                             t1.Text = "I'm a TextBox";
                             b1.Text = "I'm a Button";
                             b1.BackColor = Color.Coral;
                             l1.Text = "I'm a Label";
                             l1.BackColor = Color.Coral;
+
+                            ComboBox cb1 = surface.CreateControl<ComboBox>(new Size(200, 20), new Point(288, 16));
+                            cb1.Items.AddRange(new string[] { "a1", "b2", "c3" });
+                            cb1.SelectedIndex = 1;
+
+                            ListBox lb1 = surface.CreateControl<ListBox>(new Size(200, 130), new Point(288, 100));
+                            lb1.Items.AddRange(new string[] { "a1", "b2", "c3" });
+
+                            TreeView tv1 = surface.CreateControl<TreeView>(new Size(290, 160), new Point(20, 220));
                         }
 
                         break;
                     case 3:
                         {
-                            rootComponent = (Form)surface.CreateRootComponent(typeof(Form), new Size(800, 600));
+                            rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
                             rootComponent.BackColor = Color.YellowGreen;
                             rootComponent.Text = "Root Component hosted by the DesignSurface N.3";
                             //- step.3
                             //- create some Controls at DesignTime
-                            Button b1 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(10, 10));
-                            Button b2 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(100, 100));
-                            Button b3 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(22, 22));
+                            Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 10));
+                            Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(100, 100));
+                            Button b3 = surface.CreateControl<Button>(new Size(200, 40), new Point(22, 22));
                             b1.Text = "I'm the first Button";
                             b2.Text = "I'm the second Button";
                             b3.Text = "I'm the third Button (belonging to the BroupBox)";
-                            GroupBox gb = (GroupBox)surface.CreateControl(typeof(GroupBox), new Size(300, 180), new Point(100, 200));
+                            GroupBox gb = surface.CreateControl<GroupBox>(new Size(300, 180), new Point(100, 200));
                             b3.Parent = gb;
                             b3.BackColor = Color.LightGray;
+
+                            ListView lb1 = surface.CreateControl<ListView>(new Size(290, 160), new Point(320, 30));
+                            ImageList im1 = surface.CreateComponent<ImageList>();
                         }
 
                         break;
                     case 4:
                         {
-                            rootComponent = (Form)surface.CreateRootComponent(typeof(Form), new Size(320, 200));
+                            rootComponent = surface.CreateRootComponent<Form>(new Size(320, 200));
                             rootComponent.BackColor = Color.Orange;
                             rootComponent.Text = "Root Component hosted by the DesignSurface N.4";       //- step.1
                                                                                                          //- step.3
                                                                                                          //- create some Controls at DesignTime
-                            Button b1 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(10, 10));
-                            Button b2 = (Button)surface.CreateControl(typeof(Button), new Size(200, 40), new Point(100, 100));
+                            Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 10));
+                            Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(100, 100));
                             b1.Text = "I'm the first Button";
                             b2.Text = "I'm the second Button";
                             b1.BackColor = Color.Gold;
                             b2.BackColor = Color.LightGreen;
+
+                            Timer tm11 = surface.CreateComponent<Timer>();
+                            FontDialog fd1 = surface.CreateComponent<FontDialog>();
                         }
 
                         break;
@@ -270,7 +300,7 @@ namespace TestConsole
 
         private void OnMenuClick(object sender, EventArgs e)
         {
-            IDesignSurfaceExt isurf = (IDesignSurfaceExt)_listOfDesignSurface[tabControl1.SelectedIndex];
+            IDesignSurfaceExt isurf = _listOfDesignSurface[tabControl1.SelectedIndex];
             if (null != isurf)
                 isurf.DoAction((sender as ToolStripMenuItem).Text);
         }
