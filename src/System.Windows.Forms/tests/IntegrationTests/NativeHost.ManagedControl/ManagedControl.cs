@@ -22,6 +22,8 @@ namespace NativeHost
     {
         public ManagedControl()
         {
+            CompModSwitches.ActiveX.Level = System.Diagnostics.TraceLevel.Verbose;
+
             InitializeComponent();
         }
 
