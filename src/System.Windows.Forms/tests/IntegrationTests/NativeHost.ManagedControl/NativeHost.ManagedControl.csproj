@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AssemblyName>NativeHost.ManagedControl</AssemblyName>
+    <Platforms>x86;x64</Platforms>
+    <EnableComHosting>true</EnableComHosting>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
+  </ItemGroup>
+
+</Project>

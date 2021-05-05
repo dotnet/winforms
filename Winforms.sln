@@ -175,6 +175,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Analyz
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Analyzers.CSharp.Tests", "src\System.Windows.Forms.Analyzers.CSharp\tests\UnitTests\System.Windows.Forms.Analyzers.CSharp.Tests.csproj", "{714EC82C-D4E0-4E14-9C34-4F270774D384}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeHost", "src\System.Windows.Forms\tests\IntegrationTests\NativeHost\NativeHost.vcxproj", "{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3129970B-A4EB-46AC-B163-18A5557B11BD} = {3129970B-A4EB-46AC-B163-18A5557B11BD}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeHost.ManagedControl", "src\System.Windows.Forms\tests\IntegrationTests\NativeHost.ManagedControl\NativeHost.ManagedControl.csproj", "{3129970B-A4EB-46AC-B163-18A5557B11BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1019,6 +1026,38 @@ Global
 		{714EC82C-D4E0-4E14-9C34-4F270774D384}.Release|x64.Build.0 = Release|Any CPU
 		{714EC82C-D4E0-4E14-9C34-4F270774D384}.Release|x86.ActiveCfg = Release|Any CPU
 		{714EC82C-D4E0-4E14-9C34-4F270774D384}.Release|x86.Build.0 = Release|Any CPU
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|Any CPU.Build.0 = Debug|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|arm64.ActiveCfg = Debug|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|arm64.Build.0 = Debug|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|x64.ActiveCfg = Debug|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|x64.Build.0 = Debug|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|x86.ActiveCfg = Debug|Win32
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Debug|x86.Build.0 = Debug|Win32
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|Any CPU.ActiveCfg = Release|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|Any CPU.Build.0 = Release|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|arm64.ActiveCfg = Release|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|arm64.Build.0 = Release|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|x64.ActiveCfg = Release|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|x64.Build.0 = Release|x64
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|x86.ActiveCfg = Release|Win32
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815}.Release|x86.Build.0 = Release|Win32
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|Any CPU.Build.0 = Debug|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|arm64.ActiveCfg = Debug|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|arm64.Build.0 = Debug|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|x64.ActiveCfg = Debug|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|x64.Build.0 = Debug|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|x86.ActiveCfg = Debug|x86
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Debug|x86.Build.0 = Debug|x86
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|Any CPU.ActiveCfg = Release|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|Any CPU.Build.0 = Release|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|arm64.ActiveCfg = Release|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|arm64.Build.0 = Release|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|x64.ActiveCfg = Release|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|x64.Build.0 = Release|x64
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|x86.ActiveCfg = Release|x86
+		{3129970B-A4EB-46AC-B163-18A5557B11BD}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1086,6 +1125,8 @@ Global
 		{D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{5025D7FF-EB6D-4250-B9C5-887ADFBBD952} = {E4C6C5F5-46E9-4C63-9628-26752B4D9C11}
 		{714EC82C-D4E0-4E14-9C34-4F270774D384} = {D3AD0BF9-F5E2-4913-9AE3-9C4998F95EA1}
+		{B68FD1FC-EA37-40F2-BBBD-77577A0A1815} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
+		{3129970B-A4EB-46AC-B163-18A5557B11BD} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
