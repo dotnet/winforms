@@ -1009,6 +1009,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal bool GroupsDisplayed => View != View.List && GroupsEnabled;
+
         // this essentially means that the version of CommCtl supports list view grouping
         // and that the user wants to make use of list view groups
         internal bool GroupsEnabled
