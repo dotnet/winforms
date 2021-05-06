@@ -150,25 +150,25 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Arcade -->
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="6.0.0-beta.21254.3">
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="6.0.0-beta.21256.1">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>0cfaf935894a4c98ff7445c903f1b4c32990b127</Sha>
+      <Sha>01c1af9f5ead4962e390cfbec92396de34118492</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.GenFacades" Version="6.0.0-beta.21254.3">
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="6.0.0-beta.21256.1">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>0cfaf935894a4c98ff7445c903f1b4c32990b127</Sha>
+      <Sha>01c1af9f5ead4962e390cfbec92396de34118492</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="6.0.0-beta.21254.3">
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="6.0.0-beta.21256.1">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>0cfaf935894a4c98ff7445c903f1b4c32990b127</Sha>
+      <Sha>01c1af9f5ead4962e390cfbec92396de34118492</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="6.0.0-beta.21254.3">
+    <Dependency Name="Microsoft.DotNet.RemoteExecutor" Version="6.0.0-beta.21256.1">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>0cfaf935894a4c98ff7445c903f1b4c32990b127</Sha>
+      <Sha>01c1af9f5ead4962e390cfbec92396de34118492</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="6.0.0-beta.21254.3">
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="6.0.0-beta.21256.1">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>0cfaf935894a4c98ff7445c903f1b4c32990b127</Sha>
+      <Sha>01c1af9f5ead4962e390cfbec92396de34118492</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>
