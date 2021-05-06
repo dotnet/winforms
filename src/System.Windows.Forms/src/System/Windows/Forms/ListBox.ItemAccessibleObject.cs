@@ -75,7 +75,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owningListBox.IsHandleCreated)
+                    if (!_owningListBox.IsHandleCreated
+                        || (_owningListBox.AccessibilityObject.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen)
                     {
                         return Rectangle.Empty;
                     }

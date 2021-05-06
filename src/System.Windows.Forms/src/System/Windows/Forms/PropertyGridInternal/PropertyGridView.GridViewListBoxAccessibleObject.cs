@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         private class GridViewListBoxAccessibleObject : ListBox.ListBoxAccessibleObject
         {
+            private readonly GridViewListBox _owningGridViewListBox;
             private readonly PropertyGridView _owningPropertyGridView;
 
             /// <summary>
@@ -31,8 +33,36 @@ namespace System.Windows.Forms.PropertyGridInternal
                     throw new ArgumentNullException(nameof(owningGridViewListBox.OwningPropertyGridView));
                 }
 
+                _owningGridViewListBox = owningGridViewListBox;
                 _owningPropertyGridView = owningGridViewListBox.OwningPropertyGridView;
             }
+
+            internal override Rectangle BoundingRectangle => _owningGridViewListBox.IsHandleCreated && _owningPropertyGridView.DropDownVisible
+                                                            ? _owningGridViewListBox.GetToolNativeScreenRectangle()
+                                                            // We return such a rectangle because if we return an empty rectangle,
+                                                            // it will be replaced by the native rectangle
+                                                            : new Rectangle(int.MinValue, int.MinValue, 1, 1);
+
+            public override AccessibleStates State
+            {
+                get
+                {
+                    AccessibleStates state = base.State;
+                    if (!_owningPropertyGridView.DropDownVisible)
+                    {
+                        state |= AccessibleStates.Offscreen;
+                    }
+
+                    return state;
+                }
+            }
+
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+                propertyID switch
+                {
+                    UiaCore.UIA.IsOffscreenPropertyId => !_owningPropertyGridView.DropDownVisible,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             /// <summary>
             ///  Request to return the element in the specified direction.
