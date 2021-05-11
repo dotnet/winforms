@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(0, accessibleObject.GetChildCount()); // listView doesn't have items
+            Assert.Equal(-1, accessibleObject.GetChildCount()); // listView doesn't have items
             Assert.False(listView.IsHandleCreated);
         }
 
@@ -74,85 +74,6 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = listView.AccessibilityObject;
             Assert.Equal(((int)(listView.View)).ToString(), accessibleObject.GetMultiViewProviderViewName((int)View.Details));
             Assert.False(listView.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(true, 1)]
-        [InlineData(false, 0)]
-        public void ListViewAccessibleObject_ListWithOneItem_GetChildCount_ReturnsCorrectValue(bool createdControl, int expectedChildCount)
-        {
-            using ListView listView = new ListView();
-            if (createdControl)
-            {
-                listView.CreateControl();
-            }
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            listView.Items.Add(new ListViewItem());
-            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // One item
-            Assert.Equal(createdControl, listView.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(true, 2)]
-        [InlineData(false, 0)]
-        public void ListViewAccessibleObject_ListWithTwoGroups_GetChildCount_ReturnsCorrectValue_UseVisualStylesEnabled(bool createdControl, int expectedChildCount)
-        {
-            if (!Application.UseVisualStyles)
-            {
-                return;
-            }
-
-            using ListView listView = new ListView();
-            if (createdControl)
-            {
-                listView.CreateControl();
-            }
-
-            listView.Items.Add(new ListViewItem());
-            ListViewItem item = new ListViewItem();
-            ListViewItem item2 = new ListViewItem();
-            ListViewGroup group = new ListViewGroup();
-            item2.Group = group;
-            item.Group = group;
-            listView.Groups.Add(group);
-            listView.Items.Add(item);
-            listView.Items.Add(item2);
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // Default group and one specified group
-            Assert.Equal(createdControl, listView.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [InlineData(true, 3)]
-        [InlineData(false, 0)]
-        public void ListViewAccessibleObject_ListWithTwoGroups_GetChildCount_ReturnsCorrectValue_UseVisualStylesDisabled(bool createdControl, int expectedChildCount)
-        {
-            if (Application.UseVisualStyles)
-            {
-                return;
-            }
-
-            using ListView listView = new ListView();
-            if (createdControl)
-            {
-                listView.CreateControl();
-            }
-
-            listView.Items.Add(new ListViewItem());
-            ListViewItem item = new ListViewItem();
-            ListViewItem item2 = new ListViewItem();
-            ListViewGroup group = new ListViewGroup();
-            item2.Group = group;
-            item.Group = group;
-            listView.Groups.Add(group);
-            listView.Items.Add(item);
-            listView.Items.Add(item2);
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // Default group and one specified group
-            Assert.Equal(createdControl, listView.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -238,25 +159,6 @@ namespace System.Windows.Forms.Tests
             Assert.False(listView.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [InlineData(true, 2)]
-        [InlineData(false, 0)]
-        public void ListViewAccessibleObject_ListWithTwoItems_GetChildCount_ReturnsCorrectValue(bool createdControl, int expectedChildCount)
-        {
-            using ListView listView = new ListView();
-            if (createdControl)
-            {
-                listView.CreateControl();
-            }
-
-            listView.Items.Add(new ListViewItem());
-            listView.Items.Add(new ListViewItem());
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(expectedChildCount, accessibleObject.GetChildCount()); // Two child items
-            Assert.Equal(createdControl, listView.IsHandleCreated);
-        }
-
         [WinFormsFact]
         public void ListViewAccessibleObject_ListWithTwoItems_FragmentNavigateWorkCorrectly_IfHandleIsCreated()
         {
@@ -296,7 +198,7 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = new ListView();
             AccessibleObject accessibleObject = listView.AccessibilityObject;
-            Assert.Equal(0, accessibleObject.GetChildCount()); // listView doesn't have items
+            Assert.Equal(-1, accessibleObject.GetChildCount()); // listView doesn't have items
             Assert.Null(accessibleObject.GetChild(0)); // GetChild method should not throw an exception
             Assert.False(listView.IsHandleCreated);
         }
@@ -332,11 +234,20 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (bool virtualMode in new[] { true, false })
                 {
+                    // View.Tile is not supported by ListView in Virtual mode
+                    if (view == View.Tile && virtualMode)
+                    {
+                        continue;
+                    }
+
                     foreach (bool showGroups in new[] { true, false })
                     {
                         foreach (bool createHandle in new[] { true, false })
                         {
-                            yield return new object[] { virtualMode, showGroups, createHandle };
+                            foreach (bool createDefaultGroup in new[] { true, false })
+                            {
+                                yield return new object[] { view, virtualMode, showGroups, createHandle, createDefaultGroup };
+                            }
                         }
                     }
                 }
@@ -345,163 +256,415 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
-        public void ListViewAccessibleObject_OwnerHasDefaultGroup_ReturnsExpected_WithoutItems(bool virtualMode, bool showGroups, bool createHandle)
+        public void ListViewAccessibleObject_OwnerHasDefaultGroup_ReturnsExpected(View view, bool virtualMode, bool showGroups, bool createHandle, bool createDefaultGroup)
         {
-            using ListView listView = new ListView
+            using ListView listView = new()
             {
+                View = view,
                 ShowGroups = showGroups,
+                VirtualListSize = 2,
                 VirtualMode = virtualMode
             };
 
-            if (createHandle)
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewGroup listViewGroup = new("Test Group");
+            listView.Groups.Add(listViewGroup);
+            ListViewItem listViewItem1 = new("Test item 1", listViewGroup);
+            ListViewItem listViewItem2 = new("Test item 2", group: createDefaultGroup ? null : listViewGroup);
+
+            if (virtualMode)
             {
-                listView.CreateControl();
-            }
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-
-            bool actual = accessibleObject.TestAccessor().Dynamic.OwnerHasDefaultGroup;
-
-            // Since the listview either
-            //  1. isn't materialised, or
-            //  2. is in virtual mode, or
-            //  3. has no items
-            // ...it doesn't have the default group
-            Assert.False(actual);
-
-            Assert.Equal(createHandle, listView.IsHandleCreated);
-        }
-
-        public static IEnumerable<object[]> ListViewAccessibleObject_OwnerHasDefaultGroup_DefaultMode_WithAllItemsInGroups_TestData()
-        {
-            foreach (View view in Enum.GetValues(typeof(View)))
-            {
-                foreach (bool showGroups in new[] { true, false })
+                listView.RetrieveVirtualItem += (s, e) =>
                 {
-                    foreach (bool createHandle in new[] { true, false })
+                    e.Item = e.ItemIndex switch
                     {
-                        yield return new object[] { showGroups, createHandle };
-                    }
-                }
-            }
-        }
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        _ => throw new NotImplementedException()
+                    };
+                };
 
-        [WinFormsTheory]
-        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_DefaultMode_WithAllItemsInGroups_TestData))]
-        public void ListViewAccessibleObject_OwnerHasDefaultGroup_DefaultMode_WithAllItemsInGroups_ReturnsExpected(bool showGroups, bool createHandle)
-        {
-            using ListView listView = new ListView
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+            }
+            else
             {
-                ShowGroups = showGroups,
-                VirtualMode = false // default mode
-            };
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+            }
 
             if (createHandle)
             {
                 listView.CreateControl();
             }
 
-            ListViewGroup group1 = new ListViewGroup("First");
-            ListViewItem item1 = new ListViewItem(group1);
-            ListViewGroup group2 = new ListViewGroup("Second");
-            ListViewItem item2 = new ListViewItem(group2);
-            listView.Groups.Add(group1);
-            listView.Groups.Add(group2);
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            bool actual = accessibleObject.TestAccessor().Dynamic.OwnerHasDefaultGroup;
-
-            Assert.False(actual);
-
-            Assert.Equal(createHandle, listView.IsHandleCreated);
-        }
-
-        public static IEnumerable<object[]> ListViewAccessibleObject_OwnerHasDefaultGroup_DefaultMode_WithItemsNotInGroup_TestData()
-        {
-            foreach (View view in Enum.GetValues(typeof(View)))
-            {
-                foreach (bool showGroups in new[] { true, false })
-                {
-                    foreach (bool createHandle in new[] { true, false })
-                    {
-                        bool expected = showGroups;
-                        yield return new object[] { showGroups, createHandle, expected };
-                    }
-                }
-            }
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_DefaultMode_WithItemsNotInGroup_TestData))]
-        public void ListViewAccessibleObject_OwnerHasDefaultGroup_DefaultMode_ReturnsExpected_WithItemsNotInGroup(bool showGroups, bool createHandle, bool expected)
-        {
-            using ListView listView = new ListView
-            {
-                ShowGroups = showGroups,
-                VirtualMode = false // default mode
-            };
-
-            if (createHandle)
-            {
-                listView.CreateControl();
-            }
-
-            ListViewGroup group1 = new ListViewGroup("First");
-            listView.Groups.Add(group1);
-
-            ListViewItem item1 = new ListViewItem(group1);
-            listView.Items.Add(item1);
-            ListViewItem item2 = new ListViewItem();
-            listView.Items.Add(item2);
-
-            AccessibleObject accessibleObject = listView.AccessibilityObject;
-            bool actual = accessibleObject.TestAccessor().Dynamic.OwnerHasDefaultGroup;
+            bool expected = listView.GroupsDisplayed && createDefaultGroup;
+            bool actual = ((ListView.ListViewAccessibleObject)listView.AccessibilityObject).OwnerHasDefaultGroup;
 
             Assert.Equal(expected, actual);
-
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> ListViewAccessibleObject_OwnerHasDefaultGroup_VirtualMode_TestData()
+        public static IEnumerable<object[]> ListViewAccessibleObject_OwnerHasDefaultGroup_WithoutItems_TestData()
         {
             foreach (View view in Enum.GetValues(typeof(View)))
             {
-                // View.Tile is not supported by ListView in Virtual mode
-                if (view == View.Tile)
+                foreach (bool virtualMode in new[] { true, false })
                 {
-                    continue;
-                }
-
-                foreach (bool showGroups in new[] { true, false })
-                {
-                    foreach (bool createHandle in new[] { true, false })
+                    // View.Tile is not supported by ListView in Virtual mode
+                    if (view == View.Tile && virtualMode)
                     {
-                        yield return new object[] { showGroups, createHandle };
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool createHandle in new[] { true, false })
+                        {
+                            yield return new object[] { view, virtualMode, showGroups, createHandle };
+                        }
                     }
                 }
             }
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_VirtualMode_TestData))]
-        public void ListViewAccessibleObject_OwnerHasDefaultGroup_VirtualMode_ReturnsExpected_WithItems(bool showGroups, bool createHandle)
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_WithoutItems_TestData))]
+        public void ListViewAccessibleObject_OwnerHasDefaultGroup_ReturnsExpected_WithoutItems(View view, bool virtualMode, bool showGroups, bool createHandle)
         {
-            using ListView listView = new ListView
+            using ListView listView = new()
             {
+                View = view,
                 ShowGroups = showGroups,
-                VirtualMode = true,
-                VirtualListSize = 2 // we can't add items, just indicate how many we have
+                VirtualListSize = 0,
+                VirtualMode = virtualMode
             };
 
-            listView.RetrieveVirtualItem += (s, e) =>
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewGroup listViewGroup = new("Test Group");
+            listView.Groups.Add(listViewGroup);
+
+            if (virtualMode)
             {
-                e.Item = e.ItemIndex switch
+                listView.RetrieveVirtualItem += (s, e) =>
                 {
-                    0 => new ListViewItem(),
-                    1 => new ListViewItem(),
-                    _ => new ListViewItem(),
+                    e.Item = e.ItemIndex switch
+                    {
+                        _ => throw new NotImplementedException()
+                    };
                 };
+            }
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            bool actual = ((ListView.ListViewAccessibleObject)listView.AccessibilityObject).OwnerHasDefaultGroup;
+
+            Assert.False(actual);
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
+        public void ListViewAccessibleObject_GetChildCount_ReturnsExpected(View view, bool virtualMode, bool showGroups, bool createHandle, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode
             };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+            ListViewItem listViewItem3 = new("Test item 3");
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group"));
+                listViewItem2.Group = listView.Groups[0];
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        2 => listViewItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            int expected = createHandle
+                ? listView.GroupsDisplayed ? 2 : 3
+                : -1;
+
+            Assert.Equal(expected, listView.AccessibilityObject.GetChildCount());
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
+        public void ListViewAccessibleObject_GetChildCount_ReturnsExpected_WithoutItems(View view, bool virtualMode, bool showGroups, bool createHandle, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 0,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group"));
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        _ => throw new NotImplementedException()
+                    };
+                };
+            }
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Equal(createHandle ? 0 : -1, listView.AccessibilityObject.GetChildCount());
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ListViewAccessibleObject_GetChild_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool virtualMode in new[] { true, false })
+                {
+                    // View.Tile is not supported by ListView in Virtual mode
+                    if (view == View.Tile && virtualMode)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool createDefaultGroup in new[] { true, false })
+                        {
+                            yield return new object[] { view, virtualMode, showGroups, createDefaultGroup };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_GetChild_TestData))]
+        public void ListViewAccessibleObject_GetChild_ReturnsExpected_IfHandleCreated(View view, bool virtualMode, bool showGroups, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+            ListViewItem listViewItem3 = new("Test item 3");
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group"));
+                listViewItem2.Group = listView.Groups[0];
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        2 => listViewItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
+
+            listView.CreateControl();
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+
+            Assert.Null(accessibleObject.GetChild(-1));
+
+            if (listView.GroupsDisplayed)
+            {
+                Assert.Equal(listView.DefaultGroup.AccessibilityObject, accessibleObject.GetChild(0));
+                Assert.Equal(listView.Groups[0].AccessibilityObject, accessibleObject.GetChild(1));
+                Assert.Null(accessibleObject.GetChild(2));
+            }
+            else
+            {
+                Assert.Equal(listViewItem1.AccessibilityObject, accessibleObject.GetChild(0));
+                Assert.Equal(listViewItem2.AccessibilityObject, accessibleObject.GetChild(1));
+                Assert.Equal(listViewItem3.AccessibilityObject, accessibleObject.GetChild(2));
+                Assert.Null(accessibleObject.GetChild(3));
+            }
+
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_GetChild_TestData))]
+        public void ListViewAccessibleObject_GetChild_ReturnsExpected_IfHandleNotCreated(View view, bool virtualMode, bool showGroups, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+            ListViewItem listViewItem3 = new("Test item 3");
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group"));
+                listViewItem2.Group = listView.Groups[0];
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        2 => listViewItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
+
+            Assert.Null(listView.AccessibilityObject.GetChild(-1));
+            Assert.Null(listView.AccessibilityObject.GetChild(0));
+            Assert.Null(listView.AccessibilityObject.GetChild(1));
+
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
+        public void ListViewAccessibleObject_GetChildIndex_ReturnsExpected_WithDefaultGroup(View view, bool virtualMode, bool showGroups, bool createHandle, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+            ListViewItem listViewItem3 = new("Test item 3");
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group 1"));
+                listView.Groups.Add(new ListViewGroup("Test Group 2"));
+                listViewItem2.Group = listView.Groups[0];
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        2 => listViewItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
 
             if (createHandle)
             {
@@ -510,9 +673,219 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject accessibleObject = listView.AccessibilityObject;
 
-            // Since the listview is in virtual mode - it doesn't have the default group
-            Assert.False(accessibleObject.TestAccessor().Dynamic.OwnerHasDefaultGroup);
+            if (listView.GroupsDisplayed)
+            {
+                Assert.Equal(0, accessibleObject.GetChildIndex(listView.DefaultGroup.AccessibilityObject));
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Groups[0].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Groups[1].AccessibilityObject));
 
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[1].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[2].AccessibilityObject));
+            }
+            else
+            {
+                Assert.Equal(0, accessibleObject.GetChildIndex(listView.Items[0].AccessibilityObject));
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Items[1].AccessibilityObject));
+                Assert.Equal(2, accessibleObject.GetChildIndex(listView.Items[2].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.DefaultGroup.AccessibilityObject));
+            }
+
+            Assert.Equal(-1, accessibleObject.GetChildIndex(new AccessibleObject()));
+
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
+        public void ListViewAccessibleObject_GetChildIndex_ReturnsExpected_WithoutDefaultGroup(View view, bool virtualMode, bool showGroups, bool createHandle, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+            ListViewItem listViewItem3 = new("Test item 3");
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group 1"));
+                listView.Groups.Add(new ListViewGroup("Test Group 2"));
+                listViewItem1.Group = listView.Groups[0];
+                listViewItem2.Group = listView.Groups[0];
+                listViewItem3.Group = listView.Groups[1];
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        2 => listViewItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+
+            if (listView.GroupsDisplayed)
+            {
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.DefaultGroup.AccessibilityObject));
+                Assert.Equal(0, accessibleObject.GetChildIndex(listView.Groups[0].AccessibilityObject));
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Groups[1].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[1].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[2].AccessibilityObject));
+            }
+            else
+            {
+                Assert.Equal(0, accessibleObject.GetChildIndex(listView.Items[0].AccessibilityObject));
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Items[1].AccessibilityObject));
+                Assert.Equal(2, accessibleObject.GetChildIndex(listView.Items[2].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.DefaultGroup.AccessibilityObject));
+            }
+
+            Assert.Equal(-1, accessibleObject.GetChildIndex(new AccessibleObject()));
+
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
+        public void ListViewAccessibleObject_GetChildIndex_ReturnsExpected_WithoutVisibleItems(View view, bool virtualMode, bool showGroups, bool createHandle, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 0,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group 1"));
+                listView.Groups[0].Items.Add(new ListViewItem());
+                listView.Groups.Add(new ListViewGroup("Test Group 2"));
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        _ => throw new NotImplementedException()
+                    };
+                };
+            }
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            AccessibleObject accessibleObject = listView.AccessibilityObject;
+
+            if (listView.GroupsDisplayed)
+            {
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.DefaultGroup.AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Groups[0].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Groups[1].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Groups[0].Items[0].AccessibilityObject));
+            }
+
+            Assert.Equal(-1, accessibleObject.GetChildIndex(new AccessibleObject()));
+
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewAccessibleObject_OwnerHasDefaultGroup_TestData))]
+        public void ListViewAccessibleObject_GetChildIndex_ReturnsMinusOne_IfChildIsNull(View view, bool virtualMode, bool showGroups, bool createHandle, bool createGroup)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode
+            };
+
+            listView.Columns.Add(new ColumnHeader());
+
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+            ListViewItem listViewItem3 = new("Test item 3");
+
+            if (createGroup)
+            {
+                listView.Groups.Add(new ListViewGroup("Test Group 1"));
+                listView.Groups.Add(new ListViewGroup("Test Group 2"));
+                listViewItem2.Group = listView.Groups[0];
+            }
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listViewItem1,
+                        1 => listViewItem2,
+                        2 => listViewItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listViewItem1.SetItemIndex(listView, 0);
+                listViewItem2.SetItemIndex(listView, 1);
+                listViewItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listViewItem1);
+                listView.Items.Add(listViewItem2);
+                listView.Items.Add(listViewItem3);
+            }
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Equal(-1, listView.AccessibilityObject.GetChildIndex(null));
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -1040,7 +1413,7 @@ namespace System.Windows.Forms.Tests
 
         private ListView GetListViewItemWithEmptyGroups(View view)
         {
-            ListView listView = new ListView() { View = view};
+            ListView listView = new ListView() { View = view };
             listView.CreateControl();
             ListViewGroup listViewGroupWithoutItems = new("Group without items");
             ListViewGroup listViewGroupWithItems1 = new("Group with item 1");

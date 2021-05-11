@@ -73,9 +73,6 @@ namespace System.Windows.Forms
             public override AccessibleRole Role
                 => AccessibleRole.ListItem;
 
-            // ListViewGroup are not displayed when the ListView is in "List" view
-            private bool ShowGroupAccessibleObject => _owningListView.View != View.List && _owningListView.GroupsEnabled;
-
             /// <summary>
             ///  Gets the accessible state.
             /// </summary>
@@ -111,29 +108,17 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                ListViewGroupAccessibleObject? owningGroupAccessibleObject = ShowGroupAccessibleObject && OwningGroup is not null
-                    ? (ListViewGroupAccessibleObject)OwningGroup.AccessibilityObject
-                    : null;
+                AccessibleObject _parentInternal = OwningGroup?.AccessibilityObject ?? _owningListView.AccessibilityObject;
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        return owningGroupAccessibleObject ?? _owningListView.AccessibilityObject;
+                        return _parentInternal;
                     case UiaCore.NavigateDirection.NextSibling:
-                        if (owningGroupAccessibleObject is null)
-                        {
-                            ListViewAccessibleObject listViewAccessibilityObject = (ListViewAccessibleObject)_owningListView.AccessibilityObject;
-                            return listViewAccessibilityObject.GetNextChild(this);
-                        }
-
-                        return owningGroupAccessibleObject.GetNextChild(this);
+                        int childIndex = _parentInternal.GetChildIndex(this);
+                        return childIndex == -1 ? null : _parentInternal.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        if (owningGroupAccessibleObject is null)
-                        {
-                            ListViewAccessibleObject listViewAccessibilityObject = (ListViewAccessibleObject)_owningListView.AccessibilityObject;
-                            return listViewAccessibilityObject.GetPreviousChild(this);
-                        }
-
-                        return owningGroupAccessibleObject.GetPreviousChild(this);
+                        return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
                     case UiaCore.NavigateDirection.FirstChild:
                         if (_owningItem.SubItems.Count > 0)
                         {

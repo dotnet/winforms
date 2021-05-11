@@ -77,6 +77,11 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListViewGroupAccessibleObject_GetPropertyValue_ReturnsExpected_WithDefaultGroup()
         {
+            if (!Application.UseVisualStyles)
+            {
+                return;
+            }
+
             using ListView list = new ListView();
             ListViewGroup listGroup = new ListViewGroup("Group1");
             listGroup.Items.Add(new ListViewItem());
@@ -101,96 +106,216 @@ namespace System.Windows.Forms.Tests
             Assert.False(list.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsCreated_VisualStylesEnabled()
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
+        public void ListViewGroupAccessibleObject_FragmentNavigate_ReturnsExpected_WithDefaultGroup(View view, bool showGroups, bool createHandle, bool virtualMode)
         {
-            if (!Application.UseVisualStyles)
+            using ListView listView = new()
             {
-                return;
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 6,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
+            };
+
+            ListViewGroup listGroup1 = new ListViewGroup("Group1");
+            ListViewGroup listGroup2 = new ListViewGroup("Group2");
+            ListViewItem listItem1 = new ListViewItem(listGroup1);
+            ListViewItem listItem2 = new ListViewItem(listGroup1);
+            ListViewItem listItem3 = new ListViewItem();
+            ListViewItem listItem4 = new ListViewItem(listGroup2);
+            ListViewItem listItem5 = new ListViewItem(listGroup2);
+            ListViewItem listItem6 = new ListViewItem(listGroup2);
+            ListViewItem listItem7 = new ListViewItem(listGroup2);
+            ListViewItem listItem8 = new ListViewItem(listGroup2);
+            listView.Groups.Add(listGroup1);
+            listView.Groups.Add(listGroup2);
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        3 => listItem4,
+                        4 => listItem5,
+                        5 => listItem6,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+                listItem4.SetItemIndex(listView, 3);
+                listItem5.SetItemIndex(listView, 4);
+                listItem6.SetItemIndex(listView, 5);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+                listView.Items.Add(listItem4);
+                listView.Items.Add(listItem5);
+                listView.Items.Add(listItem6);
             }
 
-            using ListView list = new ListView();
-            list.CreateControl();
-            ListViewGroup listGroup = new ListViewGroup("Group1");
-            ListViewItem listItem1 = new ListViewItem();
-            ListViewItem listItem2 = new ListViewItem();
-            ListViewItem listItem3 = new ListViewItem();
-            list.Groups.Add(listGroup);
-            listItem1.Group = listGroup;
-            listItem2.Group = listGroup;
-            list.Items.Add(listItem1);
-            list.Items.Add(listItem2);
-            list.Items.Add(listItem3);
-            AccessibleObject group1AccObj = listGroup.AccessibilityObject;
-            AccessibleObject defaultGroupAccObj = list.DefaultGroup.AccessibilityObject;
-            Assert.True(list.IsHandleCreated);
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
 
-            // Next/Previous siblings test
-            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            UiaCore.IRawElementProviderFragment defaultGroupNextSibling = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-            Assert.IsType<ListViewGroupAccessibleObject>(group1AccObj);
-            Assert.Equal(group1AccObj, defaultGroupNextSibling);
+            if (listView.IsHandleCreated && listView.GroupsDisplayed)
+            {
+                Assert.Equal(listView.AccessibilityObject, listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Equal(listGroup1.AccessibilityObject, listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Equal(listItem3.AccessibilityObject, listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Equal(listItem3.AccessibilityObject, listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
 
-            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            UiaCore.IRawElementProviderFragment group1PreviousSibling = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-            Assert.IsType<ListViewGroupAccessibleObject>(group1PreviousSibling);
-            Assert.Equal(defaultGroupAccObj, group1PreviousSibling);
+                Assert.Equal(listView.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Equal(listGroup2.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Equal(listView.DefaultGroup.AccessibilityObject, listView.Groups[0].AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Equal(listItem1.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Equal(listItem2.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
 
-            // Parent
-            Assert.Equal(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent), list.AccessibilityObject);
-            Assert.Equal(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent), list.AccessibilityObject);
+                Assert.Equal(listView.AccessibilityObject, listView.Groups[1].AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Equal(listGroup1.AccessibilityObject, listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Equal(listItem4.AccessibilityObject, listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Equal(listItem6.AccessibilityObject, listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+            }
+            else
+            {
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
 
-            // Childs
-            AccessibleObject firstChild = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
-            AccessibleObject lastChild = group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewItemAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemAccessibleObject>(lastChild);
-            Assert.NotEqual(firstChild, lastChild);
-            Assert.Equal(firstChild, listItem1.AccessibilityObject);
-            Assert.Equal(lastChild, listItem2.AccessibilityObject);
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
 
-            firstChild = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
-            lastChild = defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewItemAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemAccessibleObject>(lastChild);
-            Assert.Equal(firstChild, lastChild);
-            Assert.Equal(firstChild, listItem3.AccessibilityObject);
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+            }
         }
 
-        [WinFormsFact]
-        public void ListViewGroupAccessibleObject_ListWithTwoGroups_FragmentNavigateWorkCorrectly_IfHandleIsNotCreated()
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
+        public void ListViewGroupAccessibleObject_FragmentNavigate_ReturnsExpected_WithoutDefaultGroup(View view, bool showGroups, bool createHandle, bool virtualMode)
         {
-            using ListView list = new ListView();
-            ListViewGroup listGroup = new ListViewGroup("Group1");
-            ListViewItem listItem1 = new ListViewItem();
-            ListViewItem listItem2 = new ListViewItem();
-            ListViewItem listItem3 = new ListViewItem();
-            list.Groups.Add(listGroup);
-            listItem1.Group = listGroup;
-            listItem2.Group = listGroup;
-            list.Items.Add(listItem1);
-            list.Items.Add(listItem2);
-            list.Items.Add(listItem3);
-            AccessibleObject group1AccObj = listGroup.AccessibilityObject;
-            AccessibleObject defaultGroupAccObj = list.DefaultGroup.AccessibilityObject;
-            Assert.False(list.IsHandleCreated);
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 6,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
+            };
 
-            // Next/Previous siblings test
-            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+            ListViewGroup listGroup1 = new ListViewGroup("Group1");
+            ListViewGroup listGroup2 = new ListViewGroup("Group2");
+            ListViewItem listItem1 = new ListViewItem(listGroup1);
+            ListViewItem listItem2 = new ListViewItem(listGroup1);
+            ListViewItem listItem3 = new ListViewItem(listGroup1);
+            ListViewItem listItem4 = new ListViewItem(listGroup2);
+            ListViewItem listItem5 = new ListViewItem(listGroup2);
+            ListViewItem listItem6 = new ListViewItem(listGroup2);
+            ListViewItem listItem7 = new ListViewItem(listGroup2);
+            ListViewItem listItem8 = new ListViewItem(listGroup2);
+            listView.Groups.Add(listGroup1);
+            listView.Groups.Add(listGroup2);
 
-            // Parent
-            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent));
-            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        3 => listItem4,
+                        4 => listItem5,
+                        5 => listItem6,
+                        _ => throw new NotImplementedException()
+                    };
+                };
 
-            // Childs
-            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-            Assert.Null(group1AccObj.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+                listItem4.SetItemIndex(listView, 3);
+                listItem5.SetItemIndex(listView, 4);
+                listItem6.SetItemIndex(listView, 5);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+                listView.Items.Add(listItem4);
+                listView.Items.Add(listItem5);
+                listView.Items.Add(listItem6);
+            }
 
-            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-            Assert.Null(defaultGroupAccObj.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            if (listView.IsHandleCreated && listView.GroupsDisplayed)
+            {
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+
+                Assert.Equal(listView.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Equal(listGroup2.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listView.Groups[0].AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Equal(listItem1.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Equal(listItem3.AccessibilityObject, listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+
+                Assert.Equal(listView.AccessibilityObject, listView.Groups[1].AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Equal(listGroup1.AccessibilityObject, listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Equal(listItem4.AccessibilityObject, listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Equal(listItem6.AccessibilityObject, listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+            }
+            else
+            {
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listView.DefaultGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listGroup1.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(listGroup2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+            }
         }
 
         [WinFormsFact]
@@ -252,15 +377,16 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
-        public void ListViewGroupAccessibleObject_GetChildCount_Invoke_ReturnExpected_IfHandleCreated(View view, bool showGroups)
+        public void ListViewGroupAccessibleObject_GetChildIndex_ReturnsExpected(View view, bool showGroups, bool createHandle, bool virtualMode)
         {
-            using ListView listView = new ListView
+            using ListView listView = new()
             {
                 View = view,
-                ShowGroups = showGroups
+                ShowGroups = showGroups,
+                VirtualListSize = 6,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
             };
-
-            Assert.NotEqual(IntPtr.Zero, listView.Handle);
 
             ListViewGroup listGroup1 = new ListViewGroup("Group1");
             ListViewGroup listGroup2 = new ListViewGroup("Group2");
@@ -270,31 +396,192 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem4 = new ListViewItem(listGroup2);
             ListViewItem listItem5 = new ListViewItem(listGroup2);
             ListViewItem listItem6 = new ListViewItem(listGroup2);
+            ListViewItem listItem7 = new ListViewItem(listGroup2);
+            ListViewItem listItem8 = new ListViewItem(listGroup2);
             listView.Groups.Add(listGroup1);
             listView.Groups.Add(listGroup2);
-            listView.Items.Add(listItem1);
-            listView.Items.Add(listItem2);
-            listView.Items.Add(listItem3);
-            listView.Items.Add(listItem4);
-            listView.Items.Add(listItem5);
-            listView.Items.Add(listItem6);
-            ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listGroup1.AccessibilityObject;
-            ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listGroup2.AccessibilityObject;
-            ListViewGroupAccessibleObject defaultGroupAccObj = (ListViewGroupAccessibleObject)listView.DefaultGroup.AccessibilityObject;
-            Assert.Equal(2, group1AccObj.GetChildCount());
-            Assert.Equal(3, group2AccObj.GetChildCount());
-            Assert.Equal(1, defaultGroupAccObj.GetChildCount());
-            Assert.True(listView.IsHandleCreated);
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        3 => listItem4,
+                        4 => listItem5,
+                        5 => listItem6,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+                listItem4.SetItemIndex(listView, 3);
+                listItem5.SetItemIndex(listView, 4);
+                listItem6.SetItemIndex(listView, 5);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+                listView.Items.Add(listItem4);
+                listView.Items.Add(listItem5);
+                listView.Items.Add(listItem6);
+            }
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            if (listView.IsHandleCreated && listView.GroupsDisplayed)
+            {
+                Assert.Equal(0, listGroup1.AccessibilityObject.GetChildIndex(listItem1.AccessibilityObject));
+                Assert.Equal(1, listGroup1.AccessibilityObject.GetChildIndex(listItem2.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem3.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem4.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem5.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem6.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem7.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem8.AccessibilityObject));
+
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem1.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem2.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem3.AccessibilityObject));
+                Assert.Equal(0, listGroup2.AccessibilityObject.GetChildIndex(listItem4.AccessibilityObject));
+                Assert.Equal(1, listGroup2.AccessibilityObject.GetChildIndex(listItem5.AccessibilityObject));
+                Assert.Equal(2, listGroup2.AccessibilityObject.GetChildIndex(listItem6.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem7.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem8.AccessibilityObject));
+
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem1.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem2.AccessibilityObject));
+                Assert.Equal(0, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem3.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem4.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem5.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem6.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem7.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem8.AccessibilityObject));
+            }
+            else
+            {
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem1.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem2.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem3.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem4.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem5.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem6.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem7.AccessibilityObject));
+                Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(listItem8.AccessibilityObject));
+
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem1.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem2.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem3.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem4.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem5.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem6.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem7.AccessibilityObject));
+                Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(listItem8.AccessibilityObject));
+
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem1.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem2.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem3.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem4.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem5.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem6.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem7.AccessibilityObject));
+                Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(listItem8.AccessibilityObject));
+            }
+
+            Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
-        public void ListViewGroupAccessibleObject_GetChildCount_Invoke_ReturnExpected_IfHandleNotCreated(View view, bool showGroups)
+        public void ListViewGroupAccessibleObject_GetChildIndex_ReturnsMinusOne_IfChildIsNull(View view, bool showGroups, bool createHandle, bool virtualMode)
         {
-            using ListView listView = new ListView
+            using ListView listView = new()
             {
                 View = view,
-                ShowGroups = showGroups
+                ShowGroups = showGroups,
+                VirtualListSize = 6,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
+            };
+
+            ListViewGroup listGroup1 = new ListViewGroup("Group1");
+            ListViewGroup listGroup2 = new ListViewGroup("Group2");
+            ListViewItem listItem1 = new ListViewItem(listGroup1);
+            ListViewItem listItem2 = new ListViewItem(listGroup1);
+            ListViewItem listItem3 = new ListViewItem();
+            ListViewItem listItem4 = new ListViewItem(listGroup2);
+            ListViewItem listItem5 = new ListViewItem(listGroup2);
+            ListViewItem listItem6 = new ListViewItem(listGroup2);
+            ListViewItem listItem7 = new ListViewItem(listGroup2);
+            ListViewItem listItem8 = new ListViewItem(listGroup2);
+            listView.Groups.Add(listGroup1);
+            listView.Groups.Add(listGroup2);
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        3 => listItem4,
+                        4 => listItem5,
+                        5 => listItem6,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+                listItem4.SetItemIndex(listView, 3);
+                listItem5.SetItemIndex(listView, 4);
+                listItem6.SetItemIndex(listView, 5);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+                listView.Items.Add(listItem4);
+                listView.Items.Add(listItem5);
+                listView.Items.Add(listItem6);
+            }
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            Assert.Equal(-1, listGroup1.AccessibilityObject.GetChildIndex(null));
+            Assert.Equal(-1, listGroup2.AccessibilityObject.GetChildIndex(null));
+            Assert.Equal(-1, listView.DefaultGroup.AccessibilityObject.GetChildIndex(null));
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
+        public void ListViewGroupAccessibleObject_GetChildCount_Invoke_ReturnsExpected(View view, bool showGroups, bool createHandle, bool virtualMode)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 6,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
             };
 
             ListViewGroup listGroup1 = new ListViewGroup("Group1");
@@ -307,19 +594,54 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem6 = new ListViewItem(listGroup2);
             listView.Groups.Add(listGroup1);
             listView.Groups.Add(listGroup2);
-            listView.Items.Add(listItem1);
-            listView.Items.Add(listItem2);
-            listView.Items.Add(listItem3);
-            listView.Items.Add(listItem4);
-            listView.Items.Add(listItem5);
-            listView.Items.Add(listItem6);
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        3 => listItem4,
+                        4 => listItem5,
+                        5 => listItem6,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+                listItem4.SetItemIndex(listView, 3);
+                listItem5.SetItemIndex(listView, 4);
+                listItem6.SetItemIndex(listView, 5);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+                listView.Items.Add(listItem4);
+                listView.Items.Add(listItem5);
+                listView.Items.Add(listItem6);
+            }
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
             ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listGroup1.AccessibilityObject;
             ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listGroup2.AccessibilityObject;
             ListViewGroupAccessibleObject defaultGroupAccObj = (ListViewGroupAccessibleObject)listView.DefaultGroup.AccessibilityObject;
-            Assert.Equal(-1, group1AccObj.GetChildCount());
-            Assert.Equal(-1, group2AccObj.GetChildCount());
-            Assert.Equal(-1, defaultGroupAccObj.GetChildCount());
-            Assert.False(listView.IsHandleCreated);
+            bool supportsGetChild = listView.IsHandleCreated && listView.GroupsDisplayed;
+
+            Assert.Equal(supportsGetChild ? 2 : -1, group1AccObj.GetChildCount());
+            Assert.Equal(supportsGetChild ? 3 : -1, group2AccObj.GetChildCount());
+            Assert.Equal(supportsGetChild ? 1 : -1, defaultGroupAccObj.GetChildCount());
+            Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> ListViewGroupAccessibleObject_VirtualMode_TestData()
@@ -342,225 +664,109 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(ListViewGroupAccessibleObject_VirtualMode_TestData))]
-        public void ListViewGroupAccessibleObject_GetChildCount_Invoke_VirtualMode_ReturnExpected(View view, bool showGroups, bool createHandle)
-        {
-            using ListView listView = new ListView
-            {
-                View = view,
-                VirtualMode = true,
-                ShowGroups = showGroups,
-                VirtualListSize = 4
-            };
-
-            ListViewGroup listViewGroup1 = new ListViewGroup("Test1");
-            ListViewGroup listViewGroup2 = new ListViewGroup("Test2");
-            listView.Groups.Add(listViewGroup1);
-            listView.Groups.Add(listViewGroup2);
-
-            ListViewItem listItem1 = new ListViewItem(new string[] { "Item 1", "Item A" }, -1, listViewGroup1);
-            ListViewItem listItem2 = new ListViewItem("Group item 2", listViewGroup1);
-            ListViewItem listItem3 = new ListViewItem("Item 3");
-            ListViewItem listItem4 = new ListViewItem(new string[] { "Item 4", "Item B" }, -1);
-
-            listView.RetrieveVirtualItem += (s, e) =>
-            {
-                e.Item = e.ItemIndex switch
-                {
-                    0 => listItem1,
-                    1 => listItem2,
-                    2 => listItem3,
-                    3 => listItem4,
-                    _ => throw new NotImplementedException()
-                };
-            };
-
-            if (createHandle)
-            {
-                listView.CreateControl();
-            }
-
-            listItem1.SetItemIndex(listView, 0);
-            listItem2.SetItemIndex(listView, 1);
-            listItem3.SetItemIndex(listView, 2);
-            listItem4.SetItemIndex(listView, 3);
-
-            ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listViewGroup1.AccessibilityObject;
-            ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listViewGroup2.AccessibilityObject;
-            ListViewGroupAccessibleObject defaultGroupAccObj = (ListViewGroupAccessibleObject)listView.DefaultGroup.AccessibilityObject;
-            Assert.Equal(-1, group1AccObj.GetChildCount());
-            Assert.Equal(-1, group2AccObj.GetChildCount());
-            Assert.Equal(-1, defaultGroupAccObj.GetChildCount());
-            Assert.Equal(createHandle, listView.IsHandleCreated);
-        }
-
         public static IEnumerable<object[]> ListViewGroupAccessibleObject_GetChild_Invoke_TestData()
         {
-            foreach (View view in Enum.GetValues(typeof(View)))
+            foreach (bool virtualMode in new[] { true, false })
             {
-                foreach (bool showGroups in new[] { true, false })
+                foreach (View view in Enum.GetValues(typeof(View)))
                 {
-                    yield return new object[] { view, showGroups };
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (virtualMode == true && View.Tile == view)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool createHandle in new[] { true, false })
+                        {
+                            yield return new object[] { view, showGroups, createHandle, virtualMode };
+                        }
+                    }
                 }
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
-        public void ListViewGroupAccessibleObject_GetChild_Invoke_ReturnsExpected_IfHandleCreated(View view, bool showGroups)
+        public void ListViewGroupAccessibleObject_GetChild_Invoke_ReturnsExpected(View view, bool showGroups, bool createHandle, bool virtualMode)
         {
-            using ListView listView = new ListView
+            using ListView listView = new()
             {
                 View = view,
-                ShowGroups = showGroups
-            };
-
-            Assert.NotEqual(IntPtr.Zero, listView.Handle);
-
-            ListViewGroup listGroup1 = new ListViewGroup("Group1");
-            ListViewGroup listGroup2 = new ListViewGroup("Group2");
-            ListViewGroup listGroup3 = new ListViewGroup("Group2");
-            ListViewItem listItem1 = new ListViewItem(listGroup1);
-            ListViewItem listItem2 = new ListViewItem();
-            ListViewItem listItem3 = new ListViewItem(listGroup2);
-            ListViewItem listItem4 = new ListViewItem(listGroup2);
-            listView.Groups.Add(listGroup1);
-            listView.Groups.Add(listGroup2);
-            listView.Groups.Add(listGroup3);
-            listView.Items.Add(listItem1);
-            listView.Items.Add(listItem2);
-            listView.Items.Add(listItem3);
-            listView.Items.Add(listItem4);
-            ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listGroup1.AccessibilityObject;
-            ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listGroup2.AccessibilityObject;
-            ListViewGroupAccessibleObject group3AccObj = (ListViewGroupAccessibleObject)listGroup3.AccessibilityObject;
-            ListViewGroupAccessibleObject defaultGroupAccObj = (ListViewGroupAccessibleObject)listView.DefaultGroup.AccessibilityObject;
-
-            Assert.Null(group1AccObj.GetChild(-1));
-            Assert.Null(group1AccObj.GetChild(1));
-            Assert.Equal(listItem1.AccessibilityObject, group1AccObj.GetChild(0));
-
-            Assert.Null(group2AccObj.GetChild(-1));
-            Assert.Null(group2AccObj.GetChild(2));
-            Assert.Equal(listItem3.AccessibilityObject, group2AccObj.GetChild(0));
-            Assert.Equal(listItem4.AccessibilityObject, group2AccObj.GetChild(1));
-
-            Assert.Null(group3AccObj.GetChild(-1));
-            Assert.Null(group3AccObj.GetChild(0));
-
-            Assert.Null(defaultGroupAccObj.GetChild(-1));
-            Assert.Null(defaultGroupAccObj.GetChild(1));
-            Assert.Equal(listItem2.AccessibilityObject, defaultGroupAccObj.GetChild(0));
-            Assert.True(listView.IsHandleCreated);
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
-        public void ListViewGroupAccessibleObject_GetChild_Invoke_ReturnsExpected_IfHandleIsNotCreated(View view, bool showGroups)
-        {
-            using ListView listView = new ListView
-            {
-                View = view,
-                ShowGroups = showGroups
-            };
-
-            ListViewGroup listGroup1 = new ListViewGroup("Group1");
-            ListViewGroup listGroup2 = new ListViewGroup("Group2");
-            ListViewGroup listGroup3 = new ListViewGroup("Group2");
-            ListViewItem listItem1 = new ListViewItem(listGroup1);
-            ListViewItem listItem2 = new ListViewItem();
-            ListViewItem listItem3 = new ListViewItem(listGroup2);
-            ListViewItem listItem4 = new ListViewItem(listGroup2);
-            listView.Groups.Add(listGroup1);
-            listView.Groups.Add(listGroup2);
-            listView.Groups.Add(listGroup3);
-            listView.Items.Add(listItem1);
-            listView.Items.Add(listItem2);
-            listView.Items.Add(listItem3);
-            listView.Items.Add(listItem4);
-            ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listGroup1.AccessibilityObject;
-            ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listGroup2.AccessibilityObject;
-            ListViewGroupAccessibleObject group3AccObj = (ListViewGroupAccessibleObject)listGroup3.AccessibilityObject;
-            ListViewGroupAccessibleObject defaultGroupAccObj = (ListViewGroupAccessibleObject)listView.DefaultGroup.AccessibilityObject;
-
-            Assert.Null(group1AccObj.GetChild(-1));
-            Assert.Null(group1AccObj.GetChild(0));
-            Assert.Null(group1AccObj.GetChild(1));
-
-            Assert.Null(group2AccObj.GetChild(-1));
-            Assert.Null(group2AccObj.GetChild(0));
-            Assert.Null(group2AccObj.GetChild(1));
-            Assert.Null(group2AccObj.GetChild(2));
-
-            Assert.Null(group3AccObj.GetChild(-1));
-            Assert.Null(group3AccObj.GetChild(0));
-
-            Assert.Null(defaultGroupAccObj.GetChild(-1));
-            Assert.Null(defaultGroupAccObj.GetChild(0));
-            Assert.Null(defaultGroupAccObj.GetChild(1));
-        }
-
-        [WinFormsTheory]
-        [MemberData(nameof(ListViewGroupAccessibleObject_VirtualMode_TestData))]
-        public void ListViewGroupAccessibleObject_GetChild_Invoke_VirtualMode_ReturnExpected(View view, bool showGroups, bool createHandle)
-        {
-            using ListView listView = new ListView
-            {
-                View = view,
-                VirtualMode = true,
                 ShowGroups = showGroups,
-                VirtualListSize = 4
+                VirtualListSize = 4,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
             };
 
-            ListViewGroup listViewGroup1 = new ListViewGroup("Test1");
-            ListViewGroup listViewGroup2 = new ListViewGroup("Test2");
-            listView.Groups.Add(listViewGroup1);
-            listView.Groups.Add(listViewGroup2);
+            listView.Columns.Add(new ColumnHeader());
 
-            ListViewItem listItem1 = new ListViewItem(new string[] { "Item 1", "Item A" }, -1, listViewGroup1);
-            ListViewItem listItem2 = new ListViewItem("Group item 2", listViewGroup1);
-            ListViewItem listItem3 = new ListViewItem("Item 3");
-            ListViewItem listItem4 = new ListViewItem(new string[] { "Item 4", "Item B" }, -1);
+            ListViewGroup listGroup1 = new ListViewGroup("Group1");
+            ListViewGroup listGroup2 = new ListViewGroup("Group2");
+            ListViewGroup listGroup3 = new ListViewGroup("Group2");
+            ListViewItem listItem1 = new ListViewItem(listGroup1);
+            ListViewItem listItem2 = new ListViewItem();
+            ListViewItem listItem3 = new ListViewItem(listGroup2);
+            ListViewItem listItem4 = new ListViewItem(listGroup2);
+            listView.Groups.Add(listGroup1);
+            listView.Groups.Add(listGroup2);
+            listView.Groups.Add(listGroup3);
 
-            listView.RetrieveVirtualItem += (s, e) =>
+            if (virtualMode)
             {
-                e.Item = e.ItemIndex switch
+                listView.RetrieveVirtualItem += (s, e) =>
                 {
-                    0 => listItem1,
-                    1 => listItem2,
-                    2 => listItem3,
-                    3 => listItem4,
-                    _ => throw new NotImplementedException()
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        3 => listItem4,
+                        _ => throw new NotImplementedException()
+                    };
                 };
-            };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+                listItem4.SetItemIndex(listView, 3);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+                listView.Items.Add(listItem4);
+            }
 
             if (createHandle)
             {
-                listView.CreateControl();
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
             }
 
-            listItem1.SetItemIndex(listView, 0);
-            listItem2.SetItemIndex(listView, 1);
-            listItem3.SetItemIndex(listView, 2);
-            listItem4.SetItemIndex(listView, 3);
-
-            ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listViewGroup1.AccessibilityObject;
-            ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listViewGroup2.AccessibilityObject;
+            ListViewGroupAccessibleObject group1AccObj = (ListViewGroupAccessibleObject)listGroup1.AccessibilityObject;
+            ListViewGroupAccessibleObject group2AccObj = (ListViewGroupAccessibleObject)listGroup2.AccessibilityObject;
+            ListViewGroupAccessibleObject group3AccObj = (ListViewGroupAccessibleObject)listGroup3.AccessibilityObject;
             ListViewGroupAccessibleObject defaultGroupAccObj = (ListViewGroupAccessibleObject)listView.DefaultGroup.AccessibilityObject;
+            bool supportsGetChild = listView.IsHandleCreated && listView.GroupsDisplayed;
 
             Assert.Null(group1AccObj.GetChild(-1));
-            Assert.Null(group1AccObj.GetChild(0));
             Assert.Null(group1AccObj.GetChild(1));
-            Assert.Null(group1AccObj.GetChild(2));
+
+            Assert.Equal(supportsGetChild ? listItem1.AccessibilityObject : null, group1AccObj.GetChild(0));
 
             Assert.Null(group2AccObj.GetChild(-1));
-            Assert.Null(group2AccObj.GetChild(0));
+            Assert.Null(group2AccObj.GetChild(2));
+            Assert.Equal(supportsGetChild ? listItem3.AccessibilityObject : null, group2AccObj.GetChild(0));
+            Assert.Equal(supportsGetChild ? listItem4.AccessibilityObject : null, group2AccObj.GetChild(1));
+
+            Assert.Null(group3AccObj.GetChild(-1));
+            Assert.Null(group3AccObj.GetChild(0));
 
             Assert.Null(defaultGroupAccObj.GetChild(-1));
-            Assert.Null(defaultGroupAccObj.GetChild(0));
             Assert.Null(defaultGroupAccObj.GetChild(1));
-            Assert.Null(defaultGroupAccObj.GetChild(2));
+            Assert.Equal(supportsGetChild ? listItem2.AccessibilityObject : null, defaultGroupAccObj.GetChild(0));
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -1000,7 +1206,7 @@ namespace System.Windows.Forms.Tests
         {
             using ListView listView = GetListViewWithGroups(view, showGroups, createHandle, virtualMode);
             ListView.ListViewAccessibleObject accessibleObject = listView.AccessibilityObject as ListView.ListViewAccessibleObject;
-            bool showBounds = listView.IsHandleCreated && accessibleObject.ShowGroupAccessibleObject;
+            bool showBounds = listView.IsHandleCreated && listView.GroupsDisplayed;
 
             Assert.Equal(showBounds, !listView.DefaultGroup.AccessibilityObject.Bounds.IsEmpty);
             Assert.Equal(showBounds, !listView.Groups[0].AccessibilityObject.Bounds.IsEmpty);
@@ -1073,6 +1279,73 @@ namespace System.Windows.Forms.Tests
             listViewGroupWithInvisibleItems.Items.Add(listViewItem3);
 
             return listView;
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroupAccessibleObject_GetChild_Invoke_TestData))]
+        public void ListViewGroupAccessibleObject_SetFocus_WorksCorrectly(View view, bool showGroups, bool createHandle, bool virtualMode)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualListSize = 3,
+                VirtualMode = virtualMode,
+                Size = new Size(200, 200)
+            };
+
+            ListViewGroup listGroup1 = new ListViewGroup("Group1");
+            ListViewGroup listGroup2 = new ListViewGroup("Group2");
+            ListViewItem listItem1 = new ListViewItem(listGroup1);
+            ListViewItem listItem2 = new ListViewItem(listGroup1);
+            ListViewItem listItem3 = new ListViewItem();
+            listView.Groups.Add(listGroup1);
+            listView.Groups.Add(listGroup2);
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        2 => listItem3,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+                listItem3.SetItemIndex(listView, 2);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+                listView.Items.Add(listItem3);
+            }
+
+            if (createHandle)
+            {
+                Assert.NotEqual(IntPtr.Zero, listView.Handle);
+            }
+
+            bool setFocusSupported = listView.IsHandleCreated && listView.GroupsDisplayed;
+
+            listGroup2.AccessibilityObject.SetFocus();
+
+            Assert.Null(listView.FocusedGroup);
+
+            listView.DefaultGroup.AccessibilityObject.SetFocus();
+
+            Assert.Equal(setFocusSupported ? listView.DefaultGroup : null, listView.FocusedGroup);
+
+            listGroup1.AccessibilityObject.SetFocus();
+
+            Assert.Equal(setFocusSupported ? listGroup1 : null, listView.FocusedGroup);
+
+            Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
         private ListView GetListViewItemWithInvisibleItems(View view)

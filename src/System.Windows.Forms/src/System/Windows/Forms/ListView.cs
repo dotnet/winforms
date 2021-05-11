@@ -1009,17 +1009,13 @@ namespace System.Windows.Forms
             }
         }
 
+        // ListViewGroup are not displayed when the ListView is in "List" view
         internal bool GroupsDisplayed => View != View.List && GroupsEnabled;
 
         // this essentially means that the version of CommCtl supports list view grouping
         // and that the user wants to make use of list view groups
         internal bool GroupsEnabled
-        {
-            get
-            {
-                return ShowGroups && groups is not null && groups.Count > 0 && Application.ComCtlSupportsVisualStyles && !VirtualMode;
-            }
-        }
+            => ShowGroups && groups is not null && groups.Count > 0 && Application.ComCtlSupportsVisualStyles && !VirtualMode;
 
         /// <summary>
         ///  Column headers can either be invisible, clickable, or non-clickable.

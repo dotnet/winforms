@@ -43,12 +43,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owningListView.IsHandleCreated || !_owningListViewAccessibilityObject.ShowGroupAccessibleObject)
-                    {
-                        return Rectangle.Empty;
-                    }
-
-                    if (GetVisibleItems().Count == 0)
+                    if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || IsEmpty)
                     {
                         return Rectangle.Empty;
                     }
@@ -143,6 +138,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            private bool IsEmpty => GetVisibleItems().Count == 0;
+
             internal override void Collapse()
                 => _owningGroup.CollapsedState = ListViewGroupCollapsedState.Collapsed;
 
@@ -156,7 +153,7 @@ namespace System.Windows.Forms
 
             private bool GetNativeFocus()
             {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
                     return false;
                 }
@@ -232,7 +229,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || IsEmpty)
                 {
                     return null;
                 }
@@ -242,26 +239,15 @@ namespace System.Windows.Forms
                     case UiaCore.NavigateDirection.Parent:
                         return _owningListViewAccessibilityObject;
                     case UiaCore.NavigateDirection.NextSibling:
-                        return _owningListViewAccessibilityObject.GetNextChild(this);
+                        int childIndex = _owningListViewAccessibilityObject.GetChildIndex(this);
+                        return childIndex == -1 ? null : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        return _owningListViewAccessibilityObject.GetPreviousChild(this);
+                        return _owningListViewAccessibilityObject.GetChild(_owningListViewAccessibilityObject.GetChildIndex(this) - 1);
                     case UiaCore.NavigateDirection.FirstChild:
-                        int childCount = GetChildCount();
-                        if (childCount > 0)
-                        {
-                            return GetChild(0);
-                        }
-
-                        return null;
-
+                        return GetChild(0);
                     case UiaCore.NavigateDirection.LastChild:
-                        childCount = GetChildCount();
-                        if (childCount > 0)
-                        {
-                            return GetChild(childCount - 1);
-                        }
-
-                        return null;
+                        IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
+                        return visibleItems.Count > 0 ? visibleItems[visibleItems.Count - 1].AccessibilityObject : null;
 
                     default:
                         return null;
@@ -270,13 +256,13 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || index < 0)
                 {
                     return null;
                 }
 
                 IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
-                if (index < 0 || index >= visibleItems.Count)
+                if (index >= visibleItems.Count)
                 {
                     return null;
                 }
@@ -284,18 +270,17 @@ namespace System.Windows.Forms
                 return visibleItems[index].AccessibilityObject;
             }
 
-            private int GetChildIndex(AccessibleObject child)
+            internal override int GetChildIndex(AccessibleObject? child)
             {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                if (child is null || !_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
                     return -1;
                 }
 
-                int childCount = GetChildCount();
-                for (int i = 0; i < childCount; i++)
+                IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
+                for (int i = 0; i < visibleItems.Count; i++)
                 {
-                    var currentChild = GetChild(i);
-                    if (child == currentChild)
+                    if (visibleItems[i].AccessibilityObject == child)
                     {
                         return i;
                     }
@@ -304,47 +289,9 @@ namespace System.Windows.Forms
                 return -1;
             }
 
-            internal AccessibleObject? GetNextChild(AccessibleObject currentChild)
-            {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
-                {
-                    return null;
-                }
-
-                int currentChildIndex = GetChildIndex(currentChild);
-                if (currentChildIndex == -1)
-                {
-                    return null;
-                }
-
-                int childCount = GetChildCount();
-                if (currentChildIndex > childCount - 2) // Is more than pre-last element.
-                {
-                    return null;
-                }
-
-                return GetChild(currentChildIndex + 1);
-            }
-
-            internal AccessibleObject? GetPreviousChild(AccessibleObject currentChild)
-            {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
-                {
-                    return null;
-                }
-
-                int currentChildIndex = GetChildIndex(currentChild);
-                if (currentChildIndex <= 0)
-                {
-                    return null;
-                }
-
-                return GetChild(currentChildIndex - 1);
-            }
-
             public override int GetChildCount()
             {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed)
                 {
                     return -1;
                 }
@@ -365,7 +312,7 @@ namespace System.Windows.Forms
 
             internal override unsafe void SetFocus()
             {
-                if (!_owningListView.IsHandleCreated || _owningListView.VirtualMode)
+                if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || IsEmpty)
                 {
                     return;
                 }
