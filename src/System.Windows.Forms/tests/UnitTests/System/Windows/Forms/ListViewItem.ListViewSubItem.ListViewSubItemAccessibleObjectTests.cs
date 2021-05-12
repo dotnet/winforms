@@ -90,11 +90,26 @@ namespace System.Windows.Forms.Tests
 
             object controlType = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
             UiaCore.UIA expected = (UiaCore.UIA)expectedControlType;
-            Assert.Equal(expected, controlType);
 
-            Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsGridItemPatternAvailablePropertyId));
-            Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsTableItemPatternAvailablePropertyId));
+            Assert.Equal(expected, controlType);
             Assert.True(list.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_GridTablePattern_ReturnsExpected(View view)
+        {
+            using ListView list = new() { View = view };
+            list.Items.Add(new ListViewItem(new string[] { "Test 1", "Test 2" }));
+
+            AccessibleObject accessibleObject = list.Items[0].SubItems[1].AccessibilityObject;
+
+            Assert.Equal(view == View.Details, (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsGridItemPatternAvailablePropertyId));
+            Assert.Equal(view == View.Details, (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsTableItemPatternAvailablePropertyId));
         }
 
         public static IEnumerable<object[]> ListViewSubItemAccessibleObject_FragmentNavigate_TestData()
@@ -656,41 +671,80 @@ namespace System.Windows.Forms.Tests
             Assert.True(list.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void ListViewSubItemAccessibleObject_ColumnProperty_ReturnCorrectValue()
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewSubItemAccessibleObject_ColumnProperty_ReturnCorrectValue(bool createControl)
         {
-            using ListView list = new();
+            using ListView list = new() { View = View.Details };
             ListViewItem listViewItem1 = new(new string[]
             {
-            "Test 1",
-            "Item 1",
-            "Something 1"
-            }, -1);
-
-            ColumnHeader columnHeader1 = new();
-            ColumnHeader columnHeader2 = new();
-            ColumnHeader columnHeader3 = new();
+                "Test 1",
+                "Item 1",
+                "Something 1",
+                "Something 2"
+            });
 
             list.Columns.AddRange(new ColumnHeader[]
             {
-            columnHeader1,
-            columnHeader2,
-            columnHeader3
+                new ColumnHeader(),
+                new ColumnHeader(),
+                new ColumnHeader()
             });
-            list.HideSelection = false;
+
             list.Items.Add(listViewItem1);
-            list.View = View.Details;
 
-            list.CreateControl();
+            if (createControl)
+            {
+                list.CreateControl();
+            }
 
-            AccessibleObject subItemAccObj1 = listViewItem1.AccessibilityObject.GetChild(0);
-            AccessibleObject subItemAccObj2 = listViewItem1.AccessibilityObject.GetChild(1);
-            AccessibleObject subItemAccObj3 = listViewItem1.AccessibilityObject.GetChild(2);
-            Assert.True(list.IsHandleCreated);
+            Assert.Equal(0, listViewItem1.SubItems[0].AccessibilityObject.Column);
+            Assert.Equal(1, listViewItem1.SubItems[1].AccessibilityObject.Column);
+            Assert.Equal(2, listViewItem1.SubItems[2].AccessibilityObject.Column);
+            Assert.Equal(-1, listViewItem1.SubItems[3].AccessibilityObject.Column);
+            Assert.Equal(createControl, list.IsHandleCreated);
+        }
 
-            Assert.Equal(0, subItemAccObj1.Column);
-            Assert.Equal(1, subItemAccObj2.Column);
-            Assert.Equal(2, subItemAccObj3.Column);
+        [WinFormsTheory]
+        [InlineData(View.LargeIcon, true)]
+        [InlineData(View.LargeIcon, false)]
+        [InlineData(View.List, true)]
+        [InlineData(View.List, false)]
+        [InlineData(View.SmallIcon, true)]
+        [InlineData(View.SmallIcon, false)]
+        [InlineData(View.Tile, true)]
+        [InlineData(View.Tile, false)]
+        public void ListViewSubItemAccessibleObject_ColumnProperty_ReturnMinusOne_ForNotTableView(View view, bool createControl)
+        {
+            using ListView list = new() { View = view};
+            ListViewItem listViewItem1 = new(new string[]
+            {
+                "Test 1",
+                "Item 1",
+                "Something 1",
+                "Something 2",
+            });
+
+            list.Columns.AddRange(new ColumnHeader[]
+            {
+                new ColumnHeader(),
+                new ColumnHeader(),
+                new ColumnHeader()
+            });
+
+            list.Items.Add(listViewItem1);
+
+            if (createControl)
+            {
+                list.CreateControl();
+            }
+
+            Assert.Equal(-1, listViewItem1.SubItems[0].AccessibilityObject.Column);
+            Assert.Equal(-1, listViewItem1.SubItems[1].AccessibilityObject.Column);
+            Assert.Equal(-1, listViewItem1.SubItems[2].AccessibilityObject.Column);
+            Assert.Equal(-1, listViewItem1.SubItems[3].AccessibilityObject.Column);
+            Assert.Equal(createControl, list.IsHandleCreated);
         }
 
         [WinFormsFact]

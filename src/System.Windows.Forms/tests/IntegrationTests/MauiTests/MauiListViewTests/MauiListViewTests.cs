@@ -695,6 +695,224 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(accessibleObject.GetChild(5) is null, "GetChild(5) does not return null for the non-existing item");
         }
 
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_GetChildIndex_ReturnsExpected(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+            InitializeTileList(columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
+
+            Application.DoEvents();
+
+            AccessibleObject accessibleObject = _listView.Items[0].AccessibilityObject;
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[0].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the first SubItem");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[1].AccessibilityObject) != 1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 1 for the second SubItem");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[2].AccessibilityObject) != 2)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 2 for the third SubItem");
+            }
+
+            return new ScenarioResult(accessibleObject.GetChildIndex(_listView.Items[0].SubItems[3].AccessibilityObject) == 3,
+                "GetChildIndex does not return 3 for the fourth SubItem");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_GetChildIndex_ReturnsExpected_ColumnsMoreThanSubItems(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+
+            InitializeTileList(columnCount: 4, subItemsCount: 1, tileSize: new Size(150, 150));
+
+            Application.DoEvents();
+
+            AccessibleObject accessibleObject = _listView.Items[0].AccessibilityObject;
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[0].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the first SubItem");
+            }
+
+            return new ScenarioResult(accessibleObject.GetChildIndex(_listView.Items[0].SubItems[1].AccessibilityObject) == 1,
+                "GetChildIndex does not return 1 for the second SubItem");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_GetChildIndex_ReturnsExpected_SubItemsMoreThanColumns(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+
+            InitializeTileList(columnCount: 2, subItemsCount: 5, tileSize: new Size(150, 150));
+
+            Application.DoEvents();
+
+            AccessibleObject accessibleObject = _listView.Items[0].AccessibilityObject;
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[0].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the first SubItem");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[1].AccessibilityObject) != 1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 1 for the second SubItem");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[2].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the third SubItem");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[3].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the fourth SubItem");
+            }
+
+            return new ScenarioResult(accessibleObject.GetChildIndex(_listView.Items[0].SubItems[4].AccessibilityObject) == -1,
+                "GetChildIndex does not return -1 for the fifth SubItem");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_GetChildIndex_ReturnsMinusOne_For_Single_Column(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+            InitializeTileList(columnCount: 1, subItemsCount: 2, tileSize: new Size(150, 150));
+
+            Application.DoEvents();
+
+            AccessibleObject accessibleObject = _listView.Items[0].AccessibilityObject;
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[0].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the first SubItem");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[1].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the second SubItem");
+            }
+
+            return new ScenarioResult(accessibleObject.GetChildIndex(_listView.Items[0].SubItems[2].AccessibilityObject) == -1,
+                "GetChildIndex does not return -1 for the second SubItem");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_GetChildIndex_ReturnsMinusOne_For_SmallSize(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+            InitializeTileList(columnCount: 2, subItemsCount: 1, tileSize: new Size(10, 10));
+
+            Application.DoEvents();
+
+            AccessibleObject accessibleObject = _listView.Items[0].AccessibilityObject;
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[0].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the first SubItem");
+            }
+
+            return new ScenarioResult(accessibleObject.GetChildIndex(_listView.Items[0].SubItems[1].AccessibilityObject) == -1,
+                "GetChildIndex does not return -1 for the second SubItem");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_GetChildIndex_ReturnsExpected_For_BigSize(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+            InitializeTileList(columnCount: 10, subItemsCount: 10, tileSize: new Size(100, 100));
+
+            Application.DoEvents();
+
+            AccessibleObject accessibleObject = _listView.Items[0].AccessibilityObject;
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[0].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the SubItem with the index 1");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[1].AccessibilityObject) != 1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 1 for the SubItem with the index 1");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[2].AccessibilityObject) != 2)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 2 for the SubItem with the index 2");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[3].AccessibilityObject) != 3)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 3 for the SubItem with the index 3");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[4].AccessibilityObject) != 4)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 4 for the SubItem with the index 4");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[5].AccessibilityObject) != 5)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return 5 for the SubItem with the index 5");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[6].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the SubItem with the index 6");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[7].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the SubItem with the index 7");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[8].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the SubItem with the index 8");
+            }
+
+            if (accessibleObject.GetChildIndex(_listView.Items[0].SubItems[9].AccessibilityObject) != -1)
+            {
+                return new ScenarioResult(false, "GetChildIndex does not return -1 for the SubItem with the index 9");
+            }
+
+            return new ScenarioResult(accessibleObject.GetChildIndex(_listView.Items[0].SubItems[10].AccessibilityObject) == -1,
+                "GetChildIndex does not return -1 for the SubItem with the index 10");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult ListView_Tile_ColumnProperty_ReturnsMinusOne(TParams p)
+        {
+            InitializeItems(View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
+            InitializeTileList(columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
+
+            Application.DoEvents();
+
+            if (_listView.Items[0].SubItems[0].AccessibilityObject.Column != -1)
+            {
+                return new ScenarioResult(false, "Column property does not return -1 value for the first SubItem");
+            }
+
+            if (_listView.Items[0].SubItems[1].AccessibilityObject.Column != -1)
+            {
+                return new ScenarioResult(false, "Column property does not return -1 value for the second SubItem");
+            }
+
+            if (_listView.Items[0].SubItems[2].AccessibilityObject.Column != -1)
+            {
+                return new ScenarioResult(false, "Column property does not return -1 value for the third SubItem");
+            }
+
+            return new ScenarioResult(_listView.Items[0].SubItems[2].AccessibilityObject.Column == -1,
+                "Column property does not return -1 value for the fourth SubItem");
+        }
+
         private void ExecuteDoubleClickOnItem(ListViewItem listViewItem)
         {
             Point previousPosition = new Point();

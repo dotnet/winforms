@@ -19,11 +19,11 @@ namespace System.Windows.Forms
 
                 // This is necessary for the "Details" view,  when there is no ListViewSubItem,
                 // but the cell for it is displayed and the user can interact with it.
-                private readonly ListViewSubItem? _owningSubItem;
+                internal ListViewSubItem? OwningSubItem { get; private set; }
 
                 public ListViewSubItemAccessibleObject(ListViewSubItem? owningSubItem, ListViewItem owningItem)
                 {
-                    _owningSubItem = owningSubItem;
+                    OwningSubItem = owningSubItem;
                     _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
                     _owningListView = owningItem.ListView ?? owningItem.Group?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 }
@@ -31,15 +31,16 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                     => _owningListView.AccessibilityObject;
 
-                private int CurrentIndex => _owningSubItem is null
-                    ? ParentInternal.GetFakeSubItemIndex(this)
-                    : _owningSubItem.Index;
-
                 public override Rectangle Bounds
                 {
                     get
                     {
-                        int index = CurrentIndex;
+                        int index = ParentInternal.GetChildIndex(this);
+                        if (index == -1)
+                        {
+                            return Rectangle.Empty;
+                        }
+
                         Rectangle bounds = ParentInternal.GetSubItemBounds(index);
                         if (bounds.IsEmpty)
                         {
@@ -74,20 +75,20 @@ namespace System.Windows.Forms
                         UiaCore.NavigateDirection.Parent
                             => ParentInternal,
                         UiaCore.NavigateDirection.NextSibling
-                            => ParentInternal.GetChildInternal(CurrentIndex + 1),
+                            => ParentInternal.GetChildInternal(ParentInternal.GetChildIndex(this) + 1),
                         UiaCore.NavigateDirection.PreviousSibling
-                            => ParentInternal.GetChildInternal(CurrentIndex - 1),
+                            => ParentInternal.GetChildInternal(ParentInternal.GetChildIndex(this) - 1),
                         _ => base.FragmentNavigate(direction)
                     };
 
-                internal override int Column => CurrentIndex;
+                internal override int Column => _owningListView.View == View.Details ? ParentInternal.GetChildIndex(this) : -1;
 
                 /// <summary>
                 ///  Gets or sets the accessible name.
                 /// </summary>
                 public override string? Name
                 {
-                    get => base.Name ?? _owningSubItem?.Text ?? string.Empty;
+                    get => base.Name ?? OwningSubItem?.Text ?? string.Empty;
                     set => base.Name = value;
                 }
 
@@ -111,7 +112,7 @@ namespace System.Windows.Forms
                         runtimeId[1] = owningItemRuntimeId[1];
                         runtimeId[2] = owningItemRuntimeId[2];
                         runtimeId[3] = owningItemRuntimeId[3];
-                        runtimeId[4] = CurrentIndex;
+                        runtimeId[4] = ParentInternal.GetChildIndex(this);
                         return runtimeId;
                     }
                 }
@@ -121,7 +122,7 @@ namespace System.Windows.Forms
                     {
                         // All subitems are "text" except the first.
                         // It can be "edit" if ListView.LabelEdit is true.
-                        UiaCore.UIA.ControlTypePropertyId => _owningListView.LabelEdit && CurrentIndex == 0
+                        UiaCore.UIA.ControlTypePropertyId => _owningListView.LabelEdit && ParentInternal.GetChildIndex(this) == 0
                                                              ? UiaCore.UIA.EditControlTypeId
                                                              : UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.NamePropertyId => Name,
@@ -160,14 +161,14 @@ namespace System.Windows.Forms
                     if (patternId == UiaCore.UIA.GridItemPatternId ||
                         patternId == UiaCore.UIA.TableItemPatternId)
                     {
-                        return true;
+                        return _owningListView.View == View.Details;
                     }
 
                     return base.IsPatternSupported(patternId);
                 }
 
                 private string AutomationId
-                    => string.Format("{0}-{1}", typeof(ListViewItem.ListViewSubItem).Name, CurrentIndex);
+                    => string.Format("{0}-{1}", typeof(ListViewItem.ListViewSubItem).Name, ParentInternal.GetChildIndex(this));
             }
         }
     }

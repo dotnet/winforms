@@ -198,29 +198,38 @@ namespace System.Windows.Forms
                 return GetLastTileChildIndex();
             }
 
-            private int GetChildIndex()
+            internal override int GetChildIndex(AccessibleObject? child)
             {
-                // Data about the first ListViewSubItem is displayed in the ListViewItem.
-                // Therefore, it is not displayed in the ListViewSubItems list
-                if (_owningItem.SubItems.Count == 1)
+                if (child is null
+                    || !_owningListView.SupportsListViewSubItems
+                    || child is not ListViewSubItem.ListViewSubItemAccessibleObject subItemAccessibleObject)
                 {
                     return -1;
                 }
 
-                // Only ListViewSubItems with the corresponding columns are displayed in the ListView
-                int subItemCount = Math.Min(_owningListView.Columns.Count, _owningItem.SubItems.Count);
-
-                // The ListView can be of limited TileSize, so some of the ListViewSubItems can be hidden.
-                // sListViewSubItems that do not have enough space to display have an empty bounds
-                for (int i = 1; i < subItemCount; i++)
+                // Data about the first ListViewSubItem is displayed in the ListViewItem.
+                // Therefore, it is not displayed in the ListViewSubItems list
+                if (_owningListView.View == View.Tile && _owningItem.SubItems[0].AccessibilityObject == child)
                 {
-                    if (GetSubItemBounds(i).IsEmpty)
-                    {
-                        return i - 1;
-                    }
+                    return -1;
                 }
 
-                return subItemCount - 1;
+                if (subItemAccessibleObject.OwningSubItem is null)
+                {
+                    return _owningListView.View == View.Details
+                        ? GetFakeSubItemIndex(subItemAccessibleObject)
+                        : -1;
+                }
+
+                int index = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
+                if (index == -1
+                    || (_owningListView.View == View.Details && index > _owningListView.Columns.Count - 1)
+                    || (_owningListView.View == View.Tile && index > GetLastTileChildIndex()))
+                {
+                    return -1;
+                }
+
+                return index;
             }
 
             private int LastChildIndex
@@ -255,7 +264,7 @@ namespace System.Windows.Forms
 
             // This method is required to get the index of the fake accessibility object. Since the fake accessibility object
             // has no ListViewSubItem from which we could get an index, we have to get its index from the dictionary
-            internal int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject)
+            private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject)
             {
                 foreach (KeyValuePair<int, AccessibleObject> keyValuePair in _listViewSubItemAccessibleObjects)
                 {

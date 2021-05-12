@@ -1519,6 +1519,106 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
         }
 
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsExpected(View view)
+        {
+            using ListView listView = new() { View = view };
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1", "SubItem 2" }));
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+            if (view == View.Details)
+            {
+                Assert.Equal(0, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[2].AccessibilityObject));
+            }
+            else
+            {
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[2].AccessibilityObject));
+            }
+
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsMinusOne_IfChildIsNull(View view)
+        {
+            using ListView listView = new() { View = view};
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1", "SubItem 2" }));
+
+            Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(null));
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsMinusOne_IfSubItemNotExists(View view)
+        {
+            using ListView listView = new() { View = view };
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 11", "SubItem 12" }));
+            listView.Items.Add(new ListViewItem(new string[] { "Item 2", "SubItem 21", "SubItem 22" }));
+
+            Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(listView.Items[1].SubItems[1].AccessibilityObject));
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsExpected_ForFakeSubItem()
+        {
+            using ListView listView = new() { View = View.Details };
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1"}));
+            ListViewItemAccessibleObject accessibleObject = (ListViewItemAccessibleObject)listView.Items[0].AccessibilityObject;
+
+            Assert.Equal(0, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+            Assert.Equal(1, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(1)));
+            Assert.Equal(2, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(2)));
+            Assert.Equal(3, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(3)));
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewItemAccessibleObject_GetChildIndex_ReturnsMinusOne_ForInvalidChild(View view)
+        {
+            using ListView listView = new() { View = view };
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Columns.Add(new ColumnHeader());
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 11", "SubItem 12" }));
+
+            Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(listView.AccessibilityObject));
+            Assert.False(listView.IsHandleCreated);
+        }
+
         private ListView GetBoundsListView(View view, bool showGroups, bool virtualMode)
         {
             ListView listView = new()
