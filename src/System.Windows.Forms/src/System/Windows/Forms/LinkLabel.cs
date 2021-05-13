@@ -1506,7 +1506,12 @@ namespace System.Windows.Forms
                             font,
                             clientRectWithPadding,
                             brushColor,
-                            CreateTextFormatFlags(clientRectWithPadding.Size));
+                            CreateTextFormatFlags(clientRectWithPadding.Size)
+#if DEBUG
+                            // Skip the asserts in TextRenderer because the DC has been modified
+                            | TextRenderer.SkipAssertFlag
+#endif
+                            );
                     }
 
                     if (Focused && ShowFocusCues && FocusLink == link)
