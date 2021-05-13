@@ -628,7 +628,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(document.Focused);
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip="https://github.com/dotnet/winforms/issues/4906")]
         public async Task HtmlDocument_Focused_GetFocused_ReturnsExpected()
         {
             using var parent = new Control();
@@ -1553,7 +1553,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<COMException>(() => document.ExecCommand(command, showUI, value));
         }
 
-        [WinFormsFact]
+        [WinFormsFact(Skip = "https://github.com/dotnet/winforms/issues/4906")]
         public async Task HtmlDocument_Focus_Invoke_Success()
         {
             using var parent = new Control();
