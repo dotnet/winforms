@@ -130,8 +130,8 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewItemAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemAccessibleObject>(lastChild);
+            Assert.IsType<ListViewItemBaseAccessibleObject>(firstChild);
+            Assert.IsType<ListViewItemBaseAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
             Assert.True(listView.IsHandleCreated);
         }
@@ -171,8 +171,8 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
             AccessibleObject lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
-            Assert.IsType<ListViewItemAccessibleObject>(firstChild);
-            Assert.IsType<ListViewItemAccessibleObject>(lastChild);
+            Assert.IsType<ListViewItemBaseAccessibleObject>(firstChild);
+            Assert.IsType<ListViewItemBaseAccessibleObject>(lastChild);
             Assert.NotEqual(firstChild, lastChild);
             Assert.True(listView.IsHandleCreated);
         }
@@ -931,9 +931,9 @@ namespace System.Windows.Forms.Tests
             listView.Items[3].Selected = true;
 
             var listSelection = listView.AccessibilityObject.GetSelection();
-            Assert.Equal(listItem1.AccessibilityObject, (ListViewItemAccessibleObject)listSelection[0]);
-            Assert.Equal(listItem2.AccessibilityObject, (ListViewItemAccessibleObject)listSelection[1]);
-            Assert.Equal(listItem4.AccessibilityObject, (ListViewItemAccessibleObject)listSelection[2]);
+            Assert.Equal(listItem1.AccessibilityObject, listSelection[0]);
+            Assert.Equal(listItem2.AccessibilityObject, listSelection[1]);
+            Assert.Equal(listItem4.AccessibilityObject, listSelection[2]);
             Assert.True(listView.IsHandleCreated);
         }
 
@@ -1037,9 +1037,9 @@ namespace System.Windows.Forms.Tests
             listView.Items[3].Selected = true;
 
             var listSelection = listView.AccessibilityObject.GetSelection();
-            Assert.Equal(listItem1.AccessibilityObject, (ListViewItemAccessibleObject)listSelection[0]);
-            Assert.Equal(listItem2.AccessibilityObject, (ListViewItemAccessibleObject)listSelection[1]);
-            Assert.Equal(listItem4.AccessibilityObject, (ListViewItemAccessibleObject)listSelection[2]);
+            Assert.Equal(listItem1.AccessibilityObject, listSelection[0]);
+            Assert.Equal(listItem2.AccessibilityObject, listSelection[1]);
+            Assert.Equal(listItem4.AccessibilityObject, listSelection[2]);
             Assert.True(listView.IsHandleCreated);
         }
 
@@ -1225,7 +1225,7 @@ namespace System.Windows.Forms.Tests
             Assert.Same(GetDetailsSubItemOrFake(1, 2), HitTest(listView, GetDetailsSubItemOrFake(1, 2).Bounds.Location));
 
             AccessibleObject GetDetailsSubItemOrFake(int itemIndex, int subItemIndex) =>
-                ((ListViewItemAccessibleObject)listView.Items[itemIndex].AccessibilityObject).GetDetailsSubItemOrFake(subItemIndex);
+                ((ListViewItemDetailsAccessibleObject)listView.Items[itemIndex].AccessibilityObject).GetDetailsSubItemOrFake(subItemIndex);
         }
 
         public static IEnumerable<object[]> ListViewAccessibleObject_GetChild_TestData()
