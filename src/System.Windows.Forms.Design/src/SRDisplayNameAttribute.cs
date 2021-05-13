@@ -11,7 +11,8 @@ namespace System.Windows.Forms.Design
     {
         private bool replaced;
 
-        public SRDisplayNameAttribute(string displayName) : base(displayName)
+        public SRDisplayNameAttribute(string displayName)
+            : base(displayName)
         {
         }
 
@@ -22,7 +23,7 @@ namespace System.Windows.Forms.Design
                 if (!replaced)
                 {
                     replaced = true;
-                    DisplayNameValue = base.DisplayName;
+                    DisplayNameValue = SR.GetResourceString(base.DisplayName);
                 }
 
                 return base.DisplayName;
