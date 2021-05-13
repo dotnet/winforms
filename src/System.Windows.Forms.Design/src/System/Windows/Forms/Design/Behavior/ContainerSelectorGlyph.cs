@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (_glyph is null)
                 {
-                    _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
+                    _glyph = new Bitmap(typeof(ContainerSelectorGlyph), "MoverGlyph");
                 }
 
                 return _glyph;

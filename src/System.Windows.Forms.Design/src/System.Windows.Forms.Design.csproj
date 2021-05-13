@@ -100,7 +100,7 @@
     <EmbeddedResource Include="Resources\System\WinForms\Design\InheritedGlyph.ico">
       <LogicalName>System.Windows.Forms.Design.InheritedGlyph</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\MoverGlyph.ico">
+    <EmbeddedResource Include="Resources\System\WinForms\Design\MoverGlyph.bmp">
       <LogicalName>System.Windows.Forms.Design.Behavior.MoverGlyph</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\ImageEditor.ico">
