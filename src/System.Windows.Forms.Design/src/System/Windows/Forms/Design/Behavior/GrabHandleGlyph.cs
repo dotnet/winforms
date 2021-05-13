@@ -14,6 +14,7 @@ namespace System.Windows.Forms.Design.Behavior
     ///  Note that the pen and brush are created once per instance of this class and re-used in our painting logic
     ///  for perf reasons.
     /// </summary>
+    [DebuggerDisplay("{GetType().Name, nq}:: Behavior={Behavior.GetType().Name, nq}, {rules}, {hitTestCursor}")]
     internal class GrabHandleGlyph : SelectionGlyphBase
     {
         private readonly bool _isPrimary;

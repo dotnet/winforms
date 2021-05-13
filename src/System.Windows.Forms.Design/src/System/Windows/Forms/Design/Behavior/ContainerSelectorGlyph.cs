@@ -4,6 +4,7 @@
 
 #nullable enable
 
+using System.Diagnostics;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -11,6 +12,7 @@ namespace System.Windows.Forms.Design.Behavior
     /// <summary>
     ///  This is the glyph used to drag container controls around the designer. This glyph (and associated behavior) is created by the ParentControlDesigner.
     /// </summary>
+    [DebuggerDisplay("{GetType().Name}:: Component: {_component}, Cursor: {_hitTestCursor}")]
     internal sealed class ContainerSelectorGlyph : Glyph
     {
         private Rectangle _glyphBounds;
