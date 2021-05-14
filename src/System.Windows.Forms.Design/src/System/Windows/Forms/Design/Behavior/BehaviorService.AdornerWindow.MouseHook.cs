@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Design.Behavior
                             User32.WH.MOUSE,
                             hook,
                             IntPtr.Zero,
-                            (uint)AppDomain.GetCurrentThreadId());
+                            Kernel32.GetCurrentThreadId());
 
                         if (_mouseHookHandle != IntPtr.Zero)
                         {

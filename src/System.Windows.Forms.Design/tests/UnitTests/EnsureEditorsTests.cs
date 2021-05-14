@@ -18,6 +18,29 @@ namespace System.Windows.Forms.Design.Editors.Tests
 {
     public class EnsureEditorsTests : IClassFixture<ThreadExceptionFixture>
     {
+        [WinFormsFact]
+        public void Ensure_editors_type_forwarded()
+        {
+            // The list of editors which either didn't exist in .NET Framework
+            Type[] nonTypeForwardedEditors =
+            {
+                typeof(InitialDirectoryEditor),     // introduced in .NET 6.0, https://github.com/dotnet/winforms/pull/4645
+            };
+
+            SystemDesignMetadataReader metadataReader = new();
+            IReadOnlyList<string> forwardedTypes = metadataReader.GetExportedTypeNames();
+
+            IEnumerable<Type> editors = typeof(ComponentDesigner).Assembly
+                                .GetTypes()
+                                .Where(t => t.IsSubclassOf(typeof(UITypeEditor))
+                                         && !t.IsPublic
+                                         && !nonTypeForwardedEditors.Contains(t));
+            foreach (Type editor in editors)
+            {
+                Assert.True(forwardedTypes.Contains(editor.FullName), $"{editor.FullName} must be type forwarded");
+            }
+        }
+
         [WinFormsTheory]
         // In Table
         [InlineData(typeof(Array), typeof(ArrayEditor))]

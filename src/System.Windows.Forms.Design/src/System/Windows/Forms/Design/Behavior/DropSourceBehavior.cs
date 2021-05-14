@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal DropSourceBehavior(ICollection dragComponents, Control source, Point initialMouseLocation)
         {
-            serviceProviderSource = source.Site as IServiceProvider;
+            serviceProviderSource = source.Site;
             if (serviceProviderSource is null)
             {
                 Debug.Fail("DragBehavior could not be created because the source ServiceProvider was not found");
@@ -300,7 +300,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (serviceProviderTarget is null)
             {
                 Debug.Fail("EndDragDrop - how can serviceProviderTarget be null?");
-                serviceProviderTarget = dragTarget.Site as IServiceProvider;
+                serviceProviderTarget = dragTarget.Site;
                 if (serviceProviderTarget is null)
                 {
                     Debug.Fail("EndDragDrop - how can serviceProviderTarget be null?");
@@ -644,7 +644,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (!data.Target.Equals(lastDropTarget))
                 {
-                    serviceProviderTarget = target.Site as IServiceProvider;
+                    serviceProviderTarget = target.Site;
                     if (serviceProviderTarget is null)
                     {
                         return;
@@ -834,7 +834,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                     if (statusCommandUITarget != null)
                     {
-                        statusCommandUITarget.SetStatusInformation(c as Component, dropPoint);
+                        statusCommandUITarget.SetStatusInformation(c, dropPoint);
                     }
                 }
 
@@ -1017,7 +1017,7 @@ namespace System.Windows.Forms.Design.Behavior
                 imageHeight = 1;
             }
 
-            dragImage = new Bitmap(imageWidth, imageHeight, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            dragImage = new Bitmap(imageWidth, imageHeight, Drawing.Imaging.PixelFormat.Format32bppPArgb);
             using (Graphics g = Graphics.FromImage(dragImage))
             {
                 g.Clear(Color.Chartreuse);

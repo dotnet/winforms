@@ -165,7 +165,7 @@ namespace System.Windows.Forms.Design
                             if (curDesignerNode.AccessibilityObject is ToolStripItem.ToolStripItemAccessibleObject acc)
                             {
                                 acc.AddState(AccessibleStates.Selected | AccessibleStates.Focused);
-                                ToolStrip owner = curDesignerNode.GetCurrentParent() as ToolStrip;
+                                ToolStrip owner = curDesignerNode.GetCurrentParent();
                                 int focusIndex = 0;
                                 if (owner != null)
                                 {
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Design
                     Control p = ctl.Parent;
                     // Cycle through the controls in z-order looking for the one with the next highest tab index.  Because there can be dups, we have to start with the existing tab index and remember to exclude the current control.
                     int parentControlCount = 0;
-                    Control.ControlCollection parentControls = (Control.ControlCollection)p.Controls;
+                    Control.ControlCollection parentControls = p.Controls;
                     if (parentControls != null)
                     {
                         parentControlCount = parentControls.Count;
@@ -362,7 +362,7 @@ namespace System.Windows.Forms.Design
                     Control p = ctl.Parent;
                     // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must start with the same tab index as ctl, because there can be dups.
                     int parentControlCount = 0;
-                    Control.ControlCollection parentControls = (Control.ControlCollection)p.Controls;
+                    Control.ControlCollection parentControls = p.Controls;
                     if (parentControls != null)
                     {
                         parentControlCount = parentControls.Count;
@@ -599,7 +599,7 @@ namespace System.Windows.Forms.Design
                 //Case 1: If SelectedObj is ToolStripItem select all items in its immediate parent.
                 if (item != null)
                 {
-                    parent = item.GetCurrentParent() as ToolStrip;
+                    parent = item.GetCurrentParent();
                 }
 
                 if (parent != null)
@@ -765,7 +765,7 @@ namespace System.Windows.Forms.Design
                 if (selectedObj is ToolStripItem)
                 {
                     ToolStripItem selectedItem = selectedObj as ToolStripItem;
-                    ToolStrip parent = selectedItem.GetCurrentParent() as ToolStrip;
+                    ToolStrip parent = selectedItem.GetCurrentParent();
                     if (parent is ToolStripOverflow)
                     {
                         parent = selectedItem.Owner;
@@ -793,7 +793,7 @@ namespace System.Windows.Forms.Design
                 if (selectedObj is ToolStripPanel)
                 {
                     ToolStripPanel parentToolStripPanel = selectedObj as ToolStripPanel;
-                    selSvc.SetSelectedComponents((ICollection)parentToolStripPanel.Controls, SelectionTypes.Replace);
+                    selSvc.SetSelectedComponents(parentToolStripPanel.Controls, SelectionTypes.Replace);
                     return;
                 }
             }
@@ -1452,7 +1452,7 @@ namespace System.Windows.Forms.Design
                                 {
                                     if (item.Owner is ToolStrip owner)
                                     {
-                                        targetSelection = GetNextItem(owner, ((ToolStripDropDown)parentToMoveOn).OwnerItem, ArrowDirection.Left);
+                                        targetSelection = GetNextItem(owner, parentToMoveOn.OwnerItem, ArrowDirection.Left);
                                     }
                                 }
                                 else
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms.Design
                 _oldCommands.Add(mcs.FindCommand(MenuCommands.KeyInvokeSmartTag));
 
                 _oldCommands.Add(mcs.FindCommand(StandardCommands.Cut));
-                _oldCommands.Add(mcs.FindCommand(MenuCommands.Delete));
+                _oldCommands.Add(mcs.FindCommand(StandardCommands.Delete));
             }
         }
 
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms.Design
             _newCommands.Add(new MenuCommand(new EventHandler(OnKeyShowDesignerActions), MenuCommands.KeyInvokeSmartTag));
 
             _newCommands.Add(new MenuCommand(new EventHandler(OnCommandCopy), StandardCommands.Cut));
-            _newCommands.Add(new MenuCommand(new EventHandler(OnCommandDelete), MenuCommands.Delete));
+            _newCommands.Add(new MenuCommand(new EventHandler(OnCommandDelete), StandardCommands.Delete));
         }
 
         // restores the old commands back into the menu command service.

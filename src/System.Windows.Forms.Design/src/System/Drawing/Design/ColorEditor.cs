@@ -319,7 +319,7 @@ namespace System.Drawing.Design
                 NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
             }
 
-            protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
+            protected override bool IsInputKey(Keys keyData)
             {
                 switch (keyData)
                 {
@@ -757,8 +757,8 @@ namespace System.Drawing.Design
                 Size size = pal.Size;
                 Rectangle rectItemSize = tabControl.GetTabRect(0);
                 int CMARGIN = 0;
-                this.Size = new Size(size.Width + 2 * CMARGIN, size.Height + 2 * CMARGIN + rectItemSize.Height);
-                tabControl.Size = this.Size;
+                Size = new Size(size.Width + 2 * CMARGIN, size.Height + 2 * CMARGIN + rectItemSize.Height);
+                tabControl.Size = Size;
             }
 
             private void AdjustListBoxItemHeight()
@@ -838,8 +838,8 @@ namespace System.Drawing.Design
                     Sorted = false
                 };
                 lbSystem.Click += new EventHandler(OnListClick);
-                lbSystem.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
-                lbSystem.KeyDown += new KeyEventHandler(this.OnListKeyDown);
+                lbSystem.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+                lbSystem.KeyDown += new KeyEventHandler(OnListKeyDown);
                 lbSystem.Dock = DockStyle.Fill;
                 lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
@@ -851,8 +851,8 @@ namespace System.Drawing.Design
                     Sorted = false
                 };
                 lbCommon.Click += new EventHandler(OnListClick);
-                lbCommon.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
-                lbCommon.KeyDown += new KeyEventHandler(this.OnListKeyDown);
+                lbCommon.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+                lbCommon.KeyDown += new KeyEventHandler(OnListKeyDown);
                 lbCommon.Dock = DockStyle.Fill;
 
                 Array.Sort(ColorValues, new StandardColorComparer());
@@ -877,7 +877,7 @@ namespace System.Drawing.Design
                 systemTabPage.Controls.Add(lbSystem);
                 commonTabPage.Controls.Add(lbCommon);
 
-                this.Controls.Add(tabControl);
+                Controls.Add(tabControl);
             }
 
             protected override void OnGotFocus(EventArgs e)
@@ -1052,7 +1052,7 @@ namespace System.Drawing.Design
 
             private class ColorEditorListBox : ListBox
             {
-                protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
+                protected override bool IsInputKey(Keys keyData)
                 {
                     switch (keyData)
                     {
@@ -1072,7 +1072,7 @@ namespace System.Drawing.Design
 
                 protected override void OnGotFocus(EventArgs e)
                 {
-                    TabPage selectedTab = this.SelectedTab;
+                    TabPage selectedTab = SelectedTab;
                     if (selectedTab != null && selectedTab.Controls.Count > 0)
                     {
                         selectedTab.Controls[0].Focus();

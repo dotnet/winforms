@@ -612,7 +612,7 @@ namespace System.ComponentModel.Design.Serialization
                     return;
                 }
 
-                System.CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
+                CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
                 using var sw = new StringWriter(CultureInfo.InvariantCulture);
                 Trace("Stored CodeDom for {0}: ", name);
                 Debug.Indent();
@@ -753,7 +753,7 @@ namespace System.ComponentModel.Design.Serialization
                     _statementsTable = new Hashtable();
 
                     // generate statement table keyed on component name
-                    CodeDomSerializerBase.FillStatementTable(manager, _statementsTable, mappedStatements);
+                    FillStatementTable(manager, _statementsTable, mappedStatements);
 
                     // We need to also ensure that for every entry in the statement table we have a corresponding entry in objectNames.  Otherwise, we won't deserialize completely.
                     ArrayList completeNames = new ArrayList(objectNames);
@@ -1696,13 +1696,13 @@ namespace System.ComponentModel.Design.Serialization
                     return base.CreateInstance(type, arguments, name, addToContainer);
                 }
 
-                private Nullable<bool> TypeResolutionAvailable
+                private bool? TypeResolutionAvailable
                 {
                     get
                     {
                         if (!_typeSvcAvailable.HasValue)
                         {
-                            _typeSvcAvailable = new Nullable<bool>(GetService(typeof(ITypeResolutionService)) != null);
+                            _typeSvcAvailable = new bool?(GetService(typeof(ITypeResolutionService)) != null);
                         }
 
                         return _typeSvcAvailable.Value;

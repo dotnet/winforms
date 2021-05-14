@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        protected override void OnClick(System.EventArgs e)
+        protected override void OnClick(EventArgs e)
         {
             if (_verb != null)
             {

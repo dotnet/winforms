@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design
                 AssignHandle(hwnd);
             }
 
-            void IDesignerTarget.DefWndProc(ref Message m) => base.DefWndProc(ref m);
+            void IDesignerTarget.DefWndProc(ref Message m) => DefWndProc(ref m);
 
             public void Dispose() => _designer = null;
 

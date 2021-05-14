@@ -164,7 +164,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Draws the client background and frames
+        ///  Draws the client background and frames
         /// </summary>
         /// <internalonly/>
         private void DrawClient(Graphics g)
@@ -194,7 +194,7 @@ namespace System.ComponentModel.Design
         // Copied code here to preserve semantics.  -- BrianGru, 10/3/2000
         private static bool CharIsPrintable(char c)
         {
-            UnicodeCategory uc = Char.GetUnicodeCategory(c);
+            UnicodeCategory uc = char.GetUnicodeCategory(c);
             return (!(uc == UnicodeCategory.Control) || (uc == UnicodeCategory.Format) ||
                     (uc == UnicodeCategory.LineSeparator) || (uc == UnicodeCategory.ParagraphSeparator) ||
                     (uc == UnicodeCategory.OtherNotAssigned));
@@ -227,7 +227,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Draws the "HEX" part in the HEXDUMP view
+        ///  Draws the "HEX" part in the HEXDUMP view
         /// </summary>
         /// <internalonly/>
         private void DrawHex(Graphics g, byte[] lineBuffer, int line)
@@ -278,9 +278,9 @@ namespace System.ComponentModel.Design
         ///  This is based on the following algorithm:
         ///  * Count number of zeros, prinables and other characters in the half of the dataBuffer
         ///  * Base on the following table establish the mode:
-        ///     - 80% Characters or digits -> ANSI
-        ///     - 80% Valid Unicode chars -> Unicode
-        ///     - All other cases -> HEXDUMP
+        ///  - 80% Characters or digits -> ANSI
+        ///  - 80% Valid Unicode chars -> Unicode
+        ///  - All other cases -> HEXDUMP
         ///  Also for the buffer of size [0..5] it returns the HEXDUMP mode
         /// </summary>
         /// <internalonly/>
@@ -341,7 +341,7 @@ namespace System.ComponentModel.Design
                     for (int i = 0; i < size; i++)
                     {
                         char c = (char)_dataBuf[i]; //OK we do not care for Unicode now
-                        if (Char.IsLetterOrDigit(c) || Char.IsWhiteSpace(c))
+                        if (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))
                         {
                             printablesCount++;
                         }

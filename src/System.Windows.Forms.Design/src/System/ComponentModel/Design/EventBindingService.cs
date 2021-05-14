@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public abstract partial class EventBindingService : IEventBindingService
     {
-        private IServiceProvider _provider;
+        private readonly IServiceProvider _provider;
         private IComponent _showCodeComponent;
         private EventDescriptor _showCodeEventDescriptor;
         private string _showCodeMethodName;

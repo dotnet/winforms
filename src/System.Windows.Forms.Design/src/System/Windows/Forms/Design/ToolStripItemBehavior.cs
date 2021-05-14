@@ -94,7 +94,6 @@ namespace System.Windows.Forms.Design
                     finally
                     {
                         rgn.Dispose();
-                        rgn = null;
                     }
                 }
             }
@@ -191,7 +190,7 @@ namespace System.Windows.Forms.Design
             if (_timer != null)
             {
                 _timer.Enabled = false;
-                _timer.Tick -= new System.EventHandler(OnDoubleClickTimerTick);
+                _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
                 _timer.Dispose();
                 _timer = null;
                 // Enter Insitu ...
@@ -242,7 +241,7 @@ namespace System.Windows.Forms.Design
                         if (_timer != null)
                         {
                             _timer.Enabled = false;
-                            _timer.Tick -= new System.EventHandler(OnDoubleClickTimerTick);
+                            _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
                             _timer.Dispose();
                             _timer = null;
                         }
@@ -569,7 +568,7 @@ namespace System.Windows.Forms.Design
                     if (_timer != null)
                     {
                         _timer.Enabled = false;
-                        _timer.Tick -= new System.EventHandler(OnDoubleClickTimerTick);
+                        _timer.Tick -= new EventHandler(OnDoubleClickTimerTick);
                         _timer.Dispose();
                         _timer = null;
                     }
@@ -647,7 +646,7 @@ namespace System.Windows.Forms.Design
                 if (currentDropItem != selectedItem && designerHost != null)
                 {
                     ArrayList components = data.DragComponents;
-                    ToolStrip parentToolStrip = currentDropItem.GetCurrentParent() as ToolStrip;
+                    ToolStrip parentToolStrip = currentDropItem.GetCurrentParent();
                     int primaryIndex = -1;
                     string transDesc;
                     bool copy = (e.Effect == DragDropEffects.Copy);
@@ -824,7 +823,6 @@ namespace System.Windows.Forms.Design
                         if (designerTransaction != null)
                         {
                             designerTransaction.Commit();
-                            designerTransaction = null;
                         }
                     }
                 }

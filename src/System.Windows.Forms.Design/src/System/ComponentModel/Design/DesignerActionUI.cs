@@ -339,7 +339,7 @@ namespace System.ComponentModel.Design
             // we don't want to do anything if the panel is not visible
             if (!IsDesignerActionPanelVisible)
             {
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.RecreatePanel] panel is not visible, bail");
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.RecreatePanel] panel is not visible, bail");
                 return;
             }
 
@@ -601,25 +601,25 @@ namespace System.ComponentModel.Design
             if (_cancelClose || e.Cancel)
             {
                 e.Cancel = true;
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] cancelClose true, bail");
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] cancelClose true, bail");
                 return;
             }
 
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
             {
                 e.Cancel = true;
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: " + e.Cancel.ToString());
             }
 
             if (e.CloseReason == ToolStripDropDownCloseReason.Keyboard)
             {
                 e.Cancel = false;
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: " + e.Cancel.ToString());
             }
 
             if (e.Cancel == false)
             { // we WILL disappear
-                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Closing...");
+                Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Closing...");
                 Debug.Assert(_lastPanelComponent != null, "last panel component should not be null here... " +
                     "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
                 if (_lastPanelComponent is null)
@@ -644,7 +644,7 @@ namespace System.ComponentModel.Design
                 _lastPanelComponent = null;
                 // panel is going away, pop the behavior that's on the stack...
                 Debug.Assert(_dapkb != null, "why is dapkb null?");
-                System.Windows.Forms.Design.Behavior.Behavior popBehavior = _behaviorService.PopBehavior(_dapkb);
+                Behavior popBehavior = _behaviorService.PopBehavior(_dapkb);
                 Debug.Assert(popBehavior is DesignerActionKeyboardBehavior, "behavior returned is of the wrong kind?");
             }
         }
@@ -741,7 +741,7 @@ namespace System.ComponentModel.Design
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
-                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
+                    Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
                     User32.SetWindowLong(designerActionHost, User32.GWL.HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
                 }
 
@@ -956,7 +956,7 @@ namespace System.ComponentModel.Design
             }
         }
 
-        private void PanelResized(object sender, System.EventArgs e)
+        private void PanelResized(object sender, EventArgs e)
         {
             Control ctrl = sender as Control;
             if (Size.Width != ctrl.Size.Width || Size.Height != ctrl.Size.Height)
@@ -1041,7 +1041,7 @@ namespace System.ComponentModel.Design
             string windowText = User32.GetWindowText(hwnd);
             string typeOfControl = "Unknown";
             string nameOfControl = string.Empty;
-            Control c = Control.FromHandle(hwnd);
+            Control c = FromHandle(hwnd);
             if (c != null)
             {
                 typeOfControl = c.GetType().Name;
@@ -1118,7 +1118,7 @@ namespace System.ComponentModel.Design
             if (keyData == Keys.Enter)
             {
                 IntPtr focusedControlPtr = User32.GetFocus();
-                Control focusedControl = Control.FromChildHandle(focusedControlPtr);
+                Control focusedControl = FromChildHandle(focusedControlPtr);
                 if (focusedControl is IButtonControl button && button is Control)
                 {
                     button.PerformClick();

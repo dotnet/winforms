@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         protected string imageListPropertyName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.ImageIndexEditor'/> class.
+        /// Initializes a new instance of the <see cref='ImageIndexEditor'/> class.
         /// </summary>
         public ImageIndexEditor()
         {

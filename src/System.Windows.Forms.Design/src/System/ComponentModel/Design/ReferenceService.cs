@@ -175,7 +175,7 @@ namespace System.ComponentModel.Design
         {
             foreach (ReferenceHolder reference in _references)
             {
-                if (object.ReferenceEquals(reference.SitedComponent, cevent.Component))
+                if (ReferenceEquals(reference.SitedComponent, cevent.Component))
                 {
                     reference.ResetName();
                     return;
@@ -193,7 +193,7 @@ namespace System.ComponentModel.Design
                 int size = _references.Count;
                 for (int i = size - 1; i >= 0; i--)
                 {
-                    if (object.ReferenceEquals(((ReferenceHolder)_references[i]).SitedComponent, component))
+                    if (ReferenceEquals(((ReferenceHolder)_references[i]).SitedComponent, component))
                     {
                         _references.RemoveAt(i);
                     }
@@ -233,7 +233,7 @@ namespace System.ComponentModel.Design
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
             {
-                if (object.ReferenceEquals(holder.Reference, reference))
+                if (ReferenceEquals(holder.Reference, reference))
                 {
                     return holder.SitedComponent;
                 }
@@ -255,7 +255,7 @@ namespace System.ComponentModel.Design
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
             {
-                if (object.ReferenceEquals(holder.Reference, reference))
+                if (ReferenceEquals(holder.Reference, reference))
                 {
                     return holder.Name;
                 }

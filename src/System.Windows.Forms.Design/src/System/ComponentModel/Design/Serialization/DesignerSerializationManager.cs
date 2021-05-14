@@ -963,7 +963,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool IEqualityComparer.Equals(object x, object y)
             {
-                return object.ReferenceEquals(x, y);
+                return ReferenceEquals(x, y);
             }
 
             int IEqualityComparer.GetHashCode(object x)

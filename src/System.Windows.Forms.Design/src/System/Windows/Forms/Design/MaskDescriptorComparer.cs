@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
     {
-        private SortOrder _sortOrder;
-        private SortType _sortType;
+        private readonly SortOrder _sortOrder;
+        private readonly SortType _sortType;
 
         public enum SortType
         {
