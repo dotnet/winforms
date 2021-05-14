@@ -628,8 +628,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(document.Focused);
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/4906")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
+        [WinFormsFact]
         public async Task HtmlDocument_Focused_GetFocused_ReturnsExpected()
         {
             using var parent = new Control();
@@ -1556,8 +1555,7 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<COMException>(() => document.ExecCommand(command, showUI, value));
         }
 
-        [ActiveIssue("https://github.com/dotnet/winforms/issues/4906")]
-        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
+        [WinFormsFact]
         public async Task HtmlDocument_Focus_Invoke_Success()
         {
             using var parent = new Control();
