@@ -1,8 +1,9 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -148,6 +149,13 @@ namespace System.Windows.Forms.Tests
             using Stream stream = typeof(Application).Module.Assembly.GetManifestResourceStream(
                 "System.Windows.Forms.XPThemes.manifest");
             Assert.NotNull(stream);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HighDpiMode))]
+        public void Application_SetHighDpiMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(HighDpiMode value)
+        {
+            Assert.Throws<InvalidEnumArgumentException>("highDpiMode", () => Application.SetHighDpiMode(value));
         }
 
         private class CustomLCIDCultureInfo : CultureInfo
