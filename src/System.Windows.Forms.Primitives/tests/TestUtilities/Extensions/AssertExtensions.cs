@@ -4,7 +4,9 @@
 
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using System.Windows.Forms;
 using Xunit;
+using static Interop;
 
 namespace System
 {
@@ -21,6 +23,16 @@ namespace System
             }
 
             return exception;
+        }
+
+        internal static void True(AccessibleObject accessibleObject, UiaCore.UIA propertyId)
+        {
+            Assert.True((bool)accessibleObject.GetPropertyValue(propertyId));
+        }
+
+        internal static void False(AccessibleObject accessibleObject, UiaCore.UIA propertyId)
+        {
+            Assert.False((bool)accessibleObject.GetPropertyValue(propertyId));
         }
     }
 }

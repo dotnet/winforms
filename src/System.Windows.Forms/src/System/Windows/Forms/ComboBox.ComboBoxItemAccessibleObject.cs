@@ -44,7 +44,8 @@ namespace System.Windows.Forms
                 {
                     int currentIndex = GetCurrentIndex();
                     IntPtr listHandle = _owningComboBox.GetListHandle();
-                    RECT itemRect = new RECT();
+                    RECT itemRect = new();
+
                     int result = unchecked((int)(long)User32.SendMessageW(
                         listHandle, (User32.WM)User32.LB.GETITEMRECT, (IntPtr)currentIndex, ref itemRect));
 
@@ -55,7 +56,6 @@ namespace System.Windows.Forms
 
                     // Translate the item rect to screen coordinates
                     User32.MapWindowPoints(listHandle, IntPtr.Zero, ref itemRect, 2);
-
                     return itemRect;
                 }
             }
@@ -230,9 +230,19 @@ namespace System.Windows.Forms
                 get
                 {
                     var accState = _systemIAccessible?.get_accState(GetChildId());
-                    return accState is not null
-                        ? (AccessibleStates)accState
-                        : AccessibleStates.None;
+                    if (accState is null)
+                    {
+                        return AccessibleStates.None;
+                    }
+
+                    AccessibleStates accessibleStates = (AccessibleStates)accState;
+
+                    if (!_owningComboBox.DroppedDown || !_owningComboBox.ChildListAccessibleObject.Bounds.IntersectsWith(Bounds))
+                    {
+                        accessibleStates |= AccessibleStates.Offscreen;
+                    }
+
+                    return accessibleStates;
                 }
             }
 
