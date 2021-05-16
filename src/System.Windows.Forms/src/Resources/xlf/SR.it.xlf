@@ -11052,8 +11052,8 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault deve essere chiamato prima della creazione del primo oggetto IWin32Window nell'applicazione.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

@@ -11052,8 +11052,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault muss aufgerufen werden, bevor das erste IWin32Window-Objekt in der Anwendung erstellt wird.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

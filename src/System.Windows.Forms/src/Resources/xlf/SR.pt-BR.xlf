@@ -11052,8 +11052,8 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">É necessário chamar SetCompatibleTextRenderingDefault antes da criação do primeiro objeto IWin32Window no aplicativo.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

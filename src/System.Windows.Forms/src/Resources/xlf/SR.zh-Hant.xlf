@@ -11052,8 +11052,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 SetCompatibleTextRenderingDefault。</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

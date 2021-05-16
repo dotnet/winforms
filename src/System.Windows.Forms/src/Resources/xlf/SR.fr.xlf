@@ -11052,8 +11052,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault doit être appelé avant la création du premier objet IWin32Window dans l'application.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
