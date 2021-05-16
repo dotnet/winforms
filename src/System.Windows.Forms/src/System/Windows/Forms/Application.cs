@@ -304,14 +304,6 @@ namespace System.Windows.Forms
             => DpiHelper.GetWinformsApplicationDpiAwareness();
 
         /// <summary>
-        ///  Sets the <see cref="HighDpiMode"/> mode for process.
-        /// </summary>
-        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
-        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
-        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
-            => !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
-
-        /// <summary>
         ///  Gets the path for the application data specific to a local, non-roaming user.
         /// </summary>
         /// <remarks>
@@ -1239,6 +1231,18 @@ namespace System.Windows.Forms
             }
 
             Control.UseCompatibleTextRenderingDefault = defaultValue;
+        }
+
+        /// <summary>
+        ///  Sets the <see cref="HighDpiMode"/> mode for process.
+        /// </summary>
+        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
+        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
+        {
+            SourceGenerated.EnumValidator.Validate(highDpiMode, nameof(highDpiMode));
+
+            return !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
         }
 
         /// <summary>
