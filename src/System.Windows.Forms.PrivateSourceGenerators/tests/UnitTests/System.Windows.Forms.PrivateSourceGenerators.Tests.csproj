@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>System.Windows.Forms.SourceGenerators.Tests</AssemblyName>
+    <AssemblyName>System.Windows.Forms.PrivateSourceGenerators.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\System.Windows.Forms.SourceGenerators.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.PrivateSourceGenerators.csproj" />
   </ItemGroup>
 
 </Project>

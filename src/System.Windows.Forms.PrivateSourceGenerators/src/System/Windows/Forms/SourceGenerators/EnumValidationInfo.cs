@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 
-namespace System.Windows.Forms.SourceGenerators
+namespace System.Windows.Forms.PrivateSourceGenerators
 {
     internal class EnumValidationInfo
     {

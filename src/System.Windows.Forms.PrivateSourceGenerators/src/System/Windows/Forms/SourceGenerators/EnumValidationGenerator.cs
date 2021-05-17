@@ -9,7 +9,7 @@ using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace System.Windows.Forms.SourceGenerators
+namespace System.Windows.Forms.PrivateSourceGenerators
 {
     [Generator]
     public class EnumValidationGenerator : ISourceGenerator

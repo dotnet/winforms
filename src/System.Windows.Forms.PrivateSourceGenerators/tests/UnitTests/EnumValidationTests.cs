@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
-namespace System.Windows.Forms.SourceGenerators.Tests
+namespace System.Windows.Forms.PrivateSourceGenerators.Tests
 {
     public class EnumValidationTests
     {
