@@ -624,7 +624,6 @@ override System.Windows.Forms.Design.DocumentDesigner.OnContextMenu(int x, int y
 override System.Windows.Forms.Design.DocumentDesigner.OnCreateHandle() -> void
 ~override System.Windows.Forms.Design.DocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 override System.Windows.Forms.Design.DocumentDesigner.SelectionRules.get -> System.Windows.Forms.Design.SelectionRules
-override System.Windows.Forms.Design.DocumentDesigner.WndProc(ref System.Windows.Forms.Message m) -> void
 ~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object codeObject) -> object
 ~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 override System.Windows.Forms.Design.ParentControlDesigner.Dispose(bool disposing) -> void
@@ -848,7 +847,6 @@ virtual System.Windows.Forms.Design.DesignerOptions.UseSmartTags.get -> bool
 virtual System.Windows.Forms.Design.DesignerOptions.UseSmartTags.set -> void
 virtual System.Windows.Forms.Design.DesignerOptions.UseSnapLines.get -> bool
 virtual System.Windows.Forms.Design.DesignerOptions.UseSnapLines.set -> void
-virtual System.Windows.Forms.Design.DocumentDesigner.EnsureMenuEditorService(System.ComponentModel.IComponent c) -> void
 ~virtual System.Windows.Forms.Design.DocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.DocumentDesigner.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
 virtual System.Windows.Forms.Design.ParentControlDesigner.AllowControlLasso.get -> bool
