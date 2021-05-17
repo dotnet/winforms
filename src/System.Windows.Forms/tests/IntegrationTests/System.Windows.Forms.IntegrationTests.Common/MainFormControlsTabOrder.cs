@@ -33,6 +33,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ErrorProviderButton,
         TaskDialogButton,
         MessageBoxButton,
-        ToolStripsButton
+        ToolStripsButton,
+        TrackBarsButton
     }
 }

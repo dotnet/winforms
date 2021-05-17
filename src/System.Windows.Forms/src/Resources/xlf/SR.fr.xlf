@@ -10401,6 +10401,16 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">LargeChange : la valeur '{0}' doit être supérieure ou égale à 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="new">Large decrease</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="new">Large increase</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">La valeur maximale pour la position du curseur sur le TrackBar.</target>
@@ -10419,6 +10429,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">L'orientation du contrôle.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="new">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">

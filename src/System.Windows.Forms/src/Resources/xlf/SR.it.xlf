@@ -10401,6 +10401,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">LargeChange: il valore '{0}' deve essere maggiore o uguale a 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="new">Large decrease</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="new">Large increase</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Il valore massimo per la posizione del dispositivo di scorrimento nel controllo TrackBar.</target>
@@ -10419,6 +10429,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">L'orientamento del controllo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="new">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">

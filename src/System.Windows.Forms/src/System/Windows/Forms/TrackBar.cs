@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     [DefaultBindingProperty(nameof(Value))]
     [Designer("System.Windows.Forms.Design.TrackBarDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTrackBar))]
-    public class TrackBar : Control, ISupportInitialize
+    public partial class TrackBar : Control, ISupportInitialize
     {
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
@@ -488,6 +488,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
@@ -718,6 +720,8 @@ namespace System.Windows.Forms
             }
         }
 
+        protected override AccessibleObject CreateAccessibilityInstance() => new TrackBarAccessibleObject(this);
+
         protected override void CreateHandle()
         {
             if (!RecreatingHandle)
@@ -913,6 +917,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
+            // UIA events:
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ValueValuePropertyId, Name, Name);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+
             ((EventHandler)Events[s_valueChangedEvent])?.Invoke(this, e);
         }
 
