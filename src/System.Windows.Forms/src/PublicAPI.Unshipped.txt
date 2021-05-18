@@ -1,1 +1,2 @@
 ~override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs e) -> void
+~static System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font font) -> void
