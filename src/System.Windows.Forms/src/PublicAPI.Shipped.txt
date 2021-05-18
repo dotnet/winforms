@@ -3670,6 +3670,7 @@ System.Windows.Forms.MonthCalendar.MinDate.set -> void
 System.Windows.Forms.MonthCalendar.MonthCalendar() -> void
 System.Windows.Forms.MonthCalendar.MouseClick -> System.Windows.Forms.MouseEventHandler
 System.Windows.Forms.MonthCalendar.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
+~override System.Windows.Forms.MonthCalendar.OnResize(System.EventArgs e) -> void
 System.Windows.Forms.MonthCalendar.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.MonthCalendar.Padding.set -> void
 System.Windows.Forms.MonthCalendar.PaddingChanged -> System.EventHandler
