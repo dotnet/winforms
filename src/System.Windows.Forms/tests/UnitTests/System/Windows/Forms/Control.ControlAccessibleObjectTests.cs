@@ -1260,8 +1260,7 @@ namespace System.Windows.Forms.Tests
             var typeDefaultValues = new Dictionary<Type, string>
             {
                 { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName},
-                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview},
-                { typeof(MonthCalendar), string.Format(SR.MonthCalendarSingleDateSelected, DateTime.Now.ToLongDateString())}
+                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview}
             };
 
             foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())
