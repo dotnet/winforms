@@ -6495,7 +6495,7 @@ Stack trace where the illegal operation occurred was:
     <value>Width must be greater than MinWidth.</value>
   </data>
   <data name="Win32WindowAlreadyCreated" xml:space="preserve">
-    <value>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</value>
+    <value>{0} must be called before the first IWin32Window object is created in the application.</value>
   </data>
   <data name="WindowsFormsSetEvent" xml:space="preserve">
     <value>Setting event '{0}'</value>

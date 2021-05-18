@@ -11052,8 +11052,8 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault se debe llamar antes de crear el primer objeto IWin32Window en la aplicación.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

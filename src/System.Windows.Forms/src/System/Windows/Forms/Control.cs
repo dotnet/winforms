@@ -1810,7 +1810,7 @@ namespace System.Windows.Forms
             {
                 if (s_defaultFont is null)
                 {
-                    s_defaultFont = SystemFonts.MessageBoxFont;
+                    s_defaultFont = Application.DefaultFont ?? SystemFonts.MessageBoxFont;
                     Debug.Assert(s_defaultFont is not null, "defaultFont wasn't set!");
                 }
 
@@ -11603,6 +11603,7 @@ namespace System.Windows.Forms
             if (pref.Category == UserPreferenceCategory.Color)
             {
                 s_defaultFont = null;
+                Application.ScaleDefaultFont();
                 OnSystemColorsChanged(EventArgs.Empty);
             }
         }

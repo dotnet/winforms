@@ -11052,8 +11052,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">Před vytvořením prvního objektu IWin32Window v aplikaci je nutné volat metodu SetCompatibleTextRenderingDefault.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">
