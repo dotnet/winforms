@@ -9,13 +9,17 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripItemImageRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
+        [WinFormsFact]
+        public void ToolStripItemImageRenderEventArgs_NullGraphics_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ToolStripItemImageRenderEventArgs(null, null, Rectangle.Empty));
+        }
+
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_TestData()
         {
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
 
-            yield return new object[] { null, null, Rectangle.Empty, null };
-            yield return new object[] { null, new ToolStripButton(), Rectangle.Empty, null };
             yield return new object[] { graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), null };
             yield return new object[] { graphics, new ToolStripButton() { Image = image }, new Rectangle(1, 2, 3, 4), image };
             yield return new object[]
@@ -74,17 +78,6 @@ namespace System.Windows.Forms.Tests
                 Assert.NotSame(image, e.Image);
                 Assert.Equal(image.Size, e.Image.Size);
             }
-        }
-
-        [WinFormsFact]
-        public void ToolStripItemImageRenderEventArgs_Ctor_nulls()
-        {
-            var e = new ToolStripItemImageRenderEventArgs(null, null, null, Rectangle.Empty);
-
-            Assert.Null(e.Graphics);
-            Assert.Null(e.Item);
-            Assert.Null(e.Image);
-            Assert.Equal(Rectangle.Empty, e.ImageRectangle);
         }
 
         public static IEnumerable<object[]> Ctor_ToolStripItem_Image_Rectangle_TestData()

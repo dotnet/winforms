@@ -12,7 +12,6 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolStripContentPanelRenderEventArgs_NullGraphics_ThrowsArgumentNullException()
         {
-            using var toolStripButton = new ToolStripButton();
             Assert.Throws<ArgumentNullException>(() => new ToolStripContentPanelRenderEventArgs(null, null));
         }
 
