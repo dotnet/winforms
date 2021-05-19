@@ -422,7 +422,7 @@ namespace System.Windows.Forms
 
             if (_width != 0 && _height != 0)
             {
-                RECT rect = new (0, 0, 0, 0);
+                RECT rect = default;
 
                 CreateParams cp = CreateParams;
 
@@ -5776,14 +5776,14 @@ namespace System.Windows.Forms
 
             // We should not include the window adornments in our calculation,
             // because windows scales them for us.
-            var adornmentsBeforeDpiChange = new RECT(0, 0, 0, 0);
+            var adornmentsBeforeDpiChange = default;
             CreateParams cp = CreateParams;
 
             // We would need to get old adornments metrics as we will be deducting this from bounds and then scale it.
             User32.AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false.ToBOOL(), cp.ExStyle, (uint)_oldDeviceDpi);
 
             // And now, we get new adornments to add to bounds after scaling
-            var adornmentsAfterDpiChange = new RECT(0, 0, 0, 0);
+            var adornmentsAfterDpiChange = default;
             if (_oldDeviceDpi != _deviceDpi)
             {
                 AdjustWindowRectEx(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
@@ -10272,7 +10272,7 @@ namespace System.Windows.Forms
         protected virtual void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             CreateParams cp = CreateParams;
-            RECT adornments = new RECT(0, 0, 0, 0);
+            RECT adornments = default;
             AdjustWindowRectEx(ref adornments, cp.Style, false, cp.ExStyle);
             Size minSize = MinimumSize;
             Size maxSize = MaximumSize;
