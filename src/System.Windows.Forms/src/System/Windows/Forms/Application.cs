@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Locates a thread context given a window handle.
         /// </summary>
-        private static ThreadContext GetContextForHandle(HandleRef handle)
+        internal static ThreadContext GetContextForHandle(HandleRef handle)
         {
             ThreadContext cxt = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
             Debug.Assert(
