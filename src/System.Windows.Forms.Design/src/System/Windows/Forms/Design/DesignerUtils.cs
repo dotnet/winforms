@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Design
             {
                 if (s_boxImage is null)
                 {
-                    s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                    s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, PixelFormat.Format32bppPArgb);
                     using (Graphics g = Graphics.FromImage(s_boxImage))
                     {
                         g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, BOXIMAGESIZE, BOXIMAGESIZE);
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Design
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
             IntPtr hWnd = control.Handle;
-            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
             //Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
@@ -537,12 +537,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
-            return GetBoundsForSelectionType(originalBounds, type, DesignerUtils.SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
+            return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
         }
 
         public static Rectangle GetBoundsForNoResizeSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
-            return GetBoundsForSelectionType(originalBounds, type, DesignerUtils.SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
+            return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
         }
 
         /// <summary>
@@ -553,10 +553,6 @@ namespace System.Windows.Forms.Design
             //determine the actual client area we are working in (w/padding)
             Rectangle face = ctrl.ClientRectangle;
 
-            //get the font metrics via gdi
-            int fontAscent = 0;
-            int fontHeight = 0;
-
             using Graphics g = ctrl.CreateGraphics();
             using var dc = new DeviceContextHdcScope(g, applyGraphicsState: false);
             using var hFont = new Gdi32.ObjectScope(ctrl.Font.ToHFONT());
@@ -565,9 +561,10 @@ namespace System.Windows.Forms.Design
             var metrics = new Gdi32.TEXTMETRICW();
             Gdi32.GetTextMetricsW(dc, ref metrics);
 
+            //get the font metrics via gdi
             // Add the font ascent to the baseline
-            fontAscent = metrics.tmAscent + 1;
-            fontHeight = metrics.tmHeight;
+            int fontAscent = metrics.tmAscent + 1;
+            int fontHeight = metrics.tmHeight;
 
             // Now add it all up
             if ((alignment & AnyTopAlignment) != 0)
@@ -780,8 +777,7 @@ namespace System.Windows.Forms.Design
                 Debug.Assert(host != null, "No host -- we cannot copy the objects");
                 if (css != null && host != null)
                 {
-                    SerializationStore store = null;
-                    store = css.CreateStore();
+                    SerializationStore store = css.CreateStore();
                     // Get all the objects, meaning we want the children too
                     ICollection copyObjects = GetCopySelection(objects, host);
 

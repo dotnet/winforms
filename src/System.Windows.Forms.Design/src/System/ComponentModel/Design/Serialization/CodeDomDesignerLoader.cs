@@ -95,7 +95,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
-                cs.ComponentRemoved -= new ComponentEventHandler(this.OnComponentRemoved);
+                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
 
@@ -738,7 +738,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (cs != null)
             {
-                cs.ComponentRemoved -= new ComponentEventHandler(this.OnComponentRemoved);
+                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
             }
 
@@ -822,7 +822,7 @@ namespace System.ComponentModel.Design.Serialization
                 return;
             }
 
-            cs.ComponentRemoved += new ComponentEventHandler(this.OnComponentRemoved);
+            cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
         }
 

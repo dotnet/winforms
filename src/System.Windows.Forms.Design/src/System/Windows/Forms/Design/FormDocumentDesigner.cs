@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design
     internal class FormDocumentDesigner : DocumentDesigner
     {
         private Size _autoScaleBaseSize = Size.Empty;
-        private bool _inAutoscale;
         private bool _initializing;
         private bool _autoSize;
         private ToolStripAdornerWindowService _toolStripAdornerWindowService;
@@ -171,7 +170,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 ArrayList snapLines = null;
-                base.AddPaddingSnapLines(ref snapLines);
+                AddPaddingSnapLines(ref snapLines);
                 if (snapLines is null)
                 {
                     Debug.Fail("why did base.AddPaddingSnapLines return null?");
@@ -262,17 +261,9 @@ namespace System.Windows.Forms.Design
                     return;
                 }
 
-                float percY = ((float)newVar.Height) / ((float)baseVar.Height);
-                float percX = ((float)newVar.Width) / ((float)baseVar.Width);
-                try
-                {
-                    _inAutoscale = true;
-                    form.Scale(percX, percY);
-                }
-                finally
-                {
-                    _inAutoscale = false;
-                }
+                float percY = newVar.Height / ((float)baseVar.Height);
+                float percX = newVar.Width / ((float)baseVar.Width);
+                form.Scale(percX, percY);
             }
         }
 
@@ -285,6 +276,20 @@ namespace System.Windows.Forms.Design
             {
                 IDesignerHost host = GetService<IDesignerHost>();
                 Debug.Assert(host != null, "Must have a designer host on dispose");
+
+                if (host != null)
+                {
+                    host.LoadComplete -= new EventHandler(OnLoadComplete);
+                    host.Activated -= new EventHandler(OnDesignerActivate);
+                    host.Deactivated -= new EventHandler(OnDesignerDeactivate);
+                }
+
+                IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+                if (cs != null)
+                {
+                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                }
             }
 
             base.Dispose(disposing);
@@ -311,12 +316,30 @@ namespace System.Windows.Forms.Design
             base.Initialize(component);
             _initializing = false;
             AutoResizeHandles = true;
+
             Debug.Assert(component is Form, "FormDocumentDesigner expects its component to be a form.");
+
+            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            if (host != null)
+            {
+                host.LoadComplete += new EventHandler(OnLoadComplete);
+                host.Activated += new EventHandler(OnDesignerActivate);
+                host.Deactivated += new EventHandler(OnDesignerDeactivate);
+            }
 
             Form form = (Form)Control;
             form.WindowState = FormWindowState.Normal;
             ShadowProperties[nameof(AcceptButton)] = form.AcceptButton;
             ShadowProperties[nameof(CancelButton)] = form.CancelButton;
+
+            // Monitor component/remove add events for our tray
+            //
+            IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            if (cs != null)
+            {
+                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+            }
         }
 
         /// <summary>
@@ -443,37 +466,6 @@ namespace System.Windows.Forms.Design
             {
                 properties["ClientSize"] = TypeDescriptor.CreateProperty(typeof(FormDocumentDesigner), prop, new DefaultValueAttribute(new Size(-1, -1)));
             }
-        }
-
-        /// <summary>
-        ///  Handles the WM_WINDOWPOSCHANGING message
-        /// </summary>
-        private unsafe void WmWindowPosChanging(ref Message m)
-        {
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
-            bool updateSize = _inAutoscale;
-            if (!updateSize)
-            {
-                if (TryGetService(out IDesignerHost host))
-                {
-                    updateSize = host.Loading;
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Overrides our base class WndProc to provide support for the menu editor service.
-        /// </summary>
-        protected override void WndProc(ref Message m)
-        {
-            switch ((User32.WM)m.Msg)
-            {
-                case User32.WM.WINDOWPOSCHANGING:
-                    WmWindowPosChanging(ref m);
-                    break;
-            }
-
-            base.WndProc(ref m);
         }
     }
 }

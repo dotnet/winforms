@@ -127,113 +127,16 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             using var wrapper = new MonthCalendarWrapper(this);
             Application.DoEvents();
             MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            CalendarBodyAccessibleObject bodyAccessibleObject = new CalendarBodyAccessibleObject(accessibleObject, 0);
+            CalendarAccessibleObject calendarAccessibleObject = new CalendarAccessibleObject(accessibleObject, 0, "Test name");
             MCHITTESTINFO info = new MCHITTESTINFO
             {
                 uHit = MCHT.CALENDARDAY,
                 iRow = 0
             };
             Application.DoEvents();
-            CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
+            MonthCalendarChildAccessibleObject cell = calendarAccessibleObject.GetChildFromPoint(info);
 
             return new ScenarioResult(cell != null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult CalendarBodyAccessibleObject_GetFromPoint_ReturnsNull_IfCalendarIndexIsIncorrect(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            CalendarBodyAccessibleObject bodyAccessibleObject = new CalendarBodyAccessibleObject(accessibleObject, -10);
-            MCHITTESTINFO info = new MCHITTESTINFO
-            {
-                uHit = MCHT.CALENDARDAY,
-                iRow = 0
-            };
-            Application.DoEvents();
-            CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
-
-            return new ScenarioResult(cell is null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult CalendarBodyAccessibleObject_GetFromPoint_ReturnsNull_IfMCHITTESTINFOIsIncorrect(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            CalendarBodyAccessibleObject bodyAccessibleObject = new CalendarBodyAccessibleObject(accessibleObject, 0);
-            MCHITTESTINFO info = new MCHITTESTINFO
-            {
-                uHit = MCHT.CALENDARDAY,
-                iRow = -10
-            };
-            Application.DoEvents();
-            CalendarChildAccessibleObject cell = bodyAccessibleObject.GetFromPoint(info);
-
-            return new ScenarioResult(cell is null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult MonthCalendarAccessibleObject_GetCalendarChildAccessibleObject_ReturnsCorrecObject(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            DateTime selectedDate = new DateTime(2020, 4, 10);
-            wrapper.Calendar.SetDate(selectedDate);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            Type type = typeof(MonthCalendarAccessibleObject);
-            MethodInfo method = type.GetMethod("GetCalendarChildAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            Application.DoEvents();
-            object child = method.Invoke(accessibleObject, new object[] { selectedDate, selectedDate });
-
-            return new ScenarioResult(child != null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult MonthCalendarAccessibleObject_GetCalendarChildAccessibleObject_ReturnsNull_IfCalendarIndexIsIncorrect(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            Type type = typeof(MonthCalendarAccessibleObject);
-            type.GetField("_calendarIndex", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(accessibleObject, -1);
-            MethodInfo method = type.GetMethod("GetCalendarChildAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            Application.DoEvents();
-            object child = method.Invoke(accessibleObject, new object[] { new DateTime(2020, 4, 10), new DateTime(2020, 4, 10) });
-
-            return new ScenarioResult(child is null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult MonthCalendarAccessibleObject_GetColumnHeaderItems_ReturnsCorrectCollection(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-
-            Application.DoEvents();
-            IRawElementProviderSimple[] items = accessibleObject.GetColumnHeaderItems();
-
-            return new ScenarioResult(items != null);
-        }
-
-        [Scenario(true)]
-        public ScenarioResult MonthCalendarAccessibleObject_GetColumnHeaderItems_ReturnsNull_IfCalendarIndexIsIncorrect(TParams p)
-        {
-            using var wrapper = new MonthCalendarWrapper(this);
-            Application.DoEvents();
-            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)wrapper.Calendar.AccessibilityObject;
-            Type type = typeof(MonthCalendarAccessibleObject);
-            type.GetField("_calendarIndex", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(accessibleObject, -1);
-
-            Application.DoEvents();
-            IRawElementProviderSimple[] items = accessibleObject.GetColumnHeaderItems();
-
-            return new ScenarioResult(items is null);
         }
     }
 }

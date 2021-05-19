@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives.csproj" />
   </ItemGroup>
 

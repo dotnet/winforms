@@ -284,7 +284,7 @@ namespace System.ComponentModel.Design
                         Rectangle workingArea = Screen.GetWorkingArea(this);
                         _minimumSize = new Size(
                             (int)Math.Min(Math.Ceiling(WatermarkSize.Width * 1.75), workingArea.Width / 3),
-                            (int)Math.Min(Font.Height * 10, workingArea.Height / 3));
+                            Math.Min(Font.Height * 10, workingArea.Height / 3));
                     }
 
                     return _minimumSize;
@@ -346,7 +346,7 @@ namespace System.ComponentModel.Design
                                     if (replaceFont != null)
                                     {
                                         int selectionLength = (i == surrogates.Length - 1) ? value.Length - surrogates[i] : surrogates[i + 1] - surrogates[i];
-                                        base.Select(surrogates[i], selectionLength);
+                                        Select(surrogates[i], selectionLength);
                                         SelectionFont = replaceFont;
                                     }
                                 }

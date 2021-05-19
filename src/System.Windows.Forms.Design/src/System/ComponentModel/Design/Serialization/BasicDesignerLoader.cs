@@ -733,7 +733,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (mgr != null && thisSurface != null)
             {
-                if (!object.ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
+                if (!ReferenceEquals(mgr.ActiveDesignSurface, thisSurface))
                 {
                     //somehow, we got deactivated and weren't told.
                     _state[s_stateActiveDocument] = false;

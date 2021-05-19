@@ -189,6 +189,8 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual AccessibleObject? GetChild(int index) => null;
 
+        internal virtual int GetChildIndex(AccessibleObject? child) => -1;
+
         /// <summary>
         ///  When overridden in a derived class, gets the number of children
         ///  belonging to an accessible object.

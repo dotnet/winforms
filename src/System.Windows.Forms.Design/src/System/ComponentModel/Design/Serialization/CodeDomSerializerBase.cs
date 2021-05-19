@@ -1849,12 +1849,12 @@ namespace System.ComponentModel.Design.Serialization
                 string leftString = left as string;
                 string rightString = right as string;
 
-                if (leftString is null && left is Char)
+                if (leftString is null && left is char)
                 {
                     leftString = left.ToString();
                 }
 
-                if (rightString is null && right is Char)
+                if (rightString is null && right is char)
                 {
                     rightString = right.ToString();
                 }
@@ -2017,7 +2017,7 @@ namespace System.ComponentModel.Design.Serialization
                     // relationship, which isn't a problem during normal serialization (since it not very
                     // likely the property has already been assigned to), but it does affect undo.
                     MemberRelationship oldRelation = MemberRelationship.Empty;
-                    MemberRelationshipService relationships = null;
+                    MemberRelationshipService relationships;
                     if (statement.Right is CodePropertyReferenceExpression)
                     {
                         relationships = manager.GetService(typeof(MemberRelationshipService)) as MemberRelationshipService;
@@ -2129,7 +2129,7 @@ namespace System.ComponentModel.Design.Serialization
             // Check to see if this object represents the root context.
             if (expression is null)
             {
-                if (manager.Context[typeof(RootContext)] is RootContext rootEx && object.ReferenceEquals(rootEx.Value, value))
+                if (manager.Context[typeof(RootContext)] is RootContext rootEx && ReferenceEquals(rootEx.Value, value))
                 {
                     expression = rootEx.Expression;
                     TraceIf(expression != null, "Resolved through root expression context : {0}", expression);
@@ -2184,7 +2184,7 @@ namespace System.ComponentModel.Design.Serialization
             // Finally, the expression context.
             if (expression is null)
             {
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && object.ReferenceEquals(cxt.PresetValue, value))
+                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
                 {
                     expression = cxt.Expression;
                 }
@@ -2200,8 +2200,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 if (parentEntry != null && parentEntry.Component != value /* don't make ourselves dependent with ourselves */ && cache != null)
                 {
-                    ComponentCache.Entry entry = null;
-                    entry = cache.GetEntryAll(value);
+                    ComponentCache.Entry entry = cache.GetEntryAll(value);
                     if (entry != null && parentEntry.Component != null)
                     {
                         entry.AddDependency(parentEntry.Component);
@@ -2376,7 +2375,7 @@ namespace System.ComponentModel.Design.Serialization
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
-            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && object.ReferenceEquals(cxt.PresetValue, value))
+            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
             {
                 CodeExpression expression = cxt.Expression;
                 //Okay, we found a preset creation expression. We just need to find if it isComplete.

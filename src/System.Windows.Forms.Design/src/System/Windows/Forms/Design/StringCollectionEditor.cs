@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
             private Button _cancelButton;
             private TableLayoutPanel _overarchingLayoutPanel;
 
-            private StringCollectionEditor _editor;
+            private readonly StringCollectionEditor _editor;
 
             /// <summary>
             ///  Constructs a StringCollectionForm.
@@ -117,13 +117,13 @@ namespace System.Windows.Forms.Design
                 // okButton
                 //
                 resources.ApplyResources(_okButton, "okButton");
-                _okButton.DialogResult = Forms.DialogResult.OK;
+                _okButton.DialogResult = DialogResult.OK;
                 _okButton.Name = "okButton";
                 //
                 // cancelButton
                 //
                 resources.ApplyResources(_cancelButton, "cancelButton");
-                _cancelButton.DialogResult = Forms.DialogResult.Cancel;
+                _cancelButton.DialogResult = DialogResult.Cancel;
                 _cancelButton.Name = "cancelButton";
                 //
                 // overarchingLayoutPanel
@@ -138,7 +138,7 @@ namespace System.Windows.Forms.Design
                 // StringCollectionEditor
                 //
                 resources.ApplyResources(this, "$this");
-                AutoScaleMode = Forms.AutoScaleMode.Font;
+                AutoScaleMode = AutoScaleMode.Font;
                 Controls.Add(_overarchingLayoutPanel);
                 HelpButton = true;
                 MaximizeBox = false;

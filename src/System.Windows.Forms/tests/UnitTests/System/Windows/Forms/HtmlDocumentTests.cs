@@ -413,6 +413,10 @@ namespace System.Windows.Forms.Tests
             HtmlDocument document = await GetDocument(control, Html);
             IHTMLDocument2 iHTMLDocument2 = (IHTMLDocument2)document.DomDocument;
 
+            // Cleanup!
+            // WebBrowser is notorious for not cleaning after itself - clean all cookies before we set new ones
+            document.ExecCommand("ClearAuthenticationCache", false, null);
+
             document.Cookie = value;
             Assert.Equal(expected, document.Cookie);
             Assert.Equal(expected, iHTMLDocument2.GetCookie());
@@ -624,7 +628,8 @@ namespace System.Windows.Forms.Tests
             Assert.False(document.Focused);
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/4906")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
         public async Task HtmlDocument_Focused_GetFocused_ReturnsExpected()
         {
             using var parent = new Control();
@@ -641,7 +646,7 @@ namespace System.Windows.Forms.Tests
 
             // Have to do it again.
             iHTMLDocument4.Focus();
-            Assert.False(document.Focused);
+            Assert.True(document.Focused);
         }
 
         [WinFormsFact]
@@ -1551,7 +1556,8 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<COMException>(() => document.ExecCommand(command, showUI, value));
         }
 
-        [WinFormsFact]
+        [ActiveIssue("https://github.com/dotnet/winforms/issues/4906")]
+        [WinFormsFact(Skip = "Flaky tests, see: https://github.com/dotnet/winforms/issues/4906")]
         public async Task HtmlDocument_Focus_Invoke_Success()
         {
             using var parent = new Control();
@@ -1563,11 +1569,11 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
             document.Focus();
-            Assert.False(document.Focused);
+            Assert.True(document.Focused);
 
             // Call again.
             document.Focus();
-            Assert.False(document.Focused);
+            Assert.True(document.Focused);
         }
 
         [WinFormsFact]

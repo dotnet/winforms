@@ -46,11 +46,11 @@ namespace System.Windows.Forms.Design
             //
             Controls.Add(_cloneMtb);
 
-            BackColor = System.Drawing.SystemColors.Control;
+            BackColor = Drawing.SystemColors.Control;
             BorderStyle = BorderStyle.FixedSingle;
             Name = "MaskedTextBoxTextEditorDropDown";
             Padding = new Padding(16);
-            Size = new System.Drawing.Size(100, 52);
+            Size = new Drawing.Size(100, 52);
             ((System.ComponentModel.ISupportInitialize)(_errorProvider)).EndInit();
             ResumeLayout(false);
             PerformLayout();

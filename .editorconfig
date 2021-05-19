@@ -7,6 +7,7 @@ root = true
 # A newline ending every file
 # Use 4 spaces as indentation
 [*]
+guidelines = 120 1px dotted 504CFF00, 150 1px dotted 50FF6A00
 indent_style = space
 indent_size = 4
 

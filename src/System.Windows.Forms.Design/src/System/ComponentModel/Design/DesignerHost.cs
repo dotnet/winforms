@@ -731,7 +731,7 @@ namespace System.ComponentModel.Design
 
                 foreach (IComponent comp in components)
                 {
-                    if (!object.ReferenceEquals(comp, _rootComponent))
+                    if (!ReferenceEquals(comp, _rootComponent))
                     {
                         if (_designers[comp] is IDesigner designer)
                         {
@@ -955,7 +955,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Activated'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.Activated'/> event.
         /// </summary>
         event EventHandler IDesignerHost.Activated
         {
@@ -964,7 +964,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Deactivated'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.Deactivated'/> event.
         /// </summary>
         event EventHandler IDesignerHost.Deactivated
         {
@@ -973,7 +973,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.LoadComplete'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.LoadComplete'/> event.
         /// </summary>
         event EventHandler IDesignerHost.LoadComplete
         {
@@ -982,7 +982,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosed'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionClosed'/> event.
         /// </summary>
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosed
         {
@@ -991,7 +991,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosing'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionClosing'/> event.
         /// </summary>
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosing
         {
@@ -1000,7 +1000,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpened'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionOpened'/> event.
         /// </summary>
         event EventHandler IDesignerHost.TransactionOpened
         {
@@ -1009,7 +1009,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpening'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionOpening'/> event.
         /// </summary>
         event EventHandler IDesignerHost.TransactionOpening
         {

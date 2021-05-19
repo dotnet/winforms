@@ -50,12 +50,12 @@ namespace System.Windows.Forms.Design
             }
 
             int i = 1;
-            resultName = lvgName + i.ToString(System.Globalization.CultureInfo.CurrentCulture);
+            resultName = lvgName + i.ToString(Globalization.CultureInfo.CurrentCulture);
 
             while (lvgCollection[resultName] != null)
             {
                 i++;
-                resultName = lvgName + i.ToString(System.Globalization.CultureInfo.CurrentCulture);
+                resultName = lvgName + i.ToString(Globalization.CultureInfo.CurrentCulture);
             }
 
             return resultName;

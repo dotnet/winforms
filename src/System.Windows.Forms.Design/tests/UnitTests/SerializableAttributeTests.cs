@@ -16,6 +16,7 @@ namespace System.Windows.Forms.Design.Tests.Serialization
                 typeof(Behavior.Behavior).Assembly,
                 new HashSet<string>
                 {
+                    typeof(OleDragDropHandler.CfCodeToolboxItem).FullName,
                     { "System.Windows.Forms.Design.Behavior.DesignerActionKeyboardBehavior+<>c"}
                 });
         }

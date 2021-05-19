@@ -766,7 +766,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                     if (control == _primaryControl && _statusCommandUI != null)
                     {
-                        _statusCommandUI.SetStatusInformation(control as Component);
+                        _statusCommandUI.SetStatusInformation(control);
                     }
                 }
                 finally
@@ -891,7 +891,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                             if (_resizeComponents[i].resizeControl == _primaryControl && _statusCommandUI != null)
                             {
-                                _statusCommandUI.SetStatusInformation(_primaryControl as Component);
+                                _statusCommandUI.SetStatusInformation(_primaryControl);
                             }
                         }
                     }

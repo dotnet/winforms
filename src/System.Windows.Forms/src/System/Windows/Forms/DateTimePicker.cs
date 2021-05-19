@@ -1200,7 +1200,7 @@ namespace System.Windows.Forms
         {
             base.OnEnabledChanged(e);
 
-            if (Application.RenderWithVisualStyles)
+            if (IsHandleCreated && Application.RenderWithVisualStyles)
             {
                 // The SysDateTimePick32 control caches the style and uses that directly to determine whether the
                 // border should be drawn disabled when theming (VisualStyles) is enabled. Setting the window

@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design
                 // first Hide the Overflow..
                 if (ToolStripItem.IsOnOverflow)
                 {
-                    ToolStrip strip = ToolStripItem.Owner as ToolStrip;
+                    ToolStrip strip = ToolStripItem.Owner;
                     if (strip.OverflowButton.DropDown.Visible)
                     {
                         strip.OverflowButton.HideDropDown();
@@ -419,7 +419,6 @@ namespace System.Windows.Forms.Design
                         if (designerTransaction != null)
                         {
                             designerTransaction.Commit();
-                            designerTransaction = null;
                         }
                     }
                 }
@@ -486,7 +485,7 @@ namespace System.Windows.Forms.Design
 
                 if (ToolStripItem != null)
                 {
-                    ToolStripItem.Paint -= new System.Windows.Forms.PaintEventHandler(OnItemPaint);
+                    ToolStripItem.Paint -= new PaintEventHandler(OnItemPaint);
                 }
 
                 // Now, unhook the component rename event
@@ -590,7 +589,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        public void GetGlyphs(ref GlyphCollection glyphs, System.Windows.Forms.Design.Behavior.Behavior standardBehavior)
+        public void GetGlyphs(ref GlyphCollection glyphs, Behavior.Behavior standardBehavior)
         {
             if (ImmediateParent == null)
             {
@@ -939,7 +938,6 @@ namespace System.Windows.Forms.Design
                 if (designerTransaction != null)
                 {
                     designerTransaction.Commit();
-                    designerTransaction = null;
                 }
             }
 
@@ -1123,7 +1121,7 @@ namespace System.Windows.Forms.Design
         private void ResetAutoSize() => ShadowProperties[nameof(AutoSize)] = false;
 
         /// <summary>
-        ///      Restores the AutoSize to be the value set in the property grid.
+        ///  Restores the AutoSize to be the value set in the property grid.
         /// </summary>
         private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties[nameof(AutoSize)];
 

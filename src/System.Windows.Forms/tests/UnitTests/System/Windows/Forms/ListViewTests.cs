@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
 using Xunit;
@@ -5097,6 +5098,172 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(text, actual);
         }
 
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListView_AnnounceColumnHeader_DoesNotWork_WithoutHandle(View view)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = view
+            };
+
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 2", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 3", Width = 100 });
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(15, 40));
+            Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListView_AnnounceColumnHeader_DoesNotWork_WithoutHeader(View view)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = view
+            };
+
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(15, 40));
+            Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListView_AnnounceColumnHeader_DoesNotWork_InvalidPoint(View view)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = view
+            };
+
+            listView.CreateControl();
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(10, 20));
+            Assert.Equal(0, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(15, 40, "Column 1")]
+        [InlineData(150, 40, "Column 2")]
+        [InlineData(250, 40, "Column 3")]
+        public void ListView_AnnounceColumnHeader_WorksCorrectly(int x, int y, string expectedColumnName)
+        {
+            using ListView listView = new ListView()
+            {
+                Size = new Size(300, 200),
+                View = View.Details
+            };
+
+            listView.CreateControl();
+
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 2", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 3", Width = 100 });
+            listView.Items.Add(new ListViewItem("Test"));
+            SubListViewAccessibleObject accessibleObject = new(listView);
+
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+            listView.AnnounceColumnHeader(new Point(x, y));
+
+            Assert.Equal(1, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(expectedColumnName, accessibleObject.AnnouncedColumn);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        private class SubListViewAccessibleObject : ListView.ListViewAccessibleObject
+        {
+            internal string AnnouncedColumn { get; private set; }
+
+            internal int RaiseAutomationNotificationCallCount { get; private set; }
+
+            internal SubListViewAccessibleObject(ListView listView) : base(listView)
+            {
+            }
+
+            internal override bool InternalRaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
+            {
+                AnnouncedColumn = notificationText;
+                RaiseAutomationNotificationCallCount++;
+                return true;
+            }
+        }
+
+        public static IEnumerable<object[]> ListView_OnSelectedIndexChanged_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool virtualMode in new[] { true, false })
+                {
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (view == View.Tile)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool withinGroup in new[] { true, false })
+                        {
+                            yield return new object[] { view, virtualMode, showGroups, withinGroup };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_OnSelectedIndexChanged_TestData))]
+        public void ListView_OnSelectedIndexChanged_DoesNotInvoke_RaiseAutomationEvent_SecondTime(View view, bool virtualMode, bool showGroups, bool withinGroup)
+        {
+            using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup);
+            ListViewItem listViewItem = listView.Items[0];
+            SubListViewItemAccessibleObject accessibleObject = new SubListViewItemAccessibleObject(listViewItem);
+            listViewItem.TestAccessor().Dynamic._accessibilityObject = accessibleObject;
+            listView.CreateControl();
+            listViewItem.Focused = true;
+            listViewItem.Selected = true;
+
+            Assert.Equal(2, accessibleObject.RaiseAutomationEventCalls);
+
+            listView.CallSelectedIndexChanged();
+
+            Assert.Equal(2, accessibleObject.RaiseAutomationEventCalls);
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }
@@ -5112,7 +5279,7 @@ namespace System.Windows.Forms.Tests
         {
             public int RaiseAutomationEventCalls;
 
-            public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem, null)
+            public SubListViewItemAccessibleObject(ListViewItem owningItem) : base(owningItem)
             {
             }
 
@@ -5125,6 +5292,8 @@ namespace System.Windows.Forms.Tests
 
         private class SubListView : ListView
         {
+            internal void CallSelectedIndexChanged() => base.OnSelectedIndexChanged(new EventArgs());
+
             public new bool CanEnableIme => base.CanEnableIme;
 
             public new bool CanRaiseEvents => base.CanRaiseEvents;
@@ -5186,6 +5355,54 @@ namespace System.Windows.Forms.Tests
             public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
 
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
+        }
+
+        private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup)
+        {
+            SubListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+                VirtualMode = virtualMode,
+                VirtualListSize = 2
+            };
+
+            ListViewItem listItem1 = new("Test Item 1");
+            ListViewItem listItem2 = new("Test Item 2");
+
+            if (withinGroup)
+            {
+                ListViewGroup listViewGroup = new("Test");
+                listView.Groups.Add(listViewGroup);
+                listItem2.Group = listViewGroup;
+            }
+
+            listView.Columns.Add(new ColumnHeader() { Name = "Column 1" });
+
+            if (virtualMode)
+            {
+                listView.RetrieveVirtualItem += (s, e) =>
+                {
+                    e.Item = e.ItemIndex switch
+                    {
+                        0 => listItem1,
+                        1 => listItem2,
+                        _ => throw new NotImplementedException()
+                    };
+                };
+
+                listItem1.SetItemIndex(listView, 0);
+                listItem2.SetItemIndex(listView, 1);
+            }
+            else
+            {
+                listView.Items.Add(listItem1);
+                listView.Items.Add(listItem2);
+            }
+
+            listView.CreateControl();
+
+            return listView;
         }
     }
 }

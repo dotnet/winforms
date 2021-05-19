@@ -14,9 +14,9 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     {
-        private CodeDomLocalizationModel _model;
-        private MemberCodeDomSerializer _serializer;
-        private CodeDomLocalizationProvider.LanguageExtenders _extender;
+        private readonly CodeDomLocalizationModel _model;
+        private readonly MemberCodeDomSerializer _serializer;
+        private readonly CodeDomLocalizationProvider.LanguageExtenders _extender;
         private CultureInfo localizationLanguage;
 
         internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationProvider.LanguageExtenders extender, CodeDomLocalizationModel model)
