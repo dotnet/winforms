@@ -5776,14 +5776,14 @@ namespace System.Windows.Forms
 
             // We should not include the window adornments in our calculation,
             // because windows scales them for us.
-            var adornmentsBeforeDpiChange = default;
+            RECT adornmentsBeforeDpiChange = default;
             CreateParams cp = CreateParams;
 
             // We would need to get old adornments metrics as we will be deducting this from bounds and then scale it.
             User32.AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false.ToBOOL(), cp.ExStyle, (uint)_oldDeviceDpi);
 
             // And now, we get new adornments to add to bounds after scaling
-            var adornmentsAfterDpiChange = default;
+            RECT adornmentsAfterDpiChange = default;
             if (_oldDeviceDpi != _deviceDpi)
             {
                 AdjustWindowRectEx(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
