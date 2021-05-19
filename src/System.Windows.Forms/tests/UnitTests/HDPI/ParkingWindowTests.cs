@@ -64,7 +64,6 @@ namespace System.Windows.Forms.Tests.HDPI
 
             var dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
             Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
-
         }
 
         [WinFormsFact]
