@@ -269,13 +269,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UpdateScrollInfo()
+        internal unsafe void UpdateScrollInfo()
         {
             if (_parent is not null && _parent.IsHandleCreated && _visible)
             {
-                var si = new User32.SCROLLINFO
+                User32.SCROLLINFO si = new()
                 {
-                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                    cbSize = (uint)sizeof(User32.SCROLLINFO),
                     fMask = User32.SIF.ALL,
                     nMin = _minimum,
                     nMax = _maximum,
@@ -283,6 +283,7 @@ namespace System.Windows.Forms
                     nPos = _value,
                     nTrackPos = 0
                 };
+
                 User32.SetScrollInfo(_parent, Orientation, ref si, BOOL.TRUE);
             }
         }

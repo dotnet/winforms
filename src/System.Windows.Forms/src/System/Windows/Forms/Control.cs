@@ -1810,7 +1810,7 @@ namespace System.Windows.Forms
             {
                 if (s_defaultFont is null)
                 {
-                    s_defaultFont = SystemFonts.MessageBoxFont;
+                    s_defaultFont = Application.DefaultFont ?? SystemFonts.MessageBoxFont;
                     Debug.Assert(s_defaultFont is not null, "defaultFont wasn't set!");
                 }
 
@@ -7803,15 +7803,16 @@ namespace System.Windows.Forms
             OnInvokedSetScrollPosition(sender, e);
         }
 
-        internal virtual void OnInvokedSetScrollPosition(object sender, EventArgs e)
+        internal unsafe virtual void OnInvokedSetScrollPosition(object sender, EventArgs e)
         {
             if (!(this is ScrollableControl) && !IsMirrored)
             {
-                var si = new User32.SCROLLINFO
+                User32.SCROLLINFO si = new()
                 {
-                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                    cbSize = (uint)sizeof(User32.SCROLLINFO),
                     fMask = User32.SIF.RANGE
                 };
+
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
@@ -11602,6 +11603,7 @@ namespace System.Windows.Forms
             if (pref.Category == UserPreferenceCategory.Color)
             {
                 s_defaultFont = null;
+                Application.ScaleDefaultFont();
                 OnSystemColorsChanged(EventArgs.Empty);
             }
         }

@@ -157,15 +157,14 @@ namespace System.Windows.Forms
             }
 
             // Check to see if we've actually corrupted the state
-            object[] data = (object[])graphics.GetContextInfo();
+            graphics.GetContextInfo(out PointF offset, out Region? clip);
 
-            using Region clipRegion = (Region)data[0];
-            using Matrix worldTransform = (Matrix)data[1];
-
-            float[] elements = worldTransform?.Elements!;
-            bool isInfinite = clipRegion.IsInfinite(graphics);
-            Debug.Assert((int)elements[4] == 0 && (int)elements[5] == 0, "transform has been modified");
-            Debug.Assert(isInfinite, "clipping as been applied");
+            using (clip)
+            {
+                bool isInfinite = clip?.IsInfinite(graphics) ?? true;
+                Debug.Assert(offset.IsEmpty, "transform has been modified");
+                Debug.Assert(isInfinite, "clipping as been applied");
+            }
         }
     }
 }

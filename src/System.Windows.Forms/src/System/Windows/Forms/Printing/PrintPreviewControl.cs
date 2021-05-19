@@ -310,17 +310,18 @@ namespace System.Windows.Forms
             }
         }
 
-        private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
+        private unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
             switch ((User32.SBH)PARAM.LOWORD(m.WParam))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
-                    var si = new User32.SCROLLINFO
+                    User32.SCROLLINFO si = new()
                     {
-                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        cbSize = (uint)sizeof(User32.SCROLLINFO),
                         fMask = User32.SIF.TRACKPOS
                     };
+
                     User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
                     if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
                     {
@@ -745,19 +746,20 @@ namespace System.Windows.Forms
             User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
         }
 
-        internal void SetVirtualSizeNoInvalidate(Size value)
+        internal unsafe void SetVirtualSizeNoInvalidate(Size value)
         {
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            var info = new User32.SCROLLINFO
+            User32.SCROLLINFO info = new()
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.RANGE | User32.SIF.PAGE,
                 nMin = 0,
                 nMax = Math.Max(Height, virtualSize.Height) - 1,
                 nPage = (uint)Height
             };
+
             User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
 
             info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;

@@ -587,33 +587,35 @@ namespace System.Windows.Forms
             return s + ", Minimum: " + Minimum + ", Maximum: " + Maximum + ", Value: " + Value;
         }
 
-        protected void UpdateScrollInfo()
+        protected unsafe void UpdateScrollInfo()
         {
-            if (IsHandleCreated && Enabled)
+            if (!IsHandleCreated || !Enabled)
             {
-                var si = new User32.SCROLLINFO
-                {
-                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
-                    fMask = User32.SIF.ALL,
-                    nMin = _minimum,
-                    nMax = _maximum,
-                    nPage = (uint)LargeChange
-                };
-
-                if (RightToLeft == RightToLeft.Yes)
-                {
-                    // Reflect the scrollbar position horizontally on an Rtl system
-                    si.nPos = ReflectPosition(_value);
-                }
-                else
-                {
-                    si.nPos = _value;
-                }
-
-                si.nTrackPos = 0;
-
-                User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
+                return;
             }
+
+            User32.SCROLLINFO si = new()
+            {
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
+                fMask = User32.SIF.ALL,
+                nMin = _minimum,
+                nMax = _maximum,
+                nPage = (uint)LargeChange
+            };
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                // Reflect the scrollbar position horizontally on an Rtl system
+                si.nPos = ReflectPosition(_value);
+            }
+            else
+            {
+                si.nPos = _value;
+            }
+
+            si.nTrackPos = 0;
+
+            User32.SetScrollInfo(this, User32.SB.CTL, ref si, BOOL.TRUE);
         }
 
         private void WmReflectScroll(ref Message m)
@@ -622,7 +624,7 @@ namespace System.Windows.Forms
             DoScroll(type);
         }
 
-        private void DoScroll(ScrollEventType type)
+        private unsafe void DoScroll(ScrollEventType type)
         {
             // For Rtl systems we need to swap increment and decrement
             if (RightToLeft == RightToLeft.Yes)
@@ -689,11 +691,12 @@ namespace System.Windows.Forms
 
                 case ScrollEventType.ThumbPosition:
                 case ScrollEventType.ThumbTrack:
-                    var si = new User32.SCROLLINFO
+                    User32.SCROLLINFO si = new()
                     {
-                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        cbSize = (uint)sizeof(User32.SCROLLINFO),
                         fMask = User32.SIF.TRACKPOS
                     };
+
                     User32.GetScrollInfo(this, User32.SB.CTL, ref si);
 
                     if (RightToLeft == RightToLeft.Yes)

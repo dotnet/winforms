@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  The ToolStripItems are the associated components. We want those to come with in any cut, copy opreations.
         /// </summary>
-        public override System.Collections.ICollection AssociatedComponents
+        public override ICollection AssociatedComponents
         {
             get
             {
@@ -156,7 +156,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                return (ICollection)items;
+                return items;
             }
         }
 
@@ -532,7 +532,7 @@ namespace System.Windows.Forms.Design
                     designer.InternalCreate = true;
                     if (designer is ComponentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        designer.InitializeNewComponent(null);
                     }
                 }
                 finally
@@ -593,7 +593,7 @@ namespace System.Windows.Forms.Design
 
                     if (designer is ComponentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        designer.InitializeNewComponent(null);
                     }
                 }
                 finally
@@ -735,7 +735,6 @@ namespace System.Windows.Forms.Design
                 else if (outerTransaction != null)
                 {
                     outerTransaction.Commit();
-                    outerTransaction = null;
                 }
 
                 _addingItem = false;
@@ -937,7 +936,7 @@ namespace System.Windows.Forms.Design
                         // notify the designer what's changed.
                         try
                         {
-                            base.RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
+                            RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
                             if (SelectionService.PrimarySelection is ToolStripItem selectedItem)
                             {
                                 //ADD at the current Selection ...
@@ -959,7 +958,7 @@ namespace System.Windows.Forms.Design
                         }
                         finally
                         {
-                            base.RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
+                            RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
                         }
                     }
                 }
@@ -1071,7 +1070,7 @@ namespace System.Windows.Forms.Design
                     if (itemIndex != -1)
                     {
                         ToolStrip.Items.Remove(item);
-                        base.RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
+                        RaiseComponentChanged(TypeDescriptor.GetProperties(Component)["Items"], null, null);
                     }
                 }
                 finally
@@ -1112,7 +1111,7 @@ namespace System.Windows.Forms.Design
 
                 if (KeyboardHandlingService.CutOrDeleteInProgress)
                 {
-                    IComponent targetSelection = (itemIndex == -1) ? (IComponent)ToolStrip : (IComponent)ToolStrip.Items[itemIndex];
+                    IComponent targetSelection = (itemIndex == -1) ? ToolStrip : ToolStrip.Items[itemIndex];
                     // if the TemplateNode becomes the targetSelection, then set the targetSelection to null.
                     if (targetSelection != null)
                     {
@@ -1146,7 +1145,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     _pendingTransaction = _host.CreateTransaction(SR.ToolStripDesignerTransactionRemovingItem);
-                    base.RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
+                    RaiseComponentChanging(TypeDescriptor.GetProperties(Component)["Items"]);
                     if (e.Component is ToolStripDropDownItem dropDownItem)
                     {
                         dropDownItem.HideDropDown();
@@ -1712,7 +1711,7 @@ namespace System.Windows.Forms.Design
 
             string nameSuffix = componentType.Name;
             // remove all the non letter and number characters. Append length of the item name...
-            System.Text.StringBuilder name = new System.Text.StringBuilder(text.Length + nameSuffix.Length);
+            Text.StringBuilder name = new Text.StringBuilder(text.Length + nameSuffix.Length);
             bool nextCharToUpper = false;
             for (int i = 0; i < text.Length; i++)
             {
@@ -1862,7 +1861,7 @@ namespace System.Windows.Forms.Design
 
             string transDesc;
             ArrayList components = data.DragComponents;
-            ToolStripItem primaryItem = data.PrimarySelection as ToolStripItem;
+            ToolStripItem primaryItem = data.PrimarySelection;
             int primaryIndex = -1;
             bool copy = (de.Effect == DragDropEffects.Copy);
 
@@ -1976,7 +1975,6 @@ namespace System.Windows.Forms.Design
                 if (changeParent != null)
                 {
                     changeParent.Commit();
-                    changeParent = null;
                 }
             }
         }
@@ -2077,7 +2075,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  In Order to Draw the Selection Glyphs we need to reforce painting on the  the AdonerWindow.This method forces the repaint
         /// </summary>
-        private void OnOverFlowDropDownPaint(object sender, System.Windows.Forms.PaintEventArgs e)
+        private void OnOverFlowDropDownPaint(object sender, PaintEventArgs e)
         {
             foreach (ToolStripItem item in ToolStrip.Items)
             {
@@ -2195,7 +2193,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  SyncSelection on ToolStrip move.
         /// </summary>
-        private void OnToolStripMove(object sender, System.EventArgs e)
+        private void OnToolStripMove(object sender, EventArgs e)
         {
             if (SelectionService.GetComponentSelected(ToolStrip))
             {
@@ -2365,9 +2363,8 @@ namespace System.Windows.Forms.Design
         {
             if (_miniToolStrip != null && _host != null)
             {
-                bool showToolStrip = false;
                 bool itemSelected = CheckIfItemSelected();
-                showToolStrip = itemSelected || SelectionService.GetComponentSelected(ToolStrip);
+                bool showToolStrip = itemSelected || SelectionService.GetComponentSelected(ToolStrip);
                 //Check All the SelectedComponents to find is toolstrips are selected
                 if (showToolStrip)
                 {

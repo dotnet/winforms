@@ -29,7 +29,7 @@ namespace System.ComponentModel.Design
         private bool _ignoreChangingEvents;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
+        ///  Initializes a new instance of the <see cref='CollectionEditor'/> class using the specified collection type.
         /// </summary>
         public CollectionEditor(Type type)
         {
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
+        ///  Edits the specified object value using the editor style  provided by <see cref='GetEditStyle'/>.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -926,7 +926,7 @@ namespace System.ComponentModel.Design
                 int c = Math.Max(2, _listbox.Items.Count);
                 SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                int charactersInNumber = ((int)(Math.Log((double)(c - 1)) / s_log10) + 1);
+                int charactersInNumber = ((int)(Math.Log(c - 1) / s_log10) + 1);
                 int w = 4 + charactersInNumber * (Font.Height / 2);
 
                 w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
@@ -1278,7 +1278,7 @@ namespace System.ComponentModel.Design
                     // We add the +4 is a fudge factor...
                     SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                    int charactersInNumber = ((int)(Math.Log((double)maxC) / s_log10) + 1);// Luckily, this is never called if count = 0
+                    int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1);// Luckily, this is never called if count = 0
                     int w = 4 + charactersInNumber * (Font.Height / 2);
 
                     w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
@@ -2224,7 +2224,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
+        ///  The <see cref='CollectionForm'/> provides a modal dialog for editing the contents of a collection.
         /// </summary>
         protected abstract class CollectionForm : Form
         {
@@ -2237,7 +2237,7 @@ namespace System.ComponentModel.Design
             private const short EditableNo = 2;
 
             /// <summary>
-            ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
+            ///  Initializes a new instance of the <see cref='CollectionForm'/> class.
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
@@ -2396,7 +2396,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
+            ///  This is called when the value property in the <see cref='CollectionForm'/> has changed.
             /// </summary>
             protected abstract void OnEditValueChanged();
         }

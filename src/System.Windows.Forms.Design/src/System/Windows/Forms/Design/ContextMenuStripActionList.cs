@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != ShowImageMargin)
                 {
-                    ChangeProperty(nameof(ShowImageMargin), (object)value);
+                    ChangeProperty(nameof(ShowImageMargin), value);
                 }
             }
         }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != ShowCheckMargin)
                 {
-                    ChangeProperty(nameof(ShowCheckMargin), (object)value);
+                    ChangeProperty(nameof(ShowCheckMargin), value);
                 }
             }
         }
@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != RenderMode)
                 {
-                    ChangeProperty(nameof(RenderMode), (object)value);
+                    ChangeProperty(nameof(RenderMode), value);
                 }
             }
         }

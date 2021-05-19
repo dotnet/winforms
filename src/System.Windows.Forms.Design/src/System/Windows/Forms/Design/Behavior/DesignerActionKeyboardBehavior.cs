@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
 
                 // in case of a ctrl-tab we need to close the DAP
-                if (_daUISvc != null && commandId.Guid == DesignerActionKeyboardBehavior.s_vSStandardCommandSet97 && commandId.ID == 1124)
+                if (_daUISvc != null && commandId.Guid == s_vSStandardCommandSet97 && commandId.ID == 1124)
                 {
                     _daUISvc.HideUI(null);
                 }

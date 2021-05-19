@@ -119,6 +119,7 @@ namespace System.Windows.Forms
         private MouseButtons downButton;
         private int itemCount;
         private int columnIndex;
+        private ListViewItem _selectedItem;
         private int topIndex;
         private bool hoveredAlready;
 
@@ -1009,15 +1010,13 @@ namespace System.Windows.Forms
             }
         }
 
+        // ListViewGroup are not displayed when the ListView is in "List" view
+        internal bool GroupsDisplayed => View != View.List && GroupsEnabled;
+
         // this essentially means that the version of CommCtl supports list view grouping
         // and that the user wants to make use of list view groups
         internal bool GroupsEnabled
-        {
-            get
-            {
-                return ShowGroups && groups is not null && groups.Count > 0 && Application.ComCtlSupportsVisualStyles && !VirtualMode;
-            }
-        }
+            => ShowGroups && groups is not null && groups.Count > 0 && Application.ComCtlSupportsVisualStyles && !VirtualMode;
 
         /// <summary>
         ///  Column headers can either be invisible, clickable, or non-clickable.
@@ -1643,6 +1642,10 @@ namespace System.Windows.Forms
             }
         }
 
+        // Getting a rectangle for a sub item only works for a ListView in "Details" and "Tile" views.
+        // Additionally, a ListView in the "Tile" view does not show ListViewSubItems when visual styles are disabled.
+        internal bool SupportsListViewSubItems => View == View.Details || (View == View.Tile && Application.ComCtlSupportsVisualStyles);
+
         internal override bool SupportsUiaProviders => true;
 
         [Browsable(false)]
@@ -2200,6 +2203,44 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
             remove => Events.RemoveHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
+        }
+
+        internal unsafe void AnnounceColumnHeader(Point point)
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            IntPtr hwnd = User32.SendMessageW(this, (User32.WM)LVM.GETHEADER);
+            if (hwnd == IntPtr.Zero)
+            {
+                return;
+            }
+
+            LVHITTESTINFO lvhi = new()
+            {
+                pt = PointToClient(point)
+            };
+
+            User32.SCROLLINFO si = new()
+            {
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
+                fMask = User32.SIF.POS
+            };
+
+            if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
+            {
+                lvhi.pt.X += si.nPos;
+            }
+
+            if (User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, IntPtr.Zero, ref lvhi) != (IntPtr)(-1) && lvhi.iItem > -1)
+            {
+                AccessibilityObject?.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.MostRecent,
+                    Columns[lvhi.iItem].Text);
+            }
         }
 
         /// <summary>
@@ -3501,22 +3542,6 @@ namespace System.Windows.Forms
             return -1;
         }
 
-        internal int GetGroupIndex(ListViewGroup owningGroup)
-        {
-            if (Groups.Count == 0)
-            {
-                return -1;
-            }
-
-            // Default group it's last group in accessibility and not specified in Groups collection, therefore default group index = Groups.Count
-            if (DefaultGroup == owningGroup)
-            {
-                return Groups.Count;
-            }
-
-            return Groups.IndexOf(owningGroup);
-        }
-
         /// <summary>
         ///  Returns the current ListViewItem corresponding to the specific
         ///  x,y co-ordinate.
@@ -3689,8 +3714,7 @@ namespace System.Windows.Forms
 
         internal Rectangle GetSubItemRect(int itemIndex, int subItemIndex, ItemBoundsPortion portion)
         {
-            // it seems that getting the rectangle for a sub item only works for list view which are in Details view
-            if (View != View.Details)
+            if (!SupportsListViewSubItems)
             {
                 return Rectangle.Empty;
             }
@@ -3702,7 +3726,9 @@ namespace System.Windows.Forms
 
             int subItemCount = Items[itemIndex].SubItems.Count;
 
-            if (subItemIndex < 0 || subItemIndex >= subItemCount)
+            if (subItemIndex < 0
+                || (View == View.Tile && subItemIndex >= subItemCount)
+                || (View == View.Details && subItemIndex >= Columns.Count))
             {
                 throw new ArgumentOutOfRangeException(nameof(subItemIndex), subItemIndex, string.Format(SR.InvalidArgument, nameof(subItemIndex), subItemIndex));
             }
@@ -3774,7 +3800,7 @@ namespace System.Windows.Forms
             };
 
             int iItem;
-            if (View == View.Details)
+            if (SupportsListViewSubItems)
             {
                 iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
             }
@@ -3799,7 +3825,7 @@ namespace System.Windows.Forms
                 location = (ListViewHitTestLocations)lvhi.flags;
             }
 
-            if (View == View.Details && item is not null)
+            if (SupportsListViewSubItems && item is not null)
             {
                 if (lvhi.iSubItem < item.SubItems.Count)
                 {
@@ -4899,8 +4925,13 @@ namespace System.Windows.Forms
             }
 
             ListViewItem firstSelectedItem = Items[SelectedIndices[0]];
-            if (firstSelectedItem.Focused)
+
+            // The second condition is necessary to avoid unexpected switch of the Inspect's focus
+            // when the user clicks on the ListViewSubItem. This is due to the fact that the "OnSelectedIndexChanged"
+            // and "WmMouseDown" methods simultaneously send message about the selected item.
+            if (firstSelectedItem.Focused && _selectedItem != firstSelectedItem)
             {
+                _selectedItem = firstSelectedItem;
                 firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
         }
@@ -5932,6 +5963,16 @@ namespace System.Windows.Forms
         private unsafe bool WmNotify(ref Message m)
         {
             User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+
+            if (nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening().IsTrue())
+            {
+                // Checking that mouse buttons are not pressed is necessary to avoid
+                // multiple annotation of the column header when resizing the column with the mouse
+                if (m.LParam != IntPtr.Zero && Control.MouseButtons == MouseButtons.None)
+                {
+                    AnnounceColumnHeader(Cursor.Position);
+                }
+            }
 
             // column header custom draw message handling
             if (nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)

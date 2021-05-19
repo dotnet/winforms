@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -148,6 +150,128 @@ namespace System.Windows.Forms.Tests
             using Stream stream = typeof(Application).Module.Assembly.GetManifestResourceStream(
                 "System.Windows.Forms.XPThemes.manifest");
             Assert.NotNull(stream);
+        }
+
+        [WinFormsFact]
+        public void Application_DefaultFont_ReturnsNull_IfNoFontSet()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+            Assert.Null(Application.DefaultFont);
+        }
+
+        [WinFormsFact]
+        public void Application_DefaultFont_Returns_DefaultFont_IfNotScaled()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font customFont = (Font)SystemFonts.CaptionFont.Clone();
+            try
+            {
+                applicationTestAccessor.s_defaultFont = customFont;
+
+                AreFontEqual(customFont, Application.DefaultFont);
+            }
+            finally
+            {
+                customFont.Dispose();
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled?.Dispose();
+                applicationTestAccessor.s_defaultFontScaled = null;
+            }
+        }
+
+        [WinFormsFact]
+        public void Application_DefaultFont_Returns_ScaledDefaultFont_IfScaled()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font font = new Font(new FontFamily("Arial"), 12f);
+            Font scaled = new Font(new FontFamily("Arial"), 16f);
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+                applicationTestAccessor.s_defaultFontScaled = scaled;
+
+                AreFontEqual(scaled, Application.DefaultFont);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled = null;
+                font.Dispose();
+                scaled.Dispose();
+            }
+        }
+
+        private static void AreFontEqual(Font expected, Font actual)
+        {
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.SizeInPoints, actual.SizeInPoints);
+            Assert.Equal(expected.GdiCharSet, actual.GdiCharSet);
+            Assert.Equal(expected.Style, actual.Style);
+        }
+
+        [WinFormsFact]
+        public void Application_SetDefaultFont_SetNull_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>("font", () => Application.SetDefaultFont(null));
+        }
+
+        [WinFormsFact]
+        public void Application_SetDefaultFont_AfterHandleCreated_InvalidOperationException()
+        {
+            using var control = new Control();
+            var window = new NativeWindow();
+            window.AssignHandle(control.Handle);
+
+            Assert.Throws<InvalidOperationException>(() => Application.SetDefaultFont(SystemFonts.CaptionFont));
+        }
+
+        [WinFormsFact]
+        public void Application_SetDefaultFont_MustCloseSystemFont()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Assert.True(SystemFonts.CaptionFont.IsSystemFont);
+
+            // This a unholy, but generally at this stage NativeWindow.AnyHandleCreated=true,
+            // And we won't be able to set the font, unless we flip the bit
+            var nativeWindowTestAccessor = typeof(NativeWindow).TestAccessor().Dynamic;
+            bool currentAnyHandleCreated = nativeWindowTestAccessor.t_anyHandleCreated;
+
+            try
+            {
+                nativeWindowTestAccessor.t_anyHandleCreated = false;
+
+                Application.SetDefaultFont(SystemFonts.CaptionFont);
+
+                Assert.False(applicationTestAccessor.s_defaultFont.IsSystemFont);
+            }
+            finally
+            {
+                // Flip the bit back
+                nativeWindowTestAccessor.t_anyHandleCreated = currentAnyHandleCreated;
+
+                applicationTestAccessor.s_defaultFont.Dispose();
+                applicationTestAccessor.s_defaultFontScaled?.Dispose();
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled = null;
+            }
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HighDpiMode))]
+        public void Application_SetHighDpiMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(HighDpiMode value)
+        {
+            Assert.Throws<InvalidEnumArgumentException>("highDpiMode", () => Application.SetHighDpiMode(value));
         }
 
         private class CustomLCIDCultureInfo : CultureInfo

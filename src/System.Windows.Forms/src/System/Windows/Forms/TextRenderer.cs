@@ -14,6 +14,13 @@ namespace System.Windows.Forms
     /// </summary>
     public static class TextRenderer
     {
+#if DEBUG
+        // In various cases the DC may have already been modified, and we don't pass TextFormatFlags.PreserveGraphicsClipping
+        // or TextFormatFlags.PreserveGraphicsTranslateTransform flags, that set off the asserts in GetApplyStateFlags
+        // method. This flags allows us to skip those assert for the cases we know we don't need these flags.
+        internal static TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
+#endif
+
         internal static Gdi32.QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
 
         internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
@@ -620,15 +627,20 @@ namespace System.Windows.Forms
                 apply |= ApplyGraphicsProperties.TranslateTransform;
             }
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
-                || graphics.Clip is null
-                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
-                "Must preserve Graphics clipping region!");
+#if DEBUG
+            if ((textFormatFlags & SkipAssertFlag) == 0)
+            {
+                Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
+                    || graphics.Clip is null
+                    || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+                    "Must preserve Graphics clipping region!");
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                || graphics.Transform is null
-                || graphics.Transform.IsIdentity,
-                "Must preserve Graphics transformation!");
+                Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
+                    || graphics.Transform is null
+                    || graphics.Transform.IsIdentity,
+                    "Must preserve Graphics transformation!");
+            }
+#endif
 
             return apply;
         }

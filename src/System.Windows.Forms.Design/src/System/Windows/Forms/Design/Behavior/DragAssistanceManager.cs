@@ -256,9 +256,9 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 for (int i = 0; i < lines.Length; i++)
                 {
-                    Rectangle invalidRect = Rectangle.Empty;
                     bool foundMatch = false;
                     Line line = lines[i];
+                    Rectangle invalidRect;
                     if (tempLines != null)
                     {
                         for (int j = 0; j < tempLines.Count; j++)
@@ -626,13 +626,12 @@ namespace System.Windows.Forms.Design.Behavior
 
         private static int FindSmallestValidDistance(ArrayList snapLines, int[] distances, int min, int max, int direction)
         {
-            int distanceValue = 0;
-            int snapLineIndex = 0;
             // loop while we still have valid distance to check and try to find the smallest valid distance
             while (true)
             {
+                int distanceValue;
                 // get the next smallest snapline index
-                snapLineIndex = SmallestDistanceIndex(distances, direction, out distanceValue);
+                int snapLineIndex = SmallestDistanceIndex(distances, direction, out distanceValue);
 
                 if (snapLineIndex == INVALID_VALUE)
                 {

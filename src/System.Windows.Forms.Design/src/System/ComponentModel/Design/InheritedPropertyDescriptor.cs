@@ -17,12 +17,12 @@ namespace System.ComponentModel.Design
     {
         private PropertyDescriptor propertyDescriptor;
         private object _defaultValue;
-        private static readonly object s_noDefault = new Object();
+        private static readonly object s_noDefault = new object();
         private bool _initShouldSerialize;
         private object _originalValue;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritedPropertyDescriptor'/> class.
+        ///  Initializes a new instance of the <see cref='InheritedPropertyDescriptor'/> class.
         /// </summary>
         public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
         {
@@ -173,7 +173,7 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                return !object.Equals(GetValue(component), _defaultValue);
+                return !Equals(GetValue(component), _defaultValue);
             }
         }
 
@@ -321,7 +321,7 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                return !object.Equals(GetValue(component), _defaultValue);
+                return !Equals(GetValue(component), _defaultValue);
             }
         }
 

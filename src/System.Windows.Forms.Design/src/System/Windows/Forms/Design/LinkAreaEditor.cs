@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Design
             => UITypeEditorEditStyle.Modal;
 
         /// <summary>
-        ///      Dialog box for the link area.
+        ///  Dialog box for the link area.
         /// </summary>
         internal class LinkAreaUI : Form
         {

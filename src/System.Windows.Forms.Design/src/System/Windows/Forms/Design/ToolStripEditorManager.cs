@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
 
@@ -73,7 +72,7 @@ namespace System.Windows.Forms.Design
                         _itemDesigner = (ToolStripItemDesigner)_designerHost.GetDesigner(_currentItem);
                     }
 
-                    _editorUI = (ToolStripTemplateNode)_itemDesigner.Editor;
+                    _editorUI = _itemDesigner.Editor;
                     // If we got an editor, position and focus it.
                     if (_editorUI != null)
                     {

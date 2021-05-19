@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -11,15 +13,15 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal abstract class SelectionGlyphBase : Glyph
     {
-        protected Rectangle bounds; // defines the bounds of the selection glyph
-        protected Rectangle hitBounds; // defines the bounds used for hittest - it could be different than the bounds of the glyph itself
-        protected Cursor hitTestCursor; // the cursor returned if hit test is positive
-        protected SelectionRules rules; // the selection rules - defining how the control can change
+        protected Rectangle bounds;         // defines the bounds of the selection glyph
+        protected Rectangle hitBounds;      // defines the bounds used for hittest - it could be different than the bounds of the glyph itself
+        protected Cursor? hitTestCursor;     // the cursor returned if hit test is positive
+        protected SelectionRules rules;     // the selection rules - defining how the control can change
 
         /// <summary>
         ///  Standard constructor.
         /// </summary>
-        internal SelectionGlyphBase(Behavior behavior) : base(behavior)
+        internal SelectionGlyphBase(Behavior? behavior) : base(behavior)
         {
         }
 
@@ -34,7 +36,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
         /// </summary>
-        public override Cursor GetHitTest(Point p)
+        public override Cursor? GetHitTest(Point p)
         {
             if (hitBounds.Contains(p))
             {
@@ -47,7 +49,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Returns the HitTestCursor for this glyph.
         /// </summary>
-        public Cursor HitTestCursor
+        public Cursor? HitTestCursor
         {
             get => hitTestCursor;
         }

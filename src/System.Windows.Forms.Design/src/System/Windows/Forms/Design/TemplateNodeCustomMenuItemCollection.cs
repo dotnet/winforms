@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design
@@ -145,7 +144,6 @@ namespace System.Windows.Forms.Design
                 if (newItemTransaction != null)
                 {
                     newItemTransaction.Commit();
-                    newItemTransaction = null;
                 }
 
                 // turn off Adding/Added events listened to by the ToolStripDesigner...

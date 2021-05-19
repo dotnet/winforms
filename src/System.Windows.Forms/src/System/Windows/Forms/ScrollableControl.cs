@@ -927,13 +927,14 @@ namespace System.Windows.Forms
             return new Point(xCalc, yCalc);
         }
 
-        private int ScrollThumbPosition(User32.SB fnBar)
+        private unsafe int ScrollThumbPosition(User32.SB fnBar)
         {
-            var si = new User32.SCROLLINFO
+            User32.SCROLLINFO si = new()
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.TRACKPOS
             };
+
             User32.GetScrollInfo(this, fnBar, ref si);
             return si.nTrackPos;
         }

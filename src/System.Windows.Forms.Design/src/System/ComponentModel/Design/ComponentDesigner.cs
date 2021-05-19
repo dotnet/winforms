@@ -197,7 +197,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.ComponentDesigner' />.
+        ///  Disposes of the resources (other than memory) used by the <see cref='ComponentDesigner' />.
         /// </summary>
         public void Dispose()
         {
@@ -272,7 +272,7 @@ namespace System.ComponentModel.Design
                         }
 
                         eventChanged = true;
-                        handler = ebs.CreateUniqueMethodName((IComponent)comp, defaultEvent);
+                        handler = ebs.CreateUniqueMethodName(comp, defaultEvent);
                     }
                     else
                     {
@@ -336,7 +336,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.ComponentDesigner' /> class using the specified component.
+        ///  Initializes a new instance of the <see cref='ComponentDesigner' /> class using the specified component.
         /// </summary>
         public virtual void Initialize(IComponent component)
         {
@@ -384,7 +384,7 @@ namespace System.ComponentModel.Design
                     PropertyDescriptor prop = values[i];
 
                     // Skip some properties
-                    if (object.Equals(prop.Attributes[typeof(DesignOnlyAttribute)], DesignOnlyAttribute.Yes))
+                    if (Equals(prop.Attributes[typeof(DesignOnlyAttribute)], DesignOnlyAttribute.Yes))
                     {
                         continue;
                     }
@@ -416,7 +416,7 @@ namespace System.ComponentModel.Design
             => toInvoke?.InheritanceAttribute;
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.ComponentDesigner' />.
+        ///  Disposes of the resources (other than memory) used by the <see cref='ComponentDesigner' />.
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -706,14 +706,14 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component has been changed.
+        ///  Notifies the <see cref='IComponentChangeService' /> that this component has been changed.
         ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
         protected void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
             => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);
 
         /// <summary>
-        ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is
+        ///  Notifies the <see cref='IComponentChangeService' /> that this component is
         ///  about to be changed. You only need to call this when you are affecting component properties directly and
         ///  not through the MemberDescriptor's accessors.
         /// </summary>

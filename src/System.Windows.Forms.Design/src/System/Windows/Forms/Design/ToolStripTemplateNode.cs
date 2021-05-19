@@ -171,13 +171,13 @@ namespace System.Windows.Forms.Design
                         IMenuCommandService menuService = (IMenuCommandService)_component.Site.GetService(typeof(IMenuCommandService));
                         if (menuService != null)
                         {
-                            _oldUndoCommand = menuService.FindCommand(MenuCommands.Undo);
+                            _oldUndoCommand = menuService.FindCommand(StandardCommands.Undo);
                             if (_oldUndoCommand != null)
                             {
                                 menuService.RemoveCommand(_oldUndoCommand);
                             }
 
-                            _oldRedoCommand = menuService.FindCommand(MenuCommands.Redo);
+                            _oldRedoCommand = menuService.FindCommand(StandardCommands.Redo);
                             if (_oldRedoCommand != null)
                             {
                                 menuService.RemoveCommand(_oldRedoCommand);
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Design
             // Set the property used in the CommitEditor (.. ) to add the correct Type.
             ToolStripItemType = senderItem.ItemType;
             //Select the parent before adding
-            ToolStrip parent = _controlHost.GetCurrentParent() as ToolStrip;
+            ToolStrip parent = _controlHost.GetCurrentParent();
             // this will add the item to the ToolStrip..
             if (parent is MenuStrip)
             {
@@ -538,7 +538,7 @@ namespace System.Windows.Forms.Design
                     if (_designer is ToolStripMenuItemDesigner)
                     {
                         // cache the serviceProvider (Site) since the component can potential get disposed after the call to CommitAndSelect();
-                        IServiceProvider svcProvider = _component.Site as IServiceProvider;
+                        IServiceProvider svcProvider = _component.Site;
                         // Commit any InsituEdit Node.
                         if (KeyboardService.TemplateNodeActive)
                         {
@@ -692,13 +692,13 @@ namespace System.Windows.Forms.Design
 
                 if (_component is ToolStrip strip)
                 {
-                    strip.RightToLeftChanged -= new System.EventHandler(OnRightToLeftChanged);
+                    strip.RightToLeftChanged -= new EventHandler(OnRightToLeftChanged);
                 }
                 else
                 {
                     if (_component is ToolStripDropDownItem stripItem)
                     {
-                        stripItem.RightToLeftChanged -= new System.EventHandler(OnRightToLeftChanged);
+                        stripItem.RightToLeftChanged -= new EventHandler(OnRightToLeftChanged);
                     }
                 }
 
@@ -886,11 +886,11 @@ namespace System.Windows.Forms.Design
 
                     if (_activeItem is ToolStripDropDownItem item && !item.IsOnDropDown)
                     {
-                        _centerTextBox.Margin = new System.Windows.Forms.Padding(1, 2, 1, 3);
+                        _centerTextBox.Margin = new Padding(1, 2, 1, 3);
                     }
                     else
                     {
-                        _centerTextBox.Margin = new System.Windows.Forms.Padding(1);
+                        _centerTextBox.Margin = new Padding(1);
                     }
 
                     _centerTextBox.Size = _miniToolStrip.DisplayRectangle.Size - _centerTextBox.Margin.Size;
@@ -1249,7 +1249,7 @@ namespace System.Windows.Forms.Design
             {
                 if (_commands[i].CommandID.Equals(cmd.CommandID))
                 {
-                    if (cmd.CommandID == MenuCommands.Delete || cmd.CommandID == MenuCommands.Cut || cmd.CommandID == MenuCommands.Copy)
+                    if (cmd.CommandID == StandardCommands.Delete || cmd.CommandID == StandardCommands.Cut || cmd.CommandID == StandardCommands.Copy)
                     {
                         _commands[i].Invoke();
                         return true;
@@ -1407,9 +1407,9 @@ namespace System.Windows.Forms.Design
                 _addItemButton.ToolTipText = SR.ToolStripDesignerTemplateNodeSplitButtonToolTip;
             }
 
-            _addItemButton.MouseDown += new System.Windows.Forms.MouseEventHandler(OnMouseDown);
-            _addItemButton.MouseMove += new System.Windows.Forms.MouseEventHandler(OnMouseMove);
-            _addItemButton.MouseUp += new System.Windows.Forms.MouseEventHandler(OnMouseUp);
+            _addItemButton.MouseDown += new MouseEventHandler(OnMouseDown);
+            _addItemButton.MouseMove += new MouseEventHandler(OnMouseMove);
+            _addItemButton.MouseUp += new MouseEventHandler(OnMouseUp);
             _addItemButton.DropDownOpened += OnAddItemButtonDropDownOpened;
             _contextMenu = ToolStripDesignerUtils.GetNewItemDropDown(component, null, new EventHandler(AddNewItemClick), false, component.Site, false);
             _contextMenu.Text = "ItemSelectionMenu";
@@ -1446,7 +1446,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            _miniToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            _miniToolStrip.Items.AddRange(new ToolStripItem[]
             {
                 _addItemButton
             });
@@ -1463,7 +1463,7 @@ namespace System.Windows.Forms.Design
             if (currentItem is ToolStrip strip)
             {
                 _miniToolStrip.RightToLeft = strip.RightToLeft;
-                strip.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
+                strip.RightToLeftChanged += new EventHandler(OnRightToLeftChanged);
                 // Make TransparentToolStrip has the same "Site" as ToolStrip. This could make sure TransparentToolStrip has the same design time behavior as ToolStrip.
                 _miniToolStrip.Site = strip.Site;
             }
@@ -1471,14 +1471,14 @@ namespace System.Windows.Forms.Design
             if (currentItem is ToolStripDropDownItem stripItem)
             {
                 _miniToolStrip.RightToLeft = stripItem.RightToLeft;
-                stripItem.RightToLeftChanged += new System.EventHandler(OnRightToLeftChanged);
+                stripItem.RightToLeftChanged += new EventHandler(OnRightToLeftChanged);
             }
 
             _miniToolStrip.SuspendLayout();
             _miniToolStrip.CanOverflow = false;
-            _miniToolStrip.Cursor = System.Windows.Forms.Cursors.Default;
-            _miniToolStrip.Dock = System.Windows.Forms.DockStyle.None;
-            _miniToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            _miniToolStrip.Cursor = Cursors.Default;
+            _miniToolStrip.Dock = DockStyle.None;
+            _miniToolStrip.GripStyle = ToolStripGripStyle.Hidden;
             _miniToolStrip.Name = "miniToolStrip";
             _miniToolStrip.TabIndex = 0;
             _miniToolStrip.Visible = true;
@@ -1497,7 +1497,7 @@ namespace System.Windows.Forms.Design
                 _miniToolStrip.AccessibleRole = AccessibleRole.ButtonDropDown;
             }
 
-            _miniToolStrip.MouseLeave += new System.EventHandler(OnMouseLeave);
+            _miniToolStrip.MouseLeave += new EventHandler(OnMouseLeave);
             _miniToolStrip.ResumeLayout();
         }
 
@@ -1586,7 +1586,7 @@ namespace System.Windows.Forms.Design
                 {
                     case User32.WM.KILLFOCUS:
                         base.WndProc(ref m);
-                        IntPtr focussedWindow = (IntPtr)m.WParam;
+                        IntPtr focussedWindow = m.WParam;
                         if (!IsParentWindow(focussedWindow))
                         {
                             owner.Commit(false, false);
@@ -1704,7 +1704,7 @@ namespace System.Windows.Forms.Design
                 {
                     if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
                     {
-                        Keys keyCode = (Keys)keyData & Keys.KeyCode;
+                        Keys keyCode = keyData & Keys.KeyCode;
                         switch (keyCode)
                         {
                             case Keys.Tab:
@@ -1971,7 +1971,6 @@ namespace System.Windows.Forms.Design
                     }
 
                     Rectangle bounds = new Rectangle(Point.Empty, splitButton.Size);
-                    Pen selectborderPen = null;
                     bool splitButtonSelected = false;
                     if (splitButton.DropDownButtonPressed)
                     {
@@ -2009,6 +2008,7 @@ namespace System.Windows.Forms.Design
                         splitButtonSelected = true;
                     }
 
+                    Pen selectborderPen;
                     if (splitButtonSelected)
                     {
                         //DrawSeleted Boder
@@ -2032,7 +2032,7 @@ namespace System.Windows.Forms.Design
             protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
             {
                 ToolStripItem item = e.Item as ToolStripLabel;
-                if (item != null && String.Equals(item.Name, CenterLabelName, StringComparison.InvariantCulture) && SystemInformation.HighContrast)
+                if (item != null && string.Equals(item.Name, CenterLabelName, StringComparison.InvariantCulture) && SystemInformation.HighContrast)
                 {
                     // "Type Here" node always has white background, text should be painted in black
                     e.TextColor = Color.Black;

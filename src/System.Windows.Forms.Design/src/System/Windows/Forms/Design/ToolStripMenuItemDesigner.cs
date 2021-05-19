@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                return (ICollection)items;
+                return items;
             }
         }
 
@@ -420,15 +420,15 @@ namespace System.Windows.Forms.Design
             }
             else if (commit)
             {
-                int index = -1;
                 bool dummyItem = dummyItemAdded;
                 dummyItemAdded = false;
                 MenuItem.DropDown.SuspendLayout();
+                int index;
                 if (commitedEditorNode != null)
                 {
                     // This means we have a valid node and we just changed some properties.
                     index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
-                    ToolStripItem editedItem = (ToolStripItem)MenuItem.DropDownItems[index + 1];
+                    ToolStripItem editedItem = MenuItem.DropDownItems[index + 1];
                     // Remove TemplatENode
                     MenuItem.DropDown.Items.Remove(commitedEditorNode);
                     // Get rid of the templateNode...
@@ -552,7 +552,6 @@ namespace System.Windows.Forms.Design
                                 if (designerTransaction != null)
                                 {
                                     designerTransaction.Commit();
-                                    designerTransaction = null;
                                 }
                             }
                         }
@@ -636,7 +635,7 @@ namespace System.Windows.Forms.Design
                     bool dummyItem = dummyItemAdded;
                     dummyItemAdded = false;
                     int index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
-                    ToolStripItem editedItem = (ToolStripItem)MenuItem.DropDownItems[index + 1];
+                    ToolStripItem editedItem = MenuItem.DropDownItems[index + 1];
                     MenuItem.DropDown.Items.Remove(commitedEditorNode);
                     // put the item back...
                     editedItem.Visible = true;
@@ -710,8 +709,6 @@ namespace System.Windows.Forms.Design
                                 dummyItemAdded = false;
                             }
                         }
-
-                        dummyItem = false;
                     }
 
                     // Added for Separators...
@@ -810,7 +807,7 @@ namespace System.Windows.Forms.Design
                     designer.InternalCreate = true;
                     if (designer is ComponentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        designer.InitializeNewComponent(null);
                     }
                 }
                 finally
@@ -888,7 +885,7 @@ namespace System.Windows.Forms.Design
 
                     if (designer is ComponentDesigner)
                     {
-                        ((ComponentDesigner)designer).InitializeNewComponent(null);
+                        designer.InitializeNewComponent(null);
                     }
                 }
                 finally
@@ -922,7 +919,6 @@ namespace System.Windows.Forms.Design
                 if (outerTransaction != null)
                 {
                     outerTransaction.Commit();
-                    outerTransaction = null;
                 }
 
                 // turn on Adding/Added events listened to by the ToolStripDesigner...
@@ -1508,7 +1504,7 @@ namespace System.Windows.Forms.Design
                 MenuItem.DropDownOpening += new EventHandler(DropDownItem_DropDownOpening);
                 MenuItem.DropDownOpened += new EventHandler(DropDownItem_DropDownOpened);
                 MenuItem.DropDownClosed += new EventHandler(DropDownItem_DropDownClosed);
-                MenuItem.DropDown.Resize += new System.EventHandler(DropDownResize);
+                MenuItem.DropDown.Resize += new EventHandler(DropDownResize);
                 MenuItem.DropDown.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
                 MenuItem.DropDown.Paint += new PaintEventHandler(DropDownPaint);
                 MenuItem.DropDown.Click += new EventHandler(DropDownClick);
@@ -1669,7 +1665,6 @@ namespace System.Windows.Forms.Design
             if (toolStripservice != null)
             {
                 toolStripservice.Invalidate(boundstoInvalidate);
-                toolStripservice = null;
             }
 
             return newItem;
@@ -1804,7 +1799,7 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        base.RaiseComponentChanged(TypeDescriptor.GetProperties(MenuItem)["DropDownItems"], null, null);
+                        RaiseComponentChanged(TypeDescriptor.GetProperties(MenuItem)["DropDownItems"], null, null);
                     }
 
                     CommitInsertTransaction(/*commit=*/true);
@@ -1904,7 +1899,7 @@ namespace System.Windows.Forms.Design
                             if (itemIndex != -1)
                             {
                                 ownerItem.DropDownItems.Remove(itemToBeDeleted);
-                                base.RaiseComponentChanged(TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
+                                RaiseComponentChanged(TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
                             }
                         }
                         finally
@@ -1945,7 +1940,7 @@ namespace System.Windows.Forms.Design
                         {
                             if (_selectionService != null && !dummyItemAdded)
                             {
-                                IComponent targetSelection = (itemIndex == -1) ? (IComponent)ownerItem : (IComponent)ownerItem.DropDownItems[itemIndex];
+                                IComponent targetSelection = (itemIndex == -1) ? ownerItem : ownerItem.DropDownItems[itemIndex];
                                 // if the TemplateNode becomes the targetSelection, then set the targetSelection to null.
                                 if (targetSelection is DesignerToolStripControlHost)
                                 {
@@ -1996,7 +1991,7 @@ namespace System.Windows.Forms.Design
                         try
                         {
                             _pendingTransaction = _designerHost.CreateTransaction(SR.ToolStripDesignerTransactionRemovingItem);
-                            base.RaiseComponentChanging(TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                            RaiseComponentChanging(TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                         }
                         catch
                         {
@@ -2232,7 +2227,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            parent = ((ToolStripItem)(parent.OwnerItem)).Owner as ToolStripDropDown;
+                            parent = parent.OwnerItem.Owner as ToolStripDropDown;
                         }
                     }
                 }
@@ -2258,7 +2253,7 @@ namespace System.Windows.Forms.Design
                                 }
                                 else
                                 {
-                                    parent = ((ToolStripItem)(parent.OwnerItem)).Owner as ToolStripDropDown;
+                                    parent = parent.OwnerItem.Owner as ToolStripDropDown;
                                 }
                             }
                         }
@@ -2616,7 +2611,7 @@ namespace System.Windows.Forms.Design
         internal class ToolStripDropDownGlyph : Glyph
         {
             private Rectangle _bounds;
-            internal ToolStripDropDownGlyph(Rectangle bounds, System.Windows.Forms.Design.Behavior.Behavior b) : base(b)
+            internal ToolStripDropDownGlyph(Rectangle bounds, Behavior.Behavior b) : base(b)
             {
                 _bounds = bounds;
             }
@@ -2830,8 +2825,6 @@ namespace System.Windows.Forms.Design
                             {
                                 changeParent.Commit();
                             }
-
-                            changeParent = null;
                         }
                     }
                 }

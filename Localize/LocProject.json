@@ -4,33 +4,33 @@
                          "LocItems":  [
                                           {
                                               "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\en\\strings.json",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\en\\"
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-CSharp\\.template.config\\"
                                           },
                                           {
                                               "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\en\\strings.json",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\en\\"
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsApplication-VisualBasic\\.template.config\\"
                                           },
                                           {
                                               "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\en\\strings.json",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\en\\"
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-CSharp\\.template.config\\"
                                           },
                                           {
                                               "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\en\\strings.json",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\en\\"
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsControlLibrary-VisualBasic\\.template.config\\"
                                           },
                                           {
                                               "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\en\\strings.json",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\en\\"
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-CSharp\\.template.config\\"
                                           },
                                           {
                                               "SourceFile":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\en\\strings.json",
-                                              "CopyOption":  "LangIDOnName",
-                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\en\\"
+                                              "CopyOption":  "LangIDOnPath",
+                                              "OutputPath":  ".\\pkg\\Microsoft.Dotnet.WinForms.ProjectTemplates\\content\\WinFormsLibrary-VisualBasic\\.template.config\\"
                                           },
                                           {
                                               "SourceFile":  ".\\src\\Microsoft.VisualBasic.Forms\\src\\Resources\\Microsoft\\VisualBasic\\CompilerServices\\xlf\\VBInputBox.xlf",
