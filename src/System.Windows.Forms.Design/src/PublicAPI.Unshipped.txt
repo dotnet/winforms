@@ -1,2 +1,0 @@
-*REMOVED*virtual System.Windows.Forms.Design.DocumentDesigner.EnsureMenuEditorService(System.ComponentModel.IComponent c) -> void
-*REMOVED*override System.Windows.Forms.Design.DocumentDesigner.WndProc(ref System.Windows.Forms.Message m) -> void
