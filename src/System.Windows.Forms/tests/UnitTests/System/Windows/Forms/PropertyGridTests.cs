@@ -3759,6 +3759,36 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AccessibleRole.RadioButton, alphaButton.AccessibleRole);
         }
 
+        [WinFormsFact]
+        public void PropertyGrid_SystemColorsChanged_DoesNotLeakImageList()
+        {
+            using SubPropertyGrid propertyGrid = new SubPropertyGrid();
+
+            var imageLists = propertyGrid.TestAccessor().Dynamic._imageList as ImageList[];
+
+            Assert.NotNull(imageLists);
+            Assert.Equal(2, imageLists.Length);
+            var imageList1 = imageLists[0];
+            Assert.NotNull(imageList1);
+
+            propertyGrid.OnSystemColorsChanged(EventArgs.Empty);
+
+            imageLists = propertyGrid.TestAccessor().Dynamic._imageList as ImageList[];
+
+            Assert.NotNull(imageLists);
+            Assert.Equal(2, imageLists.Length);
+            var imageList2 = imageLists[0];
+            Assert.NotNull(imageList2);
+            Assert.NotSame(imageList1, imageList2);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+#if DEBUG
+            Assert.True(imageList1.IsDisposed);
+#endif
+        }
+
         private class SubToolStripRenderer : ToolStripRenderer
         {
         }
@@ -3882,6 +3912,8 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseMove(MouseEventArgs eventargs) => base.OnMouseMove(eventargs);
 
             public new void OnMouseUp(MouseEventArgs eventargs) => base.OnMouseUp(eventargs);
+
+            public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }
