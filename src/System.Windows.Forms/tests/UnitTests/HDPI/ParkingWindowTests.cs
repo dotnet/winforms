@@ -14,18 +14,18 @@ namespace System.Windows.Forms.Tests.HDPI
         [WinFormsFact]
         public void UnawareParkingWindow()
         {
-            //set process awareness
+            // set process awareness
             User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
 
             using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.UNAWARE))
             {
-                var control = new Control();
+                using var control = new Control();
                 ThreadContext cxt = GetContextForHandle(new HandleRef(this, control.Handle));
                 Assert.NotNull(cxt);
-                ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE);
+                using ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.UNAWARE);
                 Assert.NotNull(parkingWindow);
 
-                var dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
+                IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
                 Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.UNAWARE, dpiContext));
             }
         }
@@ -33,18 +33,18 @@ namespace System.Windows.Forms.Tests.HDPI
         [WinFormsFact]
         public void SystemAwareParkingWindow()
         {
-            //set process awareness
+            // set process awareness
             User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
 
             using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
-                var control = new Control();
+                using var control = new Control();
                 ThreadContext cxt = GetContextForHandle(new HandleRef(this, control.Handle));
                 Assert.NotNull(cxt);
-                ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE);
+                using ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE);
                 Assert.NotNull(parkingWindow);
 
-                var dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
+                IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
                 Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE, dpiContext));
             }
         }
@@ -52,17 +52,17 @@ namespace System.Windows.Forms.Tests.HDPI
         [WinFormsFact]
         public void PMv2ParkingWindow()
         {
-            //set process awareness
+            // set process awareness
             User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
-            var control = new Control();
+            using var control = new Control();
 
             ThreadContext cxt = GetContextForHandle(new HandleRef(this, control.Handle));
             Assert.NotNull(cxt);
 
-            ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            using ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
             Assert.NotNull(parkingWindow);
 
-            var dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
+            IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
             Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
         }
 
@@ -72,18 +72,18 @@ namespace System.Windows.Forms.Tests.HDPI
             //set process awareness
             User32.SetProcessDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
 
-            var control = new Control();
+            using var control = new Control();
             ThreadContext cxt = GetContextForHandle(new HandleRef(this, control.Handle));
             Assert.NotNull(cxt);
             ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
             Assert.NotNull(parkingWindow);
 
-            var dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
+            IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
             Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
 
             using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE))
             {
-                var systemControl = new Control();
+                using var systemControl = new Control();
                 cxt = GetContextForHandle(new HandleRef(this, systemControl.Handle));
                 Assert.NotNull(cxt);
                 parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE);
