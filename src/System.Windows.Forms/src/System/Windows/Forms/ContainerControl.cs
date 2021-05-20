@@ -75,6 +75,8 @@ namespace System.Windows.Forms
 
         private const string FontMeasureString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+        private static readonly object EVENT_DPI_CHANGED = new object();
+
         /// <summary>
         ///  Initializes a new instance of the <see cref="ContainerControl"/> class.
         /// </summary>
@@ -813,7 +815,7 @@ namespace System.Windows.Forms
                 _state[s_stateScalingChild] = true;
                 try
                 {
-                    child.Scale(AutoScaleFactor, SizeF.Empty, this);
+                    child.Scale(AutoScaleFactor, SizeF.Empty, this, updateWindowFontIfNeeded: true);
                 }
                 finally
                 {
@@ -843,7 +845,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnFontChanged(EventArgs e)
         {
-            if (AutoScaleMode == AutoScaleMode.Font)
+            if (AutoScaleMode != AutoScaleMode.None)
             {
                 _currentAutoScaleDimensions = SizeF.Empty;
 
@@ -868,23 +870,55 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is called by the top level form to clear the current autoscale cache.
+        /// Scale container and its child controls according to the new DPI received.
+        /// 'suggestedRectangle' will have values when called by top-level windows. otherwise,
+        /// its default to null.
         /// </summary>
-        private protected void FormDpiChanged(float factor)
+        private void ScaleContainer(int newDpi, int oldDpi, Rectangle? suggestedRectangle = default)
         {
-            Debug.Assert(this is Form);
-
-            _currentAutoScaleDimensions = SizeF.Empty;
-
+            CommonProperties.xClearAllPreferredSizeCaches(this);
             SuspendAllLayout(this);
-            SizeF factorSize = new SizeF(factor, factor);
+
             try
             {
-                ScaleChildControls(factorSize, factorSize, this, true);
+                // If scale is being called for top-level window, we would get suggested
+                // rectangle and in this case, it is necessary to position the top-level window
+                // at coordinates received. Otherwise, would result in multi-scaling due to multiple
+                // DPI changed messages as top-level window may stuck between changing the monitors.
+
+                if (suggestedRectangle.HasValue)
+                {
+                    User32.SetWindowPos(
+                    new HandleRef(this, HandleInternal),
+                    User32.HWND_TOP,
+                    suggestedRectangle.Value.X,
+                    suggestedRectangle.Value.Y,
+                    Width,
+                    Height,
+                    User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                }
+
+                float factor = ((float)newDpi) / oldDpi;
+
+                // If Font was set on the control, we scale Font directly that results in
+                // 'OnFontChanged' event.
+                if (Properties.ContainsObject(s_fontProperty))
+                {
+                    Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
+                }
+                else
+                {
+                    // Scale the Font but do not serialize it.
+                    ScaleFont(factor);
+
+                    // 'OnFontChanged' would help scale child controls based on the AutoscaleFactor.
+                    // We do not need propagate DPI values any further.
+                    OnFontChanged(EventArgs.Empty);
+                }
             }
             finally
             {
-                ResumeAllLayout(this, false);
+                ResumeAllLayout(this, true);
             }
         }
 
@@ -1033,7 +1067,7 @@ namespace System.Windows.Forms
         ///  control's AutoScaleFactor. Any changed controls are scaled according to the provided
         ///  scaling factor.
         /// </summary>
-        internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl)
+        internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false)
         {
             // If we're inhieriting our scaling from our parent, Scale is really easy:  just do the
             // base class implementation.
@@ -1096,7 +1130,7 @@ namespace System.Windows.Forms
                     }
 
                     ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
-                    ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl);
+                    ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl, updateWindowFontIfNeeded);
                 }
             }
         }
@@ -1956,6 +1990,54 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Occurs when the DPI resolution of the screen this top level window is displayed on changes,
+        ///  either when the top level window is moved between monitors or when the OS settings are changed.
+        /// </summary>
+        [SRCategory(nameof(SR.CatLayout))]
+        [SRDescription(nameof(SR.FormOnDpiChangedDescr))]
+        public event DpiChangedEventHandler DpiChanged
+        {
+            add => Events.AddHandler(EVENT_DPI_CHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DPI_CHANGED, value);
+        }
+
+        /// <summary>
+        ///  Raises the DpiChanged event.
+        /// </summary>
+        [Browsable(true)]
+        [EditorBrowsable(EditorBrowsableState.Always)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        protected virtual void OnDpiChanged(DpiChangedEventArgs e)
+        {
+            if (e.DeviceDpiNew != e.DeviceDpiOld)
+            {
+                _oldDeviceDpi = e.DeviceDpiOld;
+                _deviceDpi = e.DeviceDpiNew;
+
+                // call any additional handlers
+                ((DpiChangedEventHandler)Events[EVENT_DPI_CHANGED])?.Invoke(this, e);
+
+                if (!e.Cancel)
+                {
+                    ScaleContainer(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Handles the WM_DPICHANGED message
+        /// </summary>
+        private void WmDpiChanged(ref Message m)
+        {
+            DefWndProc(ref m);
+
+            DpiChangedEventArgs e = new DpiChangedEventArgs(_deviceDpi, m);
+            _deviceDpi = e.DeviceDpiNew;
+
+            OnDpiChanged(e);
+        }
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m)
         {
@@ -1963,6 +2045,9 @@ namespace System.Windows.Forms
             {
                 case User32.WM.SETFOCUS:
                     WmSetFocus(ref m);
+                    break;
+                case User32.WM.DPICHANGED:
+                    WmDpiChanged(ref m);
                     break;
                 default:
                     base.WndProc(ref m);

@@ -49,7 +49,6 @@ namespace System.Windows.Forms
         private static readonly object EVENT_RESIZEBEGIN = new object();
         private static readonly object EVENT_RESIZEEND = new object();
         private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
-        private static readonly object EVENT_DPI_CHANGED = new object();
 
         //
         // The following flags should be used with formState[..] not formStateEx[..]
@@ -4233,81 +4232,6 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the DpiChanged event.
-        /// </summary>
-        [Browsable(true)]
-        [EditorBrowsable(EditorBrowsableState.Always)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
-        protected virtual void OnDpiChanged(DpiChangedEventArgs e)
-        {
-            if (e.DeviceDpiNew != e.DeviceDpiOld)
-            {
-                CommonProperties.xClearAllPreferredSizeCaches(this);
-                _oldDeviceDpi = e.DeviceDpiOld;
-
-                // call any additional handlers
-                ((DpiChangedEventHandler)Events[EVENT_DPI_CHANGED])?.Invoke(this, e);
-
-                if (!e.Cancel)
-                {
-                    float factor = (float)e.DeviceDpiNew / (float)e.DeviceDpiOld;
-                    SuspendAllLayout(this);
-                    try
-                    {
-                        User32.SetWindowPos(
-                            new HandleRef(this, HandleInternal),
-                            User32.HWND_TOP,
-                            e.SuggestedRectangle.X,
-                            e.SuggestedRectangle.Y,
-                            e.SuggestedRectangle.Width,
-                            e.SuggestedRectangle.Height,
-                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
-                        if (AutoScaleMode != AutoScaleMode.Font)
-                        {
-                            Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
-                            FormDpiChanged(factor);
-                        }
-                        else
-                        {
-                            ScaleFont(factor);
-                            FormDpiChanged(factor);
-                        }
-                    }
-                    finally
-                    {
-                        // We want to perform layout for dpi-changed HDpi improvements - setting the second parameter to 'true'
-                        ResumeAllLayout(this, true);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Occurs when the DPI resolution of the screen this top level window is displayed on changes,
-        ///  either when the top level window is moved between monitors or when the OS settings are changed.
-        /// </summary>
-        [SRCategory(nameof(SR.CatLayout))]
-        [SRDescription(nameof(SR.FormOnDpiChangedDescr))]
-        public event DpiChangedEventHandler DpiChanged
-        {
-            add => Events.AddHandler(EVENT_DPI_CHANGED, value);
-            remove => Events.RemoveHandler(EVENT_DPI_CHANGED, value);
-        }
-
-        /// <summary>
-        ///  Handles the WM_DPICHANGED message
-        /// </summary>
-        private void WmDpiChanged(ref Message m)
-        {
-            DefWndProc(ref m);
-
-            DpiChangedEventArgs e = new DpiChangedEventArgs(_deviceDpi, m);
-            _deviceDpi = e.DeviceDpiNew;
-
-            OnDpiChanged(e);
-        }
-
-        /// <summary>
         ///  Allows derived form to handle WM_GETDPISCALEDSIZE message.
         /// </summary>
         [Browsable(true)]
@@ -6641,9 +6565,6 @@ namespace System.Windows.Forms
                     break;
                 case User32.WM.GETDPISCALEDSIZE:
                     WmGetDpiScaledSize(ref m);
-                    break;
-                case User32.WM.DPICHANGED:
-                    WmDpiChanged(ref m);
                     break;
                 default:
                     base.WndProc(ref m);

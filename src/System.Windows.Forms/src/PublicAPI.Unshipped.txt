@@ -1,0 +1,4 @@
+*REMOVED*~virtual System.Windows.Forms.Form.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs e) -> void
+*REMOVED*System.Windows.Forms.Form.DpiChanged -> System.Windows.Forms.DpiChangedEventHandler
+System.Windows.Forms.ContainerControl.DpiChanged -> System.Windows.Forms.DpiChangedEventHandler
+~virtual System.Windows.Forms.ContainerControl.OnDpiChanged(System.Windows.Forms.DpiChangedEventArgs e) -> void
