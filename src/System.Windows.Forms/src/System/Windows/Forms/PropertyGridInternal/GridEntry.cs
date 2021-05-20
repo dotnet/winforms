@@ -140,7 +140,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Outline Icon padding
         /// </summary>
-        private int OutlineIconPadding
+        internal int OutlineIconPadding
         {
             get
             {
@@ -859,7 +859,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                int borderWidth = GridEntryHost.GetOutlineIconSize() + OUTLINE_ICON_PADDING;
+                int borderWidth = GridEntryHost.GetOutlineIconSize() + OutlineIconPadding;
                 return ((propertyDepth + 1) * borderWidth) + 1;
             }
         }
@@ -2025,7 +2025,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Debug.Assert(gridHost is not null, "No propEntryHost");
             string strLabel = PropertyLabel;
 
-            int borderWidth = gridHost.GetOutlineIconSize() + OUTLINE_ICON_PADDING;
+            int borderWidth = gridHost.GetOutlineIconSize() + OutlineIconPadding;
 
             // fill the background if necessary
             Color backColor = selected ? gridHost.GetSelectedItemWithFocusBackColor() : GetBackgroundColor();
