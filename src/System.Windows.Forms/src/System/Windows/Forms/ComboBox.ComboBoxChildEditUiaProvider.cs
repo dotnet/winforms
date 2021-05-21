@@ -51,7 +51,6 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        Debug.WriteLine("Edit parent " + _owner.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
                         return _owner.AccessibilityObject;
                     case UiaCore.NavigateDirection.PreviousSibling:
                         return _owner.DroppedDown
