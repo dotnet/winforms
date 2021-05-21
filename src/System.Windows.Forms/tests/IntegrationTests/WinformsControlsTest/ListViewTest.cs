@@ -23,7 +23,6 @@ namespace WinformsControlsTest
             var random = new Random();
             int i = random.Next(100, 300);
 
-            Debug.WriteLine(listView1.TileSize);
             listView1.TileSize = new Size(200, 50);
             listView1.Items[0].ImageIndex = 0;
             listView1.Items[1].ImageIndex = 1;
