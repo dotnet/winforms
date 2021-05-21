@@ -3502,7 +3502,7 @@ namespace System.Windows.Forms
                         IntPtr hwnd = IntPtr.Zero;
                         if (ipo.GetWindow(&hwnd).Succeeded())
                         {
-                            Application.ParkHandle(new HandleRef(ipo, hwnd));
+                            Application.ParkHandle(new HandleRef(ipo, hwnd), DpiAwarenessContext);
                         }
                     }
 

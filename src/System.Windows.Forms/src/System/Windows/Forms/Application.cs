@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Locates a thread context given a window handle.
         /// </summary>
-        private static ThreadContext GetContextForHandle(HandleRef handle)
+        internal static ThreadContext GetContextForHandle(HandleRef handle)
         {
             ThreadContext cxt = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
             Debug.Assert(
@@ -1060,8 +1060,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static void ParkHandle(HandleRef handle) => ParkHandle(handle, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
-
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
@@ -1077,8 +1075,6 @@ namespace System.Windows.Forms
                 cxt.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
             }
         }
-
-        internal static void ParkHandle(CreateParams cp) => ParkHandle(cp, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
 
         /// <summary>
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.

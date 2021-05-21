@@ -4978,7 +4978,7 @@ namespace System.Windows.Forms
                 if (cp.Parent == IntPtr.Zero && (cp.Style & (int)User32.WS.CHILD) != 0)
                 {
                     Debug.Assert((cp.ExStyle & (int)User32.WS_EX.MDICHILD) == 0, "Can't put MDI child forms on the parking form");
-                    Application.ParkHandle(cp);
+                    Application.ParkHandle(cp, DpiAwarenessContext);
                 }
 
                 _window.CreateHandle(cp);
@@ -7479,7 +7479,7 @@ namespace System.Windows.Forms
             // use SetParent directly so as to not raise ParentChanged events
             if (IsHandleCreated)
             {
-                Application.ParkHandle(new HandleRef(this, Handle));
+                Application.ParkHandle(new HandleRef(this, Handle), DpiAwarenessContext);
             }
         }
 
@@ -10809,7 +10809,7 @@ namespace System.Windows.Forms
                     {
                         if (value == IntPtr.Zero)
                         {
-                            Application.ParkHandle(new HandleRef(_window, Handle));
+                            Application.ParkHandle(new HandleRef(_window, Handle), DpiAwarenessContext);
                             UpdateRoot();
                         }
                         else
