@@ -4424,6 +4424,7 @@ namespace System.Windows.Forms
 
                 if (_imageList[NormalButtonSize] is null || fullRebuild)
                 {
+                    _imageList[NormalButtonSize]?.Dispose();
                     _imageList[NormalButtonSize] = new ImageList();
                     if (DpiHelper.IsScalingRequired)
                     {
