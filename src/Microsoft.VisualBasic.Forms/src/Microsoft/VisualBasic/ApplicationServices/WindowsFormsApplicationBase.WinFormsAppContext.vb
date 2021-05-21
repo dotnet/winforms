@@ -1,13 +1,11 @@
-﻿' Licensed to the .NET Foundation under one or more agreements.
+﻿Option Strict On
+Option Explicit On
+Option Infer On
+' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 ' See the LICENSE file in the project root for more information.
 
-Option Strict On
-Option Explicit On
-Option Infer On
-
 Imports System.Security
-Imports System.Security.Permissions
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -40,11 +38,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 If _app.ShutdownStyle = ShutdownMode.AfterMainFormCloses Then
                     MyBase.OnMainFormClosed(sender, e)
                 Else 'identify a new main form so we can keep running
-#Disable Warning BC40000 ' Type or member is obsolete
-                    Call New UIPermission(UIPermissionWindow.AllWindows).Assert()
                     Dim forms As Windows.Forms.FormCollection = Windows.Forms.Application.OpenForms
-                    PermissionSet.RevertAssert() 'CLR also reverts if we throw or when we return from this function.
-#Enable Warning BC40000 ' Type or member is obsolete
 
                     If forms.Count > 0 Then
                         'Note: Initially I used Process::MainWindowHandle to obtain an open form.  But that is bad for two reasons:

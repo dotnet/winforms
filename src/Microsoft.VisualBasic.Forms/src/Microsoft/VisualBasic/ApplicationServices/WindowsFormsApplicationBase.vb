@@ -238,7 +238,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '(network gets created during event hookup) and we need the context in place for it to latch on to.  The WindowsFormsSynchronizationContext
             'won't otherwise get created until OnCreateMainForm() when the startup form is created and by then it is too late.
             'When the startup form gets created, WinForms is going to push our context into the previous context and then restore it when Application.Run() exits.
-            _appSyncronizationContext = AsyncOperationManager.SynchronizationContext
+            _appSynchronizationContext = AsyncOperationManager.SynchronizationContext
+
             AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
         End Sub
 
