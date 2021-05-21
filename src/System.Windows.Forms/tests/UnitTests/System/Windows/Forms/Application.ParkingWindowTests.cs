@@ -2,10 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
+using System.Runtime.InteropServices;
 using Microsoft.DotNet.RemoteExecutor;
-using WinForms.Common.Tests;
 using Xunit;
+using static System.Windows.Forms.Application;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -58,10 +59,15 @@ namespace System.Windows.Forms.Tests
             return form;
         }
 
-
         [WinFormsFact]
         public void ParkingWindow_Unaware()
         {
+            // run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
@@ -91,6 +97,12 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ParkingWindow_SystemAware()
         {
+            // run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
@@ -120,6 +132,12 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ParkingWindow_PermonitorV2()
         {
+            // run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
@@ -147,6 +165,12 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ParkingWindow_Multiple()
         {
+            // run tests only on Windows 10 versions that support thread dpi awareness.
+            if (!PlatformDetection.IsWindows10Version1803OrGreater)
+            {
+                return;
+            }
+
             // set thread awareness context to PermonitorV2(PMv2).
             // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
             // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
@@ -159,7 +183,6 @@ namespace System.Windows.Forms.Tests
                 Assert.NotNull(cxt);
                 ParkingWindow parkingWindow = cxt.GetParkingWindowForContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
                 Assert.NotNull(parkingWindow);
-
 
                 IntPtr dpiContext = User32.GetWindowDpiAwarenessContext(parkingWindow.Handle);
                 Assert.True(User32.AreDpiAwarenessContextsEqual(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2, dpiContext));
