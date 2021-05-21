@@ -45,7 +45,7 @@ namespace System.Resources.Tests
         {
             Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
 
-            using(FileStream fs = new FileStream(resxFileName, FileMode.Open))
+            using (FileStream fs = new FileStream(resxFileName, FileMode.Open))
             {
                 using (ResXResourceSet resxSet = new ResXResourceSet(fs))
                 {

@@ -22,7 +22,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(SelectedItemChanged))]
     [DefaultBindingProperty(nameof(SelectedItem))]
     [SRDescription(nameof(SR.DescriptionDomainUpDown))]
-    public class DomainUpDown : UpDownBase
+    public partial class DomainUpDown : UpDownBase
     {
         private readonly static string s_defaultValue = string.Empty;
 
@@ -68,6 +68,7 @@ namespace System.Windows.Forms
                 {
                     _domainItems = new DomainUpDownItemCollection(this);
                 }
+
                 return _domainItems;
             }
         }
@@ -234,6 +235,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return;
@@ -246,6 +248,7 @@ namespace System.Windows.Forms
             {
                 matchIndex = MatchIndex(Text, false, _domainIndex);
             }
+
             if (matchIndex != -1)
             {
                 // Found a match, so select this value
@@ -291,14 +294,17 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return -1;
             }
+
             if (startPosition < 0)
             {
                 startPosition = _domainItems.Count - 1;
             }
+
             if (startPosition >= _domainItems.Count)
             {
                 startPosition = 0;
@@ -339,7 +345,8 @@ namespace System.Windows.Forms
                 {
                     index = 0;
                 }
-            } while (!found && index != startPosition);
+            }
+            while (!found && index != startPosition);
 
             return matchIndex;
         }
@@ -381,9 +388,11 @@ namespace System.Windows.Forms
                         // Select the matching domain item
                         SelectIndex(matchIndex);
                     }
+
                     e.Handled = true;
                 }
             }
+
             base.OnTextBoxKeyPress(source, e);
         }
 
@@ -479,6 +488,7 @@ namespace System.Windows.Forms
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 s += ", SelectedIndex: " + SelectedIndex.ToString(CultureInfo.CurrentCulture);
             }
+
             return s;
         }
 
@@ -492,6 +502,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return;
@@ -503,6 +514,7 @@ namespace System.Windows.Forms
             {
                 matchIndex = MatchIndex(Text, false, _domainIndex);
             }
+
             if (matchIndex != -1)
             {
                 // Found a match, so set the domain index accordingly
@@ -544,357 +556,6 @@ namespace System.Windows.Forms
             // AdjuctWindowRect with our border, since textbox is borderless.
             width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
-        }
-
-        // DomainUpDown collection class
-
-        /// <summary>
-        ///  Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
-        ///  class.
-        /// </summary>
-        public class DomainUpDownItemCollection : ArrayList
-        {
-            readonly DomainUpDown owner;
-
-            internal DomainUpDownItemCollection(DomainUpDown owner)
-            : base()
-            {
-                this.owner = owner;
-            }
-
-            [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public override object this[int index]
-            {
-                get
-                {
-                    return base[index];
-                }
-
-                set
-                {
-                    base[index] = value;
-
-                    if (owner.SelectedIndex == index)
-                    {
-                        owner.SelectIndex(index);
-                    }
-
-                    if (owner.Sorted)
-                    {
-                        owner.SortDomainItems();
-                    }
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public override int Add(object item)
-            {
-                // Overridden to perform sorting after adding an item
-
-                int ret = base.Add(item);
-                if (owner.Sorted)
-                {
-                    owner.SortDomainItems();
-                }
-                return ret;
-            }
-
-            /// <summary>
-            /// </summary>
-            public override void Remove(object item)
-            {
-                int index = IndexOf(item);
-
-                if (index == -1)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(item), item, string.Format(SR.InvalidArgument, nameof(item), item));
-                }
-                else
-                {
-                    RemoveAt(index);
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public override void RemoveAt(int item)
-            {
-                // Overridden to update the domain index if necessary
-                base.RemoveAt(item);
-
-                if (item < owner._domainIndex)
-                {
-                    // The item removed was before the currently selected item
-                    owner.SelectIndex(owner._domainIndex - 1);
-                }
-                else if (item == owner._domainIndex)
-                {
-                    // The currently selected item was removed
-                    //
-                    owner.SelectIndex(-1);
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public override void Insert(int index, object item)
-            {
-                base.Insert(index, item);
-                if (owner.Sorted)
-                {
-                    owner.SortDomainItems();
-                }
-            }
-        } // end class DomainUpDownItemCollection
-
-        private sealed class DomainUpDownItemCompare : IComparer
-        {
-            public int Compare(object p, object q)
-            {
-                if (p == q)
-                {
-                    return 0;
-                }
-
-                if (p is null || q is null)
-                {
-                    return 0;
-                }
-
-                return string.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
-            }
-        }
-
-        public class DomainUpDownAccessibleObject : ControlAccessibleObject
-        {
-            private DomainItemListAccessibleObject itemList;
-            private readonly UpDownBase _owner;
-
-            /// <summary>
-            /// </summary>
-            public DomainUpDownAccessibleObject(DomainUpDown owner) : base(owner)
-            {
-                _owner = owner;
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.SpinnerControlTypeId;
-                    case UiaCore.UIA.BoundingRectanglePropertyId:
-                        return Bounds;
-                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                        return State;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return false;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
-            private DomainItemListAccessibleObject ItemList
-            {
-                get
-                {
-                    if (itemList is null)
-                    {
-                        itemList = new DomainItemListAccessibleObject(this);
-                    }
-
-                    return itemList;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.SpinButton;
-                }
-            }
-
-            /// <summary>
-            /// </summary>
-            public override AccessibleObject GetChild(int index)
-            {
-                switch (index)
-                {
-                    // TextBox child
-                    case 0:
-                        return _owner.TextBox.AccessibilityObject.Parent;
-                    // Up/down buttons
-                    case 1:
-                        return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
-                    case 2:
-                        return ItemList;
-                    default:
-                        return null;
-                }
-            }
-
-            public override int GetChildCount()
-            {
-                return 3;
-            }
-
-            internal override int[] RuntimeId
-            {
-                get
-                {
-                    if (_owner is null)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    // we need to provide a unique ID
-                    // others are implementing this in the same manner
-                    // first item is static - 0x2a (RuntimeIDFirstItem)
-                    // second item can be anything, but here it is a hash
-
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
-
-                    return runtimeId;
-                }
-            }
-        }
-
-        internal class DomainItemListAccessibleObject : AccessibleObject
-        {
-            private readonly DomainUpDownAccessibleObject parent;
-
-            public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent) : base()
-            {
-                this.parent = parent;
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    string baseName = base.Name;
-                    if (baseName is null || baseName.Length == 0)
-                    {
-                        return "Items";
-                    }
-                    return baseName;
-                }
-                set => base.Name = value;
-            }
-
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return parent;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.List;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    return AccessibleStates.Invisible | AccessibleStates.Offscreen;
-                }
-            }
-
-            public override AccessibleObject GetChild(int index)
-            {
-                if (index >= 0 && index < GetChildCount())
-                {
-                    return new DomainItemAccessibleObject(((DomainUpDown)parent.Owner).Items[index].ToString(), this);
-                }
-
-                return null;
-            }
-
-            public override int GetChildCount()
-            {
-                return ((DomainUpDown)parent.Owner).Items.Count;
-            }
-        }
-
-        public class DomainItemAccessibleObject : AccessibleObject
-        {
-            private string name;
-            private readonly DomainItemListAccessibleObject parent;
-
-            public DomainItemAccessibleObject(string name, AccessibleObject parent) : base()
-            {
-                this.name = name;
-                this.parent = (DomainItemListAccessibleObject)parent;
-            }
-
-            public override string Name
-            {
-                get
-                {
-                    return name;
-                }
-                set
-                {
-                    name = value;
-                }
-            }
-
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return parent;
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.ListItem;
-                }
-            }
-
-            public override AccessibleStates State
-            {
-                get
-                {
-                    return AccessibleStates.Selectable;
-                }
-            }
-
-            public override string Value
-            {
-                get
-                {
-                    return name;
-                }
-            }
         }
     }
 }

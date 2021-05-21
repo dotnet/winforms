@@ -1678,8 +1678,10 @@ namespace System.Windows.Forms.Tests
         public void TreeView_Handle_GetVersion_ReturnsExpected()
         {
             using var control = new TreeView();
+
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)5, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+            int version = Application.UseVisualStyles ? 6 : 5;
+            Assert.Equal((IntPtr)version, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
         }
 
         public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
@@ -2731,6 +2733,7 @@ namespace System.Windows.Forms.Tests
             };
             Assert.Equal(expectedHeight, treeView.ItemHeight);
         }
+
         public static IEnumerable<object[]> ItemHeight_Set_TestData()
         {
             yield return new object[] { -1, Control.DefaultFont.Height + 3 };
@@ -5642,10 +5645,11 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> OnDrawNode_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new DrawTreeNodeEventArgs(null, null, Rectangle.Empty, TreeNodeStates.Checked) };
 
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
+            yield return new object[] { new DrawTreeNodeEventArgs(graphics, null, Rectangle.Empty, TreeNodeStates.Checked) };
+
             yield return new object[] { new DrawTreeNodeEventArgs(graphics, new TreeNode(), new Rectangle(1, 2, 3, 4), TreeNodeStates.Checked) };
         }
 
@@ -6592,6 +6596,216 @@ namespace System.Windows.Forms.Tests
 
             control.Dispose();
             Assert.Equal(1, disposedCallCount);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, true)]
+        [InlineData(false, true)]
+        [InlineData(false, false)]
+        public unsafe void TreeView_InvokeGetToolInfoWrapper_ReturnsExpected(bool showNodeToolTips, bool useKeyboardToolTip)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            ToolTip toolTip = useKeyboardToolTip ? treeView.KeyboardToolTip : new ToolTip();
+            ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+
+            Assert.Equal("Test caption", wrapper.Text);
+            // Assert.Equal method does not work because char* cannot be used as an argument to it
+            Assert.Equal(string.Empty, new string(wrapper.Info.lpszText));
+        }
+
+        [WinFormsFact]
+        public unsafe void TreeView_ShowNodesEnabled_ExternalToolTip_InvokeGetToolInfoWrapper_ReturnsExpected()
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = true;
+            ToolTip toolTip = new ToolTip();
+            ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TTF.ABSOLUTE, "Test caption", toolTip);
+            char* expected = (char*)(-1);
+
+            Assert.Null(wrapper.Text);
+            //Assert.Equal method does not work because char* cannot be used as an argument to it
+            Assert.True(wrapper.Info.lpszText == expected);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeAdd_AddNodeToTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+            treeView.Nodes.Add(treeNode);
+
+            Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor().IsToolTracked(treeNode));
+            treeView.Nodes.Remove(treeNode);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeAddRange_AddNodesToTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode1 = new TreeNode();
+            TreeNode treeNode2 = new TreeNode();
+            TreeNode treeNode3 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+
+            treeView.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
+
+            Assert.True(accessor.IsToolTracked(treeNode1));
+            Assert.True(accessor.IsToolTracked(treeNode2));
+            Assert.True(accessor.IsToolTracked(treeNode3));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeAdd_AddSubNodeToTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+            TreeNode treeSubNodeLevel1 = new TreeNode();
+            TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            treeView.Nodes.Add(treeNode);
+            treeNode.Nodes.Add(treeSubNodeLevel1);
+            treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
+
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
+            treeView.Nodes.Remove(treeNode);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeAdd_AddNodeAndSubNodeToTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+            TreeNode treeSubNodeLevel1 = new TreeNode();
+            TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            treeNode.Nodes.Add(treeSubNodeLevel1);
+            treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
+            treeView.Nodes.Add(treeNode);
+
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
+            treeView.Nodes.Remove(treeNode);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeRemove_RemoveNodeFromTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+
+            treeView.Nodes.Add(treeNode);
+            Assert.True(accessor.IsToolTracked(treeNode));
+
+            treeView.Nodes.Remove(treeNode);
+
+            Assert.False(accessor.IsToolTracked(treeNode));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeRemove_RemoveNodeAndSubNodesFromTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+            TreeNode treeSubNodeLevel1 = new TreeNode();
+            TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            treeNode.Nodes.Add(treeSubNodeLevel1);
+            treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
+            treeView.Nodes.Add(treeNode);
+
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
+
+            treeView.Nodes.Remove(treeNode);
+
+            Assert.False(accessor.IsToolTracked(treeNode));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel2));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeInsert_AddNodeToTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+
+            treeView.Nodes.Insert(0, treeNode);
+
+            Assert.True(KeyboardToolTipStateMachine.Instance.TestAccessor().IsToolTracked(treeNode));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TreeView_InvokeDispose_RemoveNodesFromTrackList(bool showNodeToolTips)
+        {
+            using var treeView = new TreeView();
+            treeView.ShowNodeToolTips = showNodeToolTips;
+            TreeNode treeNode = new TreeNode();
+            TreeNode treeSubNodeLevel1 = new TreeNode();
+            TreeNode treeSubNodeLevel2 = new TreeNode();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            treeNode.Nodes.Add(treeSubNodeLevel1);
+            treeSubNodeLevel1.Nodes.Add(treeSubNodeLevel2);
+            treeView.Nodes.Add(treeNode);
+
+            Assert.True(accessor.IsToolTracked(treeNode));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.True(accessor.IsToolTracked(treeSubNodeLevel2));
+
+            treeView.Dispose();
+
+            Assert.False(accessor.IsToolTracked(treeNode));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel1));
+            Assert.False(accessor.IsToolTracked(treeSubNodeLevel2));
+        }
+
+        [WinFormsFact]
+        public void TreeView_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using TreeView treeView = new TreeView();
+            treeView.ShowNodeToolTips = true;
+            using ToolTip toolTip = new ToolTip();
+            treeView.CreateControl();
+
+            dynamic listViewDynamic = treeView.TestAccessor().Dynamic;
+            string actual = listViewDynamic.controlToolTipText;
+
+            Assert.Null(actual);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            string text = "Some test text";
+            toolTip.SetToolTip(treeView, text); // Invokes TreeView's SetToolTip inside
+            actual = listViewDynamic.controlToolTipText;
+
+            Assert.Equal(text, actual);
         }
 
         private class SubTreeView : TreeView

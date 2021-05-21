@@ -4,11 +4,11 @@
 
 #nullable disable
 
-using System.Drawing;
-using System.Windows.Forms.Layout;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
@@ -141,7 +141,7 @@ namespace System.Windows.Forms
                 if (state[stateVisible] != value)
                 {
                     state[stateVisible] = value;
-                    if (Parent != null)
+                    if (Parent is not null)
                     {
                         LayoutTransaction.DoLayout(Parent, this, PropertyNames.Visible);
                     }

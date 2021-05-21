@@ -4,9 +4,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.IntegrationTests.Common;
+using Microsoft.Win32;
 using WindowsFormsApp1;
 using WinformsControlsTest.UserControls;
 
@@ -28,8 +31,8 @@ namespace WinformsControlsTest
                 InitInfo info = buttonsInitInfo[item];
                 Button button = new Button
                 {
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
                     Name = info.Name,
-                    Size = new Size(259, 23),
                     TabIndex = (int)item,
                     Text = info.Name,
                     UseVisualStyleBackColor = true
@@ -39,13 +42,17 @@ namespace WinformsControlsTest
                 flowLayoutPanelUITypeEditors.Controls.Add(button);
             }
 
-            // Calculate the form size.
-            ClientSize = new Size(545, 18 + (mainFormControlsTabOrderItems.Length + 1) / 2 * 29);
-            MinimumSize = Size;
+            Text = RuntimeInformation.FrameworkDescription;
 
-            // Force the panel to show all buttons
-            flowLayoutPanelUITypeEditors.PerformLayout();
-            flowLayoutPanelUITypeEditors.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+            SystemEvents.UserPreferenceChanged += (s, e) =>
+            {
+                // The default font gets reset for UserPreferenceCategory.Color
+                // though perhaps it should've been done for UserPreferenceCategory.Window
+                if (e.Category == UserPreferenceCategory.Color)
+                {
+                    UpdateLayout();
+                }
+            };
         }
 
         private IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> GetButtonsInitInfo() => new Dictionary<MainFormControlsTabOrder, InitInfo>
@@ -67,24 +74,24 @@ namespace WinformsControlsTest
                 new InitInfo("ComboBoxes", (obj, e) => new ComboBoxes().Show())
             },
             {
+                MainFormControlsTabOrder.ComboBoxesWithScrollBarsButton,
+                new InitInfo("ComboBoxes with ScrollBars", (obj, e) => new ComboBoxesWithScrollBars().Show())
+            },
+            {
                 MainFormControlsTabOrder.DateTimePickerButton,
                 new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show())
             },
             {
-                MainFormControlsTabOrder.FolderBrowserDialogButton,
-                new InitInfo("FolderBrowserDialog", (obj, e) => new FolderBrowserDialog().ShowDialog())
-            },
-            {
-                MainFormControlsTabOrder.ThreadExceptionDialogButton,
-                new InitInfo("ThreadExceptionDialog", (obj, e) => new ThreadExceptionDialog(new Exception("Really long exception description string, because we want to see if it properly wraps around or is truncated.")).ShowDialog())
-            },
-            {
-                MainFormControlsTabOrder.PrintDialogButton,
-                new InitInfo("PrintDialog", (obj, e) => new PrintDialog().ShowDialog())
+                MainFormControlsTabOrder.DialogsButton,
+                new InitInfo("Dialogs", (obj, e) => new Dialogs().ShowDialog())
             },
             {
                 MainFormControlsTabOrder.DataGridViewButton,
-                new InitInfo("DataGridView", (obj, e) => new DataGridViewHeaders().Show())
+                new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show())
+            },
+            {
+                MainFormControlsTabOrder.DataGridViewInVirtualModeButton,
+                new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show())
             },
             {
                 MainFormControlsTabOrder.TreeViewButton,
@@ -108,7 +115,7 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.MdiParentButton,
-                new InitInfo("MDI Parent", (obj, e) => new MDIParent().Show())
+                new InitInfo("MDI Parent", (obj, e) => new MdiParent().Show())
             },
             {
                 MainFormControlsTabOrder.PropertyGridButton,
@@ -145,8 +152,80 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.FileDialogButton,
                 new InitInfo("FileDialog", (obj, e) => new FileDialog().Show())
+            },
+            {
+                MainFormControlsTabOrder.ErrorProviderButton,
+                new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show())
+            },
+            {
+                MainFormControlsTabOrder.TaskDialogButton,
+                new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show())
             }
         };
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            UpdateLayout();
+            flowLayoutPanelUITypeEditors.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+        }
+
+        private void UpdateLayout()
+        {
+            MinimumSize = default;
+            Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
+            Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
+
+            // 1. Auto-size all buttons
+            flowLayoutPanelUITypeEditors.SuspendLayout();
+            foreach (Control c in flowLayoutPanelUITypeEditors.Controls)
+            {
+                if (c is Button button)
+                {
+                    button.AutoSize = true;
+                }
+            }
+
+            flowLayoutPanelUITypeEditors.ResumeLayout(true);
+
+            // 2. Find the biggest button
+            Size biggestButton = default;
+            foreach (Control c in flowLayoutPanelUITypeEditors.Controls)
+            {
+                if (c is Button button)
+                {
+                    if (button.Width > biggestButton.Width)
+                    {
+                        biggestButton = button.Size;
+                    }
+                }
+            }
+
+            Debug.WriteLine($"Biggest button size: {biggestButton}", nameof(MainForm));
+
+            // 3. Size all buttons to the biggest button
+            flowLayoutPanelUITypeEditors.SuspendLayout();
+            foreach (Control c in flowLayoutPanelUITypeEditors.Controls)
+            {
+                if (c is Button button)
+                {
+                    button.AutoSize = false;
+                    button.Size = biggestButton;
+                }
+            }
+
+            flowLayoutPanelUITypeEditors.ResumeLayout(true);
+
+            // 4. Calculate the new form size showing all buttons in two vertical columns
+            int padding = flowLayoutPanelUITypeEditors.Controls[0].Margin.All;
+            ClientSize = new Size(
+                (biggestButton.Width + padding * 2) * 2 + padding * 2,
+                (int)(flowLayoutPanelUITypeEditors.Controls.Count / 2 * (biggestButton.Height + padding * 2) + padding * 2)
+                );
+            MinimumSize = Size;
+            Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
+        }
 
         private struct InitInfo
         {

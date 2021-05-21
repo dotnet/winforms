@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Metafiles
         public RECT rcl;
         public uint offDx;              // Offset to the inter-character spacing array.
 
-        public unsafe ReadOnlySpan<char> GetString()
+        public unsafe ReadOnlySpan<char> GetText()
         {
             int offset = (int)offString - sizeof(EMREXTTEXTOUTW) + sizeof(EMRTEXT);
             fixed (Point* p = &ptlReference)

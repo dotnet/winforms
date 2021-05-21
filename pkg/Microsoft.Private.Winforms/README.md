@@ -31,6 +31,6 @@ If the content of these files differ - the build will fail.
 
 ----
 
-<a name="ref1"></a>1. Except for `Accessibility.dll` which is [noted explicitly](https://github.com/dotnet/windowsdesktop/blob/0d4ab955ce71069f5f1e035d448a7999c4311e0c/pkg/windowsdesktop/pkg/Directory.Build.props#L28).
+<a name="ref1"></a>1. Except for `Accessibility.dll` which is [noted explicitly](https://github.com/dotnet/windowsdesktop/blob/f497549de5c2dba4d296c3311de71e12db808c65/pkg/windowsdesktop/sfx/Microsoft.WindowsDesktop.App.Ref.sfxproj#L18).
 
 <a name="ref2"></a>2. Generated in .\winforms\artifacts\obj\Microsoft.Private.Winforms\\[Debug|Release].

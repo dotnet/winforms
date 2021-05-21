@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -92,8 +93,10 @@ namespace System.Windows.Forms
                     {
                         scaledStateImageSize = DpiHelper.LogicalToDeviceUnits(new Size(16, 16));
                     }
+
                     isScalingInitialized = true;
                 }
+
                 return scaledStateImageSize;
             }
         }
@@ -106,6 +109,7 @@ namespace System.Windows.Forms
                 {
                     imageIndexer = new ImageList.Indexer();
                 }
+
                 imageIndexer.ImageList = ImageList;
                 return imageIndexer;
             }
@@ -119,6 +123,7 @@ namespace System.Windows.Forms
                 {
                     selectedImageIndexer = new ImageList.Indexer();
                 }
+
                 selectedImageIndexer.ImageList = ImageList;
 
                 return selectedImageIndexer;
@@ -258,10 +263,7 @@ namespace System.Windows.Forms
             {
                 if (borderStyle != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     borderStyle = value;
                     UpdateStyles();
@@ -324,6 +326,7 @@ namespace System.Windows.Forms
                     int currentStyle = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
                     cp.Style |= currentStyle & (int)(User32.WS.HSCROLL | User32.WS.VSCROLL);
                 }
+
                 switch (borderStyle)
                 {
                     case BorderStyle.Fixed3D:
@@ -562,10 +565,12 @@ namespace System.Windows.Forms
                 {
                     return ImageList.Indexer.DefaultIndex;
                 }
+
                 if (ImageIndexer.Index >= imageList.Images.Count)
                 {
                     return Math.Max(0, imageList.Images.Count - 1);
                 }
+
                 return ImageIndexer.Index;
             }
 
@@ -621,8 +626,9 @@ namespace System.Windows.Forms
                     ImageIndexer.Key = value;
                     if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone))
                     {
-                        ImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
+                        ImageIndex = (ImageList is not null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
+
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
@@ -660,11 +666,12 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero,
                                     value is null ? IntPtr.Zero : value.Handle);
-                        if (StateImageList != null && StateImageList.Images.Count > 0 && internalStateImageList != null)
+                        if (StateImageList is not null && StateImageList.Images.Count > 0 && internalStateImageList is not null)
                         {
-                            SetStateImageList(internalStateImageList.CreateUniqueHandle());
+                            SetStateImageList(internalStateImageList.Handle);
                         }
                     }
+
                     UpdateCheckedState(root, true);
                 }
             }
@@ -672,7 +679,7 @@ namespace System.Windows.Forms
 
         private void AttachImageListHandlers()
         {
-            if (imageList != null)
+            if (imageList is not null)
             {
                 //NOTE: any handlers added here should be removed in DetachImageListHandlers
                 imageList.RecreateHandle += new EventHandler(ImageListRecreateHandle);
@@ -683,7 +690,7 @@ namespace System.Windows.Forms
 
         private void DetachImageListHandlers()
         {
-            if (imageList != null)
+            if (imageList is not null)
             {
                 imageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
                 imageList.Disposed -= new EventHandler(DetachImageList);
@@ -693,7 +700,7 @@ namespace System.Windows.Forms
 
         private void AttachStateImageListHandlers()
         {
-            if (stateImageList != null)
+            if (stateImageList is not null)
             {
                 //NOTE: any handlers added here should be removed in DetachStateImageListHandlers
                 stateImageList.RecreateHandle += new EventHandler(StateImageListRecreateHandle);
@@ -704,7 +711,7 @@ namespace System.Windows.Forms
 
         private void DetachStateImageListHandlers()
         {
-            if (stateImageList != null)
+            if (stateImageList is not null)
             {
                 stateImageList.RecreateHandle -= new EventHandler(StateImageListRecreateHandle);
                 stateImageList.Disposed -= new EventHandler(DetachStateImageList);
@@ -777,6 +784,7 @@ namespace System.Windows.Forms
                 {
                     return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT));
                 }
+
                 return DefaultTreeViewIndent;
             }
 
@@ -788,10 +796,12 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Indent), value, 0));
                     }
+
                     if (value > MaxIndent)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(Indent), value, MaxIndent));
                     }
+
                     indent = value;
                     if (IsHandleCreated)
                     {
@@ -826,6 +836,7 @@ namespace System.Windows.Forms
                     {
                         return Math.Max(16, FontHeight + 3);
                     }
+
                     return FontHeight + 3;
                 }
             }
@@ -838,6 +849,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ItemHeight), value, 1));
                     }
+
                     if (value >= short.MaxValue)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(ItemHeight), value, short.MaxValue));
@@ -865,6 +877,8 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        internal ToolTip KeyboardToolTip { get; } = new ToolTip();
 
         /// <summary>
         ///  The LabelEdit property determines if the label text
@@ -907,6 +921,7 @@ namespace System.Windows.Forms
                     int intColor = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETLINECOLOR));
                     return ColorTranslator.FromWin32(intColor);
                 }
+
                 return lineColor;
             }
             set
@@ -938,6 +953,7 @@ namespace System.Windows.Forms
                 {
                     nodes = new TreeNodeCollection(root);
                 }
+
                 return nodes;
             }
         }
@@ -958,10 +974,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TreeViewDrawMode.Normal, (int)TreeViewDrawMode.OwnerDrawAll))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TreeViewDrawMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (drawMode != value)
                 {
@@ -1078,10 +1091,12 @@ namespace System.Windows.Forms
                 {
                     return ImageList.Indexer.DefaultIndex;
                 }
+
                 if (SelectedImageIndexer.Index >= imageList.Images.Count)
                 {
                     return Math.Max(0, imageList.Images.Count - 1);
                 }
+
                 return SelectedImageIndexer.Index;
             }
             set
@@ -1099,6 +1114,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedImageIndex), value, 0));
                 }
+
                 if (SelectedImageIndexer.Index != value)
                 {
                     SelectedImageIndexer.Index = value;
@@ -1136,8 +1152,9 @@ namespace System.Windows.Forms
 
                     if (string.IsNullOrEmpty(value) || value.Equals(SR.toStringNone))
                     {
-                        SelectedImageIndex = (ImageList != null) ? 0 : ImageList.Indexer.DefaultIndex;
+                        SelectedImageIndex = (ImageList is not null) ? 0 : ImageList.Indexer.DefaultIndex;
                     }
+
                     if (IsHandleCreated)
                     {
                         RecreateHandle();
@@ -1167,7 +1184,7 @@ namespace System.Windows.Forms
 
                     return NodeFromHandle(hItem);
                 }
-                else if (selectedNode != null && selectedNode.TreeView == this)
+                else if (selectedNode is not null && selectedNode.TreeView == this)
                 {
                     return selectedNode;
                 }
@@ -1181,7 +1198,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated && (value is null || value.TreeView == this))
                 {
                     // This class invariant is not quite correct -- if the selected node does not belong to this Treeview,
-                    // selectedNode != null even though the handle is created.  We will call set_SelectedNode
+                    // selectedNode is not null even though the handle is created.  We will call set_SelectedNode
                     // to inform the handle that the selected node has been added to the TreeView.
                     Debug.Assert(selectedNode is null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
@@ -1341,7 +1358,7 @@ namespace System.Windows.Forms
                 if (treeViewNodeSorter != value)
                 {
                     treeViewNodeSorter = value;
-                    if (value != null)
+                    if (value is not null)
                     {
                         Sort();
                     }
@@ -1384,6 +1401,7 @@ namespace System.Windows.Forms
                     IntPtr hitem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.FIRSTVISIBLE);
                     return (hitem == IntPtr.Zero ? null : NodeFromHandle(hitem));
                 }
+
                 return topNode;
             }
             set
@@ -1391,7 +1409,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated && (value is null || value.TreeView == this))
                 {
                     // This class invariant is not quite correct -- if the selected node does not belong to this Treeview,
-                    // selectedNode != null even though the handle is created.  We will call set_SelectedNode
+                    // selectedNode is not null even though the handle is created.  We will call set_SelectedNode
                     // to inform the handle that the selected node has been added to the TreeView.
                     Debug.Assert(topNode is null || topNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
@@ -1609,6 +1627,7 @@ namespace System.Windows.Forms
                     ThemingScope.Deactivate(userCookie);
                 }
             }
+
             base.CreateHandle();
         }
 
@@ -1645,7 +1664,9 @@ namespace System.Windows.Forms
             }
 
             // Dispose unmanaged resources.
+            UnhookNodes();
             _toolTipBuffer.Dispose();
+            KeyboardToolTip.Dispose();
 
             base.Dispose(disposing);
         }
@@ -1699,14 +1720,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip, string toolTipText)
+        internal override void SetToolTip(ToolTip toolTip)
         {
-            if (toolTip != null)
+            if (toolTip is null || !ShowNodeToolTips)
             {
-                User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
-                User32.SendMessageW(this, (User32.WM)TVM.SETTOOLTIPS, toolTip.Handle);
-                controlToolTipText = toolTipText;
+                return;
             }
+
+            User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+            User32.SendMessageW(this, (User32.WM)TVM.SETTOOLTIPS, toolTip.Handle);
+            controlToolTipText = toolTip.GetToolTip(this);
         }
 
         /// <summary>
@@ -1808,7 +1831,24 @@ namespace System.Windows.Forms
                 {
                     UpdateImagesRecursive(node);
                 }
+
                 EndUpdate();
+            }
+        }
+
+        private void NotifyAboutGotFocus(TreeNode treeNode)
+        {
+            if (treeNode is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(treeNode);
+            }
+        }
+
+        private void NotifyAboutLostFocus(TreeNode treeNode)
+        {
+            if (treeNode is not null)
+            {
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(treeNode);
             }
         }
 
@@ -1817,10 +1857,11 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = IntPtr.Zero;
-                if (internalStateImageList != null)
+                if (internalStateImageList is not null)
                 {
-                    handle = internalStateImageList.CreateUniqueHandle();
+                    handle = internalStateImageList.Handle;
                 }
+
                 SetStateImageList(handle);
             }
         }
@@ -1831,7 +1872,7 @@ namespace System.Windows.Forms
             {
                 // Since the native treeview requires the state imagelist to be 1-indexed we need to
                 // re add the images if the original collection had changed.
-                if (stateImageList != null && stateImageList.Images.Count > 0)
+                if (stateImageList is not null && stateImageList.Images.Count > 0)
                 {
                     Image[] images = new Image[stateImageList.Images.Count + 1];
                     images[0] = stateImageList.Images[0];
@@ -1840,7 +1881,7 @@ namespace System.Windows.Forms
                         images[i] = stateImageList.Images[i - 1];
                     }
 
-                    if (internalStateImageList != null)
+                    if (internalStateImageList is not null)
                     {
                         internalStateImageList.Images.Clear();
                         internalStateImageList.Images.AddRange(images);
@@ -1851,15 +1892,15 @@ namespace System.Windows.Forms
                         internalStateImageList.Images.AddRange(images);
                     }
 
-                    Debug.Assert(internalStateImageList != null, "Why are changing images when the Imagelist is null?");
-                    if (internalStateImageList != null)
+                    Debug.Assert(internalStateImageList is not null, "Why are changing images when the Imagelist is null?");
+                    if (internalStateImageList is not null)
                     {
-                        if (ScaledStateImageSize != null)
+                        if (ScaledStateImageSize is not null)
                         {
                             internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
                         }
 
-                        SetStateImageList(internalStateImageList.CreateUniqueHandle());
+                        SetStateImageList(internalStateImageList.Handle);
                     }
                 }
                 else //stateImageList is null || stateImageList.Images.Count = 0;
@@ -1877,7 +1918,7 @@ namespace System.Windows.Forms
             // If in edit mode, treat Return as an input key, so the form doesn't grab it
             // and treat it as clicking the Form.AcceptButton.  Similarly for Escape
             // and Form.CancelButton.
-            if (editNode != null && (keyData & Keys.Alt) == 0)
+            if (editNode is not null && (keyData & Keys.Alt) == 0)
             {
                 switch (keyData & Keys.KeyCode)
                 {
@@ -1890,6 +1931,7 @@ namespace System.Windows.Forms
                         return true;
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1969,12 +2011,12 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)TVM.SETLINECOLOR, IntPtr.Zero, PARAM.FromColor(lineColor));
             }
 
-            if (imageList != null)
+            if (imageList is not null)
             {
                 User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero, imageList.Handle);
             }
 
-            if (stateImageList != null)
+            if (stateImageList is not null)
             {
                 UpdateNativeStateImageList();
             }
@@ -2035,10 +2077,10 @@ namespace System.Windows.Forms
         // set the value of internalStateImageList to the new list
         private void UpdateNativeStateImageList()
         {
-            if (stateImageList != null && stateImageList.Images.Count > 0)
+            if (stateImageList is not null && stateImageList.Images.Count > 0)
             {
                 ImageList newImageList = new ImageList();
-                if (ScaledStateImageSize != null)
+                if (ScaledStateImageSize is not null)
                 {
                     newImageList.ImageSize = (Size)ScaledStateImageSize;
                 }
@@ -2049,13 +2091,15 @@ namespace System.Windows.Forms
                 {
                     images[i] = stateImageList.Images[i - 1];
                 }
-                newImageList.Images.AddRange(images);
-                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.CreateUniqueHandle());
 
-                if (internalStateImageList != null)
+                newImageList.Images.AddRange(images);
+                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.Handle);
+
+                if (internalStateImageList is not null)
                 {
                     internalStateImageList.Dispose();
                 }
+
                 internalStateImageList = newImageList;
             }
         }
@@ -2067,8 +2111,7 @@ namespace System.Windows.Forms
             IntPtr handleOld = User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
-                var result = ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
-                Debug.Assert(result.IsTrue());
+                ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
             }
         }
 
@@ -2079,8 +2122,7 @@ namespace System.Windows.Forms
             IntPtr handle = User32.SendMessageW(this, (User32.WM)TVM.GETIMAGELIST, (IntPtr)TVSIL.STATE);
             if (handle != IntPtr.Zero)
             {
-                var result = ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
-                Debug.Assert(result.IsTrue());
+                ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
                 if (reset)
                 {
                     User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE);
@@ -2098,7 +2140,7 @@ namespace System.Windows.Forms
 
             // for the case when we are NOT being disposed, we'll be recreating the internal state imagelist
             // in OnHandleCreate, so it is ok to completely Dispose here
-            if (internalStateImageList != null)
+            if (internalStateImageList is not null)
             {
                 internalStateImageList.Dispose();
                 internalStateImageList = null;
@@ -2134,10 +2176,11 @@ namespace System.Windows.Forms
             if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
-                if (tn != prevHoveredNode && tn != null)
+                if (tn != prevHoveredNode && tn is not null)
                 {
                     OnNodeMouseHover(new TreeNodeMouseHoverEventArgs(tn));
                     prevHoveredNode = tn;
+                    NotifyAboutLostFocus(SelectedNode);
                 }
             }
 
@@ -2272,12 +2315,13 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // if it's a space, send the check notifications and toggle the checkbox if we're not
             // cancelled.
             if (CheckBoxes && (e.KeyData & Keys.KeyCode) == Keys.Space)
             {
                 TreeNode node = SelectedNode;
-                if (node != null)
+                if (node is not null)
                 {
                     bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByKeyboard);
                     if (!eventReturn)
@@ -2285,6 +2329,7 @@ namespace System.Windows.Forms
                         node.CheckedInternal = !node.CheckedInternal;
                         TreeViewAfterCheck(node, TreeViewAction.ByKeyboard);
                     }
+
                     e.Handled = true;
                     return;
                 }
@@ -2301,6 +2346,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // eat the space key
             if ((e.KeyData & Keys.KeyCode) == Keys.Space)
             {
@@ -2319,6 +2365,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // eat the space key
             if (e.KeyChar == ' ')
             {
@@ -2390,19 +2437,21 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeSelectedImageIndex()
         {
-            if (imageList != null)
+            if (imageList is not null)
             {
                 return (SelectedImageIndex != 0);
             }
+
             return (SelectedImageIndex != ImageList.Indexer.DefaultIndex);
         }
 
         private bool ShouldSerializeImageIndex()
         {
-            if (imageList != null)
+            if (imageList is not null)
             {
                 return (ImageIndex != 0);
             }
+
             return (ImageIndex != ImageList.Indexer.DefaultIndex);
         }
 
@@ -2421,7 +2470,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (Nodes != null)
+            if (Nodes is not null)
             {
                 s += ", Nodes.Count: " + Nodes.Count.ToString(CultureInfo.CurrentCulture);
                 if (Nodes.Count > 0)
@@ -2429,6 +2478,7 @@ namespace System.Windows.Forms
                     s += ", Nodes[0]: " + Nodes[0].ToString();
                 }
             }
+
             return s;
         }
 
@@ -2468,6 +2518,7 @@ namespace System.Windows.Forms
                 e = new TreeViewCancelEventArgs(NodeFromHandle(item.hItem), false, TreeViewAction.Collapse);
                 OnBeforeCollapse(e);
             }
+
             return (IntPtr)(e.Cancel ? 1 : 0);
         }
 
@@ -2503,6 +2554,7 @@ namespace System.Windows.Forms
             {
                 return (IntPtr)1;
             }
+
             // Check for invalid node handle
             if (nmtv->itemNew.hItem == IntPtr.Zero)
             {
@@ -2516,6 +2568,7 @@ namespace System.Windows.Forms
             {
                 case TVC.BYKEYBOARD:
                     action = TreeViewAction.ByKeyboard;
+                    NotifyAboutLostFocus(SelectedNode);
                     break;
                 case TVC.BYMOUSE:
                     action = TreeViewAction.ByMouse;
@@ -2538,18 +2591,20 @@ namespace System.Windows.Forms
 
             if (nmtv->itemNew.hItem != IntPtr.Zero)
             {
+                TreeNode node = NodeFromHandle(nmtv->itemNew.hItem);
                 TreeViewAction action = TreeViewAction.Unknown;
                 switch (nmtv->action)
                 {
                     case TVC.BYKEYBOARD:
                         action = TreeViewAction.ByKeyboard;
+                        NotifyAboutGotFocus(node);
                         break;
                     case TVC.BYMOUSE:
                         action = TreeViewAction.ByMouse;
                         break;
                 }
 
-                OnAfterSelect(new TreeViewEventArgs(NodeFromHandle(nmtv->itemNew.hItem), action));
+                OnAfterSelect(new TreeViewEventArgs(node, action));
             }
 
             // TreeView doesn't properly revert back to the unselected image
@@ -2598,7 +2653,7 @@ namespace System.Windows.Forms
             string newText = (nmtvdi.item.pszText == IntPtr.Zero ? null : Marshal.PtrToStringAuto(nmtvdi.item.pszText));
             NodeLabelEditEventArgs e = new NodeLabelEditEventArgs(node, newText);
             OnAfterLabelEdit(e);
-            if (newText != null && !e.CancelEdit && node != null)
+            if (newText is not null && !e.CancelEdit && node is not null)
             {
                 node.text = newText;
                 if (Scrollable)
@@ -2606,6 +2661,7 @@ namespace System.Windows.Forms
                     ForceScrollbarUpdate(true);
                 }
             }
+
             return (IntPtr)(e.CancelEdit ? 0 : 1);
         }
 
@@ -2614,14 +2670,14 @@ namespace System.Windows.Forms
             base.UpdateStylesCore();
             if (IsHandleCreated && CheckBoxes)
             {
-                if (StateImageList != null)
+                if (StateImageList is not null)
                 {
                     // Setting the TVS_CHECKBOXES window style also causes the TreeView to display the default checkbox
                     // images rather than the user specified StateImageList.  We send a TVM_SETIMAGELIST to restore the
                     // user's images.
-                    if (internalStateImageList != null)
+                    if (internalStateImageList is not null)
                     {
-                        SetStateImageList(internalStateImageList.CreateUniqueHandle());
+                        SetStateImageList(internalStateImageList.Handle);
                     }
                 }
             }
@@ -2722,11 +2778,12 @@ namespace System.Windows.Forms
                         {
                             Rectangle bounds = node.RowBounds;
 
-                            var si = new User32.SCROLLINFO
+                            User32.SCROLLINFO si = new()
                             {
-                                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                                cbSize = (uint)sizeof(User32.SCROLLINFO),
                                 fMask = User32.SIF.POS
                             };
+
                             if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                             {
                                 // need to get the correct bounds if horizontal scroll bar is shown.
@@ -2738,6 +2795,7 @@ namespace System.Windows.Forms
                                     bounds.Width += value;
                                 }
                             }
+
                             e = new DrawTreeNodeEventArgs(g, node, bounds, (TreeNodeStates)(state));
                             OnDrawNode(e);
                         }
@@ -2761,16 +2819,17 @@ namespace System.Windows.Forms
                     // when one item is selected, click and hold on another). This needs to be fixed.
                     Color riFore = renderinfo.ForeColor;
                     Color riBack = renderinfo.BackColor;
-                    if (renderinfo != null && !riFore.IsEmpty)
+                    if (renderinfo is not null && !riFore.IsEmpty)
                     {
                         nmtvcd->clrText = ColorTranslator.ToWin32(riFore);
                     }
-                    if (renderinfo != null && !riBack.IsEmpty)
+
+                    if (renderinfo is not null && !riBack.IsEmpty)
                     {
                         nmtvcd->clrTextBk = ColorTranslator.ToWin32(riBack);
                     }
 
-                    if (renderinfo != null && renderinfo.Font != null)
+                    if (renderinfo is not null && renderinfo.Font is not null)
                     {
                         // Mess with the DC directly...
                         Gdi32.SelectObject(nmtvcd->nmcd.hdc, renderinfo.FontHandle);
@@ -2866,8 +2925,23 @@ namespace System.Windows.Forms
                 retval.ForeColor = node.propBag.ForeColor;
                 retval.BackColor = node.propBag.BackColor;
             }
+
             retval.Font = node.propBag.Font;
             return retval;
+        }
+
+        internal unsafe override ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TTF flags, string caption, ToolTip tooltip)
+        {
+            // The "ShowNodeToolTips" flag is required so that when the user hovers over the TreeNode,
+            // their own tooltip is displayed, not the TreeView tooltip.
+            // The second condition is necessary for the correct display of the keyboard tooltip,
+            // since the logic of the external tooltip blocks its display
+            bool isExternalTooltip = ShowNodeToolTips && tooltip != KeyboardToolTip;
+            var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, isExternalTooltip ? null : caption);
+            if (isExternalTooltip)
+                wrapper.Info.lpszText = (char*)(-1);
+
+            return wrapper;
         }
 
         private unsafe bool WmShowToolTip(ref Message m)
@@ -2883,7 +2957,7 @@ namespace System.Windows.Forms
             if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
-                if (tn != null)
+                if (tn is not null)
                 {
                     if (!ShowNodeToolTips) // default ToolTips
                     {
@@ -2901,6 +2975,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -2917,11 +2992,11 @@ namespace System.Windows.Forms
             if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
-                if (ShowNodeToolTips && tn != null && (!string.IsNullOrEmpty(tn.ToolTipText)))
+                if (ShowNodeToolTips && tn is not null && (!string.IsNullOrEmpty(tn.ToolTipText)))
                 {
                     tipText = tn.ToolTipText;
                 }
-                else if (tn != null && tn.Bounds.Right > Bounds.Right)
+                else if (tn is not null && tn.Bounds.Right > Bounds.Right)
                 {
                     tipText = tn.Text;
                 }
@@ -3010,10 +3085,11 @@ namespace System.Windows.Forms
                                 OnMouseClick(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
                             }
                         }
+
                         if (nmtv->nmhdr.code == (int)NM.RCLICK)
                         {
                             TreeNode treeNode = NodeFromHandle(hnode);
-                            if (treeNode != null && treeNode.ContextMenuStrip != null)
+                            if (treeNode is not null && treeNode.ContextMenuStrip is not null)
                             {
                                 ShowContextMenu(treeNode);
                             }
@@ -3022,6 +3098,7 @@ namespace System.Windows.Forms
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
                                 User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, (IntPtr)User32.GetMessagePos());
                             }
+
                             m.Result = (IntPtr)1;
                         }
 
@@ -3037,9 +3114,22 @@ namespace System.Windows.Forms
                                 treeViewState[TREEVIEWSTATE_mouseUpFired] = true;
                             }
                         }
+
                         break;
                 }
             }
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            NotifyAboutGotFocus(SelectedNode);
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            NotifyAboutLostFocus(SelectedNode);
         }
 
         /// <summary>
@@ -3047,7 +3137,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu(TreeNode treeNode)
         {
-            if (treeNode.ContextMenuStrip != null)
+            if (treeNode.ContextMenuStrip is not null)
             {
                 ContextMenuStrip menu = treeNode.ContextMenuStrip;
 
@@ -3065,6 +3155,17 @@ namespace System.Windows.Forms
             // Unhook the Event.
             strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
+        }
+
+        private void UnhookNodes()
+        {
+            foreach (TreeNode rootNode in Nodes)
+            {
+                foreach (TreeNode node in rootNode.GetSelfAndChildNodes())
+                {
+                    KeyboardToolTipStateMachine.Instance.Unhook(node, KeyboardToolTip);
+                }
+            }
         }
 
         private void WmPrint(ref Message m)
@@ -3099,6 +3200,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case (int)User32.WM.HSCROLL:
                     base.WndProc(ref m);
@@ -3106,6 +3208,7 @@ namespace System.Windows.Forms
                     {
                         Invalidate();
                     }
+
                     break;
 
                 case (int)User32.WM.PRINT:
@@ -3131,6 +3234,7 @@ namespace System.Windows.Forms
                             node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
                         }
                     }
+
                     break;
                 case (int)User32.WM.NOTIFY:
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
@@ -3158,6 +3262,7 @@ namespace System.Windows.Forms
                             base.WndProc(ref m);
                             break;
                     }
+
                     break;
                 case (int)(User32.WM.REFLECT_NOTIFY):
                     WmNotify(ref m);
@@ -3203,18 +3308,20 @@ namespace System.Windows.Forms
                         {
                             TreeNode node = NodeFromHandle(hNodeMouseDown);
                             bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByMouse);
-                            if (!eventReturn && node != null)
+                            if (!eventReturn && node is not null)
                             {
                                 node.CheckedInternal = !node.CheckedInternal;
                                 TreeViewAfterCheck(node, TreeViewAction.ByMouse);
                             }
                         }
+
                         m.Result = IntPtr.Zero;
                     }
                     else
                     {
                         WmMouseDown(ref m, MouseButtons.Left, 1);
                     }
+
                     downButton = MouseButtons.Left;
                     break;
                 case (int)User32.WM.LBUTTONUP:
@@ -3252,6 +3359,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
@@ -3324,6 +3432,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case (int)User32.WM.CONTEXTMENU:
                     if (treeViewState[TREEVIEWSTATE_showTreeViewContextMenu])
@@ -3335,12 +3444,12 @@ namespace System.Windows.Forms
                     {
                         // this is the Shift + F10 Case....
                         TreeNode treeNode = SelectedNode;
-                        if (treeNode != null && treeNode.ContextMenuStrip != null)
+                        if (treeNode is not null && treeNode.ContextMenuStrip is not null)
                         {
                             Point client;
                             client = new Point(treeNode.Bounds.X, treeNode.Bounds.Y + treeNode.Bounds.Height / 2);
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
-                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip != null)
+                            if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip is not null)
                             {
                                 bool keyboardActivated = (unchecked((int)(long)m.LParam) == -1);
                                 treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
@@ -3353,6 +3462,7 @@ namespace System.Windows.Forms
                             base.WndProc(ref m);
                         }
                     }
+
                     break;
 
                 default:

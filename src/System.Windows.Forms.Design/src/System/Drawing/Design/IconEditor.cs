@@ -20,8 +20,8 @@ namespace System.Drawing.Design
     /// </summary>
     public class IconEditor : UITypeEditor
     {
-        private static List<string> s_iconExtensions = new List<string>() { "ico" };
-        private static Type[] s_imageExtenders = Array.Empty<Type>();
+        private static readonly List<string> s_iconExtensions = new List<string>() { "ico" };
+        private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
         private FileDialog _fileDialog;
 
         protected static string CreateExtensionsString(string[] extensions, string sep)
@@ -145,6 +145,7 @@ namespace System.Drawing.Design
                 rectangle.X = (rectangle.Width - icon.Width) / 2;
                 rectangle.Width = icon.Width;
             }
+
             if (icon.Height < rectangle.Height)
             {
                 rectangle.X = (rectangle.Height - icon.Height) / 2;

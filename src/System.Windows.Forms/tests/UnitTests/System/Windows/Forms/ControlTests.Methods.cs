@@ -3,8 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -155,6 +155,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             child2.BringToFront();
@@ -196,6 +197,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, child1.Handle);
             int invalidatedCallCount = 0;
@@ -250,6 +252,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -316,6 +319,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int parentInvalidatedCallCount = 0;
@@ -985,7 +989,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1035,7 +1040,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1088,7 +1094,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int child1CallCount = 0;
             child1.Disposed += (sender, e) => child1CallCount++;
@@ -1160,7 +1167,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1214,7 +1222,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1282,7 +1291,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1367,7 +1377,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1463,7 +1474,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int child1CallCount = 0;
             child1.Disposed += (sender, e) => child1CallCount++;
@@ -1603,7 +1615,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -1695,7 +1708,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -2099,38 +2113,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
         }
 
-        /// <summary>
-        ///  Data for the GetChildAtPointNull test
-        /// </summary>
-        public static TheoryData<GetChildAtPointSkip> GetChildAtPointNullData =>
-            CommonTestHelper.GetEnumTheoryData<GetChildAtPointSkip>();
-
         [WinFormsTheory]
-        [MemberData(nameof(GetChildAtPointNullData))]
-        public void Control_GetChildAtPointNull(GetChildAtPointSkip skip)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(GetChildAtPointSkip))]
+        public void Control_GetChildAtPoint_Invoke_ReturnsExpected(GetChildAtPointSkip skipValue)
         {
-            using var cont = new Control();
+            using var control = new Control();
+            Assert.Null(control.GetChildAtPoint(new Point(5, 5), skipValue));
+            Assert.True(control.IsHandleCreated);
 
-            Control ret = cont.GetChildAtPoint(new Point(5, 5), skip);
-
-            Assert.Null(ret);
+            // Call again.
+            Assert.Null(control.GetChildAtPoint(new Point(5, 5), skipValue));
+            Assert.True(control.IsHandleCreated);
         }
 
-        /// <summary>
-        ///  Data for the GetChildAtPointInvalid test
-        /// </summary>
-        public static TheoryData<GetChildAtPointSkip> GetChildAtPointInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<GetChildAtPointSkip>();
-
         [WinFormsTheory]
-        [MemberData(nameof(GetChildAtPointInvalidData))]
-        public void Control_GetChildAtPointInvalid(GetChildAtPointSkip skip)
+        [InlineData((GetChildAtPointSkip)(-1))]
+        [InlineData((GetChildAtPointSkip)8)]
+        public void Control_GetChildAtPoint_InvokeInvalidSkipValue_ThrowsInvalidEnumArgumentException(GetChildAtPointSkip skipValue)
         {
-            using var cont = new Control();
-
-            // act & assert
-            InvalidEnumArgumentException ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.GetChildAtPoint(new Point(5, 5), skip));
-            Assert.Equal("skipValue", ex.ParamName);
+            using var control = new Control();
+            Assert.Throws<InvalidEnumArgumentException>("skipValue", () => control.GetChildAtPoint(new Point(5, 5), skipValue));
         }
 
         [WinFormsFact]
@@ -3785,6 +3787,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, childStyleChangedCallCount);
             Assert.Equal(0, childCreatedCallCount);
         }
+
         [WinFormsFact]
         public void Control_InvokeDelegateSameThread_Success()
         {
@@ -3919,6 +3922,41 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+
+            /*
+
+            Expecting something like the following.
+            The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>g__FaultingMethod|412_1() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3945
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
+                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6348
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                        --- End of stack trace from previous location ---
+                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                           at System.Windows.Forms.Control.Invoke(Delegate method) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>b__0() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3915
+                           at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
+
+            */
+            Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+            Assert.Contains(nameof(Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace), exception.StackTrace);
+
+            static void FaultingMethod()
+            {
+                throw new DivideByZeroException();
+            }
+        }
+
+        [WinFormsFact]
         public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_Success()
         {
             using var control = new Control();
@@ -3946,6 +3984,48 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
+        }
+
+        [WinFormsFact]
+        public async Task Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            await Task.Run(() =>
+            {
+                var exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+
+                /*
+
+                Expecting something like the following.
+                The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>g__FaultingMethod|413_1() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3969
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6367
+                           at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+                        --- End of stack trace from previous location ---
+                           at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+                           at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
+                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6344
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                        --- End of stack trace from previous location ---
+                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                           at System.Windows.Forms.Control.Invoke(Delegate method) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass413_0.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>b__2() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3947
+                           at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
+
+                */
+                Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+                Assert.Contains(nameof(Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace), exception.StackTrace);
+            });
+
+            static void FaultingMethod()
+            {
+                throw new DivideByZeroException();
+            }
         }
 
         [WinFormsFact]
@@ -4667,6 +4747,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("PreferredSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             control.PerformLayout();
@@ -4931,6 +5012,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("PreferredSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             control.PerformLayout(affectedControl, affectedProperty);
@@ -5222,35 +5304,40 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(keys, actualKeyData);
                 processCmdKeyCallCount++;
                 return processCmdKeyResult;
-            };
+            }
+
             int isInputKeyCallCount = 0;
             bool isInputKeyAction(Keys actualKeyData)
             {
                 Assert.Equal(keys, actualKeyData);
                 isInputKeyCallCount++;
                 return isInputKeyResult;
-            };
+            }
+
             int processDialogKeyCallCount = 0;
             bool processDialogKeyAction(Keys actualKeyData)
             {
                 Assert.Equal(keys, actualKeyData);
                 processDialogKeyCallCount++;
                 return processDialogKeyResult;
-            };
+            }
+
             int isInputCharCallCount = 0;
             bool isInputCharAction(char actualCharCode)
             {
                 Assert.Equal((char)keys, actualCharCode);
                 isInputCharCallCount++;
                 return isInputCharResult;
-            };
+            }
+
             int processDialogCharCallCount = 0;
             bool processDialogCharAction(char actualCharCode)
             {
                 Assert.Equal((char)keys, actualCharCode);
                 processDialogCharCallCount++;
                 return processDialogCharResult;
-            };
+            }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = processCmdKeyAction,
@@ -5349,6 +5436,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessCmdKeyAction = action
@@ -5394,6 +5482,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessDialogCharAction = action
@@ -5441,6 +5530,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessDialogKeyAction = action
@@ -5572,6 +5662,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -5862,6 +5953,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -5920,6 +6012,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = action
@@ -5948,6 +6041,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -5975,6 +6069,7 @@ namespace System.Windows.Forms.Tests
                 parentCallCount++;
                 return parentResult;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = parentAction
@@ -5986,6 +6081,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 Parent = parent,
@@ -6033,6 +6129,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = action
@@ -6808,6 +6905,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             child1.SendToBack();
@@ -6849,6 +6947,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, child1.Handle);
             int invalidatedCallCount = 0;
@@ -6903,6 +7002,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -6969,6 +7069,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("ChildIndex", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int parentInvalidatedCallCount = 0;
@@ -7503,7 +7604,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -7760,7 +7862,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -8358,7 +8461,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -8615,7 +8719,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -9181,7 +9286,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -9493,7 +9599,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11058,7 +11165,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11296,7 +11404,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -11542,7 +11651,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11792,7 +11902,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(sizeChangedCallCount - 1, parentLayoutCallCount);
                 Assert.Equal(clientSizeChangedCallCount - 1, parentLayoutCallCount);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;

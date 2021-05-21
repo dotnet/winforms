@@ -358,8 +358,8 @@ Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Close() -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Dispose(disposing As Boolean) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Flush() -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.GetSupportedAttributes() -> String()
-Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, ParamArray data As Object()) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, data As Object) -> Void
+Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceData(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, ParamArray data As Object()) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceEvent(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, format As String, ParamArray args As Object()) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.TraceEvent(eventCache As System.Diagnostics.TraceEventCache, source As String, eventType As System.Diagnostics.TraceEventType, id As Integer, message As String) -> Void
 Overrides Microsoft.VisualBasic.Logging.FileLogTraceListener.Write(message As String) -> Void

@@ -677,6 +677,21 @@
         <target state="translated">ハンドルされていない VT: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="new">Go to next time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="new">Go to previous time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="new">Go to and select today's date</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">キャンセル</target>
@@ -1110,6 +1125,16 @@
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
         <target state="translated">{0} 件を選択済み</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">閉じる</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">開く</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -2214,7 +2239,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
         <source>{0} check box checked</source>
-        <target state="translated">{0} チェック ボックスがオンになっています</target>
+        <target state="translated">{0} のチェック ボックスがオンになっています</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
@@ -3707,6 +3732,11 @@ To replace this default dialog please handle the DataError event.</source>
       <trans-unit id="DataGridView_ReadOnlyDescr">
         <source>Indicates whether the user can edit the cells of the DataGridView control.</source>
         <target state="translated">ユーザーが DataGridView コントロールのセルを編集することができるかどうかを示します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">行 {0} が追加されました</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -7061,6 +7091,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">月表示カレンダーの前と次の月の表示に使用される色です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="new">Week {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">{0} 年から {1} 年までが選択されています。</target>
@@ -8313,7 +8348,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
         <source>Drop down control holder</source>
-        <target state="new">Drop down control holder</target>
+        <target state="translated">ドロップ ダウンのコントロール ホルダー</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -10407,8 +10442,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">文字列の長さは 64 文字未満でなければなりません。</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">テキストの長さは 128 文字未満でなければなりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10419,6 +10454,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">LabelEdit のプロパティが false であるため、BeginEdit は成功しませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode は、既に別の TreeView にバインドされています。最初に現在の場所から削除するか、複製する必要があります。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10801,6 +10841,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">上</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">編集</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">テキストの表示が Windows Forms の以前のリリースとの互換性を維持するかどうかを指定します。</target>
@@ -11007,8 +11052,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">最初の IWin32Window オブジェクトがアプリケーションで作成される前に、SetCompatibleTextRenderingDefault が呼び出されなければなりません。</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

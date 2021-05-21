@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             }
 
             private int CurrentIndex
-                => Array.IndexOf((Array)_owningListBox.Items.InnerArray.Entries, _itemEntry);
+                => _owningListBox.Items.InnerArray.IndexOf(_itemEntry);
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _owningListBox.GetItemText(_itemEntry.item);
+                    return _owningListBox.GetItemText(_itemEntry.Item);
                 }
                 set => base.Name = value;
             }
@@ -133,7 +133,7 @@ namespace System.Windows.Forms
                 get
                 {
                     var accRole = _systemIAccessible?.get_accRole(GetChildId());
-                    return accRole != null
+                    return accRole is not null
                         ? (AccessibleRole)accRole
                         : AccessibleRole.None;
                 }
@@ -154,7 +154,7 @@ namespace System.Windows.Forms
                     }
 
                     var systemIAccessibleState = _systemIAccessible?.get_accState(GetChildId());
-                    if (systemIAccessibleState != null)
+                    if (systemIAccessibleState is not null)
                     {
                         return state |= (AccessibleStates)systemIAccessibleState;
                     }
@@ -194,12 +194,14 @@ namespace System.Windows.Forms
                         {
                             return _owningAccessibleObject.GetChild(currentIndex - 1);
                         }
+
                         return null;
                     case UiaCore.NavigateDirection.NextSibling:
                         if (currentIndex >= firstItemIndex && currentIndex < lastItemIndex)
                         {
                             return _owningAccessibleObject.GetChild(currentIndex + 1);
                         }
+
                         return null;
                 }
 

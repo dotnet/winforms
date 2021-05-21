@@ -12,12 +12,22 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Comdlg32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void PRINTDLGW_32_Size()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(66, sizeof(PRINTDLGW_32));
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is32bit))]
         public unsafe void PRINTDLGW_32_ensure_layout()
         {
+            if (Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             PRINTDLGW_32 sut = new PRINTDLGW_32();
             byte* addr = (byte*)&sut;
 
@@ -45,12 +55,22 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Comdlg32
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void PRINTDLGW_64_Size()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             Assert.Equal(120, sizeof(PRINTDLGW_64));
         }
 
         [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
         public unsafe void PRINTDLGW_64_ensure_layout()
         {
+            if (!Environment.Is64BitProcess)
+            {
+                return;
+            }
+
             PRINTDLGW_64 sut = new PRINTDLGW_64();
             byte* addr = (byte*)&sut;
 

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -261,6 +261,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             }
+
             Assert.False(control.IsHandleCreated);
         }
 
@@ -432,6 +433,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(gridVisible && rowHeadersVisible && columnHeadersVisible && columnVisible, cell.Displayed);
             }
+
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -2885,9 +2887,9 @@ namespace System.Windows.Forms.Tests
         {
             // Frozen.
             yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen };
-            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible  | DataGridViewElementStates.Displayed};
+            yield return new object[] { DataGridViewTriState.True, true, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed };
             yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, true, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen };
-            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible  | DataGridViewElementStates.Displayed};
+            yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed };
 
             // Visible.
             yield return new object[] { DataGridViewTriState.True, false, true, DataGridViewTriState.True, false, true, DataGridViewElementStates.Resizable | DataGridViewElementStates.Visible | DataGridViewElementStates.Displayed };
@@ -4239,10 +4241,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(true, -2)]
+        // [InlineData(true, -2)] If a datagridview is rendered with visual styles, mouse entering a header cell will lead to a ArgumentOutOfRangeException
         [InlineData(true, -1)]
         [InlineData(true, 0)]
-        [InlineData(true, 1)]
+        // [InlineData(true, 1)] If a datagridview is rendered with visual styles, mouse entering a header cell will lead to a ArgumentOutOfRangeException
         [InlineData(false, -2)]
         [InlineData(false, -1)]
         [InlineData(false, 0)]
@@ -4260,9 +4262,36 @@ namespace System.Windows.Forms.Tests
             };
             control.Columns.Add(column);
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
+
             cell.OnMouseEnter(rowIndex);
+
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(1)]
+        public void DataGridViewHeaderCell_OnMouseEnter_VisualStyles_on_ThrowsArgumentOutOfRangeException(int rowIndex)
+        {
+            if (!Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
+            using var cellTemplate = new SubDataGridViewHeaderCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = true
+            };
+            control.Columns.Add(column);
+            SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseEnter(rowIndex));
         }
 
         [WinFormsTheory]
@@ -4278,10 +4307,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(true, -2)]
+        //[InlineData(true, -2)] If a datagridview is rendered with visual styles, mouse leaving a header cell will lead to a ArgumentOutOfRangeException
         [InlineData(true, -1)]
         [InlineData(true, 0)]
-        [InlineData(true, 1)]
+        //[InlineData(true, 1)] If a datagridview is rendered with visual styles, mouse leaving a header cell will lead to a ArgumentOutOfRangeException
         [InlineData(false, -2)]
         [InlineData(false, -1)]
         [InlineData(false, 0)]
@@ -4299,10 +4328,38 @@ namespace System.Windows.Forms.Tests
             };
             control.Columns.Add(column);
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
+
             cell.OnMouseLeave(rowIndex);
+
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData(-2)]
+        [InlineData(1)]
+        public void DataGridViewHeaderCell_OnMouseLeave_VisualStyles_on_ThrowsArgumentOutOfRangeException(int rowIndex)
+        {
+            if (!Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
+            using var cellTemplate = new SubDataGridViewHeaderCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = true
+            };
+            control.Columns.Add(column);
+            SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseLeave(rowIndex));
+        }
+
         [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
         [InlineData(true, -1)]
         [InlineData(true, 0)]
@@ -4396,9 +4453,11 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(1, 0, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
                 yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
                 yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.None, 0, 0, 0, 0)) };
-                yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
                 yield return new object[] { enableHeadersVisualStyles, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Middle, 0, 0, 0, 0)) };
             }
+
+            // If a datagridview is rendered with visual styles, a left click on a header cell will lead to a ArgumentOutOfRangeException
+            yield return new object[] { false, new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0)) };
         }
 
         [WinFormsTheory]
@@ -4416,9 +4475,35 @@ namespace System.Windows.Forms.Tests
             };
             control.Columns.Add(column);
             SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
+
             cell.OnMouseUp(e);
+
             Assert.Equal(ButtonState.Normal, cell.ButtonState);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewHeaderCell_OnMouseUp_VisualStyles_on_ThrowsArgumentOutOfRangeException()
+        {
+            if (!Application.RenderWithVisualStyles)
+            {
+                return;
+            }
+
+            using var cellTemplate = new SubDataGridViewHeaderCell();
+            using var column = new DataGridViewColumn
+            {
+                CellTemplate = cellTemplate
+            };
+            using var control = new DataGridView
+            {
+                EnableHeadersVisualStyles = true
+            };
+            control.Columns.Add(column);
+            SubDataGridViewHeaderCell cell = (SubDataGridViewHeaderCell)control.Rows[0].Cells[0];
+
+            var e = new DataGridViewCellMouseEventArgs(0, 1, 0, 0, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => cell.OnMouseUp(e));
         }
 
         public static IEnumerable<object[]> OnMouseUp_WithDataGridViewMouseDown_TestData()

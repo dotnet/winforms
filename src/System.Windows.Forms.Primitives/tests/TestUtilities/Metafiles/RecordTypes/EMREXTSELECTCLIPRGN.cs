@@ -4,7 +4,9 @@
 
 #nullable enable
 
+using System.Buffers;
 using System.Runtime.InteropServices;
+using System.Text;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -28,10 +30,25 @@ namespace System.Windows.Forms.Metafiles
             }
         }
 
+        public RECT[] ClippingRectangles => Gdi32.RGNDATAHEADER.GetRegionRects(RegionDataHeader);
+
         public override string ToString()
-            => RegionDataHeader is null
-                ? $"[{nameof(EMREXTSELECTCLIPRGN)}] Mode: Set Default"
-                : $@"[{nameof(EMREXTSELECTCLIPRGN)}] Mode: {iMode} Bounds: {RegionDataHeader->rcBound} Rects: {
-                    RegionDataHeader->nCount}";
+        {
+            if (RegionDataHeader is null)
+            {
+                return $"[{nameof(EMREXTSELECTCLIPRGN)}] Mode: Set Default";
+            }
+
+            StringBuilder sb = new StringBuilder(512);
+            sb.Append($@"[{nameof(EMREXTSELECTCLIPRGN)}] Mode: {iMode} Bounds: {RegionDataHeader->rcBound} Rects: {RegionDataHeader->nCount}");
+
+            RECT[] clippingRects = ClippingRectangles;
+            for (int i = 0; i < clippingRects.Length; i++)
+            {
+                sb.AppendFormat("\n\tRect index {0}: {1}", i, clippingRects[i]);
+            }
+
+            return sb.ToString();
+        }
     }
 }

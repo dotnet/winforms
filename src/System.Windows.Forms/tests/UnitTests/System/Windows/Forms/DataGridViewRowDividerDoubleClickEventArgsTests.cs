@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowDividerDoubleClickEventArgs_Ctor_NegativeRowIndex_ThrowsArgumentOutOfRangeException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, null));
+            Assert.Throws<ArgumentNullException>("e", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, null));
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4, true)));
         }
 

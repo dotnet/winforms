@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     /// </remarks>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
-    public sealed class MdiClient : Control
+    public sealed partial class MdiClient : Control
     {
         // kept in add order, not ZOrder. Need to return the correct
         // array of items...
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             get
             {
                 Image result = base.BackgroundImage;
-                if (result is null && ParentInternal != null)
+                if (result is null && ParentInternal is not null)
                 {
                     result = ParentInternal.BackgroundImage;
                 }
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
             get
             {
                 Image backgroundImage = BackgroundImage;
-                if (backgroundImage != null && ParentInternal != null)
+                if (backgroundImage is not null && ParentInternal is not null)
                 {
                     ImageLayout imageLayout = base.BackgroundImageLayout;
                     if (imageLayout != ParentInternal.BackgroundImageLayout)
@@ -74,6 +74,7 @@ namespace System.Windows.Forms
                         return ParentInternal.BackgroundImageLayout;
                     }
                 }
+
                 return base.BackgroundImageLayout;
             }
             set => base.BackgroundImageLayout = value;
@@ -105,13 +106,13 @@ namespace System.Windows.Forms
                     idFirstChild = 1
                 };
                 ISite site = ParentInternal?.Site;
-                if (site != null && site.DesignMode)
+                if (site is not null && site.DesignMode)
                 {
                     cp.Style |= (int)User32.WS.DISABLED;
                     SetState(States.Enabled, false);
                 }
 
-                if (RightToLeft == RightToLeft.Yes && ParentInternal != null && ParentInternal.IsMirrored)
+                if (RightToLeft == RightToLeft.Yes && ParentInternal is not null && ParentInternal.IsMirrored)
                 {
                     //We want to turn on mirroring for MdiClient explicitly.
                     cp.ExStyle |= (int)(User32.WS_EX.LAYOUTRTL | User32.WS_EX.NOINHERITLAYOUT);
@@ -178,10 +179,11 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             ISite site = ParentInternal?.Site;
-            if (site != null && site.DesignMode && Handle != IntPtr.Zero)
+            if (site is not null && site.DesignMode && Handle != IntPtr.Zero)
             {
                 SetWindowRgn();
             }
+
             base.OnResize(e);
         }
 
@@ -251,7 +253,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < Controls.Count; i++)
                     {
                         Control ctl = Controls[i];
-                        if (ctl != null && ctl is Form)
+                        if (ctl is not null && ctl is Form)
                         {
                             Form child = (Form)ctl;
                             // Only adjust the window position for visible MDI Child windows to prevent
@@ -271,6 +273,7 @@ namespace System.Windows.Forms
                                         wp.ptMinPosition.Y = -2;
                                     }
                                 }
+
                                 wp.flags = User32.WPF.SETMINPOSITION;
                                 User32.SetWindowPlacement(child, ref wp);
                             }
@@ -349,10 +352,11 @@ namespace System.Windows.Forms
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.CREATE:
-                    if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
+                    if (ParentInternal is not null && ParentInternal.Site is not null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero)
                     {
                         SetWindowRgn();
                     }
+
                     break;
 
                 case User32.WM.SETFOCUS:
@@ -362,11 +366,13 @@ namespace System.Windows.Forms
                     {
                         childForm = ((Form)ParentInternal).ActiveMdiChildInternal;
                     }
+
                     if (childForm is null && MdiChildren.Length > 0 && MdiChildren[0].IsMdiChildFocusable)
                     {
                         childForm = MdiChildren[0];
                     }
-                    if (childForm != null && childForm.Visible)
+
+                    if (childForm is not null && childForm.Visible)
                     {
                         childForm.Active = true;
                     }
@@ -381,6 +387,7 @@ namespace System.Windows.Forms
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }
+
             base.WndProc(ref m);
         }
 
@@ -393,63 +400,6 @@ namespace System.Windows.Forms
         {
             Application.Idle -= new EventHandler(OnIdle);
             base.OnInvokedSetScrollPosition(sender, e);
-        }
-
-        /// <summary>
-        ///  Collection of controls...
-        /// </summary>
-        new public class ControlCollection : Control.ControlCollection
-        {
-            private readonly MdiClient owner;
-
-            /*C#r: protected*/
-
-            public ControlCollection(MdiClient owner)
-            : base(owner)
-            {
-                this.owner = owner;
-            }
-
-            /// <summary>
-            ///  Adds a control to the MDI Container. This child must be
-            ///  a Form that is marked as an MDI Child to be added to the
-            ///  container. You should not call this directly, but rather
-            ///  set the child form's (ctl) MDIParent property:
-            /// <code>
-            ///  //     wrong
-            ///  Form child = new ChildForm();
-            ///  this.getMdiClient().add(child);
-            ///  //     right
-            ///  Form child = new ChildForm();
-            ///  child.setMdiParent(this);
-            /// </code>
-            /// </summary>
-            public override void Add(Control value)
-            {
-                if (value is null)
-                {
-                    return;
-                }
-                if (!(value is Form) || !((Form)value).IsMdiChild)
-                {
-                    throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
-                }
-                if (owner.CreateThreadId != value.CreateThreadId)
-                {
-                    throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
-                }
-                owner.children.Add((Form)value);
-                base.Add(value);
-            }
-
-            /// <summary>
-            ///  Removes a child control.
-            /// </summary>
-            public override void Remove(Control value)
-            {
-                owner.children.Remove(value);
-                base.Remove(value);
-            }
         }
     }
 }

@@ -34,7 +34,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string defaultAction = _ownerItem.AccessibleDefaultActionDescription;
-                    if (defaultAction != null)
+                    if (defaultAction is not null)
                     {
                         return defaultAction;
                     }
@@ -48,7 +48,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string description = _ownerItem.AccessibleDescription;
-                    if (description != null)
+                    if (description is not null)
                     {
                         return description;
                     }
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 get
                 {
                     QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
-                    if (handler != null)
+                    if (handler is not null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
@@ -121,6 +121,10 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
+                    // "ControlType" value depends on owner's AccessibleRole value.
+                    // See: docs/accessibility/accessible-role-controltype.md
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return AccessibleRoleControlTypeMap.GetControlType(Role);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
@@ -128,7 +132,7 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerItem.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:
-                        return _ownerItem.Placement != ToolStripItemPlacement.Main;
+                        return GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds);
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerItem.CanSelect;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -149,7 +153,7 @@ namespace System.Windows.Forms
                 get
                 {
                     string name = _ownerItem.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
@@ -212,6 +216,7 @@ namespace System.Windows.Forms
                     {
                         accState |= AccessibleStates.Focused | AccessibleStates.HotTracked;
                     }
+
                     if (_ownerItem.Pressed)
                     {
                         accState |= AccessibleStates.Pressed;
@@ -223,31 +228,26 @@ namespace System.Windows.Forms
 
             public override void DoDefaultAction()
             {
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     ((ToolStripItem)Owner).PerformClick();
                 }
             }
+
             public override int GetHelpTopic(out string fileName)
             {
                 int topic = 0;
 
                 QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
 
-                if (handler != null)
+                if (handler is not null)
                 {
                     QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;
 
-                    try
-                    {
-                        topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
-                    }
-                    catch
-                    {
-                    }
+                    int.TryParse(args.HelpKeyword, NumberStyles.Integer, CultureInfo.InvariantCulture, out topic);
 
                     return topic;
                 }
@@ -259,7 +259,7 @@ namespace System.Windows.Forms
             {
                 ToolStripItem nextItem = null;
 
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     ToolStrip parent = Owner.ParentInternal;
                     if (parent is null)
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
 
             public override string ToString()
             {
-                if (Owner != null)
+                if (Owner is not null)
                 {
                     return "ToolStripItemAccessibleObject: Owner = " + Owner.ToString();
                 }
@@ -328,7 +328,8 @@ namespace System.Windows.Forms
                 get
                 {
                     Rectangle bounds = Owner.Bounds;
-                    if (Owner.ParentInternal != null && Owner.ParentInternal.Visible)
+
+                    if (Owner.ParentInternal is not null && Owner.ParentInternal.Visible)
                     {
                         return new Rectangle(Owner.ParentInternal.PointToScreen(bounds.Location), bounds.Size);
                     }
@@ -351,7 +352,7 @@ namespace System.Windows.Forms
                         return dropDown.AccessibilityObject;
                     }
 
-                    return (Owner.Parent != null) ? Owner.Parent.AccessibilityObject : base.Parent;
+                    return (Owner.Parent is not null) ? Owner.Parent.AccessibilityObject : base.Parent;
                 }
             }
 
@@ -484,7 +485,7 @@ namespace System.Windows.Forms
             internal void RaiseFocusChanged()
             {
                 ToolStrip root = _ownerItem.RootToolStrip;
-                if (root != null && root.IsHandleCreated && root.SupportsUiaProviders)
+                if (root is not null && root.IsHandleCreated && root.SupportsUiaProviders)
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }

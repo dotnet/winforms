@@ -28,6 +28,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -35,7 +36,7 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type.  The most common types to convert
         ///  are to and from a string object.  The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
@@ -72,35 +73,43 @@ namespace System.Windows.Forms
                 {
                     if (node.Nodes.Count == 0)
                     {
-                        info = typeof(TreeNode).GetConstructor(new Type[] {
+                        info = typeof(TreeNode).GetConstructor(new Type[]
+                        {
                             typeof(string),
                             typeof(int),
-                            typeof(int)});
-                        args = new object[] {
+                            typeof(int)
+                        });
+                        args = new object[]
+                        {
                             node.Text,
                             node.ImageIndex,
-                            node.SelectedImageIndex};
+                            node.SelectedImageIndex
+                        };
                     }
                     else
                     {
-                        info = typeof(TreeNode).GetConstructor(new Type[] {
+                        info = typeof(TreeNode).GetConstructor(new Type[]
+                        {
                             typeof(string),
                             typeof(int),
                             typeof(int),
-                            typeof(TreeNode[])});
+                            typeof(TreeNode[])
+                        });
 
                         TreeNode[] nodesArray = new TreeNode[node.Nodes.Count];
                         node.Nodes.CopyTo(nodesArray, 0);
 
-                        args = new object[] {
+                        args = new object[]
+                        {
                             node.Text,
                             node.ImageIndex,
                             node.SelectedImageIndex,
-                            nodesArray};
+                            nodesArray
+                        };
                     }
                 }
 
-                if (info != null)
+                if (info is not null)
                 {
                     return new InstanceDescriptor(info, args, false);
                 }

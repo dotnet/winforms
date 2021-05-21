@@ -35,12 +35,13 @@ namespace System.Windows.Forms.Layout
                     Rectangle bounds = GetCachedBounds(element);
 
                     AnchorStyles anchor = GetAnchor(element);
-                    Size proposedConstraints = LayoutUtils.MaxSize;
+                    Size proposedConstraints = LayoutUtils.s_maxSize;
 
                     if ((anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right))
                     {
                         proposedConstraints.Width = bounds.Width;
                     }
+
                     if ((anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
                     {
                         proposedConstraints.Height = bounds.Height;
@@ -152,7 +153,14 @@ namespace System.Windows.Forms.Layout
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
             // Container can not be null since we AschorControls takes a non-null container.
-            Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "\t\t'" + element + "' is anchored at " + GetCachedBounds(element).ToString());
+            //
+            // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
+            // because it WILL execute GetCachedBounds(element).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
+            // This in turn will lead to a cascade of native calls and callbacks
+            if (CompModSwitches.RichLayout.TraceInfo)
+            {
+                Debug.WriteLine($"\t\t'{element}' is anchored at {GetCachedBounds(element).ToString()}");
+            }
 
             AnchorInfo layout = GetAnchorInfo(element);
 
@@ -234,6 +242,7 @@ namespace System.Windows.Forms.Layout
                     {
                         left = Math.Max(Math.Abs(left), Math.Abs(cachedBounds.Left));
                     }
+
                     right = left + Math.Max(element.Bounds.Width, cachedBounds.Width) + Math.Abs(right);
                 }
                 else
@@ -251,6 +260,7 @@ namespace System.Windows.Forms.Layout
                     {
                         top = Math.Max(Math.Abs(top), Math.Abs(cachedBounds.Top));
                     }
+
                     bottom = top + Math.Max(element.Bounds.Height, cachedBounds.Height) + Math.Abs(bottom);
                 }
                 else
@@ -332,6 +342,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Height -= element.Bounds.Height;
                                 break;
                             }
+
                         case DockStyle.Bottom:
                             {
                                 Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -344,6 +355,7 @@ namespace System.Windows.Forms.Layout
 
                                 break;
                             }
+
                         case DockStyle.Left:
                             {
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -356,6 +368,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
+
                         case DockStyle.Right:
                             {
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -367,6 +380,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
+
                         case DockStyle.Fill:
                             if (element is MdiClient)
                             {
@@ -380,6 +394,7 @@ namespace System.Windows.Forms.Layout
 
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
                             }
+
                             break;
                         default:
                             Debug.Fail("Unsupported value for dock.");
@@ -414,10 +429,12 @@ namespace System.Windows.Forms.Layout
                 {
                     neededSize.Width = 0;
                 }
+
                 if ((dockStyle == DockStyle.Left) || (dockStyle == DockStyle.Right))
                 {
                     neededSize.Height = 0;
                 }
+
                 if (dockStyle != DockStyle.Fill)
                 {
                     preferredSize += neededSize;
@@ -744,6 +761,7 @@ namespace System.Windows.Forms.Layout
                         // check for this in OnLayout, we just detect the case her and force a relayout.
                         LayoutTransaction.DoLayout(element.Container.Container, element, PropertyNames.Anchor);
                     }
+
                     LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Anchor);
                 }
             }
@@ -757,10 +775,7 @@ namespace System.Windows.Forms.Layout
 
             if (GetDock(element) != value)
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DockStyle.None, (int)DockStyle.Fill))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DockStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 bool dockNeedsLayout = CommonProperties.GetNeedsDockLayout(element);
                 CommonProperties.xSetDock(element, value);

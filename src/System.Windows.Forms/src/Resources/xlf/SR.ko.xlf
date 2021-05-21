@@ -677,6 +677,21 @@
         <target state="translated">처리되지 않은 VT입니다. {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="new">Go to next time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="new">Go to previous time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="new">Go to and select today's date</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">취소</target>
@@ -1110,6 +1125,16 @@
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
         <target state="translated">{0}이(가) 선택됨</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">닫기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">열기</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -3707,6 +3732,11 @@ To replace this default dialog please handle the DataError event.</source>
       <trans-unit id="DataGridView_ReadOnlyDescr">
         <source>Indicates whether the user can edit the cells of the DataGridView control.</source>
         <target state="translated">사용자가 DataGridView 컨트롤의 셀을 편집할 수 있는지 여부를 나타냅니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">{0} 행이 추가됨</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -7061,6 +7091,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">달력에 나타나는 이전 달과 다음 달을 표시하는 데 사용할 색입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="new">Week {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">{0}년~{1}년이 선택되었습니다.</target>
@@ -8313,7 +8348,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
         <source>Drop down control holder</source>
-        <target state="new">Drop down control holder</target>
+        <target state="translated">드롭다운 컨트롤 표시자</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -10407,8 +10442,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">텍스트 길이는 64자 미만이어야 합니다.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">텍스트 길이는 128자 미만이어야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10419,6 +10454,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">LabelEdit 속성이 false이므로 BeginEdit이 실패했습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode가 이미 다른 TreeView에 바인딩되어 있습니다. 먼저 현재 위치에서 TreeNode를 제거하거나 복제해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10801,6 +10841,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">위쪽</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">편집</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">텍스트 렌더링이 Windows Forms의 이전 버전과 호환되는지 여부를 지정합니다.</target>
@@ -11007,8 +11052,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault는 애플리케이션에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

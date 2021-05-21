@@ -97,5 +97,19 @@ internal static partial class Interop
                 return SendMessageW(hWnd, Msg, wParam, (IntPtr)l);
             }
         }
+
+        public unsafe static IntPtr SendMessageW<TWParam, TLParam>(
+            IHandle hWnd,
+            WM Msg,
+            ref TWParam wParam,
+            ref TLParam lParam)
+            where TWParam : unmanaged
+            where TLParam : unmanaged
+        {
+            fixed (void* w = &wParam, l = &lParam)
+            {
+                return SendMessageW(hWnd, Msg, (IntPtr)w, (IntPtr)l);
+            }
+        }
     }
 }

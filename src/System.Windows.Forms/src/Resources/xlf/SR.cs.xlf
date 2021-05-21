@@ -677,6 +677,21 @@
         <target state="translated">Nezpracovaná hodnota VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="new">Go to next time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="new">Go to previous time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="new">Go to and select today's date</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Zrušit</target>
@@ -1110,6 +1125,16 @@
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
         <target state="translated">Počet vybraných: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Zavřít</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Otevřít</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -3709,6 +3734,11 @@ Chcete-li nahradit toto výchozí dialogové okno, nastavte popisovač události
         <target state="translated">Označuje, zda uživatel může upravovat buňky ovládacího prvku DataGridView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">Řádek {0} se přidal.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Zadaný řádek již patří do ovládacího prvku DataGridView.</target>
@@ -4725,7 +4755,7 @@ nikoli v tomto dialogovém okně.
         <target state="translated">{0}
     Verze sestavení: {1}
     Verze Win32: {2}
-    Základ kódu (CodeBase): {3}
+    Kódová báze (CodeBase): {3}
 </target>
         <note />
       </trans-unit>
@@ -7061,6 +7091,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Barva použitá k zobrazení předchozích a následujících měsíců v měsíčním kalendáři.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="new">Week {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">Jsou vybrány roky {0} až {1}.</target>
@@ -8313,7 +8348,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
         <source>Drop down control holder</source>
-        <target state="new">Drop down control holder</target>
+        <target state="translated">Vlastník ovládacího prvku rozevíracího seznamu</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -10407,8 +10442,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Délka textu musí být menší než 64 znaků.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Text musí být kratší než 128 znaků.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10419,6 +10454,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">Funkce BeginEdit se nezdařila, protože vlastnost LabelEdit má hodnotu False.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">Uzel TreeNode je už svázaný s jiným zobrazením TreeView. Nejdříve je nutné ho klonovat nebo odebrat z aktuálního umístění.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10801,6 +10841,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Upravit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Určuje, zda má být vykreslování textu kompatibilní s předchozími verzemi knihovny Windows Forms.</target>
@@ -11007,8 +11052,8 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">Před vytvořením prvního objektu IWin32Window v aplikaci je nutné volat metodu SetCompatibleTextRenderingDefault.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

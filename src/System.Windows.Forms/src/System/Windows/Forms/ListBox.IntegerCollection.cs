@@ -11,7 +11,7 @@ namespace System.Windows.Forms
 {
     public partial class ListBox
     {
-        public class IntegerCollection : IList
+        public partial class IntegerCollection : IList
         {
             private readonly ListBox owner;
             private int[] innerArray;
@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             {
                 int index = -1;
 
-                if (innerArray != null)
+                if (innerArray is not null)
                 {
                     index = Array.IndexOf(innerArray, item);
 
@@ -138,6 +138,7 @@ namespace System.Windows.Forms
                     Array.Sort(innerArray, 0, count);
                     index = IndexOf(item);
                 }
+
                 return index;
             }
 
@@ -160,6 +161,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(nameof(item));
                 }
+
                 return Add((int)item);
             }
 
@@ -182,6 +184,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
+
                 owner.BeginUpdate();
                 try
                 {
@@ -197,6 +200,7 @@ namespace System.Windows.Forms
                             AddInternal((int)item);
                         }
                     }
+
                     owner.UpdateCustomTabOffsets();
                 }
                 finally
@@ -240,6 +244,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(nameof(value));
                 }
+
                 Remove((int)value);
             }
 
@@ -299,6 +304,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
+
                     innerArray[index] = (int)value;
                     owner.UpdateCustomTabOffsets();
                 }
@@ -340,66 +346,6 @@ namespace System.Windows.Forms
             IEnumerator IEnumerable.GetEnumerator()
             {
                 return new CustomTabOffsetsEnumerator(this);
-            }
-
-            /// <summary>
-            ///  EntryEnumerator is an enumerator that will enumerate over
-            ///  a given state mask.
-            /// </summary>
-            private class CustomTabOffsetsEnumerator : IEnumerator
-            {
-                private readonly IntegerCollection items;
-                private int current;
-
-                /// <summary>
-                ///  Creates a new enumerator that will enumerate over the given state.
-                /// </summary>
-                public CustomTabOffsetsEnumerator(IntegerCollection items)
-                {
-                    this.items = items;
-                    current = -1;
-                }
-
-                /// <summary>
-                ///  Moves to the next element, or returns false if at the end.
-                /// </summary>
-                bool IEnumerator.MoveNext()
-                {
-                    if (current < items.Count - 1)
-                    {
-                        current++;
-                        return true;
-                    }
-                    else
-                    {
-                        current = items.Count;
-                        return false;
-                    }
-                }
-
-                /// <summary>
-                ///  Resets the enumeration back to the beginning.
-                /// </summary>
-                void IEnumerator.Reset()
-                {
-                    current = -1;
-                }
-
-                /// <summary>
-                ///  Retrieves the current value in the enumerator.
-                /// </summary>
-                object IEnumerator.Current
-                {
-                    get
-                    {
-                        if (current == -1 || current == items.Count)
-                        {
-                            throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
-                        }
-
-                        return items[current];
-                    }
-                }
             }
         }
     }

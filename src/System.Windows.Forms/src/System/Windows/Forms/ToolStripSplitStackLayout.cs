@@ -329,7 +329,7 @@ namespace System.Windows.Forms
                 // We need to honor left to right and head and tail.
                 //      In RTL.Yes, Head is to the Right, Tail is to the Left
                 //      In RTL.No,  Head is to the Left,  Tail is to the Right
-                if ((item != null) && (item.Placement == ToolStripItemPlacement.Main))
+                if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
                 {
                     int x = displayRectangle.Left;
                     int y = displayRectangle.Top;
@@ -424,9 +424,8 @@ namespace System.Windows.Forms
 
             Size toolStripPreferredSize = displayRectangle.Size;
             DockStyle dock = toolStrip.Dock;
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-            if (toolStrip.AutoSize && (!toolStrip.IsInToolStripPanel && (dock == DockStyle.Left) || (dock == DockStyle.Right)))
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            var IsNotInToolStripPanelWithLeftDockstyle = !toolStrip.IsInToolStripPanel && dock == DockStyle.Left;
+            if (toolStrip.AutoSize && (IsNotInToolStripPanelWithLeftDockstyle || dock == DockStyle.Right))
             {
                 // if we're autosizing, make sure we pad out items to the preferred width, not the
                 // width of the display rectangle.
@@ -491,7 +490,7 @@ namespace System.Windows.Forms
                 // Vertical split stack management ignores left to right.
                 //      Items aligned to the Head are placed from Top to Bottom
                 //      Items aligned to the Tail are placed from Bottom to Top
-                if ((item != null) && (item.Placement == ToolStripItemPlacement.Main))
+                if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
                 {
                     Padding itemMargin = item.Margin;
                     int x = displayRectangle.Left + itemMargin.Left;
@@ -514,6 +513,7 @@ namespace System.Windows.Forms
                                                     : Rectangle.Union(alignedLeftItems, new Rectangle(x, y, itemSize.Width, itemSize.Height));
                             break;
                     }
+
                     item.ParentInternal = ToolStrip;
                     Point itemLocation = new Point(x, y);
 

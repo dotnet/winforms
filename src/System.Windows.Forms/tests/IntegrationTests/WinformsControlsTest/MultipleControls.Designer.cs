@@ -79,9 +79,13 @@ namespace WinformsControlsTest
             this.button1.TabIndex = 1;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += Button1_Click;
             //
             // label1
             //
+            this.label1.AccessibleDescription = "Test Label AccessibleDescription";
+            this.label1.AccessibleName = "Test Label AccessibleName";
+            this.label1.AccessibleRole = System.Windows.Forms.AccessibleRole.Indicator;
             this.label1.AutoSize = true;
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.label1.Location = new System.Drawing.Point(13, 73);
@@ -89,9 +93,6 @@ namespace WinformsControlsTest
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
-            this.label1.AccessibleName = "Test Label AccessibleName";
-            this.label1.AccessibleDescription = "Test Label AccessibleDescription";
-            this.label1.AccessibleRole = System.Windows.Forms.AccessibleRole.Indicator;
             //
             // maskedTextBox1
             //
@@ -114,6 +115,7 @@ namespace WinformsControlsTest
             //
             this.textBox1.Location = new System.Drawing.Point(13, 229);
             this.textBox1.Name = "textBox1";
+            this.textBox1.PlaceholderText = "Type some text here...";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 5;
             this.textBox1.Text = "LLLLL";
@@ -194,6 +196,9 @@ namespace WinformsControlsTest
             //
             // groupBox1
             //
+            this.groupBox1.AccessibleDescription = "Test GroupBox AccessibleDescription";
+            this.groupBox1.AccessibleName = "Test GroupBox AccessibleName";
+            this.groupBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Table;
             this.groupBox1.Controls.Add(this.radioButton2);
             this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Location = new System.Drawing.Point(125, 171);
@@ -202,9 +207,6 @@ namespace WinformsControlsTest
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
-            this.groupBox1.AccessibleName = "Test GroupBox AccessibleName";
-            this.groupBox1.AccessibleDescription = "Test GroupBox AccessibleDescription";
-            this.groupBox1.AccessibleRole = System.Windows.Forms.AccessibleRole.Table;
             //
             // checkedListBox1
             //
@@ -234,12 +236,12 @@ namespace WinformsControlsTest
             this.domainUpDown1.Size = new System.Drawing.Size(120, 20);
             this.domainUpDown1.TabIndex = 10;
             this.domainUpDown1.Text = "domainUpDown1";
-            //
-            // Test3
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(629, 269);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(639, 397);
             this.Controls.Add(this.domainUpDown1);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.checkedListBox1);
@@ -251,7 +253,7 @@ namespace WinformsControlsTest
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBar1);
-            this.Name = "Test3";
+            this.Name = "Form1";
             this.Text = "These look ok";
             this.Load += new System.EventHandler(this.Test3_Load);
             this.tabControl1.ResumeLayout(false);

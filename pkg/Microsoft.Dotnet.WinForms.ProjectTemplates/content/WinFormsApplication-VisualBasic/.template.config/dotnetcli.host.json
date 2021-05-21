@@ -16,6 +16,10 @@
     "langVersion": {
       "longName": "langVersion",
       "shortName": ""
+    },
+    "UseAppFramework": {
+      "longName": "use-app-framework",
+      "shortName": ""
     }
   },
   "usageExamples": [

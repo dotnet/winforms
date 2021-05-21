@@ -138,6 +138,7 @@ namespace System.Windows.Forms.Tests
             notifyIcon.BalloonTipTitle = value;
             Assert.Equal(value, notifyIcon.BalloonTipTitle);
         }
+
         public static IEnumerable<object[]> ContextMenuStrip_Set_TestData()
         {
             yield return new object[] { null };
@@ -338,7 +339,7 @@ namespace System.Windows.Forms.Tests
                     yield return new object[] { visible, icon, null, string.Empty };
                     yield return new object[] { visible, icon, string.Empty, string.Empty };
                     yield return new object[] { visible, icon, "text", "text" };
-                    yield return new object[] { visible, icon, new string('a', 63), new string('a', 63) };
+                    yield return new object[] { visible, icon, new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize) };
                 }
             }
         }
@@ -390,13 +391,13 @@ namespace System.Windows.Forms.Tests
                 }
 
                 yield return new object[] { visible, null, "text", "text", 0 };
-                yield return new object[] { visible, null, new string('a', 63), new string('a', 63), 0 };
+                yield return new object[] { visible, null, new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize), 0 };
             }
 
             yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 0 };
-            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 63), new string('a', 63), 0 };
+            yield return new object[] { false, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize), 0 };
             yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), "text", "text", 1 };
-            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', 63), new string('a', 63), 1 };
+            yield return new object[] { true, new Icon("bitmaps/10x16_one_entry_32bit.ico"), new string('a', NotifyIcon.MaxTextSize), new string('a', NotifyIcon.MaxTextSize), 1 };
         }
 
         [WinFormsTheory]
@@ -430,7 +431,7 @@ namespace System.Windows.Forms.Tests
         public void NotifyIcon_Text_SetLongValue_ThrowsArgumentOutOfRangeException()
         {
             using var notifyIcon = new NotifyIcon();
-            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', 64));
+            Assert.Throws<ArgumentOutOfRangeException>("Text", () => notifyIcon.Text = new string('a', NotifyIcon.MaxTextSize + 1));
         }
 
         [WinFormsTheory]
@@ -578,6 +579,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.BalloonTipClicked += handler;
             notifyIcon.BalloonTipClicked -= handler;
             Assert.Equal(0, callCount);
@@ -592,6 +594,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.BalloonTipClosed += handler;
             notifyIcon.BalloonTipClosed -= handler;
             Assert.Equal(0, callCount);
@@ -606,6 +609,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.BalloonTipShown += handler;
             notifyIcon.BalloonTipShown -= handler;
             Assert.Equal(0, callCount);
@@ -620,6 +624,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.Click += handler;
             notifyIcon.Click -= handler;
             Assert.Equal(0, callCount);
@@ -634,6 +639,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.DoubleClick += handler;
             notifyIcon.DoubleClick -= handler;
             Assert.Equal(0, callCount);
@@ -648,6 +654,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseClick += handler;
             notifyIcon.MouseClick -= handler;
             Assert.Equal(0, callCount);
@@ -662,6 +669,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseDoubleClick += handler;
             notifyIcon.MouseDoubleClick -= handler;
             Assert.Equal(0, callCount);
@@ -676,6 +684,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseDown += handler;
             notifyIcon.MouseDown -= handler;
             Assert.Equal(0, callCount);
@@ -690,6 +699,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseMove += handler;
             notifyIcon.MouseMove -= handler;
             Assert.Equal(0, callCount);
@@ -704,6 +714,7 @@ namespace System.Windows.Forms.Tests
             {
                 callCount++;
             }
+
             notifyIcon.MouseUp += handler;
             notifyIcon.MouseUp -= handler;
             Assert.Equal(0, callCount);

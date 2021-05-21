@@ -74,10 +74,11 @@ namespace System.Windows.Forms
             // non-released controls will show what control wasn't released.
             public override string ToString()
             {
-                if (_control != null)
+                if (_control is not null)
                 {
                     return _control.GetType().FullName;
                 }
+
                 return base.ToString();
             }
 #endif
@@ -107,6 +108,7 @@ namespace System.Windows.Forms
                                 _control.SetState(States.MouseEnterPending, false);
                             }
                         }
+
                         break;
 
                     case User32.WM.MOUSEWHEEL:

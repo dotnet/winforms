@@ -360,6 +360,7 @@ namespace System.Drawing.Design
                             OptionClick(this, EventArgs.Empty);
                             return true;
                         }
+
                         goto default;
 
                     case Keys.Escape:
@@ -368,6 +369,7 @@ namespace System.Drawing.Design
                             _edSvc.CloseDropDown();
                             return true;
                         }
+
                         goto default;
 
                     case Keys.Tab:
@@ -394,6 +396,7 @@ namespace System.Drawing.Design
 
                             return true;
                         }
+
                         goto default;
 
                     default:
@@ -563,6 +566,7 @@ namespace System.Drawing.Design
                             return radioButton;
                         }
                     }
+
                     return _middleLeft;
                 }
                 set

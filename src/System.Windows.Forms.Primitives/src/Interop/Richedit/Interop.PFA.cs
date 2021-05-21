@@ -8,11 +8,11 @@ internal partial class Interop
     {
         public enum PFA : ushort
         {
-            LEFT  = 1,
-            RIGHT  = 2,
-            CENTER  = 3,
-            JUSTIFY  = 4,
-            FULL_INTERWORD  = 4,
+            LEFT = 1,
+            RIGHT = 2,
+            CENTER = 3,
+            JUSTIFY = 4,
+            FULL_INTERWORD = 4,
         }
     }
 }

@@ -62,6 +62,7 @@ namespace System.Windows.Forms
                             Array.Copy(_windows, 0, newWindows, 0, _windowCount);
                             _windows = newWindows;
                         }
+
                         _windows[_windowCount++] = hWnd;
                     }
                 }
@@ -78,7 +79,7 @@ namespace System.Windows.Forms
                     if (User32.IsWindow(hWnd).IsTrue())
                     {
                         Control c = Control.FromHandle(hWnd);
-                        if (c != null)
+                        if (c is not null)
                         {
                             c.Dispose();
                         }
@@ -93,7 +94,7 @@ namespace System.Windows.Forms
                 {
                     _activeHwnd = User32.GetActiveWindow();
                     Control activatingControl = ThreadContext.FromCurrent().ActivatingControl;
-                    if (activatingControl != null)
+                    if (activatingControl is not null)
                     {
                         _focusedHwnd = activatingControl.Handle;
                     }

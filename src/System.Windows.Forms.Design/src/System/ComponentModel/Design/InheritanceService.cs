@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         private InheritanceAttribute _addingAttribute;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.InheritanceService'/> class.
+        ///  Initializes a new instance of the <see cref='InheritanceService'/> class.
         /// </summary>
         public InheritanceService()
         {
@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref='InheritanceService'/>.
         /// </summary>
         public void Dispose()
         {
@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Adds inherited components to the <see cref='InheritanceService'/>.
         /// </summary>
         public void AddInheritedComponents(IComponent component, IContainer container)
         {
@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds inherited components to the <see cref='System.ComponentModel.Design.InheritanceService'/>.
+        ///  Adds inherited components to the <see cref='InheritanceService'/>.
         /// </summary>
         protected virtual void AddInheritedComponents(Type type, IComponent component, IContainer container)
         {
@@ -214,8 +214,10 @@ namespace System.ComponentModel.Design
                                 _addingAttribute = null;
                             }
                         }
+
                         Debug.Unindent();
                     }
+
                     type = type.BaseType;
                 }
             }
@@ -244,6 +246,7 @@ namespace System.ComponentModel.Design
             {
                 return method.IsPrivate || method.IsAssembly;
             }
+
             Debug.Fail("Unknown member type passed to IgnoreInheritedMember");
             return true;
         }
@@ -258,6 +261,7 @@ namespace System.ComponentModel.Design
             {
                 attr = InheritanceAttribute.Default;
             }
+
             return attr;
         }
 
@@ -288,6 +292,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return type;
         }
 
@@ -301,6 +306,7 @@ namespace System.ComponentModel.Design
                     return service.GetProvider(type);
                 }
             }
+
             return null;
         }
     }

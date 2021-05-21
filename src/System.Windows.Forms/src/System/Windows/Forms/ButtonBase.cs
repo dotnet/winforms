@@ -102,6 +102,7 @@ namespace System.Windows.Forms
                         _textToolTip = new ToolTip();
                     }
                 }
+
                 Invalidate();
             }
         }
@@ -206,6 +207,7 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= (int)User32.BS.CENTER;
                     }
+
                     if ((int)(align & WindowsFormsUtils.AnyTopAlign) != 0)
                     {
                         cp.Style |= (int)User32.BS.TOP;
@@ -219,6 +221,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.VCENTER;
                     }
                 }
+
                 return cp;
             }
         }
@@ -281,10 +284,8 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 _flatStyle = value;
                 LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.FlatStyle);
                 Invalidate();
@@ -320,7 +321,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_image is null && _imageList != null)
+                if (_image is null && _imageList is not null)
                 {
                     int actualIndex = _imageIndex.ActualIndex;
 
@@ -338,8 +339,10 @@ namespace System.Windows.Forms
                     {
                         return _imageList.Images[actualIndex];
                     }
+
                     Debug.Assert(_image is null, "We expect to be returning null.");
                 }
+
                 return _image;
             }
             set
@@ -352,7 +355,7 @@ namespace System.Windows.Forms
                 StopAnimate();
 
                 _image = value;
-                if (_image != null)
+                if (_image is not null)
                 {
                     ImageIndex = ImageList.Indexer.DefaultIndex;
                     ImageList = null;
@@ -383,6 +386,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
+
                 if (value != _imageAlign)
                 {
                     _imageAlign = value;
@@ -407,10 +411,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_imageIndex.Index != ImageList.Indexer.DefaultIndex && _imageList != null && _imageIndex.Index >= _imageList.Images.Count)
+                if (_imageIndex.Index != ImageList.Indexer.DefaultIndex && _imageList is not null && _imageIndex.Index >= _imageList.Images.Count)
                 {
                     return _imageList.Images.Count - 1;
                 }
+
                 return _imageIndex.Index;
             }
             set
@@ -461,7 +466,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (value != null)
+                if (value is not null)
                 {
                     // Image.set calls ImageIndex = -1
                     _image = null;
@@ -498,7 +503,7 @@ namespace System.Windows.Forms
 
                 // Detach old event handlers
                 //
-                if (_imageList != null)
+                if (_imageList is not null)
                 {
                     _imageList.RecreateHandle -= recreateHandler;
                     _imageList.Disposed -= disposedHandler;
@@ -506,7 +511,7 @@ namespace System.Windows.Forms
 
                 // Make sure we don't have an Image as well as an ImageList
                 //
-                if (value != null)
+                if (value is not null)
                 {
                     _image = null; // Image.set calls ImageList = null
                 }
@@ -516,7 +521,7 @@ namespace System.Windows.Forms
 
                 // Wire up new event handlers
                 //
-                if (value != null)
+                if (value is not null)
                 {
                     value.RecreateHandle += recreateHandler;
                     value.Disposed += disposedHandler;
@@ -670,6 +675,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
                 }
+
                 if (value == TextAlign)
                 {
                     return;
@@ -697,10 +703,7 @@ namespace System.Windows.Forms
             get => _textImageRelation;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == TextImageRelation)
                 {
@@ -742,7 +745,7 @@ namespace System.Windows.Forms
 
         private void Animate()
         {
-            Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
+            Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
         }
 
         private void StopAnimate()
@@ -756,7 +759,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (_image != null)
+                    if (_image is not null)
                     {
                         ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -764,7 +767,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_image != null)
+                    if (_image is not null)
                     {
                         ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
                         SetFlag(FlagCurrentlyAnimating, animate);
@@ -788,17 +791,19 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 StopAnimate();
-                if (_imageList != null)
+                if (_imageList is not null)
                 {
                     _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
+
                 //Dipose the tooltip if one present..
-                if (_textToolTip != null)
+                if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();
                     _textToolTip = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -845,10 +850,11 @@ namespace System.Windows.Forms
         {
             SetFlag(FlagMouseOver, true);
             Invalidate();
-            if (!DesignMode && AutoEllipsis && ShowToolTip && _textToolTip != null)
+            if (!DesignMode && AutoEllipsis && ShowToolTip && _textToolTip is not null)
             {
                 _textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnMouseEnter(eventargs);
@@ -860,10 +866,11 @@ namespace System.Windows.Forms
         protected override void OnMouseLeave(EventArgs eventargs)
         {
             SetFlag(FlagMouseOver, false);
-            if (_textToolTip != null)
+            if (_textToolTip is not null)
             {
                 _textToolTip.Hide(this);
             }
+
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
@@ -895,6 +902,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnMouseMove(mevent);
@@ -911,6 +919,7 @@ namespace System.Windows.Forms
                 SetFlag(FlagMousePressed, true);
                 Invalidate(DownChangeRectangle);
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnMouseDown(mevent);
@@ -954,10 +963,12 @@ namespace System.Windows.Forms
             {
                 proposedSize.Width = 0;
             }
+
             if (proposedSize.Height == 1)
             {
                 proposedSize.Height = 0;
             }
+
             return base.GetPreferredSize(proposedSize);
         }
 
@@ -992,8 +1003,10 @@ namespace System.Windows.Forms
                             Debug.Fail("Unsupported FlatStyle: '" + FlatStyle + '"');
                             break;
                     }
+
                     _cachedAdapterType = FlatStyle;
                 }
+
                 return _adapter;
             }
         }
@@ -1023,6 +1036,7 @@ namespace System.Windows.Forms
                 Debug.Fail("Adapter not expected to be null at this point");
                 return new StringFormat();
             }
+
             return Adapter.CreateStringFormat();
         }
 
@@ -1033,6 +1047,7 @@ namespace System.Windows.Forms
                 Debug.Fail("Adapter not expected to be null at this point");
                 return TextFormatFlags.Default;
             }
+
             return Adapter.CreateTextFormatFlags();
         }
 
@@ -1042,6 +1057,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (IsHandleCreated && InvokeRequired)
             {
                 BeginInvoke(new EventHandler(OnFrameChanged), new object[] { o, e });
@@ -1091,10 +1107,13 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(true));
                     }
+
                     Invalidate(DownChangeRectangle);
                 }
+
                 kevent.Handled = true;
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnKeyDown(kevent);
@@ -1117,14 +1136,17 @@ namespace System.Windows.Forms
                     SetFlag(FlagMouseDown, false);
                     User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(false));
                 }
+
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
                 // two keystrokes to execute OnClick.
                 if (kevent.KeyCode == Keys.Enter || kevent.KeyCode == Keys.Space)
                 {
                     OnClick(EventArgs.Empty);
                 }
+
                 kevent.Handled = true;
             }
+
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
             base.OnKeyUp(kevent);
@@ -1152,6 +1174,7 @@ namespace System.Windows.Forms
 
                 PaintControl(pevent);
             }
+
             base.OnPaint(pevent);
         }
 
@@ -1193,7 +1216,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeImage()
         {
-            return _image != null;
+            return _image is not null;
         }
 
         private void UpdateOwnerDraw()
@@ -1285,6 +1308,7 @@ namespace System.Windows.Forms
                     {
                         OnClick(EventArgs.Empty);
                     }
+
                     return;
             }
 
@@ -1310,6 +1334,7 @@ namespace System.Windows.Forms
                                 Invalidate(DownChangeRectangle);
                             }
                         }
+
                         base.WndProc(ref m);
                         break;
 
@@ -1325,6 +1350,7 @@ namespace System.Windows.Forms
                         {
                             SetFlag(FlagInButtonUp, false);
                         }
+
                         break;
 
                     default:
@@ -1341,6 +1367,7 @@ namespace System.Windows.Forms
                         {
                             OnClick(EventArgs.Empty);
                         }
+
                         break;
                     default:
                         base.WndProc(ref m);

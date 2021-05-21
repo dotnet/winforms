@@ -249,17 +249,14 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_borderStyle != value)
                 {
                     _borderStyle = value;
                     Invalidate();
                     SetInnerMostBorder(this);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         if (ParentInternal is SplitterPanel)
                         {
@@ -302,6 +299,7 @@ namespace System.Windows.Forms
             add => base.ControlAdded += value;
             remove => base.ControlAdded -= value;
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved
@@ -309,6 +307,7 @@ namespace System.Windows.Forms
             add => base.ControlRemoved += value;
             remove => base.ControlRemoved -= value;
         }
+
         /// <summary>
         ///  The dock property. The dock property controls to which edge
         ///  of the container this control is docked to. For example, when docked to
@@ -321,7 +320,7 @@ namespace System.Windows.Forms
             set
             {
                 base.Dock = value;
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     if (ParentInternal is SplitterPanel)
                     {
@@ -329,6 +328,7 @@ namespace System.Windows.Forms
                         sc.SetInnerMostBorder(sc);
                     }
                 }
+
                 ResizeSplitContainer();
             }
         }
@@ -362,10 +362,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FixedPanel.None, (int)FixedPanel.Panel2))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FixedPanel));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_fixedPanel != value)
                 {
@@ -382,6 +379,7 @@ namespace System.Windows.Forms
                             {
                                 _panelSize = Height - SplitterDistanceInternal - SplitterWidthInternal;
                             }
+
                             break;
                         default:
                             _panelSize = SplitterDistanceInternal;
@@ -439,10 +437,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Orientation));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (_orientation != value)
                 {
                     _orientation = value;
@@ -516,6 +511,7 @@ namespace System.Windows.Forms
                 // restore panel
                 p.Visible = true;
             }
+
             UpdateSplitter();
         }
 
@@ -556,6 +552,7 @@ namespace System.Windows.Forms
                     {
                         CollapsePanel(Panel2, false);
                     }
+
                     CollapsePanel(Panel1, value);
                 }
             }
@@ -581,6 +578,7 @@ namespace System.Windows.Forms
                     {
                         CollapsePanel(Panel1, false);
                     }
+
                     CollapsePanel(Panel2, value);
                 }
             }
@@ -676,14 +674,17 @@ namespace System.Windows.Forms
                             {
                                 value = Panel1MinSize;
                             }
+
                             if (value + SplitterWidthInternal > Width - Panel2MinSize)
                             {
                                 value = Width - Panel2MinSize - SplitterWidthInternal;
                             }
+
                             if (value < 0)
                             {
                                 throw new InvalidOperationException(SR.SplitterDistanceNotAllowed);
                             }
+
                             _splitDistance = value;
                             _splitterDistance = value;
                             Panel1.WidthInternal = SplitterDistance;
@@ -699,10 +700,12 @@ namespace System.Windows.Forms
                             {
                                 value = Height - Panel2MinSize - SplitterWidthInternal;
                             }
+
                             if (value < 0)
                             {
                                 throw new InvalidOperationException(SR.SplitterDistanceNotAllowed);
                             }
+
                             _splitDistance = value;
                             _splitterDistance = value;
                             Panel1.HeightInternal = SplitterDistance;
@@ -722,14 +725,17 @@ namespace System.Windows.Forms
                                 {
                                     _panelSize = Height - SplitterDistance - SplitterWidthInternal;
                                 }
+
                                 break;
                         }
+
                         UpdateSplitter();
                     }
                     finally
                     {
                         _setSplitterDistance = false;
                     }
+
                     OnSplitterMoved(new SplitterEventArgs(SplitterRectangle.X + SplitterRectangle.Width / 2, SplitterRectangle.Y + SplitterRectangle.Height / 2, SplitterRectangle.X, SplitterRectangle.Y));
                 }
             }
@@ -886,10 +892,12 @@ namespace System.Windows.Forms
             {
                 ApplyPanel1MinSize(_newPanel1MinSize);
             }
+
             if (_newPanel2MinSize != _panel2MinSize)
             {
                 ApplyPanel2MinSize(_newPanel2MinSize);
             }
+
             if (_newSplitterWidth != _splitterWidth)
             {
                 ApplySplitterWidth(_newSplitterWidth);
@@ -981,6 +989,7 @@ namespace System.Windows.Forms
                     _splitBreak = true;
                     return;
                 }
+
                 //valid Keys that move the splitter...
                 if (_splitterFocused &&
                     (e.KeyData == Keys.Right || e.KeyData == Keys.Down || e.KeyData == Keys.Left || e.KeyData == Keys.Up))
@@ -996,6 +1005,7 @@ namespace System.Windows.Forms
                         _splitterDistance -= SplitterIncrement;
                         _splitterDistance = (_splitterDistance < Panel1MinSize) ? _splitterDistance + SplitterIncrement : Math.Max(_splitterDistance, _borderSize);
                     }
+
                     //right OR down
                     if (_splitterFocused && (e.KeyData == Keys.Right || e.KeyData == Keys.Down))
                     {
@@ -1014,6 +1024,7 @@ namespace System.Windows.Forms
                     {
                         _splitBegin = true;
                     }
+
                     //draw Helper start
                     if (_splitBegin && !_splitMove)
                     {
@@ -1056,6 +1067,7 @@ namespace System.Windows.Forms
                     _splitMove = false;
                 }
             }
+
             if (_splitBreak)
             {
                 _splitBreak = false;
@@ -1084,6 +1096,7 @@ namespace System.Windows.Forms
             {
                 ResizeSplitContainer();
             }
+
             base.OnLayout(e);
         }
 
@@ -1136,6 +1149,7 @@ namespace System.Windows.Forms
                         y = Math.Max(Math.Min(y, Height - Panel2MinSize), Panel1MinSize);
                         x = Math.Max(x, 0);
                     }
+
                     Rectangle r = CalcSplitLine(GetSplitterDistance(e.X, e.Y), 0);
                     int xSplit = r.X;
                     int ySplit = r.Y;
@@ -1159,6 +1173,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             OverrideCursor = null;
         }
 
@@ -1175,12 +1190,13 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 if (e.Button == MouseButtons.Left && e.Clicks == 1 && !IsSplitterFixed)
                 {
                     // Focus the current splitter OnMouseDown.
                     _splitterFocused = true;
                     IContainerControl c = ParentInternal.GetContainerControl();
-                    if (c != null)
+                    if (c is not null)
                     {
                         if (!(c is ContainerControl cc))
                         {
@@ -1191,6 +1207,7 @@ namespace System.Windows.Forms
                             cc.SetActiveControl(this);
                         }
                     }
+
                     SetActiveControl(null);
                     _nextActiveControl = Panel2;
 
@@ -1210,6 +1227,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (!IsSplitterFixed && IsSplitterMovable && _splitterClick)
             {
                 Capture = false;
@@ -1223,6 +1241,7 @@ namespace System.Windows.Forms
                 {
                     SplitEnd(false);
                 }
+
                 _splitterClick = false;
                 _splitterDrag = false;
             }
@@ -1326,6 +1345,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
             }
+
             if (Orientation == Orientation.Vertical)
             {
                 if (DesignMode && Width != DefaultSize.Width && value + Panel1MinSize + SplitterWidth > Width)
@@ -1340,6 +1360,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value));
                 }
             }
+
             _panel2MinSize = value;
             if (value > Panel2.Width)
             {
@@ -1356,6 +1377,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterWidth), value, 1));
             }
+
             if (Orientation == Orientation.Vertical)
             {
                 if (DesignMode && value + Panel1MinSize + Panel2MinSize > Width)
@@ -1370,6 +1392,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SplitterWidth), value));
                 }
             }
+
             _splitterWidth = value;
             UpdateSplitter();
         }
@@ -1444,9 +1467,11 @@ namespace System.Windows.Forms
                     {
                         r.Width = minWeight;
                     }
+
                     r.Y = Panel1.Location.Y + splitSize;
                     break;
             }
+
             return r;
         }
 
@@ -1461,6 +1486,7 @@ namespace System.Windows.Forms
                 DrawSplitHelper(_lastDrawSplit);
                 _lastDrawSplit = -1;
             }
+
             // Bail if drawing with no old point...
             //
             else if (mode != DrawStart && _lastDrawSplit == -1)
@@ -1487,6 +1513,7 @@ namespace System.Windows.Forms
                 {
                     DrawSplitHelper(_lastDrawSplit);
                 }
+
                 _lastDrawSplit = -1;
             }
         }
@@ -1547,11 +1574,13 @@ namespace System.Windows.Forms
                         // In RTL negative delta actually means increasing the size....
                         size = Math.Max(Panel1.Width - delta, _borderSize);
                     }
+
                     break;
                 case Orientation.Horizontal:
                     size = Math.Max(Panel1.Height + delta, _borderSize);
                     break;
             }
+
             if (Orientation == Orientation.Vertical)
             {
                 return Math.Max(Math.Min(size, Width - Panel2MinSize), Panel1MinSize);
@@ -1569,10 +1598,11 @@ namespace System.Windows.Forms
         private bool ProcessArrowKey(bool forward)
         {
             Control group = this;
-            if (ActiveControl != null)
+            if (ActiveControl is not null)
             {
                 group = ActiveControl.ParentInternal;
             }
+
             return group.SelectNextControl(ActiveControl, forward, false, false, true);
         }
 
@@ -1584,7 +1614,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 Graphics g = CreateGraphicsInternal();
-                if (BackgroundImage != null)
+                if (BackgroundImage is not null)
                 {
                     using TextureBrush textureBrush = new TextureBrush(BackgroundImage, WrapMode.Tile);
                     g.FillRectangle(textureBrush, ClientRectangle);
@@ -1594,6 +1624,7 @@ namespace System.Windows.Forms
                     using var solidBrush = BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(solidBrush, _splitterRect);
                 }
+
                 g.Dispose();
             }
         }
@@ -1651,6 +1682,7 @@ namespace System.Windows.Forms
                             Panel1.Size = new Size(_panelSize, Height);
                             Panel2.Size = new Size(Math.Max(Width - _panelSize - SplitterWidthInternal, Panel2MinSize), Height);
                         }
+
                         if (FixedPanel == FixedPanel.Panel2)
                         {
                             Panel2.Size = new Size(_panelSize, Height);
@@ -1658,16 +1690,19 @@ namespace System.Windows.Forms
                             Panel1.WidthInternal = _splitterDistance;
                             Panel1.HeightInternal = Height;
                         }
+
                         if (FixedPanel == FixedPanel.None)
                         {
                             if (_ratioWidth != 0.0)
                             {
                                 _splitterDistance = Math.Max((int)(Math.Floor(Width / _ratioWidth)), Panel1MinSize);
                             }
+
                             Panel1.WidthInternal = _splitterDistance; //Default splitter distance from left or top.
                             Panel1.HeightInternal = Height;
                             Panel2.Size = new Size(Math.Max(Width - _splitterDistance - SplitterWidthInternal, Panel2MinSize), Height);
                         }
+
                         if (RightToLeft == RightToLeft.No)
                         {
                             Panel2.Location = new Point(Panel1.WidthInternal + SplitterWidthInternal, 0);
@@ -1676,6 +1711,7 @@ namespace System.Windows.Forms
                         {
                             Panel1.Location = new Point(Width - Panel1.WidthInternal, 0);
                         }
+
                         RepaintSplitterRect();
                         SetSplitterRect(true);
                     }
@@ -1706,6 +1742,7 @@ namespace System.Windows.Forms
                             Panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
                             Panel2.Location = new Point(0, panel2Start);
                         }
+
                         if (FixedPanel == FixedPanel.Panel2)
                         {
                             Panel2.Size = new Size(Width, _panelSize);
@@ -1715,6 +1752,7 @@ namespace System.Windows.Forms
                             int panel2Start = _splitterDistance + SplitterWidthInternal;
                             Panel2.Location = new Point(0, panel2Start);
                         }
+
                         if (FixedPanel == FixedPanel.None)
                         {
                             //NO PANEL FIXED !!
@@ -1722,12 +1760,14 @@ namespace System.Windows.Forms
                             {
                                 _splitterDistance = Math.Max((int)(Math.Floor(Height / _ratioHeight)), Panel1MinSize);
                             }
+
                             Panel1.HeightInternal = _splitterDistance; //Default splitter distance from left or top.
                             Panel1.WidthInternal = Width;
                             int panel2Start = _splitterDistance + SplitterWidthInternal;
                             Panel2.Size = new Size(Width, Math.Max(Height - panel2Start, Panel2MinSize));
                             Panel2.Location = new Point(0, panel2Start);
                         }
+
                         RepaintSplitterRect();
                         SetSplitterRect(false);
                     }
@@ -1745,6 +1785,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 try
                 {
                     _resizeCalled = true;
@@ -1755,6 +1796,7 @@ namespace System.Windows.Forms
                     _resizeCalled = false;
                 }
             }
+
             Panel1.ResumeLayout();
             Panel2.ResumeLayout();
         }
@@ -1785,6 +1827,7 @@ namespace System.Windows.Forms
                 {
                     scale = factor.Height;
                 }
+
                 SplitterWidth = (int)Math.Round((float)SplitterWidth * scale);
             }
             finally
@@ -1801,6 +1844,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             // continue selection iff panels have controls or tabstop is true.
             if ((Panel1.Controls.Count > 0 || Panel2.Controls.Count > 0) || TabStop)
             {
@@ -1812,12 +1856,13 @@ namespace System.Windows.Forms
                 {
                     Control parent = ParentInternal;
                     _selectNextControl = true;
-                    while (parent != null)
+                    while (parent is not null)
                     {
                         if (parent.SelectNextControl(this, forward, true, true, parent.ParentInternal is null))
                         {
                             break;
                         }
+
                         parent = parent.ParentInternal;
                     }
                 }
@@ -1834,9 +1879,8 @@ namespace System.Windows.Forms
         private bool SelectNextControlInContainer(Control ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-            if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            if (!Contains(ctl) ||
+                (!nested && ctl.ParentInternal != this))
             {
                 ctl = null;
             }
@@ -1850,18 +1894,21 @@ namespace System.Windows.Forms
                 if (ctl is SplitterPanel panel && panel.Visible)
                 {
                     //We have crossed over to the second Panel...
-                    if (firstPanel != null)
+                    if (firstPanel is not null)
                     {
                         break;
                     }
+
                     firstPanel = panel;
                 }
-                if (!forward && firstPanel != null && ctl.ParentInternal != firstPanel)
+
+                if (!forward && firstPanel is not null && ctl.ParentInternal != firstPanel)
                 {
                     //goback to start correct re-ordering ....
                     ctl = firstPanel;
                     break;
                 }
+
                 if (ctl is null)
                 {
                     break;
@@ -1878,16 +1925,18 @@ namespace System.Windows.Forms
                         {
                             SelectNextActiveControl(ctl, forward, tabStopOnly, nested, wrap);
                         }
+
                         return true;
                     }
                 }
-            } while (ctl != null);
-            if (ctl != null && TabStop)
+            }
+            while (ctl is not null);
+            if (ctl is not null && TabStop)
             {
                 //we are on Splitter.....Focus it
                 _splitterFocused = true;
                 IContainerControl c = ParentInternal.GetContainerControl();
-                if (c != null)
+                if (c is not null)
                 {
                     if (!(c is ContainerControl cc))
                     {
@@ -1898,6 +1947,7 @@ namespace System.Windows.Forms
                         cc.SetActiveControl(this);
                     }
                 }
+
                 SetActiveControl(null);
                 _nextActiveControl = ctl;
                 return true;
@@ -1909,7 +1959,7 @@ namespace System.Windows.Forms
                 if (!selected)
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         try
                         {
@@ -1923,6 +1973,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -1932,9 +1983,8 @@ namespace System.Windows.Forms
         private bool SelectNextControlInPanel(Control ctl, bool forward, bool tabStopOnly,
                                       bool nested, bool wrap)
         {
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-            if (!Contains(ctl) || !nested && ctl.ParentInternal != this)
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+            if (!Contains(ctl) ||
+                (!nested && ctl.ParentInternal != this))
             {
                 ctl = null;
             }
@@ -1959,16 +2009,19 @@ namespace System.Windows.Forms
                         {
                             SelectNextActiveControl(ctl, forward, tabStopOnly, nested, wrap);
                         }
+
                         return true;
                     }
                 }
-            } while (ctl != null);
+            }
+            while (ctl is not null);
 
             //If CTL is null .. we r out of the Current SplitContainer...
             if (ctl is null || (ctl is SplitterPanel && !ctl.Visible))
             {
                 _callBaseVersion = true;
             }
+
             //IF the CTL == typeof(SpliterPanel) find the NEXT Control... so that we know
             // we can focus the NEXT control within this SPLITCONTAINER....
             else
@@ -1990,6 +2043,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -1999,15 +2053,16 @@ namespace System.Windows.Forms
             if (ctl is ContainerControl container)
             {
                 bool correctParentActiveControl = true;
-                if (container.ParentInternal != null)
+                if (container.ParentInternal is not null)
                 {
                     IContainerControl c = container.ParentInternal.GetContainerControl();
-                    if (c != null)
+                    if (c is not null)
                     {
                         c.ActiveControl = container;
                         correctParentActiveControl = (c.ActiveControl == container);
                     }
                 }
+
                 if (correctParentActiveControl)
                 {
                     ctl.SelectNextControl(null, forward, tabStopOnly, nested, wrap);
@@ -2039,11 +2094,13 @@ namespace System.Windows.Forms
                             {
                                 break;
                             }
+
                            ((SplitterPanel)ctl).BorderStyle = BorderStyle.None;
                             SetInnerMostBorder(c1);
                             foundChildSplitContainer = true;
                         }
                     }
+
                     if (!foundChildSplitContainer)
                     {
                         ((SplitterPanel)ctl).BorderStyle = BorderStyle;
@@ -2097,6 +2154,7 @@ namespace System.Windows.Forms
             {
                 _splitContainerMessageFilter = new SplitContainerMessageFilter(this);
             }
+
             Application.AddMessageFilter(_splitContainerMessageFilter);
 
             Capture = true;
@@ -2128,6 +2186,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             DrawSplitBar(DrawMove);
         }
 
@@ -2137,7 +2196,7 @@ namespace System.Windows.Forms
         private void SplitEnd(bool accept)
         {
             DrawSplitBar(DrawEnd);
-            if (_splitContainerMessageFilter != null)
+            if (_splitContainerMessageFilter is not null)
             {
                 Application.RemoveMessageFilter(_splitContainerMessageFilter);
                 _splitContainerMessageFilter = null;
@@ -2152,6 +2211,7 @@ namespace System.Windows.Forms
                 _splitterClick = false;
                 _splitterDistance = SplitterDistanceInternal = _initialSplitterDistance;
             }
+
             _anchor = Point.Empty;
         }
 
@@ -2164,6 +2224,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Panel1.SuspendLayout();
             Panel2.SuspendLayout();
             if (Orientation == Orientation.Vertical)
@@ -2207,6 +2268,7 @@ namespace System.Windows.Forms
                         Panel1.Size = Size;
                         Panel1.Location = new Point(0, 0);
                     }
+
                     // Update Ratio when the splitContainer is in CollapsedMode.
                     if (!_resizeCalled)
                     {
@@ -2255,6 +2317,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             Panel1.ResumeLayout();
             Panel2.ResumeLayout();
         }
@@ -2349,6 +2412,7 @@ namespace System.Windows.Forms
                         break;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -2364,7 +2428,7 @@ namespace System.Windows.Forms
                 return base.ProcessTabKey(forward);
             }
 
-            if (_nextActiveControl != null)
+            if (_nextActiveControl is not null)
             {
                 SetActiveControl(_nextActiveControl);
                 _nextActiveControl = null;
@@ -2388,7 +2452,7 @@ namespace System.Windows.Forms
                     //We are om Splitter ......
                     _splitterFocused = true;
                     IContainerControl c = ParentInternal.GetContainerControl();
-                    if (c != null)
+                    if (c is not null)
                     {
                         if (!(c is ContainerControl cc))
                         {
@@ -2399,6 +2463,7 @@ namespace System.Windows.Forms
                             cc.SetActiveControl(this);
                         }
                     }
+
                     SetActiveControl(null);
                     return true;
                 }
@@ -2408,7 +2473,7 @@ namespace System.Windows.Forms
         protected override void OnMouseCaptureChanged(EventArgs e)
         {
             base.OnMouseCaptureChanged(e);
-            if (_splitContainerMessageFilter != null)
+            if (_splitContainerMessageFilter is not null)
             {
                 Application.RemoveMessageFilter(_splitContainerMessageFilter);
                 _splitContainerMessageFilter = null;
@@ -2456,7 +2521,7 @@ namespace System.Windows.Forms
             /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <=(int) User32.WM.KEYLAST)
+                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                 {
                     if ((m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam == (int)Keys.Escape)
                         || (m.Msg == (int)User32.WM.SYSKEYDOWN))
@@ -2468,8 +2533,10 @@ namespace System.Windows.Forms
                         _owner._splitterClick = false;
                         _owner._splitterDrag = false;
                     }
+
                     return true;
                 }
+
                 return false;
             }
         }
@@ -2499,6 +2566,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 base.Remove(value);
             }
 
@@ -2519,6 +2587,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 base.SetChildIndexInternal(child, newIndex);
             }
         }

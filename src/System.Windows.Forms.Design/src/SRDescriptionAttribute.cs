@@ -11,7 +11,8 @@ namespace System.Windows.Forms
     {
         private bool replaced;
 
-        public SRDescriptionAttribute(string description) : base(description)
+        public SRDescriptionAttribute(string description)
+            : base(description)
         {
         }
 
@@ -22,7 +23,7 @@ namespace System.Windows.Forms
                 if (!replaced)
                 {
                     replaced = true;
-                    DescriptionValue = base.Description;
+                    DescriptionValue = SR.GetResourceString(base.Description);
                 }
 
                 return base.Description;

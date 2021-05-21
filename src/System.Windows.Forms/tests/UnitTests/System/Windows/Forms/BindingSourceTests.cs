@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -64,8 +64,8 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { null, null, typeof(BindingList<object>) };
             yield return new object[] { null, string.Empty, typeof(BindingList<object>) };
             yield return new object[] { null, "dataMember", typeof(BindingList<object>) };
-            yield return new object[] {  new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
-            yield return new object[] {  new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
+            yield return new object[] { new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
+            yield return new object[] { new DataClass { List = null }, nameof(DataClass.List), typeof(BindingList<int>) };
 
             yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List), typeof(BindingList<object>) };
             yield return new object[] { new ObjectDataClass { List = null }, nameof(ObjectDataClass.List).ToLower(), typeof(BindingList<object>) };

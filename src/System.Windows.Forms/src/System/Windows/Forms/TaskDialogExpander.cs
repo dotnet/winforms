@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             {
                 DenyIfBoundAndNotCreated();
 
-                if (BoundPage != null)
+                if (BoundPage is not null)
                 {
                     // If we are bound but waiting for initialization (e.g. immediately after
                     // starting a navigation), we buffer the change until we apply the
@@ -189,17 +189,7 @@ namespace System.Windows.Forms
             get => _expanderPosition;
             set
             {
-                if (!ClientUtils.IsEnumValid(
-                    value,
-                    (int)value,
-                    (int)TaskDialogExpanderPosition.AfterText,
-                    (int)TaskDialogExpanderPosition.AfterFootnote))
-                {
-                    throw new InvalidEnumArgumentException(
-                        nameof(value),
-                        (int)value,
-                        typeof(TaskDialogExpanderPosition));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 DenyIfBound();
 
@@ -231,6 +221,7 @@ namespace System.Windows.Forms
             {
                 flags |= ComCtl32.TDF.EXPANDED_BY_DEFAULT;
             }
+
             if (_expanderPosition == TaskDialogExpanderPosition.AfterFootnote)
             {
                 flags |= ComCtl32.TDF.EXPAND_FOOTER_AREA;

@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Tests
             // Run this from another thread as we call Application.EnableVisualStyles.
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
-                var data = new (int, int)[] { (-1, -1), (0 , 0), (1, 1), (2, -1) };
+                var data = new (int, int)[] { (-1, -1), (0, 0), (1, 1), (2, -1) };
                 foreach ((int Index, int Expected) value in data)
                 {
                     Application.EnableVisualStyles();
@@ -1319,12 +1319,12 @@ namespace System.Windows.Forms.Tests
             using (var stream = new MemoryStream())
             {
                 var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 formatter.Serialize(stream, group);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 ListViewGroup result = Assert.IsType<ListViewGroup>(formatter.Deserialize(stream));
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 Assert.Equal(group.Header, result.Header);
                 Assert.Equal(group.HeaderAlignment, result.HeaderAlignment);
                 Assert.Equal(group.Items.Cast<ListViewItem>().Select(i => i.Text), result.Items.Cast<ListViewItem>().Select(i => i.Text));
@@ -1401,6 +1401,39 @@ namespace System.Windows.Forms.Tests
             ISerializable iSerializable = group;
             var context = new StreamingContext();
             Assert.Throws<ArgumentNullException>("info", () => iSerializable.GetObjectData(null, context));
+        }
+
+        [WinFormsFact]
+        public void ListViewGroup_InvokeAdd_DoesNotAddTreeViewItemToList()
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem = new ListViewItem();
+            ListViewItem listViewItemGroup = new ListViewItem();
+            ListViewGroup listViewGroup = new ListViewGroup();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Groups.Add(listViewGroup);
+            listView.Items.Add(listViewItem);
+            listViewGroup.Items.Add(listViewItemGroup);
+
+            Assert.True(accessor.IsToolTracked(listViewItem));
+            Assert.False(accessor.IsToolTracked(listViewItemGroup));
+        }
+
+        [WinFormsFact]
+        public void ListViewGroup_InvokeRemove_DoesNotRemoveTreeViewItemFromList()
+        {
+            using var listView = new ListView();
+            ListViewItem listViewItem = new ListViewItem();
+            ListViewGroup listViewGroup = new ListViewGroup();
+            var accessor = KeyboardToolTipStateMachine.Instance.TestAccessor();
+            listView.Groups.Add(listViewGroup);
+            listView.Items.Add(listViewItem);
+            listViewGroup.Items.Add(listViewItem);
+
+            Assert.True(accessor.IsToolTracked(listViewItem));
+
+            listViewGroup.Items.Remove(listViewItem);
+            Assert.True(accessor.IsToolTracked(listViewItem));
         }
     }
 }

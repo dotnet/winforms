@@ -11,9 +11,9 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        public unsafe static extern BOOL SetViewportOrgEx(HDC hdc, int x, int y, Point *lppt);
+        public unsafe static extern BOOL SetViewportOrgEx(HDC hdc, int x, int y, Point* lppt);
 
-        public unsafe static BOOL SetViewportOrgEx(IHandle hdc, int x, int y, Point *lppt)
+        public unsafe static BOOL SetViewportOrgEx(IHandle hdc, int x, int y, Point* lppt)
         {
             BOOL result = SetViewportOrgEx((HDC)hdc.Handle, x, y, lppt);
             GC.KeepAlive(hdc);

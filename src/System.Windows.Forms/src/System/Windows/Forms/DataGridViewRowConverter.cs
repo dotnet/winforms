@@ -30,10 +30,10 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (value is DataGridView row && destinationType == typeof(InstanceDescriptor))
+            if (value is DataGridViewRow row && destinationType == typeof(InstanceDescriptor))
             {
                 ConstructorInfo ctor = row.GetType().GetConstructor(Array.Empty<Type>());
-                if (ctor != null)
+                if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, Array.Empty<object>(), isComplete: false);
                 }

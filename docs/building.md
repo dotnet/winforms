@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-Follow the prerequisites listed at [Building CoreFX on Windows][corefx-windows-instructions]
+Follow the prerequisites listed at [Developer Guide](developer-guide.md).
 
 ## Building
 
@@ -29,7 +29,7 @@ Note that this does **not** build using your machine-wide installed version of t
 
 * All build outputs are generated under the `artifacts` folder.
 * Binaries are under `artifacts\bin`.
-  * For example, `System.Windows.Forms.dll` can be found under `artifacts\bin\System.Windows.Forms\Debug\netcoreapp5.0`.
+  * For example, `System.Windows.Forms.dll` can be found under `artifacts\bin\System.Windows.Forms\Debug\net6.0`.
 * Logs are found under `artifacts\log`.
 * Packages are found under `artifacts\packages`.
 
@@ -46,7 +46,7 @@ Note that this does **not** build using your machine-wide installed version of t
     winforms> pushd .\src\System.Windows.Forms\tests\AccessibilityTests
     winforms\src\System.Windows.Forms\tests\AccessibilityTests> dotnet run
     ```
-3. (Alternatively) Navigate to `.\artifacts\bin\AccessibilityTests\Debug\netcoreapp5.0` and run the app manually.
+3. (Alternatively) Navigate to `.\artifacts\bin\AccessibilityTests\Debug\net6.0` and run the app manually.
 
 ## Troubleshooting build errors
 
@@ -65,5 +65,5 @@ To create the Microsoft.Private.Winforms package, run `.\build -pack`
 
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
 [latest-core-build]: https://github.com/dotnet/core/blob/master/daily-builds.md
-[msbuild-log-viewer]: http://msbuildlog.com/
+[msbuild-log-viewer]: https://msbuildlog.com/
 [VS-download]: https://visualstudio.microsoft.com/downloads/

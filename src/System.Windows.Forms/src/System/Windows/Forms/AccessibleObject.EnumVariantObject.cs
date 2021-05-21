@@ -18,13 +18,13 @@ namespace System.Windows.Forms
 
             public EnumVariantObject(AccessibleObject owner)
             {
-                Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
+                Debug.Assert(owner is not null, "Cannot create EnumVariantObject with a null owner");
                 this.owner = owner;
             }
 
             public EnumVariantObject(AccessibleObject owner, uint currentChild)
             {
-                Debug.Assert(owner != null, "Cannot create EnumVariantObject with a null owner");
+                Debug.Assert(owner is not null, "Cannot create EnumVariantObject with a null owner");
                 this.owner = owner;
                 this.currentChild = currentChild;
             }
@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             {
                 if (ppEnum is null)
                 {
-                    return HRESULT.E_INVALIDARG;
+                    return HRESULT.E_POINTER;
                 }
 
                 ppEnum[0] = new EnumVariantObject(owner, currentChild);
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                     {
                         NextEmpty(celt, rgVar, pCeltFetched);
                     }
-                    else if ((newOrder = owner.GetSysChildOrder()) != null)
+                    else if ((newOrder = owner.GetSysChildOrder()) is not null)
                     {
                         NextFromSystemReordered(celt, rgVar, pCeltFetched, newOrder);
                     }
@@ -118,7 +118,7 @@ namespace System.Windows.Forms
             private unsafe void NextFromSystem(uint celt, IntPtr rgVar, uint* pCeltFetched)
             {
                 owner.systemIEnumVariant?.Next(celt, rgVar, pCeltFetched);
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     currentChild += *pCeltFetched;
                 }
@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding sys child " + currentChild + " of " + newOrder.Length);
                 }
 
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     *pCeltFetched = i;
                 }
@@ -179,11 +179,14 @@ namespace System.Windows.Forms
                 for (i = 0; i < celt && currentChild < childCount; ++i)
                 {
                     ++currentChild;
-                    Marshal.GetNativeVariantForObject(((object)currentChild), GetAddressOfVariantAtIndex(rgVar, i));
+                    // Using "currentChild" as uint type leads to incorrect object boxing and converting an object to a COM VARIANT.
+                    // Because of this, controls without UIA support build an incorrect Accessibility tree.
+                    // It needs to cast "currentChild" to int type before converting to get a correct object argument
+                    Marshal.GetNativeVariantForObject(((object)(int)currentChild), GetAddressOfVariantAtIndex(rgVar, i));
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: adding own child " + currentChild + " of " + childCount);
                 }
 
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     *pCeltFetched = i;
                 }
@@ -196,7 +199,7 @@ namespace System.Windows.Forms
             /// </summary>
             private unsafe void NextEmpty(uint celt, IntPtr rgvar, uint* pCeltFetched)
             {
-                if (pCeltFetched != null)
+                if (pCeltFetched is not null)
                 {
                     *pCeltFetched = 0;
                 }

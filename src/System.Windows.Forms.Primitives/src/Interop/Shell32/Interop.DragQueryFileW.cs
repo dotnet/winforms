@@ -11,7 +11,9 @@ internal static partial class Interop
     internal static partial class Shell32
     {
         [DllImport(Libraries.Shell32, ExactSpelling = true, EntryPoint = "DragQueryFileW", CharSet = CharSet.Unicode)]
+#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         private static extern uint DragQueryFileWInternal(IntPtr hDrop, uint iFile, StringBuilder? lpszFile, uint cch);
+#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
 
         public static uint DragQueryFileW(IntPtr hDrop, uint iFile, StringBuilder? lpszFile)
         {

@@ -4,7 +4,9 @@
 
 #nullable disable
 
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Layout;
@@ -20,13 +22,16 @@ namespace System.Windows.Forms
     [DesignTimeVisible(false)]
     [DefaultEvent("Click")]
     [DefaultProperty("Text")]
-    public class TabPage : Panel
+    public partial class TabPage : Panel
     {
         private ImageList.Indexer _imageIndexer;
         private string _toolTipText = string.Empty;
         private bool _enterFired;
         private bool _leaveFired;
         private bool _useVisualStyleBackColor;
+        private List<ToolTip> _associatedToolTips;
+        private ToolTip _externalToolTip;
+        private readonly ToolTip _internalToolTip = new ToolTip();
 
         /// <summary>
         ///  Constructs an empty TabPage.
@@ -44,6 +49,9 @@ namespace System.Windows.Forms
         {
             Text = text;
         }
+
+        internal override bool AllowsKeyboardToolTip()
+            => ParentInternal is TabControl tabControl && tabControl.ShowToolTips;
 
         /// <summary>
         ///  Allows the control to optionally shrink when AutoSize is true.
@@ -127,6 +135,74 @@ namespace System.Windows.Forms
         ///  Constructs the new instance of the Controls collection objects.
         /// </summary>
         protected override ControlCollection CreateControlsInstance() => new TabPageControlCollection(this);
+
+        private protected override string GetCaptionForTool(ToolTip toolTip)
+        {
+            // Return the internal toolTip text if it is set
+            if (!string.IsNullOrEmpty(_toolTipText))
+            {
+                return _toolTipText;
+            }
+
+            // Return the external toolTip text for this page
+            return toolTip.GetCaptionForTool(this);
+        }
+
+        private protected override IList<Rectangle> GetNeighboringToolsRectangles()
+        {
+            List<Rectangle> neighbors = new List<Rectangle>();
+
+            if (ParentInternal is not TabControl tabControl)
+            {
+                return neighbors;
+            }
+
+            int currentIndex = tabControl.TabPages.IndexOf(this);
+            if (currentIndex == -1)
+            {
+                return neighbors;
+            }
+
+            // Get the previous tab rectangle
+            if (currentIndex > 0)
+            {
+                neighbors.Add(tabControl.RectangleToScreen(tabControl.GetTabRect(currentIndex - 1)));
+            }
+
+            // Get the next tab rectangle
+            if (currentIndex < tabControl.TabCount - 1)
+            {
+                neighbors.Add(tabControl.RectangleToScreen(tabControl.GetTabRect(currentIndex + 1)));
+            }
+
+            return neighbors;
+        }
+
+        private protected override bool IsHoveredWithMouse()
+        {
+            if (ParentInternal is not TabControl tabControl)
+            {
+                return false;
+            }
+
+            // Check if any tab contains the mouse
+            for (int i = 0; i < tabControl.TabCount; i++)
+            {
+                if (tabControl.RectangleToScreen(tabControl.GetTabRect(i)).Contains(MousePosition))
+                {
+                    return true;
+                }
+            }
+
+            // Check if the selected page contains the mouse
+            TabPage selectedTab = tabControl.SelectedTab;
+            if (selectedTab is not null)
+            {
+                return selectedTab.AccessibilityObject.Bounds.Contains(MousePosition);
+            }
+
+            return false;
+        }
 
         internal ImageList.Indexer ImageIndexer => _imageIndexer ??= new ImageList.Indexer();
 
@@ -368,6 +444,11 @@ namespace System.Windows.Forms
 
                 _toolTipText = value;
                 UpdateParent();
+
+                if (_externalToolTip is null && _associatedToolTips is null)
+                {
+                    _internalToolTip.SetToolTip(this, value);
+                }
             }
         }
 
@@ -393,7 +474,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override void AssignParent(Control value)
         {
-            if (value != null && !(value is TabControl))
+            if (value is not null && !(value is TabControl))
             {
                 throw new ArgumentException(string.Format(SR.TabControlTabPageNotOnTabControl, value.GetType().FullName));
             }
@@ -412,12 +493,27 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            while (c != null && !(c is TabPage))
+            while (c is not null && !(c is TabPage))
             {
                 c = c.ParentInternal;
             }
 
             return (TabPage)c;
+        }
+
+        internal override Rectangle GetToolNativeScreenRectangle()
+        {
+            // Check SelectedIndex of the parental TabControl instead of SelectedTab
+            // because it is used in GetTabRect next.
+            // So check this to make sure that the value is correct
+            // to avoid ArgumentOutOfRangeException in GetTabRect.
+            if (ParentInternal is TabControl tabControl && tabControl.SelectedIndex >= 0)
+            {
+                Rectangle rect = tabControl.GetTabRect(tabControl.SelectedIndex);
+                return tabControl.RectangleToScreen(rect);
+            }
+
+            return Rectangle.Empty;
         }
 
         /// <summary>
@@ -505,7 +601,7 @@ namespace System.Windows.Forms
 
                 // TabRenderer does not support painting the background image on the panel, so
                 // draw it ourselves.
-                if (BackgroundImage != null)
+                if (BackgroundImage is not null)
                 {
                     ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, bkcolor, BackgroundImageLayout, inflateRect, inflateRect, DisplayRectangle.Location);
                 }
@@ -513,6 +609,81 @@ namespace System.Windows.Forms
             else
             {
                 base.OnPaintBackground(e);
+            }
+        }
+
+        internal override void RemoveToolTip(ToolTip toolTip)
+        {
+            if (toolTip is null)
+            {
+                return;
+            }
+
+            // If a user used one ToolTIp instance to set a toolTip text before.
+            if (_associatedToolTips is null)
+            {
+                Debug.Assert(_externalToolTip == toolTip, "RemoveToolTip should remove a toolTip that was set.");
+                _externalToolTip = null;
+                _internalToolTip.SetToolTip(this, ToolTipText);
+                return;
+            }
+
+            if (_associatedToolTips.Contains(toolTip))
+            {
+                _associatedToolTips.Remove(toolTip);
+            }
+            else
+            {
+                Debug.Fail("RemoveToolTip should remove a toolTip that was set.");
+            }
+
+            // If there is only one associated toolTip set it as _externalToolTip
+            // and remove the List collection to improve performance.
+            if (_associatedToolTips.Count == 1)
+            {
+                _externalToolTip = _associatedToolTips[0];
+                _associatedToolTips = null;
+            }
+        }
+
+        /// <summary>
+        ///  Usually users create one ToolTip instance and set toolTip texts for several controls using this instance.
+        ///  This method will store the link to this ToolTip instance in _externalToolTip
+        ///  to use it as a base for a keyboard toolTip instead _internalToolTip instance.
+        ///  That is strange and unexpected but a user can set several toolTip instances for this TabPage,
+        ///  in this case, we have to check all associated toolTips.
+        ///  Because of that, create a new List collection to do that.
+        /// </summary>
+        internal override void SetToolTip(ToolTip toolTip)
+        {
+            // "_externalToolTip == toolTip" condition means a user just set a new text using a ToolTip instance
+            // that was already set for this TabPage.
+            if (toolTip is null || _externalToolTip == toolTip)
+            {
+                return;
+            }
+
+            // If a user sets toolTip text using a ToolTip instance first time.
+            // In this case, use external ToolTip instance to show keyboard toolTip instead internal one.
+            if (_externalToolTip is null)
+            {
+                _externalToolTip = toolTip;
+                _internalToolTip.RemoveAll();
+                return;
+            }
+
+            // If a user sets a toolTip text for this TabPage using one more ToolTip instance.
+            // Use the List collection to track all associated toolTips.
+            // In this case, the keyboard toolTip will show the text of the latest toolTip instance that was set.
+            if (_associatedToolTips is null)
+            {
+                _associatedToolTips = new List<ToolTip>() { _externalToolTip, toolTip };
+                return;
+            }
+
+            if (!_associatedToolTips.Contains(toolTip))
+            {
+                _associatedToolTips.Add(toolTip);
             }
         }
 
@@ -554,36 +725,6 @@ namespace System.Windows.Forms
             if (ParentInternal is TabControl parent)
             {
                 parent.UpdateTab(this);
-            }
-        }
-
-        /// <summary>
-        ///  Our control collection will throw an exception if you try to add other tab pages.
-        /// </summary>
-        public class TabPageControlCollection : ControlCollection
-        {
-            /// <summary>
-            ///  Creates a new TabPageControlCollection.
-            /// </summary>
-            public TabPageControlCollection(TabPage owner) : base(owner)
-            {
-            }
-
-            /// <summary>
-            ///  Adds a child control to this control. The control becomes the last control
-            ///  in the child control list. If the control is already a child of another
-            ///  control it is first removed from that control. The tab page overrides
-            ///  this method to ensure that child tab pages are not added to it, as these
-            ///  are illegal.
-            /// </summary>
-            public override void Add(Control value)
-            {
-                if (value is TabPage)
-                {
-                    throw new ArgumentException(SR.TabControlTabPageOnTabPage);
-                }
-
-                base.Add(value);
             }
         }
     }

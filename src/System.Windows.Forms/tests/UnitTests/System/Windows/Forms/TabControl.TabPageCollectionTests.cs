@@ -50,6 +50,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -175,6 +176,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -337,6 +339,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -480,6 +483,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -976,6 +980,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -1332,6 +1337,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             int controlRemovedCallCount = 0;
             owner.ControlRemoved += (sender, e) => controlRemovedCallCount++;
@@ -1451,7 +1457,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(child3, e.AffectedControl);
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             owner.Layout += parentHandler;
 
             try
@@ -1947,6 +1954,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -2067,6 +2075,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -2235,6 +2244,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -2384,6 +2394,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -2987,6 +2998,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -3928,6 +3940,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -4026,6 +4039,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -4153,6 +4167,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -4267,6 +4282,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -4628,6 +4644,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -4736,6 +4753,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -4825,6 +4843,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try

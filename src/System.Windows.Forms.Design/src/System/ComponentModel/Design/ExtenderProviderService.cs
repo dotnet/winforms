@@ -30,6 +30,7 @@ namespace System.ComponentModel.Design
                 _providers.CopyTo(providers, 0);
                 return providers;
             }
+
             return Array.Empty<IExtenderProvider>();
         }
 

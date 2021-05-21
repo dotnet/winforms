@@ -36,6 +36,7 @@ namespace Microsoft.VisualBasic.MyServices.Tests
             {
                 return;
             }
+
             string actual = getActual();
             Assert.Equal(expected, actual);
         }

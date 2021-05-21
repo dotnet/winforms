@@ -50,6 +50,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 name = fieldReferenceEx.FieldName;
             }
+
             return name;
         }
 
@@ -114,6 +115,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return instance;
         }
 
@@ -156,6 +158,7 @@ namespace System.ComponentModel.Design.Serialization
                 // This statement isn't one that will return a named object.  Deserialize it normally.
                 DeserializeStatement(manager, statement);
             }
+
             return instance;
         }
 
@@ -169,6 +172,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
@@ -194,7 +198,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // We need to find out if SerializeCreationExpression returned a preset expression.
-                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && object.ReferenceEquals(cxt.PresetValue, value))
+                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
                     {
                         isPreset = true;
                     }
@@ -234,6 +238,7 @@ namespace System.ComponentModel.Design.Serialization
                                 variableReference = new CodeVariableReferenceExpression(varName);
                                 SetExpression(manager, value, variableReference);
                             }
+
                             // Finally, we need to walk properties and events for this object
                             SerializePropertiesToResources(manager, statements, value, _designTimeFilter);
                             SerializeProperties(manager, statements, value, _runTimeFilter);
@@ -243,6 +248,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return result;
         }
 
@@ -263,6 +269,7 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Assert(manager.Context.Current == abs, "Serializer added a context it didn't remove.");
                 manager.Context.Pop();
             }
+
             return data;
         }
 
@@ -311,6 +318,7 @@ namespace System.ComponentModel.Design.Serialization
                     throw new NotSupportedException(string.Format(SR.SerializerMemberTypeNotSerializable, member.GetType().FullName));
                 }
             }
+
             return statements;
         }
 
@@ -347,6 +355,7 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Assert(manager.Context.Current == abs, "Serializer added a context it didn't remove.");
                 manager.Context.Pop();
             }
+
             return statements;
         }
 
@@ -357,7 +366,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  when you expect the resulting expression to be used as a parameter or target
         ///  of a statement.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use SerializeToExpression or GetExpression instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         protected CodeExpression SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
@@ -402,8 +411,10 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return expression;
         }
+
         private void ResetBrowsableProperties(object instance)
         {
             if (instance is null)

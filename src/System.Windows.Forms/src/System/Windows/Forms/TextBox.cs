@@ -122,15 +122,13 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 bool resetAutoComplete = false;
                 if (autoCompleteMode != AutoCompleteMode.None && value == AutoCompleteMode.None)
                 {
                     resetAutoComplete = true;
                 }
+
                 autoCompleteMode = value;
                 SetAutoComplete(resetAutoComplete);
             }
@@ -193,23 +191,25 @@ namespace System.Windows.Forms
                     autoCompleteCustomSource = new AutoCompleteStringCollection();
                     autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
+
                 return autoCompleteCustomSource;
             }
             set
             {
                 if (autoCompleteCustomSource != value)
                 {
-                    if (autoCompleteCustomSource != null)
+                    if (autoCompleteCustomSource is not null)
                     {
                         autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
 
                     autoCompleteCustomSource = value;
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         autoCompleteCustomSource.CollectionChanged += new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                     }
+
                     SetAutoComplete(false);
                 }
             }
@@ -232,10 +232,7 @@ namespace System.Windows.Forms
             {
                 if (characterCasing != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)CharacterCasing.Normal, (int)CharacterCasing.Lower))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CharacterCasing));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     characterCasing = value;
                     RecreateHandle();
@@ -314,6 +311,7 @@ namespace System.Windows.Forms
                     {
                         cp.Style |= (int)WS.HSCROLL;
                     }
+
                     if ((scrollBars & ScrollBars.Vertical) == ScrollBars.Vertical)
                     {
                         cp.Style |= (int)WS.VSCROLL;
@@ -391,10 +389,7 @@ namespace System.Windows.Forms
             {
                 if (scrollBars != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ScrollBars.None, (int)ScrollBars.Both))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ScrollBars));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     scrollBars = value;
                     RecreateHandle();
@@ -410,6 +405,7 @@ namespace System.Windows.Forms
             {
                 scrollBarPadding.Height += SystemInformation.GetHorizontalScrollBarHeightForDpi(_deviceDpi);
             }
+
             if (Multiline && (ScrollBars & ScrollBars.Vertical) != 0)
             {
                 scrollBarPadding.Width += SystemInformation.GetVerticalScrollBarWidthForDpi(_deviceDpi);
@@ -454,10 +450,7 @@ namespace System.Windows.Forms
             {
                 if (textAlign != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     textAlign = value;
                     RecreateHandle();
@@ -517,16 +510,18 @@ namespace System.Windows.Forms
                 // so this will undo it, but on a dispose we'll be Destroying the window anyay.
 
                 ResetAutoComplete(true);
-                if (autoCompleteCustomSource != null)
+                if (autoCompleteCustomSource is not null)
                 {
                     autoCompleteCustomSource.CollectionChanged -= new CollectionChangeEventHandler(OnAutoCompleteCustomSourceChanged);
                 }
-                if (stringSource != null)
+
+                if (stringSource is not null)
                 {
                     stringSource.ReleaseAutoComplete();
                     stringSource = null;
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -543,6 +538,7 @@ namespace System.Windows.Forms
                         return acceptsReturn;
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -639,12 +635,55 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            if (stringSource != null)
+            if (stringSource is not null)
             {
                 stringSource.ReleaseAutoComplete();
                 stringSource = null;
             }
+
             base.OnHandleDestroyed(e);
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+
+            if (IsHandleCreated && ContainsNavigationKeyCode(e.KeyCode))
+            {
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
+        }
+
+        private bool ContainsNavigationKeyCode(Keys keyCode)
+        {
+            switch (keyCode)
+            {
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.PageUp:
+                case Keys.PageDown:
+                case Keys.Home:
+                case Keys.End:
+                case Keys.Left:
+                case Keys.Right:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+
+            if (IsHandleCreated)
+            {
+                // As there is no corresponding windows notification
+                // about text selection changed for TextBox assuming
+                // that any mouse down on textbox leads to change of
+                // the caret position and thereby change the selection.
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            }
         }
 
         protected virtual void OnTextAlignChanged(EventArgs e)
@@ -704,6 +743,7 @@ namespace System.Windows.Forms
             {
                 strings[i] = AutoCompleteCustomSource[i];
             }
+
             return strings;
         }
 
@@ -732,7 +772,7 @@ namespace System.Windows.Forms
 
                 if (AutoCompleteSource == AutoCompleteSource.CustomSource)
                 {
-                    if (IsHandleCreated && AutoCompleteCustomSource != null)
+                    if (IsHandleCreated && AutoCompleteCustomSource is not null)
                     {
                         if (AutoCompleteCustomSource.Count == 0)
                         {
@@ -764,10 +804,12 @@ namespace System.Windows.Forms
                         {
                             mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON | Shlwapi.SHACF.AUTOAPPEND_FORCE_OFF;
                         }
+
                         if (AutoCompleteMode == AutoCompleteMode.Append)
                         {
                             mode |= Shlwapi.SHACF.AUTOAPPEND_FORCE_ON | Shlwapi.SHACF.AUTOSUGGEST_FORCE_OFF;
                         }
+
                         if (AutoCompleteMode == AutoCompleteMode.SuggestAppend)
                         {
                             mode |= Shlwapi.SHACF.AUTOSUGGEST_FORCE_ON;
@@ -849,7 +891,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws the <see cref="PlaceholderText"/> in the client area of the <see cref="TextBox"/> using the default font and color.
         /// </summary>
-        private void DrawPlaceholderText(Graphics graphics)
+        private void DrawPlaceholderText(Gdi32.HDC hdc)
         {
             TextFormatFlags flags = TextFormatFlags.NoPadding | TextFormatFlags.Top |
                                     TextFormatFlags.EndEllipsis;
@@ -894,7 +936,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            TextRenderer.DrawText(graphics, PlaceholderText, Font, rectangle, SystemColors.GrayText, BackColor, flags);
+            TextRenderer.DrawTextInternal(hdc, PlaceholderText, Font, rectangle, SystemColors.GrayText, TextRenderer.DefaultQuality, flags);
         }
 
         /// <summary>
@@ -902,7 +944,7 @@ namespace System.Windows.Forms
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch ((User32.WM)m.Msg)
             {
@@ -916,27 +958,58 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
+
+                case User32.WM.PAINT:
+                    {
+                        // The native control tracks its own state, so it is get into a state Where either the native control invalidates
+                        // itself, and thus blastsover the placeholder text
+                        // - or -
+                        // The placeholder text is written multiple times without being cleared first.
+                        //
+                        // To avoid either of the above we need the following operations.
+                        //
+                        // NOTE: there is still an observable flicker with this implementations. We're getting a second WM_PAINT after we
+                        // do our begin/end paint. Something is apparently invalidating the control again. Explicitly calling ValidateRect
+                        // should, in theory, prevent this second call but it clearly isn't happening.
+
+                        // Invalidate the whole control to make sure the native control doesn't make any assumptions over what it has to paint
+                        if (ShouldRenderPlaceHolderText())
+                        {
+                            User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
+                        }
+
+                        // Let the native implementation draw the background and animate the frame
+                        base.WndProc(ref m);
+
+                        if (ShouldRenderPlaceHolderText())
+                        {
+                            // Invalidate again because the native WM_PAINT already validated everything by calling BeginPaint itself.
+                            User32.InvalidateRect(Handle, null, bErase: BOOL.TRUE);
+
+                            // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
+                            using var paintScope = new User32.BeginPaintScope(Handle);
+                            DrawPlaceholderText(paintScope);
+
+                            User32.ValidateRect(this, null);
+                        }
+                    }
+
+                    break;
+
                 case User32.WM.PRINT:
                     WmPrint(ref m);
                     break;
+
                 default:
                     base.WndProc(ref m);
                     break;
             }
-
-            if (ShouldRenderPlaceHolderText(m))
-            {
-                using (Graphics g = CreateGraphics())
-                {
-                    DrawPlaceholderText(g);
-                }
-            }
         }
 
-        private bool ShouldRenderPlaceHolderText(in Message m) =>
+        private bool ShouldRenderPlaceHolderText() =>
             !string.IsNullOrEmpty(PlaceholderText) &&
-            (m.Msg == (int)User32.WM.PAINT || m.Msg == (int)User32.WM.KILLFOCUS) &&
             !GetStyle(ControlStyles.UserPaint) &&
             !Focused &&
             TextLength == 0;

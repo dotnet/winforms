@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         /// </summary>
         private class AmbientProperty
         {
-            private object _value;
+            private object? _value;
 
             /// <summary>
             ///  Creates a new, empty ambient property.
@@ -46,7 +44,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The current value of the property.
             /// </summary>
-            internal object Value
+            internal object? Value
             {
                 get => _value;
                 set

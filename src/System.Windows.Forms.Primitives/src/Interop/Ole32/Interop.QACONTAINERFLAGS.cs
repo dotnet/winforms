@@ -14,7 +14,7 @@ internal static partial class Interop
             SHOWHATCHING = 0x0001,
             SHOWGRABHANDLES = 0x0002,
             USERMODE = 0x0004,
-            DISPLAYASDEFAULT= 0x0008,
+            DISPLAYASDEFAULT = 0x0008,
             UIDEAD = 0x0010,
             AUTOCLIP = 0x0020,
             MESSAGEREFLECT = 0x0040,

@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
@@ -17,6 +15,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
+    [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
     public class ImageListTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
@@ -448,11 +447,11 @@ namespace System.Windows.Forms.Tests
         {
             using var stream = new MemoryStream();
             var formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(stream, source);
             stream.Position = 0;
             return (T)formatter.Deserialize(stream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
         [WinFormsTheory]
@@ -842,9 +841,7 @@ namespace System.Windows.Forms.Tests
             list.Dispose();
             Assert.False(list.HandleCreated);
             Assert.Throws<ObjectDisposedException>(() => list.Images.GetEnumerator());
-#pragma warning disable xUnit2013
             Assert.Equal(0, list.Images.Count);
-#pragma warning restore xUnit2013
             Assert.True(list.HandleCreated);
 
             // Call again.
@@ -907,6 +904,18 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(list.Images);
             Assert.False(list.HandleCreated);
         }
+
+#if DEBUG
+        [WinFormsFact]
+        public void ImageList_Dispose_SetsIsDisposed()
+        {
+            using var list = new ImageList();
+            Assert.False(list.IsDisposed);
+
+            list.Dispose();
+            Assert.True(list.IsDisposed);
+        }
+#endif
 
         public static IEnumerable<object[]> Draw_Point_TestData()
         {

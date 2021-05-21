@@ -174,10 +174,12 @@ namespace System.Windows.Forms
                 {
                     parent = Owner;
                 }
+
                 if (parent is ToolStripDropDownMenu dropDownMenu)
                 {
                     return false;
                 }
+
                 switch (parent.LayoutStyle)
                 {
                     case ToolStripLayoutStyle.VerticalStackWithOverflow:
@@ -264,6 +266,7 @@ namespace System.Windows.Forms
             {
                 parent = Owner;
             }
+
             if (parent is null)
             {
                 return new Size(SeparatorThickness, SeparatorThickness);
@@ -280,6 +283,7 @@ namespace System.Windows.Forms
                 constrainingSize.Width = SeparatorHeight;
                 constrainingSize.Height = SeparatorHeight;
             }
+
             if (IsVertical)
             {
                 return new Size(SeparatorThickness, constrainingSize.Height);
@@ -290,7 +294,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null && ParentInternal != null)
+            if (Owner is not null && ParentInternal is not null)
             {
                 Renderer.DrawSeparator(new ToolStripSeparatorRenderEventArgs(e.Graphics, this, IsVertical));
             }
@@ -316,6 +320,7 @@ namespace System.Windows.Forms
                 rect.X = 2;
                 rect.Width = dropDownMenu.Width - 4;
             }
+
             base.SetBounds(rect);
         }
     }

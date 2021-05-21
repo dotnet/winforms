@@ -1459,6 +1459,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             element.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 
@@ -1491,6 +1492,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             element.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 
@@ -1522,6 +1524,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             element.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 

@@ -2,15 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
 {
     public class SearchForVirtualItemEventArgs : EventArgs
     {
-        public SearchForVirtualItemEventArgs(bool isTextSearch, bool isPrefixSearch, bool includeSubItemsInSearch, string text, Point startingPoint, SearchDirectionHint direction, int startIndex)
+        public SearchForVirtualItemEventArgs(
+            bool isTextSearch,
+            bool isPrefixSearch,
+            bool includeSubItemsInSearch,
+            string? text,
+            Point startingPoint,
+            SearchDirectionHint direction,
+            int startIndex)
         {
             IsTextSearch = isTextSearch;
             IsPrefixSearch = isPrefixSearch;
@@ -29,7 +34,7 @@ namespace System.Windows.Forms
 
         public int Index { get; set; } = -1;
 
-        public string Text { get; }
+        public string? Text { get; }
 
         public Point StartingPoint { get; }
 

@@ -33,7 +33,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ///  Should always match the TargetFramework in the .csproj
         /// </summary>
         private static string TargetFramework
-            => "netcoreapp5.0";
+            => "net6.0";
 
         /// <summary>
         ///  Get the output exe path for a specified project.
@@ -124,6 +124,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             catch (Exception)
             {
             }
+
             process.WaitForExit(timeout);
             return process.ExitCode;
         }
@@ -234,8 +235,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
                     var ret = Path.Combine(currentDirectory, seek);
                     return ret;
                 }
+
                 currentDirectory = Directory.GetParent(currentDirectory).FullName;
             }
+
             throw new DirectoryNotFoundException($"No {seek} folder was found among siblings of subfolders of {codeBasePath}.");
         }
 

@@ -53,8 +53,6 @@ namespace System.Windows.Forms
         private EventHandler _recreateHandler;
         private EventHandler _changeHandler;
 
-        private bool _inAddRange;
-
         /// <summary>
         ///  Creates a new ImageList Control with a default image size of 16x16
         ///  pixels
@@ -68,6 +66,7 @@ namespace System.Windows.Forms
                     s_maxImageWidth = DpiHelper.LogicalToDeviceUnitsX(MaxDimension);
                     s_maxImageHeight = DpiHelper.LogicalToDeviceUnitsY(MaxDimension);
                 }
+
                 s_isScalingInitialized = true;
             }
         }
@@ -96,17 +95,7 @@ namespace System.Windows.Forms
             get => _colorDepth;
             set
             {
-                // ColorDepth is not conitguous - list the members instead.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                                                     (int)value,
-                                                    (int)ColorDepth.Depth4Bit,
-                                                    (int)ColorDepth.Depth8Bit,
-                                                    (int)ColorDepth.Depth16Bit,
-                                                    (int)ColorDepth.Depth24Bit,
-                                                    (int)ColorDepth.Depth32Bit))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ColorDepth));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_colorDepth == value)
                 {
@@ -138,19 +127,9 @@ namespace System.Windows.Forms
                 {
                     CreateHandle();
                 }
+
                 return _nativeImageList.Handle;
             }
-        }
-
-        internal IntPtr CreateUniqueHandle()
-        {
-            if (_nativeImageList is null)
-            {
-                CreateHandle();
-            }
-
-            using var iml = _nativeImageList.Duplicate();
-            return iml.TransferOwnership();
         }
 
         /// <summary>
@@ -273,6 +252,10 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+#if DEBUG
+        internal bool IsDisposed { get; private set; }
+#endif
 
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
@@ -504,6 +487,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             _originals = null;
         }
 
@@ -546,6 +530,11 @@ namespace System.Windows.Forms
 
                 DestroyHandle();
             }
+
+#if DEBUG
+            // At this stage we've released all resources, and the component is essentially disposed
+            IsDisposed = true;
+#endif
 
             base.Dispose(disposing);
         }
@@ -623,6 +612,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             bool hasAlpha = false;
             unsafe
             {
@@ -642,6 +632,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
             Found:
                 return hasAlpha;
             }
@@ -703,6 +694,7 @@ namespace System.Windows.Forms
 
                             tmpBitmap.Dispose();
                         }
+
                         if (result != null && targetData != null)
                         {
                             result.UnlockBits(targetData);

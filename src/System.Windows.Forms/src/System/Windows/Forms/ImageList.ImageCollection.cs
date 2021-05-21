@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     {
         // Everything other than set_All, Add, and Clear will force handle creation.
         [Editor("System.Windows.Forms.Design.ImageCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
-        public sealed class ImageCollection : IList
+        public sealed partial class ImageCollection : IList
         {
             private readonly ImageList _owner;
             private readonly ArrayList _imageInfoCollection = new ArrayList();
@@ -28,6 +28,9 @@ namespace System.Windows.Forms
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
             private int _lastAccessedIndex = -1;
+
+            // Indicates whether images are added in a batch.
+            private bool _isBatchAdd;
 
             /// <summary>
             ///  Returns the keys in the image list - images without keys return String.Empty.
@@ -50,9 +53,11 @@ namespace System.Windows.Forms
                             keysCollection.Add(string.Empty);
                         }
                     }
+
                     return keysCollection;
                 }
             }
+
             internal ImageCollection(ImageList owner)
             {
                 _owner = owner;
@@ -96,6 +101,7 @@ namespace System.Windows.Forms
                                 count += original._nImages;
                             }
                         }
+
                         return count;
                     }
                 }
@@ -150,7 +156,6 @@ namespace System.Windows.Forms
                     {
                         // Since there's no ImageList_ReplaceMasked, we need to generate
                         // a transparent bitmap
-                        Bitmap source = bitmap;
                         bitmap = (Bitmap)bitmap.Clone();
                         bitmap.MakeTransparent(_owner.TransparentColor);
                         ownsImage = true;
@@ -196,7 +201,7 @@ namespace System.Windows.Forms
                         throw new ArgumentException(SR.ImageListBadImage, nameof(value));
                     }
 
-                    this[index] = (Image)value;
+                    this[index] = image;
                 }
             }
 
@@ -346,6 +351,7 @@ namespace System.Windows.Forms
                     {
                         index = _owner._originals.Add(original);
                     }
+
                     if (_owner.HandleCreated)
                     {
                         index = _owner.AddIconToHandle(original, (Icon)original._image);
@@ -373,7 +379,7 @@ namespace System.Windows.Forms
                     _imageInfoCollection.Add(imageInfo);
                 }
 
-                if (!_owner._inAddRange)
+                if (!_isBatchAdd)
                 {
                     _owner.OnChangeHandle(EventArgs.Empty);
                 }
@@ -388,13 +394,13 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(images));
                 }
 
-                _owner._inAddRange = true;
+                _isBatchAdd = true;
                 foreach (Image image in images)
                 {
                     Add(image);
                 }
 
-                _owner._inAddRange = false;
+                _isBatchAdd = false;
                 _owner.OnChangeHandle(EventArgs.Empty);
             }
 
@@ -555,6 +561,7 @@ namespace System.Windows.Forms
                 if (value is Image image)
                 {
                     Remove(image);
+
                     _owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
@@ -576,6 +583,7 @@ namespace System.Windows.Forms
                 if ((_imageInfoCollection != null) && (index >= 0 && index < _imageInfoCollection.Count))
                 {
                     _imageInfoCollection.RemoveAt(index);
+
                     _owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
@@ -608,11 +616,6 @@ namespace System.Windows.Forms
                 }
 
                 ((ImageInfo)_imageInfoCollection[index]).Name = name;
-            }
-
-            internal class ImageInfo
-            {
-                public string Name { get; set; }
             }
         }
     }

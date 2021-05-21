@@ -13,6 +13,8 @@ set DOTNET_MULTILEVEL_LOOKUP=0
 :: Put our local dotnet.exe on PATH first so Visual Studio knows which one to use
 set PATH=%DOTNET_ROOT%;%PATH%
 
+call restore.cmd
+
 if not exist "%DOTNET_ROOT%\dotnet.exe" (
     echo [ERROR] .NET Core has not yet been installed. Run `%~dp0restore.cmd` to install tools
     exit /b 1

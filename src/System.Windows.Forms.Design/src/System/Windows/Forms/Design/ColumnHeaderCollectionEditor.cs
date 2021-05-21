@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design
     internal class ColumnHeaderCollectionEditor : CollectionEditor
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.ImageCollectionEditor'/> class.
+        /// Initializes a new instance of the <see cref='ImageCollectionEditor'/> class.
         /// </summary>
         public ColumnHeaderCollectionEditor(Type type) : base(type)
         {
@@ -36,6 +36,7 @@ namespace System.Windows.Forms.Design
                 Array.Copy(value, 0, colHeaders, 0, value.Length);
                 list.AddRange(colHeaders);
             }
+
             return editValue;
         }
 
@@ -58,6 +59,7 @@ namespace System.Windows.Forms.Design
                     itemsProp = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
                     cs.OnComponentChanging(Context.Instance, itemsProp);
                 }
+
                 listview.Columns.Remove(column);
 
                 if (cs != null && itemsProp != null)

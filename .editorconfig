@@ -7,6 +7,7 @@ root = true
 # A newline ending every file
 # Use 4 spaces as indentation
 [*]
+guidelines = 120 1px dotted 504CFF00, 150 1px dotted 50FF6A00
 indent_style = space
 indent_size = 4
 
@@ -72,6 +73,10 @@ dotnet_style_null_propagation = true:suggestion
 
 # C# files
 [*.cs]
+
+# .NET diagnostic
+dotnet_diagnostic.RS0041.severity = none
+
 # New line preferences
 csharp_new_line_before_open_brace = all
 csharp_new_line_before_else = true
@@ -90,7 +95,7 @@ csharp_indent_labels = one_less_than_current
 
 # only use var when it's obvious what the variable type is
 csharp_style_var_for_built_in_types = false:none
-csharp_style_var_when_type_is_apparent = false:none
+csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_var_elsewhere = false:suggestion
 
 
@@ -177,7 +182,3 @@ end_of_line = lf
 
 [*.{cmd,bat}]
 end_of_line = crlf
-
-
-# .NET diagnostic
-dotnet_diagnostic.RS0041.severity = none

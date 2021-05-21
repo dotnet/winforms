@@ -89,10 +89,7 @@ namespace System.Windows.Forms
             get => GetAutoSizeMode();
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
@@ -106,6 +103,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -191,10 +189,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_flatStyle != value)
                 {
@@ -262,6 +257,7 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
                     }
+
                     base.Text = value;
                 }
                 finally
@@ -271,6 +267,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
                     }
                 }
+
                 Invalidate(true);
             }
         }
@@ -631,8 +628,10 @@ namespace System.Windows.Forms
                 SelectNextControl(null, true, true, true, false);
                 return true;
             }
+
             return false;
         }
+
         protected override void ScaleControl(SizeF factor, BoundsSpecified specified)
         {
             if (factor.Width != 1F && factor.Height != 1F)
@@ -643,6 +642,7 @@ namespace System.Windows.Forms
                 _fontHeight = -1;
                 _cachedFont = null;
             }
+
             base.ScaleControl(factor, specified);
         }
 
@@ -709,6 +709,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = IntPtr.Zero;
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

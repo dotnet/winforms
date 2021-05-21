@@ -9,7 +9,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Provides a design-time editor for specifying the <see cref='System.Windows.Forms.Control.Anchor' />
+    ///  Provides a design-time editor for specifying the <see cref='Control.Anchor' />
     ///  property.
     /// </summary>
     [CLSCompliant(false)]
@@ -23,6 +23,7 @@ namespace System.Windows.Forms.Design
             {
                 return value;
             }
+
             if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
             {
                 return value;
@@ -171,6 +172,7 @@ namespace System.Windows.Forms.Design
                     right
                 });
             }
+
             protected override void OnGotFocus(EventArgs e)
             {
                 base.OnGotFocus(e);

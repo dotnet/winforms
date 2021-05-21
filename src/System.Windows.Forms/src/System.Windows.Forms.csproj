@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms</AssemblyName>
@@ -12,6 +12,16 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\System\Windows\Forms\XPThemes.manifest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.PrivateSourceGenerators\src\System.Windows.Forms.PrivateSourceGenerators.csproj" 
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
@@ -628,5 +638,59 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\ToolStrip\BlankToolstrip.ico">
       <LogicalName>System.Windows.Forms.blank</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\XPThemes.manifest">
+      <LogicalName>System.Windows.Forms.XPThemes.manifest</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="System\Windows\Forms\ComboBox.ChildAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ObjectCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.FlatComboAdapter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.AutoCompleteDropDownFinder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ACNativeWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildDropDownButtonUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildTextUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildListUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildEditUiaProvider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxItemAccessibleObjectCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxItemAccessibleObject.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ItemComparer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="System\Windows\Forms\ComboBox.ComboBoxChildNativeWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('comctl32.dll')">
+    <None Update="comctl32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

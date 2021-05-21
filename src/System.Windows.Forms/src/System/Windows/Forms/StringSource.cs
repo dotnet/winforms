@@ -34,10 +34,11 @@ namespace System.Windows.Forms
         {
             Array.Clear(strings, 0, size);
 
-            if (strings != null)
+            if (strings is not null)
             {
                 this.strings = strings;
             }
+
             current = 0;
             size = (strings is null) ? 0 : strings.Length;
 
@@ -66,6 +67,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (!_autoCompleteObject2.SetOptions(options).Succeeded())
             {
                 return false;
@@ -78,7 +80,7 @@ namespace System.Windows.Forms
 
         public void ReleaseAutoComplete()
         {
-            if (_autoCompleteObject2 != null)
+            if (_autoCompleteObject2 is not null)
             {
                 Marshal.ReleaseComObject(_autoCompleteObject2);
                 _autoCompleteObject2 = null;
@@ -89,10 +91,11 @@ namespace System.Windows.Forms
         {
             Array.Clear(strings, 0, size);
 
-            if (strings != null)
+            if (strings is not null)
             {
                 strings = newSource;
             }
+
             current = 0;
             size = (strings is null) ? 0 : strings.Length;
         }
@@ -110,6 +113,7 @@ namespace System.Windows.Forms
             {
                 return (int)HRESULT.E_INVALIDARG;
             }
+
             int fetched = 0;
 
             while (current < size && celt > 0)
@@ -124,6 +128,7 @@ namespace System.Windows.Forms
             {
                 Marshal.WriteInt32(pceltFetched, fetched);
             }
+
             return celt == 0 ? (int)HRESULT.S_OK : (int)HRESULT.S_FALSE;
         }
 
@@ -139,6 +144,7 @@ namespace System.Windows.Forms
             {
                 return (int)HRESULT.S_FALSE;
             }
+
             return (int)HRESULT.S_OK;
         }
 

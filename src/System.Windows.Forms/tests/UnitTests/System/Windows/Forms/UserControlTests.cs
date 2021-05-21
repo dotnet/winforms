@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -328,7 +328,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -434,7 +435,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             try
             {
@@ -532,7 +534,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -604,7 +607,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -846,6 +850,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.TextChanged += handler;
 
             // Set different.

@@ -5,12 +5,12 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.IntegrationTests.Common;
-using System.Windows.Forms;
-using WFCTestLib.Util;
-using WFCTestLib.Log;
-using ReflectTools;
 using System.Threading;
+using System.Windows.Forms;
+using System.Windows.Forms.IntegrationTests.Common;
+using ReflectTools;
+using WFCTestLib.Log;
+using WFCTestLib.Util;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -76,6 +76,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                     return new ScenarioResult(false, $"Failed to set ContentAlignment: {value}");
                 }
             }
+
             return ScenarioResult.Pass;
         }
 
@@ -96,6 +97,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                     return new ScenarioResult(false, $"Failed to set ContentAlignment: {value}");
                 }
             }
+
             return ScenarioResult.Pass;
         }
 
@@ -119,6 +121,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 p.log.WriteLine("exception was caught: " + e.Message);
                 return new ScenarioResult(false, "FAILED: wrong exception was thrown", p.log);
             }
+
             return new ScenarioResult(false, "Failed to throw exception on -1 text alignment", p.log);
         }
     }

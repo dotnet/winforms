@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Representaion of one row item in the PropertyGrid. These items represent the
+    ///  Representation of one row item in the PropertyGrid. These items represent the
     ///  hierarchy of the grid's "tree-like" view and can be used to get information about
     ///  the grid's state and contents.
     ///  These objects should not be cached because they represent a snapshot of the
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Retrieves the child GridItems, if any, of this GridItem
@@ -41,12 +39,12 @@ namespace System.Windows.Forms
         ///  PropertyName. For GridItemType.Property GridItems, retrieve the PropertyDescriptor
         ///  and check its Name property.
         /// </summary>
-        public abstract string Label { get; }
+        public abstract string? Label { get; }
 
         /// <summary>
         ///  Retrieves parent GridItem of this GridItem, if any.
         /// </summary>
-        public abstract GridItem Parent { get; }
+        public abstract GridItem? Parent { get; }
 
         /// <summary>
         ///  If this item is a GridItemType.Property GridItem, this retreives the
@@ -54,13 +52,13 @@ namespace System.Windows.Forms
         ///  This can be used to retrieve infomration such as property Type, Name, or
         ///  TypeConverter.
         /// </summary>
-        public abstract PropertyDescriptor PropertyDescriptor { get; }
+        public abstract PropertyDescriptor? PropertyDescriptor { get; }
 
         /// <summary>
         ///  Retrieves the current Value of this grid Item. This may be null.
         /// </summary>
         // We don't do set because of the value class semantics, etc.
-        public abstract object Value { get; }
+        public abstract object? Value { get; }
 
         /// <summary>
         ///  Retreives whether the given property is expandable.

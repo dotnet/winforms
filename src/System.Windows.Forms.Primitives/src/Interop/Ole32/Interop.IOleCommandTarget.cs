@@ -23,7 +23,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT Exec(
-                Guid *pguidCmdGroup,
+                Guid* pguidCmdGroup,
                 uint nCmdID,
                 uint nCmdexecopt,
                 IntPtr pvaIn,

@@ -160,10 +160,7 @@ namespace System.Windows.Forms
             get => _autoScaleMode;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoScaleMode.None, (int)AutoScaleMode.Inherit))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoScaleMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 bool scalingNeeded = false;
                 if (value != _autoScaleMode)
@@ -326,6 +323,7 @@ namespace System.Windows.Forms
                                 // this DPI value comes from the primary monitor.
                                 _currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
                             }
+
                             break;
 
                         default:
@@ -349,10 +347,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     return ParentInternal.FindForm();
                 }
+
                 if (this is Form)
                 {
                     return null;
@@ -384,14 +383,15 @@ namespace System.Windows.Forms
             bool updateContainerActiveControl = false;
             ContainerControl cc = null;
             Control parent = ParentInternal;
-            if (parent != null)
+            if (parent is not null)
             {
                 cc = (parent.GetContainerControl()) as ContainerControl;
-                if (cc != null)
+                if (cc is not null)
                 {
                     updateContainerActiveControl = (cc.ActiveControl != this);
                 }
             }
+
             if (control != _activeControl || updateContainerActiveControl)
             {
                 if (updateContainerActiveControl)
@@ -422,13 +422,14 @@ namespace System.Windows.Forms
             do
             {
                 ctl = GetNextControl(ctl, true);
-                if (ctl != null && ctl.CanSelect && ctl.TabStop)
+                if (ctl is not null && ctl.CanSelect && ctl.TabStop)
                 {
                     break;
                 }
-            } while (ctl != null);
+            }
+            while (ctl is not null);
 
-            return ctl != null;
+            return ctl is not null;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -448,7 +449,7 @@ namespace System.Windows.Forms
         internal virtual void AfterControlRemoved(Control control, Control oldParent)
         {
             ContainerControl cc;
-            Debug.Assert(control != null);
+            Debug.Assert(control is not null);
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::AfterControlRemoved(" + control.Name + ") - " + Name);
             if (control == _activeControl || control.Contains(_activeControl))
             {
@@ -468,15 +469,15 @@ namespace System.Windows.Forms
                     SetActiveControl(null);
                 }
             }
-            else if (_activeControl is null && ParentInternal != null)
+            else if (_activeControl is null && ParentInternal is not null)
             {
                 // The last control of an active container was removed. Focus needs to be given to the next
                 // control in the Form.
                 cc = ParentInternal.GetContainerControl() as ContainerControl;
-                if (cc != null && cc.ActiveControl == this)
+                if (cc is not null && cc.ActiveControl == this)
                 {
                     Form f = FindForm();
-                    if (f != null)
+                    if (f is not null)
                     {
                         f.SelectNextControl(this, true, true, true, true);
                     }
@@ -488,7 +489,7 @@ namespace System.Windows.Forms
             // container potentially, but the unvalidatedControl of all its container parents, up the chain, needs to
             // now point to the old parent of the disappearing control.
             cc = this;
-            while (cc != null)
+            while (cc is not null)
             {
                 Control parent = cc.ParentInternal;
                 if (parent is null)
@@ -499,8 +500,9 @@ namespace System.Windows.Forms
                 {
                     cc = parent.GetContainerControl() as ContainerControl;
                 }
-                if (cc != null &&
-                    cc._unvalidatedControl != null &&
+
+                if (cc is not null &&
+                    cc._unvalidatedControl is not null &&
                     (cc._unvalidatedControl == control || control.Contains(cc._unvalidatedControl)))
                 {
                     cc._unvalidatedControl = oldParent;
@@ -516,9 +518,9 @@ namespace System.Windows.Forms
         private bool AssignActiveControlInternal(Control value)
         {
 #if DEBUG
-            if (value is null || (value != null && value.ParentInternal != null && !value.ParentInternal.IsContainerControl))
+            if (value is null || (value is not null && value.ParentInternal is not null && !value.ParentInternal.IsContainerControl))
             {
-                Debug.Assert(value is null || (value.ParentInternal != null && this == value.ParentInternal.GetContainerControl()));
+                Debug.Assert(value is null || (value.ParentInternal is not null && this == value.ParentInternal.GetContainerControl()));
             }
 #endif
 
@@ -527,7 +529,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.BecomingActiveControl = true;
                     }
@@ -537,7 +539,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.BecomingActiveControl = false;
                     }
@@ -546,7 +548,7 @@ namespace System.Windows.Forms
                 if (_activeControl == value)
                 {
                     Form form = FindForm();
-                    if (form != null)
+                    if (form is not null)
                     {
                         form.UpdateDefaultButton();
                     }
@@ -634,13 +636,13 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::FocusActiveControlInternal() - " + Name);
 #if DEBUG
             // Things really get ugly if you try to pop up an assert dialog here
-            if (_activeControl != null && !Contains(_activeControl))
+            if (_activeControl is not null && !Contains(_activeControl))
             {
                 Debug.WriteLine("ActiveControl is not a child of this ContainerControl");
             }
 #endif
 
-            if (_activeControl != null && _activeControl.Visible)
+            if (_activeControl is not null && _activeControl.Visible)
             {
                 // Avoid focus loops, especially with ComboBoxes.
                 IntPtr focusHandle = User32.GetFocus();
@@ -653,10 +655,10 @@ namespace System.Windows.Forms
             {
                 // Determine and focus closest visible parent
                 ContainerControl cc = this;
-                while (cc != null && !cc.Visible)
+                while (cc is not null && !cc.Visible)
                 {
                     Control parent = cc.ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         cc = parent.GetContainerControl() as ContainerControl;
                     }
@@ -666,7 +668,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (cc != null && cc.Visible)
+                if (cc is not null && cc.Visible)
                 {
                     User32.SetFocus(new HandleRef(cc, cc.Handle));
                 }
@@ -782,6 +784,7 @@ namespace System.Windows.Forms
                 {
                     SelectNextControl(null, true, true, true, false);
                 }
+
                 InnerMostActiveContainerControl.FocusActiveControlInternal();
             }
         }
@@ -826,10 +829,11 @@ namespace System.Windows.Forms
         {
             base.OnCreateControl();
 
-            if (Properties.GetObject(s_propAxContainer) != null)
+            if (Properties.GetObject(s_propAxContainer) is not null)
             {
                 AxContainerFormCreated();
             }
+
             OnBindingContextChanged(EventArgs.Empty);
         }
 
@@ -966,6 +970,7 @@ namespace System.Windows.Forms
                     _state[s_stateScalingNeededOnLayout] = false;
                     EnableRequiredScaling(this, enable: false);
                 }
+
                 _state[s_stateParentChanged] = false;
 
                 if (suspended)
@@ -1066,7 +1071,7 @@ namespace System.Windows.Forms
                     // scaling occur.
                     SizeF ourExternalContainerFactor = ourExcludedFactor;
 
-                    if (!excludedFactor.IsEmpty && ParentInternal != null)
+                    if (!excludedFactor.IsEmpty && ParentInternal is not null)
                     {
                         ourExternalContainerFactor = SizeF.Empty;
 
@@ -1103,7 +1108,7 @@ namespace System.Windows.Forms
         private bool ProcessArrowKey(bool forward)
         {
             Control group = this;
-            if (_activeControl != null)
+            if (_activeControl is not null)
             {
                 group = _activeControl.ParentInternal;
             }
@@ -1179,6 +1184,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             if (ParentInternal is null)
             {
                 // Unfortunately, we have to stick this here for the case where we're hosted without
@@ -1230,7 +1236,7 @@ namespace System.Windows.Forms
                 bool wrapped = false;
 
                 Control ctl = start;
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Check starting at '" + ((start != null) ? start.ToString() : "<null>") + "'");
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Check starting at '" + ((start is not null) ? start.ToString() : "<null>") + "'");
 
                 do
                 {
@@ -1244,7 +1250,7 @@ namespace System.Windows.Forms
 #endif
                     ctl = GetNextControl(ctl, true);
 
-                    if (ctl != null)
+                    if (ctl is not null)
                     {
 #if DEBUG
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "  ...checking for mnemonics on " + ctl.ToString());
@@ -1273,7 +1279,8 @@ namespace System.Windows.Forms
 
                         wrapped = true;
                     }
-                } while (ctl != start);
+                }
+                while (ctl != start);
             }
             finally
             {
@@ -1295,7 +1302,7 @@ namespace System.Windows.Forms
         private ScrollableControl FindScrollableParent(Control ctl)
         {
             Control current = ctl.ParentInternal;
-            while (current != null && !(current is ScrollableControl))
+            while (current is not null && !(current is ScrollableControl))
             {
                 current = current.ParentInternal;
             }
@@ -1306,11 +1313,11 @@ namespace System.Windows.Forms
         private void ScrollActiveControlIntoView()
         {
             Control last = _activeControl;
-            if (last != null)
+            if (last is not null)
             {
                 ScrollableControl scrollParent = FindScrollableParent(last);
 
-                while (scrollParent != null)
+                while (scrollParent is not null)
                 {
                     scrollParent.ScrollControlIntoView(_activeControl);
                     last = scrollParent;
@@ -1322,15 +1329,16 @@ namespace System.Windows.Forms
         protected override void Select(bool directed, bool forward)
         {
             bool correctParentActiveControl = true;
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 IContainerControl c = ParentInternal.GetContainerControl();
-                if (c != null)
+                if (c is not null)
                 {
                     c.ActiveControl = this;
                     correctParentActiveControl = (c.ActiveControl == this);
                 }
             }
+
             if (directed && correctParentActiveControl)
             {
                 SelectNextControl(null, forward, tabStopOnly: true, nested: true, wrap: false);
@@ -1344,9 +1352,9 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::SetActiveControl(" + (value is null ? "null" : value.Name) + ") - " + Name);
 
-            if (_activeControl != value || (value != null && !value.Focused))
+            if (_activeControl != value || (value is not null && !value.Focused))
             {
-                if (value != null && !Contains(value))
+                if (value is not null && !Contains(value))
                 {
                     throw new ArgumentException(SR.CannotActivateControl, nameof(value));
                 }
@@ -1354,11 +1362,12 @@ namespace System.Windows.Forms
                 bool ret;
                 ContainerControl cc = this;
 
-                if (value != null)
+                if (value is not null)
                 {
                     cc = (value.ParentInternal.GetContainerControl()) as ContainerControl;
                 }
-                if (cc != null)
+
+                if (cc is not null)
                 {
                     // Call to the recursive function that corrects the chain of active controls
                     ret = cc.ActivateControl(value, false);
@@ -1368,14 +1377,14 @@ namespace System.Windows.Forms
                     ret = AssignActiveControlInternal(value);
                 }
 
-                if (cc != null && ret)
+                if (cc is not null && ret)
                 {
                     ContainerControl ccAncestor = this;
-                    while (ccAncestor.ParentInternal != null &&
+                    while (ccAncestor.ParentInternal is not null &&
                            ccAncestor.ParentInternal.GetContainerControl() is ContainerControl)
                     {
                         ccAncestor = ccAncestor.ParentInternal.GetContainerControl() as ContainerControl;
-                        Debug.Assert(ccAncestor != null);
+                        Debug.Assert(ccAncestor is not null);
                     }
 
                     if (ccAncestor.ContainsFocus &&
@@ -1485,7 +1494,7 @@ namespace System.Windows.Forms
                     ContainerControl innerMostFCC = InnerMostFocusedContainerControl;
                     Control stopControl = null;
 
-                    if (innerMostFCC._focusedControl != null)
+                    if (innerMostFCC._focusedControl is not null)
                     {
                         pathControl = innerMostFCC._focusedControl;
                         stopControl = innerMostFCC;
@@ -1493,7 +1502,7 @@ namespace System.Windows.Forms
                         if (innerMostFCC != this)
                         {
                             innerMostFCC._focusedControl = null;
-                            if (!(innerMostFCC.ParentInternal != null && innerMostFCC.ParentInternal is MdiClient))
+                            if (!(innerMostFCC.ParentInternal is not null && innerMostFCC.ParentInternal is MdiClient))
                             {
                                 // Don't reset the active control of a MDIChild that loses the focus
                                 innerMostFCC._activeControl = null;
@@ -1504,11 +1513,11 @@ namespace System.Windows.Forms
                     {
                         pathControl = innerMostFCC;
                         // innerMostFCC.ParentInternal can be null when the ActiveControl is deleted.
-                        if (innerMostFCC.ParentInternal != null)
+                        if (innerMostFCC.ParentInternal is not null)
                         {
                             ContainerControl cc = (innerMostFCC.ParentInternal.GetContainerControl()) as ContainerControl;
                             stopControl = cc;
-                            if (cc != null && cc != this)
+                            if (cc is not null && cc != this)
                             {
                                 cc._focusedControl = null;
                                 cc._activeControl = null;
@@ -1520,7 +1529,7 @@ namespace System.Windows.Forms
                     {
                         Control leaveControl = pathControl;
 
-                        if (pathControl != null)
+                        if (pathControl is not null)
                         {
                             pathControl = pathControl.ParentInternal;
                         }
@@ -1530,7 +1539,7 @@ namespace System.Windows.Forms
                             pathControl = null;
                         }
 
-                        if (leaveControl != null)
+                        if (leaveControl is not null)
                         {
                             if (NativeWindow.WndProcShouldBeDebuggable)
                             {
@@ -1549,20 +1558,20 @@ namespace System.Windows.Forms
                             }
                         }
                     }
-                    while (pathControl != null &&
+                    while (pathControl is not null &&
                            pathControl != stopControl &&
                            !pathControl.IsDescendant(_activeControl));
                 }
             }
 
 #if DEBUG
-            if (_activeControl is null || (_activeControl != null && _activeControl.ParentInternal != null && !_activeControl.ParentInternal.IsContainerControl))
+            if (_activeControl is null || (_activeControl is not null && _activeControl.ParentInternal is not null && !_activeControl.ParentInternal.IsContainerControl))
             {
                 Debug.Assert(_activeControl is null || _activeControl.ParentInternal.GetContainerControl() == this);
             }
 #endif
             _focusedControl = _activeControl;
-            if (_activeControl != null)
+            if (_activeControl is not null)
             {
                 EnterValidation(_activeControl);
             }
@@ -1580,7 +1589,7 @@ namespace System.Windows.Forms
             }
 
             // Don't change the existing unvalidated control
-            if (_unvalidatedControl != null)
+            if (_unvalidatedControl is not null)
             {
                 return;
             }
@@ -1607,11 +1616,11 @@ namespace System.Windows.Forms
             {
                 ContainerControl container = _unvalidatedControl as ContainerControl;
 
-                if (container._unvalidatedControl != null && container._unvalidatedControl.ShouldAutoValidate)
+                if (container._unvalidatedControl is not null && container._unvalidatedControl.ShouldAutoValidate)
                 {
                     _unvalidatedControl = container._unvalidatedControl;
                 }
-                else if (container._activeControl != null && container._activeControl.ShouldAutoValidate)
+                else if (container._activeControl is not null && container._activeControl.ShouldAutoValidate)
                 {
                     _unvalidatedControl = container._activeControl;
                 }
@@ -1651,7 +1660,7 @@ namespace System.Windows.Forms
 
             // Find common ancestor of entered control and unvalidated control
             Control commonAncestor = enterControl;
-            while (commonAncestor != null && !commonAncestor.IsDescendant(_unvalidatedControl))
+            while (commonAncestor is not null && !commonAncestor.IsDescendant(_unvalidatedControl))
             {
                 commonAncestor = commonAncestor.ParentInternal;
             }
@@ -1690,7 +1699,7 @@ namespace System.Windows.Forms
             validatedControlAllowsFocusChange = false;
 
             if (AutoValidate == AutoValidate.EnablePreventFocusChange ||
-                (_activeControl != null && _activeControl.CausesValidation))
+                (_activeControl is not null && _activeControl.CausesValidation))
             {
                 if (_unvalidatedControl is null)
                 {
@@ -1713,7 +1722,7 @@ namespace System.Windows.Forms
 
                 Control controlToValidate = _unvalidatedControl ?? _focusedControl;
 
-                if (controlToValidate != null)
+                if (controlToValidate is not null)
                 {
                     // Get the effective AutoValidate mode for unvalidated control (based on its container control)
                     AutoValidate autoValidateMode = Control.GetAutoValidateForControl(controlToValidate);
@@ -1792,7 +1801,7 @@ namespace System.Windows.Forms
 
             Control currentActiveControl = _activeControl;
             Control currentValidatingControl = _unvalidatedControl;
-            if (currentActiveControl != null)
+            if (currentActiveControl is not null)
             {
                 currentActiveControl.ValidationCancelled = false;
                 if (currentActiveControl is ContainerControl currentActiveContainerControl)
@@ -1800,9 +1809,10 @@ namespace System.Windows.Forms
                     currentActiveContainerControl.ResetValidationFlag();
                 }
             }
+
             try
             {
-                while (currentValidatingControl != null && currentValidatingControl != ancestorControl)
+                while (currentValidatingControl is not null && currentValidatingControl != ancestorControl)
                 {
                     try
                     {
@@ -1824,16 +1834,17 @@ namespace System.Windows.Forms
 
                 if (cancel && preventFocusChangeOnError)
                 {
-                    if (_unvalidatedControl is null && currentValidatingControl != null &&
+                    if (_unvalidatedControl is null && currentValidatingControl is not null &&
                         ancestorControl.IsDescendant(currentValidatingControl))
                     {
                         _unvalidatedControl = currentValidatingControl;
                     }
+
                     // This bit 'marks' the control that was going to get the focus, so that it will ignore any pending
                     // mouse or key events. Otherwise it would still perform its default 'click' action or whatever.
                     if (currentActiveControl == _activeControl)
                     {
-                        if (currentActiveControl != null)
+                        if (currentActiveControl is not null)
                         {
                             CancelEventArgs ev = new CancelEventArgs
                             {
@@ -1843,10 +1854,11 @@ namespace System.Windows.Forms
                             if (currentActiveControl is ContainerControl)
                             {
                                 ContainerControl currentActiveContainerControl = currentActiveControl as ContainerControl;
-                                if (currentActiveContainerControl._focusedControl != null)
+                                if (currentActiveContainerControl._focusedControl is not null)
                                 {
                                     currentActiveContainerControl._focusedControl.ValidationCancelled = true;
                                 }
+
                                 currentActiveContainerControl.ResetActiveAndFocusedControlsRecursive();
                             }
                         }
@@ -1899,7 +1911,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::WmSetFocus() - " + Name);
             if (!HostedInWin32DialogManager)
             {
-                if (ActiveControl != null)
+                if (ActiveControl is not null)
                 {
                     WmImeSetFocus();
                     // Do not raise GotFocus event since the focus is given to the visible ActiveControl
@@ -1912,10 +1924,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         IContainerControl c = ParentInternal.GetContainerControl();
-                        if (c != null)
+                        if (c is not null)
                         {
                             bool succeeded = false;
 
@@ -1927,6 +1939,7 @@ namespace System.Windows.Forms
                             {
                                 succeeded = c.ActivateControl(this);
                             }
+
                             if (!succeeded)
                             {
                                 return;

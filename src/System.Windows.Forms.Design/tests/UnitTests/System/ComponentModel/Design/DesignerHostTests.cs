@@ -1666,8 +1666,8 @@ namespace System.ComponentModel.Design.Tests
         {
             var surface = new SubDesignSurface();
             IDesignerLoaderHost2 host = surface.Host;
-            Assert.Throws<Exception>(() => host.Container.Add(component));
-            Assert.Throws<Exception>(() => host.Container.Add(component, "name"));
+            Assert.Throws<NotImplementedException>(() => host.Container.Add(component));
+            Assert.Throws<NotImplementedException>(() => host.Container.Add(component, "name"));
             Assert.Empty(host.Container.Components);
         }
 
@@ -1724,6 +1724,7 @@ namespace System.ComponentModel.Design.Tests
             {
                 threwCheckoutException = true;
             }
+
             Assert.True(threwCheckoutException);
             Assert.Same(host.Container, component.Container);
             Assert.Empty(component.Site.Name);
@@ -2518,6 +2519,7 @@ namespace System.ComponentModel.Design.Tests
                 IDesignerHost oldDesigner = eventArgs.OldDesigner == s_placeholderHost ? host : eventArgs.OldDesigner;
                 actualEventArgs = new ActiveDesignerEventArgs(oldDesigner, newDesigner);
             }
+
             mockDesignerEventService.Raise(s => s.ActiveDesignerChanged += null, actualEventArgs);
             Assert.Equal(expectedActivatedCallCount, activatedCallCount);
             Assert.Equal(expectedDeactivatedCallCount, deactivatedCallCount);

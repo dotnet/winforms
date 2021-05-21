@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -34,16 +34,6 @@ namespace System.Windows.Forms
 
                     return AccessibleRole.Separator;
                 }
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-                {
-                    return UiaCore.UIA.SeparatorControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
             }
         }
     }

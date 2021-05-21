@@ -44,7 +44,7 @@ namespace System.Windows.Forms
         /// </returns>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance != null)
+            if (context is not null && context.Instance is not null)
             {
                 object instance = context.Instance;
 
@@ -53,33 +53,32 @@ namespace System.Windows.Forms
                 PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);
                 PropertyDescriptor listViewProp = listViewItemProps["ListView"];
 
-                if (listViewProp != null)
+                if (listViewProp is not null)
                 {
                     // Grab the ListView property off of the TreeNode.
                     object listViewInstance = listViewProp.GetValue(instance);
 
-                    if (listViewInstance != null)
+                    if (listViewInstance is not null)
                     {
                         // Get the ImageList property from the ListView and set it to be the currentImageList.
                         PropertyDescriptorCollection listViewProps = TypeDescriptor.GetProperties(listViewInstance);
                         PropertyDescriptor listViewImageListProperty = listViewProps["StateImageList"];
-                        if (listViewImageListProperty != null)
+                        if (listViewImageListProperty is not null)
                         {
                             imageList = (ImageList)listViewImageListProperty.GetValue(listViewInstance);
                         }
                     }
                 }
 
-                if (imageList != null)
+                if (imageList is not null)
                 {
                     // Create array to contain standard values
-                    //
                     object[] values;
                     int nImages = imageList.Images.Count;
                     if (IncludeNoneAsStandardValue)
                     {
                         values = new object[nImages + 1];
-                        values[nImages] = -1;
+                        values[nImages] = ImageList.Indexer.DefaultIndex;
                     }
                     else
                     {
@@ -87,7 +86,6 @@ namespace System.Windows.Forms
                     }
 
                     // Fill in the array
-                    //
                     for (int i = 0; i < nImages; i++)
                     {
                         values[i] = i;
@@ -96,9 +94,10 @@ namespace System.Windows.Forms
                     return new StandardValuesCollection(values);
                 }
             }
+
             if (IncludeNoneAsStandardValue)
             {
-                return new StandardValuesCollection(new object[] { -1 });
+                return new StandardValuesCollection(new object[] { ImageList.Indexer.DefaultIndex });
             }
             else
             {

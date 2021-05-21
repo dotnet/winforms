@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                     fetched++;
                 }
 
-                if (pceltFetched != null)
+                if (pceltFetched is not null)
                 {
                     *pceltFetched = fetched;
                 }
@@ -61,6 +61,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLine($"{i}: {_verbs[i].lVerb} {_verbs[i].lpszVerbName ?? string.Empty}");
                     }
+
                     Debug.Unindent();
                 }
 #endif

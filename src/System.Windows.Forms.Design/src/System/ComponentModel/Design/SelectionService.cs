@@ -70,6 +70,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             if (!_selection.Contains(sel))
             {
                 _selection.Add(sel);
@@ -97,6 +98,7 @@ namespace System.ComponentModel.Design
             {
                 return _provider.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -182,7 +184,7 @@ namespace System.ComponentModel.Design
         private void ApplicationIdle(object source, EventArgs args)
         {
             UpdateHelpKeyword(false);
-            Windows.Forms.Application.Idle -= new EventHandler(ApplicationIdle);
+            Application.Idle -= new EventHandler(ApplicationIdle);
         }
 
         /// <summary>
@@ -197,8 +199,9 @@ namespace System.ComponentModel.Design
                     // we don't have an help service YET, we need to wait for it...
                     // hook up to the application.idle event
                     // yes this is UGLY but we don't have a choice, vs is always returning a UserContext, so even if we manage to instanciate the HelpService beforehand and class pushcontext on it (trying to stack up help context in the helpservice to be flushed when we get the documentactivation event we just don't know if that's going to work or not... so we just wait...) :(((
-                    Windows.Forms.Application.Idle += new EventHandler(ApplicationIdle);
+                    Application.Idle += new EventHandler(ApplicationIdle);
                 }
+
                 return;
             }
 
@@ -209,6 +212,7 @@ namespace System.ComponentModel.Design
                 {
                     helpService.RemoveContextAttribute("Keyword", s);
                 }
+
                 _contextAttributes = null;
             }
 
@@ -228,6 +232,7 @@ namespace System.ComponentModel.Design
                     baseComponentSelected = true;
                 }
             }
+
             _contextAttributes = new string[_selection.Count];
 
             for (int i = 0; i < _selection.Count; i++)
@@ -239,6 +244,7 @@ namespace System.ComponentModel.Design
                 {
                     helpContext = contextAttr.HelpKeyword;
                 }
+
                 _contextAttributes[i] = helpContext;
             }
 
@@ -255,6 +261,7 @@ namespace System.ComponentModel.Design
             {
                 count--;
             }
+
             _contextKeyword = (short)Math.Min(count, s_selectionKeywords.Length - 1);
             helpService.AddContextAttribute("Selection", s_selectionKeywords[_contextKeyword], HelpKeywordType.FilterKeyword);
         }
@@ -280,8 +287,10 @@ namespace System.ComponentModel.Design
                 {
                     cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
                 }
+
                 _selection.Clear();
             }
+
             _statusCommandUI = null;
             _provider = null;
         }
@@ -313,12 +322,13 @@ namespace System.ComponentModel.Design
                 {
                     return _selection.Count;
                 }
+
                 return 0;
             }
         }
 
         /// <summary>
-        ///  Adds a <see cref='System.ComponentModel.Design.ISelectionService.SelectionChanged'/> event handler to the selection service.
+        ///  Adds a <see cref='ISelectionService.SelectionChanged'/> event handler to the selection service.
         /// </summary>
         event EventHandler ISelectionService.SelectionChanged
         {
@@ -344,6 +354,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             return (_selection != null && _selection.Contains(component));
         }
 
@@ -359,6 +370,7 @@ namespace System.ComponentModel.Design
                 _selection.CopyTo(selectedValues, 0);
                 return selectedValues;
             }
+
             return Array.Empty<object>();
         }
 
@@ -387,6 +399,7 @@ namespace System.ComponentModel.Design
             {
                 components = Array.Empty<object>();
             }
+
             // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifer keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)
             {
@@ -414,6 +427,7 @@ namespace System.ComponentModel.Design
                     {
                         throw new ArgumentNullException(nameof(components));
                     }
+
                     break;
                 }
             }
@@ -448,7 +462,7 @@ namespace System.ComponentModel.Design
                                     throw new ArgumentNullException(nameof(components));
                                 }
 
-                                if (object.ReferenceEquals(comp, item))
+                                if (ReferenceEquals(comp, item))
                                 {
                                     remove = false;
                                     break;
@@ -500,6 +514,7 @@ namespace System.ComponentModel.Design
                 {
                     _statusCommandUI.SetStatusInformation(Rectangle.Empty);
                 }
+
                 OnSelectionChanged();
             }
         }

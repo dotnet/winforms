@@ -20,8 +20,8 @@ namespace System.ComponentModel.Design.Serialization
     public sealed class CodeDomLocalizationProvider : IDisposable, IDesignerSerializationProvider
     {
         private IExtenderProviderService _providerService;
-        private CodeDomLocalizationModel _model;
-        private CultureInfo[] _supportedCultures;
+        private readonly CodeDomLocalizationModel _model;
+        private readonly CultureInfo[] _supportedCultures;
         private LanguageExtenders _extender;
         private Hashtable _memberSerializers;
         private Hashtable _nopMemberSerializers;
@@ -205,8 +205,7 @@ namespace System.ComponentModel.Design.Serialization
                 _nopMemberSerializers = new Hashtable();
             }
 
-            object newSerializer = null;
-
+            object newSerializer;
             if (model == CodeDomLocalizationModel.None)
             {
                 newSerializer = _nopMemberSerializers[currentSerializer];
@@ -260,10 +259,10 @@ namespace System.ComponentModel.Design.Serialization
         [ProvideProperty("Localizable", typeof(IComponent))]
         internal class LanguageExtenders : IExtenderProvider
         {
-            private IServiceProvider _serviceProvider;
-            private IDesignerHost _host;
+            private readonly IServiceProvider _serviceProvider;
+            private readonly IDesignerHost _host;
             private IComponent _lastRoot;
-            private TypeConverter.StandardValuesCollection _supportedCultures;
+            private readonly TypeConverter.StandardValuesCollection _supportedCultures;
             private bool _localizable;
             private CultureInfo _language;
             private CultureInfo _loadLanguage;
@@ -304,6 +303,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         _defaultLanguage = Application.CurrentCulture;
                     }
+
                     return _defaultLanguage;
                 }
             }
@@ -357,7 +357,7 @@ namespace System.ComponentModel.Design.Serialization
             [DesignOnly(true)]
             [TypeConverter(typeof(LanguageCultureInfoConverter))]
             [Category("Design")]
-            [SRDescriptionAttribute("LocalizationProviderLanguageDescr")]
+            [SRDescription("LocalizationProviderLanguageDescr")]
             public CultureInfo GetLanguage(IComponent o)
             {
                 CheckRoot();
@@ -390,7 +390,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             [DesignOnly(true)]
             [Category("Design")]
-            [SRDescriptionAttribute("LocalizationProviderLocalizableDescr")]
+            [SRDescription("LocalizationProviderLocalizableDescr")]
             public bool GetLocalizable(IComponent o)
             {
                 CheckRoot();

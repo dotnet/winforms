@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Drawing;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Drawing;
 using System.Globalization;
 using WinForms.Common.Tests;
 using Xunit;

@@ -5,9 +5,7 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
 
@@ -22,8 +20,9 @@ namespace System.Windows.Forms
     [Designer("System.Windows.Forms.Design.NotifyIconDesigner, " + AssemblyRef.SystemDesign)]
     [ToolboxItemFilter("System.Windows.Forms")]
     [SRDescription(nameof(SR.DescriptionNotifyIcon))]
-    public sealed class NotifyIcon : Component
+    public sealed partial class NotifyIcon : Component
     {
+        internal const int MaxTextSize = 127;
         private static readonly object EVENT_MOUSEDOWN = new object();
         private static readonly object EVENT_MOUSEMOVE = new object();
         private static readonly object EVENT_MOUSEUP = new object();
@@ -121,10 +120,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ToolTipIcon));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value != balloonTipIcon)
                 {
                     balloonTipIcon = value;
@@ -252,12 +248,13 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (value != null && !value.Equals(text))
+                if (value is not null && !value.Equals(text))
                 {
-                    if (value != null && value.Length > 63)
+                    if (value is not null && value.Length > MaxTextSize)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
+
                     text = value;
                     if (added)
                     {
@@ -401,7 +398,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (window != null)
+                if (window is not null)
                 {
                     icon = null;
                     Text = string.Empty;
@@ -416,12 +413,13 @@ namespace System.Windows.Forms
                 // This same post is done in ControlNativeWindow's finalize method, so if you change
                 // it, change it there too.
                 //
-                if (window != null && window.Handle != IntPtr.Zero)
+                if (window is not null && window.Handle != IntPtr.Zero)
                 {
                     User32.PostMessageW(window, User32.WM.CLOSE);
                     window.ReleaseHandle();
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -569,10 +567,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x3
-            if (!ClientUtils.IsEnumValid(tipIcon, (int)tipIcon, (int)ToolTipIcon.None, (int)ToolTipIcon.Error))
-            {
-                throw new InvalidEnumArgumentException(nameof(tipIcon), (int)tipIcon, typeof(ToolTipIcon));
-            }
+            SourceGenerated.EnumValidator.Validate(tipIcon, nameof(tipIcon));
 
             if (added)
             {
@@ -593,6 +588,7 @@ namespace System.Windows.Forms
                 {
                     window.CreateHandle(new CreateParams());
                 }
+
                 data.hWnd = window.Handle;
                 data.InfoTitle = tipTitle;
                 data.Info = tipText;
@@ -611,6 +607,7 @@ namespace System.Windows.Forms
                         data.dwInfoFlags = NIIF.NONE;
                         break;
                 }
+
                 Shell32.Shell_NotifyIconW(NIM.MODIFY, ref data);
             }
         }
@@ -620,7 +617,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu()
         {
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 User32.GetCursorPos(out Point pt);
 
@@ -665,16 +662,18 @@ namespace System.Windows.Forms
                         window.CreateHandle(new CreateParams());
                     }
                 }
+
                 data.hWnd = window.Handle;
-                if (icon != null)
+                if (icon is not null)
                 {
                     data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
                 }
+
                 data.uFlags |= NIF.TIP;
                 data.Tip = text;
 
-                if (showIconInTray && icon != null)
+                if (showIconInTray && icon is not null)
                 {
                     if (!added)
                     {
@@ -705,6 +704,7 @@ namespace System.Windows.Forms
                 OnMouseDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
                 doubleClick = true;
             }
+
             OnMouseDown(new MouseEventArgs(button, clicks, 0, 0, 0));
         }
 
@@ -728,6 +728,7 @@ namespace System.Windows.Forms
                 OnClick(new MouseEventArgs(button, 0, 0, 0, 0));
                 OnMouseClick(new MouseEventArgs(button, 0, 0, 0, 0));
             }
+
             doubleClick = false;
         }
 
@@ -772,10 +773,11 @@ namespace System.Windows.Forms
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
                         case (int)User32.WM.RBUTTONUP:
-                            if (contextMenuStrip != null)
+                            if (contextMenuStrip is not null)
                             {
                                 ShowContextMenu();
                             }
+
                             WmMouseUp(ref msg, MouseButtons.Right);
                             break;
                         case (int)NIN.BALLOONSHOW:
@@ -791,6 +793,7 @@ namespace System.Windows.Forms
                             OnBalloonTipClicked();
                             break;
                     }
+
                     break;
                 case User32.WM.COMMAND:
                     if (IntPtr.Zero == msg.LParam)
@@ -804,6 +807,7 @@ namespace System.Windows.Forms
                     {
                         window.DefWndProc(ref msg);
                     }
+
                     break;
 
                 case User32.WM.DESTROY:
@@ -820,69 +824,6 @@ namespace System.Windows.Forms
 
                     window.DefWndProc(ref msg);
                     break;
-            }
-        }
-
-        /// <summary>
-        ///  Defines a placeholder window that the NotifyIcon is attached to.
-        /// </summary>
-        private class NotifyIconNativeWindow : NativeWindow
-        {
-            internal NotifyIcon reference;
-            private GCHandle rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
-
-            /// <summary>
-            ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.
-            /// </summary>
-            internal NotifyIconNativeWindow(NotifyIcon component)
-            {
-                reference = component;
-            }
-
-            ~NotifyIconNativeWindow()
-            {
-                // This same post is done in Control's Dispose method, so if you change
-                // it, change it there too.
-                //
-                if (Handle != IntPtr.Zero)
-                {
-                    User32.PostMessageW(this, User32.WM.CLOSE);
-                }
-
-                // This releases the handle from our window proc, re-routing it back to
-                // the system.
-            }
-
-            public void LockReference(bool locked)
-            {
-                if (locked)
-                {
-                    if (!rootRef.IsAllocated)
-                    {
-                        rootRef = GCHandle.Alloc(reference, GCHandleType.Normal);
-                    }
-                }
-                else
-                {
-                    if (rootRef.IsAllocated)
-                    {
-                        rootRef.Free();
-                    }
-                }
-            }
-
-            protected override void OnThreadException(Exception e)
-            {
-                Application.OnThreadException(e);
-            }
-
-            /// <summary>
-            ///  Pass messages on to the NotifyIcon object's wndproc handler.
-            /// </summary>
-            protected override void WndProc(ref Message m)
-            {
-                Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
-                reference.WndProc(ref m);
             }
         }
     }

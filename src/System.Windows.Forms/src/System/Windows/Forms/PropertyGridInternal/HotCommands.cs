@@ -7,11 +7,10 @@
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Text;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class HotCommands : PropertyGrid.SnappableControl
+    internal partial class HotCommands : PropertyGrid.SnappableControl
     {
         private object component;
         private DesignerVerb[] verbs;
@@ -53,7 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new HotCommandsAccessibleObject(this, ownerGrid);
+            return new HotCommandsAccessibleObject(this, ownerPropertyGrid);
         }
 
         public override Rectangle DisplayRectangle
@@ -82,6 +81,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
                     Controls.Add(label);
                 }
+
                 return label;
             }
         }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return (component != null);
+                return (component is not null);
             }
         }
 
@@ -100,14 +100,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 int lineHeight = (int)(1.5 * Font.Height);
                 int verbCount = 0;
-                if (verbs != null)
+                if (verbs is not null)
                 {
                     verbCount = verbs.Length;
                 }
+
                 optimalHeight = verbCount * lineHeight + 8;
             }
+
             return optimalHeight;
         }
+
         public override int SnapHeightRequest(int request)
         {
             return request;
@@ -171,12 +174,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs)
         {
-            if (this.verbs != null)
+            if (this.verbs is not null)
             {
                 for (int i = 0; i < this.verbs.Length; i++)
                 {
                     this.verbs[i].CommandChanged -= new EventHandler(OnCommandChanged);
                 }
+
                 this.component = null;
                 this.verbs = null;
             }
@@ -201,6 +205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     Visible = true;
                 }
+
                 SetupLabel();
             }
 
@@ -225,6 +230,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         sb.Append(' ');
                         charLoc += 2;
                     }
+
                     string name = verbs[i].Text;
 
                     links[i] = new Point(charLoc, name.Length);
@@ -246,70 +252,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                         link.Enabled = false;
                     }
                 }
-            }
-        }
-    }
-
-    /// <summary>
-    ///  Represents the hot commands control accessible object.
-    /// </summary>
-    internal class HotCommandsAccessibleObject : Control.ControlAccessibleObject
-    {
-        private readonly PropertyGrid _parentPropertyGrid;
-
-        /// <summary>
-        ///  Initializes new instance of DocCommentAccessibleObject.
-        /// </summary>
-        /// <param name="owningHotCommands">The owning HotCommands control.</param>
-        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-        public HotCommandsAccessibleObject(HotCommands owningHotCommands, PropertyGrid parentPropertyGrid) : base(owningHotCommands)
-        {
-            _parentPropertyGrid = parentPropertyGrid;
-        }
-
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
-        {
-            if (_parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
-            {
-                UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                if (navigationTarget != null)
-                {
-                    return navigationTarget;
-                }
-            }
-
-            return base.FragmentNavigate(direction);
-        }
-
-        /// <summary>
-        ///  Request value of specified property from an element.
-        /// </summary>
-        /// <param name="propertyID">Identifier indicating the property to return</param>
-        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-        internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            => propertyID switch
-            {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
-                UiaCore.UIA.NamePropertyId => Name,
-                _ => base.GetPropertyValue(propertyID)
-            };
-
-        public override string Name
-        {
-            get
-            {
-                string name = Owner?.AccessibleName;
-                if (name != null)
-                {
-                    return name;
-                }
-
-                return _parentPropertyGrid?.AccessibilityObject.Name;
             }
         }
     }

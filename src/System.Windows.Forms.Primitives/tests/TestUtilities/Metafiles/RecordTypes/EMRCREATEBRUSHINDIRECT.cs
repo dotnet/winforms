@@ -17,8 +17,7 @@ namespace System.Windows.Forms.Metafiles
         public LOGBRUSH32 lb;
 
         public override string ToString()
-            => $@"[{nameof(EMRCREATEBRUSHINDIRECT)}] Index: {ihBrush} Style: {lb.lbStyle} Color: {
-                lb.lbColor.ToSystemColorString()}";
+            => $@"[{nameof(EMRCREATEBRUSHINDIRECT)}] Index: {ihBrush} Style: {lb.lbStyle} Color: {lb.lbColor.ToSystemColorString()}";
 
         // This structure is used exclusively in EMRCREATEBRUSHINDIRECT
         [StructLayout(LayoutKind.Sequential)]

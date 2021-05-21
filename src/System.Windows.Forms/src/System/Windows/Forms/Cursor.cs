@@ -149,6 +149,7 @@ namespace System.Windows.Forms
                 {
                     throw new ObjectDisposedException(string.Format(SR.ObjectDisposed, GetType().Name));
                 }
+
                 return _handle;
             }
         }
@@ -232,6 +233,7 @@ namespace System.Windows.Forms
                 {
                     User32.DestroyCursor(_handle);
                 }
+
                 _handle = IntPtr.Zero;
             }
         }
@@ -417,7 +419,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void LoadPicture(Ole32.IStream stream, string paramName)
         {
-            Debug.Assert(stream != null, "Stream should be validated before this method is called.");
+            Debug.Assert(stream is not null, "Stream should be validated before this method is called.");
 
             try
             {
@@ -426,7 +428,7 @@ namespace System.Windows.Forms
                 Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
                 ipictureAsIPersist.Load(stream);
 
-                if (picture != null && picture.Type == (short)Ole32.PICTYPE.ICON)
+                if (picture is not null && picture.Type == (short)Ole32.PICTYPE.ICON)
                 {
                     IntPtr cursorHandle = (IntPtr)picture.Handle;
                     Size picSize = GetIconSize(cursorHandle);
@@ -464,6 +466,7 @@ namespace System.Windows.Forms
             {
                 throw new FormatException(SR.CursorCannotCovertToBytes);
             }
+
             if (_cursorData is null)
             {
                 throw new InvalidOperationException(SR.InvalidPictureFormat);
@@ -529,6 +532,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return (this == (Cursor)obj);
         }
     }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using Microsoft.Win32;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -129,6 +130,7 @@ namespace System.Windows.Forms
                         s_interpolationMode = InterpolationMode.HighQualityBicubic;
                     }
                 }
+
                 return s_interpolationMode;
             }
         }
@@ -169,6 +171,45 @@ namespace System.Windows.Forms
         ///  if the application opted in the automatic scaling in the .config file.
         /// </summary>
         public static bool IsScalingRequired => DeviceDpi != LogicalDpi;
+
+        /// <summary>
+        /// Retrieve the text scale factor, which is set via Settings > Display > Make Text Bigger.
+        /// The settings are stored in the registry under HKCU\Software\Microsoft\Accessibility in (DWORD)TextScaleFactor.
+        /// </summary>
+        /// <returns>The scaling factor in the range [1.0, 2.25].</returns>
+        /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
+        public static float GetTextScaleFactor()
+        {
+            // The default(100) and max(225) text scale factor is value what Settings display text scale
+            // applies and also clamps the text scale factor value between 100 and 225 value.
+            const short MinTextScaleValue = 100;
+            const short MaxTextScaleValue = 225;
+
+            short textScaleValue = MinTextScaleValue;
+            try
+            {
+                RegistryKey? key = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Accessibility");
+                if (key is not null && key.GetValue("TextScaleFactor") is int _textScaleValue)
+                {
+                    textScaleValue = (short)_textScaleValue;
+                }
+            }
+            catch
+            {
+                // Failed to read the registry for whatever reason.
+#if DEBUG
+                throw;
+#endif
+            }
+
+            // Restore the text scale if it isn't the default value in the valid text scale factor value
+            if (textScaleValue > MinTextScaleValue && textScaleValue <= MaxTextScaleValue)
+            {
+                return (float)textScaleValue / MinTextScaleValue;
+            }
+
+            return 1.0f;
+        }
 
         /// <summary>
         /// scale logical pixel to the factor
@@ -283,8 +324,9 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap, deviceDpi);
-            if (deviceBitmap != null)
+            if (deviceBitmap is not null)
             {
                 logicalBitmap.Dispose();
                 logicalBitmap = deviceBitmap;

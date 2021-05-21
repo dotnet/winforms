@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows Forms-Steuerelementbibliothek",
+    "description": "Eine Projektvorlage zum Erstellen einer .NET Steuerelementbibliothek für Windows Forms (WinForms)."
+  }
+}

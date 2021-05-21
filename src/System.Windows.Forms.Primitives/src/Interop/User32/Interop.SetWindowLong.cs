@@ -22,6 +22,7 @@ internal static partial class Interop
             {
                 return SetWindowLongW(hWnd, nIndex, dwNewLong);
             }
+
             return SetWindowLongPtrW(hWnd, nIndex, dwNewLong);
         }
 

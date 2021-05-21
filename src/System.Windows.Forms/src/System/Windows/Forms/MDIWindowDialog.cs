@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
-    internal sealed class MdiWindowDialog : Form
+    internal sealed partial class MdiWindowDialog : Form
     {
         private ListBox itemList;
         private Button okButton;
@@ -28,24 +28,9 @@ namespace System.Windows.Forms
             {
 #if DEBUG
                 ListItem item = (ListItem)itemList.SelectedItem;
-                Debug.Assert(item != null, "No item selected!");
+                Debug.Assert(item is not null, "No item selected!");
 #endif
                 return active;
-            }
-        }
-
-        private class ListItem
-        {
-            public Form form;
-
-            public ListItem(Form f)
-            {
-                form = f;
-            }
-
-            public override string ToString()
-            {
-                return form.Text;
             }
         }
 
@@ -64,6 +49,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             this.active = active;
             itemList.SelectedIndex = selIndex;
         }
@@ -76,7 +62,7 @@ namespace System.Windows.Forms
         private void ItemList_selectedIndexChanged(object source, EventArgs e)
         {
             ListItem item = (ListItem)itemList.SelectedItem;
-            if (item != null)
+            if (item is not null)
             {
                 active = item.form;
             }

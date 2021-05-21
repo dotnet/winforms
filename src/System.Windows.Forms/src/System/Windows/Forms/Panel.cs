@@ -71,15 +71,12 @@ namespace System.Windows.Forms
             get => GetAutoSizeMode();
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to. When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -88,6 +85,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -108,10 +106,7 @@ namespace System.Windows.Forms
             {
                 if (_borderStyle != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _borderStyle = value;
                     UpdateStyles();
@@ -142,6 +137,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
+
                 return cp;
             }
         }

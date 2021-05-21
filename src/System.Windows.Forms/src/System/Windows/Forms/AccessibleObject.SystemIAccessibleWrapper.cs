@@ -25,8 +25,10 @@ namespace System.Windows.Forms
             public SystemIAccessibleWrapper(IAccessible? systemIAccessible)
             {
                 _systemIAccessible = systemIAccessible;
-                IsIAccessibleCreated = systemIAccessible != null;
+                IsIAccessibleCreated = systemIAccessible is not null;
             }
+
+            internal IAccessible? SystemIAccessibleInternal => _systemIAccessible;
 
             public bool IsIAccessibleCreated { get; }
 

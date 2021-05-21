@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Aplikace Windows Forms",
+    "description": "Šablona projektu pro vytvoření aplikace .NET Windows Forms (WinForms)"
+  }
+}

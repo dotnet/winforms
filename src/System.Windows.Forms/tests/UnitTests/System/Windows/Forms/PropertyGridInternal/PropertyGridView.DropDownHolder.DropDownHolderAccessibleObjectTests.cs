@@ -70,5 +70,20 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             Assert.Equal(propertyGrid.AccessibilityObject, accessibilityObject.FragmentRoot);
         }
+
+        [WinFormsFact]
+        public void DropDownHolderAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+            using PropertyGridView.DropDownHolder dropDownControlHolder = new PropertyGridView.DropDownHolder(propertyGridView);
+            // AccessibleRole is not set = Default
+
+            object actual = dropDownControlHolder.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+            Assert.False(propertyGrid.IsHandleCreated);
+            Assert.False(dropDownControlHolder.IsHandleCreated);
+        }
     }
 }

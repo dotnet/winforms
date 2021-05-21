@@ -165,7 +165,7 @@ namespace System.Windows.Forms
             }
             while (hr != 0);
 
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 if (dataObject is IDataObject ido && !Marshal.IsComObject(dataObject))
                 {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
         public static bool ContainsAudio()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.WaveAudio, false);
             }
@@ -202,7 +202,7 @@ namespace System.Windows.Forms
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(format, false);
             }
@@ -213,7 +213,7 @@ namespace System.Windows.Forms
         public static bool ContainsFileDropList()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.FileDrop, true);
             }
@@ -224,7 +224,7 @@ namespace System.Windows.Forms
         public static bool ContainsImage()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.Bitmap, true);
             }
@@ -236,13 +236,10 @@ namespace System.Windows.Forms
 
         public static bool ContainsText(TextDataFormat format)
         {
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(ConvertToDataFormats(format), false);
             }
@@ -253,7 +250,7 @@ namespace System.Windows.Forms
         public static Stream GetAudioStream()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetData(DataFormats.WaveAudio, false) as Stream;
             }
@@ -269,7 +266,7 @@ namespace System.Windows.Forms
             }
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetData(format);
             }
@@ -282,7 +279,7 @@ namespace System.Windows.Forms
             IDataObject dataObject = Clipboard.GetDataObject();
             StringCollection retVal = new StringCollection();
 
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 if (dataObject.GetData(DataFormats.FileDrop, true) is string[] strings)
                 {
@@ -296,7 +293,7 @@ namespace System.Windows.Forms
         public static Image GetImage()
         {
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 return dataObject.GetData(DataFormats.Bitmap, true) as Image;
             }
@@ -308,13 +305,10 @@ namespace System.Windows.Forms
 
         public static string GetText(TextDataFormat format)
         {
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = Clipboard.GetDataObject();
-            if (dataObject != null)
+            if (dataObject is not null)
             {
                 if (dataObject.GetData(ConvertToDataFormats(format), false) is string text)
                 {
@@ -371,6 +365,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
+
             if (filePaths.Count == 0)
             {
                 throw new ArgumentException(SR.CollectionEmptyException);
@@ -419,10 +414,8 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(ConvertToDataFormats(format), false, text);

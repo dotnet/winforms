@@ -68,24 +68,6 @@ namespace System.Windows.Forms
         /// </remarks>
         private const User32.WM ContinueButtonClickHandlingMessage = User32.WM.APP + 0x3FFF;
 
-        /// <summary>
-        ///   The delegate for <see cref="HandleTaskDialogNativeCallback"/> which is
-        ///   marshaled as native callback.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        ///   This delegate must be kept alive (protecting it from garbage collection)
-        ///   to ensure the native function pointer doesn't become invalid.
-        /// </para>
-        /// </remarks>
-        // Because marshaling a delegate this will allocate some memory required
-        // to store the native code for the function pointer, we only do this
-        // once by using a static function, and then identify the actual TaskDialog
-        // instance by using a GCHandle in the reference data field (like an
-        // object pointer).
-        private static readonly ComCtl32.PFTASKDIALOGCALLBACK s_callbackProcDelegate =
-            HandleTaskDialogNativeCallback;
-
         private TaskDialogPage? _boundPage;
 
         /// <summary>
@@ -282,6 +264,7 @@ namespace System.Windows.Forms
 
         private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
+        [UnmanagedCallersOnly]
         private static HRESULT HandleTaskDialogNativeCallback(
             IntPtr hwnd,
             ComCtl32.TDN msg,
@@ -578,21 +561,6 @@ namespace System.Windows.Forms
                     }
 
                     _waitingNavigationPages.Clear();
-
-                    // We need to ensure the callback delegate is not garbage-collected
-                    // as long as TaskDialogIndirect doesn't return, by calling
-                    // GC.KeepAlive().
-                    //
-                    // This is not an exaggeration, as the comment for GC.KeepAlive()
-                    // says the following:
-                    // The JIT is very aggressive about keeping an
-                    // object's lifetime to as small a window as possible, to the point
-                    // where a 'this' pointer isn't considered live in an instance method
-                    // unless you read a value from the instance.
-                    //
-                    // Note: As this is a static field, the call to GC.KeepAlive() might be
-                    // superfluous here, but we still do it to be safe.
-                    GC.KeepAlive(s_callbackProcDelegate);
                 }
             }
             finally
@@ -690,6 +658,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(min));
             }
+
             if (max < 0 || max > ushort.MaxValue)
             {
                 throw new ArgumentOutOfRangeException(nameof(max));
@@ -843,7 +812,7 @@ namespace System.Windows.Forms
             ComCtl32.TDN notification,
             IntPtr wParam)
         {
-            Debug.Assert(_boundPage != null);
+            Debug.Assert(_boundPage is not null);
 
             // Set the hWnd as this may be the first time that we get it.
             bool isFirstNotification = _handle == IntPtr.Zero;
@@ -874,6 +843,7 @@ namespace System.Windows.Forms
                             _raisedPageCreated = true;
                             _boundPage.OnCreated(EventArgs.Empty);
                         }
+
                         break;
 
                     case ComCtl32.TDN.NAVIGATED:
@@ -942,6 +912,7 @@ namespace System.Windows.Forms
                             // with the 'Destroyed' notification.
                             _handle = IntPtr.Zero;
                         }
+
                         break;
 
                     case ComCtl32.TDN.BUTTON_CLICKED:
@@ -1005,6 +976,7 @@ namespace System.Windows.Forms
                             {
                                 _buttonClickNavigationCounter.stackCount++;
                             }
+
                             try
                             {
                                 applyButtonResult = button.HandleButtonClicked();
@@ -1042,7 +1014,7 @@ namespace System.Windows.Forms
                             // override the previously set result, which would mean the
                             // button returned from Show() would not match one specified
                             // in the "Closing" event's args.
-                            if (_resultButton != null)
+                            if (_resultButton is not null)
                             {
                                 applyButtonResult = false;
                             }
@@ -1072,6 +1044,7 @@ namespace System.Windows.Forms
                         {
                             RadioButtonClickedStackCount++;
                         }
+
                         try
                         {
                             radioButton.HandleRadioButtonClicked();
@@ -1157,7 +1130,7 @@ namespace System.Windows.Forms
             // the dialog was closed abnormally without a prior TDN_BUTTON_CLICKED
             // notification (e.g. when closing the main application window while a modeless
             // task dialog is showing).
-            if (_resultButton != null || _receivedDestroyedNotification)
+            if (_resultButton is not null || _receivedDestroyedNotification)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
             }
@@ -1180,7 +1153,7 @@ namespace System.Windows.Forms
                     // button click that closed the dialog.
                     // TODO: Another option would be to disallow button clicks while
                     // within the event handler.
-                    if (_resultButton != null)
+                    if (_resultButton is not null)
                     {
                         throw new InvalidOperationException(SR.TaskDialogCannotNavigateClosedDialog);
                     }
@@ -1387,7 +1360,7 @@ namespace System.Windows.Forms
                             pszFooter = MarshalString(page.Footnote?.Text),
                             nDefaultButton = defaultButtonID,
                             nDefaultRadioButton = defaultRadioButtonID,
-                            pfCallback = Marshal.GetFunctionPointerForDelegate(s_callbackProcDelegate),
+                            pfCallback = &HandleTaskDialogNativeCallback,
                             lpCallbackData = _instanceHandlePtr
                         };
 
@@ -1491,10 +1464,8 @@ namespace System.Windows.Forms
 
                 // Align the pointer to the next align size. If not specified,
                 // we will use the pointer (register) size.
-                // TODO: Use nuint (System.UIntN) once available instead of
-                // ulong to avoid the overhead for 32-bit platforms.
-                ulong add = (ulong)(alignment ?? IntPtr.Size) - 1;
-                currentPtr = (byte*)(((ulong)currentPtr + add) & ~add);
+                nuint add = (nuint)(alignment ?? IntPtr.Size) - 1;
+                currentPtr = (byte*)(((nuint)currentPtr + add) & ~add);
             }
 
             static long SizeOfString(string? str)
@@ -1505,7 +1476,7 @@ namespace System.Windows.Forms
 
         private void SubclassWindow()
         {
-            if (_windowSubclassHandler != null)
+            if (_windowSubclassHandler is not null)
             {
                 throw new InvalidOperationException();
             }
@@ -1517,7 +1488,7 @@ namespace System.Windows.Forms
 
         private void UnsubclassWindow()
         {
-            if (_windowSubclassHandler != null)
+            if (_windowSubclassHandler is not null)
             {
                 try
                 {
@@ -1537,7 +1508,7 @@ namespace System.Windows.Forms
 
         private void DenyIfBound()
         {
-            if (_boundPage != null)
+            if (_boundPage is not null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfShownDialog);
             }

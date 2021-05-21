@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
             ToolStripMenuItem item = value as ToolStripMenuItem;
-            ToolStrip parent = item.GetCurrentParent() as ToolStrip;
+            ToolStrip parent = item.GetCurrentParent();
 
             //Dont Serialize if we are Dummy Item ...
             if ((item != null) && !(item.IsOnDropDown) && (parent != null) && (parent.Site is null))

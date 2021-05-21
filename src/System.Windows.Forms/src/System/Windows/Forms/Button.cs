@@ -64,15 +64,12 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -81,6 +78,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -128,6 +126,7 @@ namespace System.Windows.Forms
                 requiredSize.Height += 9;
                 _systemSize = requiredSize;
             }
+
             Size paddedSize = _systemSize + Padding.Size;
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
@@ -156,6 +155,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
                     }
                 }
+
                 return cp;
             }
         }
@@ -177,10 +177,8 @@ namespace System.Windows.Forms
 
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int)DialogResult.No))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DialogResult));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 _dialogResult = value;
             }
         }
@@ -244,7 +242,7 @@ namespace System.Windows.Forms
         protected override void OnClick(EventArgs e)
         {
             Form form = FindForm();
-            if (form != null)
+            if (form is not null)
             {
                 form.DialogResult = _dialogResult;
             }
@@ -281,6 +279,7 @@ namespace System.Windows.Forms
                     //Paint in raised state...
                     ResetFlagsandPaint();
                 }
+
                 if (isMouseDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
@@ -290,10 +289,12 @@ namespace System.Windows.Forms
                         {
                             OnClick(mevent);
                         }
+
                         OnMouseClick(mevent);
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -354,6 +355,7 @@ namespace System.Windows.Forms
                 PerformClick();
                 return true;
             }
+
             return base.ProcessMnemonic(charCode);
         }
 
@@ -384,6 +386,7 @@ namespace System.Windows.Forms
                             OnClick(EventArgs.Empty);
                         }
                     }
+
                     break;
                 case User32.WM.ERASEBKGND:
                     DefWndProc(ref m);

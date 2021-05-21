@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
                 _parent = parent;
 
-                if (formats != null)
+                if (formats is not null)
                 {
                     for (int i = 0; i < formats.Length; i++)
                     {
@@ -91,20 +91,23 @@ namespace System.Windows.Forms
                     rgelt[0].ptd = IntPtr.Zero;
                     rgelt[0].lindex = -1;
 
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         pceltFetched[0] = 1;
                     }
+
                     _current++;
                 }
                 else
                 {
-                    if (pceltFetched != null)
+                    if (pceltFetched is not null)
                     {
                         pceltFetched[0] = 0;
                     }
+
                     return (int)HRESULT.S_FALSE;
                 }
+
                 return (int)HRESULT.S_OK;
             }
 
@@ -115,6 +118,7 @@ namespace System.Windows.Forms
                 {
                     return (int)HRESULT.S_FALSE;
                 }
+
                 _current += celt;
                 return (int)HRESULT.S_OK;
             }

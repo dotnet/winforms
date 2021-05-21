@@ -23,6 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetAttributes);
@@ -40,7 +41,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             if (target is VSSDK.IVSMDPerPropertyBrowsing)
             {
                 Attribute[] attrs = GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)target, sender.DISPID);
-                if (attrs != null)
+                if (attrs is not null)
                 {
                     for (int i = 0; i < attrs.Length; i++)
                     {
@@ -83,7 +84,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Type t = Type.GetType(attrName);
                 Assembly a = null;
 
-                if (t != null)
+                if (t is not null)
                 {
                     a = t.Assembly;
                 }
@@ -137,12 +138,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         continue;
                     }
 
-                    if (t != null)
+                    if (t is not null)
                     {
                         FieldInfo fi = t.GetField(fieldName);
 
                         // only if it's static
-                        if (fi != null && fi.IsStatic)
+                        if (fi is not null && fi.IsStatic)
                         {
                             object fieldValue = fi.GetValue(null);
                             if (fieldValue is Attribute)
@@ -170,7 +171,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 // okay, if we got here, we need to build the attribute...
                 // get the initalizer value if we've got a one item ctor
 
-                if (!Convert.IsDBNull(varParams[i]) && varParams[i] != null)
+                if (!Convert.IsDBNull(varParams[i]) && varParams[i] is not null)
                 {
                     ConstructorInfo[] ctors = t.GetConstructors();
                     for (int c = 0; c < ctors.Length; c++)
@@ -242,6 +243,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         Debug.Fail("Failed to marshal component attribute BSTR " + i.ToString(CultureInfo.InvariantCulture), ex.ToString());
                     }
                 }
+
                 try
                 {
                     Marshal.FreeCoTaskMem(ptr);
@@ -250,6 +252,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     Debug.Fail("Failed to free BSTR array memory", ex.ToString());
                 }
+
                 return strs;
             }
             else
@@ -273,6 +276,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Debug.Fail("Failed to marshal component attribute VARIANT " + i, ex.ToString());
                 }
             }
+
             try
             {
                 Marshal.FreeCoTaskMem((IntPtr)ptr);

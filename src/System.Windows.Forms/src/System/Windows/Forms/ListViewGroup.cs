@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             _headerAlignment = headerAlignment;
         }
 
-        internal AccessibleObject? AccessibilityObject
+        internal AccessibleObject AccessibilityObject
         {
             get
             {
@@ -120,10 +120,7 @@ namespace System.Windows.Forms
             get => _headerAlignment;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_headerAlignment == value)
                 {
@@ -171,10 +168,7 @@ namespace System.Windows.Forms
             get => _footerAlignment;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_footerAlignment == value)
                 {
@@ -205,10 +199,7 @@ namespace System.Windows.Forms
             get => _collapsedState;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ListViewGroupCollapsedState.Default, (int)ListViewGroupCollapsedState.Collapsed))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ListViewGroupCollapsedState));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_collapsedState == value)
                 {
@@ -274,6 +265,7 @@ namespace System.Windows.Forms
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         [Localizable(true)]
         [RefreshProperties(RefreshProperties.Repaint)]
+        [RelatedImageList("ListView.GroupImageList")]
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
         public int TitleImageIndex
@@ -314,6 +306,7 @@ namespace System.Windows.Forms
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(Drawing.Design.UITypeEditor))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [RefreshProperties(RefreshProperties.Repaint)]
+        [RelatedImageList("ListView.GroupImageList")]
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
         public string TitleImageKey
@@ -394,6 +387,7 @@ namespace System.Windows.Forms
                     Name = (string)entry.Value!;
                 }
             }
+
             if (count > 0)
             {
                 ListViewItem[] items = new ListViewItem[count];
@@ -401,6 +395,7 @@ namespace System.Windows.Forms
                 {
                     items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem))!;
                 }
+
                 Items.AddRange(items);
             }
         }
@@ -409,7 +404,7 @@ namespace System.Windows.Forms
 
         private void UpdateListView()
         {
-            if (ListView != null && ListView.IsHandleCreated)
+            if (ListView is not null && ListView.IsHandleCreated)
             {
                 ListView.UpdateGroupNative(this);
             }
@@ -431,7 +426,8 @@ namespace System.Windows.Forms
             {
                 info.AddValue(nameof(Name), Name);
             }
-            if (_items != null && _items.Count > 0)
+
+            if (_items is not null && _items.Count > 0)
             {
                 info.AddValue("ItemsCount", Items.Count);
                 for (int i = 0; i < Items.Count; i++)

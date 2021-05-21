@@ -16,7 +16,6 @@ using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.Richedit;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms
 {
@@ -27,7 +26,7 @@ namespace System.Windows.Forms
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.RichTextBoxDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionRichTextBox))]
-    public class RichTextBox : TextBoxBase
+    public partial class RichTextBox : TextBoxBase
     {
         static TraceSwitch richTextDbg;
         static TraceSwitch RichTextDbg
@@ -38,6 +37,7 @@ namespace System.Windows.Forms
                 {
                     richTextDbg = new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
                 }
+
                 return richTextDbg;
             }
         }
@@ -293,6 +293,7 @@ namespace System.Windows.Forms
                 {
                     return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANREDO)) != 0;
                 }
+
                 return false;
             }
         }
@@ -321,8 +322,8 @@ namespace System.Windows.Forms
                     string path = pathBuilder.ToString();
                     FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(path);
 
-                    Debug.Assert(versionInfo != null && !string.IsNullOrEmpty(versionInfo.ProductVersion), "Couldn't get the version info for the richedit dll");
-                    if (versionInfo != null && !string.IsNullOrEmpty(versionInfo.ProductVersion))
+                    Debug.Assert(versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion), "Couldn't get the version info for the richedit dll");
+                    if (versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion))
                     {
                         //Note: this only allows for one digit version
                         if (int.TryParse(versionInfo.ProductVersion[0].ToString(), out int parsedValue))
@@ -503,6 +504,7 @@ namespace System.Windows.Forms
             {
                 scrollBarPadding.Height += SystemInformation.HorizontalScrollBarHeight;
             }
+
             if (Multiline && (ScrollBars & RichTextBoxScrollBars.Vertical) != 0)
             {
                 scrollBarPadding.Width += SystemInformation.VerticalScrollBarWidth;
@@ -565,6 +567,7 @@ namespace System.Windows.Forms
             get => base.MaxLength;
             set => base.MaxLength = value;
         }
+
         [DefaultValue(true)]
         public override bool Multiline
         {
@@ -576,6 +579,11 @@ namespace System.Windows.Forms
         {
             get { return richTextBoxFlags[protectedErrorSection] != 0; }
             set { richTextBoxFlags[protectedErrorSection] = value ? 1 : 0; }
+        }
+
+        private protected override void RaiseAccessibilityTextChangedEvent()
+        {
+            // Do not do anything because Win32 provides unmanaged Text pattern for RichTextBox
         }
 
         /// <summary>
@@ -616,6 +624,7 @@ namespace System.Windows.Forms
                 {
                     shortcutsToDisable = new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
                 }
+
                 richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
             }
         }
@@ -674,7 +683,7 @@ namespace System.Windows.Forms
                 {
                     return StreamOut(SF.RTF);
                 }
-                else if (textPlain != null)
+                else if (textPlain is not null)
                 {
                     ForceHandleCreate();
                     return StreamOut(SF.RTF);
@@ -722,20 +731,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // we could be more clever here, but it doesnt seem like this would get set enough
-                // to warrant a clever bitmask.
-                if (!ClientUtils.IsEnumValid_NotSequential(value,
-                    (int)value,
-                    (int)RichTextBoxScrollBars.Both,
-                    (int)RichTextBoxScrollBars.None,
-                    (int)RichTextBoxScrollBars.Horizontal,
-                    (int)RichTextBoxScrollBars.Vertical,
-                    (int)RichTextBoxScrollBars.ForcedHorizontal,
-                    (int)RichTextBoxScrollBars.ForcedVertical,
-                    (int)RichTextBoxScrollBars.ForcedBoth))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RichTextBoxScrollBars));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != ScrollBars)
                 {
@@ -794,10 +790,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 ForceHandleCreate();
                 var pf = new PARAFORMAT
@@ -884,6 +877,7 @@ namespace System.Windows.Forms
                     pf.wNumbering = PFN.BULLET;
                     pf.dxOffset = Pixel2Twip(bulletIndent, true);
                 }
+
                 // set the format for our current paragraph or selection
                 User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
@@ -996,6 +990,7 @@ namespace System.Windows.Forms
                 {
                     selColor = selectionBackColorToSetOnHandleCreated;
                 }
+
                 return selColor;
             }
             set
@@ -1304,7 +1299,7 @@ namespace System.Windows.Forms
             set
             {
                 // Verify the argument, and throw an error if is bad
-                if (value != null && value.Length > MAX_TAB_STOPS)
+                if (value is not null && value.Length > MAX_TAB_STOPS)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), SR.SelTabCountRange);
                 }
@@ -1424,7 +1419,7 @@ namespace System.Windows.Forms
 
                 if (!IsHandleCreated && textRtf is null)
                 {
-                    if (textPlain != null)
+                    if (textPlain is not null)
                     {
                         return textPlain;
                     }
@@ -1461,6 +1456,7 @@ namespace System.Windows.Forms
                         {
                             value = string.Empty;
                         }
+
                         StreamIn(value, SF.TEXT | SF.UNICODE);
                         // reset Modified
                         User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
@@ -1571,6 +1567,7 @@ namespace System.Windows.Forms
                     {
                         zoomMultiplier = 1.0f;
                     }
+
                     return zoomMultiplier;
                 }
                 else
@@ -1772,12 +1769,14 @@ namespace System.Windows.Forms
                                                     pBuffer++;
                                                     continue;
                                                 }
+
                                                 *pChars = *pBuffer;
                                                 pChars++;
                                                 pBuffer++;
                                                 consumedCharCount++;
                                             }
                                         }
+
                                         editStream.Write(bytes, 0, consumedCharCount * 2);
                                     }
                                     else
@@ -1797,14 +1796,17 @@ namespace System.Windows.Forms
                                                     pBuffer++;
                                                     continue;
                                                 }
+
                                                 *pChars = *pBuffer;
                                                 pChars++;
                                                 pBuffer++;
                                                 consumedCharCount++;
                                             }
                                         }
+
                                         editStream.Write(bytes, 0, consumedCharCount);
                                     }
+
                                     break;
                             }
 
@@ -1823,7 +1825,7 @@ namespace System.Windows.Forms
                             // However, the user said that his app is not using LoadFile method.
                             // The only possibility left open is that the native Edit control sends random calls into EditStreamProc.
                             // We have to guard against this.
-                            if (editStream != null)
+                            if (editStream is not null)
                             {
                                 transferred = editStream.Read(bytes, 0, cb);
 
@@ -1852,7 +1854,8 @@ namespace System.Windows.Forms
                 ret = 1;
             }
 #else
-            catch (IOException) {
+            catch (IOException)
+            {
                 transferred = 0;
                 ret = 1;
             }
@@ -1900,6 +1903,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
             }
+
             if (end < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
@@ -2006,6 +2010,7 @@ namespace System.Windows.Forms
                             foundCursor++;
                         }
                     }
+
                     chrg.cpMax = foundCursor;
                 }
 
@@ -2072,6 +2077,7 @@ namespace System.Windows.Forms
                 start = 0;
                 end = textLen;
             }
+
             if (end == -1)
             {
                 end = textLen;
@@ -2257,7 +2263,7 @@ namespace System.Windows.Forms
             return charFormat;
         }
 
-        Font GetCharFormatFont(bool selectionOnly)
+        private Font GetCharFormatFont(bool selectionOnly)
         {
             ForceHandleCreate();
 
@@ -2325,6 +2331,7 @@ namespace System.Windows.Forms
             {
                 index = Math.Max(t.Length - 1, 0);
             }
+
             return index;
         }
 
@@ -2400,10 +2407,7 @@ namespace System.Windows.Forms
         public void LoadFile(string path, RichTextBoxStreamType fileType)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
-            {
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-            }
+            SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
             try
@@ -2425,10 +2429,8 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(data));
             }
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
-            {
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-            }
+
+            SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             SF flags;
             switch (fileType)
@@ -2505,6 +2507,16 @@ namespace System.Windows.Forms
             ((ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
         }
 
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            AccessibilityObject.RaiseAutomationNotification(
+                Automation.AutomationNotificationKind.Other,
+                Automation.AutomationNotificationProcessing.MostRecent,
+                Text);
+        }
+
         protected override void OnHandleCreated(EventArgs e)
         {
             // base.OnHandleCreated is called somewhere in the middle of this
@@ -2557,14 +2569,14 @@ namespace System.Windows.Forms
             try
             {
                 SuppressTextChangedEvent = true;
-                if (textRtf != null)
+                if (textRtf is not null)
                 {
                     // setting RTF calls back on Text, which relies on textRTF being null
                     string text = textRtf;
                     textRtf = null;
                     Rtf = text;
                 }
-                else if (textPlain != null)
+                else if (textPlain is not null)
                 {
                     string text = textPlain;
                     textPlain = null;
@@ -2694,6 +2706,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 
@@ -2718,10 +2731,7 @@ namespace System.Windows.Forms
         public void SaveFile(string path, RichTextBoxStreamType fileType)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(fileType, (int)fileType, (int)RichTextBoxStreamType.RichText, (int)RichTextBoxStreamType.UnicodePlainText))
-            {
-                throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
-            }
+            SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             Stream file = File.Create(path);
             try
@@ -2962,7 +2972,7 @@ namespace System.Windows.Forms
             try
             {
                 editStream = data;
-                Debug.Assert(data != null, "StreamIn passed a null stream");
+                Debug.Assert(data is not null, "StreamIn passed a null stream");
 
                 // If SF_RTF is requested then check for the RTF tag at the start
                 // of the file.  We don't load if the tag is not there.
@@ -3100,6 +3110,7 @@ namespace System.Windows.Forms
                 {
                     cookieVal = OUTPUT | ANSI;
                 }
+
                 if ((flags & SF.RTF) != 0)
                 {
                     cookieVal |= RTF;
@@ -3115,6 +3126,7 @@ namespace System.Windows.Forms
                         cookieVal |= TEXTLF;
                     }
                 }
+
                 es.dwCookie = (UIntPtr)cookieVal;
                 var callback = new EDITSTREAMCALLBACK(EditStreamProc);
                 es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
@@ -3150,6 +3162,11 @@ namespace System.Windows.Forms
                 flags = GTL.DEFAULT
             };
 
+            if (flags.HasFlag(GT.USECRLF))
+            {
+                gtl.flags |= GTL.USECRLF;
+            }
+
             GETTEXTLENGTHEX* pGtl = &gtl;
             int expectedLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, (IntPtr)pGtl));
             if (expectedLength == (int)HRESULT.E_INVALIDARG)
@@ -3173,6 +3190,25 @@ namespace System.Windows.Forms
             fixed (char* pText = text)
             {
                 int actualLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTEX, (IntPtr)pGt, (IntPtr)pText));
+
+                // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
+                // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
+                // whereas previously we would normalise to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
+                // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behaviour.
+                if (!flags.HasFlag(GT.USECRLF))
+                {
+                    int index = 0;
+                    while (index < actualLength)
+                    {
+                        if (pText[index] == '\r')
+                        {
+                            pText[index] = '\n';
+                        }
+
+                        index++;
+                    }
+                }
+
                 result = new string(pText, 0, actualLength);
             }
 
@@ -3230,12 +3266,15 @@ namespace System.Windows.Forms
                 {
                     User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 }
+
                 if (ForeColor.IsSystemColor)
                 {
                     InternalSetForeColor(ForeColor);
                 }
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new ControlAccessibleObject(this);
 
         /// <summary>
         ///  Creates the IRichEditOleCallback compatible object for handling RichEdit callbacks. For more
@@ -3275,11 +3314,13 @@ namespace System.Windows.Forms
                     string linktext = CharRangeToString(enlink.charrange);
                     if (!string.IsNullOrEmpty(linktext))
                     {
-                        OnLinkClicked(new LinkClickedEventArgs(linktext));
+                        OnLinkClicked(new LinkClickedEventArgs(linktext, enlink.charrange.cpMin, enlink.charrange.cpMax - enlink.charrange.cpMin));
                     }
+
                     m.Result = (IntPtr)1;
                     return;
             }
+
             m.Result = IntPtr.Zero;
             return;
         }
@@ -3395,6 +3436,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         m.Result = (IntPtr)1;   // tell them we did the drop
                         break;
 
@@ -3406,8 +3448,10 @@ namespace System.Windows.Forms
                             {
                                 reqResize->rc.bottom++;
                             }
+
                             OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
                         }
+
                         break;
 
                     case EN.SELCHANGE:
@@ -3440,6 +3484,7 @@ namespace System.Windows.Forms
                                         m.Result = IntPtr.Zero;
                                         return;
                                     }
+
                                     break;
 
                                 // Throw an exception for the following
@@ -3630,6 +3675,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.SETFONT:
@@ -3657,6 +3703,7 @@ namespace System.Windows.Forms
                     {
                         m.Result = (IntPtr)(65536 + 30);
                     }
+
                     break;
 
                 case User32.WM.RBUTTONUP:
@@ -3682,8 +3729,10 @@ namespace System.Windows.Forms
                         {
                             OnVScroll(EventArgs.Empty);
                         }
+
                         break;
                     }
+
                 case User32.WM.HSCROLL:
                     {
                         base.WndProc(ref m);
@@ -3696,265 +3745,13 @@ namespace System.Windows.Forms
                         {
                             OnHScroll(EventArgs.Empty);
                         }
+
                         break;
                     }
+
                 default:
                     base.WndProc(ref m);
                     break;
-            }
-        }
-
-        // I used the visual basic 6 RichText (REOleCB.CPP) as a guide for this
-        private class OleCallback : Richedit.IRichEditOleCallback
-        {
-            private readonly RichTextBox owner;
-            IDataObject lastDataObject;
-            DragDropEffects lastEffect;
-
-            internal OleCallback(RichTextBox owner)
-            {
-                this.owner = owner;
-            }
-
-            public HRESULT GetNewStorage(out Ole32.IStorage storage)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetNewStorage");
-                if (!owner.AllowOleObjects)
-                {
-                    storage = null;
-                    return HRESULT.E_FAIL;
-                }
-
-                Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
-
-                storage = Ole32.StgCreateDocfileOnILockBytes(
-                    pLockBytes,
-                    Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
-                    0);
-                Debug.Assert(storage != null, "storage is NULL!");
-
-                return HRESULT.S_OK;
-            }
-
-            public HRESULT GetInPlaceContext(IntPtr lplpFrame,
-                                         IntPtr lplpDoc,
-                                         IntPtr lpFrameInfo)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetInPlaceContext");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            public HRESULT ShowContainerUI(BOOL fShow)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ShowContainerUI");
-                // Do nothing
-                return HRESULT.S_OK;
-            }
-
-            public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
-                return HRESULT.S_OK;
-            }
-
-            public HRESULT DeleteObject(IntPtr lpoleobj)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::DeleteObject");
-                // Do nothing
-                return HRESULT.S_OK;
-            }
-
-            public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, RECO reco, BOOL fReally, IntPtr hMetaPict)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::QueryAcceptData(reco=" + reco + ")");
-
-                if (reco == RECO.DROP)
-                {
-                    if (owner.AllowDrop || owner.EnableAutoDragDrop)
-                    {
-                        MouseButtons b = Control.MouseButtons;
-                        Keys k = Control.ModifierKeys;
-
-                        User32.MK keyState = 0;
-
-                        // Due to the order in which we get called, we have to set up the keystate here.
-                        // First GetDragDropEffect is called with grfKeyState == 0, and then
-                        // QueryAcceptData is called. Since this is the time we want to fire
-                        // OnDragEnter, but we have yet to get the keystate, we set it up ourselves.
-
-                        if ((b & MouseButtons.Left) == MouseButtons.Left)
-                        {
-                            keyState |= User32.MK.LBUTTON;
-                        }
-
-                        if ((b & MouseButtons.Right) == MouseButtons.Right)
-                        {
-                            keyState |= User32.MK.RBUTTON;
-                        }
-
-                        if ((b & MouseButtons.Middle) == MouseButtons.Middle)
-                        {
-                            keyState |= User32.MK.MBUTTON;
-                        }
-
-                        if ((k & Keys.Control) == Keys.Control)
-                        {
-                            keyState |= User32.MK.CONTROL;
-                        }
-
-                        if ((k & Keys.Shift) == Keys.Shift)
-                        {
-                            keyState |= User32.MK.SHIFT;
-                        }
-
-                        lastDataObject = new DataObject(lpdataobj);
-
-                        if (!owner.EnableAutoDragDrop)
-                        {
-                            lastEffect = DragDropEffects.None;
-                        }
-
-                        var e = new DragEventArgs(lastDataObject,
-                                                  (int)keyState,
-                                                  Control.MousePosition.X,
-                                                  Control.MousePosition.Y,
-                                                  DragDropEffects.All,
-                                                  lastEffect);
-                        if (fReally == 0)
-                        {
-                            // we are just querying
-
-                            // We can get here without GetDragDropEffects actually being called first.
-                            // This happens when you drag/drop between two rtb's. Say you drag from rtb1 to rtb2.
-                            // GetDragDropEffects will first be called for rtb1, then QueryAcceptData for rtb1 just
-                            // like in the local drag case. Then you drag into rtb2. rtb2 will first be called in this method,
-                            // and not GetDragDropEffects. Now lastEffect is initialized to None for rtb2, so we would not allow
-                            // the drag. Thus we need to set the effect here as well.
-                            e.Effect = ((keyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
-                            owner.OnDragEnter(e);
-                        }
-                        else
-                        {
-                            owner.OnDragDrop(e);
-                            lastDataObject = null;
-                        }
-
-                        lastEffect = e.Effect;
-                        if (e.Effect == DragDropEffects.None)
-                        {
-                            Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data");
-                            return HRESULT.E_FAIL;
-                        }
-                        else
-                        {
-                            Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tAccept data");
-                            return HRESULT.S_OK;
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLineIf(RichTextDbg.TraceVerbose, "\tCancel data, allowdrop == false");
-                        lastDataObject = null;
-                        return HRESULT.E_FAIL;
-                    }
-                }
-                else
-                {
-                    return HRESULT.E_NOTIMPL;
-                }
-            }
-
-            public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::ContextSensitiveHelp");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, RECO reco, IntPtr lplpdataobj)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetClipboardData");
-                return HRESULT.E_NOTIMPL;
-            }
-
-            public unsafe HRESULT GetDragDropEffect(BOOL fDrag, User32.MK grfKeyState, Ole32.DROPEFFECT* pdwEffect)
-            {
-                if (pdwEffect is null)
-                {
-                    return HRESULT.E_POINTER;
-                }
-
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetDragDropEffect");
-
-                if (owner.AllowDrop || owner.EnableAutoDragDrop)
-                {
-                    if (fDrag.IsTrue() && grfKeyState == (User32.MK)0)
-                    {
-                        // This is the very first call we receive in a Drag-Drop operation,
-                        // so we will let the control know what we support.
-
-                        // Note that we haven't gotten any data yet, so we will let QueryAcceptData
-                        // do the OnDragEnter. Note too, that grfKeyState does not yet reflect the
-                        // current keystate
-                        if (owner.EnableAutoDragDrop)
-                        {
-                            lastEffect = (DragDropEffects.All | DragDropEffects.None);
-                        }
-                        else
-                        {
-                            lastEffect = DragDropEffects.None;
-                        }
-                    }
-                    else
-                    {
-                        // We are either dragging over or dropping
-
-                        // The below is the complete reverse of what the docs on MSDN suggest,
-                        // but if we follow the docs, we would be firing OnDragDrop all the
-                        // time instead of OnDragOver (see
-
-                        // drag - fDrag = false, grfKeyState != 0
-                        // drop - fDrag = false, grfKeyState = 0
-                        // We only care about the drag.
-                        //
-                        // When we drop, lastEffect will have the right state
-                        if (fDrag.IsFalse() && lastDataObject != null && grfKeyState != (User32.MK)0)
-                        {
-                            DragEventArgs e = new DragEventArgs(lastDataObject,
-                                                                (int)grfKeyState,
-                                                                Control.MousePosition.X,
-                                                                Control.MousePosition.Y,
-                                                                DragDropEffects.All,
-                                                                lastEffect);
-
-                            // Now tell which of the allowable effects we want to use, but only if we are not already none
-                            if (lastEffect != DragDropEffects.None)
-                            {
-                                e.Effect = ((grfKeyState & User32.MK.CONTROL) == User32.MK.CONTROL) ? DragDropEffects.Copy : DragDropEffects.Move;
-                            }
-
-                            owner.OnDragOver(e);
-                            lastEffect = e.Effect;
-                        }
-                    }
-
-                    *pdwEffect = (Ole32.DROPEFFECT)lastEffect;
-                }
-                else
-                {
-                    *pdwEffect = Ole32.DROPEFFECT.NONE;
-                }
-
-                return HRESULT.S_OK;
-            }
-
-            public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
-            {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichEditOleCallback::GetContextMenu");
-
-                // do nothing, we don't have ContextMenu any longer
-                hmenu = IntPtr.Zero;
-                return HRESULT.S_OK;
             }
         }
     }

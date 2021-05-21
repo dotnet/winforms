@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Interop.Tests</AssemblyName>
     <Platforms>x86;x64</Platforms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <Import Project="ProjectReference.targets" Sdk="Microsoft.DotNet.CMake.Sdk" />
@@ -15,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\TestUtilities\System.Windows.Forms.TestUtilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

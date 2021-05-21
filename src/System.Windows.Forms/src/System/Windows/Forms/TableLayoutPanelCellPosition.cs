@@ -20,6 +20,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
             }
+
             if (column < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
@@ -125,6 +126,7 @@ namespace System.Windows.Forms
                     new object[] { cellPosition.Column, cellPosition.Row }
                 );
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 

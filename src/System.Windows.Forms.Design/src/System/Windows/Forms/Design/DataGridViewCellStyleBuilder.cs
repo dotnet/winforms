@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design
         private Button _okButton;
         private Button _cancelButton;
         private Label _label1;
-        private DataGridView _listenerDataGridView;
+        private readonly DataGridView _listenerDataGridView;
         private DataGridView _sampleDataGridView;
         private DataGridView _sampleDataGridViewSelected;
         private TableLayoutPanel _sampleViewTableLayoutPanel;
@@ -27,9 +27,9 @@ namespace System.Windows.Forms.Design
         private TableLayoutPanel _sampleViewGridsTableLayoutPanel;
         private Label _normalLabel;
         private Label _selectedLabel;
-        private IHelpService _helpService;
-        private IComponent _comp;
-        private IServiceProvider _serviceProvider;
+        private readonly IHelpService _helpService;
+        private readonly IComponent _comp;
+        private readonly IServiceProvider _serviceProvider;
 
         private DataGridViewCellStyle _cellStyle;
         private ITypeDescriptorContext _context;
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
             // Adds columns and rows to the grid, also resizes them
             InitializeGrids();
 
-            _listenerDataGridView = new System.Windows.Forms.DataGridView();
+            _listenerDataGridView = new DataGridView();
             _serviceProvider = serviceProvider;
             _comp = comp;
 
@@ -49,13 +49,14 @@ namespace System.Windows.Forms.Design
             {
                 _helpService = (IHelpService)serviceProvider.GetService(typeof(IHelpService));
             }
+
             _cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, comp);
         }
 
         private void InitializeGrids()
         {
-            _sampleDataGridViewSelected.Size = new System.Drawing.Size(100, Font.Height + 9);
-            _sampleDataGridView.Size = new System.Drawing.Size(100, Font.Height + 9);
+            _sampleDataGridViewSelected.Size = new Drawing.Size(100, Font.Height + 9);
+            _sampleDataGridView.Size = new Drawing.Size(100, Font.Height + 9);
             _sampleDataGridView.AccessibilityObject.Name = SR.CellStyleBuilderNormalPreviewAccName;
 
             DataGridViewRow row = new DataGridViewRow();
@@ -279,7 +280,7 @@ namespace System.Windows.Forms.Design
             DataGridViewCellStyleBuilder_HelpRequestHandled();
         }
 
-        private void DataGridViewCellStyleBuilder_HelpRequested(object sender, System.Windows.Forms.HelpEventArgs e)
+        private void DataGridViewCellStyleBuilder_HelpRequested(object sender, HelpEventArgs e)
         {
             e.Handled = true;
             DataGridViewCellStyleBuilder_HelpRequestHandled();
@@ -293,7 +294,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void DataGridViewCellStyleBuilder_Load(object sender, System.EventArgs e)
+        private void DataGridViewCellStyleBuilder_Load(object sender, EventArgs e)
         {
             // The cell inside the sampleDataGridView should not be selected.
             _sampleDataGridView.ClearSelection();
@@ -306,11 +307,11 @@ namespace System.Windows.Forms.Design
             _sampleDataGridViewSelected.Columns[0].Width = _sampleDataGridViewSelected.Width;
 
             // sync the Layout event for both sample DataGridView's so that when the sample DataGridView's are laid out we know to change the size of their cells
-            _sampleDataGridView.Layout += new System.Windows.Forms.LayoutEventHandler(sampleDataGridView_Layout);
-            _sampleDataGridViewSelected.Layout += new System.Windows.Forms.LayoutEventHandler(sampleDataGridView_Layout);
+            _sampleDataGridView.Layout += new LayoutEventHandler(sampleDataGridView_Layout);
+            _sampleDataGridViewSelected.Layout += new LayoutEventHandler(sampleDataGridView_Layout);
         }
 
-        private void sampleDataGridView_CellStateChanged(object sender, System.Windows.Forms.DataGridViewCellStateChangedEventArgs e)
+        private void sampleDataGridView_CellStateChanged(object sender, DataGridViewCellStateChangedEventArgs e)
         {
             Debug.Assert(e.Cell == _sampleDataGridView.Rows[0].Cells[0], "the sample data grid view has only one cell");
             Debug.Assert(sender == _sampleDataGridView, "did we forget to unhook notification");
@@ -321,7 +322,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        private void sampleDataGridView_Layout(object sender, System.Windows.Forms.LayoutEventArgs e)
+        private void sampleDataGridView_Layout(object sender, LayoutEventArgs e)
         {
             DataGridView dataGridView = (DataGridView)sender;
             dataGridView.Rows[0].Height = dataGridView.Height;
@@ -337,10 +338,11 @@ namespace System.Windows.Forms.Design
                 {
                     _accObj = new DialogDataGridViewCellAccessibleObject(this);
                 }
+
                 return _accObj;
             }
 
-            private class DialogDataGridViewCellAccessibleObject : DataGridViewCell.DataGridViewCellAccessibleObject
+            private class DialogDataGridViewCellAccessibleObject : DataGridViewCellAccessibleObject
             {
                 public DialogDataGridViewCellAccessibleObject(DataGridViewCell owner) : base(owner)
                 {

@@ -54,13 +54,7 @@
       </trans-unit>
       <trans-unit id="thirdRowLabel.Text">
         <source>Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</source>
-        <target state="translated">Nota: No se garantiza que las cadenas de formato
-personalizado completen correctamente la ida y
-vuelta entre el origen de datos y el control enlazado.
-Para garantizar que un valor con formato
-personalizado se muestre bien en el control y se
-almacene en la base de datos, controle el
-análisis o el evento de formato del enlace de datos.</target>
+        <target state="translated">Nota: No se garantiza que las cadenas de formato personalizado completen correctamente la ida y vuelta entre el origen de datos y el control enlazado.Para garantizar que un valor con formato personalizado se muestre bien en el control y se almacene en la base de datos, controle el análisis o el evento de formato del enlace de datos.</target>
         <note />
       </trans-unit>
     </body>

@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 // unfortunately, there's no easy way to obtain handle of a message box.
                 // we'll have to rely on the fact that modal message loops have to pop off in an orderly way.
 
-                if (helpInfoTable != null && helpInfoTable.Length > 0)
+                if (helpInfoTable is not null && helpInfoTable.Length > 0)
                 {
                     // the top of the stack is actually at the end of the array.
                     return helpInfoTable[helpInfoTable.Length - 1];
@@ -97,6 +97,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         private static void PushHelpInfo(HelpInfo hpi)
         {
             // we roll our own stack here because we want a pretty lightweight implementation.
@@ -118,6 +119,7 @@ namespace System.Windows.Forms
                 newTable = new HelpInfo[lastCount + 1];
                 Array.Copy(helpInfoTable, newTable, lastCount);
             }
+
             newTable[lastCount] = hpi;
             helpInfoTable = newTable;
         }
@@ -333,6 +335,7 @@ namespace System.Windows.Forms
             {
                 PopHelpInfo();
             }
+
             return result;
         }
 
@@ -340,16 +343,14 @@ namespace System.Windows.Forms
                                              MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
                                              MessageBoxOptions options, bool showHelp)
         {
-            if (!ClientUtils.IsEnumValid(buttons, (int)buttons, (int)MessageBoxButtons.OK, (int)MessageBoxButtons.RetryCancel))
-            {
-                throw new InvalidEnumArgumentException(nameof(buttons), (int)buttons, typeof(MessageBoxButtons));
-            }
+            SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
 
             // valid values are 0x0 0x10 0x20 0x30 0x40, chop off the last 4 bits and check that it's between 0 and 4.
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4))
             {
                 throw new InvalidEnumArgumentException(nameof(icon), (int)icon, typeof(MessageBoxIcon));
             }
+
             // valid values are 0x0 0x100, 0x200, chop off the last 8 bits and check that it's between 0 and 2.
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2))
             {
@@ -362,10 +363,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
-            if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+
+            if (owner is not null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
             }
+
             if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));

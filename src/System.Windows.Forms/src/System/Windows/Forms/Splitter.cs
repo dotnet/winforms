@@ -113,6 +113,7 @@ namespace System.Windows.Forms
                     case DockStyle.Right:
                         return Cursors.VSplit;
                 }
+
                 return base.DefaultCursor;
             }
         }
@@ -194,10 +195,7 @@ namespace System.Windows.Forms
             get => borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (borderStyle != value)
                 {
@@ -233,6 +231,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
+
                 return cp;
             }
         }
@@ -269,6 +268,7 @@ namespace System.Windows.Forms
                         {
                             Height = requestedSize;
                         }
+
                         break;
                     case DockStyle.Left:
                     case DockStyle.Right:
@@ -276,6 +276,7 @@ namespace System.Windows.Forms
                         {
                             Width = requestedSize;
                         }
+
                         break;
                 }
             }
@@ -425,6 +426,7 @@ namespace System.Windows.Forms
                         bounds.Width = value;
                         break;
                 }
+
                 spd.target.Bounds = bounds;
                 Application.DoEvents();
                 OnSplitterMoved(new SplitterEventArgs(Left, Top, (Left + bounds.Width / 2), (Top + bounds.Height / 2)));
@@ -534,6 +536,7 @@ namespace System.Windows.Forms
                 DrawSplitHelper(lastDrawSplit);
                 lastDrawSplit = -1;
             }
+
             // Bail if drawing with no old point...
             //
             else if (mode != DRAW_START && lastDrawSplit == -1)
@@ -552,6 +555,7 @@ namespace System.Windows.Forms
                 {
                     DrawSplitHelper(lastDrawSplit);
                 }
+
                 lastDrawSplit = -1;
             }
         }
@@ -599,6 +603,7 @@ namespace System.Windows.Forms
                     r.X = bounds.X + bounds.Width - splitSize - r.Width;
                     break;
             }
+
             return r;
         }
 
@@ -635,7 +640,7 @@ namespace System.Windows.Forms
             SplitData spd = new SplitData();
             Control target = FindTarget();
             spd.target = target;
-            if (target != null)
+            if (target is not null)
             {
                 switch (target.Dock)
                 {
@@ -648,6 +653,7 @@ namespace System.Windows.Forms
                         initTargetSize = target.Bounds.Height;
                         break;
                 }
+
                 Control parent = ParentInternal;
                 ControlCollection children = parent.Controls;
                 int count = children.Count;
@@ -670,6 +676,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 Size clientSize = parent.ClientSize;
                 if (Horizontal)
                 {
@@ -679,9 +686,11 @@ namespace System.Windows.Forms
                 {
                     maxSize = clientSize.Height - dockHeight - minExtra;
                 }
+
                 spd.dockWidth = dockWidth;
                 spd.dockHeight = dockHeight;
             }
+
             return spd;
         }
 
@@ -761,6 +770,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return null;
         }
 
@@ -778,6 +788,7 @@ namespace System.Windows.Forms
             {
                 delta = y - anchor.Y;
             }
+
             int size = 0;
             switch (Dock)
             {
@@ -794,13 +805,14 @@ namespace System.Windows.Forms
                     size = splitTarget.Width - delta;
                     break;
             }
+
             return Math.Max(Math.Min(size, maxSize), minSize);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            if (splitTarget != null && e.KeyCode == Keys.Escape)
+            if (splitTarget is not null && e.KeyCode == Keys.Escape)
             {
                 SplitEnd(false);
             }
@@ -818,7 +830,7 @@ namespace System.Windows.Forms
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 int x = e.X + Left;
                 int y = e.Y + Top;
@@ -832,7 +844,7 @@ namespace System.Windows.Forms
         protected override void OnMouseUp(MouseEventArgs e)
         {
             base.OnMouseUp(e);
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 int x = e.X + Left;
                 int y = e.Y + Top;
@@ -852,7 +864,7 @@ namespace System.Windows.Forms
         {
             ((SplitterEventHandler)Events[EVENT_MOVING])?.Invoke(this, sevent);
 
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 SplitMove(sevent.SplitX, sevent.SplitY);
             }
@@ -867,7 +879,7 @@ namespace System.Windows.Forms
         {
             ((SplitterEventHandler)Events[EVENT_MOVED])?.Invoke(this, sevent);
 
-            if (splitTarget != null)
+            if (splitTarget is not null)
             {
                 SplitMove(sevent.SplitX, sevent.SplitY);
             }
@@ -881,6 +893,7 @@ namespace System.Windows.Forms
                 {
                     width = 3;
                 }
+
                 splitterThickness = width;
             }
             else
@@ -889,8 +902,10 @@ namespace System.Windows.Forms
                 {
                     height = 3;
                 }
+
                 splitterThickness = height;
             }
+
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
@@ -900,16 +915,17 @@ namespace System.Windows.Forms
         private void SplitBegin(int x, int y)
         {
             SplitData spd = CalcSplitBounds();
-            if (spd.target != null && (minSize < maxSize))
+            if (spd.target is not null && (minSize < maxSize))
             {
                 anchor = new Point(x, y);
                 splitTarget = spd.target;
                 splitSize = GetSplitSize(x, y);
 
-                if (splitterMessageFilter != null)
+                if (splitterMessageFilter is not null)
                 {
                     splitterMessageFilter = new SplitterMessageFilter(this);
                 }
+
                 Application.AddMessageFilter(splitterMessageFilter);
 
                 Capture = true;
@@ -925,7 +941,7 @@ namespace System.Windows.Forms
             DrawSplitBar(DRAW_END);
             splitTarget = null;
             Capture = false;
-            if (splitterMessageFilter != null)
+            if (splitterMessageFilter is not null)
             {
                 Application.RemoveMessageFilter(splitterMessageFilter);
                 splitterMessageFilter = null;
@@ -939,6 +955,7 @@ namespace System.Windows.Forms
             {
                 SplitPosition = initTargetSize;
             }
+
             anchor = Point.Empty;
         }
 
@@ -1003,8 +1020,10 @@ namespace System.Windows.Forms
                     {
                         owner.SplitEnd(false);
                     }
+
                     return true;
                 }
+
                 return false;
             }
         }

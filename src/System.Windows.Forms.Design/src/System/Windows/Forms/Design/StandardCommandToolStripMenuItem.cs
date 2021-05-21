@@ -62,6 +62,7 @@ namespace System.Windows.Forms.Design
                 {
                     _menuCommandService = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
                 }
+
                 return _menuCommandService;
             }
         }
@@ -81,6 +82,7 @@ namespace System.Windows.Forms.Design
                         {
                             _image = new Icon(typeof(ToolStripMenuItem), _name).ToBitmap();
                         }
+
                         ImageTransparentColor = Color.Magenta;
                     }
                     catch (Exception ex)
@@ -91,6 +93,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return _image;
             }
             set
@@ -100,7 +103,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        protected override void OnClick(System.EventArgs e)
+        protected override void OnClick(EventArgs e)
         {
             if (_menuCommand != null)
             {

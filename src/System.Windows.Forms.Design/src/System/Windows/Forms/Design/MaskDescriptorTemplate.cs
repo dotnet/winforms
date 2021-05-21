@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
 
             string msg;
 
-            if (!MaskDescriptor.IsValidMaskDescriptor(this, out msg))
+            if (!IsValidMaskDescriptor(this, out msg))
             {
                 // Don't throw here, callers should check the Mask property for validity. See the ValidMaskDescriptorList below.
                 _mask = null;
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design
                 //case "en-US": // English US.
                 case "en": // English.
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Numeric (5-digits)", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("00000", "Numeric (5-digits)", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("(999) 000-0000", "Phone number", "5745550123", null, culture));
                     // Phone Number No Area Code.
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Design
                     // Special-case date sample format for French-Canada.
                     string dateSample = culture.Name == "fr-CA" ? "11282005" : "28112005";
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numérique (5 chiffres)", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numérique (5 chiffres)", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("00 00 00 00 00 00", "Numéro de téléphone (France)", "0123456789", null, culture));
                     // Short Date.
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.Design
                 //case "it-IT": // Italian Italy.
                 case "it": // Italian.
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numerico (5 Cifre)", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numerico (5 Cifre)", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("0000 00000", "Numero di telefono", "012345678", null, culture));
                     // Mobile Phone Number.
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Design
                 //case "es-ES": // Spanish Spain.
                 case "es": // Spanish.
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numérico", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "Numérico", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("(999)000-0000", "Número de teléfono", "0123456789", null, culture));
                     // Mobile Phone Number.
@@ -186,7 +186,7 @@ namespace System.Windows.Forms.Design
                 //case "ja-JP": // Japanese.
                 case "ja": // Japanese.
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "数値（５桁）", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "数値（５桁）", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("99900-9990-0000", "電話番号", "  012- 345-6789", null, culture));
                     // Mobile Phone Number.
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Design
                 case "zh-CHS":  // Simplified Chinese.
                 case "zh-Hans":  // New name of Simplified Chinese.
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "数字(最长5位)", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "数字(最长5位)", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("(900)9000-0000", "（区号）电话号码", " 1234567890", null, culture));
                     // Phone Number No Area Code.
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.Design
                 //case "ko-KR": // Korean.
                 case "ko": // Korean.
                     // Numeric.
-                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "숫자(5자리)", "12345", typeof(Int32), culture));
+                    maskDescriptors.Add(new MaskDescriptorTemplate("99999", "숫자(5자리)", "12345", typeof(int), culture));
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("(999)9000-0000", "전화 번호", "01234567890", null, culture));
                     // Mobile Phone Number.

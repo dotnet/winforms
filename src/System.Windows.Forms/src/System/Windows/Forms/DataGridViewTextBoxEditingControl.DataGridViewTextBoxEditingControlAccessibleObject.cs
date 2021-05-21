@@ -17,9 +17,14 @@ namespace System.Windows.Forms
             ///  The parent is changed when the editing control is attached to another editing cell.
             /// </summary>
             private AccessibleObject? _parentAccessibleObject;
+            private readonly TextBoxBase _owningDataGridViewTextBoxEditingControl;
+            private readonly TextBoxBaseUiaTextProvider _textProvider;
 
             public DataGridViewTextBoxEditingControlAccessibleObject(DataGridViewTextBoxEditingControl ownerControl) : base(ownerControl)
             {
+                _owningDataGridViewTextBoxEditingControl = ownerControl;
+                _textProvider = new TextBoxBaseUiaTextProvider(ownerControl);
+                UseTextProviders(_textProvider, _textProvider);
             }
 
             public override AccessibleObject? Parent => _parentAccessibleObject;
@@ -45,9 +50,16 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+                    // If we don't set a default role for the accessible object
+                    // it will be retrieved from Windows.
+                    // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                    UiaCore.UIA.ControlTypePropertyId => Owner.AccessibleRole == AccessibleRole.Default
+                                                         ? UiaCore.UIA.EditControlTypeId
+                                                         : base.GetPropertyValue(propertyID),
                     UiaCore.UIA.NamePropertyId => Name,
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
+                    UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
+                    UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
+                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                     _ => base.GetPropertyValue(propertyID),
                 };
 
@@ -55,8 +67,12 @@ namespace System.Windows.Forms
                 => patternId switch
                 {
                     UiaCore.UIA.ValuePatternId => true,
+                    UiaCore.UIA.TextPatternId => true,
+                    UiaCore.UIA.TextPattern2Id => true,
                     _ => base.IsPatternSupported(patternId)
                 };
+
+            internal override bool IsReadOnly => _owningDataGridViewTextBoxEditingControl.ReadOnly;
 
             /// <summary>
             ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.

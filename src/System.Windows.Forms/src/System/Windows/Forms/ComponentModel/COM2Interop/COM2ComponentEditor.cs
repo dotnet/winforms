@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
                 finally
                 {
-                    if (uuids.pElems != null)
+                    if (uuids.pElems is not null)
                     {
                         Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
                     }
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     finally
                     {
                         Marshal.Release(pUnk);
-                        if (uuids.pElems != null)
+                        if (uuids.pElems is not null)
                         {
                             Marshal.FreeCoTaskMem((IntPtr)uuids.pElems);
                         }
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     string errString = SR.ErrorPropertyPageFailed;
 
-                    IUIService uiSvc = (context != null) ? ((IUIService)context.GetService(typeof(IUIService))) : null;
+                    IUIService uiSvc = (context is not null) ? ((IUIService)context.GetService(typeof(IUIService))) : null;
 
                     if (uiSvc is null)
                     {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                                 MessageBoxButtons.OK, MessageBoxIcon.Error,
                                 MessageBoxDefaultButton.Button1, 0);
                     }
-                    else if (ex != null)
+                    else if (ex is not null)
                     {
                         uiSvc.ShowError(ex, errString);
                     }

@@ -57,7 +57,7 @@ if ((expected) != (actual)) \
 }
 
 #define assertEqualBool(expected, actual) \
-if ((expected) != (actual)) \
+if ((BOOL)(expected) != (BOOL)(actual)) \
 { \
     printLine(); \
     if ((expected)) \
@@ -101,15 +101,20 @@ if ((int)((expected)) != (int)((actual))) \
 }
 
 #define assertEqualWString(expected, actual) \
-if (!(expected) && (actual)) \
+if (!(expected)) \
 { \
-    output << format(L"Expected: NULL\n"); \
-    output << format(L"Actual:   %s\n", (const wchar_t*)((actual))); \
+    if ((actual)) \
+    { \
+        output << format(L"Expected: NULL\n"); \
+        output << format(L"Actual:   %s\n", (const wchar_t*)((actual))); \
+        return E_FAIL; \
+    } \
 } \
-else if ((expected) && !(actual)) \
+else if (!(actual)) \
 { \
     output << format(L"Expected:   %s\n", (const wchar_t*)((expected))); \
     output << format(L"Actual: NULL\n"); \
+    return E_FAIL; \
 } \
 else if (wcscmp((const wchar_t*)(expected), (const wchar_t*)(actual)) != 0) \
 { \

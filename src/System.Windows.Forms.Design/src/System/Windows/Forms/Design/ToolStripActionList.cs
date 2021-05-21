@@ -42,6 +42,7 @@ namespace System.Windows.Forms.Design
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -56,6 +57,7 @@ namespace System.Windows.Forms.Design
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -69,6 +71,7 @@ namespace System.Windows.Forms.Design
             {
                 return getProperty.GetValue(_toolStrip);
             }
+
             return null;
         }
 
@@ -105,7 +108,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != Dock)
                 {
-                    ChangeProperty(nameof(Dock), (object)value);
+                    ChangeProperty(nameof(Dock), value);
                 }
             }
         }
@@ -117,7 +120,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != RenderMode)
                 {
-                    ChangeProperty(nameof(RenderMode), (object)value);
+                    ChangeProperty(nameof(RenderMode), value);
                 }
             }
         }
@@ -129,7 +132,7 @@ namespace System.Windows.Forms.Design
             {
                 if (value != GripStyle)
                 {
-                    ChangeProperty(nameof(GripStyle), (object)value);
+                    ChangeProperty(nameof(GripStyle), value);
                 }
             }
         }
@@ -142,6 +145,7 @@ namespace System.Windows.Forms.Design
             {
                 actionUIService.HideUI(_toolStrip);
             }
+
             _changeParentVerb.ChangeParent();
         }
 
@@ -167,6 +171,7 @@ namespace System.Windows.Forms.Design
                 {
                     items.Add(new DesignerActionMethodItem(this, "InvokeInsertStandardItemsVerb", SR.ToolStripDesignerStandardItemsVerb, "", SR.ToolStripDesignerStandardItemsVerbDesc, true));
                 }
+
                 items.Add(new DesignerActionPropertyItem("RenderMode", SR.ToolStripActionList_RenderMode, SR.ToolStripActionList_Layout, SR.ToolStripActionList_RenderModeDesc));
             }
 
@@ -174,10 +179,12 @@ namespace System.Windows.Forms.Design
             {
                 items.Add(new DesignerActionPropertyItem("Dock", SR.ToolStripActionList_Dock, SR.ToolStripActionList_Layout, SR.ToolStripActionList_DockDesc));
             }
+
             if (!(_toolStrip is StatusStrip))
             {
                 items.Add(new DesignerActionPropertyItem("GripStyle", SR.ToolStripActionList_GripStyle, SR.ToolStripActionList_Layout, SR.ToolStripActionList_GripStyleDesc));
             }
+
             return items;
         }
     }

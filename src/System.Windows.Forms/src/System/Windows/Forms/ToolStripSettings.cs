@@ -142,9 +142,12 @@ namespace System.Windows.Forms
         {
             ArrayList savedToolStripSettingsObjects = new ArrayList();
 
-            foreach (ToolStrip toolStrip in FindToolStrips(true, form.Controls))
+            List<ToolStrip> toolStripControls = new();
+            FindControls(true, form.Controls, toolStripControls);
+
+            foreach (ToolStrip toolStrip in toolStripControls)
             {
-                if (toolStrip != null && !string.IsNullOrEmpty(toolStrip.Name))
+                if (!string.IsNullOrEmpty(toolStrip.Name))
                 {
                     ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
 
@@ -161,9 +164,12 @@ namespace System.Windows.Forms
 
         internal void Save()
         {
-            foreach (ToolStrip toolStrip in FindToolStrips(true, form.Controls))
+            List<ToolStrip> toolStripControls = new();
+            FindControls(true, form.Controls, toolStripControls);
+
+            foreach (ToolStrip toolStrip in toolStripControls)
             {
-                if (toolStrip != null && !string.IsNullOrEmpty(toolStrip.Name))
+                if (!string.IsNullOrEmpty(toolStrip.Name))
                 {
                     ToolStripSettings toolStripSettings = new ToolStripSettings(GetSettingsKey(toolStrip));
                     SettingsStub stub = new SettingsStub(toolStrip);
@@ -192,6 +198,7 @@ namespace System.Windows.Forms
                     itemNames.Append(',');
                 }
             }
+
             return itemNames.ToString();
         }
 
@@ -237,12 +244,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            // build up a list of the toolstrippanels to party on
-            ArrayList toolStripPanels = FindToolStripPanels(true, form.Controls);
-
+            // Build up a list of the toolstrippanels to party on.
+            List<ToolStripPanel> toolStripPanels = new();
+            FindControls(true, form.Controls, toolStripPanels);
             foreach (ToolStripPanel toolStripPanel in toolStripPanels)
             {
-                // set all the controls to visible false/
+                // Set all the controls to visible false.
                 foreach (Control c in toolStripPanel.Controls)
                 {
                     c.Visible = false;
@@ -255,13 +262,14 @@ namespace System.Windows.Forms
                 {
                     toolStripPanelName = toolStripPanel.Parent.Name + "." + toolStripPanel.Dock.ToString();
                 }
+
                 toolStripPanel.BeginInit();
                 // get the associated toolstrips for this panel
                 if (toolStripPanelDestinationHash.ContainsKey(toolStripPanelName))
                 {
                     List<SettingsStub> stubSettings = toolStripPanelDestinationHash[toolStripPanelName];
 
-                    if (stubSettings != null)
+                    if (stubSettings is not null)
                     {
                         foreach (SettingsStub settings in stubSettings)
                         {
@@ -275,6 +283,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 toolStripPanel.EndInit();
             }
 
@@ -283,7 +292,7 @@ namespace System.Windows.Forms
 
         private void ApplyToolStripSettings(ToolStrip toolStrip, SettingsStub settings, Dictionary<string, ToolStrip> itemLocationHash)
         {
-            if (toolStrip != null)
+            if (toolStrip is not null)
             {
                 toolStrip.Visible = settings.Visible;
                 toolStrip.Size = settings.Size;
@@ -299,7 +308,7 @@ namespace System.Windows.Forms
                     for (int i = 0; ((i < toolStrip.Items.Count) && (i < keys.Length)); i++)
                     {
                         Match match = r.Match(keys[i]);
-                        if (match != null && match.Success)
+                        if (match is not null && match.Success)
                         {
                             string key = match.Value;
                             if (!string.IsNullOrEmpty(key) && itemLocationHash.ContainsKey(key))
@@ -314,20 +323,19 @@ namespace System.Windows.Forms
 
         private Dictionary<string, ToolStrip> BuildItemOriginationHash()
         {
-            ArrayList toolStrips = FindToolStrips(true, form.Controls);
             Dictionary<string, ToolStrip> itemLocationHash = new Dictionary<string, ToolStrip>();
 
-            if (toolStrips != null)
+            List<ToolStrip> toolStripControls = new();
+            FindControls(true, form.Controls, toolStripControls);
+
+            foreach (ToolStrip toolStrip in toolStripControls)
             {
-                foreach (ToolStrip toolStrip in toolStrips)
+                foreach (ToolStripItem item in toolStrip.Items)
                 {
-                    foreach (ToolStripItem item in toolStrip.Items)
+                    if (!string.IsNullOrEmpty(item.Name))
                     {
-                        if (!string.IsNullOrEmpty(item.Name))
-                        {
-                            Debug.Assert(!itemLocationHash.ContainsKey(item.Name), "WARNING: ToolStripItem name not unique.");
-                            itemLocationHash[item.Name] = toolStrip;
-                        }
+                        Debug.Assert(!itemLocationHash.ContainsKey(item.Name), "WARNING: ToolStripItem name not unique.");
+                        itemLocationHash[item.Name] = toolStrip;
                     }
                 }
             }
@@ -335,18 +343,13 @@ namespace System.Windows.Forms
             return itemLocationHash;
         }
 
-        private ArrayList FindControls(Type baseType, bool searchAllChildren, Control.ControlCollection controlsToLookIn, ArrayList foundControls)
+        private void FindControls<T>(bool searchAllChildren, Control.ControlCollection controlsToLookIn, List<T> foundControls)
+            where T : Control
         {
-            if ((controlsToLookIn is null) || (foundControls is null))
-            {
-                return null;
-            }
-
             try
             {
                 // Perform breadth first search - as it's likely people will want controls belonging
                 // to the same parent close to each other.
-
                 for (int i = 0; i < controlsToLookIn.Count; i++)
                 {
                     if (controlsToLookIn[i] is null)
@@ -354,14 +357,13 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    if (baseType.IsAssignableFrom(controlsToLookIn[i].GetType()))
+                    if (controlsToLookIn[i] is T control)
                     {
-                        foundControls.Add(controlsToLookIn[i]);
+                        foundControls.Add(control);
                     }
                 }
 
-                // Optional recurive search for controls in child collections.
-
+                // Optional recursive search for controls in child collections.
                 if (searchAllChildren)
                 {
                     for (int i = 0; i < controlsToLookIn.Count; i++)
@@ -370,37 +372,23 @@ namespace System.Windows.Forms
                         {
                             continue;
                         }
-                        if ((controlsToLookIn[i].Controls != null) && controlsToLookIn[i].Controls.Count > 0)
+
+                        if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
                         {
-                            // if it has a valid child collecion, append those results to our collection
-                            foundControls = FindControls(baseType, searchAllChildren, controlsToLookIn[i].Controls, foundControls);
+                            // If it has a valid child collection, append those results to our collection.
+                            FindControls(searchAllChildren, controlsToLookIn[i].Controls, foundControls);
                         }
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
             {
-                if (ClientUtils.IsCriticalException(e))
-                {
-                    throw;
-                }
             }
-            return foundControls;
-        }
-
-        private ArrayList FindToolStripPanels(bool searchAllChildren, Control.ControlCollection controlsToLookIn)
-        {
-            return FindControls(typeof(ToolStripPanel), true, form.Controls, new ArrayList());
-        }
-
-        private ArrayList FindToolStrips(bool searchAllChildren, Control.ControlCollection controlsToLookIn)
-        {
-            return FindControls(typeof(ToolStrip), true, form.Controls, new ArrayList());
         }
 
         private string GetSettingsKey(ToolStrip toolStrip)
         {
-            if (toolStrip != null)
+            if (toolStrip is not null)
             {
                 return formKey + "." + toolStrip.Name;
             }
@@ -468,6 +456,7 @@ namespace System.Windows.Forms
                 Name = toolStrip.Name;
                 ItemOrder = GetItemOrder(toolStrip);
             }
+
             public SettingsStub(ToolStripSettings toolStripSettings)
             {
                 ToolStripPanelName = toolStripSettings.ToolStripPanelName;

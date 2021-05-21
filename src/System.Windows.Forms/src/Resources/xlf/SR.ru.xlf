@@ -677,6 +677,21 @@
         <target state="translated">Необработанный VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="new">Go to next time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="new">Go to previous time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="new">Go to and select today's date</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Отмена</target>
@@ -1110,6 +1125,16 @@
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
         <target state="translated">Выбрано: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Закрыть</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Открыть</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -3709,6 +3734,11 @@ To replace this default dialog please handle the DataError event.</source>
         <target state="translated">Указывает, может ли пользователь редактировать ячейки элемента управления DataGridView.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">Добавлена строка {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
         <source>Row provided already belongs to a DataGridView control.</source>
         <target state="translated">Указанная строка уже принадлежит к элементу управления DataGridView.</target>
@@ -4726,7 +4756,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">{0}
     Версия сборки: {1}
     Версия Win32: {2}
-    CodeBase: {3}
+    CodeBase (база кода): {3}
 </target>
         <note />
       </trans-unit>
@@ -7062,6 +7092,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Цвет для отображения предыдущих и следующих месяцев, отображаемых в элементе управления 'календарь на месяц'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="new">Week {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">Выбраны года с {0} по {1}.</target>
@@ -8229,7 +8264,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
         <source>Static tabs cannot be removed from the PropertyGrid.</source>
-        <target state="translated">&lt;невозможно найти строку ресурса "PropertyGridRemoveStaticTabs"&gt;</target>
+        <target state="translated">невозможно найти строку ресурса "PropertyGridRemoveStaticTabs"</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridResetValue">
@@ -8314,7 +8349,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
         <source>Drop down control holder</source>
-        <target state="new">Drop down control holder</target>
+        <target state="translated">Контейнер раскрывающегося элемента управления</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -10408,8 +10443,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Длина текста должна быть меньше 64 символов.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Длина текста должна быть меньше 128 символов.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10420,6 +10455,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">Операция BeginEdit не удалась, поскольку значение свойства LabelEdit равно false.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode уже связан с другим TreeView. Сначала необходимо удалить его из текущего расположения или клонировать его.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10802,6 +10842,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Вверх</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Изменить</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Определяет, должен ли отображаемый текст быть совместимым с предыдущими версиями Windows Forms.</target>
@@ -11008,8 +11053,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">До создания первого объекта IWin32Window в приложении необходимо вызвать SetCompatibleTextRenderingDefault.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

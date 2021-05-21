@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             /// <param name="x">X coordinate.</param>
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 if (!_owningListBox.IsHandleCreated)
                 {
@@ -88,7 +88,7 @@ namespace System.Windows.Forms
 
                 AccessibleObject? element = HitTest((int)x, (int)y);
 
-                if (element != null)
+                if (element is not null)
                 {
                     return element;
                 }
@@ -132,7 +132,12 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
                     case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ListControlTypeId;
+                        // If we don't set a default role for the accessible object
+                        // it will be retrieved from Windows.
+                        // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
+                        return _owningListBox.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.ListControlTypeId
+                               : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -141,6 +146,7 @@ namespace System.Windows.Forms
                         {
                             _owningListBox.HasKeyboardFocus = false;
                         }
+
                         return result;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _owningListBox.InternalHandle;
@@ -158,7 +164,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 AccessibleObject? itemAccessibleObject = GetSelected();
-                if (itemAccessibleObject != null)
+                if (itemAccessibleObject is not null)
                 {
                     return new UiaCore.IRawElementProviderSimple[]
                     {
@@ -171,7 +177,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningListBox != null)
+                if (_owningListBox is not null)
                 {
                     return true;
                 }
@@ -227,7 +233,18 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                ItemArray.Entry item = _owningListBox.Items.InnerArray.Entries[index];
+                if (_owningListBox.Items.InnerArray.Count == 0)
+                {
+                    return null;
+                }
+
+                ItemArray.Entry? item = _owningListBox.Items.InnerArray.Entries[index];
+
+                if (item is null)
+                {
+                    return null;
+                }
+
                 if (!_itemAccessibleObjects.ContainsKey(item))
                 {
                     _itemAccessibleObjects.Add(item, new ListBoxItemAccessibleObject(_owningListBox, item, this));
@@ -276,8 +293,8 @@ namespace System.Windows.Forms
                 for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject? child = GetChild(index);
-                    Debug.Assert(child != null, $"GetChild({index}) returned null");
-                    if (child != null && child.Bounds.Contains(x, y))
+                    Debug.Assert(child is not null, $"GetChild({index}) returned null");
+                    if (child is not null && child.Bounds.Contains(x, y))
                     {
                         _owningListBox.HasKeyboardFocus = false;
                         return child;

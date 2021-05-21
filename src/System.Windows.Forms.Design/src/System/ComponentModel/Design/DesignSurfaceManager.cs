@@ -449,8 +449,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         private sealed class MergedServiceProvider : IServiceProvider
         {
-            private IServiceProvider _primaryProvider;
-            private IServiceProvider _secondaryProvider;
+            private readonly IServiceProvider _primaryProvider;
+            private readonly IServiceProvider _secondaryProvider;
 
             internal MergedServiceProvider(IServiceProvider primaryProvider, IServiceProvider secondaryProvider)
             {

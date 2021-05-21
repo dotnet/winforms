@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private class DateTimeUI : Control
         {
-            private MonthCalendar _monthCalendar = new DateTimeMonthCalendar();
+            private readonly MonthCalendar _monthCalendar = new DateTimeMonthCalendar();
             private object _value;
             private IWindowsFormsEditorService _edSvc;
 

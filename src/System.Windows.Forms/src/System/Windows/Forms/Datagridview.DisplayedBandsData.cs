@@ -329,6 +329,7 @@ namespace System.Windows.Forms
                 {
                     oldFirstDisplayedScrollingCol += insertionCount;
                 }
+
                 columnInsertionOccurred = true;
             }
 
@@ -348,6 +349,7 @@ namespace System.Windows.Forms
                 {
                     oldFirstDisplayedScrollingRow += insertionCount;
                 }
+
                 rowInsertionOccurred = true;
                 oldNumDisplayedScrollingRows += insertionCount;
                 oldNumDisplayedFrozenRows += insertionCount;

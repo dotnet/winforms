@@ -49,13 +49,14 @@ namespace System.Windows.Forms
                     catch
                     {
                     }
-                    if (nameToBind != null)
+
+                    if (nameToBind is not null)
                     {
                         if (string.CompareOrdinal(nameToBind.Name, AllowedAssemblyName) == 0)
                         {
                             byte[] tokenToBind = nameToBind.GetPublicKeyToken();
-                            if ((tokenToBind != null) &&
-                                (s_allowedToken != null) &&
+                            if ((tokenToBind is not null) &&
+                                (s_allowedToken is not null) &&
                                 (tokenToBind.Length == s_allowedToken.Length))
                             {
                                 bool block = false;
@@ -67,6 +68,7 @@ namespace System.Windows.Forms
                                         break;
                                     }
                                 }
+
                                 if (!block)
                                 {
                                     return null;
@@ -75,6 +77,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 throw new RestrictedTypeDeserializationException(SR.UnexpectedClipboardType);
             }
 
@@ -89,7 +92,7 @@ namespace System.Windows.Forms
                 // null strings will follow the default codepath in BinaryFormatter
                 assemblyName = null;
                 typeName = null;
-                if (serializedType != null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
+                if (serializedType is not null && !serializedType.Equals(typeof(string)) && !serializedType.Equals(typeof(Bitmap)))
                 {
                     throw new SerializationException(string.Format(SR.UnexpectedTypeForClipboardFormat, serializedType.FullName));
                 }

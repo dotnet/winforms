@@ -29,6 +29,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -42,6 +43,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -64,6 +66,7 @@ namespace System.Windows.Forms
                 {
                     culture = CultureInfo.CurrentCulture;
                 }
+
                 char separator = culture.TextInfo.ListSeparator[0];
                 string[] tokens = text.Split(new char[] { separator });
 
@@ -93,7 +96,7 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type.  The most common types to convert
         ///  are to and from a string object.  The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
@@ -111,6 +114,7 @@ namespace System.Windows.Forms
                     {
                         culture = CultureInfo.CurrentCulture;
                     }
+
                     string sep = culture.TextInfo.ListSeparator + " ";
                     PropertyDescriptorCollection props = GetProperties(value);
                     string[] args = new string[props.Count];
@@ -123,20 +127,25 @@ namespace System.Windows.Forms
 
                     return string.Join(sep, args);
                 }
+
                 if (destinationType == typeof(DateTime))
                 {
                     return range.Start;
                 }
+
                 if (destinationType == typeof(InstanceDescriptor))
                 {
-                    ConstructorInfo ctor = typeof(SelectionRange).GetConstructor(new Type[] {
-                        typeof(DateTime), typeof(DateTime)});
-                    if (ctor != null)
+                    ConstructorInfo ctor = typeof(SelectionRange).GetConstructor(new Type[]
+                    {
+                        typeof(DateTime), typeof(DateTime)
+                    });
+                    if (ctor is not null)
                     {
                         return new InstanceDescriptor(ctor, new object[] { range.Start, range.End });
                     }
                 }
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 

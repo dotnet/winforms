@@ -677,6 +677,21 @@
         <target state="translated">VT non géré : {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="new">Go to next time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="new">Go to previous time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="new">Go to and select today's date</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Annuler</target>
@@ -1110,6 +1125,16 @@
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
         <target state="translated">{0} sélectionné(s)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Fermer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Ouvrir</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -2214,7 +2239,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
         <source>{0} check box checked</source>
-        <target state="translated">Case à cocher {0} activée</target>
+        <target state="translated">{0} : case cochée</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
@@ -3707,6 +3732,11 @@ Pour remplacer cette boîte de dialogue par défaut, traitez l'événement DataE
       <trans-unit id="DataGridView_ReadOnlyDescr">
         <source>Indicates whether the user can edit the cells of the DataGridView control.</source>
         <target state="translated">Indique si l'utilisateur peut modifier les cellules du contrôle DataGridView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">La ligne {0} est ajoutée</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -7061,6 +7091,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">La couleur utilisée pour afficher les mois précédents et suivants qui s'affichent dans le calendrier mensuel.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="new">Week {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">Sélection effectuée de l'année {0} à {1}.</target>
@@ -8313,7 +8348,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
         <source>Drop down control holder</source>
-        <target state="new">Drop down control holder</target>
+        <target state="translated">Conteneur de contrôles déroulant</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -10407,8 +10442,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">La longueur du texte doit être inférieure à 64 caractères.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Le texte doit comporter moins de 128 caractères.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10419,6 +10454,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">Échec de BeginEdit, car la propriété LabelEdit a la valeur false.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">TreeNode est déjà lié à un autre TreeView. Vous devez d'abord le supprimer de son emplacement actuel ou le cloner.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10801,6 +10841,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Haut</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Modifier</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Spécifie si le rendu de texte doit être compatible avec les versions antérieures de Windows Forms.</target>
@@ -11007,8 +11052,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault doit être appelé avant la création du premier objet IWin32Window dans l'application.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

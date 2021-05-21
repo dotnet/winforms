@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -25,7 +23,7 @@ namespace System.Windows.Forms
         ///  class with the specified index to the <see cref='ListViewItem'/>
         ///  being edited and the new text for the label of the <see cref='ListViewItem'/>.
         /// </summary>
-        public LabelEditEventArgs(int item, string label)
+        public LabelEditEventArgs(int item, string? label)
         {
             Item = item;
             Label = label;
@@ -40,7 +38,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the new text assigned to the label of the <see cref='ListViewItem'/>.
         /// </summary>
-        public string Label { get; }
+        public string? Label { get; }
 
         /// <summary>
         ///  Gets or sets a value indicating whether changes made to the label of the

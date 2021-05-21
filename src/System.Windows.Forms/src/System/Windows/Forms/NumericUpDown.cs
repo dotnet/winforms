@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(ValueChanged))]
     [DefaultBindingProperty(nameof(Value))]
     [SRDescription(nameof(SR.DescriptionNumericUpDown))]
-    public class NumericUpDown : UpDownBase, ISupportInitialize
+    public partial class NumericUpDown : UpDownBase, ISupportInitialize
     {
         private const decimal DefaultValue = decimal.Zero;
         private const decimal DefaultMinimum = decimal.Zero;
@@ -99,6 +99,7 @@ namespace System.Windows.Forms
                 {
                     accelerations = new NumericUpDownAccelerationCollection();
                 }
+
                 return accelerations;
             }
         }
@@ -122,6 +123,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(DecimalPlaces), value, 0, 99));
                 }
+
                 decimalPlaces = value;
                 UpdateEditText();
             }
@@ -259,7 +261,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return accelerations != null && buttonPressedStartTime != InvalidValue;
+                return accelerations is not null && buttonPressedStartTime != InvalidValue;
             }
         }
 
@@ -322,6 +324,7 @@ namespace System.Windows.Forms
                 {
                     ValidateEditText();
                 }
+
                 return currentValue;
             }
 
@@ -734,6 +737,7 @@ namespace System.Windows.Forms
             {
                 text = num.ToString((ThousandsSeparator ? "N" : "F") + DecimalPlaces.ToString(CultureInfo.CurrentCulture), CultureInfo.CurrentCulture);
             }
+
             return text;
         }
 
@@ -805,6 +809,7 @@ namespace System.Windows.Forms
             {
                 maxDigits = (int)Math.Floor(Math.Log((double)decimal.MaxValue, baseSize));
             }
+
             bool maxDigitsReached = numDigits >= maxDigits;
             decimal testNumber;
 
@@ -846,6 +851,7 @@ namespace System.Windows.Forms
                 {
                     shortText = testNumber.ToString(CultureInfo.CurrentCulture);
                 }
+
                 int shortTextWidth = TextRenderer.MeasureText(shortText, Font).Width;
                 // Adding the width of the one digit that was dropped earlier.
                 // This assumes that no additional thousand separator is added by that digit which is correct.
@@ -882,101 +888,9 @@ namespace System.Windows.Forms
                     largestDigit = i;
                 }
             }
+
             Debug.Assert(largestDigit != -1 && digitWidth != -1, "Failed to find largest digit.");
             return largestDigit;
-        }
-
-        internal class NumericUpDownAccessibleObject : ControlAccessibleObject
-        {
-            private readonly UpDownBase _owner;
-
-            public NumericUpDownAccessibleObject(NumericUpDown owner) : base(owner)
-            {
-                _owner = owner;
-            }
-
-            public override AccessibleObject GetChild(int index)
-            {
-                // TextBox child
-                if (index == 0)
-                {
-                    return _owner.TextBox.AccessibilityObject.Parent;
-                }
-
-                // Up/down buttons
-                if (index == 1)
-                {
-                    return _owner.UpDownButtonsInternal.AccessibilityObject.Parent;
-                }
-
-                return null;
-            }
-
-            public override int GetChildCount()
-            {
-                return 2;
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.SpinnerControlTypeId;
-                    case UiaCore.UIA.BoundingRectanglePropertyId:
-                        return Bounds;
-                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                        return State;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return false;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    AccessibleRole role = Owner.AccessibleRole;
-
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.SpinButton;
-                }
-            }
-
-            internal override int[] RuntimeId
-            {
-                get
-                {
-                    if (_owner is null)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    // we need to provide a unique ID
-                    // others are implementing this in the same manner
-                    // first item is static - 0x2a (RuntimeIDFirstItem)
-                    // second item can be anything, but here it is a hash
-
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
-
-                    return runtimeId;
-                }
-            }
         }
     }
 }

@@ -144,10 +144,12 @@ namespace System.Windows.Forms.Design
             // listViewCannedMasks
             //
             resources.ApplyResources(_listViewCannedMasks, "listViewCannedMasks");
-            _listViewCannedMasks.Columns.AddRange(new ColumnHeader[] {
+            _listViewCannedMasks.Columns.AddRange(new ColumnHeader[]
+            {
             _maskDescriptionHeader,
             _dataFormatHeader,
-            _validatingTypeHeader});
+            _validatingTypeHeader
+            });
             _listViewCannedMasks.FullRowSelect = true;
             _listViewCannedMasks.HideSelection = false;
             _listViewCannedMasks.Margin = new Padding(0, 3, 0, 3);
@@ -442,6 +444,7 @@ namespace System.Windows.Forms.Design
             int maskDexIndex = GetMaskDescriptorIndex(maskDex);
             SetSelectedMaskDescriptor(maskDexIndex);
         }
+
         private void SetSelectedMaskDescriptor(int maskDexIndex)
         {
             if (maskDexIndex < 0 || _listViewCannedMasks.Items.Count <= maskDexIndex)
@@ -528,6 +531,7 @@ namespace System.Windows.Forms.Design
         {
             InsertMaskDescriptor(index, maskDescriptor, true);
         }
+
         private void InsertMaskDescriptor(int index, MaskDescriptor maskDescriptor, bool validateDescriptor)
         {
             string errorMessage;
@@ -603,7 +607,7 @@ namespace System.Windows.Forms.Design
             }
 
             int selectedIndex = _listViewCannedMasks.SelectedIndices[0];
-            MaskDescriptor maskDescriptor = (MaskDescriptor)_maskDescriptors[selectedIndex];
+            MaskDescriptor maskDescriptor = _maskDescriptors[selectedIndex];
 
             // If one of the canned mask descriptors chosen, update test control.
             if (maskDescriptor != _customMaskDescriptor)
@@ -639,9 +643,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///    <para>
-        ///   Called when the help button is clicked.
-        ///    </para>
+        ///  <para>
+        ///  Called when the help button is clicked.
+        ///  </para>
         /// </summary>
         private void ShowHelp()
         {

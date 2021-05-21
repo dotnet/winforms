@@ -17,6 +17,7 @@ This document describes our approach to testing.
             - [Disposal](#dispose-created-objects)
             - [Theory tests](#theory-tests#theory-tests)
         - [Throw unhandled exceptions](#throw-unhandled-exceptions)
+* [Rendering Tests](#rendering-tests)
 * [Functional Tests](#functional-tests)
     * [Running functional tests](#running-functional-tests)
         - [Functional testing from the command line](#functional-testing-from-the-command-line)
@@ -43,8 +44,8 @@ To execute unit tests, run `.\build -test`
 If all the tests are successful, you should see something like this:
 
 ```console
-  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\netcoreapp5.0\System.Windows.Forms.Tests.dll [netcoreapp5.0|x64]
-  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\netcoreapp5.0\System.Windows.Forms.Tests.dll [netcoreapp5.0|x64]
+  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net6.0\System.Windows.Forms.Tests.dll [net6.0|x64]
+  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net6.0\System.Windows.Forms.Tests.dll [net6.0|x64]
 
 Build succeeded.
     0 Warning(s)
@@ -56,9 +57,9 @@ Build succeeded.
 When testing from the command line, a failed test should look something like this:
 
 ```console
-Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\netcoreapp5.0\System.Windows.Forms.Tests.dll [netcoreapp5.0|x64]
-XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_netcoreapp5.0_x64.html [netcoreapp5.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
-XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_netcoreapp5.0_x64.html [netcoreapp5.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
+Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.Tests\Debug\net6.0\System.Windows.Forms.Tests.dll [net6.0|x64]
+XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_net6.0_x64.html [net6.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
+XUnit : error : Tests failed: E:\src\repos\github\winforms\artifacts\TestResults\Debug\System.Windows.Forms.Tests_net6.0_x64.html [net6.0|x64] [E:\src\repos\github\winforms\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj]
 
 Build FAILED.
 ```
@@ -74,7 +75,7 @@ To test from Visual Studio, start Visual Studio via `.\start-vs.cmd`, and test h
 
 * When testing from Visual Studio, test errors show up as normal in the Test Explorer.
 * To troubleshoot, debug the selected test and set breakpoints as you normally would.
-* For common issues when running tests through Visual Studio, see [Testing in Visual Studio](https://github.com/dotnet/winforms/blob/master/docs/testing-in-vs.md)
+* For common issues when running tests through Visual Studio, see [Testing in Visual Studio](testing-in-vs.md)
 
 ## Adding new unit tests
 
@@ -206,7 +207,7 @@ Each test class must implement the `IClassFixture<ThreadExceptionFixture>` inter
 ##### Unit tests should be part of the same PR as code changes
 
 * Unit tests must be added for any change to public APIs. 
-* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases it is totally acceptable to use Reflection API to arrange, act and assert. For example: https://gist.github.com/JeremyKuhne/e8c9c33d037ac5e5ed4c477817cae414
+* We will accept unit tests for internal/private methods as well. Some non-public API can be accessed directly (e.g. `internal`), some via subclassing (e.g. `virtual`) or via the public surface. However there are plenty of instances where a non-public API can't be easily accessed or arranged for. In this cases we use [`TestAccessor` pattern](https://github.com/dotnet/winforms/blob/main/src/System.Windows.Forms.Primitives/tests/TestUtilities/TestAccessor.cs) to arrange, act and assert.
 
 ##### Code Coverage
 
@@ -228,9 +229,44 @@ Each test class must implement the `IClassFixture<ThreadExceptionFixture>` inter
 * Search for Mock in the existing tests for examples, and see [Moq](https://github.com/Moq/moq4/wiki/Quickstart) for details on how to use Moq.
 
 
+# Rendering Tests
+
+We use [Enhance Metafiles](https://docs.microsoft.com/windows/win32/gdi/enhanced-format-metafiles) (or EMF for short) to validate rendering operations, i.e. assert that correct shapes were drawn with expected colours and brushes.
+
+A typical "rendering" assersion test would looks something like this:
+```cs
+[WinFormsFact]
+public void MyControl_Rendering()
+{
+    // 1. Create a control to validate rendering for.
+    // 2. Add the control to a form, and make sure the form is created
+    using Form form = new Form();
+    using var control = new MyControl { ... };
+    form.Controls.Add(control);
+    Assert.NotEqual(IntPtr.Zero, form.Handle);
+
+    // Create an Enhance Metafile into which we will render the control
+    using var emf = new EmfScope();
+    DeviceContextState state = new DeviceContextState(emf);
+
+    // Render the control
+    control.PrintToMetafile(emf);
+
+    // We can see the rendering steps by invoking this command:
+    // string records = emf.RecordsToString();
+
+    // Assert the rendering was as expected
+    emf.Validate(
+        state,
+        ...
+        );
+}
+```
 
 
 # Functional Tests
+
+> :warning: There is a very blurry line between unit and functional tests in Windows Forms realm. A lot of our implementations depend on ambient contexts (such as Win32, COM, etc.). We classify tests as "functional" or "integration" that require process-wide settings (such as visual styles) or require user-like interactions (e.g. mouse gestures).
 
 Currently, there is a single functional test suite in the repository: the **WinformsControlsTest**. There is an xUnit project that executes various commands against this binary.
 
@@ -243,8 +279,8 @@ To execute functional tests, run `.\build -integrationTest`
 You will see various windows open and close very quickly. If all the tests are successful, you should see something like this:
 
 ```console
-  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\netcoreapp5.0\System.Windows.Forms.IntegrationTests.dll [netcoreapp5.0|x64]
-  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\netcoreapp5.0\System.Windows.Forms.IntegrationTests.dll [netcoreapp5.0|x64]
+  Running tests: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\net6.0\System.Windows.Forms.IntegrationTests.dll [net6.0|x64]
+  Tests succeeded: E:\src\repos\github\winforms\artifacts\bin\System.Windows.Forms.IntegrationTests\Debug\net6.0\System.Windows.Forms.IntegrationTests.dll [net6.0|x64]
 
 Build succeeded.
     0 Warning(s)
@@ -287,4 +323,4 @@ Functional tests are built and executed by file name convention
   
 # Testing for Accessibility
 
-Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/master/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 
+Our goal is to make writing accessible WinForms applications easy. Specifically, all default property values should yield accessible experience. To test that controls are accessible, find or add the changed control to [AccessibilityTests application](https://github.com/dotnet/winforms/tree/main/src/System.Windows.Forms/tests/AccessibilityTests) and run [Accessibility Insights for Windows](https://accessibilityinsights.io/docs/en/windows/overview) on it. 

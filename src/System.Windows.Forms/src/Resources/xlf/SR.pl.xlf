@@ -677,6 +677,21 @@
         <target state="translated">Nieobsługiwany VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="new">Go to next time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="new">Go to previous time frame</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="new">Go to and select today's date</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Anuluj</target>
@@ -1110,6 +1125,16 @@
       <trans-unit id="ComboBoxValueSelectedFormat">
         <source>{0} selected</source>
         <target state="translated">Wybrano: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonCloseName">
+        <source>Close</source>
+        <target state="translated">Zamknij</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboboxDropDownButtonOpenName">
+        <source>Open</source>
+        <target state="translated">Otwórz</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -3707,6 +3732,11 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       <trans-unit id="DataGridView_ReadOnlyDescr">
         <source>Indicates whether the user can edit the cells of the DataGridView control.</source>
         <target state="translated">Wskazuje, czy użytkownik może edytować komórki formantu DataGridView.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_RowAddedNotification">
+        <source>Row {0} is added</source>
+        <target state="translated">Został dodany wiersz {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_RowAlreadyBelongsToDataGridView">
@@ -7061,6 +7091,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Kolor używany do wyświetlania miesięcy poprzedzających i następnych pojawiających się w kalendarzy miesięcznym.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="new">Week {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
         <source>Year {0} to {1} selected.</source>
         <target state="translated">Wybrane lata: {0} do {1}.</target>
@@ -8313,7 +8348,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PropertyGridViewDropDownControlHolderAccessibleName">
         <source>Drop down control holder</source>
-        <target state="new">Drop down control holder</target>
+        <target state="translated">Symbol zastępczy kontrolki listy rozwijanej</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridViewEditorCreatedInvalidObject">
@@ -10407,8 +10442,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
-        <source>Text length must be less than 64 characters long.</source>
-        <target state="translated">Długość tekstu musi być mniejsza niż 64 znaki.</target>
+        <source>Text length must be less than 128 characters long.</source>
+        <target state="translated">Długość tekstu musi być mniejsza niż 128 znaków.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -10419,6 +10454,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="TreeNodeBeginEditFailed">
         <source>BeginEdit did not succeed because LabelEdit property is false.</source>
         <target state="translated">Nie można wykonać elementu BeginEdit, ponieważ właściwość LabelEdit ma wartość false.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TreeNodeBoundToAnotherTreeView">
+        <source>The TreeNode is already bound to another TreeView. You must first remove it from its current location or clone it.</source>
+        <target state="translated">Element TreeNode jest już powiązany z innym elementem TreeView. Należy go najpierw usunąć z jego bieżącej lokalizacji lub sklonować.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCheckedDescr">
@@ -10801,6 +10841,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">W górę</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpDownEditLocalizedControlTypeName">
+        <source>Edit</source>
+        <target state="translated">Edytuj</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UseCompatibleTextRenderingDescr">
         <source>Specifies whether text rendering should be compatible with previous releases of Windows Forms.</source>
         <target state="translated">Określa, czy renderowanie tekstu powinno być zgodne z poprzednimi wydaniami formantów systemu Windows.</target>
@@ -11007,8 +11052,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">Należy wywołać element SetCompatibleTextRenderingDefault, aby pierwszy obiekt IWin32Window został utworzony w aplikacji.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -60,8 +58,8 @@ namespace System.Windows.Forms
                 //
                 if (cachedImeMode == ImeMode.Inherit)
                 {
-                    Control parent = ParentInternal;
-                    if (parent != null)
+                    Control? parent = ParentInternal;
+                    if (parent is not null)
                     {
                         cachedImeMode = parent.CachedImeMode;
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "inherited from parent = " + parent.GetType());
@@ -240,10 +238,7 @@ namespace System.Windows.Forms
                 Debug.Indent();
 
                 //valid values are -1 to 0xb
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)ImeMode.Inherit, (int)ImeMode.OnHalf))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ImeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 ImeMode oldImeMode = CachedImeMode;
                 CachedImeMode = value;
@@ -251,7 +246,7 @@ namespace System.Windows.Forms
                 if (oldImeMode != value)
                 {
                     // Cache current value to determine whether we need to raise the ImeModeChanged.
-                    Control ctl = null;
+                    Control? ctl = null;
 
                     if (!DesignMode && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable)
                     {
@@ -265,7 +260,7 @@ namespace System.Windows.Forms
                             ctl = FromChildHandle(User32.GetFocus());
                         }
 
-                        if (ctl != null && ctl.CanEnableIme)
+                        if (ctl is not null && ctl.CanEnableIme)
                         {
                             // Block ImeModeChanged since we are checking for it below.
                             DisableImeModeChangedCount++;
@@ -640,7 +635,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(ImeSupported, "ImeModeChanged should not be raised on an Ime-Unaware control.");
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside OnImeModeChanged(), this = " + this);
-            ((EventHandler)Events[s_imeModeChangedEvent])?.Invoke(this, e);
+            ((EventHandler?)Events[s_imeModeChangedEvent])?.Invoke(this, e);
         }
 
         /// <summary>
@@ -685,7 +680,7 @@ namespace System.Windows.Forms
 
             Form form = FindForm();
 
-            if (form != null)
+            if (form is not null)
             {
                 InputLanguageChangedEventArgs e = InputLanguage.CreateInputLanguageChangedEventArgs(m);
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Culture=" + e.Culture);
@@ -709,7 +704,7 @@ namespace System.Windows.Forms
             InputLanguageChangingEventArgs e = InputLanguage.CreateInputLanguageChangingEventArgs(m);
             Form form = FindForm();
 
-            if (form != null)
+            if (form is not null)
             {
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Culture=" + e.Culture);
                 form.PerformOnInputLanguageChanging(e);
@@ -736,6 +731,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             DefWndProc(ref m);
         }
 
@@ -830,7 +826,7 @@ namespace System.Windows.Forms
             Debug.Indent();
 
             Control topMostWinformsParent = TopMostParent;
-            Form appForm = topMostWinformsParent as Form;
+            Form? appForm = topMostWinformsParent as Form;
 
             if ((appForm is null || appForm.Modal) && !topMostWinformsParent.ContainsFocus)
             {
@@ -1006,7 +1002,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmGetConversionStatus(" + inputContext + ", conversion, sentence)");
             Imm32.ImmGetConversionStatus(inputContext, out Imm32.IME_CMODE conversion, out Imm32.IME_SMODE sentence);
 
-            Debug.Assert(countryTable != null, "countryTable is null");
+            Debug.Assert(countryTable is not null, "countryTable is null");
 
             if ((conversion & Imm32.IME_CMODE.NATIVE) != 0)
             {
@@ -1246,6 +1242,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, "ImmReleaseContext(" + handle + ", " + inputContext + ")");
                         Imm32.ImmReleaseContext(handle, inputContext);
                     }
+
                     break;
             }
 
@@ -1295,7 +1292,7 @@ namespace System.Windows.Forms
     /// </summary>
     public struct ImeModeConversion
     {
-        private static Dictionary<ImeMode, ImeModeConversion> imeModeConversionBits;
+        private static Dictionary<ImeMode, ImeModeConversion>? imeModeConversionBits;
 
         internal Imm32.IME_CMODE setBits;
         internal Imm32.IME_CMODE clearBits;
@@ -1320,7 +1317,8 @@ namespace System.Windows.Forms
         ///              meaning depending on the language; for instance ImeMode.Off means 'disable' or 'alpha' to Chinese
         ///              but to Japanese it is 'alpha' and to Korean it has no meaning.
         /// </summary>
-        private static readonly ImeMode[] japaneseTable = {
+        private static readonly ImeMode[] japaneseTable =
+        {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Off,
@@ -1333,7 +1331,8 @@ namespace System.Windows.Forms
             ImeMode.Alpha
         };
 
-        private static readonly ImeMode[] koreanTable = {
+        private static readonly ImeMode[] koreanTable =
+        {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Alpha,
@@ -1346,7 +1345,8 @@ namespace System.Windows.Forms
             ImeMode.Alpha
         };
 
-        private static readonly ImeMode[] chineseTable = {
+        private static readonly ImeMode[] chineseTable =
+        {
             ImeMode.Inherit,
             ImeMode.Disable,
             ImeMode.Off,

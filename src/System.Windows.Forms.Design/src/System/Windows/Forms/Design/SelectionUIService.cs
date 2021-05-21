@@ -127,6 +127,7 @@ namespace System.Windows.Forms.Design
                 {
                     message = e.ToString();
                 }
+
                 RTLAwareMessageBox.Show(null, message, null, MessageBoxButtons.OK, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1, 0);
             }
         }
@@ -157,6 +158,7 @@ namespace System.Windows.Forms.Design
                 {
                     s.Dispose();
                 }
+
                 _selectionHandlers.Clear();
                 _selectionItems.Clear();
                 // Listen to the SystemEvents so that we can resync selection based on display settings etc.
@@ -164,6 +166,7 @@ namespace System.Windows.Forms.Design
                 SystemEvents.InstalledFontsChanged -= new EventHandler(OnSystemSettingChanged);
                 SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
             }
+
             base.Dispose(disposing);
         }
 
@@ -177,6 +180,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             _ignoreCaptureChanged = true;
             Capture = false;
             _mouseDragAnchor = s_invalidPoint;
@@ -226,6 +230,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return new HitTestInfo(SelectionUIItem.NOHIT, null);
         }
 
@@ -238,7 +243,7 @@ namespace System.Windows.Forms.Design
         {
             // Determine a nice name for the drag operation
             string transactionName;
-            if ((int)(rules & SelectionRules.Moveable) != 0)
+            if ((rules & SelectionRules.Moveable) != 0)
             {
                 if (objects.Length > 1)
                 {
@@ -258,10 +263,11 @@ namespace System.Windows.Forms.Design
                             name = objects[0].GetType().Name;
                         }
                     }
+
                     transactionName = string.Format(SR.DragDropMoveComponent, name);
                 }
             }
-            else if ((int)(rules & SelectionRules.AllSizeable) != 0)
+            else if ((rules & SelectionRules.AllSizeable) != 0)
             {
                 if (objects.Length > 1)
                 {
@@ -281,6 +287,7 @@ namespace System.Windows.Forms.Design
                             name = objects[0].GetType().Name;
                         }
                     }
+
                     transactionName = string.Format(SR.DragDropSizeComponent, name);
                 }
             }
@@ -288,6 +295,7 @@ namespace System.Windows.Forms.Design
             {
                 transactionName = string.Format(SR.DragDropDragComponents, objects.Length);
             }
+
             return transactionName;
         }
 
@@ -304,6 +312,7 @@ namespace System.Windows.Forms.Design
                     _batchChanged = false;
                     ((ISelectionUIService)this).SyncSelection();
                 }
+
                 if (_batchSync)
                 {
                     _batchSync = false;
@@ -408,6 +417,7 @@ namespace System.Windows.Forms.Design
             {
                 UpdateWindowRegion();
             }
+
             Invalidate();
             Update();
         }
@@ -445,6 +455,7 @@ namespace System.Windows.Forms.Design
                 _dragHandler.OleDragOver(devent);
             }
         }
+
         /// <summary>
         ///  Inheriting classes should override this method to handle this event. Call super.onDragLeave to send this event to any registered event listeners.
         /// </summary>
@@ -520,7 +531,7 @@ namespace System.Windows.Forms.Design
                     {
                         SelectionRules rules = SelectionRules.None;
                         // If the CTRL key isn't down, select this component, otherwise, we wait until the mouse up. Make sure the component is selected
-                        _ctrlSelect = (Control.ModifierKeys & Keys.Control) != Keys.None;
+                        _ctrlSelect = (ModifierKeys & Keys.Control) != Keys.None;
                         if (!_ctrlSelect)
                         {
                             _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
@@ -530,20 +541,24 @@ namespace System.Windows.Forms.Design
                         {
                             rules |= SelectionRules.Moveable;
                         }
+
                         if ((hitTest & SelectionUIItem.SIZE_MASK) != 0)
                         {
                             if ((hitTest & (SelectionUIItem.SIZE_X | SelectionUIItem.POS_RIGHT)) == (SelectionUIItem.SIZE_X | SelectionUIItem.POS_RIGHT))
                             {
                                 rules |= SelectionRules.RightSizeable;
                             }
+
                             if ((hitTest & (SelectionUIItem.SIZE_X | SelectionUIItem.POS_LEFT)) == (SelectionUIItem.SIZE_X | SelectionUIItem.POS_LEFT))
                             {
                                 rules |= SelectionRules.LeftSizeable;
                             }
+
                             if ((hitTest & (SelectionUIItem.SIZE_Y | SelectionUIItem.POS_TOP)) == (SelectionUIItem.SIZE_Y | SelectionUIItem.POS_TOP))
                             {
                                 rules |= SelectionRules.TopSizeable;
                             }
+
                             if ((hitTest & (SelectionUIItem.SIZE_Y | SelectionUIItem.POS_BOTTOM)) == (SelectionUIItem.SIZE_Y | SelectionUIItem.POS_BOTTOM))
                             {
                                 rules |= SelectionRules.BottomSizeable;
@@ -600,6 +615,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             // If we're not dragging then set the cursor correctly.
             if (!_mouseDragging)
             {
@@ -638,10 +654,12 @@ namespace System.Windows.Forms.Design
                 {
                     _mouseDragOffset.X = screenCoord.X - _mouseDragAnchor.X;
                 }
+
                 if ((_mouseDragHitTest & SelectionUIItem.MOVE_Y) != 0)
                 {
                     _mouseDragOffset.Y = screenCoord.Y - _mouseDragAnchor.Y;
                 }
+
                 if ((_mouseDragHitTest & SelectionUIItem.SIZE_X) != 0)
                 {
                     if ((_mouseDragHitTest & SelectionUIItem.POS_LEFT) != 0)
@@ -654,6 +672,7 @@ namespace System.Windows.Forms.Design
                         _mouseDragOffset.Width = screenCoord.X - _mouseDragAnchor.X;
                     }
                 }
+
                 if ((_mouseDragHitTest & SelectionUIItem.SIZE_Y) != 0)
                 {
                     if ((_mouseDragHitTest & SelectionUIItem.POS_TOP) != 0)
@@ -681,6 +700,7 @@ namespace System.Windows.Forms.Design
                         {
                             Cursor = Cursors.Default;
                         }
+
                         ((ISelectionUIService)this).DragMoved(delta);
                     }
                 }
@@ -752,6 +772,7 @@ namespace System.Windows.Forms.Design
                 {
                     continue;
                 }
+
                 item.DoPaint(e.Graphics);
             }
 
@@ -777,6 +798,7 @@ namespace System.Windows.Forms.Design
                 {
                     continue;
                 }
+
                 Cursor cursor = item.GetCursorAtPoint(clientCoords);
                 if (cursor != null)
                 {
@@ -788,6 +810,7 @@ namespace System.Windows.Forms.Design
                     {
                         Cursor = cursor;
                     }
+
                     return;
                 }
             }
@@ -807,10 +830,12 @@ namespace System.Windows.Forms.Design
                         {
                             Cursor = cursor;
                         }
+
                         return;
                     }
                 }
             }
+
             // Don't know what to set; just use the default.
             Cursor = null;
         }
@@ -842,6 +867,7 @@ namespace System.Windows.Forms.Design
                     {
                         _ignoreCaptureChanged = true;
                     }
+
                     break;
                 case User32.WM.CAPTURECHANGED:
                     if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
@@ -852,9 +878,11 @@ namespace System.Windows.Forms.Design
                             ((ISelectionUIService)this).EndDrag(true);
                         }
                     }
+
                     _ignoreCaptureChanged = false;
                     break;
             }
+
             base.WndProc(ref m);
         }
 
@@ -897,9 +925,11 @@ namespace System.Windows.Forms.Design
                 {
                     return;
                 }
+
                 Debug.Fail("A component may have only one selection UI handler.");
                 throw new InvalidOperationException();
             }
+
             _selectionHandlers[component] = handler;
             // If this component is selected, create a new UI handler for it.
             if (_selSvc != null && _selSvc.GetComponentSelected(component))
@@ -961,6 +991,7 @@ namespace System.Windows.Forms.Design
             {
                 primaryHandler = GetHandler(primary);
             }
+
             if (primaryHandler is null)
             {
                 return false; // no UI handler for selection
@@ -979,10 +1010,12 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             if (list.Count == 0)
             {
                 return false; // nothing matching the given constraints
             }
+
             objects = list.ToArray();
             bool dragging = false;
             // We must setup state before calling QueryBeginDrag.  It is possible that QueryBeginDrag will cancel a drag (if it places a modal dialog, for example), so we must have the drag data all setup before it cancels.  Then, we will check again after QueryBeginDrag to see if a cancel happened.
@@ -1025,6 +1058,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return dragging;
         }
 
@@ -1044,6 +1078,7 @@ namespace System.Windows.Forms.Design
             {
                 newOffset = new Rectangle(0, 0, offset.Width, offset.Height);
             }
+
             if ((_dragRules & SelectionRules.AllSizeable) == SelectionRules.None)
             {
                 if (newOffset.IsEmpty)
@@ -1100,6 +1135,7 @@ namespace System.Windows.Forms.Design
                         trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
                     }
                 }
+
                 try
                 {
                     handler.EndDrag(components, cancel);
@@ -1115,6 +1151,7 @@ namespace System.Windows.Forms.Design
                 {
                     trans.Commit();
                 }
+
                 // Reset the selection.  This will re-display our selection.
                 Visible = _savedVisible;
                 ((ISelectionUIService)this).SyncSelection();
@@ -1123,6 +1160,7 @@ namespace System.Windows.Forms.Design
                     _dragTransaction.Commit();
                     _dragTransaction = null;
                 }
+
                 // In case this drag was initiated by us, ensure that our mouse state is correct
                 EndMouseDrag(MousePosition);
             }
@@ -1138,6 +1176,7 @@ namespace System.Windows.Forms.Design
             {
                 return Array.Empty<object>();
             }
+
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
@@ -1153,8 +1192,10 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
-                selection = (object[])list.ToArray();
+
+                selection = list.ToArray();
             }
+
             return selection ?? (Array.Empty<object>());
         }
 
@@ -1171,6 +1212,7 @@ namespace System.Windows.Forms.Design
                 case AdornmentType.Maximum:
                     return new Size(ContainerSelectionUIItem.CONTAINER_WIDTH, ContainerSelectionUIItem.CONTAINER_HEIGHT);
             }
+
             return new Size(0, 0);
         }
 
@@ -1195,6 +1237,7 @@ namespace System.Windows.Forms.Design
                 Debug.Fail("The component is not currently selected.");
                 throw new InvalidOperationException();
             }
+
             return sel.GetRules();
         }
 
@@ -1208,6 +1251,7 @@ namespace System.Windows.Forms.Design
             {
                 return SelectionStyles.None;
             }
+
             return s.Style;
         }
 
@@ -1225,6 +1269,7 @@ namespace System.Windows.Forms.Design
                     {
                         existingItem.Dispose();
                     }
+
                     SelectionUIItem item = new ContainerSelectionUIItem(this, component);
                     _selectionItems[component] = item;
                     // Now update our region and invalidate
@@ -1233,6 +1278,7 @@ namespace System.Windows.Forms.Design
                     {
                         existingItem.Invalidate();
                     }
+
                     item.Invalidate();
                 }
             }
@@ -1246,6 +1292,7 @@ namespace System.Windows.Forms.Design
                     {
                         existingItem.Dispose();
                     }
+
                     UpdateWindowRegion();
                     existingItem.Invalidate();
                 }
@@ -1291,6 +1338,7 @@ namespace System.Windows.Forms.Design
                         updateRegion |= item.UpdateSize();
                         item.UpdateRules();
                     }
+
                     if (updateRegion)
                     {
                         UpdateWindowRegion();
@@ -1318,6 +1366,7 @@ namespace System.Windows.Forms.Design
                         item.UpdateRules();
                         item.Dispose();
                     }
+
                     UpdateWindowRegion();
                     Invalidate();
                     Update();
@@ -1351,20 +1400,23 @@ namespace System.Windows.Forms.Design
             public const int GRABHANDLE_WIDTH = 7;
             public const int GRABHANDLE_HEIGHT = 7;
             // tables we use to determine how things can move and size
-            internal static readonly int[] s_activeSizeArray = new int[] {
+            internal static readonly int[] s_activeSizeArray = new int[]
+            {
                 SIZE_X | SIZE_Y | POS_LEFT | POS_TOP,      SIZE_Y | POS_TOP,      SIZE_X | SIZE_Y | POS_TOP | POS_RIGHT,
                 SIZE_X | POS_LEFT,                                                SIZE_X | POS_RIGHT,
                 SIZE_X | SIZE_Y | POS_LEFT | POS_BOTTOM,   SIZE_Y | POS_BOTTOM,   SIZE_X | SIZE_Y | POS_RIGHT | POS_BOTTOM
             };
 
-            internal static readonly Cursor[] s_activeCursorArrays = new Cursor[] {
+            internal static readonly Cursor[] s_activeCursorArrays = new Cursor[]
+            {
                 Cursors.SizeNWSE,   Cursors.SizeNS,   Cursors.SizeNESW,
                 Cursors.SizeWE,                      Cursors.SizeWE,
                 Cursors.SizeNESW,   Cursors.SizeNS,   Cursors.SizeNWSE
             };
 
             internal static readonly int[] s_inactiveSizeArray = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-            internal static readonly Cursor[] s_inactiveCursorArray = new Cursor[] {
+            internal static readonly Cursor[] s_inactiveCursorArray = new Cursor[]
+            {
                 Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow,
                 Cursors.Arrow,                   Cursors.Arrow,
                 Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow
@@ -1399,6 +1451,7 @@ namespace System.Windows.Forms.Design
                         _control = cd.Control;
                     }
                 }
+
                 UpdateRules();
                 UpdateGrabSettings();
                 UpdateSize();
@@ -1454,6 +1507,7 @@ namespace System.Windows.Forms.Design
                     Control parent = _control.Parent;
                     borderColor = parent.BackColor;
                 }
+
                 Brush brush = new SolidBrush(borderColor);
                 gr.ExcludeClip(inner);
                 gr.FillRectangle(brush, outer);
@@ -1524,6 +1578,7 @@ namespace System.Windows.Forms.Design
                         cursor = _cursors[nOffset];
                     }
                 }
+
                 return cursor;
             }
 
@@ -1545,6 +1600,7 @@ namespace System.Windows.Forms.Design
                 {
                     return ((GetRules() & SelectionRules.Moveable) == SelectionRules.None ? 0 : MOVE_X | MOVE_Y);
                 }
+
                 return _sizes[nOffset];
             }
 
@@ -1625,6 +1681,7 @@ namespace System.Windows.Forms.Design
 
                     return -1; // unknown hit
                 }
+
                 return -1; // unknown hit
             }
 
@@ -1654,6 +1711,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return _region;
             }
 
@@ -1692,14 +1750,17 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
+
                 if (pt.X < _outerRect.X || pt.X > _outerRect.X + _outerRect.Width)
                 {
                     return false;
                 }
+
                 if (pt.Y < _outerRect.Y || pt.Y > _outerRect.Y + _outerRect.Height)
                 {
                     return false;
                 }
+
                 if (pt.X > _innerRect.X
                     && pt.X < _innerRect.X + _innerRect.Width
                     && pt.Y > _innerRect.Y
@@ -1707,6 +1768,7 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
+
                 return true;
             }
 
@@ -1736,6 +1798,7 @@ namespace System.Windows.Forms.Design
                         _cursors[1] = Cursors.Arrow;
                         _cursors[2] = Cursors.Arrow;
                     }
+
                     if ((rules & SelectionRules.LeftSizeable) != SelectionRules.LeftSizeable)
                     {
                         _sizes[0] = 0;
@@ -1745,6 +1808,7 @@ namespace System.Windows.Forms.Design
                         _cursors[3] = Cursors.Arrow;
                         _cursors[5] = Cursors.Arrow;
                     }
+
                     if ((rules & SelectionRules.BottomSizeable) != SelectionRules.BottomSizeable)
                     {
                         _sizes[5] = 0;
@@ -1754,6 +1818,7 @@ namespace System.Windows.Forms.Design
                         _cursors[6] = Cursors.Arrow;
                         _cursors[7] = Cursors.Arrow;
                     }
+
                     if ((rules & SelectionRules.RightSizeable) != SelectionRules.RightSizeable)
                     {
                         _sizes[2] = 0;
@@ -1823,6 +1888,7 @@ namespace System.Windows.Forms.Design
                             _region.Dispose();
                             _region = null;
                         }
+
                         sizeChanged = true;
                     }
                 }
@@ -1832,6 +1898,7 @@ namespace System.Windows.Forms.Design
                     sizeChanged = _outerRect.IsEmpty || !_outerRect.Equals(rcNew);
                     _innerRect = _outerRect = rcNew;
                 }
+
                 return sizeChanged;
             }
         }
@@ -1873,6 +1940,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
+
                 return ht;
             }
 
@@ -1902,6 +1970,7 @@ namespace System.Windows.Forms.Design
                         _region = new Region(new Rectangle(0, 0, 0, 0));
                     }
                 }
+
                 return _region;
             }
         }
@@ -1941,6 +2010,7 @@ namespace System.Windows.Forms.Design
                         throw;
                     }
                 }
+
                 return false;
             }
 
@@ -1958,6 +2028,7 @@ namespace System.Windows.Forms.Design
                 {
                     hash |= 0x10000;
                 }
+
                 return hash;
             }
         }

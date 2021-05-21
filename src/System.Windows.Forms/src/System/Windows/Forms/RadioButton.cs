@@ -108,10 +108,7 @@ namespace System.Windows.Forms
                 if (appearance != value)
                 {
                     //valid values are 0x0 to 0x1
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Appearance))
                     {
@@ -255,6 +252,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
                 }
+
                 return cp;
             }
         }
@@ -323,7 +321,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return Adapter.CommonLayout().Layout().checkBounds;
+                        return Adapter.CommonLayout().Layout().CheckBounds;
                     }
                 }
             }
@@ -339,7 +337,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    return Adapter.CommonLayout().Layout().checkBounds;
+                    return Adapter.CommonLayout().Layout().CheckBounds;
                 }
             }
         }
@@ -422,6 +420,7 @@ namespace System.Windows.Forms
             {
                 Checked = true;
             }
+
             base.OnClick(e);
         }
 
@@ -453,6 +452,7 @@ namespace System.Windows.Forms
                     TabStop = true;
                 }
             }
+
             base.OnEnter(e);
         }
 
@@ -464,11 +464,12 @@ namespace System.Windows.Forms
                 {
                     WipeTabStops(tabbedInto);
                 }
+
                 TabStop = isChecked;
                 if (isChecked)
                 {
                     Control parent = ParentInternal;
-                    if (parent != null)
+                    if (parent is not null)
                     {
                         ControlCollection children = parent.Controls;
                         for (int i = 0; i < children.Count; i++)
@@ -495,7 +496,7 @@ namespace System.Windows.Forms
         private void WipeTabStops(bool tabbedInto)
         {
             Control parent = ParentInternal;
-            if (parent != null)
+            if (parent is not null)
             {
                 ControlCollection children = parent.Controls;
                 for (int i = 0; i < children.Count; i++)
@@ -507,6 +508,7 @@ namespace System.Windows.Forms
                         {
                             button.firstfocus = false;
                         }
+
                         if (button.autoCheck)
                         {
                             button.TabStop = false;
@@ -562,6 +564,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -595,8 +598,10 @@ namespace System.Windows.Forms
                 {
                     PerformClick();     // Generate a click if already focused
                 }
+
                 return true;
             }
+
             return false;
         }
 

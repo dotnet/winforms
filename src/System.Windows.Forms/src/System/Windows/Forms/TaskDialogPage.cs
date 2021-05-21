@@ -317,7 +317,7 @@ namespace System.Windows.Forms
             get => _heading;
             set
             {
-                if (BoundDialog != null)
+                if (BoundDialog is not null)
                 {
                     // If we are bound but waiting for initialization (e.g. immediately after
                     // starting a navigation), we buffer the change until we apply the
@@ -353,7 +353,7 @@ namespace System.Windows.Forms
             get => _text;
             set
             {
-                if (BoundDialog != null)
+                if (BoundDialog is not null)
                 {
                     if (WaitingForInitialization)
                     {
@@ -402,7 +402,7 @@ namespace System.Windows.Forms
                 // that seems like an overkill.
                 DenyIfWaitingForInitialization();
 
-                if (BoundDialog != null)
+                if (BoundDialog is not null)
                 {
                     (ComCtl32.TASKDIALOGCONFIG.IconUnion icon, bool? iconIsFromHandle) =
                         GetIconValue(value);
@@ -410,7 +410,7 @@ namespace System.Windows.Forms
                     // The native task dialog icon cannot be updated from a handle
                     // type to a non-handle type and vice versa, so we need to throw
                     // throw in such a case.
-                    if (iconIsFromHandle != null && iconIsFromHandle != _boundIconIsFromHandle)
+                    if (iconIsFromHandle is not null && iconIsFromHandle != _boundIconIsFromHandle)
                     {
                         throw new InvalidOperationException(SR.TaskDialogCannotUpdateIconType);
                     }
@@ -540,7 +540,7 @@ namespace System.Windows.Forms
         ///   started navigation to this page but navigation did not yet complete
         ///   (in which case we cannot modify the dialog even though we are bound).
         /// </summary>
-        internal bool WaitingForInitialization => BoundDialog != null && !_appliedInitialization;
+        internal bool WaitingForInitialization => BoundDialog is not null && !_appliedInitialization;
 
         /// <summary>
         ///  Shows the new content in the current task dialog.
@@ -615,9 +615,7 @@ namespace System.Windows.Forms
             {
                 // Convert the value to an ushort before converting it to a pointer,
                 // which corresponds to using the MAKEINTRESOURCEW macro in native code.
-#pragma warning disable IDE0004 // Remove Unnecessary Cast (false positive, see https://github.com/dotnet/roslyn/issues/20617)
                 iconUnion.pszIcon = (char*)checked((ushort)icon.StandardIcon);
-#pragma warning restore IDE0004 // Remove Unnecessary Cast
                 iconIsFromHandle = false;
             }
 
@@ -626,7 +624,7 @@ namespace System.Windows.Forms
 
         internal void DenyIfBound()
         {
-            if (BoundDialog != null)
+            if (BoundDialog is not null)
             {
                 throw new InvalidOperationException(SR.TaskDialogCannotSetPropertyOfBoundPage);
             }
@@ -682,7 +680,7 @@ namespace System.Windows.Forms
         internal void Validate()
         {
             // Check that this page instance is not already bound to a TaskDialog instance.
-            if (BoundDialog != null)
+            if (BoundDialog is not null)
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogPageIsAlreadyBound,
@@ -692,8 +690,8 @@ namespace System.Windows.Forms
 
             // We also need to check the controls (and collections) since they could also be
             // bound to a TaskDialogPage at the same time.
-            if (_buttons.BoundPage != null ||
-                _radioButtons.BoundPage != null)
+            if (_buttons.BoundPage is not null ||
+                _radioButtons.BoundPage is not null)
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogCollectionAlreadyBound,
@@ -706,7 +704,7 @@ namespace System.Windows.Forms
                 .Append(_expander)
                 .Append(_footnote)
                 .Append(_progressBar)
-                .Any(c => c?.BoundPage != null))
+                .Any(c => c?.BoundPage is not null))
             {
                 throw new InvalidOperationException(string.Format(
                     SR.TaskDialogControlAlreadyBound,
@@ -763,7 +761,7 @@ namespace System.Windows.Forms
             }
 
             // Ensure the default button is part of the button collection.
-            if (DefaultButton != null && !_buttons.Contains(DefaultButton))
+            if (DefaultButton is not null && !_buttons.Contains(DefaultButton))
             {
                 throw new InvalidOperationException(SR.TaskDialogDefaultButtonMustExistInCollection);
             }
@@ -780,7 +778,7 @@ namespace System.Windows.Forms
             out int defaultButtonID,
             out int defaultRadioButtonID)
         {
-            if (BoundDialog != null)
+            if (BoundDialog is not null)
             {
                 throw new InvalidOperationException();
             }
@@ -832,7 +830,7 @@ namespace System.Windows.Forms
                 flags |= customButton.Bind(this, CustomButtonStartID + i);
             }
 
-            if (DefaultButton != null)
+            if (DefaultButton is not null)
             {
                 // Retrieve the button from the collection, to handle the case for standard buttons
                 // when the user set an equal (but not same) instance as default button.
@@ -869,17 +867,17 @@ namespace System.Windows.Forms
             if (_boundCustomButtons.Any(e => e.IsCreated && e is TaskDialogCommandLinkButton))
                 flags |= ComCtl32.TDF.USE_COMMAND_LINKS;
 
-            if (_checkBox != null)
+            if (_checkBox is not null)
             {
                 flags |= _checkBox.Bind(this);
             }
 
-            if (_expander != null)
+            if (_expander is not null)
             {
                 flags |= _expander.Bind(this);
             }
 
-            if (_footnote != null)
+            if (_footnote is not null)
             {
                 flags |= _footnote.Bind(this, out footnoteIcon);
             }
@@ -888,7 +886,7 @@ namespace System.Windows.Forms
                 footnoteIcon = default;
             }
 
-            if (_progressBar != null)
+            if (_progressBar is not null)
             {
                 flags |= _progressBar.Bind(this);
             }

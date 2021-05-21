@@ -185,6 +185,7 @@ namespace System.Windows.Forms.Tests
                 list.Add(node);
                 node = node.Next;
             }
+
             return list;
         }
 
@@ -196,6 +197,7 @@ namespace System.Windows.Forms.Tests
             {
                 list.Add(enumerator.Current);
             }
+
             return list;
         }
     }

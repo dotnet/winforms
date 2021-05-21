@@ -32,10 +32,12 @@ namespace System.Windows.Forms
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
         private static readonly TYMED[] ALLOWED_TYMEDS =
-        new TYMED[] {
+        new TYMED[]
+        {
             TYMED.TYMED_HGLOBAL,
             TYMED.TYMED_ISTREAM,
-            TYMED.TYMED_GDI};
+            TYMED.TYMED_GDI
+        };
 
         private readonly IDataObject innerData;
 
@@ -53,7 +55,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IDataObject");
             innerData = data;
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -70,7 +72,8 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IComDataObject");
                 innerData = new OleConverter(data);
             }
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -81,7 +84,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject standalone");
             innerData = new DataStore();
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -103,7 +106,8 @@ namespace System.Windows.Forms
                 innerData = new DataStore();
                 SetData(data);
             }
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -113,7 +117,7 @@ namespace System.Windows.Forms
         public DataObject(string format, object data) : this()
         {
             SetData(format, data);
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         private Gdi32.HBITMAP GetCompatibleBitmap(Bitmap bm)
@@ -157,7 +161,7 @@ namespace System.Windows.Forms
         public virtual object GetData(string format, bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format + ", " + autoConvert.ToString());
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             return innerData.GetData(format, autoConvert);
         }
 
@@ -212,7 +216,7 @@ namespace System.Windows.Forms
         public virtual bool GetDataPresent(string format, bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format + ", " + autoConvert.ToString());
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             bool b = innerData.GetDataPresent(format, autoConvert);
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
             return b;
@@ -241,7 +245,7 @@ namespace System.Windows.Forms
         public virtual string[] GetFormats(bool autoConvert)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats: " + autoConvert.ToString());
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             return innerData.GetFormats(autoConvert);
         }
 
@@ -280,10 +284,7 @@ namespace System.Windows.Forms
         public virtual bool ContainsText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             return GetDataPresent(ConvertToDataFormats(format), false);
         }
@@ -300,6 +301,7 @@ namespace System.Windows.Forms
             {
                 retVal.AddRange(strings);
             }
+
             return retVal;
         }
 
@@ -316,10 +318,7 @@ namespace System.Windows.Forms
         public virtual string GetText(TextDataFormat format)
         {
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             if (GetData(ConvertToDataFormats(format), false) is string text)
             {
@@ -335,6 +334,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(audioBytes));
             }
+
             SetAudio(new MemoryStream(audioBytes));
         }
 
@@ -344,6 +344,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(audioStream));
             }
+
             SetData(DataFormats.WaveAudio, false, audioStream);
         }
 
@@ -353,6 +354,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
+
             string[] strings = new string[filePaths.Count];
             filePaths.CopyTo(strings, 0);
             SetData(DataFormats.FileDrop, true, strings);
@@ -364,6 +366,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(image));
             }
+
             SetData(DataFormats.Bitmap, true, image);
         }
 
@@ -380,10 +383,7 @@ namespace System.Windows.Forms
             }
 
             //valid values are 0x0 to 0x4
-            if (!ClientUtils.IsEnumValid(format, (int)format, (int)TextDataFormat.Text, (int)TextDataFormat.CommaSeparatedValue))
-            {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(TextDataFormat));
-            }
+            SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             SetData(ConvertToDataFormats(format), false, textData);
         }
@@ -424,7 +424,8 @@ namespace System.Windows.Forms
                 || format.Equals(DataFormats.UnicodeText)
                 || format.Equals(DataFormats.StringFormat))
             {
-                return new string[] {
+                return new string[]
+                {
                     DataFormats.StringFormat,
                     DataFormats.UnicodeText,
                     DataFormats.Text,
@@ -435,7 +436,8 @@ namespace System.Windows.Forms
                 || format.Equals(CF_DEPRECATED_FILENAME)
                 || format.Equals(CF_DEPRECATED_FILENAMEW))
             {
-                return new string[] {
+                return new string[]
+                {
                     DataFormats.FileDrop,
                     CF_DEPRECATED_FILENAMEW,
                     CF_DEPRECATED_FILENAME,
@@ -445,7 +447,8 @@ namespace System.Windows.Forms
             if (format.Equals(DataFormats.Bitmap)
                 || format.Equals((typeof(Bitmap)).FullName))
             {
-                return new string[] {
+                return new string[]
+                {
                     (typeof(Bitmap)).FullName,
                     DataFormats.Bitmap,
                 };
@@ -466,6 +469,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -495,7 +499,7 @@ namespace System.Windows.Forms
                     else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
                     {
                         if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
-                            && bm != null)
+                            && bm is not null)
                         {
                             // save bitmap
                             medium.unionmember = (IntPtr)GetCompatibleBitmap(bm);
@@ -527,6 +531,7 @@ namespace System.Windows.Forms
             {
                 return ((OleConverter)innerData).OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
             }
+
             pdwConnection = 0;
             return (int)HRESULT.E_NOTIMPL;
         }
@@ -542,6 +547,7 @@ namespace System.Windows.Forms
                 ((OleConverter)innerData).OleDataObject.DUnadvise(dwConnection);
                 return;
             }
+
             Marshal.ThrowExceptionForHR((int)HRESULT.E_NOTIMPL);
         }
 
@@ -570,6 +576,7 @@ namespace System.Windows.Forms
             {
                 return innerDataOleConverter.OleDataObject.EnumFormatEtc(dwDirection);
             }
+
             if (dwDirection == DATADIR.DATADIR_GET)
             {
                 return new FormatEnumerator(this);
@@ -588,6 +595,7 @@ namespace System.Windows.Forms
             {
                 return innerDataOleConverter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
+
             pformatetcOut = new FORMATETC();
             return DATA_S_SAMEFORMATETC;
         }
@@ -668,6 +676,7 @@ namespace System.Windows.Forms
             {
                 return ((OleConverter)innerData).OleDataObject.QueryGetData(ref formatetc);
             }
+
             if (formatetc.dwAspect == DVASPECT.DVASPECT_CONTENT)
             {
                 if (GetTymedUseable(formatetc.tymed))
@@ -780,10 +789,11 @@ namespace System.Windows.Forms
             }
             else if (format.Equals(DataFormats.Serializable)
                      || data is ISerializable
-                     || (data != null && data.GetType().IsSerializable))
+                     || (data is not null && data.GetType().IsSerializable))
             {
                 hr = SaveObjectToHandle(ref medium.unionmember, data, DataObject.RestrictDeserializationToSafeTypes(format));
             }
+
             return hr;
         }
 
@@ -804,9 +814,9 @@ namespace System.Windows.Forms
                 formatter.Binder = new BitmapBinder();
             }
 
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
             formatter.Serialize(stream, data);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
         }
 
         /// <summary>
@@ -831,6 +841,7 @@ namespace System.Windows.Forms
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
+
             try
             {
                 var span = new Span<byte>(ptr.ToPointer(), size);
@@ -841,6 +852,7 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalUnlock(handle);
             }
+
             return HRESULT.S_OK;
         }
 
@@ -871,6 +883,7 @@ namespace System.Windows.Forms
             {
                 sizeInBytes += ((uint)files[i].Length + 1) * 2;
             }
+
             sizeInBytes += 2;
 
             // Allocate the Win32 memory
@@ -1028,7 +1041,7 @@ namespace System.Windows.Forms
         public virtual void SetData(string format, bool autoConvert, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, autoConvert, data);
         }
 
@@ -1039,7 +1052,7 @@ namespace System.Windows.Forms
         public virtual void SetData(string format, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
 
@@ -1051,7 +1064,7 @@ namespace System.Windows.Forms
         public virtual void SetData(Type format, object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(format, data);
         }
 
@@ -1062,7 +1075,7 @@ namespace System.Windows.Forms
         public virtual void SetData(object data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
+            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
             innerData.SetData(data);
         }
     }

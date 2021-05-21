@@ -43,6 +43,7 @@ namespace System.Windows.Forms
                 parentImageListProperty = value;
             }
         }
+
         /// <summary>
         ///  Gets a value indicating whether this converter can convert an object in the
         ///  given source type to a string using the specified context.
@@ -53,6 +54,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -65,10 +67,12 @@ namespace System.Windows.Forms
             {
                 return (string)value;
             }
+
             if (value is null)
             {
                 return "";
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -76,7 +80,7 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type.  The most common types to convert
         ///  are to and from a string object.  The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the desitnation type, this will
+        ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)

@@ -92,6 +92,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 for (; sie.MoveNext();)
                 {
                     if (string.Compare(sie.Name, "Data", true, CultureInfo.InvariantCulture) == 0)
@@ -99,7 +100,7 @@ namespace System.Windows.Forms
                         try
                         {
                             byte[] dat = (byte[])sie.Value;
-                            if (dat != null)
+                            if (dat is not null)
                             {
                                 using var datMemoryStream = new MemoryStream(dat);
                                 InitializeFromStream(datMemoryStream);
@@ -116,7 +117,7 @@ namespace System.Windows.Forms
                         {
                             Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Loading up property bag from stream...");
                             byte[] dat = (byte[])sie.Value;
-                            if (dat != null)
+                            if (dat is not null)
                             {
                                 PropertyBagBinary = new PropertyBagStream();
                                 using var datMemoryStream = new MemoryStream(dat);
@@ -157,7 +158,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(storage is null, "but we already have a storage!!!");
                 IntPtr hglobal = IntPtr.Zero;
-                if (buffer != null)
+                if (buffer is not null)
                 {
                     hglobal = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE, (uint)length);
                     IntPtr pointer = Kernel32.GlobalLock(hglobal);
@@ -228,7 +229,7 @@ namespace System.Windows.Forms
             {
                 if (ms is null)
                 {
-                    Debug.Assert(buffer != null, "gotta have the buffer already...");
+                    Debug.Assert(buffer is not null, "gotta have the buffer already...");
                     if (buffer is null)
                     {
                         return null;
@@ -240,6 +241,7 @@ namespace System.Windows.Forms
                 {
                     ms.Seek(0, SeekOrigin.Begin);
                 }
+
                 return new Ole32.GPStream(ms);
             }
 
@@ -255,6 +257,7 @@ namespace System.Windows.Forms
                 {
                     licenseKey = new string(br.ReadChars(cc));
                 }
+
                 for (int skipUnits = br.ReadInt32(); skipUnits > 0; skipUnits--)
                 {
                     int len = br.ReadInt32();
@@ -281,8 +284,8 @@ namespace System.Windows.Forms
 
             internal State RefreshStorage(Ole32.IPersistStorage iPersistStorage)
             {
-                Debug.Assert(storage != null, "how can we not have a storage object?");
-                Debug.Assert(iLockBytes != null, "how can we have a storage w/o ILockBytes?");
+                Debug.Assert(storage is not null, "how can we not have a storage object?");
+                Debug.Assert(iLockBytes is not null, "how can we have a storage w/o ILockBytes?");
                 if (storage is null || iLockBytes is null)
                 {
                     return null;
@@ -321,6 +324,7 @@ namespace System.Windows.Forms
                 {
                     iPersistStorage.SaveCompleted(storage);
                 }
+
                 return this;
             }
 
@@ -331,7 +335,7 @@ namespace System.Windows.Forms
                 bw.Write(type);
                 bw.Write(VERSION);
                 bw.Write(manualUpdate);
-                if (licenseKey != null)
+                if (licenseKey is not null)
                 {
                     bw.Write(licenseKey.Length);
                     bw.Write(licenseKey.ToCharArray());
@@ -340,13 +344,14 @@ namespace System.Windows.Forms
                 {
                     bw.Write((int)0);
                 }
+
                 bw.Write((int)0); // skip units
                 bw.Write(length);
-                if (buffer != null)
+                if (buffer is not null)
                 {
                     bw.Write(buffer);
                 }
-                else if (ms != null)
+                else if (ms is not null)
                 {
                     ms.Position = 0;
                     ms.WriteTo(stream);
@@ -367,7 +372,7 @@ namespace System.Windows.Forms
 
                 si.AddValue("Data", stream.ToArray());
 
-                if (PropertyBagBinary != null)
+                if (PropertyBagBinary is not null)
                 {
                     try
                     {

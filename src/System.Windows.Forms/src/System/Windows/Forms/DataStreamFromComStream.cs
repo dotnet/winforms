@@ -85,6 +85,7 @@ namespace System.Windows.Forms
                 var span = new Span<byte>(buffer, index, count);
                 bytesRead = Read(span);
             }
+
             return bytesRead;
         }
 
@@ -175,7 +176,7 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (disposing && comStream != null)
+                if (disposing && comStream is not null)
                 {
                     try
                     {
@@ -185,6 +186,7 @@ namespace System.Windows.Forms
                     {
                     }
                 }
+
                 // Can't release a COM stream from the finalizer thread.
                 comStream = null;
             }

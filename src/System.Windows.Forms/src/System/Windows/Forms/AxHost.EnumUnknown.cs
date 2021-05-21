@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
             unsafe HRESULT Ole32.IEnumUnknown.Next(uint celt, IntPtr rgelt, uint* pceltFetched)
             {
-                if (pceltFetched != null)
+                if (pceltFetched is not null)
                 {
                     *pceltFetched = 0;
                 }
@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                 {
                     for (; loc < size && fetched < celt; ++loc)
                     {
-                        if (arr[loc] != null)
+                        if (arr[loc] is not null)
                         {
                             Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(arr[loc]));
                             rgelt = (IntPtr)((long)rgelt + (long)sizeof(IntPtr));
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (pceltFetched != null)
+                if (pceltFetched is not null)
                 {
                     *pceltFetched = fetched;
                 }

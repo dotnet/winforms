@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -14,7 +16,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  This constructor extends from the standard SelectionGlyphBase constructor.
         /// </summary>
-        internal SelectionBorderGlyph(Rectangle controlBounds, SelectionRules rules, SelectionBorderGlyphType type, Behavior behavior) : base(behavior)
+        internal SelectionBorderGlyph(Rectangle controlBounds, SelectionRules rules, SelectionBorderGlyphType type, Behavior? behavior)
+            : base(behavior)
         {
             InitializeGlyph(controlBounds, rules, type);
         }
@@ -40,6 +43,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeNS;
                         rules = SelectionRules.TopSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the top and the bottom of the selection border glyph
                     hitBounds.Y -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Height += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
@@ -50,6 +54,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeNS;
                         rules = SelectionRules.BottomSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the top and the bottom of the selection border glyph
                     hitBounds.Y -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Height += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
@@ -60,6 +65,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeWE;
                         rules = SelectionRules.LeftSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the left and the right of the selection border glyph
                     hitBounds.X -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
@@ -70,6 +76,7 @@ namespace System.Windows.Forms.Design.Behavior
                         hitTestCursor = Cursors.SizeWE;
                         rules = SelectionRules.RightSizeable;
                     }
+
                     // We want to apply the SELECTIONBORDERHITAREA to the left and the right of the selection border glyph
                     hitBounds.X -= (DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE) / 2;
                     hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;

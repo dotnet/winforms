@@ -53,6 +53,7 @@ namespace System.Windows.Forms
                 return Padding.Empty;
             }
         }
+
         protected override Padding DefaultPadding
         {
             get
@@ -69,6 +70,7 @@ namespace System.Windows.Forms
                 {
                     downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
                 }
+
                 return downScrollImage;
             }
         }
@@ -89,6 +91,7 @@ namespace System.Windows.Forms
                 {
                     upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
                 }
+
                 return upScrollImage;
             }
         }
@@ -101,6 +104,7 @@ namespace System.Windows.Forms
                 {
                     mouseDownTimer = new Timer();
                 }
+
                 return mouseDownTimer;
             }
         }
@@ -109,15 +113,17 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (mouseDownTimer != null)
+                if (mouseDownTimer is not null)
                 {
                     mouseDownTimer.Enabled = false;
                     mouseDownTimer.Dispose();
                     mouseDownTimer = null;
                 }
             }
+
             base.Dispose(disposing);
         }
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             UnsubscribeAll();
@@ -140,6 +146,7 @@ namespace System.Windows.Forms
         {
             UnsubscribeAll();
         }
+
         private void UnsubscribeAll()
         {
             MouseDownTimer.Enabled = false;
@@ -164,8 +171,8 @@ namespace System.Windows.Forms
         public override Size GetPreferredSize(Size constrainingSize)
         {
             Size preferredSize = Size.Empty;
-            preferredSize.Height = (Label.Image != null) ? Label.Image.Height + 4 : 0;
-            preferredSize.Width = (ParentInternal != null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
+            preferredSize.Height = (Label.Image is not null) ? Label.Image.Height + 4 : 0;
+            preferredSize.Width = (ParentInternal is not null) ? ParentInternal.Width - 2 : preferredSize.Width; // Two for border
             return preferredSize;
         }
 
@@ -194,6 +201,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 base.SetBoundsCore(x, y, width, height, specified);
             }
 

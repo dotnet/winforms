@@ -2529,7 +2529,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 Assert.Null(control.ActiveXInstance);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -2583,7 +2584,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 Assert.Null(control.ActiveXInstance);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -2630,7 +2632,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 Assert.Null(control.ActiveXInstance);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -2728,7 +2731,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 Assert.Null(control.ActiveXInstance);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try

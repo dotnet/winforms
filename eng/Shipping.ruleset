@@ -120,7 +120,7 @@
     <Rule Id="SA1412" Action="None" />
     <Rule Id="SA1413" Action="None" />
     <Rule Id="SA1414" Action="None" /> <!-- Tuple types in signatures should have element names -->
-    <Rule Id="SA1500" Action="None" />
+    <Rule Id="SA1500" Action="Error" /> <!-- The opening or closing brace within a C# statement, element, or expression is not placed on its own line. -->
     <Rule Id="SA1501" Action="None" />
     <Rule Id="SA1502" Action="None" />
     <Rule Id="SA1503" Action="None" />
@@ -133,7 +133,7 @@
     <Rule Id="SA1510" Action="None" />
     <Rule Id="SA1511" Action="None" />
     <Rule Id="SA1512" Action="None" />
-    <Rule Id="SA1513" Action="None" />
+    <Rule Id="SA1513" Action="Error" /> <!-- A closing brace within a C# element, statement, or expression is not followed by a blank line -->
     <Rule Id="SA1514" Action="None" />
     <Rule Id="SA1515" Action="None" />
     <Rule Id="SA1516" Action="None" />
@@ -181,6 +181,9 @@
     <Rule Id="SA1651" Action="None" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
+    <!-- Disable until https://github.com/dotnet/roslyn-analyzers/issues/4750 is fixed -->
+    <Rule Id="AD0001" Action="None" />
+
     <Rule Id="CA1000" Action="None" />             <!-- Do not declare static members on generic types -->
     <Rule Id="CA1001" Action="None" />             <!-- Types that own disposable fields should be disposable -->
     <Rule Id="CA1002" Action="None" />             <!-- Do not expose generic lists -->
@@ -237,6 +240,7 @@
     <Rule Id="CA1308" Action="None" />             <!-- Normalize strings to uppercase -->
     <Rule Id="CA1309" Action="None" />             <!-- Use ordinal stringcomparison -->
     <Rule Id="CA1401" Action="Warning" />          <!-- P/Invokes should not be visible -->
+    <Rule Id="CA1416" Action="None" />             <!-- Validate platform compatibility -->
     <Rule Id="CA1417" Action="Warning" />          <!-- Do not use 'OutAttribute' on string parameters for P/Invokes -->
     <Rule Id="CA1501" Action="None" />             <!-- Avoid excessive inheritance -->
     <Rule Id="CA1502" Action="None" />             <!-- Avoid excessive complexity -->

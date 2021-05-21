@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
 
                 // Site the tabPage if necessary.
                 ISite site = _owner.Site;
-                if (site != null)
+                if (site is not null)
                 {
                     ISite siteTab = tabPage.Site;
                     if (siteTab is null)
@@ -81,10 +81,10 @@ namespace System.Windows.Forms
                     _owner.RemoveTabPage(index);
                     if (index == curSelectedIndex)
                     {
-                         // Always select the first tabPage is the Selected TabPage is removed.
+                        // Always select the first tabPage is the Selected TabPage is removed.
                         _owner.SelectedIndex = 0;
                     }
-            }
+                }
 
                 _owner.UpdateTabSelection(false);
             }

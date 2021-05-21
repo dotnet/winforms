@@ -66,6 +66,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetAttributes);
@@ -76,7 +77,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             string cat = GetCategoryFromObject(sender.TargetObject, sender.DISPID);
 
-            if (cat != null && cat.Length > 0)
+            if (cat is not null && cat.Length > 0)
             {
                 attrEvent.Add(new CategoryAttribute(cat));
             }

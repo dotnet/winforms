@@ -36,11 +36,13 @@ namespace System.Windows.Forms.Design
                     _targetProperty = prop;
                 }
             }
+
             Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collectoin edtior with.");
             if (text is null)
             {
                 text = SR.ToolStripItemCollectionEditorVerb;
             }
+
             _editItemsVerb = new DesignerVerb(text, new EventHandler(OnEditItems));
 
             if (addToDesignerVerbs)
@@ -60,6 +62,7 @@ namespace System.Windows.Forms.Design
                 {
                     _componentChangeSvc = (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
                 }
+
                 return _componentChangeSvc;
             }
         }
@@ -75,6 +78,7 @@ namespace System.Windows.Forms.Design
                 {
                     return _designer.Component.Site.Container;
                 }
+
                 return null;
             }
         }
@@ -104,8 +108,10 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
+
                 throw;
             }
+
             return true;
         }
 
@@ -134,10 +140,12 @@ namespace System.Windows.Forms.Design
             {
                 return this;
             }
+
             if (_designer.Component.Site != null)
             {
                 return _designer.Component.Site.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -186,11 +194,13 @@ namespace System.Windows.Forms.Design
             {
                 actionUIService.HideUI(_designer.Component);
             }
+
             object propertyValue = _targetProperty.GetValue(_designer.Component);
             if (propertyValue is null)
             {
                 return;
             }
+
             CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
             Debug.Assert(itemsEditor != null, "Didn't get a collection editor for type '" + _targetProperty.PropertyType.FullName + "'");
             if (itemsEditor != null)

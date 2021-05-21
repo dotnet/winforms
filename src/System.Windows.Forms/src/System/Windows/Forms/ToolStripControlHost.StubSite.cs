@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -83,12 +83,12 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetKey(object value)
             {
-                if (_dictionary != null)
+                if (_dictionary is not null)
                 {
                     foreach (DictionaryEntry de in _dictionary)
                     {
                         object o = de.Value;
-                        if (value != null && value.Equals(o))
+                        if (value is not null && value.Equals(o))
                         {
                             return de.Key;
                         }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IDictionaryService.GetValue(object key)
             {
-                if (_dictionary != null)
+                if (_dictionary is not null)
                 {
                     return _dictionary[key];
                 }

@@ -24,6 +24,7 @@ namespace System.Windows.Forms.Layout
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -37,6 +38,7 @@ namespace System.Windows.Forms.Layout
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -57,6 +59,7 @@ namespace System.Windows.Forms.Layout
                 ParseStyles(settings, tableLayoutSettingsXml.GetElementsByTagName("Rows"), /*isColumn=*/false);
                 return settings;
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
@@ -92,6 +95,7 @@ namespace System.Windows.Forms.Layout
 
                     xmlWriter.WriteEndElement();
                 }
+
                 xmlWriter.WriteEndElement(); // end Controls
 
                 //
@@ -103,10 +107,12 @@ namespace System.Windows.Forms.Layout
                 {
                     columnStyles.AppendFormat("{0},{1},", colStyle.SizeType, colStyle.Width);
                 }
+
                 if (columnStyles.Length > 0)
                 {
                     columnStyles.Remove(columnStyles.Length - 1, 1);
                 }
+
                 xmlWriter.WriteAttributeString("Styles", columnStyles.ToString());
                 xmlWriter.WriteEndElement(); // end columns
 
@@ -119,10 +125,12 @@ namespace System.Windows.Forms.Layout
                 {
                     rowStyles.AppendFormat("{0},{1},", rowStyle.SizeType, rowStyle.Height);
                 }
+
                 if (rowStyles.Length > 0)
                 {
                     rowStyles.Remove(rowStyles.Length - 1, 1);
                 }
+
                 xmlWriter.WriteAttributeString("Styles", rowStyles.ToString());
                 xmlWriter.WriteEndElement(); // end Rows
 
@@ -131,16 +139,18 @@ namespace System.Windows.Forms.Layout
                 xmlWriter.Close();
                 return xmlStringBuilder.ToString();
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
         private string GetAttributeValue(XmlNode node, string attribute)
         {
             XmlAttribute attr = node.Attributes[attribute];
-            if (attr != null)
+            if (attr is not null)
             {
                 return attr.Value;
             }
+
             return null;
         }
 
@@ -154,6 +164,7 @@ namespace System.Windows.Forms.Layout
                     return result;
                 }
             }
+
             return valueIfNotFound;
         }
 
@@ -204,6 +215,7 @@ namespace System.Windows.Forms.Layout
                         {
                             nextIndex++;
                         }
+
                         SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);
 
                         // ----- Float Parsing --------------
@@ -212,6 +224,7 @@ namespace System.Windows.Forms.Layout
                         {
                             nextIndex++;
                         }
+
                         // Append digits left of the decimal delimiter(s)
                         StringBuilder floatStringBuilder = new StringBuilder();
                         while ((nextIndex < styleString.Length) && (char.IsDigit(styleString[nextIndex])))
@@ -219,6 +232,7 @@ namespace System.Windows.Forms.Layout
                             floatStringBuilder.Append(styleString[nextIndex]);
                             nextIndex++;
                         }
+
                         // Append culture invariant delimiter
                         floatStringBuilder.Append('.');
                         // Append digits right of the decimal delimiter(s)
@@ -228,8 +242,10 @@ namespace System.Windows.Forms.Layout
                             {
                                 floatStringBuilder.Append(styleString[nextIndex]);
                             }
+
                             nextIndex++;
                         }
+
                         string floatString = floatStringBuilder.ToString();
                         if (!float.TryParse(floatString, NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out float width))
                         {

@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Design
         /// Obsolete ComponentDesigner method which sets component default properties.  Overriden to avoid setting
         /// the Mask improperly.
         /// </summary>
-        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
+        [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         public override void OnSetComponentDefaults()
         {
             // do nothing.
@@ -146,13 +146,13 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///   Allows a designer to filter the set of properties
-        ///   the component it is designing will expose through the
-        ///   TypeDescriptor object.  This method is called
-        ///   immediately before its corresponding "Post" method.
-        ///   If you are overriding this method you should call
-        ///   the base implementation before you perform your own
-        ///   filtering.
+        ///  Allows a designer to filter the set of properties
+        ///  the component it is designing will expose through the
+        ///  TypeDescriptor object.  This method is called
+        ///  immediately before its corresponding "Post" method.
+        ///  If you are overriding this method you should call
+        ///  the base implementation before you perform your own
+        ///  filtering.
         /// </summary>
         protected override void PreFilterProperties(IDictionary properties)
         {
@@ -230,10 +230,10 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Shadow the Text property to do two things:
-        ///     1. Always show the text without prompt or literals.
-        ///     2. The text from the UITypeEditor is assigned escaping literals, prompt and spaces, this is to allow for partial inputs.
-        ///     Observe that if the MTB is hooked to a PropertyBrowser at design time, shadowing of the property won't work unless the
-        ///     application is a well written control designer (implements corresponding interfaces).
+        ///  1. Always show the text without prompt or literals.
+        ///  2. The text from the UITypeEditor is assigned escaping literals, prompt and spaces, this is to allow for partial inputs.
+        ///  Observe that if the MTB is hooked to a PropertyBrowser at design time, shadowing of the property won't work unless the
+        ///  application is a well written control designer (implements corresponding interfaces).
         /// </summary>
         private string Text
         {
@@ -248,6 +248,7 @@ namespace System.Windows.Forms.Design
                 {
                     return maskedTextBox.Text;
                 }
+
                 return maskedTextBox.MaskedTextProvider.ToString(false, false);
             }
             set

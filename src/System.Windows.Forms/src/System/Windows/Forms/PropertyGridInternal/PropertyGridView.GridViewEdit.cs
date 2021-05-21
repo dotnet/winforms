@@ -59,6 +59,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         return false;
                     }
+
                     return base.Focused;
                 }
             }
@@ -128,6 +129,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     mouseHook.Dispose();
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -155,10 +157,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Keys.Return:
                         return false;
                 }
+
                 if (psheet.NeedsCommit)
                 {
                     return false;
                 }
+
                 return base.IsInputKey(keyData);
             }
 
@@ -173,6 +177,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Keys.Return:
                         return false;
                 }
+
                 return base.IsInputChar(keyChar);
             }
 
@@ -204,6 +209,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ke.Handled = true;
                     return;
                 }
+
                 base.OnKeyPress(ke);
             }
 
@@ -221,11 +227,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (!Focused)
                 {
                     Graphics g = CreateGraphics();
-                    if (psheet.SelectedGridEntry != null &&
+                    if (psheet.SelectedGridEntry is not null &&
                         ClientRectangle.Width <= psheet.SelectedGridEntry.GetValueTextWidth(Text, g, Font))
                     {
                         psheet.ToolTip.ToolTip = PasswordProtect ? "" : Text;
                     }
+
                     g.Dispose();
                 }
             }
@@ -246,6 +253,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return false;
                         }
+
                         break;
 
                     case Keys.A:
@@ -268,6 +276,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 return false;
                             }
                         }
+
                         break;
 
                     case Keys.Delete:
@@ -287,7 +296,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             // if this is just the delete key and we're on a non-text editable property that is resettable,
                             // reset it now.
                             //
-                            if (psheet.SelectedGridEntry != null && !psheet.SelectedGridEntry.Enumerable && !psheet.SelectedGridEntry.IsTextEditable && psheet.SelectedGridEntry.CanResetPropertyValue())
+                            if (psheet.SelectedGridEntry is not null && !psheet.SelectedGridEntry.Enumerable && !psheet.SelectedGridEntry.IsTextEditable && psheet.SelectedGridEntry.CanResetPropertyValue())
                             {
                                 object oldValue = psheet.SelectedGridEntry.PropertyValue;
                                 psheet.SelectedGridEntry.ResetPropertyValue();
@@ -295,8 +304,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 psheet.OwnerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
                             }
                         }
+
                         break;
                 }
+
                 return base.ProcessCmdKey(ref msg, keyData);
             }
 
@@ -314,10 +325,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         case Keys.Return:
                             bool fwdReturn = !psheet.NeedsCommit;
-                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry != null)
+                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry is not null)
                             {
                                 psheet.SelectedGridEntry.OnValueReturnKey();
                             }
+
                             return true;
                         case Keys.Escape:
                             psheet.OnEscape(this);
@@ -346,6 +358,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     mouseHook.HookMouseDown = false;
                 }
+
                 base.SetVisibleCore(value);
             }
 
@@ -376,6 +389,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
                 }
+
                 return false;
             }
 
@@ -396,12 +410,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             psheet.Invalidate();
                         }
+
                         break;
                     case User32.WM.MOUSEMOVE:
                         if (unchecked((int)(long)m.LParam) == lastMove)
                         {
                             return;
                         }
+
                         lastMove = unchecked((int)(long)m.LParam);
                         break;
                     case User32.WM.DESTROY:
@@ -412,12 +428,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             mouseHook.HookMouseDown = false;
                         }
+
                         break;
                     case User32.WM.PASTE:
                         if (ReadOnly)
                         {
                             return;
                         }
+
                         break;
 
                     case User32.WM.GETDLGCODE:
@@ -427,6 +445,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS | (int)User32.DLGC.WANTTAB);
                         }
+
                         return;
 
                     case User32.WM.NOTIFY:
@@ -437,6 +456,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         break;
                 }
+
                 base.WndProc(ref m);
             }
 

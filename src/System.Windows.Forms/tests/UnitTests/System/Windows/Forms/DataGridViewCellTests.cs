@@ -4496,6 +4496,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedContextMenuStrip(rowIndex));
         }
+
         [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_Invoke_ReturnsExpected()
         {
@@ -4824,6 +4825,34 @@ namespace System.Windows.Forms.Tests
             control.Columns.Add(column);
             DataGridViewCell cell = control.Rows[0].Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedStyle(new DataGridViewCellStyle(), rowIndex, true));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCell_InitializeEditingControl_Set_Parent()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            dataGridView.CreateControl();
+            using DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
+            dataGridView.Columns.Add(column1);
+            dataGridView.Rows.Add();
+            var cell = dataGridView.Rows[0].Cells[0];
+            cell.Selected = true;
+
+            // Attach EditingControl.AccessibilityObject to cell
+            dataGridView.BeginEdit(false);
+            Assert.NotNull(dataGridView.EditingControl.AccessibilityObject.Parent);
+            Assert.Same(cell.AccessibilityObject, dataGridView.EditingControl.AccessibilityObject.Parent);
+
+            // Detach EditingControl.AccessibilityObject
+            dataGridView.EndEdit();
+            Assert.Null(dataGridView.EditingControlAccessibleObject);
+
+            // Reattach EditingControl.AccessibilityObject to cell
+            dataGridView.BeginEdit(false);
+            Assert.NotNull(dataGridView.EditingControl.AccessibilityObject.Parent);
+            Assert.Same(cell.AccessibilityObject, dataGridView.EditingControl.AccessibilityObject.Parent);
+
+            dataGridView.EndEdit();
         }
 
         [StaFact]
@@ -6541,7 +6570,7 @@ namespace System.Windows.Forms.Tests
                 Times.Exactly(2));
         }
 
-        private class SubDataGridViewCheckBoxCell: DataGridViewCheckBoxCell
+        private class SubDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         {
             public SubDataGridViewCheckBoxCell()
             {
@@ -6609,7 +6638,7 @@ namespace System.Windows.Forms.Tests
                 return base.GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format);
             }
 
-            public new Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) =>  base.GetContentBounds(graphics, cellStyle, rowIndex);
+            public new Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) => base.GetContentBounds(graphics, cellStyle, rowIndex);
 
             public new Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) => base.GetErrorIconBounds(graphics, cellStyle, rowIndex);
 

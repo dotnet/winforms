@@ -97,6 +97,7 @@ namespace System.ComponentModel.Design
                 {
                     _licenseCtx = new HostDesigntimeLicenseContext(this);
                 }
+
                 return _licenseCtx;
             }
         }
@@ -123,6 +124,7 @@ namespace System.ComponentModel.Design
                 _typeService = GetService(typeof(TypeDescriptionProviderService)) as TypeDescriptionProviderService;
                 _typeServiceChecked = true;
             }
+
             // TypeDescriptionProviderService is attached at design time only
             if (_typeService != null)
             {
@@ -137,6 +139,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             PerformAdd(component, name);
         }
 
@@ -156,6 +159,7 @@ namespace System.ComponentModel.Design
                     {
                         Remove(component);
                     }
+
                     throw;
                 }
             }
@@ -203,8 +207,10 @@ namespace System.ComponentModel.Design
                 {
                     existingSite.Name = name;
                 }
+
                 return false;
             }
+
             // Raise an adding event for our container if the container is us.
             ComponentEventArgs ce = new ComponentEventArgs(component);
             (_events[s_eventComponentAdding] as ComponentEventHandler)?.Invoke(containerToAddTo, ce);
@@ -320,6 +326,7 @@ namespace System.ComponentModel.Design
                     _designerEventService = des;
                 }
             }
+
             _state[s_stateLoading] = true;
             _surface.OnLoading();
 
@@ -380,6 +387,7 @@ namespace System.ComponentModel.Design
                     {
                         reflectType = component.GetType();
                     }
+
                     name = nameCreate.CreateName(this, reflectType);
                 }
                 else
@@ -394,6 +402,7 @@ namespace System.ComponentModel.Design
                     nameCreate.ValidateName(name);
                 }
             }
+
             return new Site(component, this, name, this);
         }
 
@@ -406,6 +415,7 @@ namespace System.ComponentModel.Design
             {
                 throw new InvalidOperationException(SR.DesignSurfaceContainerDispose);
             }
+
             base.Dispose(disposing);
         }
 
@@ -456,6 +466,7 @@ namespace System.ComponentModel.Design
                 _surface = null;
                 _events.Dispose();
             }
+
             base.Dispose(true);
         }
 
@@ -498,6 +509,7 @@ namespace System.ComponentModel.Design
                     serviceInstance = _surface.GetService(service);
                 }
             }
+
             return serviceInstance;
         }
 
@@ -560,6 +572,7 @@ namespace System.ComponentModel.Design
                     _rootComponentClassName = newName;
                 }
             }
+
             (_events[s_eventComponentRename] as ComponentRenameEventHandler)?.Invoke(this, new ComponentRenameEventArgs(component, oldName, newName));
         }
 
@@ -670,6 +683,7 @@ namespace System.ComponentModel.Design
                 _rootComponent = null;
                 _rootComponentClassName = null;
             }
+
             return true;
         }
 
@@ -717,7 +731,7 @@ namespace System.ComponentModel.Design
 
                 foreach (IComponent comp in components)
                 {
-                    if (!object.ReferenceEquals(comp, _rootComponent))
+                    if (!ReferenceEquals(comp, _rootComponent))
                     {
                         if (_designers[comp] is IDesigner designer)
                         {
@@ -731,6 +745,7 @@ namespace System.ComponentModel.Design
                                 exceptions.Add(e);
                             }
                         }
+
                         try
                         {
                             comp.Dispose();
@@ -756,6 +771,7 @@ namespace System.ComponentModel.Design
                             exceptions.Add(e);
                         }
                     }
+
                     try
                     {
                         _rootComponent.Dispose();
@@ -933,12 +949,13 @@ namespace System.ComponentModel.Design
                 {
                     return ((DesignerTransaction)_transactions.Peek()).Description;
                 }
+
                 return null;
             }
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Activated'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.Activated'/> event.
         /// </summary>
         event EventHandler IDesignerHost.Activated
         {
@@ -947,7 +964,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.Deactivated'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.Deactivated'/> event.
         /// </summary>
         event EventHandler IDesignerHost.Deactivated
         {
@@ -956,7 +973,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.LoadComplete'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.LoadComplete'/> event.
         /// </summary>
         event EventHandler IDesignerHost.LoadComplete
         {
@@ -965,7 +982,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosed'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionClosed'/> event.
         /// </summary>
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosed
         {
@@ -974,7 +991,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionClosing'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionClosing'/> event.
         /// </summary>
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosing
         {
@@ -983,7 +1000,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpened'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionOpened'/> event.
         /// </summary>
         event EventHandler IDesignerHost.TransactionOpened
         {
@@ -992,7 +1009,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds an event handler for the <see cref='System.ComponentModel.Design.IDesignerHost.TransactionOpening'/> event.
+        ///  Adds an event handler for the <see cref='IDesignerHost.TransactionOpening'/> event.
         /// </summary>
         event EventHandler IDesignerHost.TransactionOpening
         {
@@ -1093,6 +1110,7 @@ namespace System.ComponentModel.Design
             {
                 description = SR.DesignerHostGenericTransactionName;
             }
+
             return new DesignerHostTransaction(this, description);
         }
 
@@ -1155,6 +1173,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             return _designers[component] as IDesigner;
         }
 
@@ -1172,6 +1191,7 @@ namespace System.ComponentModel.Design
             {
                 return ts.GetType(typeName);
             }
+
             return Type.GetType(typeName);
         }
 
@@ -1248,6 +1268,7 @@ namespace System.ComponentModel.Design
                         {
                             errorList.AddRange(errorCollection);
                         }
+
                         errorCollection = errorList;
                         successful = false;
 
@@ -1274,6 +1295,7 @@ namespace System.ComponentModel.Design
                                     selectedComponents.Add(comp);
                                 }
                             }
+
                             _savedSelection = null;
                             ss.SetSelectedComponents(selectedComponents, SelectionTypes.Replace);
                         }
@@ -1302,8 +1324,10 @@ namespace System.ComponentModel.Design
                             list.Add(comp.Site.Name);
                         }
                     }
+
                     _savedSelection = list;
                 }
+
                 Unload();
                 BeginLoad(_loader);
             }
@@ -1434,6 +1458,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException("IServiceContainer");
             }
+
             sc.AddService(serviceType, serviceInstance);
         }
 
@@ -1447,6 +1472,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException("IServiceContainer");
             }
+
             sc.AddService(serviceType, serviceInstance, promote);
         }
 
@@ -1460,6 +1486,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException("IServiceContainer");
             }
+
             sc.AddService(serviceType, callback);
         }
 
@@ -1473,6 +1500,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException("IServiceContainer");
             }
+
             sc.AddService(serviceType, callback, promote);
         }
 
@@ -1486,6 +1514,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException("IServiceContainer");
             }
+
             sc.RemoveService(serviceType);
         }
 
@@ -1499,6 +1528,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException("IServiceContainer");
             }
+
             sc.RemoveService(serviceType, promote);
         }
 
@@ -1524,6 +1554,7 @@ namespace System.ComponentModel.Design
                 {
                     _host._transactions = new Stack();
                 }
+
                 _host._transactions.Push(this);
                 _host.OnTransactionOpening(EventArgs.Empty);
                 _host.OnTransactionOpened(EventArgs.Empty);
@@ -1541,6 +1572,7 @@ namespace System.ComponentModel.Design
                         string nestedDescription = ((DesignerTransaction)_host._transactions.Peek()).Description;
                         throw new InvalidOperationException(string.Format(SR.DesignerHostNestedTransaction, Description, nestedDescription));
                     }
+
                     _host.IsClosingTransaction = true;
                     try
                     {
@@ -1639,6 +1671,7 @@ namespace System.ComponentModel.Design
                         }
                     }
                 }
+
                 return null;
             }
 
@@ -1651,6 +1684,7 @@ namespace System.ComponentModel.Design
                 {
                     return _dictionary[key];
                 }
+
                 return null;
             }
 
@@ -1663,6 +1697,7 @@ namespace System.ComponentModel.Design
                 {
                     _dictionary = new Hashtable();
                 }
+
                 if (value is null)
                 {
                     _dictionary.Remove(key);
@@ -1748,6 +1783,7 @@ namespace System.ComponentModel.Design
                         // otherwise site has no access to the DesignerHost's services.
                         _ = _nestedContainer.GetServiceInternal(typeof(IServiceContainer));
                     }
+
                     return _nestedContainer;
                 }
 
@@ -1757,6 +1793,7 @@ namespace System.ComponentModel.Design
                 {
                     return _nestedContainer.GetServiceInternal(service);
                 }
+
                 return _host.GetService(service);
             }
 

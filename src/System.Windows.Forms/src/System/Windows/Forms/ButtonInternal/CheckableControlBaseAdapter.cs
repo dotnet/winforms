@@ -14,8 +14,8 @@ namespace System.Windows.Forms.ButtonInternal
     /// </summary>
     internal abstract class CheckableControlBaseAdapter : ButtonBaseAdapter
     {
-        private const int standardCheckSize = 13;
-        private ButtonBaseAdapter buttonAdapter;
+        private const int StandardCheckSize = 13;
+        private ButtonBaseAdapter _buttonAdapter;
 
         internal CheckableControlBaseAdapter(ButtonBase control) : base(control) { }
 
@@ -23,11 +23,12 @@ namespace System.Windows.Forms.ButtonInternal
         {
             get
             {
-                if (buttonAdapter is null)
+                if (_buttonAdapter is null)
                 {
-                    buttonAdapter = CreateButtonAdapter();
+                    _buttonAdapter = CreateButtonAdapter();
                 }
-                return buttonAdapter;
+
+                return _buttonAdapter;
             }
         }
 
@@ -72,12 +73,12 @@ namespace System.Windows.Forms.ButtonInternal
         internal override LayoutOptions CommonLayout()
         {
             LayoutOptions layout = base.CommonLayout();
-            layout.growBorderBy1PxWhenDefault = false;
-            layout.borderSize = 0;
-            layout.paddingSize = 0;
-            layout.maxFocus = false;
-            layout.focusOddEvenFixup = true;
-            layout.checkSize = standardCheckSize;
+            layout.GrowBorderBy1PxWhenDefault = false;
+            layout.BorderSize = 0;
+            layout.PaddingSize = 0;
+            layout.MaxFocus = false;
+            layout.FocusOddEvenFixup = true;
+            layout.CheckSize = StandardCheckSize;
             return layout;
         }
 
@@ -89,7 +90,7 @@ namespace System.Windows.Forms.ButtonInternal
         internal static double GetDpiScaleRatio(Control control)
         {
             if (DpiHelper.IsPerMonitorV2Awareness
-                && control != null && control.IsHandleCreated)
+                && control is not null && control.IsHandleCreated)
             {
                 return control._deviceDpi / DpiHelper.LogicalDpi;
             }

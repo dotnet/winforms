@@ -41,6 +41,7 @@ namespace System.Windows.Forms
                 {
                     events = new EventHandlerList();
                 }
+
                 return events;
             }
         }
@@ -61,6 +62,7 @@ namespace System.Windows.Forms
             {
                 attachedEventList = new Dictionary<EventHandler, HtmlToClrEventProxy>();
             }
+
             HtmlToClrEventProxy proxy = new HtmlToClrEventProxy(this, eventName, eventHandler);
             attachedEventList[eventHandler] = proxy;
             return proxy;
@@ -141,6 +143,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         protected virtual void OnEventHandlerAdded()
         {
             ConnectToEvents();
@@ -175,6 +178,7 @@ namespace System.Windows.Forms
                 attachedEventList.Remove(eventHandler);
                 return proxy;
             }
+
             return null;
         }
     }

@@ -152,6 +152,7 @@ namespace System.Windows.Forms.Design
             {
                 hash += ValidatingType.ToString();
             }
+
             return hash.GetHashCode();
         }
 

@@ -26,8 +26,8 @@ namespace System
         void Validate(ref EmfRecord record, DeviceContextState state, out bool complete);
 
         /// <summary>
-        ///  Return true if this validator doesn't require any additional records.
+        ///  Return true if this validator is still in scope when all records have been processed.
         /// </summary>
-        bool ValidationSatisfied => false;
+        bool FailIfIncomplete => true;
     }
 }

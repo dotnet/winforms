@@ -48,7 +48,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.IsStub)
+                if (value is not null && value.IsStub)
                 {
                     // WINRES only scenario.
                     // we only support table layout settings that have been created from a type converter.
@@ -95,6 +95,7 @@ namespace System.Windows.Forms
                 {
                     SetStyle(ControlStyles.ResizeRedraw, true);
                 }
+
                 Invalidate();
                 Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set it");
             }
@@ -198,7 +199,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeControls()
         {
             TableLayoutControlCollection collection = Controls;
-            return collection != null && collection.Count > 0;
+            return collection is not null && collection.Count > 0;
         }
 
         #region Extended Properties
@@ -323,6 +324,7 @@ namespace System.Windows.Forms
             {
                 cw[i] = containerInfo.Columns[i].MinSize;
             }
+
             return cw;
         }
 
@@ -344,6 +346,7 @@ namespace System.Windows.Forms
             {
                 rh[i] = containerInfo.Rows[i].MinSize;
             }
+
             return rh;
         }
 
@@ -455,6 +458,7 @@ namespace System.Windows.Forms
                         // Paint the table border on top.
                         ControlPaint.PaintTableCellBorder(cellBorderStyle, g, outsideCellBounds);
                     }
+
                     starty += rowStrips[j].MinSize;
 
                     // Only sum this up once...
@@ -580,6 +584,7 @@ namespace System.Windows.Forms
                         cs.Width = (float)Math.Round(cs.Width * factor.Width);
                     }
                 }
+
                 i++;
             }
 

@@ -723,6 +723,7 @@ namespace System.Windows.Forms.Tests
             {
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -3054,7 +3055,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -3110,7 +3112,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -3165,7 +3168,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -3224,7 +3228,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int item1CallCount = 0;
             item1.Disposed += (sender, e) => item1CallCount++;
@@ -3294,7 +3299,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -3387,7 +3393,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -3494,7 +3501,8 @@ namespace System.Windows.Forms.Tests
                 Assert.False(control.Visible);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
             int item1CallCount = 0;
             item1.Disposed += (sender, e) => item1CallCount++;

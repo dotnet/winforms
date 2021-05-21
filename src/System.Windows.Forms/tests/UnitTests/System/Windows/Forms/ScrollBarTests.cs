@@ -1086,7 +1086,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.Minimum);
             Assert.Equal(5, control.Value);
             Assert.Equal(10, control.LargeChange);
-            Assert.Equal(1, control.SmallChange);si = new User32.SCROLLINFO
+            Assert.Equal(1, control.SmallChange);
+            si = new User32.SCROLLINFO
             {
                 cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.ALL
@@ -2741,7 +2742,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> WndProc_Scroll_TestData()
         {
-            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL, User32.WM.REFLECT | User32.WM.VSCROLL  })
+            foreach (User32.WM msg in new User32.WM[] { User32.WM.REFLECT | User32.WM.HSCROLL, User32.WM.REFLECT | User32.WM.VSCROLL })
             {
                 yield return new object[] { msg, RightToLeft.No, 100, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };
                 yield return new object[] { msg, RightToLeft.No, 99, ScrollEventType.SmallIncrement, 91, ScrollEventType.SmallIncrement };

@@ -24,6 +24,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new PrimitiveCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }
@@ -51,6 +52,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     expression = SerializeToResourceExpression(manager, stringValue);
                 }
+
                 return expression;
             }
 

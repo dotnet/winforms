@@ -101,5 +101,28 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: true));
             Assert.Throws<ArgumentNullException>("key", () => collection.Find(key, searchAllChildren: false));
         }
+
+        [WinFormsFact]
+        public void ToolStripItemCollection_AddRange_ToolStripItemCollection_Success()
+        {
+            using var contextMenuStrip = new ContextMenuStrip();
+            using var toolStripDropDownButton = new ToolStripDropDownButton();
+
+            // Add 0 items.
+            contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+            Assert.Equal(0, contextMenuStrip.Items.Count);
+
+            // Add 3 items.
+            toolStripDropDownButton.DropDownItems.Add("a");
+            toolStripDropDownButton.DropDownItems.Add("b");
+            toolStripDropDownButton.DropDownItems.Add("c");
+            contextMenuStrip.Items.AddRange(toolStripDropDownButton.DropDownItems);
+            Assert.Equal(3, contextMenuStrip.Items.Count);
+
+            // Validate order.
+            Assert.Equal("a", contextMenuStrip.Items[0].Text);
+            Assert.Equal("b", contextMenuStrip.Items[1].Text);
+            Assert.Equal("c", contextMenuStrip.Items[2].Text);
+        }
     }
 }

@@ -66,6 +66,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
+
                 propertyValue = property.GetValue(value);
             }
             catch (Exception e)
@@ -105,14 +106,17 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
+
             if (statements is null)
             {
                 throw new ArgumentNullException(nameof(statements));
@@ -164,8 +168,6 @@ namespace System.ComponentModel.Design.Serialization
             // For persist contents objects, we don't just serialize the properties on the object; we
             // serialize everything.
             //
-            CodeDomSerializer serializer = null;
-
             if (propertyValue is null)
             {
                 CodeDomSerializer.TraceError("Property {0} is marked as Visibility.Content but it is returning null.", property.Name);
@@ -181,7 +183,7 @@ namespace System.ComponentModel.Design.Serialization
             }
             else
             {
-                serializer = (CodeDomSerializer)manager.GetSerializer(propertyValue.GetType(), typeof(CodeDomSerializer));
+                var serializer = (CodeDomSerializer)manager.GetSerializer(propertyValue.GetType(), typeof(CodeDomSerializer));
                 if (serializer != null)
                 {
                     // Create a property reference expression and push it on the context stack.
@@ -432,10 +434,12 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));

@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (sourceType == typeof(string) && context != null && context.Instance is ListViewItem)
+            if (sourceType == typeof(string) && context is not null && context.Instance is ListViewItem)
             {
                 return true;
             }
@@ -43,7 +43,8 @@ namespace System.Windows.Forms
             {
                 return true;
             }
-            if (destinationType == typeof(string) && context != null && context.Instance is ListViewItem)
+
+            if (destinationType == typeof(string) && context is not null && context.Instance is ListViewItem)
             {
                 return true;
             }
@@ -59,9 +60,9 @@ namespace System.Windows.Forms
             if (value is string)
             {
                 string text = ((string)value).Trim();
-                if (context != null && context.Instance != null)
+                if (context is not null && context.Instance is not null)
                 {
-                    if (context.Instance is ListViewItem item && item.ListView != null)
+                    if (context.Instance is ListViewItem item && item.ListView is not null)
                     {
                         foreach (ListViewGroup group in item.ListView.Groups)
                         {
@@ -86,7 +87,7 @@ namespace System.Windows.Forms
         ///  Converts the given object to another type. The most common types to convert
         ///  are to and from a string object. The default implementation will make a call
         ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string. If this cannot convert to the desitnation type, this will
+        ///  type is string. If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
@@ -103,7 +104,7 @@ namespace System.Windows.Forms
 
                 // Header
                 ctor = typeof(ListViewGroup).GetConstructor(new Type[] { typeof(string), typeof(HorizontalAlignment) });
-                Debug.Assert(ctor != null, "Expected the constructor to exist.");
+                Debug.Assert(ctor is not null, "Expected the constructor to exist.");
                 return new InstanceDescriptor(ctor, new object[] { group.Header, group.HeaderAlignment }, false);
             }
 
@@ -122,16 +123,18 @@ namespace System.Windows.Forms
         /// </summary>
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance is ListViewItem item && item.ListView != null)
+            if (context is not null && context.Instance is ListViewItem item && item.ListView is not null)
             {
                 var list = new ArrayList();
                 foreach (ListViewGroup group in item.ListView.Groups)
                 {
                     list.Add(group);
                 }
+
                 list.Add(null);
                 return new StandardValuesCollection(list);
             }
+
             return null;
         }
 

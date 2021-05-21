@@ -30,14 +30,14 @@ namespace System.Windows.Forms.ButtonInternal
 
                 DrawCheckBackgroundFlat(
                     e,
-                    layout.checkBounds,
-                    colors.buttonShadow,
-                    colors.options.HighContrast ? colors.buttonFace : colors.highlight);
+                    layout.CheckBounds,
+                    colors.ButtonShadow,
+                    colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight);
 
-                DrawCheckOnly(e, layout, colors.windowText, colors.highlight, true);
+                DrawCheckOnly(e, layout, colors.WindowText, colors.Highlight, true);
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -57,12 +57,12 @@ namespace System.Windows.Forms.ButtonInternal
 
                 PaintImage(e, layout);
 
-                Color checkBackgroundColor = colors.options.HighContrast ? colors.buttonFace : colors.highlight;
-                DrawCheckBackground3DLite(e, layout.checkBounds, checkBackgroundColor, colors, true);
-                DrawCheckOnly(e, layout, colors.windowText, colors.highlight, true);
+                Color checkBackgroundColor = colors.Options.HighContrast ? colors.ButtonFace : colors.Highlight;
+                DrawCheckBackground3DLite(e, layout.CheckBounds, checkBackgroundColor, colors, true);
+                DrawCheckOnly(e, layout, colors.WindowText, colors.Highlight, true);
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -82,11 +82,11 @@ namespace System.Windows.Forms.ButtonInternal
 
                 PaintImage(e, layout);
 
-                DrawCheckBackground3DLite(e, layout.checkBounds, colors.highlight, colors, true);
-                DrawCheckOnly(e, layout, colors.buttonShadow, colors.highlight, true);
+                DrawCheckBackground3DLite(e, layout.CheckBounds, colors.Highlight, colors, true);
+                DrawCheckOnly(e, layout, colors.ButtonShadow, colors.Highlight, true);
 
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (!Control.MouseIsDown && !Control.MouseIsOver)
             {
-                layout.shadowedText = true;
+                layout.ShadowedText = true;
             }
 
             return layout;

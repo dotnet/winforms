@@ -549,6 +549,23 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoCompleteSource))]
+        public void ComboBox_AutoCompleteSource_Set_GetReturnsExpected(AutoCompleteSource value)
+        {
+            using var control = new ComboBox();
+            control.AutoCompleteSource = value;
+            Assert.Equal(value, control.AutoCompleteSource);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoCompleteSource))]
+        public void ComboBox_AutoCompleteSource_InvalidAutoCompleteSource_ThrowsInvalidEnumArgumentException(AutoCompleteSource source)
+        {
+            using var control = new ComboBox();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.AutoCompleteSource = source);
+        }
+
         [WinFormsFact]
         public void ComboBox_DropDownStyle_SetWithPreferredHeight_ResetsPreferredHeight()
         {
@@ -1413,6 +1430,7 @@ namespace System.Windows.Forms.Tests
             {
                 SendCtrlBackspace(control);
             }
+
             Assert.Equal(expected, control.Text);
         }
 
@@ -1805,6 +1823,16 @@ namespace System.Windows.Forms.Tests
             {
                 graphics.ReleaseHdc();
             }
+        }
+
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDown)]
+        [InlineData(ComboBoxStyle.DropDownList)]
+        [InlineData(ComboBoxStyle.Simple)]
+        public void Combobox_SetCustomSize_DoesNotCreateHandle(ComboBoxStyle dropDownStyle)
+        {
+            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle, Size = new Size(100, 50) };
+            Assert.False(comboBox.IsHandleCreated);
         }
 
         private class SubComboBox : ComboBox

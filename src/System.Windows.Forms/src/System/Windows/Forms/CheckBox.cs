@@ -81,10 +81,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x1
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)Appearance.Normal, (int)Appearance.Button))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Appearance));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_appearance != value)
                 {
@@ -99,6 +96,7 @@ namespace System.Windows.Forms
                         {
                             UpdateStyles();
                         }
+
                         OnAppearanceChanged(EventArgs.Empty);
                     }
                 }
@@ -209,10 +207,7 @@ namespace System.Windows.Forms
             set
             {
                 // valid values are 0-2 inclusive.
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)CheckState.Unchecked, (int)CheckState.Indeterminate))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(CheckState));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_checkState != value)
                 {
@@ -229,6 +224,7 @@ namespace System.Windows.Forms
                     {
                         OnCheckedChanged(EventArgs.Empty);
                     }
+
                     OnCheckStateChanged(EventArgs.Empty);
                 }
             }
@@ -356,7 +352,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Popup mouseover rectangle is actually bigger than GetCheckmarkRectangle
-                        return Adapter.CommonLayout().Layout().checkBounds;
+                        return Adapter.CommonLayout().Layout().CheckBounds;
                     }
                 }
             }
@@ -373,7 +369,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // Popup mouseover rectangle is actually bigger than GetCheckmarkRectangle()
-                    return Adapter.CommonLayout().Layout().checkBounds;
+                    return Adapter.CommonLayout().Layout().CheckBounds;
                 }
             }
         }
@@ -515,12 +511,14 @@ namespace System.Windows.Forms
                         {
                             CheckState = CheckState.Unchecked;
                         }
+
                         break;
                     default:
                         CheckState = CheckState.Unchecked;
                         break;
                 }
             }
+
             base.OnClick(e);
         }
 
@@ -559,11 +557,13 @@ namespace System.Windows.Forms
                             {
                                 OnClick(mevent);
                             }
+
                             OnMouseClick(mevent);
                         }
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -599,8 +599,10 @@ namespace System.Windows.Forms
                         OnClick(EventArgs.Empty);
                     }
                 }
+
                 return true;
             }
+
             return false;
         }
 

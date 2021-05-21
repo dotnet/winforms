@@ -56,10 +56,7 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet ||
                     value == banned1 ||
                     value == banned2 ||
@@ -67,11 +64,12 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "All"));
                 }
+
                 if (!all || top != value)
                 {
                     all = true;
                     top = left = right = bottom = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -87,19 +85,18 @@ namespace System.Windows.Forms
                 {
                     return top;
                 }
+
                 return bottom;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Bottom"));
                 }
+
                 BottomInternal = value;
             }
         }
@@ -117,9 +114,10 @@ namespace System.Windows.Forms
                             right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     bottom = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -135,19 +133,18 @@ namespace System.Windows.Forms
                 {
                     return top;
                 }
+
                 return left;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                 }
+
                 LeftInternal = value;
             }
         }
@@ -158,25 +155,28 @@ namespace System.Windows.Forms
             {
                 if ((all && top != value) || (!all && left != value))
                 {
-                    if ((owner != null && owner.RightToLeftInternal) &&
+                    if ((owner is not null && owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Left"));
                     }
+
                     if (all)
                     {
                         if (right == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
                             right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
                             bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     left = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -192,19 +192,18 @@ namespace System.Windows.Forms
                 {
                     return top;
                 }
+
                 return right;
             }
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                 }
+
                 RightInternal = value;
             }
         }
@@ -215,11 +214,12 @@ namespace System.Windows.Forms
             {
                 if ((all && top != value) || (!all && right != value))
                 {
-                    if ((owner != null && !owner.RightToLeftInternal) &&
+                    if ((owner is not null && !owner.RightToLeftInternal) &&
                         (value == DataGridViewAdvancedCellBorderStyle.InsetDouble || value == DataGridViewAdvancedCellBorderStyle.OutsetDouble))
                     {
                         throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Right"));
                     }
+
                     if (all)
                     {
                         if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
@@ -227,9 +227,10 @@ namespace System.Windows.Forms
                             bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     right = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }
@@ -246,14 +247,12 @@ namespace System.Windows.Forms
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x7
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridViewAdvancedCellBorderStyle.NotSet, (int)DataGridViewAdvancedCellBorderStyle.OutsetPartial))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewAdvancedCellBorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
                 if (value == DataGridViewAdvancedCellBorderStyle.NotSet)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridView_AdvancedCellBorderStyleInvalid, "Top"));
                 }
+
                 TopInternal = value;
             }
         }
@@ -270,14 +269,16 @@ namespace System.Windows.Forms
                         {
                             right = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         if (bottom == DataGridViewAdvancedCellBorderStyle.OutsetDouble)
                         {
                             bottom = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
                     }
+
                     all = false;
                     top = value;
-                    if (owner != null)
+                    if (owner is not null)
                     {
                         owner.OnAdvancedBorderStyleChanged(this);
                     }

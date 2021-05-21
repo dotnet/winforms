@@ -244,12 +244,13 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, null);
             }
             else
             {
-                RECT rect  = bounds;
+                RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(this, dc, Part, State, ref rect, null);
             }
         }
@@ -278,6 +279,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 RECT rect = bounds;
                 RECT clipRect = clipRectangle;
                 _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, &clipRect);
@@ -304,14 +306,9 @@ namespace System.Windows.Forms.VisualStyles
 
         internal Rectangle DrawEdge(Gdi32.HDC dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            if (!ClientUtils.IsEnumValid_Masked(edges, (int)edges, (uint)(Edges.Left | Edges.Top | Edges.Right | Edges.Bottom | Edges.Diagonal)))
-                throw new InvalidEnumArgumentException(nameof(edges), (int)edges, typeof(Edges));
-
-            if (!ClientUtils.IsEnumValid_NotSequential(style, (int)style, (int)EdgeStyle.Raised, (int)EdgeStyle.Sunken, (int)EdgeStyle.Etched, (int)EdgeStyle.Bump))
-                throw new InvalidEnumArgumentException(nameof(style), (int)style, typeof(EdgeStyle));
-
-            if (!ClientUtils.IsEnumValid_Masked(effects, (int)effects, (uint)(EdgeEffects.FillInterior | EdgeEffects.Flat | EdgeEffects.Soft | EdgeEffects.Mono)))
-                throw new InvalidEnumArgumentException(nameof(effects), (int)effects, typeof(EdgeEffects));
+            SourceGenerated.EnumValidator.Validate(edges, nameof(edges));
+            SourceGenerated.EnumValidator.Validate(style, nameof(style));
+            SourceGenerated.EnumValidator.Validate(effects, nameof(effects));
 
             RECT destRect = bounds;
             var contentRect = new RECT();
@@ -510,8 +507,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public bool GetBoolean(BooleanProperty prop)
         {
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)BooleanProperty.Transparent, (int)BooleanProperty.SourceShrink))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(BooleanProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             BOOL val = BOOL.FALSE;
             _lastHResult = GetThemeBool(this, Part, State, (int)prop, ref val);
@@ -524,8 +520,7 @@ namespace System.Windows.Forms.VisualStyles
         public Color GetColor(ColorProperty prop)
         {
             // Valid values are 0xed9 to 0xeef
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)ColorProperty.BorderColor, (int)ColorProperty.AccentColorHint))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(ColorProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int color = 0;
             _lastHResult = GetThemeColor(this, Part, State, (int)prop, ref color);
@@ -538,8 +533,7 @@ namespace System.Windows.Forms.VisualStyles
         public int GetEnumValue(EnumProperty prop)
         {
             // Valid values are 0xfa1 to 0xfaf
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)EnumProperty.BackgroundType, (int)EnumProperty.TrueSizeScalingType))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(EnumProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int val = 0;
             _lastHResult = GetThemeEnumValue(this, Part, State, (int)prop, ref val);
@@ -552,14 +546,14 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe string GetFilename(FilenameProperty prop)
         {
             // Valid values are 0xbb9 to 0xbc0
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)FilenameProperty.ImageFile, (int)FilenameProperty.GlyphImageFile))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FilenameProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             Span<char> filename = stackalloc char[512];
             fixed (char* pFilename = filename)
             {
                 _lastHResult = GetThemeFilename(this, Part, State, (int)prop, pFilename, filename.Length);
             }
+
             return filename.SliceAtFirstNull().ToString();
         }
 
@@ -572,8 +566,7 @@ namespace System.Windows.Forms.VisualStyles
             if (dc is null)
                 throw new ArgumentNullException(nameof(dc));
 
-            if (!ClientUtils.IsEnumValid_NotSequential(prop, (int)prop, (int)FontProperty.TextFont, (int)FontProperty.GlyphFont))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(FontProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeFont(this, hdc, Part, State, (int)prop, out User32.LOGFONTW logfont);
@@ -606,8 +599,7 @@ namespace System.Windows.Forms.VisualStyles
         public int GetInteger(IntegerProperty prop)
         {
             // Valid values are 0x961 to 0x978
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)IntegerProperty.ImageCount, (int)IntegerProperty.MinDpi5))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(IntegerProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             int val = 0;
             _lastHResult = GetThemeInt(this, Part, State, (int)prop, ref val);
@@ -629,8 +621,7 @@ namespace System.Windows.Forms.VisualStyles
         internal unsafe Size GetPartSize(Gdi32.HDC dc, ThemeSizeType type, IntPtr hwnd = default)
         {
             // Valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
-                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
+            SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             if (DpiHelper.IsPerMonitorV2Awareness && hwnd != IntPtr.Zero)
             {
@@ -639,6 +630,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 _lastHResult = GetThemePartSize(htheme, dc, Part, State, null, type, out Size dpiSize);
                 return dpiSize;
             }
@@ -656,8 +648,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
 
             // Valid values are 0x0 to 0x2
-            if (!ClientUtils.IsEnumValid(type, (int)type, (int)ThemeSizeType.Minimum, (int)ThemeSizeType.Draw))
-                throw new InvalidEnumArgumentException(nameof(type), (int)type, typeof(ThemeSizeType));
+            SourceGenerated.EnumValidator.Validate(type, nameof(type));
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;
@@ -671,8 +662,7 @@ namespace System.Windows.Forms.VisualStyles
         public Point GetPoint(PointProperty prop)
         {
             //valid values are 0xd49 to 0xd50
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)PointProperty.Offset, (int)PointProperty.MinSize5))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(PointProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             _lastHResult = GetThemePosition(this, Part, State, (int)prop, out Point point);
             return point;
@@ -687,8 +677,7 @@ namespace System.Windows.Forms.VisualStyles
                 throw new ArgumentNullException(nameof(dc));
 
             // Valid values are 0xe11 to 0xe13
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)MarginProperty.SizingMargins, (int)MarginProperty.CaptionMargins))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(MarginProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeMargins(this, hdc, Part, State, (int)prop, null, out MARGINS margins);
@@ -702,14 +691,14 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe string GetString(StringProperty prop)
         {
             // Valid values are 0xc81 to 0xc81
-            if (!ClientUtils.IsEnumValid(prop, (int)prop, (int)StringProperty.Text, (int)StringProperty.Text))
-                throw new InvalidEnumArgumentException(nameof(prop), (int)prop, typeof(StringProperty));
+            SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
             Span<char> aString = stackalloc char[512];
             fixed (char* pString = aString)
             {
                 _lastHResult = GetThemeString(this, Part, State, (int)prop, pString, aString.Length);
             }
+
             return aString.SliceAtFirstNull().ToString();
         }
 

@@ -4,8 +4,8 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace System.Windows.Forms
 {
@@ -17,7 +17,7 @@ namespace System.Windows.Forms
             int rowIndex1,
             int rowIndex2)
         {
-            Debug.Assert(dataGridViewColumn != null);
+            Debug.Assert(dataGridViewColumn is not null);
             Debug.Assert(dataGridViewColumn.Index >= 0);
             Column = dataGridViewColumn;
             CellValue1 = cellValue1;

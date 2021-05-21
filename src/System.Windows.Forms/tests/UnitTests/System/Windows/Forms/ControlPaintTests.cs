@@ -11,7 +11,7 @@ using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlPaintTests : IClassFixture<ThreadExceptionFixture>
+    public partial class ControlPaintTests : IClassFixture<ThreadExceptionFixture>
     {
         public static IEnumerable<object[]> ControlCreateHBitmap16Bit_TestData()
         {
@@ -1883,7 +1883,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DrawStringDisabled_Graphics_String_Font_Color_RectangleF_StringFormat_TestData()
         {
-            foreach (string s in new string[] { null, string.Empty, "string"} )
+            foreach (string s in new string[] { null, string.Empty, "string" })
             {
                 yield return new object[] { s, SystemFonts.MenuFont, Color.Red, new RectangleF(1, 2, 3, 4), null };
                 yield return new object[] { s, SystemFonts.MenuFont, Color.Red, RectangleF.Empty, new StringFormat() };
@@ -1931,7 +1931,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DrawStringDisabled_IDeviceContext_String_Font_Color_RectangleF_TextFormatFlags_TestData()
         {
-            foreach (string s in new string[] { null, string.Empty, "string"} )
+            foreach (string s in new string[] { null, string.Empty, "string" })
             {
                 yield return new object[] { s, SystemFonts.MenuFont, Color.Red, new Rectangle(1, 2, 3, 4), TextFormatFlags.Default };
                 yield return new object[] { s, SystemFonts.MenuFont, Color.Red, Rectangle.Empty, TextFormatFlags.VerticalCenter };
@@ -1950,12 +1950,12 @@ namespace System.Windows.Forms.Tests
            string s, Font font, Color color,
            Rectangle layoutRectangle, TextFormatFlags format)
         {
-           using var image = new Bitmap(10, 10);
-           using Graphics graphics = Graphics.FromImage(image);
-           ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
+            ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
 
-           // Call again to test caching.
-           ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
+            // Call again to test caching.
+            ControlPaint.DrawStringDisabled((IDeviceContext)graphics, s, font, color, layoutRectangle, format);
         }
 
         [WinFormsTheory]

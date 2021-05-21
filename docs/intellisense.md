@@ -40,5 +40,6 @@ Intellisense XML's are produced in the `dotnet/dotnet-api-docs` repo. They are c
     - Also update `global.json` in `dotnet-wpf-int` repository (if applicable).
 
 **Note:** 
+ - We don't have access to this blob, so contact dnceng when you have something to upload and they can assist.
  - This blob is currently owned by [WPF](https://github.com/dotnet/wpf). Please coordinate with @dotnet/wpf-developers if there is ever a need to update this blob. 
  - This file is a copy of https://github.com/dotnet/wpf/blob/master/Documentation/intellisense.md

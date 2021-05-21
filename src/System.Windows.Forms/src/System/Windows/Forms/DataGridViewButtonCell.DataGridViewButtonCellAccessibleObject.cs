@@ -45,7 +45,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
+                if (dataGridViewCell.OwningColumn is not null && dataGridViewCell.OwningRow is not null)
                 {
                     dataGridView.OnCellClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                     dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));

@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  MaskedTextBox control definition class.
     ///  Uses the services from the System.ComponentModel.MaskedTextBoxProvider class.
-    ///  See spec at http://dotnetclient/whidbey/Specs/MaskEdit.doc
+    ///  Search Microsoft SPO for "MaskEdit.doc" to see spec
     /// </summary>
     [DefaultEvent(nameof(MaskInputRejected))]
     [DefaultBindingProperty(nameof(Text))]
@@ -34,8 +34,8 @@ namespace System.Windows.Forms
         // class.  This means that the underlying Edit control won't enable Undo operations and the context
         // menu behavior will be a bit different (for instance Copy option is enabled when PasswordChar is set).
         // To provide Undo functionality and make the context menu behave like the Edit control, we would have
-        // to implement our own.  See http://msdn.microsoft.com/msdnmag/issues/1100/c/default.aspx for more info
-        // about how to do this. See postponed
+        // to implement our own.  For more info about how to do this, see:
+        // https://docs.microsoft.com/en-us/archive/msdn-magazine/2000/november/c-q-a-filetype-icon-detector-app-custom-context-menus-unreferenced-variables-and-string-conversions
 
         private const bool forward = true;
         private const bool backward = false;
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void Initialize(MaskedTextProvider maskedTextProvider)
         {
-            Debug.Assert(maskedTextProvider != null, "Initializing from a null MaskProvider ref.");
+            Debug.Assert(maskedTextProvider is not null, "Initializing from a null MaskProvider ref.");
 
             this.maskedTextProvider = maskedTextProvider;
 
@@ -413,10 +413,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == MaskFormat.IncludePrompt)
                 {
@@ -532,10 +529,7 @@ namespace System.Windows.Forms
             set
             {
                 //valid values are 0x0 to 0x2
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)InsertKeyMode.Default, (int)InsertKeyMode.Overwrite))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(InsertKeyMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (insertMode != value)
                 {
@@ -559,6 +553,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -633,7 +628,7 @@ namespace System.Windows.Forms
 
                 return lines;
             }
-            set{ }
+            set { }
         }
 
         /// <summary>
@@ -731,7 +726,7 @@ namespace System.Windows.Forms
                     maskedTextProvider.AsciiOnly);
 
                 //text is null when setting to a different mask value or when resetting the mask to null.
-                //text != null only when setting the mask from null to some value.
+                //text is not null only when setting the mask from null to some value.
                 SetMaskedTextProvider(newProvider, text);
             }
         }
@@ -1192,6 +1187,7 @@ namespace System.Windows.Forms
                             {
                                 SetText();
                             }
+
                             SelectionStart = ++caretTestPos;
                         }
                         else
@@ -1263,10 +1259,7 @@ namespace System.Windows.Forms
                 {
                     //verify that 'value' is a valid enum type...
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(HorizontalAlignment));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     textAlign = value;
                     RecreateHandle();
@@ -1326,10 +1319,7 @@ namespace System.Windows.Forms
                 }
 
                 //valid values are 0x0 to 0x3
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)MaskFormat.ExcludePromptAndLiterals, (int)MaskFormat.IncludePromptAndLiterals))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MaskFormat));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 // Changing the TextMaskFormat will likely change the 'output' text (Text getter value).  Cache old value to
                 // verify it against the new value and raise OnTextChange if needed.
@@ -1352,7 +1342,7 @@ namespace System.Windows.Forms
                     IncludeLiterals = include;
                 }
 
-                if (oldText != null && oldText != TextOutput)
+                if (oldText is not null && oldText != TextOutput)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
@@ -1646,6 +1636,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return ch;
         }
 
@@ -1665,6 +1656,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return index;
         }
 
@@ -1759,6 +1751,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return pos;
         }
 
@@ -1779,6 +1772,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return size;
         }
 
@@ -1916,6 +1910,7 @@ namespace System.Windows.Forms
                             {
                                 keyCode = Keys.Back;
                             }
+
                             goto default;
 
                         case Keys.Control:
@@ -1931,6 +1926,7 @@ namespace System.Windows.Forms
                                     startPosition = 0;
                                 }
                             }
+
                             goto default;
 
                         default:
@@ -1938,6 +1934,7 @@ namespace System.Windows.Forms
                             {
                                 flagState[HANDLE_KEY_PRESS] = true;
                             }
+
                             break;
                     }
 
@@ -2139,6 +2136,7 @@ namespace System.Windows.Forms
                 flagState[QUERY_BASE_TEXT] = queryBaseText;
             }
         }
+
         /// <summary>
         ///  Replaces the current selection in the text box specified by the startPosition and selectionLen parameters
         ///  with the contents of the supplied string.
@@ -2146,7 +2144,7 @@ namespace System.Windows.Forms
         private void Replace(string text, int startPosition, int selectionLen)
         {
             Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
-            Debug.Assert(text != null, "text is null.");
+            Debug.Assert(text is not null, "text is null.");
 
             // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
             // completed.  This is needed in case one of these properties is retreived in a MaskedInputRejected
@@ -2302,7 +2300,7 @@ namespace System.Windows.Forms
         {
             object parseRetVal = null;
 
-            if (validatingType != null)
+            if (validatingType is not null)
             {
                 string message = null;
 
@@ -2342,7 +2340,7 @@ namespace System.Windows.Forms
                             throw;
                         }
 
-                        if (exception.InnerException != null) // Outer exception is a generic TargetInvocationException.
+                        if (exception.InnerException is not null) // Outer exception is a generic TargetInvocationException.
                         {
                             exception = exception.InnerException;
                         }
@@ -2361,7 +2359,7 @@ namespace System.Windows.Forms
                 TypeValidationEventArgs tve = new TypeValidationEventArgs(validatingType, isValidInput, parseRetVal, message);
                 OnTypeValidationCompleted(tve);
 
-                if (e != null)
+                if (e is not null)
                 {
                     e.Cancel = tve.Cancel;
                 }
@@ -2497,7 +2495,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetMaskedTextProvider(MaskedTextProvider newProvider, string textOnInitializingMask)
         {
-            Debug.Assert(newProvider != null, "Initializing from a null MaskProvider ref.");
+            Debug.Assert(newProvider is not null, "Initializing from a null MaskProvider ref.");
 
             // Set R/W properties.
             newProvider.IncludePrompt = maskedTextProvider.IncludePrompt;
@@ -2528,7 +2526,7 @@ namespace System.Windows.Forms
 
             // NOTE: Whenever changing the MTP, the text is lost if any character in the old text violates the new provider's mask.
 
-            if (textOnInitializingMask != null) // Changing Mask (from null), which is the only RO property that requires passing text.
+            if (textOnInitializingMask is not null) // Changing Mask (from null), which is the only RO property that requires passing text.
             {
                 oldText = textOnInitializingMask;
                 raiseOnMaskInputRejected = !newProvider.Set(textOnInitializingMask, out testPos, out hint);
@@ -2606,7 +2604,7 @@ namespace System.Windows.Forms
 
             EventArgs e = EventArgs.Empty;
 
-            if (textOnInitializingMask != null /*changing mask from null*/ || oldProvider.Mask != newProvider.Mask)
+            if (textOnInitializingMask is not null /*changing mask from null*/ || oldProvider.Mask != newProvider.Mask)
             {
                 OnMaskChanged(e);
             }
@@ -2750,6 +2748,7 @@ namespace System.Windows.Forms
                     throw;
                 }
             }
+
             return true;
         }
 
@@ -2888,6 +2887,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 Debug.Fail(ex.ToString());
                 return;
             }
@@ -2951,6 +2951,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     goto default;
 
                 case (int)WM.IME_ENDCOMPOSITION:
@@ -2962,6 +2963,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     goto default;
 
                 case (int)WM.CUT:
@@ -2969,6 +2971,7 @@ namespace System.Windows.Forms
                     {
                         WmClear();
                     }
+
                     break;
 
                 case (int)WM.COPY:

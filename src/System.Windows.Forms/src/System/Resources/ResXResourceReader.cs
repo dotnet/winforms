@@ -196,13 +196,13 @@ namespace System.Resources
         {
             if (disposing)
             {
-                if (_fileName != null && _stream != null)
+                if (_fileName is not null && _stream is not null)
                 {
                     _stream.Close();
                     _stream = null;
                 }
 
-                if (_reader != null)
+                if (_reader is not null)
                 {
                     _reader.Close();
                     _reader = null;
@@ -244,15 +244,15 @@ namespace System.Resources
                 try
                 {
                     // Read data in any which way
-                    if (_fileContents != null)
+                    if (_fileContents is not null)
                     {
                         contentReader = new XmlTextReader(new StringReader(_fileContents));
                     }
-                    else if (_reader != null)
+                    else if (_reader is not null)
                     {
                         contentReader = new XmlTextReader(_reader);
                     }
-                    else if (_fileName != null || _stream != null)
+                    else if (_fileName is not null || _stream is not null)
                     {
                         if (_stream is null)
                         {
@@ -268,7 +268,7 @@ namespace System.Resources
                 }
                 finally
                 {
-                    if (_fileName != null && _stream != null)
+                    if (_fileName is not null && _stream is not null)
                     {
                         _stream.Close();
                         _stream = null;
@@ -432,17 +432,18 @@ namespace System.Resources
 
                 string readerTypeName = _resHeaderReaderType;
                 string writerTypeName = _resHeaderWriterType;
-                if (readerTypeName != null && readerTypeName.IndexOf(',') != -1)
+                if (readerTypeName is not null && readerTypeName.IndexOf(',') != -1)
                 {
                     readerTypeName = readerTypeName.Split(',')[0].Trim();
                 }
-                if (writerTypeName != null && writerTypeName.IndexOf(',') != -1)
+
+                if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
                 {
                     writerTypeName = writerTypeName.Split(',')[0].Trim();
                 }
 
-                if (readerTypeName != null &&
-                    writerTypeName != null &&
+                if (readerTypeName is not null &&
+                    writerTypeName is not null &&
                     readerTypeName.Equals(readerType.FullName) &&
                     writerTypeName.Equals(writerType.FullName))
                 {
@@ -461,7 +462,7 @@ namespace System.Resources
         private void ParseResHeaderNode(XmlReader reader)
         {
             string name = reader[ResXResourceWriter.NameStr];
-            if (name != null)
+            if (name is not null)
             {
                 reader.ReadStartElement();
 
@@ -527,6 +528,7 @@ namespace System.Resources
                             {
                                 _resHeaderVersion = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.ResMimeTypeStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -537,6 +539,7 @@ namespace System.Resources
                             {
                                 _resHeaderMimeType = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.ReaderStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -547,6 +550,7 @@ namespace System.Resources
                             {
                                 _resHeaderReaderType = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.WriterStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -557,6 +561,7 @@ namespace System.Resources
                             {
                                 _resHeaderWriterType = reader.Value.Trim();
                             }
+
                             break;
                     }
                 }
@@ -600,7 +605,7 @@ namespace System.Resources
                 assemblyName = _aliasResolver.ResolveAlias(alias);
             }
 
-            if (assemblyName != null)
+            if (assemblyName is not null)
             {
                 nodeInfo.TypeName = GetTypeFromTypeName(typeName) + ", " + assemblyName.FullName;
             }
@@ -630,7 +635,7 @@ namespace System.Resources
                             WhitespaceHandling oldValue = reader.WhitespaceHandling;
                             try
                             {
-                                // based on the documentation at http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemxmlxmltextreaderclasswhitespacehandlingtopic.asp
+                                // based on the documentation at https://docs.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
                                 // this is ok because:
                                 // "Because the XmlTextReader does not have DTD information available to it,
                                 // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope."

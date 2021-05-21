@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
     internal class ListViewItemCollectionEditor : CollectionEditor
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.Windows.Forms.Design.ListViewItemCollectionEditor'/> class.
+        ///  Initializes a new instance of the <see cref='ListViewItemCollectionEditor'/> class.
         /// </summary>
         public ListViewItemCollectionEditor(Type type) : base(type)
         { }

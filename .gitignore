@@ -370,3 +370,7 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Ignore "InteropTests/NativeTests/out"
+InteropTests/NativeTests/out
+/src/System.Windows.Forms/src/comctl32.dll

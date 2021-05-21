@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,8 +11,8 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     public class MdiClientTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -754,7 +754,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -905,7 +906,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -1066,7 +1068,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;

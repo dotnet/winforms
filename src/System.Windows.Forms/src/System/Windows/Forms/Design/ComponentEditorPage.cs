@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public Icon Icon
         {
-            get =>_icon ??= new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
+            get => _icon ??= new Icon(typeof(ComponentEditorPage), "ComponentEditorPage");
             set => _icon = value;
         }
 

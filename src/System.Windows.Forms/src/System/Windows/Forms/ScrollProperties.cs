@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             get => _enabled;
             set
             {
-                if (_parent != null && _parent.AutoScroll)
+                if (_parent is not null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 if (value != _enabled)
                 {
                     _enabled = value;
-                    if (_parent != null)
+                    if (_parent is not null)
                     {
                         User32.EnableScrollBar(
                             _parent,
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
             get => _maximum;
             set
             {
-                if (_parent != null && _parent.AutoScroll)
+                if (_parent is not null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -123,6 +123,7 @@ namespace System.Windows.Forms
                     {
                         _minimum = value;
                     }
+
                     if (value < _value)
                     {
                         Value = value;
@@ -147,7 +148,7 @@ namespace System.Windows.Forms
             get => _minimum;
             set
             {
-                if (_parent != null && _parent.AutoScroll)
+                if (_parent is not null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -163,6 +164,7 @@ namespace System.Windows.Forms
                     {
                         _maximum = value;
                     }
+
                     if (value > _value)
                     {
                         _value = value;
@@ -252,7 +254,7 @@ namespace System.Windows.Forms
             get => _visible;
             set
             {
-                if (_parent != null && _parent.AutoScroll)
+                if (_parent is not null && _parent.AutoScroll)
                 {
                     return;
                 }
@@ -267,13 +269,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void UpdateScrollInfo()
+        internal unsafe void UpdateScrollInfo()
         {
-            if (_parent != null && _parent.IsHandleCreated && _visible)
+            if (_parent is not null && _parent.IsHandleCreated && _visible)
             {
-                var si = new User32.SCROLLINFO
+                User32.SCROLLINFO si = new()
                 {
-                    cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                    cbSize = (uint)sizeof(User32.SCROLLINFO),
                     fMask = User32.SIF.ALL,
                     nMin = _minimum,
                     nMax = _maximum,
@@ -281,6 +283,7 @@ namespace System.Windows.Forms
                     nPos = _value,
                     nTrackPos = 0
                 };
+
                 User32.SetScrollInfo(_parent, Orientation, ref si, BOOL.TRUE);
             }
         }

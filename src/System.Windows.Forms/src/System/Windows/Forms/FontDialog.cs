@@ -115,6 +115,7 @@ namespace System.Windows.Forms
                 {
                     return ColorTranslator.FromWin32(ColorTranslator.ToWin32(color));
                 }
+
                 return color;
             }
             set
@@ -214,6 +215,7 @@ namespace System.Windows.Forms
                 {
                     value = 0;
                 }
+
                 maxSize = value;
 
                 if (maxSize > 0 && maxSize < minSize)
@@ -241,6 +243,7 @@ namespace System.Windows.Forms
                 {
                     value = 0;
                 }
+
                 minSize = value;
 
                 if (maxSize > 0 && maxSize < minSize)
@@ -362,6 +365,7 @@ namespace System.Windows.Forms
                         {
                             UpdateColor((int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index));
                         }
+
                         if (NativeWindow.WndProcShouldBeDebuggable)
                         {
                             OnApply(EventArgs.Empty);
@@ -378,6 +382,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     break;
                 case User32.WM.INITDIALOG:
                     if (!showColor)
@@ -387,6 +392,7 @@ namespace System.Windows.Forms
                         hWndCtl = User32.GetDlgItem(hWnd, User32.DialogItemID.stc4);
                         User32.ShowWindow(hWndCtl, User32.SW.HIDE);
                     }
+
                     break;
             }
 

@@ -18,9 +18,11 @@ namespace System.Windows.Forms
         public ToolStripSystemRenderer()
         {
         }
+
         internal ToolStripSystemRenderer(bool isDefault) : base(isDefault)
         {
         }
+
         internal override ToolStripRenderer RendererOverride
         {
             get
@@ -29,6 +31,7 @@ namespace System.Windows.Forms
                 {
                     return HighContrastRenderer;
                 }
+
                 return null;
             }
         }
@@ -41,6 +44,7 @@ namespace System.Windows.Forms
                 {
                     toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/true);
                 }
+
                 return toolStripHighContrastRenderer;
             }
         }
@@ -63,6 +67,7 @@ namespace System.Windows.Forms
                 {
                     renderer = null;
                 }
+
                 return renderer;
             }
         }
@@ -100,6 +105,7 @@ namespace System.Windows.Forms
         {
             return (int)GetSplitButtonToolBarState(item, false);
         }
+
         /// <summary>
         ///  translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </summary>
@@ -107,7 +113,7 @@ namespace System.Windows.Forms
         {
             ToolBarState state = ToolBarState.Normal;
 
-            if (button != null)
+            if (button is not null)
             {
                 if (!button.Enabled)
                 {
@@ -136,6 +142,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return state;
         }
 
@@ -145,12 +152,13 @@ namespace System.Windows.Forms
         private static ToolBarState GetToolBarState(ToolStripItem item)
         {
             ToolBarState state = ToolBarState.Normal;
-            if (item != null)
+            if (item is not null)
             {
                 if (!item.Enabled)
                 {
                     state = ToolBarState.Disabled;
                 }
+
                 if (item is ToolStripButton && ((ToolStripButton)item).Checked)
                 {
                     if (((ToolStripButton)item).Selected)
@@ -171,6 +179,7 @@ namespace System.Windows.Forms
                     state = ToolBarState.Hot;
                 }
             }
+
             return state;
         }
 
@@ -295,6 +304,7 @@ namespace System.Windows.Forms
                 {
                     vsRenderer.SetParameters(VisualStyleElement.Rebar.GripperVertical.Normal);
                 }
+
                 vsRenderer.DrawBackground(g, bounds);
             }
             else
@@ -309,6 +319,7 @@ namespace System.Windows.Forms
                     {
                         bounds.Inflate(0, -2);     // scoot down 2PX and start drawing
                     }
+
                     bounds.Width = 3;
                 }
                 else
@@ -317,6 +328,7 @@ namespace System.Windows.Forms
                     {
                         bounds.Inflate(-2, 0);        // scoot over 2PX and start drawing
                     }
+
                     bounds.Height = 3;
                 }
 
@@ -337,6 +349,7 @@ namespace System.Windows.Forms
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e)
         {
         }
+
         /// <summary>
         ///  Draw the button background
         /// </summary>
@@ -384,6 +397,7 @@ namespace System.Windows.Forms
         {
             RenderLabelInternal(e);
         }
+
         /// <summary>
         ///  Draw the items background
         /// </summary>
@@ -399,14 +413,14 @@ namespace System.Windows.Forms
 
             //
 
-            if (item != null)
+            if (item is not null)
             {
                 Rectangle bounds = new Rectangle(Point.Empty, item.Size);
                 if (item.IsTopLevel && !ToolStripManager.VisualStylesEnabled)
                 {
                     // Classic Mode (3D edges)
                     // Draw box highlight for toplevel items in downlevel platforms
-                    if (item.BackgroundImage != null)
+                    if (item.BackgroundImage is not null)
                     {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, item.ContentRectangle);
                     }
@@ -414,6 +428,7 @@ namespace System.Windows.Forms
                     {
                         FillBackground(g, item.ContentRectangle, item.BackColor);
                     }
+
                     // Toplevel menu items do 3D borders.
                     ToolBarState state = GetToolBarState(item);
                     RenderSmall3DBorderInternal(g, bounds, state, (item.RightToLeft == RightToLeft.Yes));
@@ -449,7 +464,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (item.BackgroundImage != null)
+                        if (item.BackgroundImage is not null)
                         {
                             ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, fillRect);
                         }
@@ -516,6 +531,7 @@ namespace System.Windows.Forms
                     // scoot to the left so we dont draw double shadow like so: ][
                     splitButtonBounds.Inflate(2, 0);
                 }
+
                 // Draw the button portion of it.
                 vsRenderer.DrawBackground(g, splitButtonBounds);
 
@@ -527,7 +543,7 @@ namespace System.Windows.Forms
 
                 // fill in the background image
                 Rectangle fillRect = splitButton.ContentRectangle;
-                if (splitButton.BackgroundImage != null)
+                if (splitButton.BackgroundImage is not null)
                 {
                     ControlPaint.DrawBackgroundImage(g, splitButton.BackgroundImage, splitButton.BackColor, splitButton.BackgroundImageLayout, fillRect, fillRect);
                 }
@@ -537,7 +553,7 @@ namespace System.Windows.Forms
 
                 // and of course, now if we're in RTL we now need to paint the arrow
                 // because we're no longer using a part that has it built in.
-                if (rightToLeft || splitButton.BackgroundImage != null)
+                if (rightToLeft || splitButton.BackgroundImage is not null)
                 {
                     DrawArrow(new ToolStripArrowRenderEventArgs(g, splitButton, splitButton.DropDownButtonBounds, arrowColor, ArrowDirection.Down));
                 }
@@ -547,11 +563,11 @@ namespace System.Windows.Forms
                 // Draw the split button button
                 Rectangle splitButtonButtonRect = splitButton.ButtonBounds;
 
-                if (splitButton.BackgroundImage != null)
+                if (splitButton.BackgroundImage is not null)
                 {
                     // fill in the background image
                     Rectangle fillRect = (splitButton.Selected) ? splitButton.ContentRectangle : bounds;
-                    if (splitButton.BackgroundImage != null)
+                    if (splitButton.BackgroundImage is not null)
                     {
                         ControlPaint.DrawBackgroundImage(g, splitButton.BackgroundImage, splitButton.BackColor, splitButton.BackgroundImageLayout, bounds, fillRect);
                     }
@@ -616,14 +632,14 @@ namespace System.Windows.Forms
 
             Rectangle fillRect = item.ContentRectangle;
 
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, fillRect, fillRect);
             }
             else
             {
                 ToolStrip parent = item.GetCurrentParent();
-                if ((parent != null) && (state != ToolBarState.Checked) && (item.BackColor != parent.BackColor))
+                if ((parent is not null) && (state != ToolBarState.Checked) && (item.BackColor != parent.BackColor))
                 {
                     FillBackground(g, fillRect, item.BackColor);
                 }
@@ -740,7 +756,7 @@ namespace System.Windows.Forms
 
             Rectangle fillRect = item.ContentRectangle;
 
-            if (item.BackgroundImage != null)
+            if (item.BackgroundImage is not null)
             {
                 ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, fillRect, fillRect);
             }

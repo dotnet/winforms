@@ -18,10 +18,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));

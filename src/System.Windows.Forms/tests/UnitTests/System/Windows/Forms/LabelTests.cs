@@ -223,6 +223,25 @@ namespace System.Windows.Forms.Tests
             Assert.True(label.SupportsUiaProviders);
         }
 
+        [WinFormsFact]
+        public void Label_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using Label label = new Label();
+            using ToolTip toolTip = new ToolTip();
+            label.CreateControl();
+
+            dynamic labelDynamic = label.TestAccessor().Dynamic;
+            bool actual = labelDynamic._controlToolTip;
+
+            Assert.False(actual);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+
+            toolTip.SetToolTip(label, "Some test text"); // Invokes Label's SetToolTip inside
+            actual = labelDynamic._controlToolTip;
+
+            Assert.True(actual);
+        }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;

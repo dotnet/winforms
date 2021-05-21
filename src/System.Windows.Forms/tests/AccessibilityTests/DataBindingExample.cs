@@ -28,7 +28,7 @@ namespace AccessibilityTests
         {
             for (int i = 0; i < 6; i++)
             {
-                _studentA.Add(new Student(i,  "Name 1" + i, "Male"));
+                _studentA.Add(new Student(i, "Name 1" + i, "Male"));
                 _studentB.Add(new Student(i * 2, "Name 11" + i * 2, "Female"));
             }
 
@@ -40,11 +40,13 @@ namespace AccessibilityTests
             comboBox1.DisplayMember = nameof(Student.Name);
 
             // Binding Data For DataGridView control by using DadSource property
-            dataGridView1.DataSource = new List<Student>{
-                     new Student(1, "StudentA", "Female", 12121, "1001", "Basketball", false, 10, 11),
-                     new Student(2, "StudentB", "Male", 12122, "1002", "Basketball", true, 10, 11),
-                     new Student(3, "StudentC", "Female", 12123, "1003", "Football", false, 10, 11),
-                     new Student(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),};
+            dataGridView1.DataSource = new List<Student>
+            {
+                new Student(1, "StudentA", "Female", 12121, "1001", "Basketball", false, 10, 11),
+                new Student(2, "StudentB", "Male", 12122, "1002", "Basketball", true, 10, 11),
+                new Student(3, "StudentC", "Female", 12123, "1003", "Football", false, 10, 11),
+                new Student(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),
+            };
 
             // Binding Data For TextBox/Label/DomianUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
             Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);

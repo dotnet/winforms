@@ -47,28 +47,31 @@ namespace System.Windows.Forms
         {
             get
             {
-                if ((destinationThreadRef != null) && (destinationThreadRef.IsAlive))
+                if ((destinationThreadRef is not null) && (destinationThreadRef.IsAlive))
                 {
                     return destinationThreadRef.Target as Thread;
                 }
+
                 return null;
             }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     destinationThreadRef = new WeakReference(value);
                 }
             }
         }
+
         public void Dispose()
         {
-            if (controlToSendTo != null)
+            if (controlToSendTo is not null)
             {
                 if (!controlToSendTo.IsDisposed)
                 {
                     controlToSendTo.Dispose();
                 }
+
                 controlToSendTo = null;
             }
         }
@@ -126,7 +129,7 @@ namespace System.Windows.Forms
                 previousSyncContext = null;
             }
 
-            if (previousSyncContext != null)
+            if (previousSyncContext is not null)
             {
                 return;
             }
@@ -177,6 +180,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (turnOffAutoInstall)
             {
                 AutoInstall = false;

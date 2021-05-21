@@ -4,9 +4,7 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -17,7 +15,7 @@ namespace System.Windows.Forms.PropertyGridInternal
     ///  Use caution and check at all DPI scaling factors if adding a new message
     ///  to be displayed in the top pane.
     /// </summary>
-    internal class GridErrorDlg : Form
+    internal partial class GridErrorDlg : Form
     {
         private TableLayoutPanel overarchingTableLayoutPanel;
         private TableLayoutPanel buttonTableLayoutPanel;
@@ -67,6 +65,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref expandImage);
             }
+
             collapseImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "up");
             if (DpiHelper.IsScalingRequired)
             {
@@ -331,7 +330,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Location is relative to its parent,
                 // therefore, we need to take its parent into consideration
                 Control parent = detailsBtn.Parent;
-                while (parent != null && !(parent is Form))
+                while (parent is not null && !(parent is Form))
                 {
                     y += parent.Location.Y;
                     parent = parent.Parent;
@@ -344,92 +343,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     DetailsClick(details, EventArgs.Empty);
                 }
             }
+
             okBtn.Focus();
-        }
-    }
-
-    internal class DetailsButton : Button
-    {
-        private readonly GridErrorDlg parent;
-        public DetailsButton(GridErrorDlg form)
-        {
-            parent = form;
-        }
-
-        public bool Expanded
-        {
-            get
-            {
-                return parent.DetailsButtonExpanded;
-            }
-        }
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DetailsButtonAccessibleObject(this);
-        }
-    }
-
-    internal class DetailsButtonAccessibleObject : Control.ControlAccessibleObject
-    {
-        private readonly DetailsButton ownerItem;
-
-        public DetailsButtonAccessibleObject(DetailsButton owner) : base(owner)
-        {
-            ownerItem = owner;
-        }
-
-        internal override bool IsIAccessibleExSupported()
-        {
-            Debug.Assert(ownerItem != null, "AccessibleObject owner cannot be null");
-            return true;
-        }
-
-        internal override object GetPropertyValue(UiaCore.UIA propertyID)
-        {
-            if (propertyID == UiaCore.UIA.ControlTypePropertyId)
-            {
-                return UiaCore.UIA.ButtonControlTypeId;
-            }
-            else
-            {
-                return base.GetPropertyValue(propertyID);
-            }
-        }
-
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-        {
-            if (patternId == UiaCore.UIA.ExpandCollapsePatternId)
-            {
-                return true;
-            }
-            else
-            {
-                return base.IsPatternSupported(patternId);
-            }
-        }
-
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
-        {
-            get
-            {
-                return ownerItem.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-            }
-        }
-
-        internal override void Expand()
-        {
-            if (ownerItem != null && !ownerItem.Expanded)
-            {
-                DoDefaultAction();
-            }
-        }
-
-        internal override void Collapse()
-        {
-            if (ownerItem != null && ownerItem.Expanded)
-            {
-                DoDefaultAction();
-            }
         }
     }
 }

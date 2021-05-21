@@ -19,18 +19,6 @@ namespace WinForms.Common.Tests
 {
     public static class CommonTestHelper
     {
-        // helper method to generate theory data from all values of an enum type
-        public static TheoryData<T> GetEnumTheoryData<T>() where T : Enum
-        {
-            var data = new TheoryData<T>();
-            foreach (T item in Enum.GetValues(typeof(T)))
-            {
-                data.Add(item);
-            }
-
-            return data;
-        }
-
         public static TheoryData GetEnumTypeTheoryData(Type enumType)
         {
             var data = new TheoryData<Enum>();
@@ -38,29 +26,31 @@ namespace WinForms.Common.Tests
             {
                 data.Add(item);
             }
-            return data;
-        }
 
-        // helper method to generate invalid theory data for an enum type
-        // This method assumes that int.MinValue and int.MaxValue are not in the enum
-        public static TheoryData<T> GetEnumTheoryDataInvalid<T>() where T : Enum
-        {
-            var data = new TheoryData<T>
-            {
-                // This boxing is necessary because you can't cast an int to a generic,
-                // even if the generic is guaranteed to be an enum
-                (T)(object)int.MinValue,
-                (T)(object)int.MaxValue
-            };
             return data;
         }
 
         public static TheoryData<Enum> GetEnumTypeTheoryDataInvalid(Type enumType)
         {
             var data = new TheoryData<Enum>();
-            IEnumerable<Enum> values = Enum.GetValues(enumType).Cast<Enum>().OrderBy(p => p);
+            Enum[] values = Enum.GetValues(enumType).Cast<Enum>().OrderBy(p => p).Distinct().ToArray();
 
-            // Assumes that the enum is sequential.
+            for (int i = 0; i < values.Length - 2; i++)
+            {
+                int currentVal = Convert.ToInt32(values[i]);
+                int nextVal = Convert.ToInt32(values[i + 1]);
+                if (nextVal != currentVal + 1)
+                {
+                    // Not sequential.
+                    data.Add((Enum)Enum.ToObject(enumType, currentVal + 1));
+
+                    if (nextVal - 1 != currentVal)
+                    {
+                        data.Add((Enum)Enum.ToObject(enumType, nextVal - 1));
+                    }
+                }
+            }
+
             data.Add((Enum)Enum.ToObject(enumType, Convert.ToInt32(values.Min()) - 1));
             data.Add((Enum)Enum.ToObject(enumType, Convert.ToInt32(values.Max()) + 1));
             return data;
@@ -388,11 +378,13 @@ namespace WinForms.Common.Tests
                 data.Add(new Point(10));
                 data.Add(new Point(1, 2));
             }
+
             if (!includeType.HasFlag(TestIncludeType.NoNegatives))
             {
                 data.Add(new Point(int.MaxValue, int.MinValue));
                 data.Add(new Point(-1, -2));
             }
+
             return data;
         }
 
@@ -407,11 +399,13 @@ namespace WinForms.Common.Tests
                 data.Add(new Size(new Point(1, 1)));
                 data.Add(new Size(1, 2));
             }
+
             if (!includeType.HasFlag(TestIncludeType.NoNegatives))
             {
                 data.Add(new Size(-1, 1));
                 data.Add(new Size(1, -1));
             }
+
             return data;
         }
 

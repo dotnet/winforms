@@ -230,6 +230,7 @@ namespace System.Windows.Forms
                 clipRight.X = clipMiddle.Right;
                 clipRight.Width = boxBounds.Right - clipRight.X;
             }
+
             clipMiddle.Y = textBounds.Bottom;
             clipMiddle.Height -= (textBounds.Bottom - boxBounds.Top);
 

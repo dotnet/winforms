@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Reflection;
 
@@ -13,10 +11,10 @@ namespace System.Windows.Forms
     {
         private class ControlVersionInfo
         {
-            private string _companyName;
-            private string _productName;
-            private string _productVersion;
-            private FileVersionInfo _versionInfo;
+            private string? _companyName;
+            private string? _productName;
+            private string? _productVersion;
+            private FileVersionInfo? _versionInfo;
             private readonly Control _owner;
 
             internal ControlVersionInfo(Control owner)
@@ -34,7 +32,7 @@ namespace System.Windows.Forms
                     if (_companyName is null)
                     {
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                        if (attrs != null && attrs.Length > 0)
+                        if (attrs is not null && attrs.Length > 0)
                         {
                             _companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
                         }
@@ -42,7 +40,7 @@ namespace System.Windows.Forms
                         if (_companyName is null || _companyName.Length == 0)
                         {
                             _companyName = GetFileVersionInfo().CompanyName;
-                            if (_companyName != null)
+                            if (_companyName is not null)
                             {
                                 _companyName = _companyName.Trim();
                             }
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
 
                         if (_companyName is null || _companyName.Length == 0)
                         {
-                            string ns = _owner.GetType().Namespace;
+                            string? ns = _owner.GetType().Namespace;
 
                             if (ns is null)
                             {
@@ -68,6 +66,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     return _companyName;
                 }
             }
@@ -82,7 +81,7 @@ namespace System.Windows.Forms
                     if (_productName is null)
                     {
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                        if (attrs != null && attrs.Length > 0)
+                        if (attrs is not null && attrs.Length > 0)
                         {
                             _productName = ((AssemblyProductAttribute)attrs[0]).Product;
                         }
@@ -90,7 +89,7 @@ namespace System.Windows.Forms
                         if (_productName is null || _productName.Length == 0)
                         {
                             _productName = GetFileVersionInfo().ProductName;
-                            if (_productName != null)
+                            if (_productName is not null)
                             {
                                 _productName = _productName.Trim();
                             }
@@ -98,12 +97,13 @@ namespace System.Windows.Forms
 
                         if (_productName is null || _productName.Length == 0)
                         {
-                            string ns = _owner.GetType().Namespace;
+                            string? ns = _owner.GetType().Namespace;
 
                             if (ns is null)
                             {
                                 ns = string.Empty;
                             }
+
                             int firstDot = ns.IndexOf('.');
                             if (firstDot != -1)
                             {
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
                     {
                         // custom attribute
                         object[] attrs = _owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
-                        if (attrs != null && attrs.Length > 0)
+                        if (attrs is not null && attrs.Length > 0)
                         {
                             _productVersion = ((AssemblyInformationalVersionAttribute)attrs[0]).InformationalVersion;
                         }
@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                         if (_productVersion is null || _productVersion.Length == 0)
                         {
                             _productVersion = GetFileVersionInfo().ProductVersion;
-                            if (_productVersion != null)
+                            if (_productVersion is not null)
                             {
                                 _productVersion = _productVersion.Trim();
                             }
@@ -152,6 +152,7 @@ namespace System.Windows.Forms
                             _productVersion = "1.0.0.0";
                         }
                     }
+
                     return _productVersion;
                 }
             }
@@ -168,6 +169,7 @@ namespace System.Windows.Forms
 
                     _versionInfo = FileVersionInfo.GetVersionInfo(path);
                 }
+
                 return _versionInfo;
             }
         }

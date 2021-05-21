@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
@@ -17,22 +19,28 @@ namespace System.Windows.Forms
         {
             private readonly ListView _owningListView;
             private readonly ListViewItem _owningItem;
-            private readonly ListViewGroup? _owningGroup;
             private readonly IAccessible? _systemIAccessible;
+            private readonly Dictionary<int, AccessibleObject> _listViewSubItemAccessibleObjects;
 
-            public ListViewItemAccessibleObject(ListViewItem owningItem, ListViewGroup? owningGroup)
+            public ListViewItemAccessibleObject(ListViewItem owningItem)
             {
                 _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
-                _owningListView = owningItem.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
-                _owningGroup = owningGroup;
+                _owningListView = owningItem.ListView ?? owningItem.Group?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 _systemIAccessible = _owningListView.AccessibilityObject.GetSystemIAccessibleInternal();
+                _listViewSubItemAccessibleObjects = new Dictionary<int, AccessibleObject>();
             }
+
+            private ListViewGroup? OwningGroup => _owningListView.GroupsDisplayed
+                ? _owningItem.Group ?? _owningListView.DefaultGroup
+                : null;
 
             private string AutomationId
                 => string.Format("{0}-{1}", typeof(ListViewItem).Name, CurrentIndex);
 
             public override Rectangle Bounds
-                => new Rectangle(
+                => !_owningListView.IsHandleCreated || OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                    ? Rectangle.Empty
+                    : new Rectangle(
                         _owningListView.AccessibilityObject.Bounds.X + _owningItem.Bounds.X,
                         _owningListView.AccessibilityObject.Bounds.Y + _owningItem.Bounds.Y,
                         _owningItem.Bounds.Width,
@@ -78,13 +86,13 @@ namespace System.Windows.Forms
                 {
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable | AccessibleStates.MultiSelectable;
 
-                    if (_owningListView.SelectedItems.Contains(_owningItem))
+                    if (_owningListView.SelectedIndices.Contains(_owningItem.Index))
                     {
                         return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
                     object? systemIAccessibleState = _systemIAccessible?.get_accState(GetChildId());
-                    if (systemIAccessibleState != null)
+                    if (systemIAccessibleState is not null)
                     {
                         return state |= (AccessibleStates)systemIAccessibleState;
                     }
@@ -104,86 +112,196 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                ListViewGroupAccessibleObject? owningGroupAccessibleObject = (ListViewGroupAccessibleObject?)_owningGroup?.AccessibilityObject;
+                AccessibleObject _parentInternal = OwningGroup?.AccessibilityObject ?? _owningListView.AccessibilityObject;
+
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        return owningGroupAccessibleObject ?? _owningListView.AccessibilityObject;
+                        return _parentInternal;
                     case UiaCore.NavigateDirection.NextSibling:
-                        if (owningGroupAccessibleObject is null)
-                        {
-                            ListViewAccessibleObject listViewAccessibilityObject = (ListViewAccessibleObject)_owningListView.AccessibilityObject;
-                            return listViewAccessibilityObject.GetNextChild(this);
-                        }
-
-                        return owningGroupAccessibleObject.GetNextChild(this);
+                        int childIndex = _parentInternal.GetChildIndex(this);
+                        return childIndex == -1 ? null : _parentInternal.GetChild(childIndex + 1);
                     case UiaCore.NavigateDirection.PreviousSibling:
-                        if (owningGroupAccessibleObject is null)
-                        {
-                            ListViewAccessibleObject listViewAccessibilityObject = (ListViewAccessibleObject)_owningListView.AccessibilityObject;
-                            return listViewAccessibilityObject.GetPreviousChild(this);
-                        }
-
-                        return owningGroupAccessibleObject.GetPreviousChild(this);
+                        return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
                     case UiaCore.NavigateDirection.FirstChild:
                         if (_owningItem.SubItems.Count > 0)
                         {
                             return GetChild(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
-                        int subItemsCount = _owningItem.SubItems.Count;
-                        if (subItemsCount > 0)
-                        {
-                            return GetChild(subItemsCount - 1);
-                        }
-                        break;
+                        return GetChildInternal(LastChildIndex);
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
             public override AccessibleObject? GetChild(int index)
+                // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
+                // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)
+                => GetChildInternal(_owningListView.View == View.Tile ? index + 1 : index);
+
+            internal AccessibleObject? GetChildInternal(int index)
             {
-                if (index < 0 || index >= _owningItem.SubItems.Count || _owningGroup != null)
+                // If the ListView does not support ListViewSubItems, the index is greater than the number of columns
+                // or the index is negative, then we return null
+                if (!_owningListView.SupportsListViewSubItems || _owningListView.Columns.Count <= index || index < 0)
                 {
                     return null;
                 }
 
-                return _owningItem.SubItems[index].AccessibilityObject;
+                if (_owningListView.View == View.Details)
+                {
+                    return GetDetailsSubItemOrFake(index);
+                }
+
+                // The ListViewSubItem for "Tile" mode is only displayed if the following conditions are met:
+                // 1. The ListViewSubItem is not the first (data about the first ListViewSubItem is displayed in the ListViewtem itself)
+                // 2. The ListViewSubItem has non-empty bounds(otherwise it means that it is not displayed)
+                if (index > 0
+                    && _owningItem.SubItems.Count > index
+                    && !GetSubItemBounds(index).IsEmpty)
+                {
+                    return _owningItem.SubItems[index].AccessibilityObject;
+                }
+
+                return null;
             }
 
-            internal override int[]? RuntimeId
+            public override int GetChildCount()
             {
-                get
+                if (!_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems)
                 {
-                    int[] runtimeId;
-                    var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
-                    if (owningListViewRuntimeId is null)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    if (_owningGroup != null)
-                    {
-                        runtimeId = new int[5];
-                        runtimeId[0] = owningListViewRuntimeId[0];
-                        runtimeId[1] = owningListViewRuntimeId[1];
-                        runtimeId[2] = 4; // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                        runtimeId[3] = _owningListView.GetGroupIndex(_owningGroup);
-                        runtimeId[4] = CurrentIndex;
-
-                        return runtimeId;
-                    }
-
-                    runtimeId = new int[4];
-                    runtimeId[0] = owningListViewRuntimeId[0];
-                    runtimeId[1] = owningListViewRuntimeId[1];
-                    runtimeId[2] = 4; // Win32-control specific RuntimeID constant.
-                    runtimeId[3] = CurrentIndex;
-
-                    return runtimeId;
+                    return -1;
                 }
+
+                return _owningListView.View switch
+                {
+                    View.Details => _owningListView.Columns.Count,
+                    View.Tile => GetChildCountTileView(),
+                    _ => -1
+                };
+            }
+
+            private int GetChildCountTileView()
+            {
+                Debug.Assert(_owningListView.View == View.Tile, $"{nameof(GetChildCountTileView)} method should only be called for 'Tile' view");
+
+                // Data about the first ListViewSubItem is displayed in the ListViewItem.
+                // Therefore, it is not displayed in the ListViewSubItems list
+                if (_owningItem.SubItems.Count == 1)
+                {
+                    return 0;
+                }
+
+                return GetLastTileChildIndex();
+            }
+
+            internal override int GetChildIndex(AccessibleObject? child)
+            {
+                if (child is null
+                    || !_owningListView.SupportsListViewSubItems
+                    || child is not ListViewSubItem.ListViewSubItemAccessibleObject subItemAccessibleObject)
+                {
+                    return -1;
+                }
+
+                // Data about the first ListViewSubItem is displayed in the ListViewItem.
+                // Therefore, it is not displayed in the ListViewSubItems list
+                if (_owningListView.View == View.Tile && _owningItem.SubItems[0].AccessibilityObject == child)
+                {
+                    return -1;
+                }
+
+                if (subItemAccessibleObject.OwningSubItem is null)
+                {
+                    return _owningListView.View == View.Details
+                        ? GetFakeSubItemIndex(subItemAccessibleObject)
+                        : -1;
+                }
+
+                int index = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
+                if (index == -1
+                    || (_owningListView.View == View.Details && index > _owningListView.Columns.Count - 1)
+                    || (_owningListView.View == View.Tile && index > GetLastTileChildIndex()))
+                {
+                    return -1;
+                }
+
+                return index;
+            }
+
+            private int LastChildIndex
+                => _owningListView.View switch
+                {
+                    View.Details => _owningListView.Columns.Count - 1,
+                    View.Tile => GetLastTileChildIndex(),
+                    _ => -1
+                };
+
+            // This method returns an accessibility object for an existing ListViewSubItem, or creates a fake one
+            // if the ListViewSubItem does not exist. This is necessary for the "Details" view,
+            // when there is no ListViewSubItem, but the cell for it is displayed and the user can interact with it.
+            internal AccessibleObject? GetDetailsSubItemOrFake(int subItemIndex)
+            {
+                if (subItemIndex < _owningItem.SubItems.Count)
+                {
+                    _listViewSubItemAccessibleObjects.Remove(subItemIndex);
+
+                    return _owningItem.SubItems[subItemIndex].AccessibilityObject;
+                }
+
+                if (_listViewSubItemAccessibleObjects.ContainsKey(subItemIndex))
+                {
+                    return _listViewSubItemAccessibleObjects[subItemIndex];
+                }
+
+                ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject = new(owningSubItem: null, _owningItem);
+                _listViewSubItemAccessibleObjects.Add(subItemIndex, fakeAccessbileObject);
+                return fakeAccessbileObject;
+            }
+
+            // This method is required to get the index of the fake accessibility object. Since the fake accessibility object
+            // has no ListViewSubItem from which we could get an index, we have to get its index from the dictionary
+            private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject)
+            {
+                foreach (KeyValuePair<int, AccessibleObject> keyValuePair in _listViewSubItemAccessibleObjects)
+                {
+                    if (keyValuePair.Value == fakeAccessbileObject)
+                    {
+                        return keyValuePair.Key;
+                    }
+                }
+
+                return -1;
+            }
+
+            private int GetLastTileChildIndex()
+            {
+                Debug.Assert(_owningListView.View == View.Tile, $"{nameof(GetLastTileChildIndex)} method should only be called for 'Tile' view");
+
+                // Data about the first ListViewSubItem is displayed in the ListViewItem.
+                // Therefore, it is not displayed in the ListViewSubItems list
+                if (_owningItem.SubItems.Count == 1)
+                {
+                    return -1;
+                }
+
+                // Only ListViewSubItems with the corresponding columns are displayed in the ListView
+                int subItemCount = Math.Min(_owningListView.Columns.Count, _owningItem.SubItems.Count);
+
+                // The ListView can be of limited TileSize, so some of the ListViewSubItems can be hidden.
+                // sListViewSubItems that do not have enough space to display have an empty bounds
+                for (int i = 1; i < subItemCount; i++)
+                {
+                    if (GetSubItemBounds(i).IsEmpty)
+                    {
+                        return i - 1;
+                    }
+                }
+
+                return subItemCount - 1;
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
@@ -206,6 +324,52 @@ namespace System.Windows.Forms
                     _ => base.GetPropertyValue(propertyID)
                 };
 
+            internal Rectangle GetSubItemBounds(int subItemIndex)
+                => _owningListView.IsHandleCreated
+                    ? _owningListView.GetSubItemRect(_owningItem.Index, subItemIndex)
+                    : Rectangle.Empty;
+
+            internal override int[]? RuntimeId
+            {
+                get
+                {
+                    int[] runtimeId;
+                    var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
+                    if (owningListViewRuntimeId is null)
+                    {
+                        return base.RuntimeId;
+                    }
+
+                    if (OwningGroup is not null)
+                    {
+                        runtimeId = new int[5];
+                        runtimeId[0] = owningListViewRuntimeId[0];
+                        runtimeId[1] = owningListViewRuntimeId[1];
+                        runtimeId[2] = 4; // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                        runtimeId[3] = OwningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
+                                        ? listViewGroupAccessibleObject.CurrentIndex
+                                        : -1;
+
+                        runtimeId[4] = CurrentIndex;
+
+                        return runtimeId;
+                    }
+
+                    runtimeId = new int[4];
+                    runtimeId[0] = owningListViewRuntimeId[0];
+                    runtimeId[1] = owningListViewRuntimeId[1];
+                    runtimeId[2] = 4; // Win32-control specific RuntimeID constant.
+                    runtimeId[3] = CurrentIndex;
+
+                    return runtimeId;
+                }
+            }
+
+            internal override UiaCore.ToggleState ToggleState
+                => _owningItem.Checked
+                    ? UiaCore.ToggleState.On
+                    : UiaCore.ToggleState.Off;
+
             /// <summary>
             ///  Indicates whether specified pattern is supported.
             /// </summary>
@@ -216,7 +380,8 @@ namespace System.Windows.Forms
                 if (patternId == UiaCore.UIA.ScrollItemPatternId ||
                     patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
                     patternId == UiaCore.UIA.SelectionItemPatternId ||
-                    patternId == UiaCore.UIA.InvokePatternId)
+                    patternId == UiaCore.UIA.InvokePatternId ||
+                    (patternId == UiaCore.UIA.TogglePatternId && _owningListView.CheckBoxes))
                 {
                     return true;
                 }
@@ -232,54 +397,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
                 => _owningListView.AccessibilityObject;
 
-            internal override void ScrollIntoView()
-            {
-                if (!_owningListView.IsHandleCreated)
-                {
-                    return;
-                }
-
-                int currentIndex = CurrentIndex;
-
-                if (_owningListView.SelectedItems is null) // no items selected
-                {
-                    User32.SendMessageW(_owningListView, (User32.WM)User32.LB.SETCARETINDEX, (IntPtr)currentIndex);
-                    return;
-                }
-
-                int firstVisibleIndex = (int)(long)User32.SendMessageW(_owningListView, (User32.WM)User32.LB.GETTOPINDEX);
-                if (currentIndex < firstVisibleIndex)
-                {
-                    User32.SendMessageW(_owningListView, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)currentIndex);
-                    return;
-                }
-
-                int itemsHeightSum = 0;
-                int listBoxHeight = _owningListView.ClientRectangle.Height;
-                int itemsCount = _owningListView.Items.Count;
-
-                for (int i = firstVisibleIndex; i < itemsCount; i++)
-                {
-                    int itemHeight = PARAM.ToInt(User32.SendMessageW(_owningListView, (User32.WM)User32.LB.GETITEMHEIGHT, (IntPtr)i));
-
-                    itemsHeightSum += itemHeight;
-
-                    if (itemsHeightSum <= listBoxHeight)
-                    {
-                        continue;
-                    }
-
-                    int lastVisibleIndex = i - 1; // less 1 because last "i" index is invisible
-                    int visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // add 1 because array indexes begin with 0
-
-                    if (currentIndex > lastVisibleIndex)
-                    {
-                        User32.SendMessageW(_owningListView, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)(currentIndex - visibleItemsCount + 1));
-                    }
-
-                    break;
-                }
-            }
+            internal override void ScrollIntoView() => _owningItem.EnsureVisible();
 
             internal unsafe override void SelectItem()
             {
@@ -319,6 +437,11 @@ namespace System.Windows.Forms
                     // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
                     // the ArgumentException and fail silently.
                 }
+            }
+
+            internal override void Toggle()
+            {
+                _owningItem.Checked = !_owningItem.Checked;
             }
         }
     }

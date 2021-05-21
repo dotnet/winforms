@@ -105,6 +105,7 @@ namespace System.Windows.Forms
                             _row == hti._row &&
                             _col == hti._col);
                 }
+
                 return false;
             }
 

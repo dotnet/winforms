@@ -49,6 +49,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\System.Windows.Forms.PrivateSourceGenerators\src\System.Windows.Forms.PrivateSourceGenerators.csproj" 
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="Analyzer" />
+  </ItemGroup>
+      
+  <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="$(SystemCodeDomPackageVersion)" />
   </ItemGroup>
 
@@ -94,7 +100,7 @@
     <EmbeddedResource Include="Resources\System\WinForms\Design\InheritedGlyph.ico">
       <LogicalName>System.Windows.Forms.Design.InheritedGlyph</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\MoverGlyph.ico">
+    <EmbeddedResource Include="Resources\System\WinForms\Design\MoverGlyph.bmp">
       <LogicalName>System.Windows.Forms.Design.Behavior.MoverGlyph</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\ImageEditor.ico">

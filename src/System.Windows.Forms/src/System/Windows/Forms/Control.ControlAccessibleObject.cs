@@ -115,6 +115,7 @@ namespace System.Windows.Forms
                             ctrls = Owner.GetChildControlsInTabOrder(true);
                             index = 0;
                         }
+
                         break;
                     case AccessibleNavigation.LastChild:
                         if (IsClientObject)
@@ -122,9 +123,10 @@ namespace System.Windows.Forms
                             ctrls = Owner.GetChildControlsInTabOrder(true);
                             index = ctrls.Length - 1;
                         }
+
                         break;
                     case AccessibleNavigation.Previous:
-                        if (IsNonClientObject && parentControl != null)
+                        if (IsNonClientObject && parentControl is not null)
                         {
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, Owner);
@@ -133,9 +135,10 @@ namespace System.Windows.Forms
                                 --index;
                             }
                         }
+
                         break;
                     case AccessibleNavigation.Next:
-                        if (IsNonClientObject && parentControl != null)
+                        if (IsNonClientObject && parentControl is not null)
                         {
                             ctrls = parentControl.GetChildControlsInTabOrder(true);
                             index = Array.IndexOf(ctrls, Owner);
@@ -144,6 +147,7 @@ namespace System.Windows.Forms
                                 ++index;
                             }
                         }
+
                         break;
                 }
 
@@ -214,7 +218,7 @@ namespace System.Windows.Forms
 
                     if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
                     {
-                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable("oleacc.dll");
+                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Oleacc);
                         freeLib = (s_oleAccAvailable != IntPtr.Zero);
                     }
 
@@ -242,7 +246,7 @@ namespace System.Windows.Forms
                 get
                 {
                     QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
-                    if (handler != null)
+                    if (handler is not null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
                         handler(Owner, args);
@@ -272,7 +276,7 @@ namespace System.Windows.Forms
                     // Note: Any non-null value in AccessibleName overrides the default accessible name logic,
                     // even an empty string (this is the only way to *force* the accessible name to be blank).
                     string? name = Owner.AccessibleName;
-                    if (name != null)
+                    if (name is not null)
                     {
                         return name;
                     }
@@ -313,7 +317,7 @@ namespace System.Windows.Forms
 
                     // Otherwise use the text of the preceding Label control, if there is one
                     Label? previousLabel = PreviousLabel;
-                    if (previousLabel != null)
+                    if (previousLabel is not null)
                     {
                         string text = previousLabel.Text;
                         if (!string.IsNullOrEmpty(text))
@@ -354,7 +358,7 @@ namespace System.Windows.Forms
 
                     // Walk backwards through peer controls...
                     for (Control previous = container.GetNextControl(Owner, false);
-                         previous != null;
+                         previous is not null;
                          previous = container.GetNextControl(previous, false))
                     {
                         // Stop when we hit a Label (whether visible or invisible)
@@ -399,13 +403,7 @@ namespace System.Windows.Forms
 
                 fileName = args.HelpNamespace;
 
-                try
-                {
-                    topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
-                }
-                catch (Exception e) when (!ClientUtils.IsCriticalException(e))
-                {
-                }
+                int.TryParse(args.HelpKeyword, NumberStyles.Integer, CultureInfo.InvariantCulture, out topic);
 
                 return topic;
             }
@@ -480,9 +478,14 @@ namespace System.Windows.Forms
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
-                if (propertyID == UiaCore.UIA.LiveSettingPropertyId && Owner is IAutomationLiveRegion)
+                switch (propertyID)
                 {
-                    return ((IAutomationLiveRegion)Owner).LiveSetting;
+                    case UiaCore.UIA.LiveSettingPropertyId:
+                        return Owner is IAutomationLiveRegion owner ? owner.LiveSetting : base.GetPropertyValue(propertyID);
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        // "ControlType" value depends on owner's AccessibleRole value.
+                        // See: docs/accessibility/accessible-role-controltype.md
+                        return AccessibleRoleControlTypeMap.GetControlType(Role);
                 }
 
                 if (Owner.SupportsUiaProviders)

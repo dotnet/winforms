@@ -79,17 +79,14 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (GetAutoSizeMode() != value)
                 {
                     SetAutoSizeMode(value);
                     Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
 
-                    if (toLayout != null)
+                    if (toLayout is not null)
                     {
                         // DefaultLayout does not keep anchor information until it needs to.  When
                         // AutoSize became a common property, we could no longer blindly call into
@@ -98,6 +95,7 @@ namespace System.Windows.Forms
                         {
                             toLayout.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(toLayout, this, PropertyNames.AutoSize);
                     }
                 }
@@ -144,10 +142,7 @@ namespace System.Windows.Forms
                 if (borderStyle != value)
                 {
                     //valid values are 0x0 to 0x2
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     borderStyle = value;
                     UpdateStyles();
@@ -180,6 +175,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.WS.BORDER;
                         break;
                 }
+
                 return cp;
             }
         }
@@ -292,7 +288,7 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if (BackgroundImage != null)
+            if (BackgroundImage is not null)
             {
                 Invalidate();
             }
@@ -318,6 +314,7 @@ namespace System.Windows.Forms
                     SelectNextControl(null, true, true, true, false);
                 }
             }
+
             if (!ValidationCancelled)
             {
                 base.WndProc(ref m);

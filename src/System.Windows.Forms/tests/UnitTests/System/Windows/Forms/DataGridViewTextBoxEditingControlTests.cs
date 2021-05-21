@@ -191,6 +191,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomGetEditingControlFormattedValueDataGridViewTextBoxEditingControl
             {
                 GetEditingControlFormattedValueAction = action
@@ -1641,6 +1642,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -1931,6 +1933,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return true;
             }
+
             using var parent = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -1989,6 +1992,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = action
@@ -2017,6 +2021,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 ProcessKeyEventArgsAction = action
@@ -2044,6 +2049,7 @@ namespace System.Windows.Forms.Tests
                 parentCallCount++;
                 return parentResult;
             }
+
             using var parent = new CustomProcessControl
             {
                 ProcessKeyPreviewAction = parentAction
@@ -2055,6 +2061,7 @@ namespace System.Windows.Forms.Tests
                 callCount++;
                 return result;
             }
+
             using var control = new CustomProcessKeyEventArgsControl
             {
                 Parent = parent,

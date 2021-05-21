@@ -112,13 +112,14 @@ namespace System.Windows.Forms.Design
             {
                 if (s_boxImage is null)
                 {
-                    s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+                    s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, PixelFormat.Format32bppPArgb);
                     using (Graphics g = Graphics.FromImage(s_boxImage))
                     {
                         g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, BOXIMAGESIZE, BOXIMAGESIZE);
                         g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, BOXIMAGESIZE - 1, BOXIMAGESIZE - 1);
                     }
                 }
+
                 return s_boxImage;
             }
         }
@@ -145,6 +146,7 @@ namespace System.Windows.Forms.Design
                     s_minDragSize.Width = Math.Max(minDrag.Width, minDblClick.Width);
                     s_minDragSize.Height = Math.Max(minDrag.Height, minDblClick.Height);
                 }
+
                 return s_minDragSize;
             }
         }
@@ -229,6 +231,7 @@ namespace System.Windows.Forms.Design
             {
                 color = SystemColors.ControlLight;
             }
+
             switch (style)
             {
                 case FrameStyle.Dashed:
@@ -239,6 +242,7 @@ namespace System.Windows.Forms.Design
                     brush = new SolidBrush(color);
                     break;
             }
+
             g.FillRegion(brush, resizeBorder);
             brush.Dispose();
         }
@@ -311,6 +315,7 @@ namespace System.Windows.Forms.Design
                 GenerateSnapShotWithBitBlt(control, ref image);
                 //if we still failed - we'll just fall though, put up a border around an empty area and call it good enough
             }
+
             //set the opacity
             if (opacity < 1.0 && opacity > 0.0)
             {
@@ -341,6 +346,7 @@ namespace System.Windows.Forms.Design
                 case AdornmentType.Maximum:
                     return new Size(CONTAINERGRABHANDLESIZE, CONTAINERGRABHANDLESIZE);
             }
+
             return new Size(0, 0);
         }
 
@@ -361,6 +367,7 @@ namespace System.Windows.Forms.Design
             {
                 useSnapLines = (bool)optionValue;
             }
+
             return useSnapLines;
         }
 
@@ -385,6 +392,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return optionValue;
         }
 
@@ -428,7 +436,7 @@ namespace System.Windows.Forms.Design
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
             IntPtr hWnd = control.Handle;
-            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
             //Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
@@ -456,6 +464,7 @@ namespace System.Windows.Forms.Design
                 //wm_print failed
                 return false;
             }
+
             return true;
         }
 
@@ -483,6 +492,7 @@ namespace System.Windows.Forms.Design
                     bounds = originalBounds;
                     break;
             }
+
             return bounds;
         }
 
@@ -518,6 +528,7 @@ namespace System.Windows.Forms.Design
                         break;
                 }
             }
+
             return bounds;
         }
 
@@ -526,12 +537,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
-            return GetBoundsForSelectionType(originalBounds, type, DesignerUtils.SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
+            return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, SELECTIONBORDEROFFSET);
         }
 
         public static Rectangle GetBoundsForNoResizeSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type)
         {
-            return GetBoundsForSelectionType(originalBounds, type, DesignerUtils.SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
+            return GetBoundsForSelectionType(originalBounds, type, SELECTIONBORDERSIZE, NORESIZEBORDEROFFSET);
         }
 
         /// <summary>
@@ -542,10 +553,6 @@ namespace System.Windows.Forms.Design
             //determine the actual client area we are working in (w/padding)
             Rectangle face = ctrl.ClientRectangle;
 
-            //get the font metrics via gdi
-            int fontAscent = 0;
-            int fontHeight = 0;
-
             using Graphics g = ctrl.CreateGraphics();
             using var dc = new DeviceContextHdcScope(g, applyGraphicsState: false);
             using var hFont = new Gdi32.ObjectScope(ctrl.Font.ToHFONT());
@@ -554,9 +561,10 @@ namespace System.Windows.Forms.Design
             var metrics = new Gdi32.TEXTMETRICW();
             Gdi32.GetTextMetricsW(dc, ref metrics);
 
+            //get the font metrics via gdi
             // Add the font ascent to the baseline
-            fontAscent = metrics.tmAscent + 1;
-            fontHeight = metrics.tmHeight;
+            int fontAscent = metrics.tmAscent + 1;
+            int fontHeight = metrics.tmHeight;
 
             // Now add it all up
             if ((alignment & AnyTopAlignment) != 0)
@@ -661,6 +669,7 @@ namespace System.Windows.Forms.Design
                 {
                     nameN = name + i.ToString(CultureInfo.InvariantCulture);
                 }
+
                 return nameN;
             }
         }
@@ -728,6 +737,7 @@ namespace System.Windows.Forms.Design
                     final.Add(t);
                 }
             }
+
             return final;
         }
 
@@ -767,8 +777,7 @@ namespace System.Windows.Forms.Design
                 Debug.Assert(host != null, "No host -- we cannot copy the objects");
                 if (css != null && host != null)
                 {
-                    SerializationStore store = null;
-                    store = css.CreateStore();
+                    SerializationStore store = css.CreateStore();
                     // Get all the objects, meaning we want the children too
                     ICollection copyObjects = GetCopySelection(objects, host);
 
@@ -777,6 +786,7 @@ namespace System.Windows.Forms.Design
                     {
                         css.Serialize(store, comp);
                     }
+
                     store.Close();
                     copyObjects = css.Deserialize(store);
 
@@ -797,6 +807,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     Debug.Assert(newObjects.Count == objects.Count, "Why is the count of the copied objects not the same?");
                     return newObjects;
                 }
@@ -805,6 +816,7 @@ namespace System.Windows.Forms.Design
             {
                 Cursor.Current = oldCursor;
             }
+
             return null;
         }
 
@@ -821,6 +833,7 @@ namespace System.Windows.Forms.Design
                 copySelection.Add(comp);
                 GetAssociatedComponents(comp, host, copySelection);
             }
+
             return copySelection;
         }
 
@@ -864,6 +877,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new ArgumentNullException(nameof(treeView));
             }
+
             treeView.HotTracking = true;
             treeView.ShowLines = false;
             IntPtr hwnd = treeView.Handle;
@@ -883,6 +897,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new ArgumentNullException(nameof(listView));
             }
+
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             User32.SendMessageW(hwnd, (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);

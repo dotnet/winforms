@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Value))]
     [DefaultBindingProperty(nameof(Value))]
     [SRDescription(nameof(SR.DescriptionProgressBar))]
-    public class ProgressBar : Control
+    public partial class ProgressBar : Control
     {
         // These four values define the range of possible values, how to navigate through them and the
         // current position
@@ -104,10 +104,7 @@ namespace System.Windows.Forms
             {
                 if (_style != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)ProgressBarStyle.Blocks, (int)ProgressBarStyle.Marquee))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ProgressBarStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     _style = value;
                     if (IsHandleCreated)
@@ -574,6 +571,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ProgressBarIncrementMarqueeException);
             }
+
             _value += value;
 
             // Enforce that value is within the range (minimum, maximum)
@@ -581,6 +579,7 @@ namespace System.Windows.Forms
             {
                 _value = _minimum;
             }
+
             if (_value > _maximum)
             {
                 _value = _maximum;
@@ -603,6 +602,7 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 User32.SendMessageW(this, (User32.WM)ComCtl32.PBM.SETBARCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
             }
+
             StartMarquee();
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
@@ -706,68 +706,5 @@ namespace System.Windows.Forms
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
             => new ProgressBarAccessibleObject(this);
-
-        internal class ProgressBarAccessibleObject : ControlAccessibleObject
-        {
-            internal ProgressBarAccessibleObject(ProgressBar owner) : base(owner)
-            {
-            }
-
-            private ProgressBar OwningProgressBar => Owner as ProgressBar;
-
-            internal override bool IsIAccessibleExSupported() => true;
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId ||
-                    patternId == UiaCore.UIA.RangeValuePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        return UiaCore.UIA.ProgressBarControlTypeId;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        // This is necessary for compatibility with MSAA proxy:
-                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                        return true;
-                    case UiaCore.UIA.IsRangeValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                    case UiaCore.UIA.RangeValueIsReadOnlyPropertyId:
-                        return true;
-                    case UiaCore.UIA.RangeValueLargeChangePropertyId:
-                    case UiaCore.UIA.RangeValueSmallChangePropertyId:
-                        return double.NaN;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
-            internal override void SetValue(double newValue)
-            {
-                throw new InvalidOperationException("Progress Bar is read-only.");
-            }
-
-            internal override double LargeChange => double.NaN;
-
-            internal override double Maximum => OwningProgressBar?.Maximum ?? double.NaN;
-
-            internal override double Minimum => OwningProgressBar?.Minimum ?? double.NaN;
-
-            internal override double SmallChange => double.NaN;
-
-            internal override double RangeValue => OwningProgressBar?.Value ?? double.NaN;
-
-            internal override bool IsReadOnly => true;
-        }
     }
 }

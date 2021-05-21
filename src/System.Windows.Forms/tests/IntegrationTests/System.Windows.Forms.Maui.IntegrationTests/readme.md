@@ -20,7 +20,7 @@ If you run into any problems, please contact Adam Yoblick.
 
 1. If the above step fails, **STOP**.
 
-    See https://github.com/dotnet/winforms/tree/master/Documentation for more verbose instructions on how to build this repo.
+    See https://github.com/dotnet/winforms/tree/main/Documentation for more verbose instructions on how to build this repo.
 
 ## Porting the maui test
 
@@ -81,7 +81,7 @@ See the pull request at https://github.com/dotnet/winforms/pull/1240 for an exam
 
         .\build-local.ps1
 	
-1. Browse to `.\artifacts\bin\<your-test-name>\Debug\netcoreapp5.0`
+1. Browse to `.\artifacts\bin\<your-test-name>\Debug\net6.0`
 1. Double click on `<your-test-name>.exe`
 1. Check the results.log in the same directory to make sure everything passed
 1. If anything shows as a failure in the log, **STOP**. 
@@ -105,13 +105,13 @@ See the pull request at https://github.com/dotnet/winforms/pull/1240 for an exam
         .\build -integrationTest /m:1
 	
 1. Verify all the integration tests pass. If there is a failure, the following files may help:
-    - xUnit test results summary can be found at `.\artifacts\TestResults\Debug\System.Windows.Forms.Maui.IntegrationTests_netcoreapp5.0_x64.html`
-    - xUnit test outputs can be found at `.\artifacts\log\Debug\System.Windows.Forms.Maui.IntegrationTests_netcoreapp5.0_x64.log`
-    - The results.log for your individual Maui test can be found at `.\artifacts\bin\<your-test-name>\Debug\netcoreapp5.0\results.log`
+    - xUnit test results summary can be found at `.\artifacts\TestResults\Debug\System.Windows.Forms.Maui.IntegrationTests_net6.0_x64.html`
+    - xUnit test outputs can be found at `.\artifacts\log\Debug\System.Windows.Forms.Maui.IntegrationTests_net6.0_x64.log`
+    - The results.log for your individual Maui test can be found at `.\artifacts\bin\<your-test-name>\Debug\net6.0\results.log`
 
 ## Run the maui test through the CI build
 
-1. Create a pull request from your new branch (or fork) into winforms master at https://github.com/dotnet/winforms/compare
+1. Create a pull request from your new branch (or fork) to the winforms main at https://github.com/dotnet/winforms/compare
 1. Once the PR is created (and every time new files are pushed to the PR), the build will kick off
 1. You can see the result of the build by scrolling down to the checks section and clicking on Show All Checks
 1. If the build is not successful, try to investigate the failure

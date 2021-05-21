@@ -27,7 +27,7 @@ namespace System.Windows.Forms.ButtonInternal
                 PaintImage(e, layout);
                 DrawCheckBox(e, layout);
                 AdjustFocusRectangle(layout);
-                PaintField(e, layout, colors, colors.windowText, true);
+                PaintField(e, layout, colors, colors.WindowText, true);
             }
         }
 
@@ -71,21 +71,21 @@ namespace System.Windows.Forms.ButtonInternal
         protected override LayoutOptions Layout(PaintEventArgs e)
         {
             LayoutOptions layout = CommonLayout();
-            layout.hintTextUp = false;
-            layout.everettButtonCompat = !Application.RenderWithVisualStyles;
+            layout.HintTextUp = false;
+            layout.DotNetOneButtonCompat = !Application.RenderWithVisualStyles;
 
             if (Application.RenderWithVisualStyles)
             {
                 ButtonBase b = Control;
                 using var screen = GdiCache.GetScreenHdc();
-                layout.checkSize = RadioButtonRenderer.GetGlyphSize(
+                layout.CheckSize = RadioButtonRenderer.GetGlyphSize(
                     screen,
                     RadioButtonRenderer.ConvertFromButtonState(GetState(), b.MouseIsOver),
                     b.HandleInternal).Width;
             }
             else
             {
-                layout.checkSize = (int)(layout.checkSize * GetDpiScaleRatio());
+                layout.CheckSize = (int)(layout.CheckSize * GetDpiScaleRatio());
             }
 
             return layout;

@@ -23,9 +23,12 @@ namespace System.Windows.Forms.Metafiles
 
         public void Validate(ref EmfRecord record, DeviceContextState state, out bool complete)
         {
+            if (_count <= 0)
+                throw new InvalidOperationException();
+
             _validator.Validate(ref record, state, out _);
             _count--;
-            complete = _count > 0;
+            complete = _count == 0;
         }
     }
 }

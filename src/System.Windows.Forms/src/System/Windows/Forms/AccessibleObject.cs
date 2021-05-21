@@ -43,7 +43,9 @@ namespace System.Windows.Forms
         UiaCore.ISelectionItemProvider,
         UiaCore.IRawElementProviderHwndOverride,
         UiaCore.IScrollItemProvider,
-        UiaCore.IMultipleViewProvider
+        UiaCore.IMultipleViewProvider,
+        UiaCore.ITextProvider,
+        UiaCore.ITextProvider2
     {
         /// <summary>
         ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
@@ -63,6 +65,9 @@ namespace System.Windows.Forms
 
         // Indicates this object is being used ONLY to wrap a system IAccessible
         private readonly bool systemWrapper;
+
+        private UiaTextProvider? _textProvider;
+        private UiaTextProvider2? _textProvider2;
 
         // The support for the UIA Notification event begins in RS3.
         // Assume the UIA Notification event is available until we learn otherwise.
@@ -141,7 +146,7 @@ namespace System.Windows.Forms
             get
             {
                 var accRole = systemIAccessible.get_accRole(NativeMethods.CHILDID_SELF);
-                return accRole != null
+                return accRole is not null
                     ? (AccessibleRole)accRole
                     : AccessibleRole.None;
             }
@@ -155,7 +160,7 @@ namespace System.Windows.Forms
             get
             {
                 var accState = systemIAccessible.get_accState(NativeMethods.CHILDID_SELF);
-                return accState != null
+                return accState is not null
                     ? (AccessibleStates)accState
                     : AccessibleStates.None;
             }
@@ -183,6 +188,8 @@ namespace System.Windows.Forms
         ///  corresponding to the specified index.
         /// </summary>
         public virtual AccessibleObject? GetChild(int index) => null;
+
+        internal virtual int GetChildIndex(AccessibleObject? child) => -1;
 
         /// <summary>
         ///  When overridden in a derived class, gets the number of children
@@ -236,8 +243,8 @@ namespace System.Windows.Forms
                 for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject? child = GetChild(index);
-                    Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
-                    if (child != null && ((child.State & AccessibleStates.Focused) != 0))
+                    Debug.Assert(child is not null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
+                    if (child is not null && ((child.State & AccessibleStates.Focused) != 0))
                     {
                         return child;
                     }
@@ -273,8 +280,8 @@ namespace System.Windows.Forms
                 for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject? child = GetChild(index);
-                    Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
-                    if (child != null && ((child.State & AccessibleStates.Selected) != 0))
+                    Debug.Assert(child is not null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
+                    if (child is not null && ((child.State & AccessibleStates.Selected) != 0))
                     {
                         return child;
                     }
@@ -303,8 +310,8 @@ namespace System.Windows.Forms
                 for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject? child = GetChild(index);
-                    Debug.Assert(child != null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
-                    if (child != null && child.Bounds.Contains(x, y))
+                    Debug.Assert(child is not null, "GetChild(" + index.ToString(CultureInfo.InvariantCulture) + ") returned null!");
+                    if (child is not null && child.Bounds.Contains(x, y))
                     {
                         return child;
                     }
@@ -350,15 +357,13 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
-        internal virtual object? GetPropertyValue(UiaCore.UIA propertyID)
-        {
-            if (propertyID == UiaCore.UIA.IsInvokePatternAvailablePropertyId)
+        internal virtual object? GetPropertyValue(UiaCore.UIA propertyID) =>
+            propertyID switch
             {
-                return IsInvokePatternAvailable;
-            }
-
-            return null;
-        }
+                UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
+                UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
+                _ => null
+            };
 
         private bool IsInvokePatternAvailable
         {
@@ -426,7 +431,7 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => null;
 
-        internal virtual UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) => this;
+        internal virtual UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y) => this;
 
         internal virtual UiaCore.IRawElementProviderFragment? GetFocus() => null;
 
@@ -473,6 +478,29 @@ namespace System.Windows.Forms
         internal virtual UiaCore.IRawElementProviderSimple? ContainingGrid => null;
 
         internal virtual void Invoke() => DoDefaultAction();
+
+        internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal => _textProvider?.DocumentRange;
+
+        internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection() => _textProvider?.GetSelection();
+
+        internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges() => _textProvider?.GetVisibleRanges();
+
+        internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
+            => _textProvider?.RangeFromChild(childElement);
+
+        internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation) => _textProvider?.RangeFromPoint(screenLocation);
+
+        internal virtual UiaCore.SupportedTextSelection SupportedTextSelectionInternal
+            => _textProvider?.SupportedTextSelection ?? UiaCore.SupportedTextSelection.None;
+
+        internal virtual UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
+        {
+            isActive = BOOL.FALSE;
+            return _textProvider2?.GetCaretRange(out isActive);
+        }
+
+        internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
+            _textProvider2?.RangeFromAnnotation(annotationElement);
 
         internal virtual bool IsReadOnly => false;
 
@@ -551,6 +579,7 @@ namespace System.Windows.Forms
             {
                 return HRESULT.E_NOINTERFACE;
             }
+
             if (ppvObject is null)
             {
                 return HRESULT.E_POINTER;
@@ -579,7 +608,7 @@ namespace System.Windows.Forms
             if (pidChild is null)
             {
                 ppAcc = null;
-                return HRESULT.E_INVALIDARG;
+                return HRESULT.E_POINTER;
             }
 
             // No need to implement this for patterns and properties
@@ -590,10 +619,15 @@ namespace System.Windows.Forms
 
         int[]? UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
 
-        HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, out UiaCore.IAccessibleEx? ppRetValOut)
+        unsafe HRESULT UiaCore.IAccessibleEx.ConvertReturnedElement(UiaCore.IRawElementProviderSimple pIn, IntPtr* ppRetValOut)
         {
+            if (ppRetValOut == null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             // No need to implement this for patterns and properties
-            ppRetValOut = null;
+            *ppRetValOut = IntPtr.Zero;
             return HRESULT.E_NOTIMPL;
         }
 
@@ -625,7 +659,7 @@ namespace System.Windows.Forms
 
         UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
 
-        object UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
+        object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 
         object? UiaCore.IRawElementProviderFragmentRoot.GetFocus() => GetFocus();
 
@@ -672,6 +706,37 @@ namespace System.Windows.Forms
         UiaCore.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
 
         void UiaCore.IInvokeProvider.Invoke() => Invoke();
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider.DocumentRange => DocumentRangeInternal;
+
+        UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider.GetSelection() => GetTextSelection();
+
+        UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider.GetVisibleRanges() => GetTextVisibleRanges();
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider.RangeFromChild(UiaCore.IRawElementProviderSimple childElement) =>
+            GetTextRangeFromChild(childElement);
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider.RangeFromPoint(Point screenLocation) => GetTextRangeFromPoint(screenLocation);
+
+        UiaCore.SupportedTextSelection UiaCore.ITextProvider.SupportedTextSelection => SupportedTextSelectionInternal;
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.DocumentRange => DocumentRangeInternal;
+
+        UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider2.GetSelection() => GetTextSelection();
+
+        UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider2.GetVisibleRanges() => GetTextVisibleRanges();
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromChild(UiaCore.IRawElementProviderSimple childElement) =>
+            GetTextRangeFromChild(childElement);
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromPoint(Point screenLocation) => GetTextRangeFromPoint(screenLocation);
+
+        UiaCore.SupportedTextSelection UiaCore.ITextProvider2.SupportedTextSelection => SupportedTextSelectionInternal;
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.GetCaretRange(out BOOL isActive) => GetTextCaretRange(out isActive);
+
+        UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
+            GetRangeFromAnnotation(annotationElement);
 
         BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? BOOL.TRUE : BOOL.FALSE;
 
@@ -730,7 +795,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     child.DoDefaultAction();
                     return;
@@ -751,7 +816,7 @@ namespace System.Windows.Forms
                     ToString());
 
                 AccessibleObject? obj = HitTest(xLeft, yTop);
-                if (obj != null)
+                if (obj is not null)
                 {
                     return AsVariant(obj);
                 }
@@ -799,7 +864,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     Rectangle bounds = child.Bounds;
                     pxLeft = bounds.X;
@@ -833,7 +898,7 @@ namespace System.Windows.Forms
                 if (childID.Equals(NativeMethods.CHILDID_SELF))
                 {
                     AccessibleObject? newObject = Navigate((AccessibleNavigation)navDir);
-                    if (newObject != null)
+                    if (newObject is not null)
                     {
                         return AsVariant(newObject);
                     }
@@ -841,7 +906,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return AsVariant(child.Navigate((AccessibleNavigation)navDir));
                 }
@@ -876,7 +941,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     child.Select((AccessibleSelection)flagsSelect);
                     return;
@@ -915,7 +980,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     // Make sure we're not returning ourselves as our own child
                     Debug.Assert(child != this, "An accessible object is returning itself as its own child. This can cause Accessibility client applications to stop responding.");
@@ -979,7 +1044,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.DefaultAction;
                 }
@@ -1005,7 +1070,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.Description;
                 }
@@ -1045,7 +1110,7 @@ namespace System.Windows.Forms
                         ToString());
 
                     AccessibleObject? obj = GetFocused();
-                    if (obj != null)
+                    if (obj is not null)
                     {
                         return AsVariant(obj);
                     }
@@ -1071,7 +1136,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.Help;
                 }
@@ -1096,7 +1161,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.GetHelpTopic(out pszHelpFile);
                 }
@@ -1126,7 +1191,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.KeyboardShortcut;
                 }
@@ -1160,7 +1225,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.Name;
                 }
@@ -1189,7 +1254,7 @@ namespace System.Windows.Forms
             {
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accParent: this = " + ToString());
                 AccessibleObject? parent = Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     // Some debugging related tests
                     Debug.Assert(parent != this, "An accessible object is returning itself as its own parent. This can cause accessibility clients to stop responding.");
@@ -1222,7 +1287,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return (int)child.Role;
                 }
@@ -1249,7 +1314,7 @@ namespace System.Windows.Forms
                         ToString());
 
                     AccessibleObject? obj = GetSelected();
-                    if (obj != null)
+                    if (obj is not null)
                     {
                         return AsVariant(obj);
                     }
@@ -1279,7 +1344,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return (int)child.State;
                 }
@@ -1305,7 +1370,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     return child.Value;
                 }
@@ -1333,7 +1398,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     child.Name = newName;
                     return;
@@ -1362,7 +1427,7 @@ namespace System.Windows.Forms
 
                 // If we have an accessible object collection, get the appropriate child
                 AccessibleObject? child = GetAccessibleChild(childID);
-                if (child != null)
+                if (child is not null)
                 {
                     child.Value = newValue;
                     return;
@@ -1390,7 +1455,7 @@ namespace System.Windows.Forms
         unsafe HRESULT Ole32.IOleWindow.GetWindow(IntPtr* phwnd)
         {
             // See if we have an inner object that can provide the window handle
-            if (systemIOleWindow != null)
+            if (systemIOleWindow is not null)
             {
                 return systemIOleWindow.GetWindow(phwnd);
             }
@@ -1418,7 +1483,7 @@ namespace System.Windows.Forms
         HRESULT Ole32.IOleWindow.ContextSensitiveHelp(BOOL fEnterMode)
         {
             // See if we have an inner object that can provide help
-            if (systemIOleWindow != null)
+            if (systemIOleWindow is not null)
             {
                 return systemIOleWindow.ContextSensitiveHelp(fEnterMode);
             }
@@ -1478,6 +1543,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         break;
                     case AccessibleNavigation.Next:
                     case AccessibleNavigation.Down:
@@ -1486,6 +1552,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         break;
                 }
             }
@@ -1523,9 +1590,9 @@ namespace System.Windows.Forms
 
         private IAccessible? AsIAccessible(AccessibleObject? obj)
         {
-            if (obj != null && obj.systemWrapper)
+            if (obj is not null && obj.systemWrapper)
             {
-                return obj.systemIAccessible;
+                return obj.systemIAccessible.SystemIAccessibleInternal;
             }
 
             return obj;
@@ -1560,7 +1627,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsNonClientObject => AccessibleObjectId == User32.OBJID.WINDOW;
 
-        internal IAccessible? GetSystemIAccessibleInternal() => systemIAccessible;
+        internal IAccessible? GetSystemIAccessibleInternal() => systemIAccessible.SystemIAccessibleInternal;
 
         protected void UseStdAccessibleObjects(IntPtr handle)
         {
@@ -1587,12 +1654,18 @@ namespace System.Windows.Forms
                         ref IID_IEnumVariant,
                         ref en);
 
-            if (acc != null || en != null)
+            if (acc is not null || en is not null)
             {
                 systemIAccessible = new SystemIAccessibleWrapper((IAccessible?)acc);
                 systemIEnumVariant = (Oleaut32.IEnumVariant?)en;
                 systemIOleWindow = (Ole32.IOleWindow?)acc;
             }
+        }
+
+        internal void UseTextProviders(UiaTextProvider textProvider, UiaTextProvider2 textProvider2)
+        {
+            _textProvider = textProvider ?? throw new ArgumentNullException(nameof(textProvider));
+            _textProvider2 = textProvider2 ?? throw new ArgumentNullException(nameof(textProvider2));
         }
 
         /// <summary>
@@ -1657,7 +1730,7 @@ namespace System.Windows.Forms
             }
 
             // Check to see if this object already wraps iacc
-            if (systemIAccessible == iacc)
+            if (systemIAccessible.SystemIAccessibleInternal == iacc)
             {
                 return this;
             }
@@ -1766,10 +1839,10 @@ namespace System.Windows.Forms
             if (args?.Length == 0)
             {
                 MemberInfo[] member = typeof(IAccessible).GetMember(name);
-                if (member != null && member.Length > 0 && member[0] is PropertyInfo)
+                if (member is not null && member.Length > 0 && member[0] is PropertyInfo)
                 {
                     MethodInfo? getMethod = ((PropertyInfo)member[0]).GetGetMethod();
-                    if (getMethod != null && getMethod.GetParameters().Length > 0)
+                    if (getMethod is not null && getMethod.GetParameters().Length > 0)
                     {
                         args = new object[getMethod.GetParameters().Length];
                         for (int i = 0; i < args.Length; i++)

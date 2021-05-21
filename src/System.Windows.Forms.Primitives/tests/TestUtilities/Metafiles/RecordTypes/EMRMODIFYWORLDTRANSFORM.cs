@@ -4,8 +4,8 @@
 
 #nullable enable
 
-using System.Runtime.InteropServices;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.Metafiles
@@ -17,9 +17,6 @@ namespace System.Windows.Forms.Metafiles
         public Matrix3x2 xform;
         public Gdi32.MWT iMode;
 
-        public override string ToString()
-        {
-            return $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
-        }
+        public override string ToString() => $"[{nameof(EMRMODIFYWORLDTRANSFORM)}] Mode: {iMode} Transform: {xform}";
     }
 }

@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         private BitVector32 _pictureBoxState; // see PICTUREBOXSTATE_ consts above
 
         /// <summary>
-        ///  http://msdn.microsoft.com/en-us/library/93z9ee4x(v=VS.100).aspx
+        ///  https://docs.microsoft.com/dotnet/api/system.drawing.image.fromstream#System_Drawing_Image_FromStream_System_IO_Stream_
         ///  if we load an image from a stream, we must keep the stream open for the lifetime of the Image
         /// </summary>
         private StreamReader _localImageStreamReader;
@@ -134,10 +134,7 @@ namespace System.Windows.Forms
             get => _borderStyle;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_borderStyle != value)
                 {
@@ -342,7 +339,7 @@ namespace System.Windows.Forms
         private Rectangle ImageRectangleFromSizeMode(PictureBoxSizeMode mode)
         {
             Rectangle result = LayoutUtils.DeflateRect(ClientRectangle, Padding);
-            if (_image != null)
+            if (_image is not null)
             {
                 switch (mode)
                 {
@@ -486,7 +483,9 @@ namespace System.Windows.Forms
                 }
                 else
                 {
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
                     using (WebClient wc = new WebClient())
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
                     {
                         _uriImageStream = wc.OpenRead(uri.ToString());
                         img = Image.FromStream(_uriImageStream);
@@ -535,7 +534,7 @@ namespace System.Windows.Forms
 
             _pictureBoxState[AsyncOperationInProgressState] = true;
 
-            if ((Image is null || (_imageInstallationType == ImageInstallationType.ErrorOrInitial)) && InitialImage != null)
+            if ((Image is null || (_imageInstallationType == ImageInstallationType.ErrorOrInitial)) && InitialImage is not null)
             {
                 InstallNewImage(InitialImage, ImageInstallationType.ErrorOrInitial);
             }
@@ -554,7 +553,9 @@ namespace System.Windows.Forms
             _contentLength = -1;
             _tempDownloadStream = new MemoryStream();
 
+#pragma warning disable SYSLIB0014 // Type or member is obsolete
             WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
+#pragma warning restore SYSLIB0014 // Type or member is obsolete
 
             Task.Run(() =>
             {
@@ -567,7 +568,7 @@ namespace System.Windows.Forms
         {
             AsyncOperation temp = _currentAsyncLoadOperation;
             _currentAsyncLoadOperation = null;
-            if (temp != null)
+            if (temp is not null)
             {
                 temp.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
             }
@@ -670,7 +671,7 @@ namespace System.Windows.Forms
                     if (_contentLength != -1)
                     {
                         int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
-                        if (_currentAsyncLoadOperation != null)
+                        if (_currentAsyncLoadOperation is not null)
                         {
                             _currentAsyncLoadOperation.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(progress, null));
@@ -680,11 +681,12 @@ namespace System.Windows.Forms
                 else
                 {
                     _tempDownloadStream.Seek(0, SeekOrigin.Begin);
-                    if (_currentAsyncLoadOperation != null)
+                    if (_currentAsyncLoadOperation is not null)
                     {
                         _currentAsyncLoadOperation.Post(_loadProgressDelegate,
                                     new ProgressChangedEventArgs(100, null));
                     }
+
                     PostCompleted(null, false);
 
                     // Do this so any exception that Close() throws will be
@@ -783,7 +785,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeImage()
         {
-            return (_imageInstallationType == ImageInstallationType.DirectlySpecified) && (Image != null);
+            return (_imageInstallationType == ImageInstallationType.DirectlySpecified) && (Image is not null);
         }
 
         /// <summary>
@@ -799,10 +801,7 @@ namespace System.Windows.Forms
             get => _sizeMode;
             set
             {
-                if (!ClientUtils.IsEnumValid(value, (int)value, (int)PictureBoxSizeMode.Normal, (int)PictureBoxSizeMode.Zoom))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(PictureBoxSizeMode));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_sizeMode != value)
                 {
@@ -811,6 +810,7 @@ namespace System.Windows.Forms
                         AutoSize = true;
                         SetStyle(ControlStyles.FixedHeight | ControlStyles.FixedWidth, true);
                     }
+
                     if (value != PictureBoxSizeMode.AutoSize)
                     {
                         AutoSize = false;
@@ -944,7 +944,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void Animate() => Animate(animate: !DesignMode && Visible && Enabled && ParentInternal != null);
+        private void Animate() => Animate(animate: !DesignMode && Visible && Enabled && ParentInternal is not null);
 
         private void StopAnimate() => Animate(animate: false);
 
@@ -954,7 +954,7 @@ namespace System.Windows.Forms
             {
                 if (animate)
                 {
-                    if (_image != null)
+                    if (_image is not null)
                     {
                         ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
                         _currentlyAnimating = animate;
@@ -962,7 +962,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_image != null)
+                    if (_image is not null)
                     {
                         ImageAnimator.StopAnimate(_image, new EventHandler(OnFrameChanged));
                         _currentlyAnimating = animate;
@@ -987,12 +987,13 @@ namespace System.Windows.Forms
 
         private void DisposeImageStream()
         {
-            if (_localImageStreamReader != null)
+            if (_localImageStreamReader is not null)
             {
                 _localImageStreamReader.Dispose();
                 _localImageStreamReader = null;
             }
-            if (_uriImageStream != null)
+
+            if (_uriImageStream is not null)
             {
                 _uriImageStream.Dispose();
                 _localImageStreamReader = null;
@@ -1038,6 +1039,7 @@ namespace System.Windows.Forms
                     {
                         BeginInvoke(new EventHandler(OnFrameChanged), o, e);
                     }
+
                     return;
                 }
             }
@@ -1101,7 +1103,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (_image != null && pe != null)
+            if (_image is not null && pe is not null)
             {
                 Animate();
                 ImageAnimator.UpdateFrames(Image);
@@ -1137,7 +1139,7 @@ namespace System.Windows.Forms
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            if (_sizeMode == PictureBoxSizeMode.Zoom || _sizeMode == PictureBoxSizeMode.StretchImage || _sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage != null)
+            if (_sizeMode == PictureBoxSizeMode.Zoom || _sizeMode == PictureBoxSizeMode.StretchImage || _sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage is not null)
             {
                 Invalidate();
             }
@@ -1186,7 +1188,7 @@ namespace System.Windows.Forms
 
             // Need to do this in EndInit since there's no guarantee of the
             // order in which ImageLocation and WaitOnLoad will be set.
-            if (ImageLocation != null && ImageLocation.Length != 0 && WaitOnLoad)
+            if (ImageLocation is not null && ImageLocation.Length != 0 && WaitOnLoad)
             {
                 // Load when initialization completes, so any error will occur synchronously
                 Load();

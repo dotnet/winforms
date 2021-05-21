@@ -23,9 +23,9 @@ namespace System.Windows.Forms
                 BinaryFormatter formatter = new BinaryFormatter();
                 try
                 {
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                     bag = (Hashtable)formatter.Deserialize(stream);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
                 }
                 catch
                 {
@@ -57,7 +57,7 @@ namespace System.Windows.Forms
             HRESULT Oleaut32.IPropertyBag.Write(string pszPropName, ref object pVar)
             {
                 Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Writing property " + pszPropName + " [" + pVar + "] into OCXState propertybag.");
-                if (pVar != null && !pVar.GetType().IsSerializable)
+                if (pVar is not null && !pVar.GetType().IsSerializable)
                 {
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t " + pVar.GetType().FullName + " is not serializable.");
                     return HRESULT.S_OK;
@@ -70,9 +70,9 @@ namespace System.Windows.Forms
             internal void Write(Stream stream)
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
                 formatter.Serialize(stream, bag);
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
             }
         }
     }

@@ -69,6 +69,7 @@ namespace System.Windows.Forms
         ///   using the given text and, optionally, a description text.
         /// </summary>
         /// <param name="text">The text of the control.</param>
+        /// <param name="enabled">A value that indicates if the button should be enabled.</param>
         /// <param name="allowCloseDialog">A value that indicates whether the task dialog should close
         ///   when this button is clicked.
         /// </param>
@@ -301,7 +302,7 @@ namespace System.Windows.Forms
 
         internal override bool IsCreatable => base.IsCreatable && _visible;
 
-        internal bool IsStandardButton => _standardButtonResult != null;
+        internal bool IsStandardButton => _standardButtonResult is not null;
 
         internal TaskDialogResult StandardButtonResult => _standardButtonResult ?? throw new InvalidOperationException();
 
@@ -383,7 +384,7 @@ namespace System.Windows.Forms
 
         internal ComCtl32.TDF Bind(TaskDialogPage page, int customButtonID)
         {
-            if (_standardButtonResult != null)
+            if (_standardButtonResult is not null)
                 throw new InvalidOperationException();
 
             ComCtl32.TDF result = Bind(page);
@@ -428,6 +429,7 @@ namespace System.Windows.Forms
             {
                 Enabled = _enabled;
             }
+
             if (_showShieldIcon)
             {
                 ShowShieldIcon = _showShieldIcon;

@@ -11,7 +11,9 @@ namespace System.Windows.Forms
     internal static class UnsafeNativeMethods
     {
         [DllImport(Libraries.User32)]
+#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         public static extern int GetClassName(HandleRef hwnd, StringBuilder lpClassName, int nMaxCount);
+#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
 
         [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
         public static extern HRESULT PrintDlgEx([In, Out] NativeMethods.PRINTDLGEX lppdex);
@@ -20,7 +22,9 @@ namespace System.Windows.Forms
         public static extern bool GetOpenFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
         [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
+#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
+#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
 
         public static StringBuilder GetModuleFileNameLongPath(HandleRef hModule)
         {
@@ -37,6 +41,7 @@ namespace System.Windows.Forms
                 int capacity = noOfTimes * Kernel32.MAX_PATH < Kernel32.MAX_UNICODESTRING_LEN ? noOfTimes * Kernel32.MAX_PATH : Kernel32.MAX_UNICODESTRING_LEN;
                 buffer.EnsureCapacity(capacity);
             }
+
             buffer.Length = length;
             return buffer;
         }
@@ -45,7 +50,9 @@ namespace System.Windows.Forms
         public static extern bool GetSaveFileName([In, Out] NativeMethods.OPENFILENAME_I ofn);
 
         [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto)]
+#pragma warning disable CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
         public static extern void GetTempFileName(string tempDirName, string prefixName, int unique, StringBuilder sb);
+#pragma warning restore CA1838 // Avoid 'StringBuilder' parameters for P/Invokes
 
         [DllImport(Libraries.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object? pAcc);

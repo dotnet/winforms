@@ -25,7 +25,7 @@ namespace System.Windows.Forms
     [DefaultEvent(nameof(TextChanged))]
     [DefaultBindingProperty(nameof(Text))]
     [Designer("System.Windows.Forms.Design.TextBoxBaseDesigner, " + AssemblyRef.SystemDesign)]
-    public abstract class TextBoxBase : Control
+    public abstract partial class TextBoxBase : Control
     {
         // The boolean properties for this control are contained in the textBoxFlags bit
         // vector.  We can store up to 32 boolean values in this one vector.  Here we
@@ -161,11 +161,15 @@ namespace System.Windows.Forms
             {
                 if (shortcutsToDisable is null)
                 {
-                    shortcutsToDisable = new int[] {(int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
-                    (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
-                    (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
-                    (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ};
+                    shortcutsToDisable = new int[]
+                    {
+                        (int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
+                        (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
+                        (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
+                        (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ
+                    };
                 }
+
                 textBoxFlags[shortcutsEnabled] = value;
             }
         }
@@ -190,6 +194,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             //
             // There are a few keys that change the alignment of the text, but that
             // are not ignored by the native control when the ReadOnly property is set.
@@ -222,6 +227,7 @@ namespace System.Windows.Forms
                     EndUpdateInternal();
                     SetSelectedTextInternal(string.Empty, clearUndo: false);
                 }
+
                 return true;
             }
 
@@ -353,10 +359,7 @@ namespace System.Windows.Forms
             {
                 if (borderStyle != value)
                 {
-                    if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D))
-                    {
-                        throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(BorderStyle));
-                    }
+                    SourceGenerated.EnumValidator.Validate(value);
 
                     borderStyle = value;
                     UpdateStyles();
@@ -426,6 +429,7 @@ namespace System.Windows.Forms
 
                     return b;
                 }
+
                 return false;
             }
         }
@@ -465,6 +469,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)WS.BORDER;
                         break;
                 }
+
                 if (textBoxFlags[multiline])
                 {
                     cp.Style |= (int)ES.MULTILINE;
@@ -665,7 +670,7 @@ namespace System.Windows.Forms
             set
             {
                 //unparse this string list...
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Using a StringBuilder instead of a String
                     // speeds things up approx 150 times
@@ -675,6 +680,7 @@ namespace System.Windows.Forms
                         text.Append("\r\n");
                         text.Append(value[i]);
                     }
+
                     Text = text.ToString();
                 }
                 else
@@ -734,6 +740,7 @@ namespace System.Windows.Forms
                         textBoxFlags[modified] = curState;
                         OnModifiedChanged(EventArgs.Empty);
                     }
+
                     return curState;
                 }
                 else
@@ -866,6 +873,7 @@ namespace System.Windows.Forms
                 {
                     height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
                 }
+
                 return height;
             }
         }
@@ -894,6 +902,7 @@ namespace System.Windows.Forms
                 bordersAndPadding.Width += 2;
                 bordersAndPadding.Height += 2;
             }
+
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
 
@@ -908,6 +917,7 @@ namespace System.Windows.Forms
             {
                 format |= TextFormatFlags.WordBreak;
             }
+
             Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
             // We use this old computation as a lower bound to ensure backwards compatibility.
@@ -1124,6 +1134,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
+
                 Select(value, SelectionLength);
             }
         }
@@ -1364,6 +1375,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void Copy() => SendMessageW(this, WM.COPY);
 
+        protected override AccessibleObject CreateAccessibilityInstance() => new TextBoxBaseAccessibleObject(this);
+
         protected override void CreateHandle()
         {
             // This "creatingHandle" stuff is to avoid property change events
@@ -1432,6 +1445,7 @@ namespace System.Windows.Forms
                         // else fall through to base
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1457,6 +1471,7 @@ namespace System.Windows.Forms
             {
                 SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(true));
             }
+
             if (textBoxFlags[scrollToCaretOnHandleCreated])
             {
                 ScrollToCaret();
@@ -1547,7 +1562,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
-            if (mevent != null)
+            if (mevent is not null)
             {
                 Point pt = PointToScreen(mevent.Location);
 
@@ -1605,7 +1620,15 @@ namespace System.Windows.Forms
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
+
+            if (UiaCore.UiaClientsAreListening().IsTrue())
+            {
+                RaiseAccessibilityTextChangedEvent();
+            }
         }
+
+        private protected virtual void RaiseAccessibilityTextChangedEvent()
+            => AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
 
         /// <summary>
         ///  Returns the character nearest to the given point.
@@ -1622,7 +1645,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+            int index = (int)(long)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -1640,6 +1663,7 @@ namespace System.Windows.Forms
                     index = Math.Max(t.Length - 1, 0);
                 }
             }
+
             return index;
         }
 
@@ -1653,7 +1677,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetLineFromCharIndex(int index)
         {
-            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index));
+            return (int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index);
         }
 
         /// <summary>
@@ -1666,7 +1690,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)User32.SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
+            int i = (int)(long)SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
@@ -1679,6 +1703,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
+
             return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)lineNumber));
         }
 
@@ -1812,6 +1837,7 @@ namespace System.Windows.Forms
                 {
                     length = (int)longLength;
                 }
+
                 start = textLen;
             }
 
@@ -1834,6 +1860,8 @@ namespace System.Windows.Forms
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
                 SendMessageW(this, (WM)EM.SETSEL, (IntPtr)s, (IntPtr)e);
+
+                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
             else
             {
@@ -1973,10 +2001,12 @@ namespace System.Windows.Forms
             {
                 start = 0;
             }
+
             if (start > bytes.Length)
             {
                 start = bytes.Length;
             }
+
             if (end > bytes.Length)
             {
                 end = bytes.Length;
@@ -2017,14 +2047,17 @@ namespace System.Windows.Forms
             {
                 start = 0;
             }
+
             if (start > str.Length)
             {
                 start = str.Length;
             }
+
             if (end < start)
             {
                 end = start;
             }
+
             if (end > str.Length)
             {
                 end = str.Length;
@@ -2199,6 +2232,7 @@ namespace System.Windows.Forms
                         // SystemMenu if ContextMenuStrip menus are null
                         WmTextBoxContextMenu(ref m);
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
@@ -58,7 +57,7 @@ namespace System.Windows.Forms.Design
                     }
 
                     // Get OleDragHandler ...
-                    ToolboxItem tbi = new ToolboxItem(typeof(System.Windows.Forms.ToolStripContainer));
+                    ToolboxItem tbi = new ToolboxItem(typeof(ToolStripContainer));
                     OleDragDropHandler ddh = rootDesigner.GetOleDragHandler();
                     if (ddh != null)
                     {
@@ -104,7 +103,7 @@ namespace System.Windows.Forms.Design
             }
             catch (Exception e)
             {
-                if (e is System.InvalidOperationException)
+                if (e is InvalidOperationException)
                 {
                     IUIService uiService = (IUIService)_provider.GetService(typeof(IUIService));
                     uiService.ShowError(e.Message);
@@ -121,8 +120,8 @@ namespace System.Windows.Forms.Design
                 if (changeParent != null)
                 {
                     changeParent.Commit();
-                    changeParent = null;
                 }
+
                 Cursor.Current = current;
             }
         }
@@ -135,6 +134,7 @@ namespace System.Windows.Forms.Design
             {
                 dock = c.Parent.Dock;
             }
+
             foreach (Control panel in container.Controls)
             {
                 if (panel is ToolStripPanel)
@@ -146,6 +146,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             return newParent;
         }
     }

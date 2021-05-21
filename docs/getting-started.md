@@ -35,6 +35,6 @@ To port your existing Windows Forms application from .NET Framework to .NET Core
 [comment]: <> (URI Links)
 
 [.net-5.0-sdk]: https://dotnet.microsoft.com/download/dotnet/5.0
-[.net-daily]: https://github.com/dotnet/core-sdk/blob/master/README.md#installers-and-binaries
+[.net-daily]: https://github.com/dotnet/installer/blob/master/README.md#installers-and-binaries
 [.net-samples]: https://github.com/dotnet/samples/tree/master/windowsforms
 [MSDN-winforms-samples]: https://code.msdn.microsoft.com/site/search?f%5B0%5D.Type=Platform&f%5B0%5D.Value=Desktop&f%5B0%5D.Text=Desktop&f%5B1%5D.Type=Contributors&f%5B1%5D.Value=Microsoft&f%5B1%5D.Text=Microsoft&f%5B2%5D.Type=Technology&f%5B2%5D.Value=Windows%20Forms

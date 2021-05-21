@@ -258,6 +258,7 @@ namespace System.Windows.Forms.Tests
                 };
                 return owner.DockPadding;
             }
+
             ScrollableControl.DockPaddingEdges CreateClonedPadding(int left, int top, int right, int bottom)
             {
                 ICloneable clonable = CreatePadding(left, top, right, bottom);
@@ -296,6 +297,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(expected, padding.GetHashCode().Equals(other.GetHashCode()));
             }
+
             Assert.Equal(expected, padding.Equals(other));
         }
 

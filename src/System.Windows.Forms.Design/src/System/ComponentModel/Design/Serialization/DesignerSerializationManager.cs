@@ -69,6 +69,7 @@ namespace System.ComponentModel.Design.Serialization
                         container = host.Container;
                     }
                 }
+
                 return container;
             }
             set
@@ -90,6 +91,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     errorList = new ArrayList();
                 }
+
                 return errorList;
             }
         }
@@ -306,9 +308,11 @@ namespace System.ComponentModel.Design.Serialization
                                         {
                                         }
                                     }
+
                                     match = false;
                                     break;
                                 }
+
                                 // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money.
                                 if (match)
                                 {
@@ -344,6 +348,7 @@ namespace System.ComponentModel.Design.Serialization
                             argTypes.Append("null");
                         }
                     }
+
                     Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
                     {
                         HelpLink = SR.SerializationManagerNoMatchingCtor
@@ -374,6 +379,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return instance;
         }
 
@@ -441,6 +447,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                         }
                     }
+
                     // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
                     if (serializer != null && session != null)
                     {
@@ -448,6 +455,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             serializers = new Hashtable();
                         }
+
                         serializers[objectType] = serializer;
                     }
                 }
@@ -473,6 +481,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     defaultProviderTable = new Hashtable();
                 }
+
                 defaultProviderTable[serializerType] = defaultSerializerType;
             }
 
@@ -494,6 +503,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return serializer;
         }
 
@@ -511,6 +521,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return provider.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -531,6 +542,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return type;
         }
 
@@ -554,6 +566,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 type = typeResolver.GetType(typeName);
             }
+
             return type;
         }
 
@@ -611,6 +624,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(property));
             }
+
             // owner can be null for static properties.
             return new WrappedPropertyDescriptor(property, owner);
         }
@@ -627,6 +641,7 @@ namespace System.ComponentModel.Design.Serialization
                     CheckSession();
                     contextStack = new ContextStack();
                 }
+
                 return contextStack;
             }
         }
@@ -655,8 +670,10 @@ namespace System.ComponentModel.Design.Serialization
                             propArray[i] = WrapProperty(props[i], propObject);
                         }
                     }
+
                     properties = new PropertyDescriptorCollection(propArray);
                 }
+
                 return properties;
             }
         }
@@ -696,6 +713,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 designerSerializationProviders = new ArrayList();
             }
+
             if (!designerSerializationProviders.Contains(provider))
             {
                 designerSerializationProviders.Add(provider);
@@ -732,9 +750,11 @@ namespace System.ComponentModel.Design.Serialization
                     instancesByName = new Hashtable();
                     namesByInstance = new Hashtable(new ReferenceComparer());
                 }
+
                 instancesByName[name] = instance;
                 namesByInstance[instance] = name;
             }
+
             return instance;
         }
 
@@ -767,6 +787,7 @@ namespace System.ComponentModel.Design.Serialization
                 OnResolveName(e);
                 instance = e.Value;
             }
+
             return instance;
         }
 
@@ -803,6 +824,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return name;
         }
 
@@ -836,9 +858,11 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         break;
                     }
+
                     typeName = typeName.Substring(0, dotIndex) + "+" + typeName.Substring(dotIndex + 1, typeName.Length - dotIndex - 1);
                 }
             }
+
             return t;
         }
 
@@ -901,6 +925,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
+
             instancesByName[name] = instance;
             namesByInstance[instance] = name;
         }
@@ -938,7 +963,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool IEqualityComparer.Equals(object x, object y)
             {
-                return object.ReferenceEquals(x, y);
+                return ReferenceEquals(x, y);
             }
 
             int IEqualityComparer.GetHashCode(object x)
@@ -947,6 +972,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     return x.GetHashCode();
                 }
+
                 return 0;
             }
         }

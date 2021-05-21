@@ -508,7 +508,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
-            char *textBuffer = stackalloc char[256];
+            char* textBuffer = stackalloc char[256];
 
             // Set first.
             collection[0] = 4;
@@ -597,7 +597,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
-            char *textBuffer = stackalloc char[256];
+            char* textBuffer = stackalloc char[256];
 
             // Set first.
             collection[0] = 4;
@@ -2217,7 +2217,7 @@ namespace System.Windows.Forms.Tests
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2241,7 +2241,7 @@ namespace System.Windows.Forms.Tests
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 2, 1, 1, 3 }, owner.Items.Cast<object>());
@@ -2268,7 +2268,7 @@ namespace System.Windows.Forms.Tests
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms.Tests
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 1, 1, 2, 3 }, owner.Items.Cast<object>());
@@ -2325,7 +2325,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             char* textBuffer = stackalloc char[256];
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2377,7 +2377,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             char* textBuffer = stackalloc char[256];
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 2, 1, 1, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 2, 1, 1, 3 }, owner.Items.Cast<object>());
@@ -2432,7 +2432,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             char* textBuffer = stackalloc char[256];
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Empty(owner.Items);
@@ -2487,7 +2487,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             char* textBuffer = stackalloc char[256];
 
-            collection.AddRange(new object[] { 2, 1, 1, 3});
+            collection.AddRange(new object[] { 2, 1, 1, 3 });
             Assert.Equal(4, collection.Count);
             Assert.Equal(new object[] { 1, 1, 2, 3 }, collection.Cast<object>());
             Assert.Equal(new object[] { 1, 1, 2, 3 }, owner.Items.Cast<object>());
@@ -7267,7 +7267,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
-            char *textBuffer = stackalloc char[256];
+            char* textBuffer = stackalloc char[256];
 
             // Set first.
             collection[0] = 4;
@@ -7358,7 +7358,7 @@ namespace System.Windows.Forms.Tests
             owner.HandleCreated += (sender, e) => createdCallCount++;
             int selectedIndexChangedCallCount = 0;
             owner.SelectedIndexChanged += (sender, e) => selectedIndexChangedCallCount++;
-            char *textBuffer = stackalloc char[256];
+            char* textBuffer = stackalloc char[256];
 
             // Set first.
             collection[0] = 4;

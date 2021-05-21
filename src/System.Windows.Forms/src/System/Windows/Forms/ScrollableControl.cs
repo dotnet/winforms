@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     ///  Defines a base class for controls that support auto-scrolling behavior.
     /// </summary>
     [Designer("System.Windows.Forms.Design.ScrollableControlDesigner, " + AssemblyRef.SystemDesign)]
-    public class ScrollableControl : Control, IArrangedElement
+    public partial class ScrollableControl : Control, IArrangedElement
     {
 #if DEBUG
         internal static readonly TraceSwitch s_autoScrolling = new TraceSwitch("AutoScrolling", "Debug autoscrolling logic");
@@ -187,6 +187,7 @@ namespace System.Windows.Forms
                 {
                     cp.Style &= ~(int)User32.WS.HSCROLL;
                 }
+
                 if (VScroll || VerticalScroll.Visible)
                 {
                     cp.Style |= (int)User32.WS.VSCROLL;
@@ -218,6 +219,7 @@ namespace System.Windows.Forms
                     {
                         rect.Width = _displayRect.Width;
                     }
+
                     if (VScroll)
                     {
                         rect.Height = _displayRect.Height;
@@ -240,6 +242,7 @@ namespace System.Windows.Forms
                     displayRectangle.Width = Math.Max(displayRectangle.Width, AutoScrollMinSize.Width);
                     displayRectangle.Height = Math.Max(displayRectangle.Height, AutoScrollMinSize.Height);
                 }
+
                 return displayRectangle;
             }
         }
@@ -357,7 +360,7 @@ namespace System.Windows.Forms
                 // things.)
                 _scrollMargin = _requestedScrollMargin;
 
-                if (dockPadding != null)
+                if (dockPadding is not null)
                 {
                     _scrollMargin.Height += Padding.Bottom;
                     _scrollMargin.Width += Padding.Right;
@@ -376,7 +379,7 @@ namespace System.Windows.Forms
                     // In addition, this is the more correct thing, because
                     // we want to layout the children with respect to their
                     // "local" visibility, not the hierarchy.
-                    if (current != null && current.DesiredVisibility)
+                    if (current is not null && current.DesiredVisibility)
                     {
                         switch (((Control)current).Dock)
                         {
@@ -409,6 +412,7 @@ namespace System.Windows.Forms
                     needHscroll = true;
                     maxX = layoutBounds.Width;
                 }
+
                 if (layoutBounds.Height > maxY)
                 {
                     needVscroll = true;
@@ -427,7 +431,7 @@ namespace System.Windows.Forms
 
                     // Same logic as the margin calc - you need to see if the
                     // control *will* be visible...
-                    if (current != null && current.DesiredVisibility)
+                    if (current is not null && current.DesiredVisibility)
                     {
                         if (defaultLayoutEngine)
                         {
@@ -453,18 +457,22 @@ namespace System.Windows.Forms
                                     {
                                         watchHoriz = false;
                                     }
+
                                     if ((anchor & AnchorStyles.Left) != AnchorStyles.Left)
                                     {
                                         watchHoriz = false;
                                     }
+
                                     if ((anchor & AnchorStyles.Bottom) == AnchorStyles.Bottom)
                                     {
                                         watchVert = false;
                                     }
+
                                     if ((anchor & AnchorStyles.Top) != AnchorStyles.Top)
                                     {
                                         watchVert = false;
                                     }
+
                                     break;
                             }
                         }
@@ -486,6 +494,7 @@ namespace System.Windows.Forms
                                 needHscroll = true;
                                 maxX = ctlRight;
                             }
+
                             if (ctlBottom > maxY && watchVert)
                             {
                                 needVscroll = true;
@@ -504,31 +513,38 @@ namespace System.Windows.Forms
             {
                 needHscroll = false;
             }
+
             if (maxY <= fullClient.Height)
             {
                 needVscroll = false;
             }
+
             Rectangle clientToBe = fullClient;
             if (needHscroll)
             {
                 clientToBe.Height -= SystemInformation.HorizontalScrollBarHeight;
             }
+
             if (needVscroll)
             {
                 clientToBe.Width -= SystemInformation.VerticalScrollBarWidth;
             }
+
             if (needHscroll && maxY > clientToBe.Height)
             {
                 needVscroll = true;
             }
+
             if (needVscroll && maxX > clientToBe.Width)
             {
                 needHscroll = true;
             }
+
             if (!needHscroll)
             {
                 maxX = clientToBe.Width;
             }
+
             if (!needVscroll)
             {
                 maxY = clientToBe.Height;
@@ -545,6 +561,7 @@ namespace System.Windows.Forms
             {
                 needLayout = (SetDisplayRectangleSize(maxX, maxY) || needLayout);
             }
+
             // Else just update the display rect size. This keeps it as big as the client
             // area in a resize scenario
             else
@@ -567,10 +584,12 @@ namespace System.Windows.Forms
             {
                 _displayRect = ClientRectangle;
             }
+
             if (!AutoScroll && HorizontalScroll._visible == true)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, HorizontalScroll.Maximum, _displayRect.Height);
             }
+
             if (!AutoScroll && VerticalScroll._visible == true)
             {
                 _displayRect = new Rectangle(_displayRect.X, _displayRect.Y, _displayRect.Width, VerticalScroll.Maximum);
@@ -603,7 +622,7 @@ namespace System.Windows.Forms
             // thus require a new layout. The result is that when you
             // affect a control's layout, we are forced to layout twice. There
             // isn't any noticible flicker, but this could be a perf problem...
-            if (levent != null && levent.AffectedControl != null && AutoScroll)
+            if (levent is not null && levent.AffectedControl is not null && AutoScroll)
             {
                 base.OnLayout(levent);
             }
@@ -674,13 +693,14 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(e));
 
             if ((HScroll || VScroll) &&
-                BackgroundImage != null &&
+                BackgroundImage is not null &&
                 (BackgroundImageLayout == ImageLayout.Zoom || BackgroundImageLayout == ImageLayout.Stretch || BackgroundImageLayout == ImageLayout.Center))
             {
                 if (ControlPaint.IsImageTransparent(BackgroundImage))
                 {
                     PaintTransparentBackground(e, _displayRect);
                 }
+
                 ControlPaint.DrawBackgroundImage(e.Graphics, BackgroundImage, BackColor, BackgroundImageLayout, _displayRect, _displayRect, _displayRect.Location);
             }
             else
@@ -761,14 +781,17 @@ namespace System.Windows.Forms
             {
                 x = 0;
             }
+
             if (y > 0)
             {
                 y = 0;
             }
+
             if (x < minX)
             {
                 x = minX;
             }
+
             if (y < minY)
             {
                 y = minY;
@@ -778,10 +801,12 @@ namespace System.Windows.Forms
             {
                 xDelta = x - displayRectangle.X;
             }
+
             if (displayRectangle.Y != y)
             {
                 yDelta = y - displayRectangle.Y;
             }
+
             _displayRect.X = x;
             _displayRect.Y = y;
 
@@ -806,7 +831,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < Controls.Count; i++)
             {
                 Control ctl = Controls[i];
-                if (ctl != null && ctl.IsHandleCreated)
+                if (ctl is not null && ctl.IsHandleCreated)
                 {
                     ctl.UpdateBounds();
                 }
@@ -902,13 +927,14 @@ namespace System.Windows.Forms
             return new Point(xCalc, yCalc);
         }
 
-        private int ScrollThumbPosition(User32.SB fnBar)
+        private unsafe int ScrollThumbPosition(User32.SB fnBar)
         {
-            var si = new User32.SCROLLINFO
+            User32.SCROLLINFO si = new()
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.TRACKPOS
             };
+
             User32.GetScrollInfo(this, fnBar, ref si);
             return si.nTrackPos;
         }
@@ -954,6 +980,7 @@ namespace System.Windows.Forms
             {
                 x = 0;
             }
+
             if (y < 0)
             {
                 y = 0;
@@ -1001,6 +1028,7 @@ namespace System.Windows.Forms
                 {
                     x = 0;
                 }
+
                 if (!vert)
                 {
                     y = 0;
@@ -1029,8 +1057,10 @@ namespace System.Windows.Forms
                 {
                     ResetScrollProperties(VerticalScroll);
                 }
+
                 UpdateStyles();
             }
+
             return needLayout;
         }
 
@@ -1055,6 +1085,7 @@ namespace System.Windows.Forms
             {
                 minX = 0;
             }
+
             if (minY > 0)
             {
                 minY = 0;
@@ -1067,6 +1098,7 @@ namespace System.Windows.Forms
             {
                 x = 0;
             }
+
             if (!VScroll)
             {
                 y = 0;
@@ -1076,6 +1108,7 @@ namespace System.Windows.Forms
             {
                 x = minX;
             }
+
             if (y < minY)
             {
                 y = minY;
@@ -1150,14 +1183,17 @@ namespace System.Windows.Forms
                     {
                         HorizontalScroll._maximum = displayRect.Width - 1;
                     }
+
                     if (!HorizontalScroll._largeChangeSetExternally)
                     {
                         HorizontalScroll._largeChange = ClientRectangle.Width;
                     }
+
                     if (!HorizontalScroll._smallChangeSetExternally)
                     {
                         HorizontalScroll._smallChange = 5;
                     }
+
                     if (resetRTLHScrollValue && !IsMirrored)
                     {
                         resetRTLHScrollValue = false;
@@ -1167,26 +1203,32 @@ namespace System.Windows.Forms
                     {
                         HorizontalScroll._value = -displayRect.X;
                     }
+
                     HorizontalScroll.UpdateScrollInfo();
                 }
+
                 if (VScroll)
                 {
                     if (!VerticalScroll._maximumSetExternally)
                     {
                         VerticalScroll._maximum = displayRect.Height - 1;
                     }
+
                     if (!VerticalScroll._largeChangeSetExternally)
                     {
                         VerticalScroll._largeChange = ClientRectangle.Height;
                     }
+
                     if (!VerticalScroll._smallChangeSetExternally)
                     {
                         VerticalScroll._smallChange = 5;
                     }
+
                     if (-displayRect.Y >= VerticalScroll._minimum && -displayRect.Y < VerticalScroll._maximum)
                     {
                         VerticalScroll._value = -displayRect.Y;
                     }
+
                     VerticalScroll.UpdateScrollInfo();
                 }
             }
@@ -1200,6 +1242,7 @@ namespace System.Windows.Forms
                 {
                     ResetScrollProperties(HorizontalScroll);
                 }
+
                 if (VerticalScroll.Visible)
                 {
                     VerticalScroll.Value = -displayRect.Y;
@@ -1272,6 +1315,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBV.LINEDOWN:
                     if (pos < maxPos - VerticalScroll.SmallChange)
@@ -1282,6 +1326,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBV.PAGEUP:
                     if (pos > VerticalScroll.LargeChange)
@@ -1292,6 +1337,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBV.PAGEDOWN:
                     if (pos < maxPos - VerticalScroll.LargeChange)
@@ -1302,6 +1348,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBV.TOP:
                     pos = 0;
@@ -1362,6 +1409,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.LINERIGHT:
                     if (pos < maxPos - HorizontalScroll.SmallChange)
@@ -1372,6 +1420,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBH.PAGELEFT:
                     if (pos > HorizontalScroll.LargeChange)
@@ -1382,6 +1431,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - HorizontalScroll.LargeChange)
@@ -1392,6 +1442,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBH.LEFT:
                     pos = 0;
@@ -1454,227 +1505,6 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
             }
-        }
-
-        /// <summary>
-        ///  Determines the border padding for docked controls.
-        /// </summary>
-        [TypeConverter(typeof(DockPaddingEdgesConverter))]
-        public class DockPaddingEdges : ICloneable
-        {
-            private readonly ScrollableControl _owner;
-            private int _left;
-            private int _right;
-            private int _top;
-            private int _bottom;
-
-            /// <summary>
-            ///  Creates a new DockPaddingEdges. The specified owner will be notified when
-            ///  the values are changed.
-            /// </summary>
-            internal DockPaddingEdges(ScrollableControl owner)
-            {
-                _owner = owner;
-            }
-
-            internal DockPaddingEdges(int left, int right, int top, int bottom)
-            {
-                _left = left;
-                _right = right;
-                _top = top;
-                _bottom = bottom;
-            }
-
-            /// <summary>
-            ///  Gets or ssets the padding width for all edges of a docked control.
-            /// </summary>
-            [RefreshProperties(RefreshProperties.All)]
-            [SRDescription(nameof(SR.PaddingAllDescr))]
-            public int All
-            {
-                get
-                {
-                    if (_owner is null)
-                    {
-                        if (_left == _right && _top == _bottom && _left == _top)
-                        {
-                            return _left;
-                        }
-                        else
-                        {
-                            return 0;
-                        }
-                    }
-                    else
-                    {
-                        // The Padding struct uses -1 to indicate that LRTB are in disagreement.
-                        // For backwards compatibility, we need to remap -1 to 0, but we need
-                        // to be careful because it could be that they explicitly set All to -1.
-                        if (_owner.Padding.All == -1
-                            &&
-                                (_owner.Padding.Left != -1
-                                || _owner.Padding.Top != -1
-                                || _owner.Padding.Right != -1
-                                || _owner.Padding.Bottom != -1))
-                        {
-                            return 0;
-                        }
-                        return _owner.Padding.All;
-                    }
-                }
-                set
-                {
-                    if (_owner is null)
-                    {
-                        _left = value;
-                        _top = value;
-                        _right = value;
-                        _bottom = value;
-                    }
-                    else
-                    {
-                        _owner.Padding = new Padding(value);
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Gets or sets the padding width for the bottom edge of a docked control.
-            /// </summary>
-            [RefreshProperties(RefreshProperties.All)]
-            [SRDescription(nameof(SR.PaddingBottomDescr))]
-            public int Bottom
-            {
-                get => _owner is null ? _bottom : _owner.Padding.Bottom;
-                set
-                {
-                    if (_owner is null)
-                    {
-                        _bottom = value;
-                    }
-                    else
-                    {
-                        Padding padding = _owner.Padding;
-                        padding.Bottom = value;
-                        _owner.Padding = padding;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Gets or sets the padding width for the left edge of a docked control.
-            /// </summary>
-            [RefreshProperties(RefreshProperties.All)]
-            [SRDescription(nameof(SR.PaddingLeftDescr))]
-            public int Left
-            {
-                get => _owner is null ? _left : _owner.Padding.Left;
-                set
-                {
-                    if (_owner is null)
-                    {
-                        _left = value;
-                    }
-                    else
-                    {
-                        Padding padding = _owner.Padding;
-                        padding.Left = value;
-                        _owner.Padding = padding;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Gets or sets the padding width for the right edge of a docked control.
-            /// </summary>
-            [RefreshProperties(RefreshProperties.All)]
-            [SRDescription(nameof(SR.PaddingRightDescr))]
-            public int Right
-            {
-                get => _owner is null ? _right : _owner.Padding.Right;
-                set
-                {
-                    if (_owner is null)
-                    {
-                        _right = value;
-                    }
-                    else
-                    {
-                        Padding padding = _owner.Padding;
-                        padding.Right = value;
-                        _owner.Padding = padding;
-                    }
-                }
-            }
-
-            /// <summary>
-            ///  Gets or sets the padding width for the top edge of a docked control.
-            /// </summary>
-            [RefreshProperties(RefreshProperties.All)]
-            [SRDescription(nameof(SR.PaddingTopDescr))]
-            public int Top
-            {
-                get => _owner is null ? _top : _owner.Padding.Top;
-                set
-                {
-                    if (_owner is null)
-                    {
-                        _top = value;
-                    }
-                    else
-                    {
-                        Padding padding = _owner.Padding;
-                        padding.Top = value;
-                        _owner.Padding = padding;
-                    }
-                }
-            }
-
-            public override bool Equals(object other)
-            {
-                return other is DockPaddingEdges dpeOther &&
-                    Left == dpeOther.Left &&
-                    Top == dpeOther.Top &&
-                    Right == dpeOther.Right &&
-                    Bottom == dpeOther.Bottom;
-            }
-
-            public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
-
-            private void ResetAll() => All = 0;
-
-            private void ResetBottom() => Bottom = 0;
-
-            private void ResetLeft() => Left = 0;
-
-            private void ResetRight() => Right = 0;
-
-            private void ResetTop() => Top = 0;
-
-            internal void Scale(float dx, float dy) => _owner.Padding.Scale(dx, dy);
-
-            public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
-
-            object ICloneable.Clone() => new DockPaddingEdges(Left, Right, Top, Bottom);
-        }
-
-        public class DockPaddingEdgesConverter : TypeConverter
-        {
-            /// <summary>
-            ///  Retrieves the set of properties for this type. By default, a type has does
-            ///  not return any properties. An easy implementation of this method can just
-            ///  call TypeDescriptor.GetProperties for the correct data type.
-            /// </summary>
-            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-            {
-                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(DockPaddingEdges), attributes);
-                return props.Sort(new string[] { "All", "Left", "Top", "Right", "Bottom" });
-            }
-
-            /// <summary>
-            ///  Determines if this object supports properties. By default, this is false.
-            /// </summary>
-            public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
         }
     }
 }

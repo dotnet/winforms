@@ -139,7 +139,7 @@ namespace System.Windows.Forms
                     // all other buttons to False.
                     // Note that this does not handle buttons that are added later
                     // to the collection.
-                    if (_collection != null && value)
+                    if (_collection is not null && value)
                     {
                         foreach (TaskDialogRadioButton radioButton in _collection)
                         {
@@ -239,6 +239,7 @@ namespace System.Windows.Forms
                 {
                     boundDialog.RadioButtonClickedStackCount++;
                 }
+
                 try
                 {
                     HandleRadioButtonClicked();

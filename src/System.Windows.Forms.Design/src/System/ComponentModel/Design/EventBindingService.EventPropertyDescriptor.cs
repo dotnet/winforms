@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design
                 ReferenceEventClosure key = new ReferenceEventClosure(component, this);
                 string oldName = (string)ds.GetValue(key);
 
-                if (object.ReferenceEquals(oldName, name))
+                if (ReferenceEquals(oldName, name))
                 {
                     return;
                 }
@@ -380,7 +380,7 @@ namespace System.ComponentModel.Design
                 ///  Converts the given object to another type.  The most common types to convert
                 ///  are to and from a string object.  The default implementation will make a call
                 ///  to ToString on the object if the object is valid and if the destination
-                ///  type is string.  If this cannot convert to the desitnation type, this will
+                ///  type is string.  If this cannot convert to the destination type, this will
                 ///  throw a NotSupportedException.
                 /// </summary>
                 public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)

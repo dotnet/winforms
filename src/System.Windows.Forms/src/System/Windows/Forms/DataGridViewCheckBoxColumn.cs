@@ -34,6 +34,7 @@ namespace System.Windows.Forms
             {
                 defaultCellStyle.NullValue = false;
             }
+
             DefaultCellStyle = defaultCellStyle;
         }
 
@@ -44,10 +45,11 @@ namespace System.Windows.Forms
             get => base.CellTemplate;
             set
             {
-                if (value != null && !(value is DataGridViewCheckBoxCell))
+                if (value is not null && !(value is DataGridViewCheckBoxCell))
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
                 }
+
                 base.CellTemplate = value;
             }
         }
@@ -81,6 +83,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.FalseValue;
             }
             set
@@ -88,7 +91,7 @@ namespace System.Windows.Forms
                 if (FalseValue != value)
                 {
                     CheckBoxCellTemplate.FalseValueInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -100,6 +103,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.FalseValueInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
                 }
@@ -117,6 +121,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.FlatStyle;
             }
             set
@@ -124,7 +129,7 @@ namespace System.Windows.Forms
                 if (FlatStyle != value)
                 {
                     CheckBoxCellTemplate.FlatStyle = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -136,6 +141,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
                 }
@@ -154,6 +160,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.IndeterminateValue;
             }
             set
@@ -161,7 +168,7 @@ namespace System.Windows.Forms
                 if (IndeterminateValue != value)
                 {
                     CheckBoxCellTemplate.IndeterminateValueInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -173,6 +180,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.IndeterminateValueInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
                 }
@@ -190,6 +198,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.ThreeState;
             }
             set
@@ -197,7 +206,7 @@ namespace System.Windows.Forms
                 if (ThreeState != value)
                 {
                     CheckBoxCellTemplate.ThreeStateInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -209,6 +218,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.ThreeStateInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
 
@@ -240,6 +250,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.TrueValue;
             }
             set
@@ -247,7 +258,7 @@ namespace System.Windows.Forms
                 if (TrueValue != value)
                 {
                     CheckBoxCellTemplate.TrueValueInternal = value;
-                    if (DataGridView != null)
+                    if (DataGridView is not null)
                     {
                         DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
                         int rowCount = dataGridViewRows.Count;
@@ -259,6 +270,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.TrueValueInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
                 }
@@ -294,14 +306,14 @@ namespace System.Windows.Forms
                     !defaultCellStyle.ForeColor.IsEmpty ||
                     !defaultCellStyle.SelectionBackColor.IsEmpty ||
                     !defaultCellStyle.SelectionForeColor.IsEmpty ||
-                    defaultCellStyle.Font != null ||
+                    defaultCellStyle.Font is not null ||
                     !defaultCellStyle.NullValue.Equals(defaultNullValue) ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
                     !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
-                    defaultCellStyle.Tag != null ||
+                    defaultCellStyle.Tag is not null ||
                     !defaultCellStyle.Padding.Equals(Padding.Empty));
         }
 

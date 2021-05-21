@@ -85,7 +85,6 @@ Namespace Microsoft.VisualBasic
                 Play(New Media.SoundPlayer(stream), playMode)
             End Sub
 
-#Disable Warning CA1822 ' Mark members as static, Justification:=<Public API>
             ''' <summary>
             '''   Plays a system messageBeep sound.
             ''' </summary>
@@ -105,9 +104,8 @@ Namespace Microsoft.VisualBasic
             ''' </summary>
             Public Sub [Stop]()
                 Dim sound As New Media.SoundPlayer()
-                InternalStop(sound)
+                sound.Stop()
             End Sub
-#Enable Warning CA1822 ' Mark members as static
 
             ''' <summary>
             '''  Plays the passed in SoundPlayer in the passed in mode
@@ -121,7 +119,7 @@ Namespace Microsoft.VisualBasic
 
                 ' Stopping the sound ensures it's safe to dispose it. This could happen when we change the value of m_Sound below
                 If _sound IsNot Nothing Then
-                    InternalStop(_sound)
+                    _sound.Stop()
                 End If
 
                 _sound = sound
@@ -137,24 +135,6 @@ Namespace Microsoft.VisualBasic
                         Debug.Fail("Unknown AudioPlayMode")
                 End Select
 
-            End Sub
-
-            ''' <summary>
-            ''' SoundPlayer.Stop requires unmanaged code permissions. This method allows us to wrap calls to SoundPlayer.Stop
-            ''' with the appropriate Demand/Assert
-            ''' </summary>
-            ''' <param name="sound"></param>
-            Private Shared Sub InternalStop(sound As Media.SoundPlayer)
-
-                ' Stop requires unmanaged code permission. Stop demands SafeSubWindows permissions, so we don't need to do it here                     
-#Disable Warning BC40000 ' Type or member is obsolete
-                Call New Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode).Assert()
-                Try
-                    sound.Stop()
-                Finally
-                    System.Security.CodeAccessPermission.RevertAssert()
-#Enable Warning BC40000 ' Type or member is obsolete
-                End Try
             End Sub
 
             ''' <summary>
