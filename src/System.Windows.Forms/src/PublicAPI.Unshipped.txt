@@ -1,0 +1,4 @@
+System.Windows.Forms.Application.ApplicationDefaults
+System.Windows.Forms.ApplicationDefaultsExtension
+~static System.Windows.Forms.Application.Defaults.get -> System.Windows.Forms.Application.ApplicationDefaults
+~static System.Windows.Forms.ApplicationDefaultsExtension.SetDefaultFont(this System.Windows.Forms.Application.ApplicationDefaults defaults, System.Drawing.Font font) -> System.Windows.Forms.Application.ApplicationDefaults

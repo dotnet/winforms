@@ -11614,7 +11614,9 @@ namespace System.Windows.Forms
             if (pref.Category == UserPreferenceCategory.Color)
             {
                 s_defaultFont = null;
-                Application.ScaleDefaultFont();
+
+                // TODO: IGOR: Why do we need to reset the Font when the Color has changed?
+                Application.Defaults.ResetDefaultFont();
                 OnSystemColorsChanged(EventArgs.Empty);
             }
         }

@@ -61,6 +61,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Delegate Sub ApplyHighDpiModeEventHandler(sender As Object, e As ApplyHighDpiModeEventArgs)
 
     ''' <summary>
+    ''' Signature for the ApplyApplicationDefaults event handler
+    ''' </summary>
+    <EditorBrowsable(EditorBrowsableState.Advanced)>
+    Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyApplicationDefaultsEventArgs)
+
+    ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
@@ -70,6 +76,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
         Public Event Shutdown As ShutdownEventHandler
         Public Event ApplyHighDpiMode As ApplyHighDpiModeEventHandler
+        Public Event ApplyApplicationDefaults As ApplyApplicationDefaultsEventHandler
 
         Private Delegate Sub DisposeDelegate() 'used to marshal a call to Dispose on the Splash Screen
 
@@ -398,7 +405,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
+            ' Let's get the request from the ApplicationEvents for the HighDpiMode...
             Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(HighDpiMode)
+            RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
+
+            ' ...and whatever Defaults need to be set.
+            Dim getApplicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(Windows.Forms.Application.Defaults)
             RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
 
             ' Apply HighDpiMode
