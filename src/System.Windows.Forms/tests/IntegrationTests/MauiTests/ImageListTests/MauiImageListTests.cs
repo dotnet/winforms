@@ -2,13 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms.IntegrationTests.Common;
 using ReflectTools;
 using WFCTestLib.Log;
+using static Interop;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests
 {
@@ -54,7 +57,14 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 GC.WaitForPendingFinalizers();
                 GC.Collect(0);
 
-                return Interop.User32.GetGuiResources(Process.GetCurrentProcess().Handle, Interop.User32.GR.GDIOBJECTS);
+                int result = User32.GetGuiResources(Process.GetCurrentProcess().Handle, User32.GR.GDIOBJECTS);
+                if (result == 0)
+                {
+                    int lastWin32Error = Marshal.GetLastWin32Error();
+                    throw new Win32Exception(lastWin32Error, "Failed to retrieves the count of GDI handles");
+                }
+
+                return result;
             }
         }
 

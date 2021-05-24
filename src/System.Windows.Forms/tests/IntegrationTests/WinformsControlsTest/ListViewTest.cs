@@ -122,8 +122,8 @@ namespace WinformsControlsTest
             listView2.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             // Create two ImageList objects.
-            ImageList imageListSmall = new();
-            ImageList imageListLarge = new();
+            ImageList imageListSmall = new(components);
+            ImageList imageListLarge = new(components);
 
             // Initialize the ImageList objects with bitmaps.
             imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));
