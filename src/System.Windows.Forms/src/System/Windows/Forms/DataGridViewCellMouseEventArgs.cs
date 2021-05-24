@@ -2,17 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public class DataGridViewCellMouseEventArgs : MouseEventArgs
     {
-        public DataGridViewCellMouseEventArgs(int columnIndex,
+        public DataGridViewCellMouseEventArgs(
+            int columnIndex,
             int rowIndex,
             int localX,
             int localY,
-            MouseEventArgs e) : base(e?.Button ?? MouseButtons.None, e?.Clicks ?? 0, localX, localY, e?.Delta ?? 0)
+            MouseEventArgs? e)
+            : base(e?.Button ?? MouseButtons.None, e?.Clicks ?? 0, localX, localY, e?.Delta ?? 0)
         {
             if (columnIndex < -1)
             {
