@@ -1340,7 +1340,7 @@
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow
 ~static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature
-~static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag value) -> System.Windows.Forms.OwnerDrawPropertyBag
+static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag? value) -> System.Windows.Forms.OwnerDrawPropertyBag!
 ~static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalBar(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
 ~static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalChunks(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
 ~static System.Windows.Forms.ProgressBarRenderer.DrawVerticalBar(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
@@ -2550,9 +2550,9 @@
 ~System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream
 ~System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string
 ~System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string[]
-~System.Windows.Forms.OwnerDrawPropertyBag.Font.get -> System.Drawing.Font
-~System.Windows.Forms.OwnerDrawPropertyBag.Font.set -> void
-~System.Windows.Forms.OwnerDrawPropertyBag.OwnerDrawPropertyBag(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+System.Windows.Forms.OwnerDrawPropertyBag.Font.get -> System.Drawing.Font?
+System.Windows.Forms.OwnerDrawPropertyBag.Font.set -> void
+System.Windows.Forms.OwnerDrawPropertyBag.OwnerDrawPropertyBag(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.PageSetupDialog.Document.get -> System.Drawing.Printing.PrintDocument
 ~System.Windows.Forms.PageSetupDialog.Document.set -> void
 ~System.Windows.Forms.PageSetupDialog.MinMargins.get -> System.Drawing.Printing.Margins
