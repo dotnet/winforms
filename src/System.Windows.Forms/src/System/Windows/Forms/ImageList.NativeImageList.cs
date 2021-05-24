@@ -84,7 +84,6 @@ namespace System.Windows.Forms
 
             ~NativeImageList()
             {
-#if DEBUG
                 // There are certain code paths where we are unable to track the lifetime of the object,
                 // for example in the following scenarios:
                 //
@@ -93,14 +92,6 @@ namespace System.Windows.Forms
                 //      resources.ApplyResources(this.listView1, "listView1");
                 //
                 // In those cases the loose instances will be collected by the GC.
-
-                if (_callStack.IndexOf("at System.Resources.ResourceManager.GetObject(String name") < 1 &&
-                    _callStack.IndexOf("at System.ComponentModel.ComponentResourceManager.ApplyResources(Object value, String objectName") < 1)
-                {
-                    Debug.Fail($"{nameof(NativeImageList)} was not disposed properly. Originating stack:\n{_callStack}");
-                }
-#endif
-
                 Dispose(false);
             }
 

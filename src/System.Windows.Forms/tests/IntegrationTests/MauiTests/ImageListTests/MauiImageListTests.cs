@@ -88,8 +88,6 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             imageList1.ImageStream = (ImageListStreamer)FromBase64String(ClassicImageListStreamer);
             listView1.SmallImageList = imageList1;
 
-            form.Disposed += (s, e) => imageList1.Dispose();
-
             return form;
         }
 
