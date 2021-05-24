@@ -1323,8 +1323,8 @@ Drücken Sie STRG+EINGABETASTE, um Text zu übernehmen.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
-        <source>Place existing controls in new containerDetermines the size of the positioning grid.</source>
-        <target state="new">Place existing controls in new containerDetermines the size of the positioning grid.</target>
+        <source>Determines the size of the positioning grid.</source>
+        <target state="new">Determines the size of the positioning grid.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">

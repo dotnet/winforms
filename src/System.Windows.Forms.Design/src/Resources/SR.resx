@@ -1190,7 +1190,7 @@ Press Ctrl+Enter to accept Text.</value>
     <value>MultiLine</value>
   </data>
   <data name="ParentControlDesignerGridSizeDescr" xml:space="preserve">
-    <value>Place existing controls in new containerDetermines the size of the positioning grid.</value>
+    <value>Determines the size of the positioning grid.</value>
   </data>
   <data name="ParentControlDesignerLassoShortcutRedo" xml:space="preserve">
     <value>Place existing controls in new container, '{0}'.</value>
