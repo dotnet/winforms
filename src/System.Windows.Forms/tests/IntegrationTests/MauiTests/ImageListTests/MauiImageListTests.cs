@@ -37,7 +37,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 form.Show();
             }
 
-            int startGdiHandleCount = GetGdiHandles();
+            uint startGdiHandleCount = GetGdiHandles();
             p.log.WriteLine($"GDI handles before: {startGdiHandleCount}");
 
             // Now test for real
@@ -46,18 +46,18 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 form.Show();
             }
 
-            int endGdiHandleCount = GetGdiHandles();
+            uint endGdiHandleCount = GetGdiHandles();
             p.log.WriteLine($"GDI handles after: {endGdiHandleCount}");
 
             return new ScenarioResult(startGdiHandleCount == endGdiHandleCount, $"GDI handles before: {startGdiHandleCount} != GDI handles after: {endGdiHandleCount}");
 
-            static int GetGdiHandles()
+            static uint GetGdiHandles()
             {
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 GC.Collect(0);
 
-                int result = User32.GetGuiResources(Process.GetCurrentProcess().Handle, User32.GR.GDIOBJECTS);
+                uint result = User32.GetGuiResources(Process.GetCurrentProcess().Handle, User32.GR.GDIOBJECTS);
                 if (result == 0)
                 {
                     int lastWin32Error = Marshal.GetLastWin32Error();
