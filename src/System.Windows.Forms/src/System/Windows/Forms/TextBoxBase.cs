@@ -50,6 +50,9 @@ namespace System.Windows.Forms
         private static readonly object EVENT_MODIFIEDCHANGED = new object();
         private static readonly object EVENT_MULTILINECHANGED = new object();
         private static readonly object EVENT_READONLYCHANGED = new object();
+        private static readonly object EVENT_IDLETEXTCHANGED = new object();
+
+        private const int DefaultIdleTextDelayTime = 300;
 
         /// <summary>
         ///  The current border for this edit control.
@@ -86,6 +89,15 @@ namespace System.Windows.Forms
         // We store all boolean properties in here.
         //
         private BitVector32 textBoxFlags;
+
+        // TODO: Not sure, if this is really necessay - this is a quick prototype to test Binding behavior.
+
+        // Instead, we maybe should consider to have ONE static Timer
+        // inside the IdleSensor to which we bind to with Open Instance Delegates weak,
+        // so the IdleSensor Component could get disposed even it is bound to the
+        // static timer_tick?
+        private WeakReference<IdleSensor> weakRefToIdleSensor = new WeakReference<IdleSensor>(null);
+        private string idleText;
 
         /// <summary>
         ///  Creates a new TextBox control.  Uses the parent's current font and color
@@ -583,6 +595,83 @@ namespace System.Windows.Forms
         {
             add => Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
             remove => Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
+        }
+
+        public string IdleText
+            => idleText;
+
+        protected virtual void OnIdleTextChanged(EventArgs e)
+        {
+            if (Events[EVENT_IDLETEXTCHANGED] is EventHandler eh)
+            {
+                eh(this, e);
+            }
+        }
+
+        /// <summary>
+        ///  Gets or sets
+        ///  the current text in the text box.
+        /// </summary>
+        [DefaultValue(DefaultIdleTextDelayTime)]
+        public int IdleTextDelayTime { get; set; } = DefaultIdleTextDelayTime;
+
+        [SRCategory(nameof(SR.CatPropertyChanged))]
+        //TODO: TBA: [SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
+        public event EventHandler IdleTextChanged
+        {
+            add
+            {
+                Events.AddHandler(EVENT_IDLETEXTCHANGED, value);
+            }
+            remove => Events.RemoveHandler(EVENT_IDLETEXTCHANGED, value);
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            if (!weakRefToIdleSensor.TryGetTarget(out var idleSensor))
+            {
+                idleSensor=new IdleSensor()
+                {
+                    KeepAliveTime = IdleTextDelayTime
+                };
+
+                weakRefToIdleSensor.SetTarget(idleSensor);
+            }
+
+            idleSensor.Idle += IdleSensor_Idle;
+        }
+
+        protected override void OnLostFocus(EventArgs e)
+        {
+            base.OnLostFocus(e);
+            if (weakRefToIdleSensor.TryGetTarget(out var idleSensor))
+            {
+                idleSensor.Idle -= IdleSensor_Idle;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                if (weakRefToIdleSensor.TryGetTarget(out var idleSensor))
+                {
+                    idleSensor.Idle -= IdleSensor_Idle;
+                    idleSensor.Dispose();
+                }
+            }
+        }
+
+        private void IdleSensor_Idle(object sender, CancelEventArgs e)
+        {
+            if (!Equals(idleText, Text))
+            {
+                idleText = Text;
+                OnIdleTextChanged(EventArgs.Empty);
+            }
         }
 
         /// <summary>
@@ -1620,6 +1709,11 @@ namespace System.Windows.Forms
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
+
+            if (weakRefToIdleSensor.TryGetTarget(out var idleSensor))
+            {
+                idleSensor.KeepAlive();
+            }
 
             if (UiaCore.UiaClientsAreListening().IsTrue())
             {
