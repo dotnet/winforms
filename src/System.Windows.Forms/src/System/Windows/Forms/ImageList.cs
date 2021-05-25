@@ -526,8 +526,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-                ImageStream?.Dispose();
-
                 DestroyHandle();
             }
 
