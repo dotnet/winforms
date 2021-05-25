@@ -139,7 +139,23 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected override IFileDialog CreateVistaDialog() => new NativeFileOpenDialog();
+        private protected override IFileDialog CreateVistaDialog()
+        {
+            Guid IID_IFileOpenDialog = new Guid("d57c7288-d4ad-4768-be02-9d969532d960");
+            Guid IID_FileOpenDialogCoClass = new Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7");
+            HRESULT hr = Ole32.CoCreateInstance(
+                ref IID_FileOpenDialogCoClass,
+                IntPtr.Zero,
+                Ole32.CLSCTX.INPROC_SERVER,
+                ref IID_IFileOpenDialog,
+                out object obj);
+            if (!hr.Succeeded())
+            {
+                throw Marshal.GetExceptionForHR((int)hr);
+            }
+
+            return (IFileOpenDialog)obj;
+        }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
