@@ -434,7 +434,7 @@
 ~override System.Windows.Forms.DomainUpDown.OnChanged(object source, System.EventArgs e) -> void
 ~override System.Windows.Forms.DomainUpDown.OnTextBoxKeyPress(object source, System.Windows.Forms.KeyPressEventArgs e) -> void
 ~override System.Windows.Forms.DomainUpDown.ToString() -> string
-~override System.Windows.Forms.DpiChangedEventArgs.ToString() -> string
+override System.Windows.Forms.DpiChangedEventArgs.ToString() -> string!
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.FileDialog.ToString() -> string
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
