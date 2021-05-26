@@ -318,7 +318,7 @@
             // monthCalendar1
             // 
             this.monthCalendar1.AccessibleDescription = "This is a test MonthCalendar.";
-            this.monthCalendar1.AccessibleName = "monthCalendatTestControl";
+            this.monthCalendar1.AccessibleName = "monthCalendarTestControl";
             this.monthCalendar1.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.monthCalendar1.Location = new System.Drawing.Point(345, 252);
             this.monthCalendar1.Name = "monthCalendar1";
