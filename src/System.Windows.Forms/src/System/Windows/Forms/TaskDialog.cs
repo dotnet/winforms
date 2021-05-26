@@ -502,7 +502,7 @@ namespace System.Windows.Forms
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed
-                    // abormally (e.g. when closing the main window while a modeless task
+                    // abnormally (e.g. when closing the main window while a modeless task
                     // dialog is displayed), the dialog returns IDCANCEL (2) without
                     // priorly raising the TDN_BUTTON_CLICKED notification.
                     // Therefore, in that case we need to retrieve the button ourselves.
