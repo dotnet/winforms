@@ -99,7 +99,7 @@ namespace TestConsole
             //-
             //-
             //- step.2
-            //- create the Root compoment, in these cases a Form
+            //- create the Root component, in these cases a Form
             try
             {
                 Form rootComponent = null;
