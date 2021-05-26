@@ -1853,7 +1853,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions.  We could calcuate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
+            ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions.  We could calculate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
             /// </summary>
             public virtual bool UpdateSize()
             {

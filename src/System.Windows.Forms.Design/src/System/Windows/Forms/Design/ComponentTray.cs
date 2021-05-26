@@ -1917,7 +1917,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                // Calcuate the next location for this control.
+                // Calculate the next location for this control.
                 Rectangle bounds = prevCtl.Bounds;
                 Point newLoc = new Point(bounds.X + bounds.Width + whiteSpace.X, bounds.Y);
 
@@ -2142,7 +2142,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Delegate that is called in response to a name change.  Here we update our own stashed version of the name, recalcuate our size and repaint.
+            ///  Delegate that is called in response to a name change.  Here we update our own stashed version of the name, recalculate our size and repaint.
             /// </summary>
             private void OnComponentRename(object sender, ComponentRenameEventArgs e)
             {
