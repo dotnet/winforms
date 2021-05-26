@@ -615,7 +615,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  This method is called immediately after the first time
-        ///  BeginLoad is invoked.  This is an appopriate place to
+        ///  BeginLoad is invoked.  This is an appropriate place to
         ///  add custom services to the loader host.  Remember to
         ///  remove any custom services you add here by overriding
         ///  Dispose.
