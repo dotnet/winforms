@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This retrieves the collection of errors that have been reported to the serialization manager.  Additionaly, new errors can be added to the list by accessing this property.
+        ///  This retrieves the collection of errors that have been reported to the serialization manager.  Additionally, new errors can be added to the list by accessing this property.
         /// </summary>
         public IList Errors
         {
