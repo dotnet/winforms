@@ -649,7 +649,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override void OnComponentChanged()
         {
             base.OnComponentChanged();
-            // If we got this it means someone called ITypeDescriptorContext.OnCompnentChanged.
+            // If we got this it means someone called ITypeDescriptorContext.OnComponentChanged.
             // so we need to echo that change up the inheritance change in case the owner object isn't a sited component.
             NotifyParentChange(this);
         }

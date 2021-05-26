@@ -959,7 +959,7 @@ namespace System.Windows.Forms
 
         private void OnComponentRename(object sender, ComponentRenameEventArgs e)
         {
-            // When we're notified of a rename, see if this is the componnent that is being
+            // When we're notified of a rename, see if this is the component that is being
             // renamed.
             //
             if (e.Component == this)

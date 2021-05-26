@@ -604,7 +604,7 @@ namespace System.Windows.Forms
         ///  global object who's lifetime exceeds the lifetime of the parent form. Otherwise
         ///  the BindingSource (and any components bound through it) will end up in limbo,
         ///  still processing list change events, etc. And when unhooking from the data source,
-        ///  take care not to trigger any events that could confuse compoents bound to us.
+        ///  take care not to trigger any events that could confuse components bound to us.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
