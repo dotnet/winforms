@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called in response to a component add or remove event.  Here we re-aquire our
+        ///  Called in response to a component add or remove event.  Here we re-acquire our
         ///  set of tabs.
         /// </summary>
         private void OnComponentAddRemove(object sender, ComponentEventArgs ce)
