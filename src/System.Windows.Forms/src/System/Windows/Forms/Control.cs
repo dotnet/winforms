@@ -9986,7 +9986,7 @@ namespace System.Windows.Forms
 
             We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
             correct layout calls are already made when bounds or parenting changes, which is all
-            we care about. We may want to call this at layout suspend count == 0, but certainaly
+            we care about. We may want to call this at layout suspend count == 0, but certainly
             not for all resumes.  I  tried removing it, and doing it only when suspendCount == 0,
             but we break things at every step.
 
