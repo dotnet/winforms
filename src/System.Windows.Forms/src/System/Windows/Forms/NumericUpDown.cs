@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         private int accelerationsCurrentIndex;
 
         // Used to calculate the time elapsed since the up/down button was pressed,
-        // to know when to get the next entry in the accelaration table.
+        // to know when to get the next entry in the acceleration table.
         private long buttonPressedStartTime;
 
         public NumericUpDown() : base()
