@@ -1469,7 +1469,7 @@ namespace System.Windows.Forms
 
                 if (!IsFirstDropDown && !forward)
                 {
-                    // this is the case where you've casecaded out to a second level dropdown and you hit the back arrow
+                    // this is the case where you've cascaded out to a second level dropdown and you hit the back arrow
                     // key.  In this case we want to just hide the current dropdown
                     Visible = false;
                     return true;
