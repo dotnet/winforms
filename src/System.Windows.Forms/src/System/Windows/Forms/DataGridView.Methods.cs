@@ -3536,7 +3536,7 @@ namespace System.Windows.Forms
                                 SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
                             }
 
-                            // Force repainting of the current collumn's header cell to remove highlighting
+                            // Force repainting of the current column's header cell to remove highlighting
                             if (_ptCurrentCell.X != -1 &&
                                 SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
@@ -15628,7 +15628,7 @@ namespace System.Windows.Forms
 
                 OnCellEnter(ref dataGridViewCell, _ptCurrentCell.X, _ptCurrentCell.Y);
 
-                // Force repainting of the current collumn's header cell to highlight it
+                // Force repainting of the current column's header cell to highlight it
                 if (SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                 {
                     InvalidateCellPrivate(_ptCurrentCell.X, -1);
@@ -27366,7 +27366,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            // Force repainting of the current and previous collumns` header cells to update highlighting
+                            // Force repainting of the current and previous columns` header cells to update highlighting
                             if (oldCurrentCellX != columnIndex &&
                                 SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
