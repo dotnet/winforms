@@ -4347,12 +4347,12 @@ namespace System.Windows.Forms
             GripMargin = Grip.DefaultMargin;
         }
 
-        internal void ResumeCaputureMode()
+        internal void ResumeCaptureMode()
         {
             SetToolStripState(STATE_SUSPENDCAPTURE, false);
         }
 
-        internal void SuspendCaputureMode()
+        internal void SuspendCaptureMode()
         {
             SetToolStripState(STATE_SUSPENDCAPTURE, true);
         }

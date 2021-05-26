@@ -695,7 +695,7 @@ namespace System.Windows.Forms
             if (!CurrentFeedbackRect.Visible)
             {
                 Debug.WriteLineIf(s_toolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: Showing NEW feedback at " + screenLocation.ToString());
-                toolStripToDrag.SuspendCaputureMode();
+                toolStripToDrag.SuspendCaptureMode();
                 try
                 {
                     CurrentFeedbackRect.Show(screenLocation);
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    toolStripToDrag.ResumeCaputureMode();
+                    toolStripToDrag.ResumeCaptureMode();
                 }
             }
             else
