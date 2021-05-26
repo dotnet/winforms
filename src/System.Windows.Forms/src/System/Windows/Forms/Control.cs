@@ -12233,7 +12233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the "WM_MOUSEHOVER" message... until we get actuall OS support
+        ///  Handles the "WM_MOUSEHOVER" message... until we get actual OS support
         ///  for this, it is implemented as a custom message.
         /// </summary>
         private void WmMouseHover(ref Message m)
