@@ -483,7 +483,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             eventArgs.Cancel = False
             'It is important not to create the network object until the ExecutionContext has everything on it.  By now the principal will be on the thread so
             'we can create the network object.  The timing is important because the network object has an AsyncOperationsManager in it that marshals
-            'the network changed event to the main thread.  The asycnOperationsManager does a CreateOperation() which makes a copy of the executionContext
+            'the network changed event to the main thread.  The asyncOperationsManager does a CreateOperation() which makes a copy of the executionContext
             'That execution context shows up on your thread during the callback so I delay creating the network object (and consequently the capturing of the
             'execution context) until the principal has been set on the thread.
             'this avoid the problem where My.User isn't set during the NetworkAvailabilityChanged event.  This problem would just extend
