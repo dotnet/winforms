@@ -481,7 +481,7 @@ namespace System.ComponentModel.Design
         // we cannot attach several menu command to the same command id, we need a single entry point, we put it in designershortcutui. but we need a way to call the show ui on the related behavior hence this internal function to hack it together. we return false if we have nothing to display, we hide it and return true if we're already displaying
         internal bool ShowDesignerActionPanelForPrimarySelection()
         {
-            //can't do anythign w/o selection service
+            //can't do anything w/o selection service
             if (_selSvc is null)
             {
                 return false;
