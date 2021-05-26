@@ -2040,7 +2040,7 @@ namespace System.Windows.Forms.Design
                     ToolStrip parent = item.GetCurrentParent();
                     if (parent != null)
                     {
-                        // flip the semantics of bakcwards...
+                        // flip the semantics of backwards...
                         if (parent.RightToLeft == RightToLeft.Yes)
                         {
                             backwards = !backwards;
