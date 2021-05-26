@@ -42,7 +42,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private readonly Type propertyType;
 
         /// <summary>
-        ///  The dispid. This is also in a DispIDAttiribute, but we
+        ///  The dispid. This is also in a DispIDAttribute, but we
         ///  need it a lot.
         /// </summary>
         private readonly DispatchID dispid;
