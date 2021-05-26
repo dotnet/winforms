@@ -797,7 +797,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  underlying code dom tree has changed in a way that
         ///  would affect the form.
         ///  If flush is true, the designer is flushed before performing
-        ///  a reload.  If false, any designer changes are abandonded.
+        ///  a reload.  If false, any designer changes are abandoned.
         ///  If ModifyOnError is true, the designer loader will be put
         ///  in the modified state if any errors happened during the
         ///  load.

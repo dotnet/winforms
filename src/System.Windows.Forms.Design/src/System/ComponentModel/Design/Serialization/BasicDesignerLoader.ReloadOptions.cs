@@ -34,7 +34,7 @@ namespace System.ComponentModel.Design.Serialization
 
             /// <summary>
             ///  If this flag is set, any pending changes in the
-            ///  designer will be abandonded.  If this flag is not
+            ///  designer will be abandoned.  If this flag is not
             ///  set, designer changes will be flushed through the
             ///  designer loader before reloading the design surface.
             /// </summary>
