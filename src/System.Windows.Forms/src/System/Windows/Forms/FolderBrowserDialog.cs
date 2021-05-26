@@ -25,7 +25,6 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionFolderBrowserDialog))]
     public sealed class FolderBrowserDialog : CommonDialog
     {
-        private static Guid IID_IFileOpenDialog = new Guid("d57c7288-d4ad-4768-be02-9d969532d960");
         private static Guid CLSID_FileOpenDialog = new Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7");
 
         // Root node of the tree view.
@@ -217,7 +216,7 @@ namespace System.Windows.Forms
                     ref CLSID_FileOpenDialog,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
-                    ref IID_IFileOpenDialog,
+                    ref NativeMethods.ActiveX.IID_IUnknown,
                     out object obj);
                 if (!hr.Succeeded())
                 {

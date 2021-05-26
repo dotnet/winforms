@@ -23,7 +23,6 @@ namespace System.Windows.Forms
     ]
     public sealed partial class SaveFileDialog : FileDialog
     {
-        private static Guid IID_IFileSaveDialog = new Guid("84bccd23-5fde-4cdb-aea4-af64b83d78ab");
         private static Guid CLSID_FileSaveDialogCoClass = new Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B");
 
         /// <summary>
@@ -161,7 +160,7 @@ namespace System.Windows.Forms
                 ref CLSID_FileSaveDialogCoClass,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
-                ref IID_IFileSaveDialog,
+                ref NativeMethods.ActiveX.IID_IUnknown,
                 out object obj);
             if (!hr.Succeeded())
             {
