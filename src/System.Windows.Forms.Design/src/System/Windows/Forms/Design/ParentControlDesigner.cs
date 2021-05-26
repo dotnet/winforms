@@ -1762,7 +1762,7 @@ namespace System.Windows.Forms.Design
                 _mouseDragTool = _toolboxService.DeserializeToolboxItem(de.Data, host);
 
                 //If we have a valid toolbox item to drag and
-                //we haven't pushed our behaivor, then do so now...
+                //we haven't pushed our behavior, then do so now...
                 if ((_mouseDragTool != null) && BehaviorService != null && BehaviorService.UseSnapLines)
                 {
                     //demand create

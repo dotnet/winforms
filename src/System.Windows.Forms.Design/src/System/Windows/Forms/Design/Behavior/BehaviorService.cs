@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Read-only property that returns the AdornerCollection that the BehaivorService manages.
+        ///  Read-only property that returns the AdornerCollection that the BehaviorService manages.
         /// </summary>
         public BehaviorServiceAdornerCollection Adorners { get; }
 
