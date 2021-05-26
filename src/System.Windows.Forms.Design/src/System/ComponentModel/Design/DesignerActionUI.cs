@@ -748,7 +748,7 @@ namespace System.ComponentModel.Design
                 _cancelClose = true;
                 designerActionHost.Show(location);
                 designerActionHost.Focus();
-                // when a control is drag and dropped and authoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
+                // when a control is drag and dropped and autoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
                 designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
                 // invalidate the glyph to have it point the other way
                 glyph.InvalidateOwnerLocation();
