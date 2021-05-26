@@ -151,7 +151,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Draws an adress part in the HEXDUMP view
+        ///  Draws an address part in the HEXDUMP view
         /// </summary>
         private void DrawAddress(Graphics g, int startLine, int line)
         {
