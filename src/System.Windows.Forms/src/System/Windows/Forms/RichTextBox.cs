@@ -1818,7 +1818,7 @@ namespace System.Windows.Forms
                     case RichTextBox.INPUT:
                         {
                             // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
-                            // We had a case of  acustomer using Everett bits and another case of a customer using Whidbey Beta1 bits.
+                            // We had a case of a customer using Everett bits and another case of a customer using Whidbey Beta1 bits.
                             // We don't have a repro in house which makes it problematic to determine the cause for this behavior.
                             // Looking at the code it seems that the only posibility for editStream to be null is when the user
                             // calls RichTextBox::LoadFile(Stream, RichTextBoxStreamType) with a null Stream.
