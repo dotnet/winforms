@@ -414,7 +414,7 @@ namespace System.Drawing.Design
         {
             // Do this in a couple of passes -- first pass, try to pull
             // out our dictionary of property names.  We need to do this
-            // for backwards compatibilty because if we throw everything
+            // for backwards compatibility because if we throw everything
             // into the property dictionary we'll duplicate stuff people
             // have serialized by hand.
 
