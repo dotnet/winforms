@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms.Design
                     for (int c = 0; c < parentControlCount; c++)
                     {
                         // The logic for this is a bit lengthy, so I have broken it into separate
-                        // caluses:
+                        // clauses:
 
                         // We are not interested in ourself.
                         //
@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms.Design
                     for (int c = parentControlCount - 1; c >= 0; c--)
                     {
                         // The logic for this is a bit lengthy, so I have broken it into separate
-                        // caluses:
+                        // clauses:
 
                         // We are not interested in ourself.
                         //

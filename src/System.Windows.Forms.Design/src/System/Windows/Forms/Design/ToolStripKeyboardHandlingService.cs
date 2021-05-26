@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Design
 
                     for (int c = 0; c < parentControlCount; c++)
                     {
-                        // The logic for this is a bit lengthy, so I have broken it into separate caluses: We are not interested in ourself.
+                        // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                         if (parentControls[c] != ctl)
                         {
                             // We are interested in controls with >= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Design
 
                     for (int c = parentControlCount - 1; c >= 0; c--)
                     {
-                        // The logic for this is a bit lengthy, so I have broken it into separate caluses: We are not interested in ourself.
+                        // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                         if (parentControls[c] != ctl)
                         {
                             // We are interested in controls with <= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
