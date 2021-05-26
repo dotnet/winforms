@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     public partial class ComboBox
     {
         /// <summary>
-        ///  This finds all autcomplete windows that belong to the active thread.
+        ///  This finds all autocomplete windows that belong to the active thread.
         /// </summary>
         private class AutoCompleteDropDownFinder
         {
