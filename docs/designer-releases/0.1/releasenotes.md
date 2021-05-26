@@ -118,7 +118,7 @@ Supported controls and scenarios, and things you should be testing
     Also, with those commands you can change the z-order of the controls by
     using *Bring to Font* and *Send to back*.
 
--   **Anchroing and Docking:** Those controls which are supporting this, can be
+-   **Anchoring and Docking:** Those controls which are supporting this, can be
     anchored and docked. Keep in mind, though, that the repositioning of
     anchored controls beyond the borders of the Form can be problematic in this
     Preview.
