@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms
                 return new Point(0, 0);
             }
 
-            // Get the Combox Rect
+            // Get the Combobox Rect
             var comboRectMid = new RECT();
             GetWindowRect(this, ref comboRectMid);
 
