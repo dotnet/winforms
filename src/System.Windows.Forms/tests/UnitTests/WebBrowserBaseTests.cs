@@ -236,7 +236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void WebBrowserBase_CanSelect_GetInPlaceActvie_ReturnsExpected()
+        public void WebBrowserBase_CanSelect_GetInPlaceActive_ReturnsExpected()
         {
             using var parent = new Control();
             using var control = new SubWebBrowserBase("8856f961-340a-11d0-a96b-00c04fd705a2")
