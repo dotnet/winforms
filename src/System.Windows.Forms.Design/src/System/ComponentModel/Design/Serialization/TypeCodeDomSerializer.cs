@@ -530,7 +530,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             Dictionary<string, int> methodMapIndex = new Dictionary<string, int>();
             List<CodeMethodMap> methodMap = new List<CodeMethodMap>();
-            // Go through all of our members and root object and fish out matching statement context info for each object.  The statement context will probably contain more objects than our members, because each object that returned a statement collection was placed in the context. That's fine, because for each major component we serialized it pushed its statement collection on the context stack and statements were added there as well, forming a comlete graph.
+            // Go through all of our members and root object and fish out matching statement context info for each object.  The statement context will probably contain more objects than our members, because each object that returned a statement collection was placed in the context. That's fine, because for each major component we serialized it pushed its statement collection on the context stack and statements were added there as well, forming a complete graph.
             if (members != null)
             {
                 foreach (object member in members)
