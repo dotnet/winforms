@@ -560,7 +560,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value that indicates whether the shortcut
-        ///  keys that are assocaited
+        ///  keys that are associated
         ///  with the menu item are displayed next to the menu item
         ///  caption.
         /// </summary>

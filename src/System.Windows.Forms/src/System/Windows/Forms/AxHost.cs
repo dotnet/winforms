@@ -3755,7 +3755,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Frees all resources assocaited with this control. This method may not be
+        ///  Frees all resources associated with this control. This method may not be
         ///  called at runtime. Any resources used by the control should be setup to
         ///  be released when the control is garbage collected. Inheriting classes should always
         ///  call base.dispose.
