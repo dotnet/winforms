@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Design
                     maskDescriptors.Add(new MaskDescriptorTemplate("000000-00000000-000A", "18位身份证号码", "123456789012345678", null, culture));
                     // Time.
                     maskDescriptors.Add(new MaskDescriptorTemplate("90:00", "时间格式", " 633", typeof(DateTime), culture));
-                    // Time Chienese.
+                    // Time Chinese.
                     maskDescriptors.Add(new MaskDescriptorTemplate("90时90分", "中文时间格式", " 6时33分", typeof(DateTime), culture));
                     // Zip code.
                     maskDescriptors.Add(new MaskDescriptorTemplate("000000", "邮政编码", "100080", null, culture));
