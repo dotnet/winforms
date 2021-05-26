@@ -613,7 +613,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Control control = _resizeComponents[i].resizeControl as Control;
                 Rectangle bounds = control.Bounds;
                 Rectangle oldBounds = bounds;
-                // We need to compute the offset beased on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
+                // We need to compute the offset based on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
                 Rectangle baseBounds = _resizeComponents[i].resizeBounds;
                 Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                 bool needToUpdate = true;
