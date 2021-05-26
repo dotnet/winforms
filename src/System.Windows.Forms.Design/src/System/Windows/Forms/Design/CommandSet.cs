@@ -4008,7 +4008,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Applys the cached status to this item.
+            /// Applies the cached status to this item.
             /// </summary>
             private void ApplyCachedStatus()
             {
