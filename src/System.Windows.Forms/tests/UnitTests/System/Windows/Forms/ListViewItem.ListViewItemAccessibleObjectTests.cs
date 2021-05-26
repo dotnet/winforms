@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_ReturnExpectedType_TestData))]
-        public void ListViewItemAccessibleObject_ReturnExpectedType_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_ReturnExpectedType_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem("Test"));
@@ -1714,7 +1714,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Tile, View.LargeIcon)]
         [InlineData(View.Tile, View.List)]
         [InlineData(View.Tile, View.SmallIcon)]
-        public void ListViewItemAccessibleObject_GetChild_ReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChild_ReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.SmallIcon, View.LargeIcon)]
         [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Tile, View.LargeIcon)]
         [InlineData(View.Tile, View.List)]
         [InlineData(View.Tile, View.SmallIcon)]
-        public void ListViewItemAccessibleObject_GetChildCount_ReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChildCount_ReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1" }));
@@ -1779,7 +1779,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.SmallIcon, View.LargeIcon)]
         [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
