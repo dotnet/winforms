@@ -23,7 +23,7 @@ namespace System.Windows.Forms
     ]
     public sealed partial class SaveFileDialog : FileDialog
     {
-        private static Guid CLSID_FileSaveDialogCoClass = new Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B");
+        private static Guid CLSID_FileSaveDialog = new Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B");
 
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box prompts the user for
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
         private protected override IFileDialog CreateVistaDialog()
         {
             HRESULT hr = Ole32.CoCreateInstance(
-                ref CLSID_FileSaveDialogCoClass,
+                ref CLSID_FileSaveDialog,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
