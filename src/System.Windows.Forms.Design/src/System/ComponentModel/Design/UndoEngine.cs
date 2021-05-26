@@ -1230,7 +1230,7 @@ namespace System.ComponentModel.Design
 
                 /// <summary>
                 ///  Indicates that undoing this event may cause side effects in other objects.
-                ///  Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
+                ///  Change events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
                 ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
                 /// </summary>
                 public override bool CausesSideEffects { get { return true; } }
@@ -1401,7 +1401,7 @@ namespace System.ComponentModel.Design
             {
                 /// <summary>
                 ///  Indicates that undoing this event may cause side effects in other objects.
-                ///  Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.
+                ///  Change events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.
                 ///  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
                 ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
                 /// </summary>

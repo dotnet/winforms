@@ -340,7 +340,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
         /// </summary>
         public void Remove(IComponent comp)
         {
@@ -359,7 +359,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {
