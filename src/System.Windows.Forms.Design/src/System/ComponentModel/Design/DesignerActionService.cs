@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design
         private readonly IServiceProvider _serviceProvider; // standard service provider
         private readonly ISelectionService _selSvc; // selection service
         private readonly Hashtable _componentToVerbsEventHookedUp; //table component true/false
-        // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accesssed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
+        // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
         private bool _reEntrantCode;
 
         /// <summary>
