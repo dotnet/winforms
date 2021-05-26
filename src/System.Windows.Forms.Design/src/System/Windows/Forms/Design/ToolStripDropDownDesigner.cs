@@ -675,7 +675,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // Everytime you hide/show .. set the DropDown of the designer MenuItem to the component dropDown beign designed.
+            // Everytime you hide/show .. set the DropDown of the designer MenuItem to the component dropDown being designed.
             menuItem.DropDown = dropDown;
             menuItem.DropDown.OwnerItem = menuItem;
             if (dropDown.Items.Count > 0)
