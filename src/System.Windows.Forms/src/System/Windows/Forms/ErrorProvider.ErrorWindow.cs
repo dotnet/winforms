@@ -167,7 +167,7 @@ namespace System.Windows.Forms
 
                 // Hide the window and invalidate the parent to ensure
                 // that we leave no visual artifacts. given that we
-                // have a bizare region window, this is needed.
+                // have a bizarre region window, this is needed.
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOP,
