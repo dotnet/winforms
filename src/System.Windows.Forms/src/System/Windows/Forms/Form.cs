@@ -6079,7 +6079,7 @@ namespace System.Windows.Forms
 
                     // if this comes back false, someone canceled the close.  we want
                     // to call this here so that we can get the cancel event properly,
-                    // and if this is a WM_QUERYENDSESSION, appriopriately set the result
+                    // and if this is a WM_QUERYENDSESSION, appropriately set the result
                     // based on this call.
                     //
                     // NOTE: We should also check !Validate(true) below too in the modal case,
