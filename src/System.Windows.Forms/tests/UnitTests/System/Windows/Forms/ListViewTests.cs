@@ -4308,8 +4308,8 @@ namespace System.Windows.Forms.Tests
                     {
                         foreach (bool selected in new[] { true, false })
                         {
-                            // Updating Focused property of ListViewItem always calls RaiseAutomatiomEvent.
-                            // If ListViewItem is focused and selected then RaiseAutomatiomEvent is also called.
+                            // Updating Focused property of ListViewItem always calls RaiseAutomationEvent.
+                            // If ListViewItem is focused and selected then RaiseAutomationEvent is also called.
                             int expectedCallCount = focused && selected ? 2 : 1;
                             yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
                         }
@@ -4360,8 +4360,8 @@ namespace System.Windows.Forms.Tests
                     {
                         foreach (bool selected in new[] { true, false })
                         {
-                            // Updating Focused property of ListViewItem always calls RaiseAutomatiomEvent.
-                            // If ListViewItem is focused and selected then RaiseAutomatiomEvent is also called.
+                            // Updating Focused property of ListViewItem always calls RaiseAutomationEvent.
+                            // If ListViewItem is focused and selected then RaiseAutomationEvent is also called.
                             int expectedCallCount = focused && selected ? 2 : 1;
                             yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
                         }
