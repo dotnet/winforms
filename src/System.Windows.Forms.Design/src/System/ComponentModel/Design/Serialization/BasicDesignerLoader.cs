@@ -381,7 +381,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  logic to determine if a reload is required.  This method is
         ///  called when someone requests a reload but doesn't force
         ///  the reload.  It gives the loader an opportunity to scan
-        ///  the underlying storage to determine if a reload is acutually
+        ///  the underlying storage to determine if a reload is actually
         ///  needed.  The default implementation of this method always
         ///  returns true.
         /// </summary>

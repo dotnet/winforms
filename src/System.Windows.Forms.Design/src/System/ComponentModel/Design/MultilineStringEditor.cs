@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
 
             private readonly StringFormat _watermarkFormat;
 
-            // TextBox needs a little space greater than that actualy text content to display the carent.
+            // TextBox needs a little space greater than that actually text content to display the carent.
             private const int _caretPadding = 3;
 
             internal MultilineStringEditorUI()
