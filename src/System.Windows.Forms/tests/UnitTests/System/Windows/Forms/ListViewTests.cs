@@ -5251,6 +5251,9 @@ namespace System.Windows.Forms.Tests
         {
             using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup);
             ListViewItem listViewItem = listView.Items[0];
+
+            Assert.NotNull(listViewItem.AccessibilityObject);
+
             SubListViewItemAccessibleObject accessibleObject = new SubListViewItemAccessibleObject(listViewItem);
             listViewItem.TestAccessor().Dynamic._accessibilityObject = accessibleObject;
             listView.CreateControl();
@@ -5275,7 +5278,7 @@ namespace System.Windows.Forms.Tests
             internal override AccessibleObject AccessibilityObject => CustomAccessibleObject;
         }
 
-        private class SubListViewItemAccessibleObject : ListViewItemAccessibleObject
+        private class SubListViewItemAccessibleObject : ListViewItemBaseAccessibleObject
         {
             public int RaiseAutomationEventCalls;
 

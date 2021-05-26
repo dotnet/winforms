@@ -94,8 +94,8 @@ namespace System.Windows.Forms
 
                 public override AccessibleObject Parent => ParentInternal;
 
-                private ListViewItemAccessibleObject ParentInternal
-                    => (ListViewItemAccessibleObject)_owningItem.AccessibilityObject;
+                private ListViewItemBaseAccessibleObject ParentInternal
+                    => (ListViewItemBaseAccessibleObject)_owningItem.AccessibilityObject;
 
                 internal override int[]? RuntimeId
                 {
