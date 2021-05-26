@@ -2003,7 +2003,7 @@ namespace System.Windows.Forms
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Control has changed size.  Setting dirty bit");
                             _activeXState[s_isDirty] = true;
 
-                            // If we're not inplace active, then anounce that the view changed.
+                            // If we're not inplace active, then announce that the view changed.
                             if (!_activeXState[s_inPlaceActive])
                             {
                                 ViewChanged();
