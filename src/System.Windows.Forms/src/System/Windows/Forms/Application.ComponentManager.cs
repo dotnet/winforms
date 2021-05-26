@@ -113,7 +113,7 @@ namespace System.Windows.Forms
 
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Compoenent not registered.");
+                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Component not registered.");
                     return BOOL.FALSE;
                 }
 
