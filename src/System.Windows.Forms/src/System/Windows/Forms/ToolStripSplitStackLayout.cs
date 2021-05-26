@@ -90,7 +90,7 @@ namespace System.Windows.Forms
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         {
-                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item));
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to always overflow: {0} ", item));
                         }
 #endif
                         OverflowRequired = true;
