@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         ///  This class contains the base implementation of properties and methods for ListViewItem accessibility objects.
         /// </summary>
         /// <remarks>
-        ///  The implementation of this class fully corresponds to the behavior of the ListViewItem accessiblity object
+        ///  The implementation of this class fully corresponds to the behavior of the ListViewItem accessibility object
         ///  when the ListView is in "LargeIcon" or "SmallIcon" view.
         /// </remarks>
         internal class ListViewItemBaseAccessibleObject : AccessibleObject
