@@ -10925,7 +10925,7 @@ namespace System.Windows.Forms
                     autoSizeRow = true;
                 }
 
-                // Auto size columms also if needed
+                // Auto size columns also if needed
                 DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
                 if (rowDisplayed)
                 {
@@ -13412,7 +13412,7 @@ namespace System.Windows.Forms
                         AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
                     }
 
-                    // Auto size columms also if needed
+                    // Auto size columns also if needed
                     // Impossible to figure out if DisplayedRows filter should be added or not. Adding it to be on the conservative side.
                     AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows |
                                                         DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
@@ -14801,7 +14801,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Auto-size columms if needed
+            // Auto-size columns if needed
             bool fixedHeight = (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) == 0;
             bool columnAutoSized = AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows, fixedHeight);
             // Autosize rows if needed
@@ -17541,7 +17541,7 @@ namespace System.Windows.Forms
                 dataGridViewRow.ThicknessInternal = Math.Max(dataGridViewRow.MinimumHeight, dataGridViewRow.CachedThickness);
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
             if (rowDisplayed)
             {
@@ -18395,7 +18395,7 @@ namespace System.Windows.Forms
                 autoSizeRow = true;
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
             if (rowDisplayed)
             {
@@ -19154,7 +19154,7 @@ namespace System.Windows.Forms
                 AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows |
                                                 DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
                                                 true /*fixedHeight*/);
@@ -19288,7 +19288,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        // Auto size columms also if needed
+                        // Auto size columns also if needed
                         DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
                         if (rowDisplayed)
                         {
