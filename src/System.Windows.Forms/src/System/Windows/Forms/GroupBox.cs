@@ -704,7 +704,7 @@ namespace System.Windows.Forms
                     // Force MSAA to always treat a group box as a custom window. This ensures its child controls
                     // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                     // "Button" window class to get OS group box rendering; but the OS does not expose the children
-                    // of buttons to MSAA (beacuse it assumes buttons won't have children).
+                    // of buttons to MSAA (because it assumes buttons won't have children).
                     if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
                         m.Result = IntPtr.Zero;

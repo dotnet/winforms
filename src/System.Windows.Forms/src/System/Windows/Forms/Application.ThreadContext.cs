@@ -938,7 +938,7 @@ namespace System.Windows.Forms
                 // When that occurs, we rely on the STATE_POSTEDQUIT to be caught in the next
                 // idle, at which point we can tear down.
                 //
-                // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
+                // We can't follow the KB article exactly, because we don't have an HWND to PostMessage
                 // to.
                 User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
