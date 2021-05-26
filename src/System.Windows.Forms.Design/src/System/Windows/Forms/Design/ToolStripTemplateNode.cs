@@ -854,7 +854,7 @@ namespace System.Windows.Forms.Design
         {
             if (!_inSituMode)
             {
-                // Listen For Commandss....
+                // Listen For Commands....
                 if (_miniToolStrip.Parent != null)
                 {
                     _miniToolStrip.Parent.SuspendLayout();
