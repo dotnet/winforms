@@ -1288,7 +1288,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///  Commits the unit.  Comitting the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
+                ///  Commits the unit.  Committing the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
                 /// </summary>
                 public void Commit(UndoEngine engine)
                 {

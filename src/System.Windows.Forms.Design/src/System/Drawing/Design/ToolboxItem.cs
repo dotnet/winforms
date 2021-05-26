@@ -902,7 +902,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         ///  This is called whenever a value is set in the property dictionary.  It gives you a chance
-        ///  to change the value of an object before comitting it, our reject it by throwing an
+        ///  to change the value of an object before committing it, our reject it by throwing an
         ///  exception.
         /// </summary>
         protected virtual object ValidatePropertyValue(string propertyName, object value)

@@ -559,7 +559,7 @@ namespace System.Windows.Forms.Design
                 }
                 else //if commitedEditorNode is null and we are in commitEdit then just add the new Item, since this item is added through dropDown.
                 {
-                    //if no editorNode then we are commiting a NEW NODE...
+                    //if no editorNode then we are committing a NEW NODE...
                     index = MenuItem.DropDownItems.IndexOf(typeHereNode);
                     try
                     {
