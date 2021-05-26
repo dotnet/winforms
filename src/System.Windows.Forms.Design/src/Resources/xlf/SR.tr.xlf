@@ -1352,7 +1352,7 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <target state="translated">FolderBrowserDialog iletişim kutusunda başlangıçta seçili olacak klasörün yolunu seçin.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Bu serileştirme yöneticisinin zaten etkin bir serileştirme oturumu bulunduğundan yeni oturum oluşturamazsınız.</target>
         <note />

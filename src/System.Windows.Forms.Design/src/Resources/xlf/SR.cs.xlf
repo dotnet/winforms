@@ -1352,7 +1352,7 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">Vyberte cestu ke složce, která bude standardně vybrána v dialogovém okně FolderBrowserDialog.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Nelze vytvořit novou relaci, protože tento správce serializace již obsahuje aktivní relaci serializace.</target>
         <note />

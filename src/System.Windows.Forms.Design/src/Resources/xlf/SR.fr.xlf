@@ -1352,7 +1352,7 @@ Appuyez sur Ctrl+Entrée pour valider le texte.</target>
         <target state="translated">Sélectionnez le chemin du dossier qui sera sélectionné initialement dans FolderBrowserDialog.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Vous ne pouvez pas créer une nouvelle session, car ce gestionnaire de sérialisation dispose déjà d'une session de sérialisation active.</target>
         <note />

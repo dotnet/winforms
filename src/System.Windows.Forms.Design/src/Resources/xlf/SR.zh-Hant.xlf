@@ -1352,7 +1352,7 @@ Press Ctrl+Enter to accept Text.</source>
         <target state="translated">請選取在 FolderBrowserDialog 中一開始就被選取的資料夾的路徑。</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">無法建立新工作階段，因為這個序列化管理員已經有使用中的序列化工作階段。</target>
         <note />
