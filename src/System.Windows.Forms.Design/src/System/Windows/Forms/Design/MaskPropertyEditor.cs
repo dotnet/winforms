@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Gets the mask property value fromt the MaskDesignerDialog.
         /// The IUIService is used to show the mask designer dialog within VS so it doesn't get blocked if focus
-        /// is moved to anoter app.
+        /// is moved to another app.
         /// </summary>
         internal static string EditMask(ITypeDiscoveryService discoverySvc, IUIService uiSvc, MaskedTextBox instance, IHelpService helpService)
         {
