@@ -383,7 +383,7 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.AccessibleDescription = "MenuStrip to test Accessiblity.";
+            this.menuStrip1.AccessibleDescription = "MenuStrip to test Accessibility.";
             this.menuStrip1.AccessibleName = "menuStripTestControl";
             this.menuStrip1.AccessibleRole = System.Windows.Forms.AccessibleRole.Caret;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
