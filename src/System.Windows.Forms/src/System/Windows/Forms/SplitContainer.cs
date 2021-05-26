@@ -818,7 +818,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We need to have a internal Property for the SplitterWidth which returns zero if we are in collapased mode.
+        ///  We need to have a internal Property for the SplitterWidth which returns zero if we are in collapsed mode.
         ///  This property is used to Layout SplitContainer.
         /// </summary>
         private int SplitterWidthInternal
