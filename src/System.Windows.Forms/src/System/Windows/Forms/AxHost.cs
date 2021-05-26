@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms
                             break;
                         case OC_RUNNING:
                             axState[ownDisposing] = false;
-                            Debug.Assert(!axState[fOwnWindow], "If we are invis at runtime, we should never be going beynd OC_RUNNING");
+                            Debug.Assert(!axState[fOwnWindow], "If we are invis at runtime, we should never be going beyond OC_RUNNING");
                             if (!axState[fOwnWindow])
                             {
                                 InPlaceActivate();
