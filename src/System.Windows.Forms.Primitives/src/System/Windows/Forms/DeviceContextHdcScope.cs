@@ -175,7 +175,7 @@ namespace System.Windows.Forms
                 if (applyClipping)
                 {
                     // If the Graphics object was created from a native DC the actual clipping region is the intersection
-                    // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as
+                    // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
                     // Graphics.VisibleClipBounds.
 
                     RegionType type;
