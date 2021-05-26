@@ -337,12 +337,12 @@ namespace System.Windows.Forms
         protected override void OnLayout(LayoutEventArgs levent)
         {
             state[stateCalledSpringTableLayout] = false;
-            bool inDisplayedItemCollecton = false;
+            bool inDisplayedItemCollection = false;
             ToolStripItem item = levent.AffectedComponent as ToolStripItem;
             int itemCount = DisplayedItems.Count;
             if (item is not null)
             {
-                inDisplayedItemCollecton = DisplayedItems.Contains(item);
+                inDisplayedItemCollection = DisplayedItems.Contains(item);
             }
 
             if (LayoutStyle == ToolStripLayoutStyle.Table)
@@ -352,7 +352,7 @@ namespace System.Windows.Forms
 
             base.OnLayout(levent);
 
-            if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollecton != DisplayedItems.Contains(item))))
+            if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollection != DisplayedItems.Contains(item))))
             {
                 // calling OnLayout has changed the displayed items collection
                 // the SpringTableLayoutCore requires the count of displayed items to
