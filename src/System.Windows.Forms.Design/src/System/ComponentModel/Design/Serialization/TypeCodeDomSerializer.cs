@@ -500,7 +500,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 Trace("--------------------------------------------------------------------");
-                Trace("     Bedginning serialization of root object {0}", rootName);
+                Trace("     Beginning serialization of root object {0}", rootName);
                 Trace("--------------------------------------------------------------------");
 #endif
                 // Now, do the root object last.
