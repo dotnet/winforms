@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms.Design
                                     if (nestedContainer != null)
                                     {
                                         control = nestedContainer.Owner as Control;
-                                        selectedComponents[i] = control; // set this so that we dont have to re-do this logic in the BrintToFront case down.
+                                        selectedComponents[i] = control; // set this so that we dont have to re-do this logic in the BringToFront case down.
                                     }
                                 }
                             }
