@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.True(accessibleObject.GetChild(1) is GridEntry.GridEntryAccessibleObject); // "AccessibleDescriptor" entry
             Assert.True(accessibleObject.GetChild(2) is GridEntry.GridEntryAccessibleObject); // "AccessibleName" entry
             Assert.True(accessibleObject.GetChild(3) is GridEntry.GridEntryAccessibleObject); // "AccessibleRole" entry
-            Assert.True(accessibleObject.GetChild(4) is GridEntry.GridEntryAccessibleObject); // "Appereance" category entry
+            Assert.True(accessibleObject.GetChild(4) is GridEntry.GridEntryAccessibleObject); // "Appearance" category entry
         }
 
         [WinFormsFact]
