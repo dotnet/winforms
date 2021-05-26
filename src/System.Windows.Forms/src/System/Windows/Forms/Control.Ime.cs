@@ -764,7 +764,7 @@ namespace System.Windows.Forms
                 //   WM_IME_NOTIFY when associating an IME to the app for the first time; setting the IME mode to direct input
                 //   during WM_INPUTLANGCHANGED forces the IMN_SETOPENSTATUS message to be sent.
                 // - The Japanese IME sends IMN_SETCONVERSIONMODE when changing from Off to one of the active modes (Katakana..)
-                //   and IMN_SETOPENSTATUS when changing beteween the active modes or when enabling/disabling the IME.
+                //   and IMN_SETOPENSTATUS when changing between the active modes or when enabling/disabling the IME.
                 // In any case we update the cache.
                 // Warning:
                 // Attempting to change the IME mode from here will cause re-entrancy - WM_IME_NOTIFY is resent.
