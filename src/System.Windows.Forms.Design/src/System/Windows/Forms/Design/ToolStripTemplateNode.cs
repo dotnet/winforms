@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
 
         // Component for this InSitu Editor... (this is a ToolStripItem) that wants to go into InSitu
         private readonly IComponent _component;
-        // Current Designer for the comopenent that in InSitu mode
+        // Current Designer for the component that in InSitu mode
         private IDesigner _designer;
         //Get DesignerHost.
         private readonly IDesignerHost _designerHost;

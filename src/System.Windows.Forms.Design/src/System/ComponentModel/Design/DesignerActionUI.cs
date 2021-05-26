@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
         private BehaviorService _behaviorService; //this is how all of our UI is implemented (glyphs, behaviors, etc...)
         private readonly IMenuCommandService _menuCommandService;
         private DesignerActionKeyboardBehavior _dapkb;   //out keyboard behavior
-        private readonly Hashtable _componentToGlyph; //used for quick reference between compoments and our glyphs
+        private readonly Hashtable _componentToGlyph; //used for quick reference between components and our glyphs
         private Control _marshalingControl; //used to invoke events on our main gui thread
         private IComponent _lastPanelComponent;
 

@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Gets the number of compnents contained within this tray.
+        ///  Gets the number of components contained within this tray.
         /// </summary>
         public int ComponentCount
         {
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Returns true if the given componenent is being shown on the tray.
+        ///  Returns true if the given component is being shown on the tray.
         /// </summary>
         public bool IsTrayComponent(IComponent comp)
         {
@@ -2019,7 +2019,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Retrieves the compnent this control is representing.
+            ///  Retrieves the component this control is representing.
             /// </summary>
             public IComponent Component
             {

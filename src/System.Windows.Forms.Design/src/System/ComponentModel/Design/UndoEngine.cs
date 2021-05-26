@@ -1134,7 +1134,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///  If this add/remove event is still open, OpenCompnent will contain the component it is operating on.
+                ///  If this add/remove event is still open, OpenComponent will contain the component it is operating on.
                 /// </summary>
                 internal IComponent OpenComponent
                 {

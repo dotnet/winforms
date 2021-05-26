@@ -1846,7 +1846,7 @@ namespace System.Windows.Forms.Design
                                     if (targetSelection != null)
                                     {
                                         ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                         while (controlDesigner != null)
                                         {
                                             // if the targetSelection from the Tray is a control .. try the next one.
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms.Design
                                         if (targetSelection != null)
                                         {
                                             ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                             while (controlDesigner != null)
                                             {
                                                 // if the targetSelection from the Tray is a control .. try the next one.

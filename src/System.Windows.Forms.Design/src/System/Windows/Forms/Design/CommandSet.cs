@@ -914,7 +914,7 @@ namespace System.Windows.Forms.Design
                                 //move these controls...
                                 if (BehaviorService != null)
                                 {
-                                    Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponenTray)
+                                    Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponentTray)
 
                                     bool useSnapLines = BehaviorService.UseSnapLines;
 
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
 
-                            // Also, skip all locked componenents...
+                            // Also, skip all locked components...
                             //
                             PropertyDescriptor lockProp = props["Locked"];
                             if (lockProp != null && (bool)lockProp.GetValue(comp) == true)
@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms.Design
 
                                     if (foundAssociatedControl)
                                     {
-                                        continue; //continue from here so that we dont add the associated compoenet of a control that failed paste operation.
+                                        continue; //continue from here so that we dont add the associated component of a control that failed paste operation.
                                     }
 
                                     ComponentDesigner cDesigner = host.GetDesigner(curComp) as ComponentDesigner;

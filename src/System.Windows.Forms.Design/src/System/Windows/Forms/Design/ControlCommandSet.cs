@@ -342,7 +342,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                // mark that this compoent checked out okay, so any siblings (or children of siblings) of this control
+                // mark that this component checked out okay, so any siblings (or children of siblings) of this control
                 // are ok.
                 //
                 okParent = c.Parent;
@@ -1533,7 +1533,7 @@ namespace System.Windows.Forms.Design
                         IComponent selection = targetSelection as IComponent;
                         ControlDesigner controlDesigner = host.GetDesigner(selection) as ControlDesigner;
                         // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again
-                        // through compoenent tray since here we select only Components. Hence only
+                        // through component tray since here we select only Components. Hence only
                         // components that have ComponentDesigners should be selected via the ComponentTray.
                         while (controlDesigner != null)
                         {

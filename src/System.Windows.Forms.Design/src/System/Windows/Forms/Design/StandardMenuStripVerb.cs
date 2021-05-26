@@ -134,7 +134,7 @@ namespace System.Windows.Forms.Design
                         ToolStripItem item = null;
                         if (name.Contains("Separator"))
                         {
-                            // create the componennt.
+                            // create the component.
                             item = (ToolStripSeparator)_host.CreateComponent(typeof(ToolStripSeparator), name);
                             IDesigner designer = _host.GetDesigner(item);
                             if (designer is ComponentDesigner)
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            // create the componennt.
+                            // create the component.
                             item = (ToolStripMenuItem)_host.CreateComponent(typeof(ToolStripMenuItem), name);
                             IDesigner designer = _host.GetDesigner(item);
                             if (designer is ComponentDesigner)
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.Design
                     ToolStripItem item = null;
                     if (name.Contains("Separator"))
                     {
-                        // create the componennt.
+                        // create the component.
                         item = (ToolStripSeparator)_host.CreateComponent(typeof(ToolStripSeparator), name);
                         IDesigner designer = _host.GetDesigner(item);
                         if (designer is ComponentDesigner)
