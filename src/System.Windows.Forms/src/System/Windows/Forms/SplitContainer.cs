@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms
                 SplitterDistanceInternal = _splitterDistance;
             }
 
-            // We need to invalidate when we have transparent backgournd.
+            // We need to invalidate when we have transparent background.
             if (BackColor == Color.Transparent)
             {
                 // the panel1 retains the focus rect... so Invalidate the rect ...
