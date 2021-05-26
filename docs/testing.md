@@ -233,7 +233,7 @@ Each test class must implement the `IClassFixture<ThreadExceptionFixture>` inter
 
 We use [Enhance Metafiles](https://docs.microsoft.com/windows/win32/gdi/enhanced-format-metafiles) (or EMF for short) to validate rendering operations, i.e. assert that correct shapes were drawn with expected colours and brushes.
 
-A typical "rendering" assersion test would looks something like this:
+A typical "rendering" assertion test would looks something like this:
 ```cs
 [WinFormsFact]
 public void MyControl_Rendering()
