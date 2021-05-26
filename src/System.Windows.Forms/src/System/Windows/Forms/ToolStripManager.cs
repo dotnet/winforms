@@ -840,7 +840,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We're halfway to an accellerator table system here.
+        ///  We're halfway to an accelerator table system here.
         ///  Each toolstrip maintains a hash of the current shortcuts its using.
         ///  this way the search only takes O(number of toolstrips in the thread)
         ///  ToolStripMenuItem pushes itself into this table as the owner is set or the shortcut changes.

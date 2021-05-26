@@ -3627,7 +3627,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                // Controls in design mode always draw their accellerators.
+                // Controls in design mode always draw their accelerators.
                 if (!IsHandleCreated || DesignMode)
                 {
                     return true;

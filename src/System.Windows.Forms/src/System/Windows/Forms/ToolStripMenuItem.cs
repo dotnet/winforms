@@ -151,7 +151,7 @@ namespace System.Windows.Forms
                 if (textFields.Length >= 2)
                 {
                     // We dont care about the shortcut here, the OS is going to
-                    // handle it for us by sending a WM_(SYS)COMMAND during TranslateAcellerator
+                    // handle it for us by sending a WM_(SYS)COMMAND during TranslateAccelerator
                     // Just display whatever the OS would have.
                     ShowShortcutKeys = true;
                     ShortcutKeyDisplayString = textFields[1];

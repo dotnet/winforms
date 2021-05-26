@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         Inactive = (int)User32.ODS.INACTIVE,
 
         /// <summary>
-        ///  The item displays without a keyboard accelarator.
+        ///  The item displays without a keyboard accelerator.
         /// </summary>
         NoAccelerator = (int)User32.ODS.NOACCEL,
 

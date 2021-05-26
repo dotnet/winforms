@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms
         ///
         ///  The keyboard processing of input keys to AxHost controls go in 3 steps inside AxHost.PreProcessMessage()
         ///
-        ///  (1) Call the OCX's TranslateAccelarator. This may or may not call back into us using IOleControlSite::TranslateAccelarator()
+        ///  (1) Call the OCX's TranslateAccelerator. This may or may not call back into us using IOleControlSite::TranslateAccelerator()
         ///
         ///  (2) If the control completely processed this without calling us back:
         ///  -- If this returns S_OK, then it means that the control already processed this message and we return true,
@@ -1864,7 +1864,7 @@ namespace System.Windows.Forms
                     // call the base implementation which normally would call the control's
                     // IsInputKey() or IsInputChar(). So, we short-circuit those to return false
                     // and only return true, if the container-chain wanted to process the keystroke
-                    // (e.g. tab, accelarators etc.)
+                    // (e.g. tab, accelerators etc.)
                     //
                     return base.PreProcessMessage(ref msg);
                 }
