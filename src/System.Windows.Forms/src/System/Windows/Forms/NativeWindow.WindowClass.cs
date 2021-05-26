@@ -85,7 +85,7 @@ namespace System.Windows.Forms
 
                     if (wc is null)
                     {
-                        // Didn't find an existing class, create one and attatch it to
+                        // Didn't find an existing class, create one and attach it to
                         // the end of the linked list.
                         wc = new WindowClass(className, classStyle)
                         {
