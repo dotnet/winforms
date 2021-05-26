@@ -13,7 +13,7 @@ namespace DesignSurfaceExt
         //- de/activate the TabOrder facility
         void SwitchTabOrder();
 
-        //- select the controls alignement mode
+        //- select the controls alignment mode
         void UseSnapLines();
         void UseGrid(System.Drawing.Size gridSize);
         void UseGridWithoutSnapping(System.Drawing.Size gridSize);
