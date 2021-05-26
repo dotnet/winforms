@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Layout
         IArrangedElement Container { get; }
 
         /// <summary>
-        ///  Returns the element's childern (on a control, this forwands to Controls)
+        ///  Returns the element's children (on a control, this forwands to Controls)
         /// </summary>
         ArrangedElementCollection Children { get; }
     }
