@@ -721,7 +721,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This method calcuates the auto scale dimensions based on the control's current font.
+        ///  This method calculates the auto scale dimensions based on the control's current font.
         /// </summary>
         private SizeF GetFontAutoScaleDimensions()
         {
