@@ -368,7 +368,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  New EventHandler for The LocationChanging so that ToolStripPanelCell Listens to the Location Property on the ToolStrips's being changed.
-        ///  The ToolStrip needs to Raft (Join) to the approriate Location Depending on the new Location w.r.t to the oldLocation ...
+        ///  The ToolStrip needs to Raft (Join) to the appropriate Location Depending on the new Location w.r.t to the oldLocation ...
         ///  Hence the need for this event listener.
         /// </summary>
         private void OnToolStripLocationChanging(object sender, ToolStripLocationCancelEventArgs e)

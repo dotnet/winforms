@@ -957,7 +957,7 @@ namespace System.Windows.Forms
             //
             // Please read if you're adding a new TextFormatFlag.
             // whenever something can change the TextFormatFlags used
-            // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
+            // MeasureTextCache.InvalidateCache() should be called so we can appropriately clear.
 
             TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, TextAlign, AutoEllipsis, UseMnemonic);
 
