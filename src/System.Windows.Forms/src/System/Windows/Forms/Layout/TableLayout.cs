@@ -260,7 +260,7 @@ namespace System.Windows.Forms.Layout
         ///             TableLayout pretends it's unconstrained for perfomance reasons.
         ///
         ///  Summary of Algorithm:
-        ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGRESSIVE
+        ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGGRESSIVE
         ///  caching for performance reasons.
         /// </summary>
         internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
