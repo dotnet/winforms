@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design
             //
             commandSet = new CommandSetItem[]
             {
-                // Allignment commands
+                // Alignment commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
