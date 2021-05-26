@@ -25,6 +25,9 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionFolderBrowserDialog))]
     public sealed class FolderBrowserDialog : CommonDialog
     {
+        private static readonly Guid IID_IFileOpenDialog = new Guid("d57c7288-d4ad-4768-be02-9d969532d960");
+        private static readonly Guid CLSID_FileOpenDialog = new Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7");
+
         // Root node of the tree view.
         private Environment.SpecialFolder _rootFolder;
 
@@ -210,12 +213,10 @@ namespace System.Windows.Forms
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
                 // Server Core App Compatibility FOD is installed.
-                Guid IID_IFileOpenDialog = new Guid("d57c7288-d4ad-4768-be02-9d969532d960");
-                Guid CLSID_FileOpenDialog = new Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7");
                 HRESULT hr = Ole32.CoCreateInstance(
                     ref CLSID_FileOpenDialog,
                     IntPtr.Zero,
-                    Ole32.CLSCTX.INPROC_SERVER,
+                    Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
                     ref IID_IFileOpenDialog,
                     out object obj);
                 if (!hr.Succeeded())

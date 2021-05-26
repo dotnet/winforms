@@ -23,6 +23,9 @@ namespace System.Windows.Forms
     ]
     public sealed partial class SaveFileDialog : FileDialog
     {
+        private static readonly Guid IID_IFileSaveDialog = new Guid("84bccd23-5fde-4cdb-aea4-af64b83d78ab");
+        private static readonly Guid CLSID_FileSaveDialogCoClass = new Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B");
+
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box prompts the user for
         ///  permission to create a file if the user specifies a file that does not exist.
@@ -154,12 +157,10 @@ namespace System.Windows.Forms
 
         private protected override IFileDialog CreateVistaDialog()
         {
-            Guid IID_IFileSaveDialog = new Guid("84bccd23-5fde-4cdb-aea4-af64b83d78ab");
-            Guid CLSID_FileSaveDialogCoClass = new Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B");
             HRESULT hr = Ole32.CoCreateInstance(
                 ref CLSID_FileSaveDialogCoClass,
                 IntPtr.Zero,
-                Ole32.CLSCTX.INPROC_SERVER,
+                Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
                 ref IID_IFileSaveDialog,
                 out object obj);
             if (!hr.Succeeded())
