@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             /// <remark>
             ///  A calendar always have 7 or 4 columns depending on its view.
             /// </remark>
-            internal override int ColumnCount => _monthCalendarAccessibleObject.CelendarView == MCMV.MONTH ? 7 : 4;
+            internal override int ColumnCount => _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH ? 7 : 4;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 => direction switch
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders()
             {
                 // A calendar has column headers (days of week) only in the Month view
-                if (_monthCalendarAccessibleObject.CelendarView != MCMV.MONTH)
+                if (_monthCalendarAccessibleObject.CalendarView != MCMV.MONTH)
                 {
                     return null;
                 }
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             {
                 if (!_monthCalendarAccessibleObject.IsHandleCreated
                     || !_monthCalendarAccessibleObject.ShowWeekNumbers
-                    || _monthCalendarAccessibleObject.CelendarView != MCMV.MONTH
+                    || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH
                     || RowsAccessibleObjects is null)
                 {
                     return null;
@@ -226,9 +226,9 @@ namespace System.Windows.Forms
                         _rowsAccessibleObjects = new();
 
                         // Day of week cells have "-1" row index
-                        int start = _monthCalendarAccessibleObject.CelendarView == MCMV.MONTH ? -1 : 0;
+                        int start = _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH ? -1 : 0;
                         // A calendar body always has 6 or 3 columns depending on its view
-                        int end = _monthCalendarAccessibleObject.CelendarView == MCMV.MONTH ? 6 : 3;
+                        int end = _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH ? 6 : 3;
 
                         for (int i = start; i < end; i++)
                         {

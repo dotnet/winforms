@@ -76,7 +76,7 @@ namespace System.Windows.Forms
 
                         int start = 0;
                         // A calendar body always has 7 or 4 columns depending on its view
-                        int end = _monthCalendarAccessibleObject.CelendarView == MCMV.MONTH ? 7 : 4;
+                        int end = _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH ? 7 : 4;
 
                         for (int i = start; i < end; i++)
                         {
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
                     // Only day and week number cells have a description
                     if (_rowIndex == -1
                         || _monthCalendarAccessibleObject.IsHandleCreated
-                        || _monthCalendarAccessibleObject.CelendarView != MCMV.MONTH)
+                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH)
                     {
                         return null;
                     }
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
                 get
                 {
                     if (!_monthCalendarAccessibleObject.ShowWeekNumbers
-                        || _monthCalendarAccessibleObject.CelendarView != MCMV.MONTH
+                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH
                         || CellsAccessibleObjects?.First is null
                         || CellsAccessibleObjects.First.Value.DateRange is null)
                     {

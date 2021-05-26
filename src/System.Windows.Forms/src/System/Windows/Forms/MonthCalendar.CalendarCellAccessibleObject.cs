@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 {
                     // Only date cells in the Month view have Descriptions that based on cells date ranges
                     if (!_monthCalendarAccessibleObject.IsHandleCreated
-                        || _monthCalendarAccessibleObject.CelendarView != MCMV.MONTH
+                        || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH
                         || DateRange is null)
                     {
                         return null;
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
                 if (!_monthCalendarAccessibleObject.IsHandleCreated
-                    || _monthCalendarAccessibleObject.CelendarView != MCMV.MONTH)
+                    || _monthCalendarAccessibleObject.CalendarView != MCMV.MONTH)
                 {
                     // Column headers are available only in the "Month" view
                     return null;
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
                         return string.Empty;
                     }
 
-                    return _monthCalendarAccessibleObject.CelendarView switch
+                    return _monthCalendarAccessibleObject.CalendarView switch
                     {
                         MCMV.MONTH => $"{DateRange.Start:D}",
                         MCMV.YEAR => $"{DateRange.Start:Y}",
@@ -217,7 +217,7 @@ namespace System.Windows.Forms
                     // then the calendar selection range in the rest views.
                     // But in the rest views a user can select only one cell. It means that a focused cell equals one selected cell,
                     // so the correct state will be returned in the condition above for the rest views.
-                    if (DateRange is not null && _monthCalendarAccessibleObject.CelendarView == MCMV.MONTH
+                    if (DateRange is not null && _monthCalendarAccessibleObject.CalendarView == MCMV.MONTH
                         && DateRange.Start >= _monthCalendarAccessibleObject.SelectionRange.Start
                         && DateRange.End <= _monthCalendarAccessibleObject.SelectionRange.End)
                     {
