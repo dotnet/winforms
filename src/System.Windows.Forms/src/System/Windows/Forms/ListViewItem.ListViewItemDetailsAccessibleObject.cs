@@ -98,18 +98,18 @@ namespace System.Windows.Forms
                     return _listViewSubItemAccessibleObjects[subItemIndex];
                 }
 
-                ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject = new(owningSubItem: null, _owningItem);
-                _listViewSubItemAccessibleObjects.Add(subItemIndex, fakeAccessbileObject);
-                return fakeAccessbileObject;
+                ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject = new(owningSubItem: null, _owningItem);
+                _listViewSubItemAccessibleObjects.Add(subItemIndex, fakeAccessibleObject);
+                return fakeAccessibleObject;
             }
 
             // This method is required to get the index of the fake accessibility object. Since the fake accessibility object
             // has no ListViewSubItem from which we could get an index, we have to get its index from the dictionary
-            private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject)
+            private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject)
             {
                 foreach (KeyValuePair<int, AccessibleObject> keyValuePair in _listViewSubItemAccessibleObjects)
                 {
-                    if (keyValuePair.Value == fakeAccessbileObject)
+                    if (keyValuePair.Value == fakeAccessibleObject)
                     {
                         return keyValuePair.Key;
                     }

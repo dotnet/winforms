@@ -1242,7 +1242,7 @@
         <target state="translated">Bu içerik menüsü şeridinin görüntülenmesine neden olan en son denetim.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Denetimin erişilebilir nesnesi geçersiz bir durumda.</target>
         <note />

@@ -1242,7 +1242,7 @@
         <target state="translated">Ostatni formant, który spowodował wyświetlenie tego paska menu kontekstowego.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Dostępny obiekt formantu ma nieprawidłowy stan.</target>
         <note />

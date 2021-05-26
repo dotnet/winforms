@@ -1242,7 +1242,7 @@
         <target state="translated">Dernier contrôle ayant provoqué l'affichage de cette bande de menus contextuels.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">L'objet accessible du contrôle est dans un état non valide.</target>
         <note />

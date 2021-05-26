@@ -1242,7 +1242,7 @@
         <target state="translated">Das letzte Steuerelement, das die Anzeige dieser Kontextmenüleiste verursacht hat.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Das zugreifbare Objekt des Steuerelements befindet sich in einem ungültigen Zustand.</target>
         <note />

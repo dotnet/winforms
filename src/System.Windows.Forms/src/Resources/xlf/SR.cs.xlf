@@ -1242,7 +1242,7 @@
         <target state="translated">Poslední ovládací prvek, který způsobil zobrazení této místní nabídky</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Dostupný objekt ovládacího prvku má neplatný stav.</target>
         <note />

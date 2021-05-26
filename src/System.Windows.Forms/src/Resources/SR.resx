@@ -781,7 +781,7 @@
   <data name="ContextMenuStripSourceControlDescr" xml:space="preserve">
     <value>The last control that caused this context menu strip to be displayed.</value>
   </data>
-  <data name="ControlAccessibileObjectInvalid" xml:space="preserve">
+  <data name="ControlAccessibleObjectInvalid" xml:space="preserve">
     <value>Control's accessible object is in an invalid state.</value>
   </data>
   <data name="ControlAccessibilityObjectDescr" xml:space="preserve">

@@ -1242,7 +1242,7 @@
         <target state="translated">Ultimo controllo che ha causato la visualizzazione di questo elenco di menu di scelta rapida.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">L'oggetto accessibile del controllo si trova in uno stato non valido.</target>
         <note />

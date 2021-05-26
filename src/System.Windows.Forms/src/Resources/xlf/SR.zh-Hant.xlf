@@ -1242,7 +1242,7 @@
         <target state="translated">造成顯示此內容功能表區域的最後控制項。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">控制項的可存取物件的狀態無效。</target>
         <note />

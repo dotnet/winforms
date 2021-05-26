@@ -1242,7 +1242,7 @@
         <target state="translated">使该上下文菜单条显示的最后一个控件。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">控件的可访问对象处于无效状态。</target>
         <note />

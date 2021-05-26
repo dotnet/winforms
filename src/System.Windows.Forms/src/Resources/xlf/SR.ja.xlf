@@ -1242,7 +1242,7 @@
         <target state="translated">このコンテキスト メニュー ストリップを最後に表示させたコントロールです。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">コントロールがアクセス可能なオブジェクトが、無効な状態になっています。</target>
         <note />
