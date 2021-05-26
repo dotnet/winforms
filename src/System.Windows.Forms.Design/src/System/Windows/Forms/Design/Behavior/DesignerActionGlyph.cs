@@ -141,7 +141,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (_alternativeParent != null)
             {
-                // alternative parent and adoner are exclusive...
+                // alternative parent and adorner are exclusive...
                 _alternativeParent.Invalidate(_bounds);
             }
             else

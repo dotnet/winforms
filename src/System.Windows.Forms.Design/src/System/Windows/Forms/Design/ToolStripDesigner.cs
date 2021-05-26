@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  In Order to Draw the Selection Glyphs we need to reforce painting on the  the AdonerWindow.This method forces the repaint
+        ///  In Order to Draw the Selection Glyphs we need to reforce painting on the AdornerWindow. This method forces the repaint
         /// </summary>
         private void OnOverFlowDropDownPaint(object sender, PaintEventArgs e)
         {
