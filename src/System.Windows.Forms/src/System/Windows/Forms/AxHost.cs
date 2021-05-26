@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             ///  pages for the control.  Note that even if this flag is
             ///  specified, the verb will not appear unless the control
             ///  proffers a set of property pages.
-            ///  [Since most activeX controls alreay have their own properties verb
+            ///  [Since most activeX controls already have their own properties verb
             ///  on the context menu, the default is not to include one specified by
             ///  this flag.]
             /// </summary>
