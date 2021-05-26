@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         private static readonly int s_stateScalingChild = BitVector32.CreateMask(s_stateProcessingMnemonic);
 
         /// <summary>
-        ///  Flagged when a parent changes so we can adpat our scaling logic to match.
+        ///  Flagged when a parent changes so we can adapt our scaling logic to match.
         /// </summary>
         private static readonly int s_stateParentChanged = BitVector32.CreateMask(s_stateScalingChild);
 
