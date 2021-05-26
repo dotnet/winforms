@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_State_TestData))]
-        public void ListViewItemAccessibleObject_State_ReturnExpected(View view, bool selected, AccessibleStates expectedAcessibleStates, bool createHandle)
+        public void ListViewItemAccessibleObject_State_ReturnExpected(View view, bool selected, AccessibleStates expectedAccessibleStates, bool createHandle)
         {
             using ListView listView = new ListView
             {
@@ -671,7 +671,7 @@ namespace System.Windows.Forms.Tests
             listView.Items[0].Selected = selected;
             AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
 
-            Assert.Equal(expectedAcessibleStates, accessibleObject.State);
+            Assert.Equal(expectedAccessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -701,7 +701,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_State_VirtualMode_TestData))]
-        public void ListViewItemAccessibleObject_State_Virtual_ModeReturnExpected(View view, bool selected, AccessibleStates expectedAcessibleStates, bool createHandle)
+        public void ListViewItemAccessibleObject_State_Virtual_ModeReturnExpected(View view, bool selected, AccessibleStates expectedAccessibleStates, bool createHandle)
         {
             using ListView listView = new ListView
             {
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
 
-            Assert.Equal(expectedAcessibleStates, accessibleObject.State);
+            Assert.Equal(expectedAccessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
