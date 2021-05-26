@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 out object obj);
             if (!hr.Succeeded())
             {
-                throw Marshal.GetExceptionForHR((int)hr);
+                Marshal.ThrowExceptionForHR((int)hr);
             }
 
             return (IFileSaveDialog)obj;
