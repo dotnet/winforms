@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms.Design
 
                                     if (foundAssociatedControl)
                                     {
-                                        continue; //continue from here so that we dont add the associted compoenet of a control that failed paste operation.
+                                        continue; //continue from here so that we dont add the associated compoenet of a control that failed paste operation.
                                     }
 
                                     ComponentDesigner cDesigner = host.GetDesigner(curComp) as ComponentDesigner;
